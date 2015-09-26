@@ -8,7 +8,7 @@
 
 #import "EMSDKHelper.h"
 
-#import "ConvertToCommonEmoticonsHelper.h"
+#import "EMConvertToCommonEmoticonsHelper.h"
 
 @interface EMChatImageOptions : NSObject<IChatImageOptions>
 
@@ -260,7 +260,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 
 {
     // 表情映射。
-    NSString *willSendText = [ConvertToCommonEmoticonsHelper convertToCommonEmoticons:text];
+    NSString *willSendText = [EMConvertToCommonEmoticonsHelper convertToCommonEmoticons:text];
     EMChatText *textChat = [[EMChatText alloc] initWithText:willSendText];
     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithChatObject:textChat];
     EMMessage *message = [[EMMessage alloc] initWithReceiver:toUser bodies:[NSArray arrayWithObject:body]];

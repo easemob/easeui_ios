@@ -17,16 +17,13 @@ FOUNDATION_EXPORT const unsigned char EaseUIVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <EaseUI/PublicHeader.h>
 
 
-//#import <EaseUI/EMMessageViewController.h>
-//#import <EaseUI/EMConversationListViewController.h>
-//#import <EaseUI/EMUsersListViewController.h>
-//
+#import <EaseUI/EMMessageViewController.h>
+#import <EaseUI/EMConversationListViewController.h>
+#import <EaseUI/EMUsersListViewController.h>
 #import <EaseUI/EMSDKHelper.h>
 
-//#import <EaseUI/ConvertToCommonEmoticonsHelper.h>
-
-// interface
 #import <EaseUI/IModelCell.h>
 #import <EaseUI/IModelChatCell.h>
 
-// message
+#import <EaseUI/EMEmotionManager.h>
+#import <EaseUI/EMConvertToCommonEmoticonsHelper.h>

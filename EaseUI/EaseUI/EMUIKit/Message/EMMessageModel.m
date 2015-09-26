@@ -9,7 +9,7 @@
 #import "EMMessageModel.h"
 
 #import "EaseMob.h"
-#import "ConvertToCommonEmoticonsHelper.h"
+#import "EMConvertToCommonEmoticonsHelper.h"
 
 @implementation EMMessageModel
 
@@ -32,7 +32,7 @@
             {
                 EMTextMessageBody *textBody = (EMTextMessageBody *)_firstMessageBody;
                 // 表情映射。
-                NSString *didReceiveText = [ConvertToCommonEmoticonsHelper convertToSystemEmoticons:textBody.text];
+                NSString *didReceiveText = [EMConvertToCommonEmoticonsHelper convertToSystemEmoticons:textBody.text];
                 self.text = didReceiveText;
             }
                 break;

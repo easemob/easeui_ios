@@ -1,0 +1,8 @@
+platform :ios, '7.0'
+
+# Import CocoaPods sources
+source 'https://github.com/CocoaPods/Specs.git'
+
+target ‘EaseUI’ do
+  pod 'EaseMobSDKFull', :git => 'https://github.com/easemob/sdk-ios-cocoapods-integration.git'
+end

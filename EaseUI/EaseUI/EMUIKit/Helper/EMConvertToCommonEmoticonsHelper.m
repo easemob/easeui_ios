@@ -10,10 +10,10 @@
  * from EaseMob Technologies.
  */
 
-#import "ConvertToCommonEmoticonsHelper.h"
+#import "EMConvertToCommonEmoticonsHelper.h"
 #import "Emoji.h"
 
-@implementation ConvertToCommonEmoticonsHelper
+@implementation EMConvertToCommonEmoticonsHelper
 
 #pragma mark - emotics
 

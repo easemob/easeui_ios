@@ -11,7 +11,7 @@
 #import "EaseMob.h"
 #import "EMSDKHelper.h"
 #import "EMConversationCell.h"
-#import "ConvertToCommonEmoticonsHelper.h"
+#import "EMConvertToCommonEmoticonsHelper.h"
 #import "NSDate+Category.h"
 
 @interface EMConversationListViewController () <IChatManagerDelegate>

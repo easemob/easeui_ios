@@ -12,7 +12,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ConvertToCommonEmoticonsHelper : NSObject
+@interface EMConvertToCommonEmoticonsHelper : NSObject
 
 + (NSString *)convertToCommonEmoticons:(NSString *)text;
 
