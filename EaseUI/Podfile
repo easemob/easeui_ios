@@ -6,3 +6,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 target ‘EaseUI’ do
   pod 'EaseMobSDKFull', :git => 'https://github.com/easemob/sdk-ios-cocoapods-integration.git'
 end
+
+target ‘EaseUILite’ do
+    pod 'EaseMobSDK', :git => 'https://github.com/easemob/sdk-ios-cocoapods.git'
+end

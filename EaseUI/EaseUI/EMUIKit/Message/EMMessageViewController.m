@@ -677,25 +677,44 @@
 
 #pragma mark - EMMessageCellDelegate
 
-- (void)messageCellSelected:(id<IMessageModel>)model withEventName:(NSString *)eventName
+- (void)messageCellSelected:(id<IMessageModel>)model withMessageCellTapEventType:(EMMessageCellTapEventType)type
 {
-    if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:didSelectMessageModel:withEventName:)]) {
-        [_delegate messageViewController:self didSelectMessageModel:model withEventName:eventName];
+    if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:didSelectMessageModel:withTapEventType:)]) {
+        [_delegate messageViewController:self didSelectMessageModel:model withTapEventType:type];
         return;
     }
     
-    if ([eventName isEqualToString:kRouterEventImageBubbleTapEventName]) {
-        _scrollToBottomWhenAppear = NO;
-        [self showHint:@"Custom implementation!"];
-    } else if ([eventName isEqualToString:kRouterEventLocationBubbleTapEventName]) {
-        [self _locationMessageCellSelected:model];
-    } else if ([eventName isEqualToString:kRouterEventAudioBubbleTapEventName]) {
-        [self _audioMessageCellSelected:model];
-    } else if ([eventName isEqualToString:kRouterEventChatCellVideoTapEventName]) {
-        [self _videoMessageCellSelected:model];
-    } else if ([eventName isEqualToString:kRouterEventFileBubbleTapEventName]) {
-        _scrollToBottomWhenAppear = NO;
-        [self showHint:@"Custom implementation!"];
+    switch (type) {
+        case EMMessageCellEventImageBubbleTap:
+        {
+            _scrollToBottomWhenAppear = NO;
+            [self showHint:@"Custom implementation!"];
+        }
+            break;
+        case EMMessageCellEventLocationBubbleTap:
+        {
+             [self _locationMessageCellSelected:model];
+        }
+            break;
+        case EMMessageCellEventAudioBubbleTap:
+        {
+            [self _audioMessageCellSelected:model];
+        }
+            break;
+        case EMMessageCellEvenVideoBubbleTap:
+        {
+            [self _videoMessageCellSelected:model];
+
+        }
+            break;
+        case EMMessageCellEventFileBubbleTap:
+        {
+            _scrollToBottomWhenAppear = NO;
+            [self showHint:@"Custom implementation!"];
+        }
+            break;
+        default:
+            break;
     }
 }
 
@@ -1016,7 +1035,7 @@
         [self.delegate messageViewController:self didSelectRecordView:recordView withEvenType:EMRecordViewTypeDragInside];
     } else {
         if ([self.recordView isKindOfClass:[EMRecordView class]]) {
-            [(EMRecordView *)self.recordView recordButtonDragOutside];
+            [(EMRecordView *)self.recordView recordButtonDragInside];
         }
     }
 }
@@ -1027,7 +1046,7 @@
         [self.delegate messageViewController:self didSelectRecordView:recordView withEvenType:EMRecordViewTypeDragOutside];
     } else {
         if ([self.recordView isKindOfClass:[EMRecordView class]]) {
-            [(EMRecordView *)self.recordView recordButtonDragInside];
+            [(EMRecordView *)self.recordView recordButtonDragOutside];
         }
     }
 }

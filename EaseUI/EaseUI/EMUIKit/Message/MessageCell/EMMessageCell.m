@@ -31,12 +31,6 @@ NSString *const EMMessageCellIdentifierSendVideo = @"EMMessageCellSendVideo";
 NSString *const EMMessageCellIdentifierSendImage = @"EMMessageCellSendImage";
 NSString *const EMMessageCellIdentifierSendFile = @"EMMessageCellSendFile";
 
-NSString *const kRouterEventChatCellVideoTapEventName = @"kRouterEventChatCellVideoTapEventName";
-NSString *const kRouterEventLocationBubbleTapEventName = @"kRouterEventLocationBubbleTapEventName";
-NSString *const kRouterEventImageBubbleTapEventName = @"kRouterEventImageBubbleTapEventName";
-NSString *const kRouterEventAudioBubbleTapEventName = @"kRouterEventAudioBubbleTapEventName";
-NSString *const kRouterEventFileBubbleTapEventName = @"kRouterEventFileBubbleTapEventName";
-
 @interface EMMessageCell()
 {
     MessageBodyType _messageType;
@@ -489,8 +483,8 @@ NSString *const kRouterEventFileBubbleTapEventName = @"kRouterEventFileBubbleTap
 //                if ([_delegate respondsToSelector:@selector(imageMessageCellSelcted:)]) {
 //                    [_delegate imageMessageCellSelcted:_model];
 //                }
-                if ([_delegate respondsToSelector:@selector(messageCellSelected:withEventName:)]) {
-                    [_delegate messageCellSelected:_model withEventName:kRouterEventImageBubbleTapEventName];
+                if ([_delegate respondsToSelector:@selector(messageCellSelected:withMessageCellTapEventType:)]) {
+                    [_delegate messageCellSelected:_model withMessageCellTapEventType:EMMessageCellEventImageBubbleTap];
                 }
             }
                 break;
@@ -499,8 +493,8 @@ NSString *const kRouterEventFileBubbleTapEventName = @"kRouterEventFileBubbleTap
 //                if ([_delegate respondsToSelector:@selector(locationMessageCellSelcted:)]) {
 //                    [_delegate locationMessageCellSelcted:_model];
 //                }
-                if ([_delegate respondsToSelector:@selector(messageCellSelected:withEventName:)]) {
-                    [_delegate messageCellSelected:_model withEventName:kRouterEventLocationBubbleTapEventName];
+                if ([_delegate respondsToSelector:@selector(messageCellSelected:withMessageCellTapEventType:)]) {
+                    [_delegate messageCellSelected:_model withMessageCellTapEventType:EMMessageCellEventLocationBubbleTap];
                 }
             }
                 break;
@@ -517,8 +511,8 @@ NSString *const kRouterEventFileBubbleTapEventName = @"kRouterEventFileBubbleTap
 //                if ([_delegate respondsToSelector:@selector(voiceMessageCellSelcted:)]) {
 //                    [_delegate voiceMessageCellSelcted:_model];
 //                }
-                if ([_delegate respondsToSelector:@selector(messageCellSelected:withEventName:)]) {
-                    [_delegate messageCellSelected:_model withEventName:kRouterEventAudioBubbleTapEventName];
+                if ([_delegate respondsToSelector:@selector(messageCellSelected:withMessageCellTapEventType:)]) {
+                    [_delegate messageCellSelected:_model withMessageCellTapEventType:EMMessageCellEventAudioBubbleTap];
                 }
             }
                 break;
@@ -527,8 +521,8 @@ NSString *const kRouterEventFileBubbleTapEventName = @"kRouterEventFileBubbleTap
 //                if ([_delegate respondsToSelector:@selector(videoMessageCellSelcted:)]) {
 //                    [_delegate videoMessageCellSelcted:_model];
 //                }
-                if ([_delegate respondsToSelector:@selector(messageCellSelected:withEventName:)]) {
-                    [_delegate messageCellSelected:_model withEventName:kRouterEventChatCellVideoTapEventName];
+                if ([_delegate respondsToSelector:@selector(messageCellSelected:withMessageCellTapEventType:)]) {
+                    [_delegate messageCellSelected:_model withMessageCellTapEventType:EMMessageCellEvenVideoBubbleTap];
                 }
             }
                 break;
@@ -537,8 +531,8 @@ NSString *const kRouterEventFileBubbleTapEventName = @"kRouterEventFileBubbleTap
 //                if ([_delegate respondsToSelector:@selector(fileMessageCellSelcted:)]) {
 //                    [_delegate fileMessageCellSelcted:_model];
 //                }
-                if ([_delegate respondsToSelector:@selector(messageCellSelected:withEventName:)]) {
-                    [_delegate messageCellSelected:_model withEventName:kRouterEventFileBubbleTapEventName];
+                if ([_delegate respondsToSelector:@selector(messageCellSelected:withMessageCellTapEventType:)]) {
+                    [_delegate messageCellSelected:_model withMessageCellTapEventType:EMMessageCellEventFileBubbleTap];
                 }
             }
                 break;

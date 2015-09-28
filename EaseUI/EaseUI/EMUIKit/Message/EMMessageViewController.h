@@ -66,7 +66,7 @@
  */
 - (void)messageViewController:(EMMessageViewController *)viewController
         didSelectMessageModel:(id<IMessageModel>)messageModel
-                withEventName:(NSString*)eventName;
+             withTapEventType:(EMMessageCellTapEventType)type;
 
 /**
  *  选中消息头像

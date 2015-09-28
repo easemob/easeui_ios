@@ -20,11 +20,13 @@
 
 extern CGFloat const EMMessageCellPadding;
 
-extern NSString *const kRouterEventChatCellVideoTapEventName;
-extern NSString *const kRouterEventLocationBubbleTapEventName;
-extern NSString *const kRouterEventImageBubbleTapEventName;
-extern NSString *const kRouterEventAudioBubbleTapEventName;
-extern NSString *const kRouterEventFileBubbleTapEventName;
+typedef enum{
+    EMMessageCellEvenVideoBubbleTap,
+    EMMessageCellEventLocationBubbleTap,
+    EMMessageCellEventImageBubbleTap,
+    EMMessageCellEventAudioBubbleTap,
+    EMMessageCellEventFileBubbleTap,
+}EMMessageCellTapEventType;
 
 @protocol EMMessageCellDelegate;
 @interface EMMessageCell : UITableViewCell<IModelChatCell>
@@ -98,19 +100,7 @@ extern NSString *const kRouterEventFileBubbleTapEventName;
 
 @optional
 
-- (void)messageCellSelected:(id<IMessageModel>)model withEventName:(NSString *)eventName;
-
-/*
-- (void)imageMessageCellSelcted:(id<IMessageModel>)model;
-
-- (void)locationMessageCellSelcted:(id<IMessageModel>)model;
-
-- (void)voiceMessageCellSelcted:(id<IMessageModel>)model;
-
-- (void)videoMessageCellSelcted:(id<IMessageModel>)model;
-
-- (void)fileMessageCellSelcted:(id<IMessageModel>)model;
-*/
+- (void)messageCellSelected:(id<IMessageModel>)model withMessageCellTapEventType:(EMMessageCellTapEventType)type;
 
 - (void)statusButtonSelcted:(id<IMessageModel>)model withMessageCell:(EMMessageCell*)messageCell;
 
