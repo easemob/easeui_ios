@@ -713,10 +713,6 @@
 
 - (void)recordButtonTouchDown
 {
-    if ([self.recordView isKindOfClass:[EMRecordView class]]) {
-        [(EMRecordView *)self.recordView recordButtonTouchDown];
-    }
-    
     if (_delegate && [_delegate respondsToSelector:@selector(didStartRecordingVoiceAction:)]) {
         [_delegate didStartRecordingVoiceAction:self.recordView];
     }
@@ -728,36 +724,20 @@
     {
         [_delegate didCancelRecordingVoiceAction:self.recordView];
     }
-    
-    if ([self.recordView isKindOfClass:[EMRecordView class]]) {
-        [(EMRecordView *)self.recordView recordButtonTouchUpOutside];
-    }
-    
-    [self.recordView removeFromSuperview];
 }
 
 - (void)recordButtonTouchUpInside
 {
-    if ([self.recordView isKindOfClass:[EMRecordView class]]) {
-        [(EMRecordView *)self.recordView recordButtonTouchUpInside];
-    }
-    
     self.recordButton.enabled = NO;
     if ([self.delegate respondsToSelector:@selector(didFinishRecoingVoiceAction:)])
     {
         [self.delegate didFinishRecoingVoiceAction:self.recordView];
     }
-    
-    [self.recordView removeFromSuperview];
     self.recordButton.enabled = YES;
 }
 
 - (void)recordDragOutside
 {
-    if ([self.recordView isKindOfClass:[EMRecordView class]]) {
-        [(EMRecordView *)self.recordView recordButtonDragOutside];
-    }
-    
     if ([self.delegate respondsToSelector:@selector(didDragOutsideAction:)])
     {
         [self.delegate didDragOutsideAction:self.recordView];
@@ -766,10 +746,6 @@
 
 - (void)recordDragInside
 {
-    if ([self.recordView isKindOfClass:[EMRecordView class]]) {
-        [(EMRecordView *)self.recordView recordButtonDragInside];
-    }
-    
     if ([self.delegate respondsToSelector:@selector(didDragInsideAction:)])
     {
         [self.delegate didDragInsideAction:self.recordView];

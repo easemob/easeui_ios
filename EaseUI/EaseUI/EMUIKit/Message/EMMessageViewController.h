@@ -69,36 +69,6 @@
                 withEventName:(NSString*)eventName;
 
 /**
- *  选中图片类型的消息
- */
-//- (void)messageViewController:(EMMessageViewController *)viewController
-//   didSelectImageMessageModel:(id<IMessageModel>)messageModel;
-
-/**
- *  选中位置类型的消息
-// */
-//- (void)messageViewController:(EMMessageViewController *)viewController
-//didSelectLocationMessageModel:(id<IMessageModel>)messageModel;
-
-/**
- *  选中语音类型的消息
- */
-//- (void)messageViewController:(EMMessageViewController *)viewController
-//   didSelectVoiceMessageModel:(id<IMessageModel>)messageModel;
-
-/**
- *  选中视频类型的消息
- */
-//- (void)messageViewController:(EMMessageViewController *)viewController
-//   didSelectVideoMessageModel:(id<IMessageModel>)messageModel;
-
-/**
- *  选中文件类型的消息
- */
-//- (void)messageViewController:(EMMessageViewController *)viewController
-//    didSelectFileMessageModel:(id<IMessageModel>)messageModel;
-
-/**
  *  选中消息头像
  */
 - (void)messageViewController:(EMMessageViewController *)viewController
@@ -110,6 +80,13 @@
 - (void)messageViewController:(EMMessageViewController *)viewController
             didSelectMoreView:(EMChatBarMoreView *)moreView
                       AtIndex:(NSInteger)index;
+
+/**
+ * 底部录音功能按钮
+ */
+- (void)messageViewController:(EMMessageViewController *)viewController
+              didSelectRecordView:(UIView *)recordView
+                withEvenType:(EMRecordViewType)type;
 
 @end
 

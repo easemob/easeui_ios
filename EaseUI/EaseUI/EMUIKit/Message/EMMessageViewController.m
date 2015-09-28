@@ -941,6 +941,14 @@
  */
 - (void)didStartRecordingVoiceAction:(UIView *)recordView
 {
+    if ([self.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
+        [self.delegate messageViewController:self didSelectRecordView:recordView withEvenType:EMRecordViewTypeTouchDown];
+    } else {
+        if ([self.recordView isKindOfClass:[EMRecordView class]]) {
+            [(EMRecordView *)self.recordView recordButtonTouchDown];
+        }
+    }
+    
     if ([self _canRecord]) {
         EMRecordView *tmpView = (EMRecordView *)recordView;
         tmpView.center = self.view.center;
@@ -965,6 +973,14 @@
 - (void)didCancelRecordingVoiceAction:(UIView *)recordView
 {
     [[EMCDDeviceManager sharedInstance] cancelCurrentRecording];
+    if ([self.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
+        [self.delegate messageViewController:self didSelectRecordView:recordView withEvenType:EMRecordViewTypeTouchUpOutside];
+    } else {
+        if ([self.recordView isKindOfClass:[EMRecordView class]]) {
+            [(EMRecordView *)self.recordView recordButtonTouchUpOutside];
+        }
+        [self.recordView removeFromSuperview];
+    }
 }
 
 /**
@@ -972,6 +988,14 @@
  */
 - (void)didFinishRecoingVoiceAction:(UIView *)recordView
 {
+    if ([self.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
+        [self.delegate messageViewController:self didSelectRecordView:recordView withEvenType:EMRecordViewTypeTouchUpInside];
+    } else {
+        if ([self.recordView isKindOfClass:[EMRecordView class]]) {
+            [(EMRecordView *)self.recordView recordButtonTouchUpInside];
+        }
+        [self.recordView removeFromSuperview];
+    }
     __weak typeof(self) weakSelf = self;
     [[EMCDDeviceManager sharedInstance] asyncStopRecordingWithCompletion:^(NSString *recordPath, NSInteger aDuration, NSError *error) {
         if (!error) {
@@ -984,6 +1008,28 @@
             });
         }
     }];
+}
+
+- (void)didDragInsideAction:(UIView *)recordView
+{
+    if ([self.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
+        [self.delegate messageViewController:self didSelectRecordView:recordView withEvenType:EMRecordViewTypeDragInside];
+    } else {
+        if ([self.recordView isKindOfClass:[EMRecordView class]]) {
+            [(EMRecordView *)self.recordView recordButtonDragOutside];
+        }
+    }
+}
+
+- (void)didDragOutsideAction:(UIView *)recordView
+{
+    if ([self.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
+        [self.delegate messageViewController:self didSelectRecordView:recordView withEvenType:EMRecordViewTypeDragOutside];
+    } else {
+        if ([self.recordView isKindOfClass:[EMRecordView class]]) {
+            [(EMRecordView *)self.recordView recordButtonDragInside];
+        }
+    }
 }
 
 #pragma mark - EMChatBarMoreViewDelegate

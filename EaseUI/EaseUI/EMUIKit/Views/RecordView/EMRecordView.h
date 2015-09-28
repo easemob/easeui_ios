@@ -12,6 +12,14 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum{
+    EMRecordViewTypeTouchDown,
+    EMRecordViewTypeTouchUpInside,
+    EMRecordViewTypeTouchUpOutside,
+    EMRecordViewTypeDragInside,
+    EMRecordViewTypeDragOutside,
+}EMRecordViewType;
+
 @interface EMRecordView : UIView
 
 @property (nonatomic) NSArray *voiceMessageAnimationImages UI_APPEARANCE_SELECTOR;
