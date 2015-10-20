@@ -22,6 +22,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		D23BD3921BD4F2DA0029242A /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D23BD3911BD4F2DA0029242A /* back@2x.png */; };
 		D24A4C2E1BD49E200007BB00 /* EMCDDeviceManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = D24A4B281BD49E200007BB00 /* EMCDDeviceManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D24A4C2F1BD49E200007BB00 /* EMCDDeviceManagerProximitySensorDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = D24A4B291BD49E200007BB00 /* EMCDDeviceManagerProximitySensorDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D24A4C301BD49E200007BB00 /* DemoErrorCode.h in Headers */ = {isa = PBXBuildFile; fileRef = D24A4B2B1BD49E200007BB00 /* DemoErrorCode.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -356,6 +357,7 @@
 		3C684748DEF6E6B2E6A5C0F7 /* Pods-EaseUILite.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseUILite.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EaseUILite/Pods-EaseUILite.debug.xcconfig"; sourceTree = "<group>"; };
 		4F3E57A1211733297789572A /* Pods-EaseUILite.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseUILite.release.xcconfig"; path = "Pods/Target Support Files/Pods-EaseUILite/Pods-EaseUILite.release.xcconfig"; sourceTree = "<group>"; };
 		85E509D2765337335A4AF69B /* libPods-EaseUILite.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EaseUILite.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D23BD3911BD4F2DA0029242A /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
 		D24A4B281BD49E200007BB00 /* EMCDDeviceManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMCDDeviceManagerDelegate.h; sourceTree = "<group>"; };
 		D24A4B291BD49E200007BB00 /* EMCDDeviceManagerProximitySensorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMCDDeviceManagerProximitySensorDelegate.h; sourceTree = "<group>"; };
 		D24A4B2B1BD49E200007BB00 /* DemoErrorCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoErrorCode.h; sourceTree = "<group>"; };
@@ -1333,6 +1335,7 @@
 			children = (
 				D27520531BB8F08000D9BA85 /* recordView */,
 				D2BDF1EF1BB2631700CE7D91 /* arrow@2x.png */,
+				D23BD3911BD4F2DA0029242A /* back@2x.png */,
 				D2BDF1F01BB2631700CE7D91 /* Call */,
 				D2BDF1FB1BB2631700CE7D91 /* chat_item_file@2x.png */,
 				D2BDF1FC1BB2631700CE7D91 /* chat_location_preview@2x.png */,
@@ -1702,6 +1705,7 @@
 				D2BDF2721BB2631700CE7D91 /* imageDownloadFail@2x.png in Resources */,
 				D2BDF2741BB2631700CE7D91 /* messageVideo@2x.png in Resources */,
 				D2BDF24F1BB2631700CE7D91 /* call_silence_h.png in Resources */,
+				D23BD3921BD4F2DA0029242A /* back@2x.png in Resources */,
 				D27520851BB8F08000D9BA85 /* VoiceSearchFeedback005@2x.png in Resources */,
 				D2BDF2491BB2631700CE7D91 /* call_out.png in Resources */,
 				D2BDF2651BB2631700CE7D91 /* chatBar_keyboard@2x.png in Resources */,
