@@ -577,6 +577,7 @@
 		D24A4C2A1BD49E200007BB00 /* EaseRecordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseRecordView.m; sourceTree = "<group>"; };
 		D24A4C2C1BD49E200007BB00 /* EaseConversationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseConversationCell.h; sourceTree = "<group>"; };
 		D24A4C2D1BD49E200007BB00 /* EaseConversationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseConversationCell.m; sourceTree = "<group>"; };
+		D250D1FF1BD7729F00C8D553 /* EaseUI-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EaseUI-Prefix.pch"; sourceTree = "<group>"; };
 		D25C0E921BB93EA700A4D726 /* libPods-EaseUI.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-EaseUI.a"; path = "Pods/../build/Debug-iphoneos/libPods-EaseUI.a"; sourceTree = "<group>"; };
 		D27520551BB8F08000D9BA85 /* VoiceSearchFeedback001@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VoiceSearchFeedback001@2x.png"; sourceTree = "<group>"; };
 		D27520571BB8F08000D9BA85 /* VoiceSearchFeedback002@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VoiceSearchFeedback002@2x.png"; sourceTree = "<group>"; };
@@ -1266,6 +1267,7 @@
 			isa = PBXGroup;
 			children = (
 				D297AB371BB13D5800EF14DC /* Info.plist */,
+				D250D1FF1BD7729F00C8D553 /* EaseUI-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1965,6 +1967,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "/Users/easemob/Documents/zilong/work/my/easeui_ios/EaseUI/EaseUI/EaseUI-Prefix.pch";
 				INFOPLIST_FILE = EaseUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
@@ -2040,6 +2044,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "/Users/easemob/Documents/zilong/work/my/easeui_ios/EaseUI/EaseUI/EaseUI-Prefix.pch";
 				INFOPLIST_FILE = EaseUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;

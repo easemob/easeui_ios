@@ -16,6 +16,8 @@
 
 @property (strong, nonatomic) id model;
 
+@optional
+
 /*!
  @method
  @brief 判断是否为自定义Cell

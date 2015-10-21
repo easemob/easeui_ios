@@ -13,7 +13,7 @@
 #import <Foundation/Foundation.h>
 
 #import "MWPhotoBrowser.h"
-#import "MessageModel.h"
+#import "EaseMessageModel.h"
 
 typedef void (^FinishBlock)(BOOL success);
 typedef void (^PlayBlock)(BOOL playing, EaseMessageModel *messageModel);
@@ -43,6 +43,6 @@ typedef void (^PlayBlock)(BOOL playing, EaseMessageModel *messageModel);
 - (BOOL)prepareMessageAudioModel:(EaseMessageModel *)messageModel
             updateViewCompletion:(void (^)(EaseMessageModel *prevAudioModel, EaseMessageModel *currentAudioModel))updateCompletion;
 
-- (MessageModel *)stopMessageAudioModel;
+- (EaseMessageModel *)stopMessageAudioModel;
 
 @end

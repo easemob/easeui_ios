@@ -138,7 +138,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     _activity.hidden = YES;
     [self.contentView addSubview:_activity];
     
-    if ([self isCustomBubbleView:model]) {
+    if ([self respondsToSelector:@selector(isCustomBubbleView:)] && [self isCustomBubbleView:model]) {
         [self setCustomBubbleView:model];
     } else {
         switch (messageType) {
@@ -280,7 +280,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 - (void)setModel:(id<IMessageModel>)model
 {
     _model = model;
-    if ([self isCustomBubbleView:model]) {
+    if ([self respondsToSelector:@selector(isCustomBubbleView:)] && [self isCustomBubbleView:model]) {
         [self setCustomModel:model];
     } else {
         switch (model.bodyType) {
@@ -406,7 +406,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 {
     _bubbleMargin = bubbleMargin;
     _bubbleMargin = self.model.isSender ? _rightBubbleMargin:_leftBubbleMargin;
-    if ([self isCustomBubbleView:_model]) {
+    if ([self respondsToSelector:@selector(isCustomBubbleView:)] && [self isCustomBubbleView:_model]) {
         [self updateCustomBubbleViewMargin:_bubbleMargin model:_model];
     } else {
         if (_bubbleView) {
@@ -548,7 +548,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             return;
         }
         
-        if ([self isCustomBubbleView:_model]) {
+        if ([self respondsToSelector:@selector(isCustomBubbleView:)] && [self isCustomBubbleView:_model]) {
             if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
                 [_delegate messageCellSelected:_model];
                 return;
@@ -618,7 +618,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 }
 
 #pragma mark - IModelCell
-
+/*
 - (BOOL)isCustomBubbleView:(id<IMessageModel>)model
 {
     return NO;
@@ -637,7 +637,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 - (void)updateCustomBubbleViewMargin:(UIEdgeInsets)bubbleMargin model:(id<IMessageModel>)model
 {
 
-}
+}*/
 
 #pragma mark - public
 

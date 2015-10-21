@@ -12,6 +12,7 @@
 
 #import "EaseMessageReadManager.h"
 #import "UIImageView+EMWebCache.h"
+#import "EMCDDeviceManager.h"
 
 static EaseMessageReadManager *detailInstance = nil;
 

@@ -8,13 +8,11 @@
 
 #import "EaseUsersListViewController.h"
 
-#import "EMSearchDisplayController.h"
 #import "UIViewController+HUD.h"
 
 @interface EaseUsersListViewController ()<EMChatManagerDelegate>
 
 @property (strong, nonatomic) UISearchBar *searchBar;
-@property (strong, nonatomic) EMSearchDisplayController *searchController;
 
 @end
 
