@@ -92,7 +92,7 @@
         if ([_dataSource respondsToSelector:@selector(userListViewController:userModelForIndexPath:)]) {
             model = [_dataSource userListViewController:self userModelForIndexPath:indexPath];
         }
-        else if ([_dataSource respondsToSelector:@selector(user)]){
+        else {
             model = [self.dataArray objectAtIndex:indexPath.row];
         }
         
@@ -120,7 +120,7 @@
         if ([_dataSource respondsToSelector:@selector(userListViewController:userModelForIndexPath:)]) {
             model = [_dataSource userListViewController:self userModelForIndexPath:indexPath];
         }
-        else if ([_dataSource respondsToSelector:@selector(user)]){
+        else {
             model = [self.dataArray objectAtIndex:indexPath.row];
         }
         
