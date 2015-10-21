@@ -222,8 +222,6 @@
 		D24A4CF21BD49E200007BB00 /* EaseMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D24A4C031BD49E200007BB00 /* EaseMessageCell.m */; };
 		D24A4CF31BD49E200007BB00 /* EaseMessageTimeCell.h in Headers */ = {isa = PBXBuildFile; fileRef = D24A4C041BD49E200007BB00 /* EaseMessageTimeCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D24A4CF41BD49E200007BB00 /* EaseMessageTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D24A4C051BD49E200007BB00 /* EaseMessageTimeCell.m */; };
-		D24A4CF51BD49E200007BB00 /* EMRecvMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = D24A4C061BD49E200007BB00 /* EMRecvMessageCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D24A4CF61BD49E200007BB00 /* EMRecvMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D24A4C071BD49E200007BB00 /* EMRecvMessageCell.m */; };
 		D24A4CF71BD49E200007BB00 /* EaseBubbleView+File.h in Headers */ = {isa = PBXBuildFile; fileRef = D24A4C091BD49E200007BB00 /* EaseBubbleView+File.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D24A4CF81BD49E200007BB00 /* EaseBubbleView+File.m in Sources */ = {isa = PBXBuildFile; fileRef = D24A4C0A1BD49E200007BB00 /* EaseBubbleView+File.m */; };
 		D24A4CF91BD49E200007BB00 /* EaseBubbleView+Image.h in Headers */ = {isa = PBXBuildFile; fileRef = D24A4C0B1BD49E200007BB00 /* EaseBubbleView+Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -547,8 +545,6 @@
 		D24A4C031BD49E200007BB00 /* EaseMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseMessageCell.m; sourceTree = "<group>"; };
 		D24A4C041BD49E200007BB00 /* EaseMessageTimeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseMessageTimeCell.h; sourceTree = "<group>"; };
 		D24A4C051BD49E200007BB00 /* EaseMessageTimeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseMessageTimeCell.m; sourceTree = "<group>"; };
-		D24A4C061BD49E200007BB00 /* EMRecvMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMRecvMessageCell.h; sourceTree = "<group>"; };
-		D24A4C071BD49E200007BB00 /* EMRecvMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMRecvMessageCell.m; sourceTree = "<group>"; };
 		D24A4C091BD49E200007BB00 /* EaseBubbleView+File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EaseBubbleView+File.h"; sourceTree = "<group>"; };
 		D24A4C0A1BD49E200007BB00 /* EaseBubbleView+File.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EaseBubbleView+File.m"; sourceTree = "<group>"; };
 		D24A4C0B1BD49E200007BB00 /* EaseBubbleView+Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EaseBubbleView+Image.h"; sourceTree = "<group>"; };
@@ -1118,8 +1114,6 @@
 				D24A4C031BD49E200007BB00 /* EaseMessageCell.m */,
 				D24A4C041BD49E200007BB00 /* EaseMessageTimeCell.h */,
 				D24A4C051BD49E200007BB00 /* EaseMessageTimeCell.m */,
-				D24A4C061BD49E200007BB00 /* EMRecvMessageCell.h */,
-				D24A4C071BD49E200007BB00 /* EMRecvMessageCell.m */,
 			);
 			path = MessageCell;
 			sourceTree = "<group>";
@@ -1485,7 +1479,6 @@
 				D24A4CA31BD49E200007BB00 /* PSTCollectionViewCommon.h in Headers */,
 				D24A4D011BD49E200007BB00 /* EaseBubbleView+Voice.h in Headers */,
 				D24A4C821BD49E200007BB00 /* EMSDWebImageDownloader.h in Headers */,
-				D24A4CF51BD49E200007BB00 /* EMRecvMessageCell.h in Headers */,
 				D24A4CD71BD49E200007BB00 /* EaseMessageReadManager.h in Headers */,
 				D24A4CEB1BD49E200007BB00 /* EaseViewController.h in Headers */,
 				D24A4CAF1BD49E200007BB00 /* PSTCollectionViewUpdateItem.h in Headers */,
@@ -1784,7 +1777,6 @@
 				D24A4CA71BD49E200007BB00 /* PSTCollectionViewData.m in Sources */,
 				D24A4C811BD49E200007BB00 /* EMSDWebImageDecoder.m in Sources */,
 				D24A4CA91BD49E200007BB00 /* PSTCollectionViewFlowLayout.m in Sources */,
-				D24A4CF61BD49E200007BB00 /* EMRecvMessageCell.m in Sources */,
 				D24A4CEC1BD49E200007BB00 /* EaseViewController.m in Sources */,
 				D24A4C751BD49E200007BB00 /* MWTapDetectingImageView.m in Sources */,
 				D24A4CBF1BD49E200007BB00 /* EaseMessageModel.m in Sources */,
