@@ -76,10 +76,14 @@
     
     if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTitleForConversationModel:)]) {
         cell.detailLabel.text = [_dataSource conversationListViewController:self latestMessageTitleForConversationModel:model];
+    } else {
+        cell.detailLabel.text = [self _latestMessageTitleForConversationModel:model];
     }
     
     if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTimeForConversationModel:)]) {
         cell.timeLabel.text = [_dataSource conversationListViewController:self latestMessageTimeForConversationModel:model];
+    } else {
+        cell.timeLabel.text = [self _latestMessageTimeForConversationModel:model];
     }
     
     return cell;
@@ -177,6 +181,57 @@
 
 - (void)dealloc{
     [self unregisterNotifications];
+}
+
+#pragma mark - private
+- (NSString *)_latestMessageTitleForConversationModel:(id<IConversationModel>)conversationModel
+{
+    NSString *latestMessageTitle = @"";
+    EMMessage *lastMessage = [conversationModel.conversation latestMessage];
+    if (lastMessage) {
+        id<IEMMessageBody> messageBody = lastMessage.messageBodies.lastObject;
+        switch (messageBody.messageBodyType) {
+            case eMessageBodyType_Image:{
+                latestMessageTitle = NSLocalizedString(@"message.image1", @"[image]");
+            } break;
+            case eMessageBodyType_Text:{
+                NSString *didReceiveText = [EaseConvertToCommonEmoticonsHelper
+                                            convertToSystemEmoticons:((EMTextMessageBody *)messageBody).text];
+                latestMessageTitle = didReceiveText;
+            } break;
+            case eMessageBodyType_Voice:{
+                latestMessageTitle = NSLocalizedString(@"message.voice1", @"[voice]");
+            } break;
+            case eMessageBodyType_Location: {
+                latestMessageTitle = NSLocalizedString(@"message.location1", @"[location]");
+            } break;
+            case eMessageBodyType_Video: {
+                latestMessageTitle = NSLocalizedString(@"message.video1", @"[video]");
+            } break;
+            case eMessageBodyType_File: {
+                latestMessageTitle = NSLocalizedString(@"message.file1", @"[file]");
+            } break;
+            default: {
+            } break;
+        }
+    }
+    return latestMessageTitle;
+}
+
+- (NSString *)_latestMessageTimeForConversationModel:(id<IConversationModel>)conversationModel
+{
+    NSString *latestMessageTime = @"";
+    EMMessage *lastMessage = [conversationModel.conversation latestMessage];;
+    if (lastMessage) {
+        double timeInterval = lastMessage.timestamp ;
+        if(timeInterval > 140000000000) {
+            timeInterval = timeInterval / 1000;
+        }
+        NSDateFormatter* formatter = [[NSDateFormatter alloc]init];
+        [formatter setDateFormat:@"YYYY-MM-dd"];
+        latestMessageTime = [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:timeInterval]];
+    }
+    return latestMessageTime;
 }
 
 @end

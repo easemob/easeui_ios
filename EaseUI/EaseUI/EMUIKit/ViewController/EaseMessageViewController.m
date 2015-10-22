@@ -506,7 +506,7 @@
     
     if ([unreadMessages count])
     {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(_messageQueue, ^{
             for (EMMessage *message in messages)
             {
                 [[EaseMob sharedInstance].chatManager sendReadAckForMessage:message];
@@ -698,68 +698,71 @@
                       count:(NSInteger)count
                      append:(BOOL)isAppend
 {
-    NSArray *moreMessages = nil;
-    if (_dataSource && [_dataSource respondsToSelector:@selector(messageViewController:loadMessageFromTimestamp:count:)]) {
-        moreMessages = [_dataSource messageViewController:self loadMessageFromTimestamp:timestamp count:count];
-    }
-    else{
-        moreMessages = [self.conversation loadNumbersOfMessages:count before:timestamp];;
-    }
-    
-    if ([moreMessages count] == 0) {
-        return;
-    }
-    
-    //格式化消息
-    NSArray *formattedMessages = [self formatMessages:moreMessages];
-    
-    NSInteger scrollToIndex = 0;
-    if (isAppend) {
-        [self.messsagesSource insertObjects:moreMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [moreMessages count])]];
-        
-        //合并消息
-        id object = [self.dataArray firstObject];
-        if ([object isKindOfClass:[NSString class]])
-        {
-            NSString *timestamp = object;
-            [formattedMessages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id model, NSUInteger idx, BOOL *stop) {
-                if ([model isKindOfClass:[NSString class]] && [timestamp isEqualToString:model])
-                {
-                    [self.dataArray removeObjectAtIndex:0];
-                    *stop = YES;
-                }
-            }];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(_messageQueue, ^{
+        NSArray *moreMessages = nil;
+        if (weakSelf.dataSource && [weakSelf.dataSource respondsToSelector:@selector(messageViewController:loadMessageFromTimestamp:count:)]) {
+            moreMessages = [weakSelf.dataSource messageViewController:weakSelf loadMessageFromTimestamp:timestamp count:count];
         }
-        scrollToIndex = [self.dataArray count];
-        [self.dataArray insertObjects:formattedMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formattedMessages count])]];
-    }
-    else{
-        [self.messsagesSource removeAllObjects];
-        [self.messsagesSource addObjectsFromArray:moreMessages];
+        else{
+            moreMessages = [weakSelf.conversation loadNumbersOfMessages:count before:timestamp];;
+        }
         
-        [self.dataArray removeAllObjects];
-        [self.dataArray addObjectsFromArray:formattedMessages];
-    }
-    
-    EMMessage *latest = [self.messsagesSource lastObject];
-    self.messageTimeIntervalTag = latest.timestamp;
-    
-    //刷新页面
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
+        if ([moreMessages count] == 0) {
+            return;
+        }
         
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - scrollToIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        //格式化消息
+        NSArray *formattedMessages = [weakSelf formatMessages:moreMessages];
+        
+        NSInteger scrollToIndex = 0;
+        if (isAppend) {
+            [weakSelf.messsagesSource insertObjects:moreMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [moreMessages count])]];
+            
+            //合并消息
+            id object = [weakSelf.dataArray firstObject];
+            if ([object isKindOfClass:[NSString class]])
+            {
+                NSString *timestamp = object;
+                [formattedMessages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id model, NSUInteger idx, BOOL *stop) {
+                    if ([model isKindOfClass:[NSString class]] && [timestamp isEqualToString:model])
+                    {
+                        [weakSelf.dataArray removeObjectAtIndex:0];
+                        *stop = YES;
+                    }
+                }];
+            }
+            scrollToIndex = [weakSelf.dataArray count];
+            [weakSelf.dataArray insertObjects:formattedMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formattedMessages count])]];
+        }
+        else{
+            [weakSelf.messsagesSource removeAllObjects];
+            [weakSelf.messsagesSource addObjectsFromArray:moreMessages];
+            
+            [weakSelf.dataArray removeAllObjects];
+            [weakSelf.dataArray addObjectsFromArray:formattedMessages];
+        }
+        
+        EMMessage *latest = [weakSelf.messsagesSource lastObject];
+        weakSelf.messageTimeIntervalTag = latest.timestamp;
+        
+        //刷新页面
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.tableView reloadData];
+            
+            [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - scrollToIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        });
+        
+        //从数据库导入时重新下载没有下载成功的附件
+        for (EMMessage *message in moreMessages)
+        {
+            [weakSelf _downloadMessageAttachments:message];
+        }
+        
+        //发送已读回执
+        [weakSelf _sendHasReadResponseForMessages:moreMessages
+                                       isRead:NO];
     });
-    
-    //从数据库导入时重新下载没有下载成功的附件
-    for (EMMessage *message in moreMessages)
-    {
-        [self _downloadMessageAttachments:message];
-    }
-    
-    //发送已读回执
-    [self _sendHasReadResponseForMessages:moreMessages
-                                   isRead:NO];
 }
 
 #pragma mark - GestureRecognizer
@@ -1593,13 +1596,15 @@
 {
     [self.messsagesSource addObject:message];
     
-    NSArray *messages = [self formatMessages:@[message]];
-    
-    __weak EaseMessageViewController *weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.dataArray addObjectsFromArray:messages];
-        [weakSelf.tableView reloadData];
-        [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[weakSelf.dataArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+     __weak EaseMessageViewController *weakSelf = self;
+    dispatch_async(_messageQueue, ^{
+        NSArray *messages = [weakSelf formatMessages:@[message]];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.dataArray addObjectsFromArray:messages];
+            [weakSelf.tableView reloadData];
+            [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[weakSelf.dataArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        });
     });
 }
 
