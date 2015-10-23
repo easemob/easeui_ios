@@ -44,10 +44,12 @@
                 self.thumbnailImageSize = imgMessageBody.thumbnailSize;
                 self.thumbnailImage = [UIImage imageWithContentsOfFile:imgMessageBody.thumbnailLocalPath];
                 self.imageSize = imgMessageBody.size;
-                self.image = [UIImage imageWithContentsOfFile:imgMessageBody.localPath];
-                
                 self.fileLocalPath = imgMessageBody.localPath;
-                self.fileURLPath = imgMessageBody.remotePath;
+                if (_isSender) {
+                    self.image = [UIImage imageWithContentsOfFile:imgMessageBody.thumbnailLocalPath];
+                } else {
+                    self.fileURLPath = imgMessageBody.remotePath;
+                }
             }
                 break;
             case eMessageBodyType_Location:

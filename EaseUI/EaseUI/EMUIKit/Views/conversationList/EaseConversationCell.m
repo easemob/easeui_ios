@@ -69,7 +69,7 @@ CGFloat const EaseConversationCellPadding = 10;
     
     _titleLabel = [[UILabel alloc] init];
     _titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    _titleLabel.numberOfLines = 2;
+    _titleLabel.numberOfLines = 1;
     _titleLabel.backgroundColor = [UIColor clearColor];
     _titleLabel.font = _titleLabelFont;
     _titleLabel.textColor = _titleLabelColor;

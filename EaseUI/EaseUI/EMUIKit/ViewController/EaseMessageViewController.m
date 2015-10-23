@@ -507,7 +507,7 @@
     if ([unreadMessages count])
     {
         dispatch_async(_messageQueue, ^{
-            for (EMMessage *message in messages)
+            for (EMMessage *message in unreadMessages)
             {
                 [[EaseMob sharedInstance].chatManager sendReadAckForMessage:message];
             }
@@ -1626,11 +1626,6 @@
     [self _loadMessagesBefore:timestamp count:self.messageCountOfPage append:YES];
     
     [self tableViewDidFinishTriggerHeader:YES reload:YES];
-}
-
-- (void)reloadConversationList
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATIONNAME_RELOADCONLIST object:nil];
 }
 
 #pragma mark - send message

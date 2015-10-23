@@ -16,8 +16,6 @@
 #define KNOTIFICATION_CALL @"callOutWithChatter"
 #define KNOTIFICATION_CALL_CLOSE @"callControllerClose"
 
-#define KNOTIFICATIONNAME_RELOADCONLIST @"reloadConversationList"
-
 @interface EaseSDKHelper : NSObject
 
 @property (nonatomic) BOOL isShowingimagePicker;

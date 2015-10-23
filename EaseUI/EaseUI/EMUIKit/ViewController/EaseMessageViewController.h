@@ -206,11 +206,6 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 - (void)tableViewDidTriggerHeaderRefresh;
 
 /**
- *  刷新conversation list页面
- */
-- (void)reloadConversationList;
-
-/**
  *  发送文本消息
  */
 - (void)sendTextMessage:(NSString *)text;
