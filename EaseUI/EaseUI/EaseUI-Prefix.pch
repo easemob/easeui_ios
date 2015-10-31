@@ -1,0 +1,17 @@
+//
+//  PrefixHeader.pch
+//  EaseUI
+//
+//  Created by EaseMob on 15/10/21.
+//  Copyright (c) 2015年 easemob. All rights reserved.
+//
+
+#ifndef EaseUI_PrefixHeader_pch
+#define EaseUI_PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import <UIKit/UIKit.h>
+
+#endif
