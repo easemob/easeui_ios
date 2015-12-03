@@ -22,6 +22,7 @@
 
 @property (nonatomic) NSLayoutConstraint *bubbleWithNameTopConstraint;
 @property (nonatomic) NSLayoutConstraint *bubbleWithoutNameTopConstraint;
+@property (nonatomic) NSLayoutConstraint *bubbleWithImageConstraint;
 
 @end
 
@@ -97,7 +98,9 @@
                 retSize.width = width;
                 retSize.height = kEMMessageImageSizeHeight;
             }
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:retSize.width + EaseMessageCellPadding * 2]];
+            [self removeConstraint:self.bubbleWithImageConstraint];
+            self.bubbleWithImageConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:retSize.width + EaseMessageCellPadding * 2];
+            [self addConstraint:self.bubbleWithImageConstraint];
         }
             break;
         case eMessageBodyType_Location:

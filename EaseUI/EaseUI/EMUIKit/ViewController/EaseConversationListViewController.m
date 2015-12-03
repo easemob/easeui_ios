@@ -73,9 +73,9 @@
     cell.model = model;
     
     if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTitleForConversationModel:)]) {
-        cell.detailLabel.text = [_dataSource conversationListViewController:self latestMessageTitleForConversationModel:model];
+        cell.detailLabel.attributedText =  [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:[_dataSource conversationListViewController:self latestMessageTitleForConversationModel:model] textFont:cell.detailLabel.font];
     } else {
-        cell.detailLabel.text = [self _latestMessageTitleForConversationModel:model];
+        cell.detailLabel.attributedText =  [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:[self _latestMessageTitleForConversationModel:model]textFont:cell.detailLabel.font];
     }
     
     if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTimeForConversationModel:)]) {
@@ -190,7 +190,7 @@
         id<IEMMessageBody> messageBody = lastMessage.messageBodies.lastObject;
         switch (messageBody.messageBodyType) {
             case eMessageBodyType_Image:{
-                latestMessageTitle = NSLocalizedString(@"message.image1", @"[image]");
+                latestMessageTitle = NSEaseLocalizedString(@"message.image1", @"[image]");
             } break;
             case eMessageBodyType_Text:{
                 NSString *didReceiveText = [EaseConvertToCommonEmoticonsHelper
@@ -198,16 +198,16 @@
                 latestMessageTitle = didReceiveText;
             } break;
             case eMessageBodyType_Voice:{
-                latestMessageTitle = NSLocalizedString(@"message.voice1", @"[voice]");
+                latestMessageTitle = NSEaseLocalizedString(@"message.voice1", @"[voice]");
             } break;
             case eMessageBodyType_Location: {
-                latestMessageTitle = NSLocalizedString(@"message.location1", @"[location]");
+                latestMessageTitle = NSEaseLocalizedString(@"message.location1", @"[location]");
             } break;
             case eMessageBodyType_Video: {
-                latestMessageTitle = NSLocalizedString(@"message.video1", @"[video]");
+                latestMessageTitle = NSEaseLocalizedString(@"message.video1", @"[video]");
             } break;
             case eMessageBodyType_File: {
-                latestMessageTitle = NSLocalizedString(@"message.file1", @"[file]");
+                latestMessageTitle = NSEaseLocalizedString(@"message.file1", @"[file]");
             } break;
             default: {
             } break;

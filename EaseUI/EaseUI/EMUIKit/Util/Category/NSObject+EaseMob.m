@@ -9,6 +9,7 @@
 #import "NSObject+EaseMob.h"
 
 #import "EaseMob.h"
+#import "EaseSDKHelper.h"
 
 @implementation NSObject (EaseMob)
 
@@ -25,6 +26,10 @@
 
 - (void)registerEaseMobNotification
 {
+    if ([[EaseSDKHelper shareHelper] isLite]) {
+        [self registerEaseMobLiteNotification];
+        return;
+    }
     [[EaseMob sharedInstance].chatManager removeDelegate:self];
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
     
@@ -34,6 +39,10 @@
 
 - (void)unregisterEaseMobNotification
 {
+    if ([[EaseSDKHelper shareHelper] isLite]) {
+        [self unregisterEaseMobLiteNotification];
+        return;
+    }
     [[EaseMob sharedInstance].chatManager removeDelegate:self];
     [[EaseMob sharedInstance].callManager removeDelegate:self];
 }
