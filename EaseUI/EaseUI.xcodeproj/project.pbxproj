@@ -263,6 +263,72 @@
 		D2F2C9BC1C10604700F4AE1E /* PSTGridLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D2F2C97F1C10604700F4AE1E /* PSTGridLayoutItem.m */; };
 		D2F2C9BD1C10604700F4AE1E /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = D2F2C9811C10604700F4AE1E /* PSTGridLayoutRow.m */; };
 		D2F2C9BE1C10604700F4AE1E /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = D2F2C9831C10604700F4AE1E /* PSTGridLayoutSection.m */; };
+		D2F2CA421C10754E00F4AE1E /* MBProgressHUD+Add.h in 3rdparty/MBProgressHUD */ = {isa = PBXBuildFile; fileRef = D2F2C8FB1C10604700F4AE1E /* MBProgressHUD+Add.h */; };
+		D2F2CA431C10754E00F4AE1E /* MBProgressHUD.h in 3rdparty/MBProgressHUD */ = {isa = PBXBuildFile; fileRef = D2F2C8FD1C10604700F4AE1E /* MBProgressHUD.h */; };
+		D2F2CA441C10756F00F4AE1E /* MJRefreshAutoFooter.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9011C10604700F4AE1E /* MJRefreshAutoFooter.h */; };
+		D2F2CA451C10756F00F4AE1E /* MJRefreshBackFooter.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9031C10604700F4AE1E /* MJRefreshBackFooter.h */; };
+		D2F2CA461C10756F00F4AE1E /* MJRefreshComponent.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9051C10604700F4AE1E /* MJRefreshComponent.h */; };
+		D2F2CA471C10756F00F4AE1E /* MJRefreshFooter.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9071C10604700F4AE1E /* MJRefreshFooter.h */; };
+		D2F2CA481C10756F00F4AE1E /* MJRefreshHeader.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9091C10604700F4AE1E /* MJRefreshHeader.h */; };
+		D2F2CA491C10756F00F4AE1E /* MJRefreshAutoGifFooter.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C90E1C10604700F4AE1E /* MJRefreshAutoGifFooter.h */; };
+		D2F2CA4A1C10756F00F4AE1E /* MJRefreshAutoNormalFooter.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9101C10604700F4AE1E /* MJRefreshAutoNormalFooter.h */; };
+		D2F2CA4B1C10756F00F4AE1E /* MJRefreshAutoStateFooter.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9121C10604700F4AE1E /* MJRefreshAutoStateFooter.h */; };
+		D2F2CA4C1C10756F00F4AE1E /* MJRefreshBackGifFooter.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9151C10604700F4AE1E /* MJRefreshBackGifFooter.h */; };
+		D2F2CA4D1C10756F00F4AE1E /* MJRefreshBackNormalFooter.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9171C10604700F4AE1E /* MJRefreshBackNormalFooter.h */; };
+		D2F2CA4E1C10756F00F4AE1E /* MJRefreshBackStateFooter.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9191C10604700F4AE1E /* MJRefreshBackStateFooter.h */; };
+		D2F2CA4F1C10756F00F4AE1E /* MJRefreshGifHeader.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C91C1C10604700F4AE1E /* MJRefreshGifHeader.h */; };
+		D2F2CA501C10756F00F4AE1E /* MJRefreshNormalHeader.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C91E1C10604700F4AE1E /* MJRefreshNormalHeader.h */; };
+		D2F2CA511C10756F00F4AE1E /* MJRefreshStateHeader.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9201C10604700F4AE1E /* MJRefreshStateHeader.h */; };
+		D2F2CA521C10756F00F4AE1E /* MJRefresh.bundle in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9221C10604700F4AE1E /* MJRefresh.bundle */; };
+		D2F2CA531C10756F00F4AE1E /* MJRefresh.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9231C10604700F4AE1E /* MJRefresh.h */; };
+		D2F2CA541C10756F00F4AE1E /* MJRefreshConst.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9241C10604700F4AE1E /* MJRefreshConst.h */; };
+		D2F2CA551C10756F00F4AE1E /* UIScrollView+MJExtension.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9261C10604700F4AE1E /* UIScrollView+MJExtension.h */; };
+		D2F2CA561C10756F00F4AE1E /* UIScrollView+MJRefresh.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C9281C10604700F4AE1E /* UIScrollView+MJRefresh.h */; };
+		D2F2CA571C10756F00F4AE1E /* UIView+MJExtension.h in 3rdparty/MJRefresh */ = {isa = PBXBuildFile; fileRef = D2F2C92A1C10604700F4AE1E /* UIView+MJExtension.h */; };
+		D2F2CA581C1075A700F4AE1E /* MWCaptionView.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C92E1C10604700F4AE1E /* MWCaptionView.h */; };
+		D2F2CA591C1075A700F4AE1E /* MWCommon.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9301C10604700F4AE1E /* MWCommon.h */; };
+		D2F2CA5A1C1075A700F4AE1E /* MWGridCell.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9311C10604700F4AE1E /* MWGridCell.h */; };
+		D2F2CA5B1C1075A700F4AE1E /* MWGridViewController.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9331C10604700F4AE1E /* MWGridViewController.h */; };
+		D2F2CA5C1C1075A700F4AE1E /* MWPhoto.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9351C10604700F4AE1E /* MWPhoto.h */; };
+		D2F2CA5D1C1075A700F4AE1E /* MWPhotoBrowser.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9371C10604700F4AE1E /* MWPhotoBrowser.h */; };
+		D2F2CA5E1C1075A700F4AE1E /* MWPhotoBrowserPrivate.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9391C10604700F4AE1E /* MWPhotoBrowserPrivate.h */; };
+		D2F2CA5F1C1075A700F4AE1E /* MWTapDetectingImageView.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C93B1C10604700F4AE1E /* MWTapDetectingImageView.h */; };
+		D2F2CA601C1075A700F4AE1E /* MWTapDetectingView.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C93D1C10604700F4AE1E /* MWTapDetectingView.h */; };
+		D2F2CA611C1075A700F4AE1E /* MWZoomingScrollView.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C93F1C10604700F4AE1E /* MWZoomingScrollView.h */; };
+		D2F2CA621C1075A700F4AE1E /* DACircularProgressView.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9431C10604700F4AE1E /* DACircularProgressView.h */; };
+		D2F2CA631C1075A700F4AE1E /* EMSDImageCache.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9461C10604700F4AE1E /* EMSDImageCache.h */; };
+		D2F2CA641C1075A700F4AE1E /* EMSDWebImageCompat.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9481C10604700F4AE1E /* EMSDWebImageCompat.h */; };
+		D2F2CA651C1075A700F4AE1E /* EMSDWebImageDecoder.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C94A1C10604700F4AE1E /* EMSDWebImageDecoder.h */; };
+		D2F2CA661C1075A700F4AE1E /* EMSDWebImageDownloader.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C94C1C10604700F4AE1E /* EMSDWebImageDownloader.h */; };
+		D2F2CA671C1075A700F4AE1E /* EMSDWebImageDownloaderOperation.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C94E1C10604700F4AE1E /* EMSDWebImageDownloaderOperation.h */; };
+		D2F2CA681C1075A700F4AE1E /* EMSDWebImageManager.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9501C10604700F4AE1E /* EMSDWebImageManager.h */; };
+		D2F2CA691C1075A700F4AE1E /* EMSDWebImageOperation.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9521C10604700F4AE1E /* EMSDWebImageOperation.h */; };
+		D2F2CA6A1C1075A700F4AE1E /* EMSDWebImagePrefetcher.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9531C10604700F4AE1E /* EMSDWebImagePrefetcher.h */; };
+		D2F2CA6B1C1075A700F4AE1E /* MKAnnotationView+EMWebCache.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9551C10604700F4AE1E /* MKAnnotationView+EMWebCache.h */; };
+		D2F2CA6C1C1075A700F4AE1E /* NSData+EMImageContentType.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9571C10604700F4AE1E /* NSData+EMImageContentType.h */; };
+		D2F2CA6D1C1075A700F4AE1E /* UIButton+EMWebCache.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9591C10604700F4AE1E /* UIButton+EMWebCache.h */; };
+		D2F2CA6E1C1075A700F4AE1E /* UIImage+EMGIF.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C95B1C10604700F4AE1E /* UIImage+EMGIF.h */; };
+		D2F2CA6F1C1075A700F4AE1E /* UIImage+EMMultiFormat.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C95D1C10604700F4AE1E /* UIImage+EMMultiFormat.h */; };
+		D2F2CA701C1075A700F4AE1E /* UIImage+EMWebP.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C95F1C10604700F4AE1E /* UIImage+EMWebP.h */; };
+		D2F2CA711C1075A700F4AE1E /* UIImageView+EMHighlightedWebCache.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9611C10604700F4AE1E /* UIImageView+EMHighlightedWebCache.h */; };
+		D2F2CA721C1075A700F4AE1E /* UIImageView+EMWebCache.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9631C10604700F4AE1E /* UIImageView+EMWebCache.h */; };
+		D2F2CA731C1075A700F4AE1E /* UIView+EMWebCacheOperation.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9651C10604700F4AE1E /* UIView+EMWebCacheOperation.h */; };
+		D2F2CA741C1075A700F4AE1E /* NSIndexPath+PSTCollectionViewAdditions.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9681C10604700F4AE1E /* NSIndexPath+PSTCollectionViewAdditions.h */; };
+		D2F2CA751C1075A700F4AE1E /* PSTCollectionView.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C96A1C10604700F4AE1E /* PSTCollectionView.h */; };
+		D2F2CA761C1075A700F4AE1E /* PSTCollectionViewCell.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C96C1C10604700F4AE1E /* PSTCollectionViewCell.h */; };
+		D2F2CA771C1075A700F4AE1E /* PSTCollectionViewCommon.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C96E1C10604700F4AE1E /* PSTCollectionViewCommon.h */; };
+		D2F2CA781C1075A700F4AE1E /* PSTCollectionViewController.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C96F1C10604700F4AE1E /* PSTCollectionViewController.h */; };
+		D2F2CA791C1075A700F4AE1E /* PSTCollectionViewData.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9711C10604700F4AE1E /* PSTCollectionViewData.h */; };
+		D2F2CA7A1C1075A700F4AE1E /* PSTCollectionViewFlowLayout.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9731C10604700F4AE1E /* PSTCollectionViewFlowLayout.h */; };
+		D2F2CA7B1C1075A700F4AE1E /* PSTCollectionViewItemKey.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9751C10604700F4AE1E /* PSTCollectionViewItemKey.h */; };
+		D2F2CA7C1C1075A700F4AE1E /* PSTCollectionViewLayout+Internals.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9771C10604700F4AE1E /* PSTCollectionViewLayout+Internals.h */; };
+		D2F2CA7D1C1075A700F4AE1E /* PSTCollectionViewLayout.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9781C10604700F4AE1E /* PSTCollectionViewLayout.h */; };
+		D2F2CA7E1C1075A700F4AE1E /* PSTCollectionViewUpdateItem.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C97A1C10604700F4AE1E /* PSTCollectionViewUpdateItem.h */; };
+		D2F2CA7F1C1075A700F4AE1E /* PSTGridLayoutInfo.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C97C1C10604700F4AE1E /* PSTGridLayoutInfo.h */; };
+		D2F2CA801C1075A700F4AE1E /* PSTGridLayoutItem.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C97E1C10604700F4AE1E /* PSTGridLayoutItem.h */; };
+		D2F2CA811C1075A700F4AE1E /* PSTGridLayoutRow.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9801C10604700F4AE1E /* PSTGridLayoutRow.h */; };
+		D2F2CA831C1075A700F4AE1E /* PSTGridLayoutSection.h in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9821C10604700F4AE1E /* PSTGridLayoutSection.h */; };
+		D2F2CA841C1075A700F4AE1E /* MWPhotoBrowser.bundle in 3rdparty/MWPhotoBrowser */ = {isa = PBXBuildFile; fileRef = D2F2C9841C10604700F4AE1E /* MWPhotoBrowser.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -476,6 +542,8 @@
 			dstPath = "$(PROJECT_DIR)/export/include/3rdparty/MBProgressHUD";
 			dstSubfolderSpec = 0;
 			files = (
+				D2F2CA421C10754E00F4AE1E /* MBProgressHUD+Add.h in 3rdparty/MBProgressHUD */,
+				D2F2CA431C10754E00F4AE1E /* MBProgressHUD.h in 3rdparty/MBProgressHUD */,
 			);
 			name = 3rdparty/MBProgressHUD;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -486,6 +554,26 @@
 			dstPath = "$(PROJECT_DIR)/export/include/3rdparty/MJRefresh";
 			dstSubfolderSpec = 0;
 			files = (
+				D2F2CA441C10756F00F4AE1E /* MJRefreshAutoFooter.h in 3rdparty/MJRefresh */,
+				D2F2CA451C10756F00F4AE1E /* MJRefreshBackFooter.h in 3rdparty/MJRefresh */,
+				D2F2CA461C10756F00F4AE1E /* MJRefreshComponent.h in 3rdparty/MJRefresh */,
+				D2F2CA471C10756F00F4AE1E /* MJRefreshFooter.h in 3rdparty/MJRefresh */,
+				D2F2CA481C10756F00F4AE1E /* MJRefreshHeader.h in 3rdparty/MJRefresh */,
+				D2F2CA491C10756F00F4AE1E /* MJRefreshAutoGifFooter.h in 3rdparty/MJRefresh */,
+				D2F2CA4A1C10756F00F4AE1E /* MJRefreshAutoNormalFooter.h in 3rdparty/MJRefresh */,
+				D2F2CA4B1C10756F00F4AE1E /* MJRefreshAutoStateFooter.h in 3rdparty/MJRefresh */,
+				D2F2CA4C1C10756F00F4AE1E /* MJRefreshBackGifFooter.h in 3rdparty/MJRefresh */,
+				D2F2CA4D1C10756F00F4AE1E /* MJRefreshBackNormalFooter.h in 3rdparty/MJRefresh */,
+				D2F2CA4E1C10756F00F4AE1E /* MJRefreshBackStateFooter.h in 3rdparty/MJRefresh */,
+				D2F2CA4F1C10756F00F4AE1E /* MJRefreshGifHeader.h in 3rdparty/MJRefresh */,
+				D2F2CA501C10756F00F4AE1E /* MJRefreshNormalHeader.h in 3rdparty/MJRefresh */,
+				D2F2CA511C10756F00F4AE1E /* MJRefreshStateHeader.h in 3rdparty/MJRefresh */,
+				D2F2CA521C10756F00F4AE1E /* MJRefresh.bundle in 3rdparty/MJRefresh */,
+				D2F2CA531C10756F00F4AE1E /* MJRefresh.h in 3rdparty/MJRefresh */,
+				D2F2CA541C10756F00F4AE1E /* MJRefreshConst.h in 3rdparty/MJRefresh */,
+				D2F2CA551C10756F00F4AE1E /* UIScrollView+MJExtension.h in 3rdparty/MJRefresh */,
+				D2F2CA561C10756F00F4AE1E /* UIScrollView+MJRefresh.h in 3rdparty/MJRefresh */,
+				D2F2CA571C10756F00F4AE1E /* UIView+MJExtension.h in 3rdparty/MJRefresh */,
 			);
 			name = 3rdparty/MJRefresh;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -496,6 +584,50 @@
 			dstPath = "$(PROJECT_DIR)/export/include/3rdparty/MWPhotoBrowser";
 			dstSubfolderSpec = 0;
 			files = (
+				D2F2CA581C1075A700F4AE1E /* MWCaptionView.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA591C1075A700F4AE1E /* MWCommon.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA5A1C1075A700F4AE1E /* MWGridCell.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA5B1C1075A700F4AE1E /* MWGridViewController.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA5C1C1075A700F4AE1E /* MWPhoto.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA5D1C1075A700F4AE1E /* MWPhotoBrowser.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA5E1C1075A700F4AE1E /* MWPhotoBrowserPrivate.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA5F1C1075A700F4AE1E /* MWTapDetectingImageView.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA601C1075A700F4AE1E /* MWTapDetectingView.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA611C1075A700F4AE1E /* MWZoomingScrollView.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA621C1075A700F4AE1E /* DACircularProgressView.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA631C1075A700F4AE1E /* EMSDImageCache.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA641C1075A700F4AE1E /* EMSDWebImageCompat.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA651C1075A700F4AE1E /* EMSDWebImageDecoder.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA661C1075A700F4AE1E /* EMSDWebImageDownloader.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA671C1075A700F4AE1E /* EMSDWebImageDownloaderOperation.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA681C1075A700F4AE1E /* EMSDWebImageManager.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA691C1075A700F4AE1E /* EMSDWebImageOperation.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA6A1C1075A700F4AE1E /* EMSDWebImagePrefetcher.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA6B1C1075A700F4AE1E /* MKAnnotationView+EMWebCache.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA6C1C1075A700F4AE1E /* NSData+EMImageContentType.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA6D1C1075A700F4AE1E /* UIButton+EMWebCache.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA6E1C1075A700F4AE1E /* UIImage+EMGIF.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA6F1C1075A700F4AE1E /* UIImage+EMMultiFormat.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA701C1075A700F4AE1E /* UIImage+EMWebP.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA711C1075A700F4AE1E /* UIImageView+EMHighlightedWebCache.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA721C1075A700F4AE1E /* UIImageView+EMWebCache.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA731C1075A700F4AE1E /* UIView+EMWebCacheOperation.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA741C1075A700F4AE1E /* NSIndexPath+PSTCollectionViewAdditions.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA751C1075A700F4AE1E /* PSTCollectionView.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA761C1075A700F4AE1E /* PSTCollectionViewCell.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA771C1075A700F4AE1E /* PSTCollectionViewCommon.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA781C1075A700F4AE1E /* PSTCollectionViewController.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA791C1075A700F4AE1E /* PSTCollectionViewData.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA7A1C1075A700F4AE1E /* PSTCollectionViewFlowLayout.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA7B1C1075A700F4AE1E /* PSTCollectionViewItemKey.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA7C1C1075A700F4AE1E /* PSTCollectionViewLayout+Internals.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA7D1C1075A700F4AE1E /* PSTCollectionViewLayout.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA7E1C1075A700F4AE1E /* PSTCollectionViewUpdateItem.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA7F1C1075A700F4AE1E /* PSTGridLayoutInfo.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA801C1075A700F4AE1E /* PSTGridLayoutItem.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA811C1075A700F4AE1E /* PSTGridLayoutRow.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA831C1075A700F4AE1E /* PSTGridLayoutSection.h in 3rdparty/MWPhotoBrowser */,
+				D2F2CA841C1075A700F4AE1E /* MWPhotoBrowser.bundle in 3rdparty/MWPhotoBrowser */,
 			);
 			name = 3rdparty/MWPhotoBrowser;
 			runOnlyForDeploymentPostprocessing = 0;
