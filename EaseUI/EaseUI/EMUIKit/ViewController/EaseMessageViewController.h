@@ -149,8 +149,8 @@
  @param messageBodyType
  @result
  */
-- (id<IEMChatProgressDelegate>)messageViewController:(EaseMessageViewController *)viewController
-                  progressDelegateForMessageBodyType:(MessageBodyType)messageBodyType;
+- (id)messageViewController:(EaseMessageViewController *)viewController
+                  progressDelegateForMessageBodyType:(EMMessageBodyType)messageBodyType;
 
 /*!
  @method
@@ -165,7 +165,7 @@
 - (void)messageViewController:(EaseMessageViewController *)viewController
                updateProgress:(float)progress
                  messageModel:(id<IMessageModel>)messageModel
-                  messageBody:(id<IEMMessageBody>)messageBody;
+                  messageBody:(EMMessageBody*)messageBody;
 
 /*!
  @method
@@ -292,7 +292,7 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 
 @end
 
-@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, IChatManagerDelegate, IEMChatProgressDelegate, EMCallManagerCallDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate>
+@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, EMChatManagerDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate,EMChatroomManagerDelegate>
 
 @property (weak, nonatomic) id<EaseMessageViewControllerDelegate> delegate;
 
@@ -467,6 +467,6 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
  @result
  */
 -(void)addMessageToDataSource:(EMMessage *)message
-                     progress:(id<IEMChatProgressDelegate>)progress;
+                     progress:(id)progress;
 
 @end

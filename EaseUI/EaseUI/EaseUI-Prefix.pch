@@ -12,5 +12,22 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
 
+    #import "EMClient.h"
+    #import "EMClientDelegate.h"
+    #import "EMConversation.h"
+    #import "EMMessage.h"
+    #import "EMGroup.h"
+    #import "EMChatroom.h"
+    #import "EMTextMessageBody.h"
+    #import "EMImageMessageBody.h"
+    #import "EMLocationMessageBody.h"
+    #import "EMVoiceMessageBody.h"
+    #import "EMVideoMessageBody.h"
+    #import "EMFileMessageBody.h"
+    #import "EMGroupManagerDelegate.h"
+    #import "EMChatroomManagerDelegate.h"
+
+//    #import "EMClient+Call.h"
+
 #define NSEaseLocalizedString(key, comment) [[NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"EaseUIResource" withExtension:@"bundle"]] localizedStringForKey:(key) value:@"" table:nil]
 #endif

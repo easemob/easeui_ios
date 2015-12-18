@@ -33,7 +33,7 @@
 - (NSInteger)numberOfRowInUserListViewController:(EaseUsersListViewController *)userListViewController;
 
 - (id<IUserModel>)userListViewController:(EaseUsersListViewController *)userListViewController
-                           modelForBuddy:(EMBuddy *)buddy;
+                           modelForBuddy:(NSString *)buddy;
 
 - (id<IUserModel>)userListViewController:(EaseUsersListViewController *)userListViewController
                    userModelForIndexPath:(NSIndexPath *)indexPath;

@@ -10,6 +10,15 @@
 
 @implementation EaseBubbleView (Location)
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+//    
+//    CGFloat availableLabelWidth = self.frame.size.width;
+//    self.locationLabel.preferredMaxLayoutWidth = availableLabelWidth - 30;
+//    
+//    [super layoutSubviews];
+}
+
 #pragma mark - private
 
 - (void)_setupLocationBubbleMarginConstraints
@@ -52,6 +61,7 @@
     self.locationLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.locationLabel.numberOfLines = 2;
     self.locationLabel.backgroundColor = [UIColor colorWithWhite:0.3 alpha:0.8];
+//    self.locationLabel.preferredMaxLayoutWidth = 0.0f;
     [self.locationImageView addSubview:self.locationLabel];
     
     [self _setupLocationBubbleConstraints];

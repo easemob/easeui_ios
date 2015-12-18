@@ -9,16 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-#import "EaseMob.h"
-#import "NSObject+EaseMob.h"
-
 #define KNOTIFICATION_LOGINCHANGE @"loginStateChange"
 #define KNOTIFICATION_CALL @"callOutWithChatter"
 #define KNOTIFICATION_CALL_CLOSE @"callControllerClose"
 
+#define kSDKConfigEnableConsoleLogger @"SDKConfigEnableConsoleLogger"
 #define kEaseUISDKConfigIsUseLite @"isUselibEaseMobClientSDKLite"
 
-@interface EaseSDKHelper : NSObject
+@interface EaseSDKHelper : NSObject<EMClientDelegate>
 
 @property (nonatomic) BOOL isShowingimagePicker;
 
@@ -34,56 +32,50 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
               apnsCertName:(NSString *)apnsCertName
                otherConfig:(NSDictionary *)otherConfig;
 
-#pragma mark - login easemob
-
-- (void)loginWithUsername:(NSString *)username
-                 password:(NSString *)password;
-
 #pragma mark - send message
 
 + (EMMessage *)sendTextMessage:(NSString *)text
                             to:(NSString *)to
-                   messageType:(EMMessageType)messageType
-             requireEncryption:(BOOL)requireEncryption
+                   messageType:(EMChatType)messageType
                     messageExt:(NSDictionary *)messageExt;
 
 + (EMMessage *)sendLocationMessageWithLatitude:(double)latitude
                                      longitude:(double)longitude
                                        address:(NSString *)address
                                             to:(NSString *)to
-                                   messageType:(EMMessageType)messageType
+                                   messageType:(EMChatType)messageType
                              requireEncryption:(BOOL)requireEncryption
                                     messageExt:(NSDictionary *)messageExt;
 
 + (EMMessage *)sendImageMessageWithImage:(UIImage *)image
                                       to:(NSString *)to
-                             messageType:(EMMessageType)messageType
+                             messageType:(EMChatType)messageType
                        requireEncryption:(BOOL)requireEncryption
                               messageExt:(NSDictionary *)messageExt
                                  quality:(float)quality
-                                progress:(id<IEMChatProgressDelegate>)progress;
+                                progress:(id)progress;
 
 + (EMMessage *)sendImageMessageWithImage:(UIImage *)image
                                       to:(NSString *)to
-                             messageType:(EMMessageType)messageType
+                             messageType:(EMChatType)messageType
                        requireEncryption:(BOOL)requireEncryption
                               messageExt:(NSDictionary *)messageExt
-                                progress:(id<IEMChatProgressDelegate>)progress;
+                                progress:(id)progress;
 
 + (EMMessage *)sendVoiceMessageWithLocalPath:(NSString *)localPath
                                     duration:(NSInteger)duration
                                           to:(NSString *)to
-                           messageType:(EMMessageType)messageType
+                           messageType:(EMChatType)messageType
                      requireEncryption:(BOOL)requireEncryption
                             messageExt:(NSDictionary *)messageExt
-                                    progress:(id<IEMChatProgressDelegate>)progress;
+                                    progress:(id)progress;
 
 + (EMMessage *)sendVideoMessageWithURL:(NSURL *)url
                                     to:(NSString *)to
-                           messageType:(EMMessageType)messageType
+                           messageType:(EMChatType)messageType
                      requireEncryption:(BOOL)requireEncryption
                             messageExt:(NSDictionary *)messageExt
-                              progress:(id<IEMChatProgressDelegate>)progress;
+                              progress:(id)progress;
 
 #pragma mark - call
 

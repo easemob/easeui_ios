@@ -8,7 +8,8 @@
 
 #import "EaseMessageViewController.h"
 
-#import "NSObject+EaseMob.h"
+#import <Foundation/Foundation.h>
+
 #import "NSDate+Category.h"
 #import "EaseUsersListViewController.h"
 #import "EaseMessageReadManager.h"
@@ -52,7 +53,7 @@
     
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
-        _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:conversationChatter conversationType:conversationType];
+        _conversation = [[EMClient shareClient].chatManager getConversation:conversationChatter type:conversationType createIfNotExist:YES];
         
         _messageCountOfPage = 10;
         _timeCellHeight = 30;
@@ -60,7 +61,7 @@
         _scrollToBottomWhenAppear = YES;
         _messsagesSource = [NSMutableArray array];
         
-        [_conversation markAllMessagesAsRead:YES];
+        [_conversation markAllMessagesAsRead];
     }
     
     return self;
@@ -74,7 +75,7 @@
     
     //初始化页面
     CGFloat chatbarHeight = [EaseChatToolbar defaultHeight];
-    EMChatToolbarType barType = self.conversation.conversationType == eConversationTypeChat ? EMChatToolbarTypeChat : EMChatToolbarTypeGroup;
+    EMChatToolbarType barType = self.conversation.type == EMConversationTypeChat ? EMChatToolbarTypeChat : EMChatToolbarTypeGroup;
     self.chatToolbar = [[EaseChatToolbar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - chatbarHeight, self.view.frame.size.width, chatbarHeight) type:barType];
     self.chatToolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;    
     
@@ -90,12 +91,12 @@
     
     //注册代理
     [EMCDDeviceManager sharedInstance].delegate = self;
-    [self registerEaseMobNotification];
-    
-    
-    if (self.conversation.conversationType == eConversationTypeChatRoom)
+    [[EMClient shareClient].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient shareClient].roomManager addDelegate:self delegateQueue:nil];
+
+    if (self.conversation.type == EMConversationTypeChatRoom)
     {
-        [self joinChatroom:self.conversation.chatter];
+        [self joinChatroom:self.conversation.conversationId];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -132,15 +133,26 @@
     
     [[EMCDDeviceManager sharedInstance] stopPlaying];
     [EMCDDeviceManager sharedInstance].delegate = nil;
-    [self unregisterEaseMobNotification];
+    [[EMClient shareClient].chatManager removeDelegate:self];
+    [[EMClient shareClient].roomManager removeDelegate:self];
     
-    if (_conversation.conversationType == eConversationTypeChatRoom && !_isKicked)
+    if (_conversation.type == EMConversationTypeChatRoom && !_isKicked)
     {
         //退出聊天室，删除会话
-        NSString *chatter = [_conversation.chatter copy];
-        [[EaseMob sharedInstance].chatManager asyncLeaveChatroom:chatter completion:^(EMChatroom *chatroom, EMError *error){
-            [[EaseMob sharedInstance].chatManager removeConversationByChatter:chatter deleteMessages:YES append2Chat:YES];
-        }];
+        NSString *chatter = [_conversation.conversationId copy];
+        EMError *error = nil;
+        [[EMClient shareClient].roomManager leaveChatroom:chatter error:&error];
+        if (error ==nil) {
+            [[EMClient shareClient].chatManager deleteConversation:_conversation.conversationId deleteMessages:YES];
+        }
+    }
+    
+    if (self.deleteConversationIfNull) {
+        //判断当前会话是否为空，若符合则删除该会话
+        EMMessage *message = [self.conversation latestMessage];
+        if (message == nil) {
+            [[EMClient shareClient].chatManager deleteConversation:self.conversation.conversationId deleteMessages:NO];
+        }
     }
     
     if (_imagePicker){
@@ -167,7 +179,7 @@
     [super viewWillDisappear:animated];
     
     self.isViewDidAppear = NO;
-    [_conversation markAllMessagesAsRead:YES];
+    [_conversation markAllMessagesAsRead];
     [[EMCDDeviceManager sharedInstance] disableProximitySensor];
 }
 
@@ -175,9 +187,9 @@
 
 - (void)saveChatroom:(EMChatroom *)chatroom
 {
-    NSString *chatroomName = chatroom.chatroomSubject ? chatroom.chatroomSubject : @"";
+    NSString *chatroomName = chatroom.subject ? chatroom.subject : @"";
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    NSString *key = [NSString stringWithFormat:@"OnceJoinedChatrooms_%@", [[[EaseMob sharedInstance].chatManager loginInfo] objectForKey:@"username" ]];
+    NSString *key = [NSString stringWithFormat:@"OnceJoinedChatrooms_%@", [[EMClient shareClient] currentUsername]];
     NSMutableDictionary *chatRooms = [NSMutableDictionary dictionaryWithDictionary:[ud objectForKey:key]];
     if (![chatRooms objectForKey:chatroom.chatroomId])
     {
@@ -189,55 +201,55 @@
 
 - (void)joinChatroom:(NSString *)chatroomId
 {
-    [self showHudInView:self.view hint:NSEaseLocalizedString(@"chatroom.joining",@"Joining the chatroom")];
     __weak typeof(self) weakSelf = self;
-    [[EaseMob sharedInstance].chatManager asyncJoinChatroom:chatroomId completion:^(EMChatroom *chatroom, EMError *error){
-        if (weakSelf)
-        {
+    [self showHudInView:self.view hint:NSLocalizedString(@"chatroom.joining",@"Joining the chatroom")];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        EMError *error = nil;
+        EMChatroom *chatroom = [[EMClient shareClient].roomManager joinChatroom:chatroomId error:&error];
+        if (weakSelf) {
             EaseMessageViewController *strongSelf = weakSelf;
             [strongSelf hideHud];
-            if (error && (error.errorCode != EMErrorChatroomJoined))
-            {
-                [strongSelf showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.joinFailed",@"join chatroom \'%@\' failed"), chatroomId]];
-            }
-            else
-            {
+            if (error != nil) {
+                [strongSelf showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.joinFailed",@"join chatroom \'%@\' failed"), chatroomId]];
+            } else {
                 [strongSelf saveChatroom:chatroom];
             }
-        }
-        else
-        {
-            if (!error || (error.errorCode == EMErrorChatroomJoined))
-            {
-                [[EaseMob sharedInstance].chatManager asyncLeaveChatroom:chatroomId completion:^(EMChatroom *chatroom, EMError *error){
-                    [[EaseMob sharedInstance].chatManager removeConversationByChatter:chatroomId deleteMessages:YES append2Chat:YES];
-                }];
+        }  else {
+            if (!error || (error.code == EMErrorChatroomAlreadyJoined)) {
+                EMError *leaveError;
+                [[EMClient shareClient].roomManager leaveChatroom:chatroomId error:&leaveError];
+                if (error == nil) {
+                    [[EMClient shareClient].chatManager deleteConversation:chatroomId deleteMessages:YES];
+                }
             }
         }
-    }];
+    });
 }
 
 #pragma mark - EMChatManagerChatroomDelegate
 
-- (void)chatroom:(EMChatroom *)chatroom occupantDidJoin:(NSString *)username
+- (void)didReceiveUserJoinedChatroom:(EMChatroom *)aChatroom
+                            username:(NSString *)aUsername
 {
     CGRect frame = self.chatToolbar.frame;
-    [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.join", @"\'%@\'join chatroom\'%@\'"), username, chatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
+    [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.join", @"\'%@\'join chatroom\'%@\'"), aUsername, aChatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
 }
 
-- (void)chatroom:(EMChatroom *)chatroom occupantDidLeave:(NSString *)username
+- (void)didReceiveUserLeavedChatroom:(EMChatroom *)aChatroom
+                            username:(NSString *)aUsername
 {
     CGRect frame = self.chatToolbar.frame;
-    [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.leave", @"\'%@\'leave chatroom\'%@\'"), username, chatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
+    [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.leave", @"\'%@\'leave chatroom\'%@\'"), aUsername, aChatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
 }
 
-- (void)beKickedOutFromChatroom:(EMChatroom *)chatroom reason:(EMChatroomBeKickedReason)reason
+- (void)didReceiveKickedFromChatroom:(EMChatroom *)aChatroom
+                              reason:(EMChatroomBeKickedReason)aReason
 {
-    if ([_conversation.chatter isEqualToString:chatroom.chatroomId])
+    if ([_conversation.conversationId isEqualToString:aChatroom.chatroomId])
     {
         _isKicked = YES;
         CGRect frame = self.chatToolbar.frame;
-        [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.remove", @"be removed from chatroom\'%@\'"), chatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
+        [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.remove", @"be removed from chatroom\'%@\'"), aChatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -275,7 +287,7 @@
             [self _sendHasReadResponseForMessages:unreadMessages isRead:YES];
         }
         
-        [_conversation markAllMessagesAsRead:YES];
+        [_conversation markAllMessagesAsRead];
     }
 }
 
@@ -340,7 +352,7 @@
 
 - (void)_showMenuViewController:(UIView *)showInView
                    andIndexPath:(NSIndexPath *)indexPath
-                    messageType:(MessageBodyType)messageType
+                    messageType:(EMMessageBodyType)messageType
 {
     if (_menuController == nil) {
         _menuController = [UIMenuController sharedMenuController];
@@ -354,7 +366,7 @@
         _copyMenuItem = [[UIMenuItem alloc] initWithTitle:NSEaseLocalizedString(@"copy", @"Copy") action:@selector(copyMenuAction:)];
     }
     
-    if (messageType == eMessageBodyType_Text) {
+    if (messageType == EMMessageBodyTypeText) {
         [_menuController setMenuItems:@[_copyMenuItem, _deleteMenuItem]];
     } else {
         [_menuController setMenuItems:@[_deleteMenuItem]];
@@ -431,18 +443,18 @@
     return mp4Url;
 }
 
-- (EMMessageType)_messageTypeFromConversationType
+- (EMChatType)_messageTypeFromConversationType
 {
-    EMMessageType type = eMessageTypeChat;
-    switch (self.conversation.conversationType) {
-        case eConversationTypeChat:
-            type = eMessageTypeChat;
+    EMChatType type = EMChatTypeChat;
+    switch (self.conversation.type) {
+        case EMConversationTypeChat:
+            type = EMChatTypeChat;
             break;
-        case eConversationTypeGroupChat:
-            type = eMessageTypeGroupChat;
+        case EMConversationTypeGroupChat:
+            type = EMChatTypeGroupChat;
             break;
-        case eConversationTypeChatRoom:
-            type = eMessageTypeChatRoom;
+        case EMConversationTypeChatRoom:
+            type = EMChatTypeChatRoom;
             break;
         default:
             break;
@@ -456,7 +468,7 @@
     void (^completion)(EMMessage *aMessage, EMError *error) = ^(EMMessage *aMessage, EMError *error) {
         if (!error)
         {
-            [weakSelf reloadTableViewDataWithMessage:message];
+            [weakSelf _reloadTableViewDataWithMessage:message];
         }
         else
         {
@@ -464,31 +476,31 @@
         }
     };
     
-    id<IEMMessageBody> messageBody = [message.messageBodies firstObject];
-    if ([messageBody messageBodyType] == eMessageBodyType_Image) {
+    EMMessageBody *messageBody = message.body;
+    if ([messageBody type] == EMMessageBodyTypeImage) {
         EMImageMessageBody *imageBody = (EMImageMessageBody *)messageBody;
-        if (imageBody.thumbnailDownloadStatus > EMAttachmentDownloadSuccessed)
+        if (imageBody.thumbnailDownloadStatus > EMDownloadStatusSuccessed)
         {
             //下载缩略图
-            [[[EaseMob sharedInstance] chatManager] asyncFetchMessageThumbnail:message progress:nil completion:completion onQueue:nil];
+            [[[EMClient shareClient] chatManager] asyncDownloadMessageThumbnail:message progress:nil completion:completion];
         }
     }
-    else if ([messageBody messageBodyType] == eMessageBodyType_Video)
+    else if ([messageBody type] == EMMessageBodyTypeVideo)
     {
         EMVideoMessageBody *videoBody = (EMVideoMessageBody *)messageBody;
-        if (videoBody.thumbnailDownloadStatus > EMAttachmentDownloadSuccessed)
+        if (videoBody.thumbnailDownloadStatus > EMDownloadStatusSuccessed)
         {
             //下载缩略图
-            [[[EaseMob sharedInstance] chatManager] asyncFetchMessageThumbnail:message progress:nil completion:completion onQueue:nil];
+            [[[EMClient shareClient] chatManager] asyncDownloadMessageThumbnail:message progress:nil completion:completion];
         }
     }
-    else if ([messageBody messageBodyType] == eMessageBodyType_Voice)
+    else if ([messageBody type] == EMMessageBodyTypeVoice)
     {
         EMVoiceMessageBody *voiceBody = (EMVoiceMessageBody*)messageBody;
-        if (voiceBody.attachmentDownloadStatus > EMAttachmentDownloadSuccessed)
+        if (voiceBody.downloadStatus > EMDownloadStatusSuccessed)
         {
             //下载语言
-            [[EaseMob sharedInstance].chatManager asyncFetchMessage:message progress:nil];
+            [[EMClient shareClient].chatManager asyncDownloadMessageAttachments:message progress:nil completion:completion];
         }
     }
 }
@@ -496,16 +508,16 @@
 - (BOOL)_shouldSendHasReadAckForMessage:(EMMessage *)message
                                    read:(BOOL)read
 {
-    NSString *account = [[EaseMob sharedInstance].chatManager loginInfo][kSDKUsername];
-    if (message.messageType != eMessageTypeChat || message.isReadAcked || [account isEqualToString:message.from] || ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) || !self.isViewDidAppear)
+    NSString *account = [[EMClient shareClient] currentUsername];
+    if (message.chatType != EMChatTypeChat || message.isReadAcked || [account isEqualToString:message.from] || ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) || !self.isViewDidAppear)
     {
         return NO;
     }
     
-    id<IEMMessageBody> body = [message.messageBodies firstObject];
-    if (((body.messageBodyType == eMessageBodyType_Video) ||
-         (body.messageBodyType == eMessageBodyType_Voice) ||
-         (body.messageBodyType == eMessageBodyType_Image)) &&
+    EMMessageBody *body = message.body;
+    if (((body.type == EMMessageBodyTypeVideo) ||
+         (body.type == EMMessageBodyTypeVoice) ||
+         (body.type == EMMessageBodyTypeImage)) &&
         !read)
     {
         return NO;
@@ -542,12 +554,10 @@
     
     if ([unreadMessages count])
     {
-        dispatch_async(_messageQueue, ^{
-            for (EMMessage *message in unreadMessages)
-            {
-                [[EaseMob sharedInstance].chatManager sendReadAckForMessage:message];
-            }
-        });
+        for (EMMessage *message in unreadMessages)
+        {
+            [[EMClient shareClient].chatManager asyncSendReadAckForMessage:message];
+        }
     }
 }
 
@@ -579,7 +589,7 @@
 {
     _scrollToBottomWhenAppear = NO;
     
-    EMVideoMessageBody *videoBody = (EMVideoMessageBody*)[model.message.messageBodies firstObject];
+    EMVideoMessageBody *videoBody = (EMVideoMessageBody*)model.message.body;
     
     //判断本地路劲是否存在
     NSString *localPath = [model.fileLocalPath length] > 0 ? model.fileLocalPath : videoBody.localPath;
@@ -600,38 +610,53 @@
         [self presentMoviePlayerViewControllerAnimated:moviePlayerController];
     };
     
-    if (videoBody.attachmentDownloadStatus == EMAttachmentDownloadSuccessed)
+    __weak typeof(self) weakSelf = self;
+    void (^completion)(EMMessage *aMessage, EMError *error) = ^(EMMessage *aMessage, EMError *error) {
+        if (!error)
+        {
+            [weakSelf _reloadTableViewDataWithMessage:aMessage];
+        }
+        else
+        {
+            [weakSelf showHint:NSEaseLocalizedString(@"message.thumImageFail", @"thumbnail for failure!")];
+        }
+    };
+    
+    if (videoBody.thumbnailDownloadStatus == EMDownloadStatusFailed || ![[NSFileManager defaultManager] fileExistsAtPath:videoBody.thumbnailLocalPath]) {
+        [self showHint:@"begin downloading thumbnail image, click later"];
+        [[EMClient shareClient].chatManager asyncDownloadMessageThumbnail:model.message progress:nil completion:completion];
+        return;
+    }
+    
+    if (videoBody.downloadStatus == EMDownloadStatusSuccessed && [[NSFileManager defaultManager] fileExistsAtPath:localPath])
     {
         block();
         return;
     }
     
     [self showHudInView:self.view hint:NSEaseLocalizedString(@"message.downloadingVideo", @"downloading video...")];
-    __weak EaseMessageViewController *weakSelf = self;
-    id<IChatManager> chatManager = [[EaseMob sharedInstance] chatManager];
-    [chatManager asyncFetchMessage:model.message progress:nil completion:^(EMMessage *aMessage, EMError *error) {
+    [[EMClient shareClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakSelf hideHud];
         if (!error) {
             block();
         }else{
             [weakSelf showHint:NSEaseLocalizedString(@"message.videoFail", @"video for failure!")];
         }
-    } onQueue:nil];
+    }];
 }
 
 - (void)_imageMessageCellSelected:(id<IMessageModel>)model
 {
     __weak EaseMessageViewController *weakSelf = self;
-    id <IChatManager> chatManager = [[EaseMob sharedInstance] chatManager];
-    EMImageMessageBody *imageBody = (EMImageMessageBody*)[model.message.messageBodies firstObject];
+    EMImageMessageBody *imageBody = (EMImageMessageBody*)[model.message body];
     
-    if ([imageBody messageBodyType] == eMessageBodyType_Image) {
-        if (imageBody.thumbnailDownloadStatus == EMAttachmentDownloadSuccessed) {
-            if (imageBody.attachmentDownloadStatus == EMAttachmentDownloadSuccessed)
+    if ([imageBody type] == EMMessageBodyTypeImage) {
+        if (imageBody.thumbnailDownloadStatus == EMDownloadStatusSuccessed) {
+            if (imageBody.downloadStatus == EMDownloadStatusSuccessed)
             {
                 //发送已读回执
                 [weakSelf _sendHasReadResponseForMessages:@[model.message] isRead:YES];
-                NSString *localPath = model.message == nil ? model.fileLocalPath : [[model.message.messageBodies firstObject] localPath];
+                NSString *localPath = model.message == nil ? model.fileLocalPath : [imageBody localPath];
                 if (localPath && localPath.length > 0) {
                     UIImage *image = [UIImage imageWithContentsOfFile:localPath];
                     if (image)
@@ -646,12 +671,12 @@
                 }
             }
             [weakSelf showHudInView:weakSelf.view hint:NSEaseLocalizedString(@"message.downloadingImage", @"downloading a image...")];
-            [chatManager asyncFetchMessage:model.message progress:nil completion:^(EMMessage *aMessage, EMError *error) {
+            [[EMClient shareClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
                 [weakSelf hideHud];
                 if (!error) {
                     //发送已读回执
                     [weakSelf _sendHasReadResponseForMessages:@[model.message] isRead:YES];
-                    NSString *localPath = aMessage == nil ? model.fileLocalPath : [[aMessage.messageBodies firstObject] localPath];
+                    NSString *localPath = message == nil ? model.fileLocalPath : [(EMImageMessageBody*)message.body localPath];
                     if (localPath && localPath.length > 0) {
                         UIImage *image = [UIImage imageWithContentsOfFile:localPath];
                         //                                weakSelf.isScrollToBottom = NO;
@@ -667,17 +692,16 @@
                     }
                 }
                 [weakSelf showHint:NSEaseLocalizedString(@"message.imageFail", @"image for failure!")];
-            } onQueue:nil];
+            }];
         }else{
             //获取缩略图
-            [chatManager asyncFetchMessageThumbnail:model.message progress:nil completion:^(EMMessage *aMessage, EMError *error) {
+            [[EMClient shareClient].chatManager asyncDownloadMessageThumbnail:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
                 if (!error) {
-                    [weakSelf reloadTableViewDataWithMessage:model.message];
+                    [weakSelf _reloadTableViewDataWithMessage:model.message];
                 }else{
                     [weakSelf showHint:NSEaseLocalizedString(@"message.thumImageFail", @"thumbnail for failure!")];
                 }
-                
-            } onQueue:nil];
+            }];
         }
     }
 }
@@ -685,21 +709,21 @@
 - (void)_audioMessageCellSelected:(id<IMessageModel>)model
 {
     _scrollToBottomWhenAppear = NO;
-    id <IEMFileMessageBody> body = [model.message.messageBodies firstObject];
-    EMAttachmentDownloadStatus downloadStatus = [body attachmentDownloadStatus];
-    if (downloadStatus == EMAttachmentDownloading) {
+    EMVoiceMessageBody *body = (EMVoiceMessageBody*)model.message.body;
+    EMDownloadStatus downloadStatus = [body downloadStatus];
+    if (downloadStatus == EMDownloadStatusDownloading) {
         [self showHint:NSEaseLocalizedString(@"message.downloadingAudio", @"downloading voice, click later")];
         return;
     }
-    else if (downloadStatus == EMAttachmentDownloadFailure)
+    else if (downloadStatus == EMDownloadStatusFailed)
     {
         [self showHint:NSEaseLocalizedString(@"message.downloadingAudio", @"downloading voice, click later")];
-        [[EaseMob sharedInstance].chatManager asyncFetchMessage:model.message progress:nil];
+        [[EMClient shareClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:NULL];
         return;
     }
     
     // 播放音频
-    if (model.bodyType == eMessageBodyType_Voice) {
+    if (model.bodyType == EMMessageBodyTypeVoice) {
         //发送已读回执
         [self _sendHasReadResponseForMessages:@[model.message] isRead:YES];
         __weak EaseMessageViewController *weakSelf = self;
@@ -730,7 +754,7 @@
 
 #pragma mark - pivate data
 
-- (void)_loadMessagesBefore:(long long)timestamp
+- (void)_loadMessagesBefore:(NSString*)messageId
                       count:(NSInteger)count
                      append:(BOOL)isAppend
 {
@@ -738,10 +762,10 @@
     dispatch_async(_messageQueue, ^{
         NSArray *moreMessages = nil;
         if (weakSelf.dataSource && [weakSelf.dataSource respondsToSelector:@selector(messageViewController:loadMessageFromTimestamp:count:)]) {
-            moreMessages = [weakSelf.dataSource messageViewController:weakSelf loadMessageFromTimestamp:timestamp count:count];
+//            moreMessages = [weakSelf.dataSource messageViewController:weakSelf loadMessageFromTimestamp:timestamp count:count];
         }
         else{
-            moreMessages = [weakSelf.conversation loadNumbersOfMessages:count before:timestamp];;
+            moreMessages = [weakSelf.conversation loadMoreMessagesFromId:messageId limit:(int)count];
         }
         
         if ([moreMessages count] == 0) {
@@ -1012,29 +1036,29 @@
     }
     
     switch (model.bodyType) {
-        case eMessageBodyType_Image:
+        case EMMessageBodyTypeImage:
         {
             _scrollToBottomWhenAppear = NO;
             [self _imageMessageCellSelected:model];
         }
             break;
-        case eMessageBodyType_Location:
+        case EMMessageBodyTypeLocation:
         {
              [self _locationMessageCellSelected:model];
         }
             break;
-        case eMessageBodyType_Voice:
+        case EMMessageBodyTypeVoice:
         {
             [self _audioMessageCellSelected:model];
         }
             break;
-        case eMessageBodyType_Video:
+        case EMMessageBodyTypeVideo:
         {
             [self _videoMessageCellSelected:model];
 
         }
             break;
-        case eMessageBodyType_File:
+        case EMMessageBodyTypeFile:
         {
             _scrollToBottomWhenAppear = NO;
             [self showHint:@"Custom implementation!"];
@@ -1047,17 +1071,17 @@
 
 - (void)statusButtonSelcted:(id<IMessageModel>)model withMessageCell:(EaseMessageCell*)messageCell
 {
-    if ((model.messageStatus != eMessageDeliveryState_Failure) && (model.messageStatus != eMessageDeliveryState_Pending))
+    if ((model.messageStatus != EMMessageStatusFailed) && (model.messageStatus != EMMessageStatusPending))
     {
         return;
     }
-    id <IChatManager> chatManager = [[EaseMob sharedInstance] chatManager];
-    [chatManager asyncResendMessage:model.message progress:nil];
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:messageCell];
-    [self.tableView beginUpdates];
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath]
-                          withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView endUpdates];
+    
+    __weak typeof(self) weakself = self;
+    [[[EMClient shareClient] chatManager] asyncResendMessage:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+        [weakself.tableView reloadData];
+    }];
+    
+    [self.tableView reloadData];
 }
 
 - (void)avatarViewSelcted:(id<IMessageModel>)model
@@ -1142,7 +1166,7 @@
         [[EMCDDeviceManager sharedInstance] asyncStartRecordingWithFileName:fileName completion:^(NSError *error)
          {
              if (error) {
-                 NSLog(NSEaseLocalizedString(@"message.startRecordFail", @"failure to start recording"));
+                 NSLog(@"%@",NSEaseLocalizedString(@"message.startRecordFail", @"failure to start recording"));
              }
          }];
     }
@@ -1269,7 +1293,7 @@
     // 隐藏键盘
     [self.chatToolbar endEditing:YES];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.chatter, @"type":[NSNumber numberWithInt:eCallSessionTypeAudio]}];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:eCallSessionTypeAudio]}];
 }
 
 - (void)moreViewVideoCallAction:(EaseChatBarMoreView *)moreView
@@ -1277,7 +1301,7 @@
     // 隐藏键盘
     [self.chatToolbar endEditing:YES];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.chatter, @"type":[NSNumber numberWithInt:eCallSessionTypeVideo]}];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:eCallSessionTypeVideo]}];
 }
 
 #pragma mark - EMLocationViewDelegate
@@ -1291,174 +1315,71 @@
 
 #pragma mark - EaseMob
 
-#pragma mark - EMChatManagerChatDelegate
+#pragma mark - EMChatManagerDelegate
 
-- (void)didReceiveOfflineMessages:(NSArray *)offlineMessages
+- (void)didReceiveMessages:(NSArray *)aMessages
 {
-    if (![offlineMessages count])
-    {
-        return;
-    }
-    
-    if ([self _shouldMarkMessageAsRead])
-    {
-        [self.conversation markAllMessagesAsRead:YES];
-    }
-    
-    long long timestamp = 0;
-    if(self.conversation.latestMessage){
-        timestamp = self.conversation.latestMessage.timestamp + 1;
-    }
-    else{
-        timestamp = [[NSDate date] timeIntervalSince1970] * 1000 + 1;
-    }
-    [self _loadMessagesBefore:timestamp
-                        count:[self.messsagesSource count] + [offlineMessages count]
-                       append:NO];
-}
-
-- (void)group:(EMGroup *)group didLeave:(EMGroupLeaveReason)reason error:(EMError *)error
-{
-    if (_conversation.conversationType != eConversationTypeChat && [group.groupId isEqualToString:_conversation.chatter]) {
-        [self.navigationController popToViewController:self animated:NO];
-        [self.navigationController popViewControllerAnimated:NO];
-    }
-}
-
--(void)didReceiveMessage:(EMMessage *)message
-{
-    if ([self.conversation.chatter isEqualToString:message.conversationChatter]) {
-        [self addMessageToDataSource:message progress:nil];
-        
-        [self _sendHasReadResponseForMessages:@[message]
-                                       isRead:NO];
-        
-        if ([self _shouldMarkMessageAsRead])
-        {
-            [self.conversation markMessageWithId:message.messageId asRead:YES];
-        }
-    }
-}
-
--(void)didReceiveCmdMessage:(EMMessage *)message
-{
-    if ([self.conversation.chatter isEqualToString:message.conversationChatter]) {
-        [self showHint:NSEaseLocalizedString(@"receiveCmd", @"receive cmd message")];
-    }
-}
-
-- (void)didReceiveMessageId:(NSString *)messageId
-                    chatter:(NSString *)conversationChatter
-                      error:(EMError *)error
-{
-    if (error && [self.conversation.chatter isEqualToString:conversationChatter])
-    {
-        __weak typeof(self) weakSelf = self;
-        id<IMessageModel> model = nil;
-        for (int i = 0; i < self.dataArray.count; i ++) {
-            id object = [self.dataArray objectAtIndex:i];
-            if ([object conformsToProtocol:@protocol(IMessageModel)]) {
-                model = (id<IMessageModel>)object;
-                if ([messageId isEqualToString:model.message.messageId]) {
-                    model.message.deliveryState = eMessageDeliveryState_Failure;
-                    
-                    if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:didFailSendingMessageModel:error:)]) {
-                        [_delegate messageViewController:self didFailSendingMessageModel:model error:error];
-                    }
-                    else{
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [weakSelf.tableView beginUpdates];
-                            [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                            [weakSelf.tableView endUpdates];
-                            
-                        });
-                        
-                        if (error && error.errorCode == EMErrorMessageContainSensitiveWords)
-                        {
-                            CGRect frame = self.chatToolbar.frame;
-                            [self showHint:NSEaseLocalizedString(@"message.forbiddenWords", @"Your message contains forbidden words") yOffset:-frame.size.height + 50];
-                        }
-                    }
-                    
-                    break;
-                }
+    for (EMMessage *message in aMessages) {
+        if ([self.conversation.conversationId isEqualToString:message.conversationId]) {
+            [self addMessageToDataSource:message progress:nil];
+            
+            [self _sendHasReadResponseForMessages:@[message]
+                                           isRead:NO];
+            
+            if ([self _shouldMarkMessageAsRead])
+            {
+                [self.conversation markMessageAsReadWithId:message.messageId];
             }
         }
     }
 }
 
-- (void)didReceiveHasReadResponse:(EMReceipt *)receipt
+- (void)didReceiveCmdMessages:(NSArray *)aCmdMessages
 {
-    if (![self.conversation.chatter isEqualToString:receipt.conversationChatter]){
-        return;
-    }
-    
-    __block id<IMessageModel> model = nil;
-    __block BOOL isHave = NO;
-    [self.dataArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-     {
-         if ([obj conformsToProtocol:@protocol(IMessageModel)])
-         {
-             model = (id<IMessageModel>)obj;
-             if ([model.messageId isEqualToString:receipt.chatId])
-             {
-                 model.message.isReadAcked = YES;
-                 isHave = YES;
-                 *stop = YES;
-             }
-         }
-     }];
-    
-    if(!isHave){
-        return;
-    }
-    
-    if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:didReceiveHasReadAckForModel:)]) {
-        [_delegate messageViewController:self didReceiveHasReadAckForModel:model];
-    }
-    else{
-        [self.tableView reloadData];
+    for (EMMessage *message in aCmdMessages) {
+        if ([self.conversation.conversationId isEqualToString:message.conversationId]) {
+            [self showHint:NSEaseLocalizedString(@"receiveCmd", @"receive cmd message")];
+            break;
+        }
     }
 }
 
-- (void)didSendMessage:(EMMessage *)message
-                 error:(EMError *)error
+- (void)didReceiveHasDeliveredAcks:(NSArray *)aMessages
 {
-    if (![self.conversation.chatter isEqualToString:message.conversationChatter]){
-        return;
+    for(EMMessage *message in aMessages){
+        [self _updateMessageStatus:message];
     }
-    
-    __block id<IMessageModel> model = nil;
-    __block BOOL isHave = NO;
-    [self.dataArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-     {
-         if ([obj conformsToProtocol:@protocol(IMessageModel)])
+}
+
+- (void)didReceiveHasReadAcks:(NSArray *)aMessages
+{
+    for (EMMessage *message in aMessages) {
+        if (![self.conversation.conversationId isEqualToString:message.conversationId]){
+            continue;
+        }
+        
+        __block id<IMessageModel> model = nil;
+        __block BOOL isHave = NO;
+        [self.dataArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
          {
-             model = (id<IMessageModel>)obj;
-             if ([model.messageId isEqualToString:message.messageId])
+             if ([obj conformsToProtocol:@protocol(IMessageModel)])
              {
-                 model.message.deliveryState = message.deliveryState;
-                 isHave = YES;
-                 *stop = YES;
+                 model = (id<IMessageModel>)obj;
+                 if ([model.messageId isEqualToString:message.messageId])
+                 {
+                     model.message.isReadAcked = YES;
+                     isHave = YES;
+                     *stop = YES;
+                 }
              }
-         }
-     }];
-    
-    if(!isHave){
-        return;
-    }
-    
-    if (error) {
-        if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:didFailSendingMessageModel:error:)]) {
-            [_delegate messageViewController:self didFailSendingMessageModel:model error:error];
+         }];
+        
+        if(!isHave){
+            return;
         }
-        else{
-            [self.tableView reloadData];
-        }
-    }
-    else{
-        if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:didSendMessageModel:)]) {
-            [_delegate messageViewController:self didSendMessageModel:model];
+        
+        if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:didReceiveHasReadAckForModel:)]) {
+            [_delegate messageViewController:self didReceiveHasReadAckForModel:model];
         }
         else{
             [self.tableView reloadData];
@@ -1466,102 +1387,37 @@
     }
 }
 
-- (void)reloadTableViewDataWithMessage:(EMMessage *)message{
-    __weak EaseMessageViewController *weakSelf = self;
-    dispatch_async(_messageQueue, ^{
-        if ([weakSelf.conversation.chatter isEqualToString:message.conversationChatter])
-        {
-            for (int i = 0; i < weakSelf.dataArray.count; i ++) {
-                id object = [weakSelf.dataArray objectAtIndex:i];
-                if ([object isKindOfClass:[EaseMessageModel class]]) {
-                    id<IMessageModel> model = object;
-                    if ([message.messageId isEqualToString:model.messageId]) {
-                        id<IMessageModel> model = nil;
-                        if (weakSelf.dataSource && [weakSelf.dataSource respondsToSelector:@selector(messageViewController:modelForMessage:)]) {
-                            model = [weakSelf.dataSource messageViewController:self modelForMessage:message];
-                        }
-                        else{
-                            model = [[EaseMessageModel alloc] initWithMessage:message];
-                            model.avatarImage = [UIImage imageNamed:@"EaseUIResource.bundle/user"];
-                            model.failImageName = @"imageDownloadFail";
-                        }
-                        
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [weakSelf.tableView beginUpdates];
-                            [weakSelf.dataArray replaceObjectAtIndex:i withObject:model];
-                            [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                            [weakSelf.tableView endUpdates];
-                        });
-                        break;
-                    }
-                }
-            }
-        }
-    });
+- (void)didMessageStatusChanged:(EMMessage *)aMessage
+                          error:(EMError *)aError;
+{
+    [self _updateMessageStatus:aMessage];
 }
 
-- (void)didMessageAttachmentsStatusChanged:(EMMessage *)message error:(EMError *)error{
+- (void)didMessageAttachmentsStatusChanged:(EMMessage *)message
+                                     error:(EMError *)error{
     if (!error) {
-        id<IEMFileMessageBody>fileBody = (id<IEMFileMessageBody>)[message.messageBodies firstObject];
-        if ([fileBody messageBodyType] == eMessageBodyType_Image) {
+        EMFileMessageBody *fileBody = (EMFileMessageBody*)[message body];
+        if ([fileBody type] == EMMessageBodyTypeImage) {
             EMImageMessageBody *imageBody = (EMImageMessageBody *)fileBody;
-            if ([imageBody thumbnailDownloadStatus] == EMAttachmentDownloadSuccessed)
+            if ([imageBody thumbnailDownloadStatus] == EMDownloadStatusSuccessed)
             {
-                [self reloadTableViewDataWithMessage:message];
+                [self _reloadTableViewDataWithMessage:message];
             }
-        }else if([fileBody messageBodyType] == eMessageBodyType_Video){
+        }else if([fileBody type] == EMMessageBodyTypeVideo){
             EMVideoMessageBody *videoBody = (EMVideoMessageBody *)fileBody;
-            if ([videoBody thumbnailDownloadStatus] == EMAttachmentDownloadSuccessed)
+            if ([videoBody thumbnailDownloadStatus] == EMDownloadStatusSuccessed)
             {
-                [self reloadTableViewDataWithMessage:message];
+                [self _reloadTableViewDataWithMessage:message];
             }
-        }else if([fileBody messageBodyType] == eMessageBodyType_Voice){
-            if ([fileBody attachmentDownloadStatus] == EMAttachmentDownloadSuccessed)
+        }else if([fileBody type] == EMMessageBodyTypeVoice){
+            if ([fileBody downloadStatus] == EMDownloadStatusSuccessed)
             {
-                [self reloadTableViewDataWithMessage:message];
+                [self _reloadTableViewDataWithMessage:message];
             }
         }
         
     }else{
         
-    }
-}
-
-#pragma mark - IEMChatProgressDelegate
-
-- (void)setProgress:(float)progress
-         forMessage:(EMMessage *)message
-     forMessageBody:(id<IEMMessageBody>)messageBody
-{
-    if (![self.conversation.chatter isEqualToString:message.conversationChatter]){
-        return;
-    }
-    
-    __block id<IMessageModel> model = nil;
-    __block BOOL isHave = NO;
-    [self.dataArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-     {
-         if ([obj conformsToProtocol:@protocol(IMessageModel)])
-         {
-             model = (id<IMessageModel>)obj;
-             if ([model.messageId isEqualToString:message.messageId])
-             {
-                 model.progress = progress;
-                 isHave = YES;
-                 *stop = YES;
-             }
-         }
-     }];
-    
-    if(!isHave){
-        return;
-    }
-    
-    if (_dataSource && [_dataSource respondsToSelector:@selector(messageViewController:updateProgress:messageModel:messageBody:)]) {
-        [_dataSource messageViewController:self
-                            updateProgress:progress
-                              messageModel:model
-                               messageBody:messageBody];
     }
 }
 
@@ -1602,7 +1458,7 @@
         NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:self.menuIndexPath.row];
         NSMutableArray *indexPaths = [NSMutableArray arrayWithObjects:self.menuIndexPath, nil];
         
-        [self.conversation removeMessage:model.message];
+        [self.conversation deleteMessageWithId:model.message.messageId];
         [self.messsagesSource removeObject:model.message];
         
         if (self.menuIndexPath.row - 1 >= 0) {
@@ -1672,7 +1528,7 @@
 }
 
 -(void)addMessageToDataSource:(EMMessage *)message
-                     progress:(id<IEMChatProgressDelegate>)progress
+                     progress:(id)progress
 {
     [self.messsagesSource addObject:message];
     
@@ -1693,22 +1549,37 @@
 - (void)tableViewDidTriggerHeaderRefresh
 {
     self.messageTimeIntervalTag = -1;
-    long long timestamp = 0;
+    NSString *messageId = nil;
     if ([self.messsagesSource count] > 0) {
-        timestamp = [(EMMessage *)self.messsagesSource.firstObject timestamp];
+        messageId = [(EMMessage *)self.messsagesSource.firstObject messageId];
     }
-    else if(self.conversation.latestMessage){
-        timestamp = self.conversation.latestMessage.timestamp + 1;
+    else {
+        messageId = nil;
     }
-    else{
-        timestamp = [[NSDate date] timeIntervalSince1970] * 1000 + 1;
-    }
-    [self _loadMessagesBefore:timestamp count:self.messageCountOfPage append:YES];
+    [self _loadMessagesBefore:messageId count:self.messageCountOfPage append:YES];
     
     [self tableViewDidFinishTriggerHeader:YES reload:YES];
 }
 
 #pragma mark - send message
+
+- (void)_sendMessage:(EMMessage *)message
+{
+    if (self.conversation.type == EMConversationTypeGroupChat){
+        message.chatType = EMChatTypeGroupChat;
+    }
+    else if (self.conversation.type == EMConversationTypeChatRoom){
+        message.chatType = EMChatTypeChatRoom;
+    }
+    
+    [self addMessageToDataSource:message
+                        progress:nil];
+    
+    __weak typeof(self) weakself = self;
+    [[EMClient shareClient].chatManager asyncSendMessage:message progress:nil completion:^(EMMessage *aMessage, EMError *aError) {
+        [weakself.tableView reloadData];
+    }];
+}
 
 - (void)sendTextMessage:(NSString *)text
 {
@@ -1718,12 +1589,10 @@
 - (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext
 {
     EMMessage *message = [EaseSDKHelper sendTextMessage:text
-                                                   to:self.conversation.chatter
+                                                   to:self.conversation.conversationId
                                           messageType:[self _messageTypeFromConversationType]
-                                    requireEncryption:NO
                                            messageExt:ext];
-    [self addMessageToDataSource:message
-                        progress:nil];
+    [self _sendMessage:message];
 }
 
 - (void)sendLocationMessageLatitude:(double)latitude
@@ -1733,40 +1602,38 @@
     EMMessage *message = [EaseSDKHelper sendLocationMessageWithLatitude:latitude
                                                             longitude:longitude
                                                               address:address
-                                                                   to:self.conversation.chatter
+                                                                   to:self.conversation.conversationId
                                                           messageType:[self _messageTypeFromConversationType]
                                                     requireEncryption:NO
                                                            messageExt:nil];
-    [self addMessageToDataSource:message
-                        progress:nil];
+    [self _sendMessage:message];
 }
 
 - (void)sendImageMessage:(UIImage *)image
 {
-    id<IEMChatProgressDelegate> progress = nil;
+    id progress = nil;
     if (_dataSource && [_dataSource respondsToSelector:@selector(messageViewController:progressDelegateForMessageBodyType:)]) {
-        progress = [_dataSource messageViewController:self progressDelegateForMessageBodyType:eMessageBodyType_Image];
+        progress = [_dataSource messageViewController:self progressDelegateForMessageBodyType:EMMessageBodyTypeImage];
     }
     else{
         progress = self;
     }
     
     EMMessage *message = [EaseSDKHelper sendImageMessageWithImage:image
-                                                             to:self.conversation.chatter
+                                                             to:self.conversation.conversationId
                                                     messageType:[self _messageTypeFromConversationType]
                                               requireEncryption:NO
                                                      messageExt:nil
                                                        progress:progress];
-    [self addMessageToDataSource:message
-                        progress:progress];
+    [self _sendMessage:message];
 }
 
 - (void)sendVoiceMessageWithLocalPath:(NSString *)localPath
                              duration:(NSInteger)duration
 {
-    id<IEMChatProgressDelegate> progress = nil;
+    id progress = nil;
     if (_dataSource && [_dataSource respondsToSelector:@selector(messageViewController:progressDelegateForMessageBodyType:)]) {
-        progress = [_dataSource messageViewController:self progressDelegateForMessageBodyType:eMessageBodyType_Voice];
+        progress = [_dataSource messageViewController:self progressDelegateForMessageBodyType:EMMessageBodyTypeVoice];
     }
     else{
         progress = self;
@@ -1774,33 +1641,31 @@
     
     EMMessage *message = [EaseSDKHelper sendVoiceMessageWithLocalPath:localPath
                                                            duration:duration
-                                                                 to:self.conversation.chatter
+                                                                 to:self.conversation.conversationId
                                                         messageType:[self _messageTypeFromConversationType]
                                                   requireEncryption:NO
                                                          messageExt:nil
                                                            progress:progress];
-    [self addMessageToDataSource:message
-                        progress:progress];
+    [self _sendMessage:message];
 }
 
 - (void)sendVideoMessageWithURL:(NSURL *)url
 {
-    id<IEMChatProgressDelegate> progress = nil;
+    id progress = nil;
     if (_dataSource && [_dataSource respondsToSelector:@selector(messageViewController:progressDelegateForMessageBodyType:)]) {
-        progress = [_dataSource messageViewController:self progressDelegateForMessageBodyType:eMessageBodyType_Video];
+        progress = [_dataSource messageViewController:self progressDelegateForMessageBodyType:EMMessageBodyTypeVideo];
     }
     else{
         progress = self;
     }
     
     EMMessage *message = [EaseSDKHelper sendVideoMessageWithURL:url
-                                                           to:self.conversation.chatter
+                                                           to:self.conversation.conversationId
                                                   messageType:[self _messageTypeFromConversationType]
                                             requireEncryption:NO
                                                    messageExt:nil
                                                      progress:progress];
-    [self addMessageToDataSource:message
-                        progress:progress];
+    [self _sendMessage:message];
 }
 
 #pragma mark - notifycation
@@ -1825,8 +1690,80 @@
             [self _sendHasReadResponseForMessages:unreadMessages isRead:YES];
         }
         
-        [_conversation markAllMessagesAsRead:YES];
+        [_conversation markAllMessagesAsRead];
     }
 }
+
+#pragma mark - private
+- (void)_reloadTableViewDataWithMessage:(EMMessage *)message{
+    __weak EaseMessageViewController *weakSelf = self;
+    dispatch_async(_messageQueue, ^{
+        if ([weakSelf.conversation.conversationId isEqualToString:message.conversationId])
+        {
+            for (int i = 0; i < weakSelf.dataArray.count; i ++) {
+                id object = [weakSelf.dataArray objectAtIndex:i];
+                if ([object isKindOfClass:[EaseMessageModel class]]) {
+                    id<IMessageModel> model = object;
+                    if ([message.messageId isEqualToString:model.messageId]) {
+                        id<IMessageModel> model = nil;
+                        if (weakSelf.dataSource && [weakSelf.dataSource respondsToSelector:@selector(messageViewController:modelForMessage:)]) {
+                            model = [weakSelf.dataSource messageViewController:self modelForMessage:message];
+                        }
+                        else{
+                            model = [[EaseMessageModel alloc] initWithMessage:message];
+                            model.avatarImage = [UIImage imageNamed:@"EaseUIResource.bundle/user"];
+                            model.failImageName = @"imageDownloadFail";
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [weakSelf.tableView beginUpdates];
+                            [weakSelf.dataArray replaceObjectAtIndex:i withObject:model];
+                            [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                            [weakSelf.tableView endUpdates];
+                        });
+                        break;
+                    }
+                }
+            }
+        }
+    });
+}
+
+- (void)_updateMessageStatus:(EMMessage *)aMessage
+{
+    BOOL isChatting = [aMessage.conversationId isEqualToString:self.conversation.conversationId];
+    if (aMessage && isChatting) {
+        id<IMessageModel> model = nil;
+        if (_dataSource && [_dataSource respondsToSelector:@selector(messageViewController:modelForMessage:)]) {
+            model = [_dataSource messageViewController:self modelForMessage:aMessage];
+        }
+        else{
+            model = [[EaseMessageModel alloc] initWithMessage:aMessage];
+            model.avatarImage = [UIImage imageNamed:@"EaseUIResource.bundle/user"];
+            model.failImageName = @"imageDownloadFail";
+        }
+        if (model) {
+            __block NSUInteger index = NSNotFound;
+            [self.dataArray enumerateObjectsUsingBlock:^(EaseMessageModel *model, NSUInteger idx, BOOL *stop){
+                if ([model conformsToProtocol:@protocol(IMessageModel)]) {
+                    if ([aMessage.messageId isEqualToString:model.message.messageId])
+                    {
+                        index = idx;
+                        *stop = YES;
+                    }
+                }
+            }];
+            
+            if (index != NSNotFound)
+            {
+                [self.dataArray replaceObjectAtIndex:index withObject:model];
+                [self.tableView beginUpdates];
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                [self.tableView endUpdates];
+            }
+        }
+    }
+}
+
 
 @end

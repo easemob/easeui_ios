@@ -146,7 +146,7 @@ static EaseMessageReadManager *detailInstance = nil;
 {
     BOOL isPrepare = NO;
     
-    if(messageModel.bodyType == eMessageBodyType_Voice)
+    if(messageModel.bodyType == EMMessageBodyTypeVoice)
     {
         EaseMessageModel *prevAudioModel = self.audioMessageModel;
         EaseMessageModel *currentAudioModel = messageModel;
@@ -172,13 +172,13 @@ static EaseMessageReadManager *detailInstance = nil;
                     if (![[dict objectForKey:@"isPlayed"] boolValue]) {
                         [dict setObject:@YES forKey:@"isPlayed"];
                         chatMessage.ext = dict;
-                        [chatMessage updateMessageExtToDB];
+                        [[EMClient shareClient].chatManager updateMessage:chatMessage];
                     }
                 } else {
                     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:chatMessage.ext];
                     [dic setObject:@YES forKey:@"isPlayed"];
                     chatMessage.ext = dic;
-                    [chatMessage updateMessageExtToDB];
+                    [[EMClient shareClient].chatManager updateMessage:chatMessage];
                 }
             }
         }
@@ -194,7 +194,7 @@ static EaseMessageReadManager *detailInstance = nil;
 - (EaseMessageModel *)stopMessageAudioModel
 {
     EaseMessageModel *model = nil;
-    if (self.audioMessageModel.bodyType == eMessageBodyType_Voice) {
+    if (self.audioMessageModel.bodyType == EMMessageBodyTypeVoice) {
         if (self.audioMessageModel.isMediaPlaying) {
             model = self.audioMessageModel;
         }

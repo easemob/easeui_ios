@@ -8,7 +8,6 @@
 
 #import "EaseMessageModel.h"
 
-#import "EaseMob.h"
 #import "EaseEmotionEscape.h"
 #import "EaseConvertToCommonEmoticonsHelper.h"
 
@@ -20,16 +19,14 @@
     if (self) {
         _cellHeight = -1;
         _message = message;
-        _firstMessageBody = [message.messageBodies firstObject];
+        _firstMessageBody = message.body;
         _isMediaPlaying = NO;
         
-        NSDictionary *userInfo = [[EaseMob sharedInstance].chatManager loginInfo];
-        NSString *login = [userInfo objectForKey:kSDKUsername];
-        _nickname = (message.messageType == eMessageTypeChat) ? message.from : message.groupSenderName;
-        _isSender = [login isEqualToString:_nickname] ? YES : NO;
+        _nickname = message.from;
+        _isSender = message.direction == EMMessageDirectionSend ? YES : NO;
         
-        switch (_firstMessageBody.messageBodyType) {
-            case eMessageBodyType_Text:
+        switch (_firstMessageBody.type) {
+            case EMMessageBodyTypeText:
             {
                 EMTextMessageBody *textBody = (EMTextMessageBody *)_firstMessageBody;
                 // 表情映射。
@@ -37,21 +34,30 @@
                 self.text = didReceiveText;
             }
                 break;
-            case eMessageBodyType_Image:
+            case EMMessageBodyTypeImage:
             {
                 EMImageMessageBody *imgMessageBody = (EMImageMessageBody *)_firstMessageBody;
+                NSData *imageData = [NSData dataWithContentsOfFile:imgMessageBody.localPath];
+                if (imageData.length) {
+                    self.image = [UIImage imageWithData:imageData];
+                }
+                
+                if ([imgMessageBody.thumbnailLocalPath length] > 0) {
+                    self.thumbnailImage = [UIImage imageWithContentsOfFile:imgMessageBody.thumbnailLocalPath];
+                }
+                else{
+                    self.thumbnailImage = self.image;
+                }
+                
                 self.thumbnailImageSize = imgMessageBody.thumbnailSize;
-                self.thumbnailImage = [UIImage imageWithContentsOfFile:imgMessageBody.thumbnailLocalPath];
                 self.imageSize = imgMessageBody.size;
                 self.fileLocalPath = imgMessageBody.localPath;
-                if (_isSender) {
-                    self.image = [UIImage imageWithContentsOfFile:imgMessageBody.thumbnailLocalPath];
-                } else {
+                if (!_isSender) {
                     self.fileURLPath = imgMessageBody.remotePath;
                 }
             }
                 break;
-            case eMessageBodyType_Location:
+            case EMMessageBodyTypeLocation:
             {
                 EMLocationMessageBody *locationBody = (EMLocationMessageBody *)_firstMessageBody;
                 self.address = locationBody.address;
@@ -59,7 +65,7 @@
                 self.longitude = locationBody.longitude;
             }
                 break;
-            case eMessageBodyType_Voice:
+            case EMMessageBodyTypeVoice:
             {
                 EMVoiceMessageBody *voiceBody = (EMVoiceMessageBody *)_firstMessageBody;
                 self.mediaDuration = voiceBody.duration;
@@ -73,20 +79,24 @@
                 self.fileURLPath = voiceBody.remotePath;
             }
                 break;
-            case eMessageBodyType_Video:
+            case EMMessageBodyTypeVideo:
             {
-                EMVideoMessageBody *videoBody = (EMVideoMessageBody *)_firstMessageBody;
-                self.thumbnailImageSize = videoBody.size;
-                self.thumbnailImage = [UIImage imageWithContentsOfFile:videoBody.thumbnailLocalPath];
-                self.imageSize = videoBody.size;
-                self.image = self.thumbnailImage;
+                EMVideoMessageBody *videoBody = (EMVideoMessageBody *)message.body;
+                self.thumbnailImageSize = videoBody.thumbnailSize;
+                if ([videoBody.thumbnailLocalPath length] > 0) {
+                    NSData *thumbnailImageData = [NSData dataWithContentsOfFile:videoBody.thumbnailLocalPath];
+                    if (thumbnailImageData.length) {
+                        self.thumbnailImage = [UIImage imageWithData:thumbnailImageData];
+                    }
+                    self.image = self.thumbnailImage;
+                }
                 
                 // 视频路径
                 self.fileLocalPath = videoBody.localPath;
                 self.fileURLPath = videoBody.remotePath;
             }
                 break;
-                case eMessageBodyType_File:
+                case EMMessageBodyTypeFile:
             {
                 EMFileMessageBody *fileMessageBody = (EMFileMessageBody *)_firstMessageBody;
                 self.fileIconName = @"chat_item_file";
@@ -117,19 +127,19 @@
     return _message.messageId;
 }
 
-- (MessageDeliveryState)messageStatus
+- (EMMessageStatus)messageStatus
 {
-    return _message.deliveryState;
+    return _message.status;
 }
 
-- (EMMessageType)messageType
+- (EMChatType)messageType
 {
-    return _message.messageType;
+    return _message.chatType;
 }
 
-- (MessageBodyType)bodyType
+- (EMMessageBodyType)bodyType
 {
-    return self.firstMessageBody.messageBodyType;
+    return self.firstMessageBody.type;
 }
 
 - (BOOL)isMessageRead

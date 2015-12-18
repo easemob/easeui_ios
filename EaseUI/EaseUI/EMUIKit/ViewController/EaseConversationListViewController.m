@@ -8,14 +8,13 @@
 
 #import "EaseConversationListViewController.h"
 
-#import "EaseMob.h"
 #import "EaseSDKHelper.h"
 #import "EaseEmotionEscape.h"
 #import "EaseConversationCell.h"
 #import "EaseConvertToCommonEmoticonsHelper.h"
 #import "NSDate+Category.h"
 
-@interface EaseConversationListViewController () <IChatManagerDelegate>
+@interface EaseConversationListViewController ()
 
 @end
 
@@ -25,7 +24,7 @@
 {
     [super viewWillAppear:animated];
     
-    [self tableViewDidTriggerHeaderRefresh];
+//    [self tableViewDidTriggerHeaderRefresh];
     [self registerNotifications];
 }
 
@@ -112,7 +111,7 @@
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         EaseConversationModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        [[EaseMob sharedInstance].chatManager removeConversationByChatter:model.conversation.chatter deleteMessages:YES append2Chat:YES];
+        [[EMClient shareClient].chatManager deleteConversation:model.conversation.conversationId deleteMessages:YES];
         [self.dataArray removeObjectAtIndex:indexPath.row];
         [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
@@ -122,7 +121,7 @@
 
 - (void)tableViewDidTriggerHeaderRefresh
 {
-    NSArray *conversations = [[EaseMob sharedInstance].chatManager conversations];
+    NSArray *conversations = [[EMClient shareClient].chatManager getAllConversations];
     NSArray* sorted = [conversations sortedArrayUsingComparator:
                        ^(EMConversation *obj1, EMConversation* obj2){
                            EMMessage *message1 = [obj1 latestMessage];
@@ -155,14 +154,9 @@
     [self tableViewDidFinishTriggerHeader:YES reload:YES];
 }
 
-#pragma mark - IChatMangerDelegate
+#pragma mark - EMGroupManagerDelegate
 
--(void)didUnreadMessagesCountChanged
-{
-    [self tableViewDidTriggerHeaderRefresh];
-}
-
-- (void)didUpdateGroupList:(NSArray *)allGroups error:(EMError *)error
+- (void)didUpdateGroupList:(NSArray *)groupList
 {
     [self tableViewDidTriggerHeaderRefresh];
 }
@@ -170,11 +164,13 @@
 #pragma mark - registerNotifications
 -(void)registerNotifications{
     [self unregisterNotifications];
-    [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient shareClient].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient shareClient].groupManager addDelegate:self delegateQueue:nil];
 }
 
 -(void)unregisterNotifications{
-    [[EaseMob sharedInstance].chatManager removeDelegate:self];
+    [[EMClient shareClient].chatManager removeDelegate:self];
+    [[EMClient shareClient].groupManager removeDelegate:self];
 }
 
 - (void)dealloc{
@@ -187,26 +183,26 @@
     NSString *latestMessageTitle = @"";
     EMMessage *lastMessage = [conversationModel.conversation latestMessage];
     if (lastMessage) {
-        id<IEMMessageBody> messageBody = lastMessage.messageBodies.lastObject;
-        switch (messageBody.messageBodyType) {
-            case eMessageBodyType_Image:{
+        EMMessageBody *messageBody = lastMessage.body;
+        switch (messageBody.type) {
+            case EMMessageBodyTypeImage:{
                 latestMessageTitle = NSEaseLocalizedString(@"message.image1", @"[image]");
             } break;
-            case eMessageBodyType_Text:{
+            case EMMessageBodyTypeText:{
                 NSString *didReceiveText = [EaseConvertToCommonEmoticonsHelper
                                             convertToSystemEmoticons:((EMTextMessageBody *)messageBody).text];
                 latestMessageTitle = didReceiveText;
             } break;
-            case eMessageBodyType_Voice:{
+            case EMMessageBodyTypeVoice:{
                 latestMessageTitle = NSEaseLocalizedString(@"message.voice1", @"[voice]");
             } break;
-            case eMessageBodyType_Location: {
+            case EMMessageBodyTypeLocation: {
                 latestMessageTitle = NSEaseLocalizedString(@"message.location1", @"[location]");
             } break;
-            case eMessageBodyType_Video: {
+            case EMMessageBodyTypeVideo: {
                 latestMessageTitle = NSEaseLocalizedString(@"message.video1", @"[video]");
             } break;
-            case eMessageBodyType_File: {
+            case EMMessageBodyTypeFile: {
                 latestMessageTitle = NSEaseLocalizedString(@"message.file1", @"[file]");
             } break;
             default: {

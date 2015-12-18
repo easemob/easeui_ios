@@ -77,11 +77,11 @@
     [super layoutSubviews];
     _bubbleView.backgroundImageView.image = self.model.isSender ? self.sendBubbleBackgroundImage : self.recvBubbleBackgroundImage;
     switch (self.model.bodyType) {
-        case eMessageBodyType_Text:
+        case EMMessageBodyTypeText:
         {
         }
             break;
-        case eMessageBodyType_Image:
+        case EMMessageBodyTypeImage:
         {
             CGSize retSize = self.model.thumbnailImageSize;
             if (retSize.width == 0 || retSize.height == 0) {
@@ -99,23 +99,23 @@
                 retSize.height = kEMMessageImageSizeHeight;
             }
             [self removeConstraint:self.bubbleWithImageConstraint];
-            self.bubbleWithImageConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:retSize.width + EaseMessageCellPadding * 2];
+            self.bubbleWithImageConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:retSize.width + EaseMessageCellPadding * 2 + self.bubbleMargin.top + self.bubbleMargin.bottom];
             [self addConstraint:self.bubbleWithImageConstraint];
         }
             break;
-        case eMessageBodyType_Location:
+        case EMMessageBodyTypeLocation:
         {
         }
             break;
-        case eMessageBodyType_Voice:
+        case EMMessageBodyTypeVoice:
         {
         }
             break;
-        case eMessageBodyType_Video:
+        case EMMessageBodyTypeVideo:
         {
         }
             break;
-        case eMessageBodyType_File:
+        case EMMessageBodyTypeFile:
         {
         }
             break;
@@ -228,14 +228,14 @@
     if (self.model.isSender) {
         _hasRead.hidden = YES;
         switch (self.model.messageStatus) {
-            case eMessageDeliveryState_Delivering:
+            case EMMessageStatusDelivering:
             {
                 _statusButton.hidden = YES;
                 [_activity setHidden:NO];
                 [_activity startAnimating];
             }
                 break;
-            case eMessageDeliveryState_Delivered:
+            case EMMessageStatusSuccessed:
             {
                 _statusButton.hidden = YES;
                 [_activity stopAnimating];
@@ -244,8 +244,8 @@
                 }
             }
                 break;
-            case eMessageDeliveryState_Pending:
-            case eMessageDeliveryState_Failure:
+            case EMMessageStatusPending:
+            case EMMessageStatusFailed:
             {
                 [_activity stopAnimating];
                 [_activity setHidden:YES];
