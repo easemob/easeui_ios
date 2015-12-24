@@ -99,7 +99,7 @@
                 retSize.height = kEMMessageImageSizeHeight;
             }
             [self removeConstraint:self.bubbleWithImageConstraint];
-            self.bubbleWithImageConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:retSize.width + EaseMessageCellPadding * 2 + self.bubbleMargin.top + self.bubbleMargin.bottom];
+            self.bubbleWithImageConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:retSize.width];
             [self addConstraint:self.bubbleWithImageConstraint];
         }
             break;

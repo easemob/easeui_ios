@@ -133,27 +133,6 @@
     
     [[EMCDDeviceManager sharedInstance] stopPlaying];
     [EMCDDeviceManager sharedInstance].delegate = nil;
-    [[EMClient shareClient].chatManager removeDelegate:self];
-    [[EMClient shareClient].roomManager removeDelegate:self];
-    
-    if (_conversation.type == EMConversationTypeChatRoom && !_isKicked)
-    {
-        //退出聊天室，删除会话
-        NSString *chatter = [_conversation.conversationId copy];
-        EMError *error = nil;
-        [[EMClient shareClient].roomManager leaveChatroom:chatter error:&error];
-        if (error ==nil) {
-            [[EMClient shareClient].chatManager deleteConversation:_conversation.conversationId deleteMessages:YES];
-        }
-    }
-    
-    if (self.deleteConversationIfNull) {
-        //判断当前会话是否为空，若符合则删除该会话
-        EMMessage *message = [self.conversation latestMessage];
-        if (message == nil) {
-            [[EMClient shareClient].chatManager deleteConversation:self.conversation.conversationId deleteMessages:NO];
-        }
-    }
     
     if (_imagePicker){
         [_imagePicker dismissViewControllerAnimated:NO completion:nil];
@@ -206,23 +185,25 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         EMError *error = nil;
         EMChatroom *chatroom = [[EMClient shareClient].roomManager joinChatroom:chatroomId error:&error];
-        if (weakSelf) {
-            EaseMessageViewController *strongSelf = weakSelf;
-            [strongSelf hideHud];
-            if (error != nil) {
-                [strongSelf showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.joinFailed",@"join chatroom \'%@\' failed"), chatroomId]];
-            } else {
-                [strongSelf saveChatroom:chatroom];
-            }
-        }  else {
-            if (!error || (error.code == EMErrorChatroomAlreadyJoined)) {
-                EMError *leaveError;
-                [[EMClient shareClient].roomManager leaveChatroom:chatroomId error:&leaveError];
-                if (error == nil) {
-                    [[EMClient shareClient].chatManager deleteConversation:chatroomId deleteMessages:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (weakSelf) {
+                EaseMessageViewController *strongSelf = weakSelf;
+                [strongSelf hideHud];
+                if (error != nil) {
+                    [strongSelf showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.joinFailed",@"join chatroom \'%@\' failed"), chatroomId]];
+                } else {
+                    [strongSelf saveChatroom:chatroom];
+                }
+            }  else {
+                if (!error || (error.code == EMErrorChatroomAlreadyJoined)) {
+                    EMError *leaveError;
+                    [[EMClient shareClient].roomManager leaveChatroom:chatroomId error:&leaveError];
+                    if (leaveError == nil) {
+                        [[EMClient shareClient].chatManager deleteConversation:chatroomId deleteMessages:YES];
+                    }
                 }
             }
-        }
+        });
     });
 }
 

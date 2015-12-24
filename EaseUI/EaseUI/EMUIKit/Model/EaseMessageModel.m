@@ -96,7 +96,7 @@
                 self.fileURLPath = videoBody.remotePath;
             }
                 break;
-                case EMMessageBodyTypeFile:
+            case EMMessageBodyTypeFile:
             {
                 EMFileMessageBody *fileMessageBody = (EMFileMessageBody *)_firstMessageBody;
                 self.fileIconName = @"chat_item_file";

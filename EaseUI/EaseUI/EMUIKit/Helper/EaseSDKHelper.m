@@ -127,15 +127,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     if ([otherConfig objectForKey:kEaseUISDKConfigIsUseLite]) {
         _isLite = YES;
     }
-    
-    BOOL isAutoLogin = [EMClient shareClient].options.isAutoLogin;
-    if (isAutoLogin){
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES];
-    }
-    else
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
-    }
 }
 
 - (void)dealloc
