@@ -89,4 +89,12 @@ typedef NS_ENUM(int, DXDeleteConvesationType) {
  */
 - (void)tableViewDidTriggerHeaderRefresh;
 
+/*!
+ @method
+ @brief 内存中刷新页面
+ @discussion
+ @result
+ */
+- (void)refreshAndSortView;
+
 @end

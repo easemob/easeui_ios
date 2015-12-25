@@ -122,7 +122,11 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     if ([otherConfig objectForKey:kSDKConfigEnableConsoleLogger]) {
         options.enableConsoleLog = YES;
     }
-    [[EMClient shareClient] initializeSDKWithOptions:options];
+    
+    BOOL sandBox = [otherConfig objectForKey:@"easeSandBox"] && [[otherConfig objectForKey:@"easeSandBox"] boolValue];
+    if (!sandBox) {
+        [[EMClient shareClient] initializeSDKWithOptions:options];
+    }
     
     if ([otherConfig objectForKey:kEaseUISDKConfigIsUseLite]) {
         _isLite = YES;

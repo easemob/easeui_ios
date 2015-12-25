@@ -15,6 +15,9 @@
 #import "NSDate+Category.h"
 
 @interface EaseConversationListViewController ()
+{
+    dispatch_queue_t refreshQueue;
+}
 
 @end
 
@@ -24,7 +27,6 @@
 {
     [super viewWillAppear:animated];
     
-//    [self tableViewDidTriggerHeaderRefresh];
     [self registerNotifications];
 }
 
@@ -66,6 +68,10 @@
     // Configure the cell...
     if (cell == nil) {
         cell = [[EaseConversationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
+    if ([self.dataArray count] <= indexPath.row) {
+        return cell;
     }
     
     id<IConversationModel> model = [self.dataArray objectAtIndex:indexPath.row];
@@ -119,39 +125,74 @@
 
 #pragma mark - data
 
+-(void)refreshAndSortView
+{
+    __weak typeof(self) weakself = self;
+    if (!refreshQueue) {
+        refreshQueue = dispatch_queue_create("com.easemob.conversation.refresh", DISPATCH_QUEUE_SERIAL);
+    }
+    dispatch_async(refreshQueue, ^{
+        if ([weakself.dataArray count] > 1) {
+            if ([[weakself.dataArray objectAtIndex:0] isKindOfClass:[EaseConversationModel class]]) {
+                NSArray* sorted = [weakself.dataArray sortedArrayUsingComparator:
+                                   ^(EaseConversationModel *obj1, EaseConversationModel* obj2){
+                                       EMMessage *message1 = [obj1.conversation latestMessage];
+                                       EMMessage *message2 = [obj2.conversation latestMessage];
+                                       if(message1.timestamp > message2.timestamp) {
+                                           return(NSComparisonResult)NSOrderedAscending;
+                                       }else {
+                                           return(NSComparisonResult)NSOrderedDescending;
+                                       }
+                                   }];
+                [weakself.dataArray removeAllObjects];
+                [weakself.dataArray addObjectsFromArray:sorted];
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself.tableView reloadData];
+        });
+    });
+}
+
 - (void)tableViewDidTriggerHeaderRefresh
 {
-    NSArray *conversations = [[EMClient shareClient].chatManager getAllConversations];
-    NSArray* sorted = [conversations sortedArrayUsingComparator:
-                       ^(EMConversation *obj1, EMConversation* obj2){
-                           EMMessage *message1 = [obj1 latestMessage];
-                           EMMessage *message2 = [obj2 latestMessage];
-                           if(message1.timestamp > message2.timestamp) {
-                               return(NSComparisonResult)NSOrderedAscending;
-                           }else {
-                               return(NSComparisonResult)NSOrderedDescending;
-                           }
-                       }];
-    
-    
-    
-    [self.dataArray removeAllObjects];
-    for (EMConversation *converstion in sorted) {
-        EaseConversationModel *model = nil;
-        if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:modelForConversation:)]) {
-            model = [_dataSource conversationListViewController:self
-                                           modelForConversation:converstion];
-        }
-        else{
-            model = [[EaseConversationModel alloc] initWithConversation:converstion];
+    __weak typeof(self) weakself = self;
+    if (!refreshQueue) {
+        refreshQueue = dispatch_queue_create("com.easemob.conversation.refresh", DISPATCH_QUEUE_SERIAL);
+    }
+    dispatch_async(refreshQueue, ^{
+        NSArray *conversations = [[EMClient shareClient].chatManager getAllConversations];
+        NSArray* sorted = [conversations sortedArrayUsingComparator:
+                           ^(EMConversation *obj1, EMConversation* obj2){
+                               EMMessage *message1 = [obj1 latestMessage];
+                               EMMessage *message2 = [obj2 latestMessage];
+                               if(message1.timestamp > message2.timestamp) {
+                                   return(NSComparisonResult)NSOrderedAscending;
+                               }else {
+                                   return(NSComparisonResult)NSOrderedDescending;
+                               }
+                           }];
+        
+        
+        
+        [weakself.dataArray removeAllObjects];
+        for (EMConversation *converstion in sorted) {
+            EaseConversationModel *model = nil;
+            if (weakself.dataSource && [weakself.dataSource respondsToSelector:@selector(conversationListViewController:modelForConversation:)]) {
+                model = [weakself.dataSource conversationListViewController:weakself
+                                               modelForConversation:converstion];
+            }
+            else{
+                model = [[EaseConversationModel alloc] initWithConversation:converstion];
+            }
+            
+            if (model) {
+                [weakself.dataArray addObject:model];
+            }
         }
         
-        if (model) {
-            [self.dataArray addObject:model];
-        }
-    }
-
-    [self tableViewDidFinishTriggerHeader:YES reload:YES];
+        [weakself tableViewDidFinishTriggerHeader:YES reload:YES];
+    });
 }
 
 #pragma mark - EMGroupManagerDelegate

@@ -56,7 +56,7 @@
 
 - (void)computeLayout {
     if (!_isValid) {
-        NSAssert(self.rows.count == 0, @"No rows shall be at this point.");
+//        NSAssert(self.rows.count == 0, @"No rows shall be at this point.");
 
         // iterate over all items, turning them into rows.
         CGSize sectionSize = CGSizeZero;
