@@ -292,7 +292,14 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 
 @end
 
+#if DEMO_CALL == 1
+
 @interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, IChatManagerDelegate, IEMChatProgressDelegate, EMCallManagerCallDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate>
+#else
+
+@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, IChatManagerDelegate, IEMChatProgressDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate>
+
+#endif
 
 @property (weak, nonatomic) id<EaseMessageViewControllerDelegate> delegate;
 

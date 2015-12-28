@@ -13,38 +13,32 @@
 
 @implementation NSObject (EaseMob)
 
-- (void)registerEaseMobLiteNotification
-{
-    [[EaseMob sharedInstance].chatManager removeDelegate:self];
-    [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
-}
-
-- (void)unregisterEaseMobLiteNotification
-{
-    [[EaseMob sharedInstance].chatManager removeDelegate:self];
-}
-
 - (void)registerEaseMobNotification
 {
-    if ([[EaseSDKHelper shareHelper] isLite]) {
-        [self registerEaseMobLiteNotification];
-        return;
-    }
+#if DEMO_CALL == 1
     [[EaseMob sharedInstance].chatManager removeDelegate:self];
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
     
     [[EaseMob sharedInstance].callManager removeDelegate:self];
     [[EaseMob sharedInstance].callManager addDelegate:self delegateQueue:nil];
+    
+#else
+    
+    [[EaseMob sharedInstance].chatManager removeDelegate:self];
+    [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
+    
+#endif
 }
 
 - (void)unregisterEaseMobNotification
 {
-    if ([[EaseSDKHelper shareHelper] isLite]) {
-        [self unregisterEaseMobLiteNotification];
-        return;
-    }
+#if DEMO_CALL == 1
     [[EaseMob sharedInstance].chatManager removeDelegate:self];
     [[EaseMob sharedInstance].callManager removeDelegate:self];
+#else
+    [[EaseMob sharedInstance].chatManager removeDelegate:self];
+#endif
+    
 }
 
 @end

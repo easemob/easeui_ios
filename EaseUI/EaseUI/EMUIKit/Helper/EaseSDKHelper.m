@@ -207,7 +207,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                                         otherConfig:otherConfig];
     
     // 注册环信监听
-    [self registerEaseMobLiteNotification];
+    [self registerEaseMobNotification];
     
     //启动easemob sdk
     [[EaseMob sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
