@@ -119,6 +119,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     
     EMOptions *options = [EMOptions optionsWithAppkey:appkey];
     options.apnsCertName = apnsCertName;
+    options.isAutoAcceptGroupInvitation = NO;
     if ([otherConfig objectForKey:kSDKConfigEnableConsoleLogger]) {
         options.enableConsoleLog = YES;
     }
@@ -170,14 +171,18 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     return message;
 }
 
-+ (EMMessage *)sendImageMessageWithImage:(UIImage *)image
-                                      to:(NSString *)to
-                             messageType:(EMChatType)messageType
-                       requireEncryption:(BOOL)requireEncryption
-                              messageExt:(NSDictionary *)messageExt
-                                progress:(id)progress
++ (EMMessage *)sendImageMessageWithImageData:(NSData *)imageData
+                                          to:(NSString *)to
+                                 messageType:(EMChatType)messageType
+                           requireEncryption:(BOOL)requireEncryption
+                                  messageExt:(NSDictionary *)messageExt
+                                    progress:(id)progress
 {
-    return [self sendImageMessageWithImage:image to:to messageType:messageType requireEncryption:requireEncryption messageExt:messageExt quality:0.6 progress:progress];
+    EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:imageData displayName:@"image.png"];
+    NSString *from = [[EMClient shareClient] currentUsername];
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
+    
+    return message;
 }
 
 + (EMMessage *)sendImageMessageWithImage:(UIImage *)image
@@ -185,15 +190,11 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                              messageType:(EMChatType)messageType
                        requireEncryption:(BOOL)requireEncryption
                               messageExt:(NSDictionary *)messageExt
-                                 quality:(float)quality
                                 progress:(id)progress
 {
     NSData *data = UIImageJPEGRepresentation(image, 1);
-    EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:data displayName:@"image.png"];
-    NSString *from = [[EMClient shareClient] currentUsername];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
     
-    return message;
+    return [self sendImageMessageWithImageData:data to:to messageType:messageType requireEncryption:requireEncryption messageExt:messageExt progress:progress];
 }
 
 + (EMMessage *)sendVoiceMessageWithLocalPath:(NSString *)localPath

@@ -9,6 +9,13 @@
 #import "EaseMessageViewController.h"
 
 #import <Foundation/Foundation.h>
+//#import <AssetsLibrary/AssetsLibrary.h>
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
+#import <Photos/Photos.h>
+#else
+#import <AssetsLibrary/AssetsLibrary.h>
+#endif
 
 #import "NSDate+Category.h"
 #import "EaseUsersListViewController.h"
@@ -20,6 +27,8 @@
 #import "UIImage+EMGIF.h"
 
 #define KHintAdjustY    50
+
+#define IOS_VERSION [[UIDevice currentDevice] systemVersion]>=9.0
 
 @interface EaseMessageViewController ()<EaseMessageCellDelegate>
 {
@@ -640,6 +649,7 @@
                 NSString *localPath = model.message == nil ? model.fileLocalPath : [imageBody localPath];
                 if (localPath && localPath.length > 0) {
                     UIImage *image = [UIImage imageWithContentsOfFile:localPath];
+                    
                     if (image)
                     {
                         [[EaseMessageReadManager defaultManager] showBrowserWithImages:@[image]];
@@ -986,8 +996,57 @@
         [self sendVideoMessageWithURL:mp4];
         
     }else{
-        UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
-        [self sendImageMessage:orgImage];
+        
+        NSURL *url = info[UIImagePickerControllerReferenceURL];
+        if (url == nil) {
+            UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
+            [self sendImageMessage:orgImage];
+        } else {
+//            ALAssetsLibrary *alasset = [[ALAssetsLibrary alloc] init];
+//            [alasset assetForURL:url resultBlock:^(ALAsset *asset) {
+//                if (asset) {
+//                    ALAssetRepresentation* assetRepresentation = [asset defaultRepresentation];
+//                    Byte* buffer = (Byte*)malloc([assetRepresentation size]);
+//                    NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:[assetRepresentation size] error:nil];
+//                    NSData* fileData = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
+//                    if (fileData.length > 10 * 1000 * 1000) {
+//                        [self showHint:@"图片太大了，换个小点的"];
+//                        return;
+//                    }
+//                    [self sendImageMessageWithData:fileData];
+//                }
+//            } failureBlock:NULL];
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
+            PHFetchResult *result = [PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil];
+            [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
+                if (asset) {
+                    [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
+                        if (data.length > 10 * 1000 * 1000) {
+                            [self showHint:@"图片太大了，换个小点的"];
+                            return;
+                        }
+                        [self sendImageMessageWithData:data];
+                    }];
+                }
+            }];
+#else
+            ALAssetsLibrary *alasset = [[ALAssetsLibrary alloc] init];
+            [alasset assetForURL:url resultBlock:^(ALAsset *asset) {
+                if (asset) {
+                    ALAssetRepresentation* assetRepresentation = [asset defaultRepresentation];
+                    Byte* buffer = (Byte*)malloc([assetRepresentation size]);
+                    NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:[assetRepresentation size] error:nil];
+                    NSData* fileData = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
+                    if (fileData.length > 10 * 1000 * 1000) {
+                        [self showHint:@"图片太大了，换个小点的"];
+                        return;
+                    }
+                    [self sendImageMessageWithData:fileData];
+                }
+            } failureBlock:NULL];
+#endif
+        }
     }
     
     [picker dismissViewControllerAnimated:YES completion:nil];
@@ -1587,6 +1646,25 @@
                                                           messageType:[self _messageTypeFromConversationType]
                                                     requireEncryption:NO
                                                            messageExt:nil];
+    [self _sendMessage:message];
+}
+
+- (void)sendImageMessageWithData:(NSData *)imageData
+{
+    id progress = nil;
+    if (_dataSource && [_dataSource respondsToSelector:@selector(messageViewController:progressDelegateForMessageBodyType:)]) {
+        progress = [_dataSource messageViewController:self progressDelegateForMessageBodyType:EMMessageBodyTypeImage];
+    }
+    else{
+        progress = self;
+    }
+    
+    EMMessage *message = [EaseSDKHelper sendImageMessageWithImageData:imageData
+                                                                   to:self.conversation.conversationId
+                                                          messageType:[self _messageTypeFromConversationType]
+                                                    requireEncryption:NO
+                                                           messageExt:nil
+                                                             progress:progress];
     [self _sendMessage:message];
 }
 

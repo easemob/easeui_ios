@@ -14,6 +14,8 @@
 #import "UIImageView+EMWebCache.h"
 #import "EMCDDeviceManager.h"
 
+#define IMAGE_MAX_SIZE_5k 5120*2880
+
 static EaseMessageReadManager *detailInstance = nil;
 
 @interface EaseMessageReadManager()
@@ -121,7 +123,12 @@ static EaseMessageReadManager *detailInstance = nil;
         for (id object in imageArray) {
             MWPhoto *photo;
             if ([object isKindOfClass:[UIImage class]]) {
-                photo = [MWPhoto photoWithImage:object];
+                CGFloat imageSize = ((UIImage*)object).size.width * ((UIImage*)object).size.height;
+                if (imageSize > IMAGE_MAX_SIZE_5k) {
+                    photo = [MWPhoto photoWithImage:[self scaleImage:object toScale:(IMAGE_MAX_SIZE_5k)/imageSize]];
+                } else {
+                    photo = [MWPhoto photoWithImage:object];
+                }
             }
             else if ([object isKindOfClass:[NSURL class]])
             {
@@ -205,5 +212,13 @@ static EaseMessageReadManager *detailInstance = nil;
     return model;
 }
 
+- (UIImage *)scaleImage:(UIImage *)image toScale:(float)scaleSize
+{
+    UIGraphicsBeginImageContext(CGSizeMake(image.size.width * scaleSize, image.size.height * scaleSize));
+    [image drawInRect:CGRectMake(0, 0, image.size.width * scaleSize, image.size.height * scaleSize)];
+    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return scaledImage;
+}
 
 @end

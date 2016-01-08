@@ -46,10 +46,10 @@
                     self.thumbnailImage = [UIImage imageWithContentsOfFile:imgMessageBody.thumbnailLocalPath];
                 }
                 else{
-                    self.thumbnailImage = self.image;
+                    self.thumbnailImage = [self scaleImage:self.image toScale:0.1];
                 }
                 
-                self.thumbnailImageSize = imgMessageBody.thumbnailSize;
+                self.thumbnailImageSize = self.thumbnailImage.size;
                 self.imageSize = imgMessageBody.size;
                 self.fileLocalPath = imgMessageBody.localPath;
                 if (!_isSender) {
@@ -145,6 +145,15 @@
 - (BOOL)isMessageRead
 {
     return _message.isReadAcked;
+}
+
+- (UIImage *)scaleImage:(UIImage *)image toScale:(float)scaleSize
+{
+    UIGraphicsBeginImageContext(CGSizeMake(image.size.width * scaleSize, image.size.height * scaleSize));
+    [image drawInRect:CGRectMake(0, 0, image.size.width * scaleSize, image.size.height * scaleSize)];
+    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return scaledImage;
 }
 
 @end

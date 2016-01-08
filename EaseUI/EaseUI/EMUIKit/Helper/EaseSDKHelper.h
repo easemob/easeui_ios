@@ -47,13 +47,12 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                              requireEncryption:(BOOL)requireEncryption
                                     messageExt:(NSDictionary *)messageExt;
 
-+ (EMMessage *)sendImageMessageWithImage:(UIImage *)image
-                                      to:(NSString *)to
-                             messageType:(EMChatType)messageType
-                       requireEncryption:(BOOL)requireEncryption
-                              messageExt:(NSDictionary *)messageExt
-                                 quality:(float)quality
-                                progress:(id)progress;
++ (EMMessage *)sendImageMessageWithImageData:(NSData *)imageData
+                                          to:(NSString *)to
+                                 messageType:(EMChatType)messageType
+                           requireEncryption:(BOOL)requireEncryption
+                                  messageExt:(NSDictionary *)messageExt
+                                    progress:(id)progress;
 
 + (EMMessage *)sendImageMessageWithImage:(UIImage *)image
                                       to:(NSString *)to
