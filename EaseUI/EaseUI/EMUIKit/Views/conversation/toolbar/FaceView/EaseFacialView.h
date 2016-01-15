@@ -29,7 +29,7 @@
 	NSMutableArray *_faces;
 }
 
-@property(nonatomic) id<EaseFacialViewDelegate> delegate;
+@property(nonatomic, weak) id<EaseFacialViewDelegate> delegate;
 
 @property(strong, nonatomic, readonly) NSArray *faces;
 

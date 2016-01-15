@@ -18,12 +18,12 @@
 
 @interface EaseFaceView ()
 {
-    EaseFacialView *_facialView;
     UIScrollView *_bottomScrollView;
     NSInteger _currentSelectIndex;
     NSArray *_emotionManagers;
-
 }
+
+@property (nonatomic, strong) EaseFacialView *facialView;
 
 @end
 
@@ -33,10 +33,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _facialView = [[EaseFacialView alloc] initWithFrame: CGRectMake(0, 0, frame.size.width, 150)];
-//        [_facialView loadFacialView:1 size:CGSizeMake(30, 30)];
-        _facialView.delegate = self;
-        [self addSubview:_facialView];
+        [self addSubview:self.facialView];
         [self _setupButtom];
     }
     return self;
@@ -49,8 +46,16 @@
     }
 }
 
-
 #pragma mark - private
+
+- (EaseFacialView*)facialView
+{
+    if (_facialView == nil) {
+        _facialView = [[EaseFacialView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 150)];
+        _facialView.delegate = self;
+    }
+    return _facialView;
+}
 
 - (void)_setupButtom
 {

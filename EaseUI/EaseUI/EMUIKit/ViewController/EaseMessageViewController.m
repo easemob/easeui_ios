@@ -9,13 +9,8 @@
 #import "EaseMessageViewController.h"
 
 #import <Foundation/Foundation.h>
-//#import <AssetsLibrary/AssetsLibrary.h>
-
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
 #import <Photos/Photos.h>
-#else
 #import <AssetsLibrary/AssetsLibrary.h>
-#endif
 
 #import "NSDate+Category.h"
 #import "EaseUsersListViewController.h"
@@ -1002,50 +997,39 @@
             UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
             [self sendImageMessage:orgImage];
         } else {
-//            ALAssetsLibrary *alasset = [[ALAssetsLibrary alloc] init];
-//            [alasset assetForURL:url resultBlock:^(ALAsset *asset) {
-//                if (asset) {
-//                    ALAssetRepresentation* assetRepresentation = [asset defaultRepresentation];
-//                    Byte* buffer = (Byte*)malloc([assetRepresentation size]);
-//                    NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:[assetRepresentation size] error:nil];
-//                    NSData* fileData = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
-//                    if (fileData.length > 10 * 1000 * 1000) {
-//                        [self showHint:@"图片太大了，换个小点的"];
-//                        return;
-//                    }
-//                    [self sendImageMessageWithData:fileData];
-//                }
-//            } failureBlock:NULL];
-
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
-            PHFetchResult *result = [PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil];
-            [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
-                if (asset) {
-                    [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
-                        if (data.length > 10 * 1000 * 1000) {
+            if ([[UIDevice currentDevice].systemVersion doubleValue] >= 9.0f) {
+                PHFetchResult *result = [PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil];
+                [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
+                    if (asset) {
+                        [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
+                            if (data.length > 10 * 1000 * 1000) {
+                                [self showHint:@"图片太大了，换个小点的"];
+                                return;
+                            }
+                            if (data != nil) {
+                                [self sendImageMessageWithData:data];
+                            } else {
+                                [self showHint:@"图片太大了，换个小点的"];
+                            }
+                        }];
+                    }
+                }];
+            } else {
+                ALAssetsLibrary *alasset = [[ALAssetsLibrary alloc] init];
+                [alasset assetForURL:url resultBlock:^(ALAsset *asset) {
+                    if (asset) {
+                        ALAssetRepresentation* assetRepresentation = [asset defaultRepresentation];
+                        Byte* buffer = (Byte*)malloc([assetRepresentation size]);
+                        NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:[assetRepresentation size] error:nil];
+                        NSData* fileData = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
+                        if (fileData.length > 10 * 1000 * 1000) {
                             [self showHint:@"图片太大了，换个小点的"];
                             return;
                         }
-                        [self sendImageMessageWithData:data];
-                    }];
-                }
-            }];
-#else
-            ALAssetsLibrary *alasset = [[ALAssetsLibrary alloc] init];
-            [alasset assetForURL:url resultBlock:^(ALAsset *asset) {
-                if (asset) {
-                    ALAssetRepresentation* assetRepresentation = [asset defaultRepresentation];
-                    Byte* buffer = (Byte*)malloc([assetRepresentation size]);
-                    NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:[assetRepresentation size] error:nil];
-                    NSData* fileData = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
-                    if (fileData.length > 10 * 1000 * 1000) {
-                        [self showHint:@"图片太大了，换个小点的"];
-                        return;
+                        [self sendImageMessageWithData:fileData];
                     }
-                    [self sendImageMessageWithData:fileData];
-                }
-            } failureBlock:NULL];
-#endif
+                } failureBlock:NULL];
+            }
         }
     }
     

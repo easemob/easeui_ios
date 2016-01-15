@@ -147,13 +147,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _faces = [NSMutableArray arrayWithArray:[EaseEmoji allEmoji]];
-        _scrollview = [[UIScrollView alloc] initWithFrame:frame];
-        _scrollview.pagingEnabled = YES;
-        _scrollview.showsHorizontalScrollIndicator = NO;
-        _scrollview.showsVerticalScrollIndicator = NO;
-        _scrollview.alwaysBounceHorizontal = YES;
-        _scrollview.delegate = self;
         _pageControl = [[UIPageControl alloc] init];
         UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
