@@ -1142,7 +1142,7 @@
         [[EMCDDeviceManager sharedInstance] asyncStartRecordingWithFileName:fileName completion:^(NSError *error)
          {
              if (error) {
-                 NSLog(NSEaseLocalizedString(@"message.startRecordFail", @"failure to start recording"));
+                 NSLog(@"%@",NSEaseLocalizedString(@"message.startRecordFail", @"failure to start recording"));
              }
          }];
     }
