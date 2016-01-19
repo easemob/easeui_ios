@@ -117,7 +117,7 @@
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         EaseConversationModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        [[EMClient shareClient].chatManager deleteConversation:model.conversation.conversationId deleteMessages:YES];
+        [[EMClient sharedClient].chatManager deleteConversation:model.conversation.conversationId deleteMessages:YES];
         [self.dataArray removeObjectAtIndex:indexPath.row];
         [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
@@ -161,7 +161,7 @@
         refreshQueue = dispatch_queue_create("com.easemob.conversation.refresh", DISPATCH_QUEUE_SERIAL);
     }
     dispatch_async(refreshQueue, ^{
-        NSArray *conversations = [[EMClient shareClient].chatManager getAllConversations];
+        NSArray *conversations = [[EMClient sharedClient].chatManager getAllConversations];
         NSArray* sorted = [conversations sortedArrayUsingComparator:
                            ^(EMConversation *obj1, EMConversation* obj2){
                                EMMessage *message1 = [obj1 latestMessage];
@@ -205,13 +205,13 @@
 #pragma mark - registerNotifications
 -(void)registerNotifications{
     [self unregisterNotifications];
-    [[EMClient shareClient].chatManager addDelegate:self delegateQueue:nil];
-    [[EMClient shareClient].groupManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
 }
 
 -(void)unregisterNotifications{
-    [[EMClient shareClient].chatManager removeDelegate:self];
-    [[EMClient shareClient].groupManager removeDelegate:self];
+    [[EMClient sharedClient].chatManager removeDelegate:self];
+    [[EMClient sharedClient].groupManager removeDelegate:self];
 }
 
 - (void)dealloc{

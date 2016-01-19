@@ -68,12 +68,12 @@ static EaseSDKHelper *helper = nil;
 
 - (void)appDidEnterBackgroundNotif:(NSNotification*)notif
 {
-    [[EMClient shareClient] applicationDidEnterBackground:notif.object];
+    [[EMClient sharedClient] applicationDidEnterBackground:notif.object];
 }
 
 - (void)appWillEnterForeground:(NSNotification*)notif
 {
-    [[EMClient shareClient] applicationWillEnterForeground:notif.object];
+    [[EMClient sharedClient] applicationWillEnterForeground:notif.object];
 }
 
 #pragma mark - register apns
@@ -126,7 +126,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     
     BOOL sandBox = [otherConfig objectForKey:@"easeSandBox"] && [[otherConfig objectForKey:@"easeSandBox"] boolValue];
     if (!sandBox) {
-        [[EMClient shareClient] initializeSDKWithOptions:options];
+        [[EMClient sharedClient] initializeSDKWithOptions:options];
     }
     
     if ([otherConfig objectForKey:kEaseUISDKConfigIsUseLite]) {
@@ -150,7 +150,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     // 表情映射。
     NSString *willSendText = [EaseConvertToCommonEmoticonsHelper convertToCommonEmoticons:text];
     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:willSendText];
-    NSString *from = [[EMClient shareClient] currentUsername];
+    NSString *from = [[EMClient sharedClient] currentUsername];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:toUser from:from to:toUser body:body ext:messageExt];
     
     return message;
@@ -165,7 +165,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                                     messageExt:(NSDictionary *)messageExt
 {
     EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:latitude longitude:longitude address:address];
-    NSString *from = [[EMClient shareClient] currentUsername];
+    NSString *from = [[EMClient sharedClient] currentUsername];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
     
     return message;
@@ -179,7 +179,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                                     progress:(id)progress
 {
     EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:imageData displayName:@"image.png"];
-    NSString *from = [[EMClient shareClient] currentUsername];
+    NSString *from = [[EMClient sharedClient] currentUsername];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
     
     return message;
@@ -207,7 +207,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     EMVoiceMessageBody *body = [[EMVoiceMessageBody alloc] initWithLocalPath:localPath displayName:@"audio"];
     body.duration = (int)duration;
-    NSString *from = [[EMClient shareClient] currentUsername];
+    NSString *from = [[EMClient sharedClient] currentUsername];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
     
     return message;
@@ -221,7 +221,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                               progress:(id)progress
 {
     EMVideoMessageBody *body = [[EMVideoMessageBody alloc] initWithLocalPath:[url path] displayName:@"video.mp4"];
-    NSString *from = [[EMClient shareClient] currentUsername];
+    NSString *from = [[EMClient sharedClient] currentUsername];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
     
     return message;

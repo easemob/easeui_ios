@@ -135,13 +135,13 @@
     __weak typeof(self) weakself = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         EMError *error = nil;
-        NSArray *buddyList = [[EMClient shareClient].contactManager getContactsFromServerWithError:&error];
+        NSArray *buddyList = [[EMClient sharedClient].contactManager getContactsFromServerWithError:&error];
         if (!error) {
             [weakself.dataArray removeAllObjects];
             NSMutableArray *contactsSource = [NSMutableArray arrayWithArray:buddyList];
             
             //从获取的数据中剔除黑名单中的好友
-            NSArray *blockList = [[EMClient shareClient].contactManager getBlackListFromDB];
+            NSArray *blockList = [[EMClient sharedClient].contactManager getBlackListFromDB];
             for (NSInteger i = (buddyList.count - 1); i >= 0; i--) {
                 NSString *buddy = [buddyList objectAtIndex:i];
                 if (![blockList containsObject:buddy]) {

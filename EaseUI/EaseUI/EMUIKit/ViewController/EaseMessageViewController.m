@@ -57,7 +57,7 @@
     
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
-        _conversation = [[EMClient shareClient].chatManager getConversation:conversationChatter type:conversationType createIfNotExist:YES];
+        _conversation = [[EMClient sharedClient].chatManager getConversation:conversationChatter type:conversationType createIfNotExist:YES];
         
         _messageCountOfPage = 10;
         _timeCellHeight = 30;
@@ -95,8 +95,8 @@
     
     //注册代理
     [EMCDDeviceManager sharedInstance].delegate = self;
-    [[EMClient shareClient].chatManager addDelegate:self delegateQueue:nil];
-    [[EMClient shareClient].roomManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].roomManager addDelegate:self delegateQueue:nil];
 
     if (self.conversation.type == EMConversationTypeChatRoom)
     {
@@ -172,7 +172,7 @@
 {
     NSString *chatroomName = chatroom.subject ? chatroom.subject : @"";
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    NSString *key = [NSString stringWithFormat:@"OnceJoinedChatrooms_%@", [[EMClient shareClient] currentUsername]];
+    NSString *key = [NSString stringWithFormat:@"OnceJoinedChatrooms_%@", [[EMClient sharedClient] currentUsername]];
     NSMutableDictionary *chatRooms = [NSMutableDictionary dictionaryWithDictionary:[ud objectForKey:key]];
     if (![chatRooms objectForKey:chatroom.chatroomId])
     {
@@ -188,7 +188,7 @@
     [self showHudInView:self.view hint:NSLocalizedString(@"chatroom.joining",@"Joining the chatroom")];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         EMError *error = nil;
-        EMChatroom *chatroom = [[EMClient shareClient].roomManager joinChatroom:chatroomId error:&error];
+        EMChatroom *chatroom = [[EMClient sharedClient].roomManager joinChatroom:chatroomId error:&error];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (weakSelf) {
                 EaseMessageViewController *strongSelf = weakSelf;
@@ -201,9 +201,9 @@
             }  else {
                 if (!error || (error.code == EMErrorChatroomAlreadyJoined)) {
                     EMError *leaveError;
-                    [[EMClient shareClient].roomManager leaveChatroom:chatroomId error:&leaveError];
+                    [[EMClient sharedClient].roomManager leaveChatroom:chatroomId error:&leaveError];
                     if (leaveError == nil) {
-                        [[EMClient shareClient].chatManager deleteConversation:chatroomId deleteMessages:YES];
+                        [[EMClient sharedClient].chatManager deleteConversation:chatroomId deleteMessages:YES];
                     }
                 }
             }
@@ -467,7 +467,7 @@
         if (imageBody.thumbnailDownloadStatus > EMDownloadStatusSuccessed)
         {
             //下载缩略图
-            [[[EMClient shareClient] chatManager] asyncDownloadMessageThumbnail:message progress:nil completion:completion];
+            [[[EMClient sharedClient] chatManager] asyncDownloadMessageThumbnail:message progress:nil completion:completion];
         }
     }
     else if ([messageBody type] == EMMessageBodyTypeVideo)
@@ -476,7 +476,7 @@
         if (videoBody.thumbnailDownloadStatus > EMDownloadStatusSuccessed)
         {
             //下载缩略图
-            [[[EMClient shareClient] chatManager] asyncDownloadMessageThumbnail:message progress:nil completion:completion];
+            [[[EMClient sharedClient] chatManager] asyncDownloadMessageThumbnail:message progress:nil completion:completion];
         }
     }
     else if ([messageBody type] == EMMessageBodyTypeVoice)
@@ -485,7 +485,7 @@
         if (voiceBody.downloadStatus > EMDownloadStatusSuccessed)
         {
             //下载语言
-            [[EMClient shareClient].chatManager asyncDownloadMessageAttachments:message progress:nil completion:completion];
+            [[EMClient sharedClient].chatManager asyncDownloadMessageAttachments:message progress:nil completion:completion];
         }
     }
 }
@@ -493,7 +493,7 @@
 - (BOOL)_shouldSendHasReadAckForMessage:(EMMessage *)message
                                    read:(BOOL)read
 {
-    NSString *account = [[EMClient shareClient] currentUsername];
+    NSString *account = [[EMClient sharedClient] currentUsername];
     if (message.chatType != EMChatTypeChat || message.isReadAcked || [account isEqualToString:message.from] || ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) || !self.isViewDidAppear)
     {
         return NO;
@@ -541,7 +541,7 @@
     {
         for (EMMessage *message in unreadMessages)
         {
-            [[EMClient shareClient].chatManager asyncSendReadAckForMessage:message];
+            [[EMClient sharedClient].chatManager asyncSendReadAckForMessage:message];
         }
     }
 }
@@ -609,7 +609,7 @@
     
     if (videoBody.thumbnailDownloadStatus == EMDownloadStatusFailed || ![[NSFileManager defaultManager] fileExistsAtPath:videoBody.thumbnailLocalPath]) {
         [self showHint:@"begin downloading thumbnail image, click later"];
-        [[EMClient shareClient].chatManager asyncDownloadMessageThumbnail:model.message progress:nil completion:completion];
+        [[EMClient sharedClient].chatManager asyncDownloadMessageThumbnail:model.message progress:nil completion:completion];
         return;
     }
     
@@ -620,7 +620,7 @@
     }
     
     [self showHudInView:self.view hint:NSEaseLocalizedString(@"message.downloadingVideo", @"downloading video...")];
-    [[EMClient shareClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakSelf hideHud];
         if (!error) {
             block();
@@ -657,7 +657,7 @@
                 }
             }
             [weakSelf showHudInView:weakSelf.view hint:NSEaseLocalizedString(@"message.downloadingImage", @"downloading a image...")];
-            [[EMClient shareClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+            [[EMClient sharedClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
                 [weakSelf hideHud];
                 if (!error) {
                     //发送已读回执
@@ -681,7 +681,7 @@
             }];
         }else{
             //获取缩略图
-            [[EMClient shareClient].chatManager asyncDownloadMessageThumbnail:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+            [[EMClient sharedClient].chatManager asyncDownloadMessageThumbnail:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
                 if (!error) {
                     [weakSelf _reloadTableViewDataWithMessage:model.message];
                 }else{
@@ -704,7 +704,7 @@
     else if (downloadStatus == EMDownloadStatusFailed)
     {
         [self showHint:NSEaseLocalizedString(@"message.downloadingAudio", @"downloading voice, click later")];
-        [[EMClient shareClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:NULL];
+        [[EMClient sharedClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:NULL];
         return;
     }
     
@@ -1101,7 +1101,7 @@
     }
     
     __weak typeof(self) weakself = self;
-    [[[EMClient shareClient] chatManager] asyncResendMessage:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[[EMClient sharedClient] chatManager] asyncResendMessage:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself.tableView reloadData];
     }];
     
@@ -1600,7 +1600,7 @@
                         progress:nil];
     
     __weak typeof(self) weakself = self;
-    [[EMClient shareClient].chatManager asyncSendMessage:message progress:nil completion:^(EMMessage *aMessage, EMError *aError) {
+    [[EMClient sharedClient].chatManager asyncSendMessage:message progress:nil completion:^(EMMessage *aMessage, EMError *aError) {
         [weakself.tableView reloadData];
     }];
 }
