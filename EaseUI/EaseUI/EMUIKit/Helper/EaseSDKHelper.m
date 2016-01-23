@@ -128,10 +128,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     if (!sandBox) {
         [[EMClient sharedClient] initializeSDKWithOptions:options];
     }
-    
-    if ([otherConfig objectForKey:kEaseUISDKConfigIsUseLite]) {
-        _isLite = YES;
-    }
 }
 
 - (void)dealloc
