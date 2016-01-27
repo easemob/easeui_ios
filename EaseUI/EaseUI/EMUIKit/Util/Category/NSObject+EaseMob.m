@@ -9,33 +9,42 @@
 #import "NSObject+EaseMob.h"
 
 #import "EaseMob.h"
+#import "EaseSDKHelper.h"
 
 @implementation NSObject (EaseMob)
 
 - (void)registerEaseMobLiteNotification
 {
-    [[EaseMob sharedInstance].chatManager removeDelegate:self];
-    [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient shareClient].chatManager removeDelegate:self];
+    [[EMClient shareClient].chatManager addDelegate:self delegateQueue:nil];
 }
 
 - (void)unregisterEaseMobLiteNotification
 {
-    [[EaseMob sharedInstance].chatManager removeDelegate:self];
+    [[EMClient shareClient].chatManager removeDelegate:self];
 }
 
 - (void)registerEaseMobNotification
 {
-    [[EaseMob sharedInstance].chatManager removeDelegate:self];
-    [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
+    if ([[EaseSDKHelper shareHelper] isLite]) {
+        [self registerEaseMobLiteNotification];
+        return;
+    }
+    [[EMClient shareClient].chatManager removeDelegate:self];
+    [[EMClient shareClient].chatManager addDelegate:self delegateQueue:nil];
     
-    [[EaseMob sharedInstance].callManager removeDelegate:self];
-    [[EaseMob sharedInstance].callManager addDelegate:self delegateQueue:nil];
+    [[EMClient shareClient].callManager removeDelegate:self];
+    [[EMClient shareClient].callManager addDelegate:self delegateQueue:nil];
 }
 
 - (void)unregisterEaseMobNotification
 {
-    [[EaseMob sharedInstance].chatManager removeDelegate:self];
-    [[EaseMob sharedInstance].callManager removeDelegate:self];
+    if ([[EaseSDKHelper shareHelper] isLite]) {
+        [self unregisterEaseMobLiteNotification];
+        return;
+    }
+    [[EMClient shareClient].chatManager removeDelegate:self];
+    [[EMClient shareClient].callManager removeDelegate:self];
 }
 
 @end

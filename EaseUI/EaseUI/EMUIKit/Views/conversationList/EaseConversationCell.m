@@ -159,7 +159,7 @@ CGFloat const EaseConversationCellPadding = 10;
         self.titleLabel.text = _model.title;
     }
     else{
-        self.titleLabel.text = _model.conversation.chatter;
+        self.titleLabel.text = _model.conversation.conversationId;
     }
     
     if (self.showAvatar) {

@@ -17,8 +17,8 @@
     self = [super init];
     if (self) {
         _conversation = conversation;
-        _title = _conversation.chatter;
-        if (conversation.conversationType == eConversationTypeChat) {
+        _title = _conversation.conversationId;
+        if (conversation.type == EMConversationTypeChat) {
             _avatarImage = [UIImage imageNamed:@"EaseUIResource.bundle/user"];
         }
         else{

@@ -8,16 +8,14 @@
 
 #import "EaseUserModel.h"
 
-#import "EMBuddy.h"
-
 @implementation EaseUserModel
 
-- (instancetype)initWithBuddy:(EMBuddy *)buddy
+- (instancetype)initWithBuddy:(NSString *)buddy
 {
     self = [super init];
     if (self) {
         _buddy = buddy;
-        _nickname = _buddy.username;
+        _nickname = @"";
         _avatarImage = [UIImage imageNamed:@"EaseUIResource.bundle/user"];
     }
     

@@ -14,8 +14,8 @@
 #import "EaseChatBarMoreView.h"
 #import "EaseChatToolbarItem.h"
 
-#define kTouchToRecord NSLocalizedString(@"message.toolBar.record.touch", @"hold down to talk")
-#define kTouchToFinish NSLocalizedString(@"message.toolBar.record.send", @"loosen to send")
+#define kTouchToRecord NSEaseLocalizedString(@"message.toolBar.record.touch", @"hold down to talk")
+#define kTouchToFinish NSEaseLocalizedString(@"message.toolBar.record.send", @"loosen to send")
 
 
 
@@ -95,6 +95,11 @@
  *  取消触摸录音键
  */
 - (void)cancelTouchRecord;
+
+/*
+ *  弹起底层视图
+ */
+- (void)willShowBottomView:(UIView *)bottomView;
 
 @end
 

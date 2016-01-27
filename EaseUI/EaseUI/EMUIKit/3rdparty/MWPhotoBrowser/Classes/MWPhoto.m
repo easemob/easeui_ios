@@ -74,7 +74,7 @@
 }
 
 - (void)loadUnderlyingImageAndNotify {
-    NSAssert([[NSThread currentThread] isMainThread], @"This method must be called on the main thread.");
+//    NSAssert([[NSThread currentThread] isMainThread], @"This method must be called on the main thread.");
     if (_loadingInProgress) return;
     _loadingInProgress = YES;
     @try {
@@ -197,7 +197,7 @@
 }
 
 - (void)imageLoadingComplete {
-    NSAssert([[NSThread currentThread] isMainThread], @"This method must be called on the main thread.");
+//    NSAssert([[NSThread currentThread] isMainThread], @"This method must be called on the main thread.");
     // Complete so notify
     _loadingInProgress = NO;
     // Notify on next run loop

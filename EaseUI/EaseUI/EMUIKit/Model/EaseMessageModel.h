@@ -18,16 +18,16 @@
 //SDK中的消息
 @property (strong, nonatomic, readonly) EMMessage *message;
 //消息的第一个消息体
-@property (strong, nonatomic, readonly) id<IEMMessageBody> firstMessageBody;
+@property (strong, nonatomic, readonly) EMMessageBody *firstMessageBody;
 
 //消息ID
 @property (strong, nonatomic, readonly) NSString *messageId;
 //消息类型
-@property (nonatomic, readonly) MessageBodyType bodyType;
+@property (nonatomic, readonly) EMMessageBodyType bodyType;
 //消息发送状态
-@property (nonatomic, readonly) MessageDeliveryState messageStatus;
+@property (nonatomic, readonly) EMMessageStatus messageStatus;
 // 消息类型（单聊，群里，聊天室）
-@property (nonatomic, readonly) EMMessageType messageType;
+@property (nonatomic, readonly) EMChatType messageType;
 
 //是否已读
 @property (nonatomic) BOOL isMessageRead;

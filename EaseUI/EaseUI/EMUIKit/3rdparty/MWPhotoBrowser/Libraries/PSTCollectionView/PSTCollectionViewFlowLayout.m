@@ -315,7 +315,7 @@ static char kPSTCachedItemRectsKey;
 
 // get size of all items (if delegate is implemented)
 - (void)getSizingInfos {
-    NSAssert(_data.sections.count == 0, @"Grid layout is already populated?");
+//    NSAssert(_data.sections.count == 0, @"Grid layout is already populated?");
 
     id<PSTCollectionViewDelegateFlowLayout> flowDataSource = (id<PSTCollectionViewDelegateFlowLayout>)self.collectionView.delegate;
 

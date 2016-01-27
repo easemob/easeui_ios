@@ -14,6 +14,8 @@
 #import "UIImageView+EMWebCache.h"
 #import "EMCDDeviceManager.h"
 
+#define IMAGE_MAX_SIZE_5k 5120*2880
+
 static EaseMessageReadManager *detailInstance = nil;
 
 @interface EaseMessageReadManager()
@@ -121,7 +123,12 @@ static EaseMessageReadManager *detailInstance = nil;
         for (id object in imageArray) {
             MWPhoto *photo;
             if ([object isKindOfClass:[UIImage class]]) {
-                photo = [MWPhoto photoWithImage:object];
+                CGFloat imageSize = ((UIImage*)object).size.width * ((UIImage*)object).size.height;
+                if (imageSize > IMAGE_MAX_SIZE_5k) {
+                    photo = [MWPhoto photoWithImage:[self scaleImage:object toScale:(IMAGE_MAX_SIZE_5k)/imageSize]];
+                } else {
+                    photo = [MWPhoto photoWithImage:object];
+                }
             }
             else if ([object isKindOfClass:[NSURL class]])
             {
@@ -146,7 +153,7 @@ static EaseMessageReadManager *detailInstance = nil;
 {
     BOOL isPrepare = NO;
     
-    if(messageModel.bodyType == eMessageBodyType_Voice)
+    if(messageModel.bodyType == EMMessageBodyTypeVoice)
     {
         EaseMessageModel *prevAudioModel = self.audioMessageModel;
         EaseMessageModel *currentAudioModel = messageModel;
@@ -172,13 +179,13 @@ static EaseMessageReadManager *detailInstance = nil;
                     if (![[dict objectForKey:@"isPlayed"] boolValue]) {
                         [dict setObject:@YES forKey:@"isPlayed"];
                         chatMessage.ext = dict;
-                        [chatMessage updateMessageExtToDB];
+                        [[EMClient sharedClient].chatManager updateMessage:chatMessage];
                     }
                 } else {
                     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:chatMessage.ext];
                     [dic setObject:@YES forKey:@"isPlayed"];
                     chatMessage.ext = dic;
-                    [chatMessage updateMessageExtToDB];
+                    [[EMClient sharedClient].chatManager updateMessage:chatMessage];
                 }
             }
         }
@@ -194,7 +201,7 @@ static EaseMessageReadManager *detailInstance = nil;
 - (EaseMessageModel *)stopMessageAudioModel
 {
     EaseMessageModel *model = nil;
-    if (self.audioMessageModel.bodyType == eMessageBodyType_Voice) {
+    if (self.audioMessageModel.bodyType == EMMessageBodyTypeVoice) {
         if (self.audioMessageModel.isMediaPlaying) {
             model = self.audioMessageModel;
         }
@@ -205,5 +212,13 @@ static EaseMessageReadManager *detailInstance = nil;
     return model;
 }
 
+- (UIImage *)scaleImage:(UIImage *)image toScale:(float)scaleSize
+{
+    UIGraphicsBeginImageContext(CGSizeMake(image.size.width * scaleSize, image.size.height * scaleSize));
+    [image drawInRect:CGRectMake(0, 0, image.size.width * scaleSize, image.size.height * scaleSize)];
+    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return scaledImage;
+}
 
 @end

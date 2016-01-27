@@ -66,7 +66,7 @@ static EaseLocationViewController *defaultLocation = nil;
 {
     [super viewDidLoad];
     
-    self.title = NSLocalizedString(@"location.messageType", @"location message");
+    self.title = NSEaseLocalizedString(@"location.messageType", @"location message");
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     [backButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/back"] forState:UIControlStateNormal];
@@ -84,7 +84,7 @@ static EaseLocationViewController *defaultLocation = nil;
         _mapView.showsUserLocation = YES;//显示当前位置
         
         UIButton *sendButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
-        [sendButton setTitle:NSLocalizedString(@"send", @"Send") forState:UIControlStateNormal];
+        [sendButton setTitle:NSEaseLocalizedString(@"send", @"Send") forState:UIControlStateNormal];
         [sendButton setTitleColor:[UIColor colorWithRed:32 / 255.0 green:134 / 255.0 blue:158 / 255.0 alpha:1.0] forState:UIControlStateNormal];
         [sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
         [sendButton addTarget:self action:@selector(sendLocation) forControlEvents:UIControlEventTouchUpInside];
@@ -137,7 +137,7 @@ static EaseLocationViewController *defaultLocation = nil;
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
                                                             message:[error.userInfo objectForKey:NSLocalizedRecoverySuggestionErrorKey]
                                                            delegate:nil
-                                                  cancelButtonTitle:NSLocalizedString(@"ok", @"OK")
+                                                  cancelButtonTitle:NSEaseLocalizedString(@"ok", @"OK")
                                                   otherButtonTitles:nil, nil];
         [alertView show];
     }
@@ -179,7 +179,7 @@ static EaseLocationViewController *defaultLocation = nil;
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
     
-    [self showHudInView:self.view hint:NSLocalizedString(@"location.ongoning", @"locating...")];
+    [self showHudInView:self.view hint:NSEaseLocalizedString(@"location.ongoning", @"locating...")];
 }
 
 -(void)createAnnotationWithCoords:(CLLocationCoordinate2D)coords

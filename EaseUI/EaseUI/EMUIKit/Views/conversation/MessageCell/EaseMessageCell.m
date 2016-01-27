@@ -15,6 +15,7 @@
 #import "EaseBubbleView+Video.h"
 #import "EaseBubbleView+File.h"
 #import "UIImageView+EMWebCache.h"
+#import "EaseEmotionEscape.h"
 
 CGFloat const EaseMessageCellPadding = 10;
 
@@ -34,7 +35,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 
 @interface EaseMessageCell()
 {
-    MessageBodyType _messageType;
+    EMMessageBodyType _messageType;
 }
 
 @property (nonatomic) NSLayoutConstraint *statusWidthConstraint;
@@ -65,7 +66,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     cell.messageTextFont = [UIFont systemFontOfSize:15];
     cell.messageTextColor = [UIColor blackColor];
     
-    cell.messageLocationFont = [UIFont systemFontOfSize:12];
+    cell.messageLocationFont = [UIFont systemFontOfSize:10];
     cell.messageLocationColor = [UIColor whiteColor];
     
     cell.messageVoiceDurationColor = [UIColor grayColor];
@@ -99,7 +100,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 
 #pragma mark - setup subviews
 
-- (void)_setupSubviewsWithType:(MessageBodyType)messageType
+- (void)_setupSubviewsWithType:(EMMessageBodyType)messageType
                       isSender:(BOOL)isSender
                          model:(id<IMessageModel>)model
 {
@@ -125,7 +126,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     
     _hasRead = [[UILabel alloc] init];
     _hasRead.translatesAutoresizingMaskIntoConstraints = NO;
-    _hasRead.text = NSLocalizedString(@"hasRead", @"Read");
+    _hasRead.text = NSEaseLocalizedString(@"hasRead", @"Read");
     _hasRead.textAlignment = NSTextAlignmentCenter;
     _hasRead.font = [UIFont systemFontOfSize:12];
     _hasRead.hidden = YES;
@@ -142,7 +143,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
         [self setCustomBubbleView:model];
     } else {
         switch (messageType) {
-            case eMessageBodyType_Text:
+            case EMMessageBodyTypeText:
             {
                 [_bubbleView setupTextBubbleView];
                 
@@ -150,14 +151,14 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 _bubbleView.textLabel.textColor = _messageTextColor;
             }
                 break;
-            case eMessageBodyType_Image:
+            case EMMessageBodyTypeImage:
             {
                 [_bubbleView setupImageBubbleView];
                 
                 _bubbleView.imageView.image = [UIImage imageNamed:@"EaseUIResource.bundle/imageDownloadFail"];
             }
                 break;
-            case eMessageBodyType_Location:
+            case EMMessageBodyTypeLocation:
             {
                 [_bubbleView setupLocationBubbleView];
                 
@@ -166,7 +167,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 _bubbleView.locationLabel.textColor = _messageLocationColor;
             }
                 break;
-            case eMessageBodyType_Voice:
+            case EMMessageBodyTypeVoice:
             {
                 [_bubbleView setupVoiceBubbleView];
                 
@@ -174,14 +175,14 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 _bubbleView.voiceDurationLabel.font = _messageVoiceDurationFont;
             }
                 break;
-            case eMessageBodyType_Video:
+            case EMMessageBodyTypeVideo:
             {
                 [_bubbleView setupVideoBubbleView];
                 
                 _bubbleView.videoTagView.image = [UIImage imageNamed:@"EaseUIResource.bundle/messageVideo"];
             }
                 break;
-            case eMessageBodyType_File:
+            case EMMessageBodyTypeFile:
             {
                 [_bubbleView setupFileBubbleView];
                 
@@ -284,14 +285,14 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
         [self setCustomModel:model];
     } else {
         switch (model.bodyType) {
-            case eMessageBodyType_Text:
+            case EMMessageBodyTypeText:
             {
-                _bubbleView.textLabel.text = model.text;
+                _bubbleView.textLabel.attributedText = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:self.messageTextFont];
             }
                 break;
-            case eMessageBodyType_Image:
+            case EMMessageBodyTypeImage:
             {
-                UIImage *image = _model.isSender ? _model.image : _model.thumbnailImage;
+                UIImage *image = _model.thumbnailImage;
                 if (!image) {
                     image = _model.image;
                     if (!image) {
@@ -304,12 +305,12 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 }
             }
                 break;
-            case eMessageBodyType_Location:
+            case EMMessageBodyTypeLocation:
             {
                 _bubbleView.locationLabel.text = _model.address;
             }
                 break;
-            case eMessageBodyType_Voice:
+            case EMMessageBodyTypeVoice:
             {
                 if (_bubbleView.voiceImageView) {
 //                    if ([self.sendMessageVoiceAnimationImages count] > 0 && [self.recvMessageVoiceAnimationImages count] > 0) {
@@ -336,7 +337,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 _bubbleView.voiceDurationLabel.text = [NSString stringWithFormat:@"%d''",(int)_model.mediaDuration];
             }
                 break;
-            case eMessageBodyType_Video:
+            case EMMessageBodyTypeVideo:
             {
                 UIImage *image = _model.isSender ? _model.image : _model.thumbnailImage;
                 if (!image) {
@@ -351,7 +352,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 }
             }
                 break;
-            case eMessageBodyType_File:
+            case EMMessageBodyTypeFile:
             {
                 _bubbleView.fileIconView.image = [UIImage imageNamed:_model.fileIconName];
                 _bubbleView.fileNameLabel.text = _model.fileName;
@@ -411,32 +412,32 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     } else {
         if (_bubbleView) {
             switch (_messageType) {
-                case eMessageBodyType_Text:
+                case EMMessageBodyTypeText:
                 {
                     [_bubbleView updateTextMargin:_bubbleMargin];
                 }
                     break;
-                case eMessageBodyType_Image:
+                case EMMessageBodyTypeImage:
                 {
                     [_bubbleView updateImageMargin:_bubbleMargin];
                 }
                     break;
-                case eMessageBodyType_Location:
+                case EMMessageBodyTypeLocation:
                 {
                     [_bubbleView updateLocationMargin:_bubbleMargin];
                 }
                     break;
-                case eMessageBodyType_Voice:
+                case EMMessageBodyTypeVoice:
                 {
                     [_bubbleView updateVoiceMargin:_bubbleMargin];
                 }
                     break;
-                case eMessageBodyType_Video:
+                case EMMessageBodyTypeVideo:
                 {
                     [_bubbleView updateVideoMargin:_bubbleMargin];
                 }
                     break;
-                case eMessageBodyType_File:
+                case EMMessageBodyTypeFile:
                 {
                     [_bubbleView updateFileMargin:_bubbleMargin];
                 }
@@ -555,21 +556,21 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             }
         }
         switch (_model.bodyType) {
-            case eMessageBodyType_Image:
+            case EMMessageBodyTypeImage:
             {
                 if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
                     [_delegate messageCellSelected:_model];
                 }
             }
                 break;
-            case eMessageBodyType_Location:
+            case EMMessageBodyTypeLocation:
             {
                 if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
                     [_delegate messageCellSelected:_model];
                 }
             }
                 break;
-            case eMessageBodyType_Voice:
+            case EMMessageBodyTypeVoice:
             {
 //                _model.isMediaPlaying = !_model.isMediaPlaying;
 //                if (_model.isMediaPlaying) {
@@ -583,14 +584,14 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 }
             }
                 break;
-            case eMessageBodyType_Video:
+            case EMMessageBodyTypeVideo:
             {
                 if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
                     [_delegate messageCellSelected:_model];
                 }
             }
                 break;
-            case eMessageBodyType_File:
+            case EMMessageBodyTypeFile:
             {
                 if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
                     [_delegate messageCellSelected:_model];
@@ -646,22 +647,22 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     NSString *cellIdentifier = nil;
     if (model.isSender) {
         switch (model.bodyType) {
-            case eMessageBodyType_Text:
+            case EMMessageBodyTypeText:
                 cellIdentifier = EaseMessageCellIdentifierSendText;
                 break;
-            case eMessageBodyType_Image:
+            case EMMessageBodyTypeImage:
                 cellIdentifier = EaseMessageCellIdentifierSendImage;
                 break;
-            case eMessageBodyType_Video:
+            case EMMessageBodyTypeVideo:
                 cellIdentifier = EaseMessageCellIdentifierSendVideo;
                 break;
-            case eMessageBodyType_Location:
+            case EMMessageBodyTypeLocation:
                 cellIdentifier = EaseMessageCellIdentifierSendLocation;
                 break;
-            case eMessageBodyType_Voice:
+            case EMMessageBodyTypeVoice:
                 cellIdentifier = EaseMessageCellIdentifierSendVoice;
                 break;
-            case eMessageBodyType_File:
+            case EMMessageBodyTypeFile:
                 cellIdentifier = EaseMessageCellIdentifierSendFile;
                 break;
             default:
@@ -670,22 +671,22 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     }
     else{
         switch (model.bodyType) {
-            case eMessageBodyType_Text:
+            case EMMessageBodyTypeText:
                 cellIdentifier = EaseMessageCellIdentifierRecvText;
                 break;
-            case eMessageBodyType_Image:
+            case EMMessageBodyTypeImage:
                 cellIdentifier = EaseMessageCellIdentifierRecvImage;
                 break;
-            case eMessageBodyType_Video:
+            case EMMessageBodyTypeVideo:
                 cellIdentifier = EaseMessageCellIdentifierRecvVideo;
                 break;
-            case eMessageBodyType_Location:
+            case EMMessageBodyTypeLocation:
                 cellIdentifier = EaseMessageCellIdentifierRecvLocation;
                 break;
-            case eMessageBodyType_Voice:
+            case EMMessageBodyTypeVoice:
                 cellIdentifier = EaseMessageCellIdentifierRecvVoice;
                 break;
-            case eMessageBodyType_File:
+            case EMMessageBodyTypeFile:
                 cellIdentifier = EaseMessageCellIdentifierRecvFile;
                 break;
             default:
@@ -712,19 +713,26 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     CGFloat height = EaseMessageCellPadding + cell.bubbleMargin.top + cell.bubbleMargin.bottom;
     
     switch (model.bodyType) {
-        case eMessageBodyType_Text:
+        case EMMessageBodyTypeText:
         {
-//            NSAttributedString *text = model.attrBody;
-//            CGRect rect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
-//            height += (rect.size.height > 20 ? rect.size.height : 20) + 10;
-            NSString *text = model.text;
-            UIFont *textFont = cell.messageTextFont;
-            CGRect rect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:textFont} context:nil];
+            NSAttributedString *text = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:cell.messageTextFont];
+            CGRect rect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
             height += (rect.size.height > 20 ? rect.size.height : 20) + 10;
+//            NSString *text = model.text;
+//            UIFont *textFont = cell.messageTextFont;
+//            CGSize retSize;
+//            if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
+//                retSize = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:textFont} context:nil].size;
+//            }else{
+//                retSize = [text sizeWithFont:textFont constrainedToSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+//            }
+//            
+//            
+//            height += (retSize.height > 20 ? retSize.height : 20) + 10;
         }
             break;
-        case eMessageBodyType_Image:
-        case eMessageBodyType_Video:
+        case EMMessageBodyTypeImage:
+        case EMMessageBodyTypeVideo:
         {
             CGSize retSize = model.thumbnailImageSize;
             if (retSize.width == 0 || retSize.height == 0) {
@@ -745,26 +753,36 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             height += retSize.height;
         }
             break;
-        case eMessageBodyType_Location:
+        case EMMessageBodyTypeLocation:
         {
             height += kEMMessageLocationHeight;
         }
             break;
-        case eMessageBodyType_Voice:
+        case EMMessageBodyTypeVoice:
         {
             height += kEMMessageVoiceHeight;
         }
             break;
-        case eMessageBodyType_File:
+        case EMMessageBodyTypeFile:
         {
             NSString *text = model.fileName;
             UIFont *font = cell.messageFileNameFont;
-            CGRect nameRect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil];
+            CGRect nameRect;
+            if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
+                nameRect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil];
+            } else {
+                nameRect.size = [text sizeWithFont:font constrainedToSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+            }
             height += (nameRect.size.height > 20 ? nameRect.size.height : 20);
             
             text = model.fileSizeDes;
             font = cell.messageFileSizeFont;
-            CGRect sizeRect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil];
+            CGRect sizeRect;
+            if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
+                sizeRect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil];
+            } else {
+                sizeRect.size = [text sizeWithFont:font constrainedToSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+            }
             height += (sizeRect.size.height > 15 ? sizeRect.size.height : 15);
         }
             break;

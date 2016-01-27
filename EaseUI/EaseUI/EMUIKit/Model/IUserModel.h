@@ -12,11 +12,11 @@
 @class EMBuddy;
 @protocol IUserModel <NSObject>
 
-@property (strong, nonatomic, readonly) EMBuddy *buddy;
+@property (strong, nonatomic, readonly) NSString *buddy;
 @property (strong, nonatomic) NSString *nickname;
 @property (strong, nonatomic) NSString *avatarURLPath;
 @property (strong, nonatomic) UIImage *avatarImage;
 
-- (instancetype)initWithBuddy:(EMBuddy *)buddy;
+- (instancetype)initWithBuddy:(NSString *)buddy;
 
 @end
