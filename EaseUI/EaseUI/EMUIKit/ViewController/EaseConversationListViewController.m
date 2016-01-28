@@ -231,7 +231,7 @@
 - (NSString *)_latestMessageTimeForConversationModel:(id<IConversationModel>)conversationModel
 {
     NSString *latestMessageTime = @"";
-    EMMessage *lastMessage = [conversationModel.conversation latestMessage];;
+    EMMessage *lastMessage = [conversationModel.conversation latestMessage];
     if (lastMessage) {
         double timeInterval = lastMessage.timestamp ;
         if(timeInterval > 140000000000) {

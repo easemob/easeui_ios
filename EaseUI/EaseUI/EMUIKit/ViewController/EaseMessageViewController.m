@@ -741,7 +741,7 @@
             moreMessages = [weakSelf.dataSource messageViewController:weakSelf loadMessageFromTimestamp:timestamp count:count];
         }
         else{
-            moreMessages = [weakSelf.conversation loadNumbersOfMessages:count before:timestamp];;
+            moreMessages = [weakSelf.conversation loadNumbersOfMessages:count before:timestamp];
         }
         
         if ([moreMessages count] == 0) {

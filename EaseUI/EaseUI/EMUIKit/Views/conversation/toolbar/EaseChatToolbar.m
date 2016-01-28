@@ -539,7 +539,7 @@
         if ([self.delegate respondsToSelector:@selector(didSendText:)]) {
             [self.delegate didSendText:textView.text];
             self.inputTextView.text = @"";
-            [self _willShowInputTextViewToHeight:[self _getTextViewContentH:self.inputTextView]];;
+            [self _willShowInputTextViewToHeight:[self _getTextViewContentH:self.inputTextView]];
         }
         
         return NO;
@@ -616,7 +616,7 @@
                  }];
                 [self.delegate didSendText:attStr];
                 self.inputTextView.text = @"";
-                [self _willShowInputTextViewToHeight:[self _getTextViewContentH:self.inputTextView]];;
+                [self _willShowInputTextViewToHeight:[self _getTextViewContentH:self.inputTextView]];
             }
         }
     }
@@ -627,7 +627,7 @@
     if (emotion) {
         if ([self.delegate respondsToSelector:@selector(didSendText:withExt:)]) {
             [self.delegate didSendText:emotion.emotionTitle withExt:@{EASEUI_EMOTION_DEFAULT_EXT:emotion}];
-            [self _willShowInputTextViewToHeight:[self _getTextViewContentH:self.inputTextView]];;
+            [self _willShowInputTextViewToHeight:[self _getTextViewContentH:self.inputTextView]];
         }
     }
 }
