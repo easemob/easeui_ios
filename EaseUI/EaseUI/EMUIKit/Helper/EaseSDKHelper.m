@@ -201,10 +201,16 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     //注册apns
     [self _registerRemoteNotification];
     
-    //注册easemob sdk
-    [[EaseMob sharedInstance] registerSDKWithAppKey:appkey
+    BOOL flag = NO;
+    if ([otherConfig objectForKey:@"easeSandBox"]) {
+        flag = [[otherConfig objectForKey:@"easeSandBox"] boolValue];
+    }
+    if (!flag) {
+        //注册easemob sdk
+        [[EaseMob sharedInstance] registerSDKWithAppKey:appkey
                                        apnsCertName:apnsCertName
                                         otherConfig:otherConfig];
+    }
     
     // 注册环信监听
     [self registerEaseMobNotification];
