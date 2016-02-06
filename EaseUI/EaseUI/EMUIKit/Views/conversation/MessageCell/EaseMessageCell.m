@@ -15,6 +15,7 @@
 #import "EaseBubbleView+Video.h"
 #import "EaseBubbleView+File.h"
 #import "UIImageView+EMWebCache.h"
+#import "EaseEmotionEscape.h"
 
 CGFloat const EaseMessageCellPadding = 10;
 
@@ -125,7 +126,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     
     _hasRead = [[UILabel alloc] init];
     _hasRead.translatesAutoresizingMaskIntoConstraints = NO;
-    _hasRead.text = NSLocalizedString(@"hasRead", @"Read");
+    _hasRead.text = NSEaseLocalizedString(@"hasRead", @"Read");
     _hasRead.textAlignment = NSTextAlignmentCenter;
     _hasRead.font = [UIFont systemFontOfSize:12];
     _hasRead.hidden = YES;
@@ -286,7 +287,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
         switch (model.bodyType) {
             case eMessageBodyType_Text:
             {
-                _bubbleView.textLabel.text = model.text;
+                _bubbleView.textLabel.attributedText = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:self.messageTextFont];
             }
                 break;
             case eMessageBodyType_Image:
@@ -714,13 +715,20 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     switch (model.bodyType) {
         case eMessageBodyType_Text:
         {
-//            NSAttributedString *text = model.attrBody;
-//            CGRect rect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
-//            height += (rect.size.height > 20 ? rect.size.height : 20) + 10;
-            NSString *text = model.text;
-            UIFont *textFont = cell.messageTextFont;
-            CGRect rect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:textFont} context:nil];
+            NSAttributedString *text = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:cell.messageTextFont];
+            CGRect rect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
             height += (rect.size.height > 20 ? rect.size.height : 20) + 10;
+//            NSString *text = model.text;
+//            UIFont *textFont = cell.messageTextFont;
+//            CGSize retSize;
+//            if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
+//                retSize = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:textFont} context:nil].size;
+//            }else{
+//                retSize = [text sizeWithFont:textFont constrainedToSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+//            }
+//            
+//            
+//            height += (retSize.height > 20 ? retSize.height : 20) + 10;
         }
             break;
         case eMessageBodyType_Image:
@@ -759,12 +767,22 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
         {
             NSString *text = model.fileName;
             UIFont *font = cell.messageFileNameFont;
-            CGRect nameRect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil];
+            CGRect nameRect;
+            if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
+                nameRect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil];
+            } else {
+                nameRect.size = [text sizeWithFont:font constrainedToSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+            }
             height += (nameRect.size.height > 20 ? nameRect.size.height : 20);
             
             text = model.fileSizeDes;
             font = cell.messageFileSizeFont;
-            CGRect sizeRect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil];
+            CGRect sizeRect;
+            if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
+                sizeRect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil];
+            } else {
+                sizeRect.size = [text sizeWithFont:font constrainedToSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+            }
             height += (sizeRect.size.height > 15 ? sizeRect.size.height : 15);
         }
             break;

@@ -12,6 +12,11 @@
 #import "NSDate+Category.h"
 #import "EaseUsersListViewController.h"
 #import "EaseMessageReadManager.h"
+#import "EaseEmotionManager.h"
+#import "EaseEmoji.h"
+#import "EaseEmotionEscape.h"
+#import "EaseCustomMessageCell.h"
+#import "UIImage+EMGIF.h"
 
 #define KHintAdjustY    50
 
@@ -71,10 +76,6 @@
     CGFloat chatbarHeight = [EaseChatToolbar defaultHeight];
     EMChatToolbarType barType = self.conversation.conversationType == eConversationTypeChat ? EMChatToolbarTypeChat : EMChatToolbarTypeGroup;
     self.chatToolbar = [[EaseChatToolbar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - chatbarHeight, self.view.frame.size.width, chatbarHeight) type:barType];
-    [(EaseChatToolbar *)self.chatToolbar setDelegate:self];
-    self.chatBarMoreView = (EaseChatBarMoreView*)[(EaseChatToolbar *)self.chatToolbar moreView];
-    self.faceView = (EaseFaceView*)[(EaseChatToolbar *)self.chatToolbar faceView];
-    self.recordView = (EaseRecordView*)[(EaseChatToolbar *)self.chatToolbar recordView];
     self.chatToolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;    
     
     //初始化手势
@@ -101,6 +102,23 @@
                                              selector:@selector(didBecomeActive)
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
+}
+
+- (void)setupEmotion
+{
+    if ([self.dataSource respondsToSelector:@selector(emotionFormessageViewController:)]) {
+        NSArray* emotionManagers = [self.dataSource emotionFormessageViewController:self];
+        [self.faceView setEmotionManagers:emotionManagers];
+    } else {
+        NSMutableArray *emotions = [NSMutableArray array];
+        for (NSString *name in [EaseEmoji allEmoji]) {
+            EaseEmotion *emotion = [[EaseEmotion alloc] initWithName:@"" emotionId:name emotionThumbnail:name emotionOriginal:name emotionOriginalURL:@"" emotionType:EMEmotionDefault];
+            [emotions addObject:emotion];
+        }
+        EaseEmotion *emotion = [emotions objectAtIndex:0];
+        EaseEmotionManager *manager= [[EaseEmotionManager alloc] initWithType:EMEmotionDefault emotionRow:3 emotionCol:7 emotions:emotions tagImage:[UIImage imageNamed:emotion.emotionId]];
+        [self.faceView setEmotionManagers:@[manager]];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -171,7 +189,7 @@
 
 - (void)joinChatroom:(NSString *)chatroomId
 {
-    [self showHudInView:self.view hint:NSLocalizedString(@"chatroom.joining",@"Joining the chatroom")];
+    [self showHudInView:self.view hint:NSEaseLocalizedString(@"chatroom.joining",@"Joining the chatroom")];
     __weak typeof(self) weakSelf = self;
     [[EaseMob sharedInstance].chatManager asyncJoinChatroom:chatroomId completion:^(EMChatroom *chatroom, EMError *error){
         if (weakSelf)
@@ -180,7 +198,7 @@
             [strongSelf hideHud];
             if (error && (error.errorCode != EMErrorChatroomJoined))
             {
-                [strongSelf showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.joinFailed",@"join chatroom \'%@\' failed"), chatroomId]];
+                [strongSelf showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.joinFailed",@"join chatroom \'%@\' failed"), chatroomId]];
             }
             else
             {
@@ -204,13 +222,13 @@
 - (void)chatroom:(EMChatroom *)chatroom occupantDidJoin:(NSString *)username
 {
     CGRect frame = self.chatToolbar.frame;
-    [self showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.join", @"\'%@\'join chatroom\'%@\'"), username, chatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
+    [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.join", @"\'%@\'join chatroom\'%@\'"), username, chatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
 }
 
 - (void)chatroom:(EMChatroom *)chatroom occupantDidLeave:(NSString *)username
 {
     CGRect frame = self.chatToolbar.frame;
-    [self showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.leave", @"\'%@\'leave chatroom\'%@\'"), username, chatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
+    [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.leave", @"\'%@\'leave chatroom\'%@\'"), username, chatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
 }
 
 - (void)beKickedOutFromChatroom:(EMChatroom *)chatroom reason:(EMChatroomBeKickedReason)reason
@@ -219,7 +237,7 @@
     {
         _isKicked = YES;
         CGRect frame = self.chatToolbar.frame;
-        [self showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.remove", @"be removed from chatroom\'%@\'"), chatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
+        [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.remove", @"be removed from chatroom\'%@\'"), chatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -273,6 +291,24 @@
     CGRect tableFrame = self.tableView.frame;
     tableFrame.size.height = self.view.frame.size.height - _chatToolbar.frame.size.height;
     self.tableView.frame = tableFrame;
+    if ([chatToolbar isKindOfClass:[EaseChatToolbar class]]) {
+        [(EaseChatToolbar *)self.chatToolbar setDelegate:self];
+        self.chatBarMoreView = (EaseChatBarMoreView*)[(EaseChatToolbar *)self.chatToolbar moreView];
+        self.faceView = (EaseFaceView*)[(EaseChatToolbar *)self.chatToolbar faceView];
+        self.recordView = (EaseRecordView*)[(EaseChatToolbar *)self.chatToolbar recordView];
+    }
+}
+
+- (void)setDataSource:(id<EaseMessageViewControllerDataSource>)dataSource
+{
+    _dataSource = dataSource;
+    
+    [self setupEmotion];
+}
+
+- (void)setDelegate:(id<EaseMessageViewControllerDelegate>)delegate
+{
+    _delegate = delegate;
 }
 
 #pragma mark - private helper
@@ -311,11 +347,11 @@
     }
     
     if (_deleteMenuItem == nil) {
-        _deleteMenuItem = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"delete", @"Delete") action:@selector(deleteMenuAction:)];
+        _deleteMenuItem = [[UIMenuItem alloc] initWithTitle:NSEaseLocalizedString(@"delete", @"Delete") action:@selector(deleteMenuAction:)];
     }
     
     if (_copyMenuItem == nil) {
-        _copyMenuItem = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"copy", @"Copy") action:@selector(copyMenuAction:)];
+        _copyMenuItem = [[UIMenuItem alloc] initWithTitle:NSEaseLocalizedString(@"copy", @"Copy") action:@selector(copyMenuAction:)];
     }
     
     if (messageType == eMessageBodyType_Text) {
@@ -424,7 +460,7 @@
         }
         else
         {
-            [weakSelf showHint:NSLocalizedString(@"message.thumImageFail", @"thumbnail for failure!")];
+            [weakSelf showHint:NSEaseLocalizedString(@"message.thumImageFail", @"thumbnail for failure!")];
         }
     };
     
@@ -548,7 +584,7 @@
     //判断本地路劲是否存在
     NSString *localPath = [model.fileLocalPath length] > 0 ? model.fileLocalPath : videoBody.localPath;
     if ([localPath length] == 0) {
-        [self showHint:NSLocalizedString(@"message.videoFail", @"video for failure!")];
+        [self showHint:NSEaseLocalizedString(@"message.videoFail", @"video for failure!")];
         return;
     }
     
@@ -570,7 +606,7 @@
         return;
     }
     
-    [self showHudInView:self.view hint:NSLocalizedString(@"message.downloadingVideo", @"downloading video...")];
+    [self showHudInView:self.view hint:NSEaseLocalizedString(@"message.downloadingVideo", @"downloading video...")];
     __weak EaseMessageViewController *weakSelf = self;
     id<IChatManager> chatManager = [[EaseMob sharedInstance] chatManager];
     [chatManager asyncFetchMessage:model.message progress:nil completion:^(EMMessage *aMessage, EMError *error) {
@@ -578,7 +614,7 @@
         if (!error) {
             block();
         }else{
-            [weakSelf showHint:NSLocalizedString(@"message.videoFail", @"video for failure!")];
+            [weakSelf showHint:NSEaseLocalizedString(@"message.videoFail", @"video for failure!")];
         }
     } onQueue:nil];
 }
@@ -609,7 +645,7 @@
                     return;
                 }
             }
-            [weakSelf showHudInView:weakSelf.view hint:NSLocalizedString(@"message.downloadingImage", @"downloading a image...")];
+            [weakSelf showHudInView:weakSelf.view hint:NSEaseLocalizedString(@"message.downloadingImage", @"downloading a image...")];
             [chatManager asyncFetchMessage:model.message progress:nil completion:^(EMMessage *aMessage, EMError *error) {
                 [weakSelf hideHud];
                 if (!error) {
@@ -630,7 +666,7 @@
                         return ;
                     }
                 }
-                [weakSelf showHint:NSLocalizedString(@"message.imageFail", @"image for failure!")];
+                [weakSelf showHint:NSEaseLocalizedString(@"message.imageFail", @"image for failure!")];
             } onQueue:nil];
         }else{
             //获取缩略图
@@ -638,7 +674,7 @@
                 if (!error) {
                     [weakSelf reloadTableViewDataWithMessage:model.message];
                 }else{
-                    [weakSelf showHint:NSLocalizedString(@"message.thumImageFail", @"thumbnail for failure!")];
+                    [weakSelf showHint:NSEaseLocalizedString(@"message.thumImageFail", @"thumbnail for failure!")];
                 }
                 
             } onQueue:nil];
@@ -652,12 +688,12 @@
     id <IEMFileMessageBody> body = [model.message.messageBodies firstObject];
     EMAttachmentDownloadStatus downloadStatus = [body attachmentDownloadStatus];
     if (downloadStatus == EMAttachmentDownloading) {
-        [self showHint:NSLocalizedString(@"message.downloadingAudio", @"downloading voice, click later")];
+        [self showHint:NSEaseLocalizedString(@"message.downloadingAudio", @"downloading voice, click later")];
         return;
     }
     else if (downloadStatus == EMAttachmentDownloadFailure)
     {
-        [self showHint:NSLocalizedString(@"message.downloadingAudio", @"downloading voice, click later")];
+        [self showHint:NSEaseLocalizedString(@"message.downloadingAudio", @"downloading voice, click later")];
         [[EaseMob sharedInstance].chatManager asyncFetchMessage:model.message progress:nil];
         return;
     }
@@ -705,7 +741,7 @@
             moreMessages = [weakSelf.dataSource messageViewController:weakSelf loadMessageFromTimestamp:timestamp count:count];
         }
         else{
-            moreMessages = [weakSelf.conversation loadNumbersOfMessages:count before:timestamp];;
+            moreMessages = [weakSelf.conversation loadNumbersOfMessages:count before:timestamp];
         }
         
         if ([moreMessages count] == 0) {
@@ -853,6 +889,32 @@
             }
         }
         
+        if (_dataSource && [_dataSource respondsToSelector:@selector(isEmotionMessageFormessageViewController:messageModel:)]) {
+            BOOL flag = [_dataSource isEmotionMessageFormessageViewController:self messageModel:model];
+            if (flag) {
+                NSString *CellIdentifier = [EaseCustomMessageCell cellIdentifierWithModel:model];
+                //发送cell
+                EaseCustomMessageCell *sendCell = (EaseCustomMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                
+                // Configure the cell...
+                if (sendCell == nil) {
+                    sendCell = [[EaseCustomMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier model:model];
+                    sendCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                }
+                
+                if (_dataSource && [_dataSource respondsToSelector:@selector(emotionURLFormessageViewController:messageModel:)]) {
+                    EaseEmotion *emotion = [_dataSource emotionURLFormessageViewController:self messageModel:model];
+                    if (emotion) {
+                        model.image = [UIImage sd_animatedGIFNamed:emotion.emotionOriginal];
+                        model.fileURLPath = emotion.emotionOriginalURL;
+                    }
+                }
+                sendCell.model = model;
+                sendCell.delegate = self;
+                return sendCell;
+            }
+        }
+        
         NSString *CellIdentifier = [EaseMessageCell cellIdentifierWithModel:model];
         
         EaseBaseMessageCell *sendCell = (EaseBaseMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -885,6 +947,14 @@
                 return height;
             }
         }
+        
+        if (_dataSource && [_dataSource respondsToSelector:@selector(isEmotionMessageFormessageViewController:messageModel:)]) {
+            BOOL flag = [_dataSource isEmotionMessageFormessageViewController:self messageModel:model];
+            if (flag) {
+                return [EaseCustomMessageCell cellHeightWithModel:model];
+            }
+        }
+        
         return [EaseBaseMessageCell cellHeightWithModel:model];
     }
 }
@@ -1032,6 +1102,16 @@
 
 - (void)didSendText:(NSString *)text withExt:(NSDictionary*)ext
 {
+    if ([ext objectForKey:EASEUI_EMOTION_DEFAULT_EXT]) {
+        EaseEmotion *emotion = [ext objectForKey:EASEUI_EMOTION_DEFAULT_EXT];
+        if (self.dataSource && [self.dataSource respondsToSelector:@selector(emotionExtFormessageViewController:easeEmotion:)]) {
+            NSDictionary *ext = [self.dataSource emotionExtFormessageViewController:self easeEmotion:emotion];
+            [self sendTextMessage:emotion.emotionTitle withExt:ext];
+        } else {
+            [self sendTextMessage:emotion.emotionTitle withExt:@{MESSAGE_ATTR_EXPRESSION_ID:emotion.emotionId,MESSAGE_ATTR_IS_BIG_EXPRESSION:@(YES)}];
+        }
+        return;
+    }
     if (text && text.length > 0) {
         [self sendTextMessage:text withExt:ext];
     }
@@ -1062,7 +1142,7 @@
         [[EMCDDeviceManager sharedInstance] asyncStartRecordingWithFileName:fileName completion:^(NSError *error)
          {
              if (error) {
-                 NSLog(NSLocalizedString(@"message.startRecordFail", @"failure to start recording"));
+                 NSLog(@"%@",NSEaseLocalizedString(@"message.startRecordFail", @"failure to start recording"));
              }
          }];
     }
@@ -1103,7 +1183,7 @@
             [weakSelf sendVoiceMessageWithLocalPath:recordPath duration:aDuration];
         }
         else {
-            [weakSelf showHudInView:self.view hint:NSLocalizedString(@"media.timeShort", @"The recording time is too short")];
+            [weakSelf showHudInView:self.view hint:NSEaseLocalizedString(@"media.timeShort", @"The recording time is too short")];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [weakSelf hideHud];
             });
@@ -1163,7 +1243,7 @@
     [self.chatToolbar endEditing:YES];
     
 #if TARGET_IPHONE_SIMULATOR
-    [self showHint:NSLocalizedString(@"message.simulatorNotSupportCamera", @"simulator does not support taking picture")];
+    [self showHint:NSEaseLocalizedString(@"message.simulatorNotSupportCamera", @"simulator does not support taking picture")];
 #elif TARGET_OS_IPHONE
     self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage,(NSString *)kUTTypeMovie];
@@ -1263,7 +1343,7 @@
 -(void)didReceiveCmdMessage:(EMMessage *)message
 {
     if ([self.conversation.chatter isEqualToString:message.conversationChatter]) {
-        [self showHint:NSLocalizedString(@"receiveCmd", @"receive cmd message")];
+        [self showHint:NSEaseLocalizedString(@"receiveCmd", @"receive cmd message")];
     }
 }
 
@@ -1296,7 +1376,7 @@
                         if (error && error.errorCode == EMErrorMessageContainSensitiveWords)
                         {
                             CGRect frame = self.chatToolbar.frame;
-                            [self showHint:NSLocalizedString(@"message.forbiddenWords", @"Your message contains forbidden words") yOffset:-frame.size.height + 50];
+                            [self showHint:NSEaseLocalizedString(@"message.forbiddenWords", @"Your message contains forbidden words") yOffset:-frame.size.height + 50];
                         }
                     }
                     

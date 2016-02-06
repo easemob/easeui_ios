@@ -64,7 +64,7 @@
     UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
     sendButton.frame = CGRectMake((kButtomNum-1)*CGRectGetWidth(_facialView.frame)/kButtomNum, CGRectGetMaxY(_facialView.frame), CGRectGetWidth(_facialView.frame)/kButtomNum, CGRectGetHeight(_bottomScrollView.frame));
     [sendButton setBackgroundColor:[UIColor colorWithRed:30 / 255.0 green:167 / 255.0 blue:252 / 255.0 alpha:1.0]];
-    [sendButton setTitle:NSLocalizedString(@"send", @"Send") forState:UIControlStateNormal];
+    [sendButton setTitle:NSEaseLocalizedString(@"send", @"Send") forState:UIControlStateNormal];
     [sendButton addTarget:self action:@selector(sendFace) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:sendButton];
 }
@@ -75,18 +75,22 @@
     if (number <= 1) {
         return;
     }
+    
+    for (UIView *view in [_bottomScrollView subviews]) {
+        [view removeFromSuperview];
+    }
+    
     for (int i = 0; i < number; i++) {
         UIButton *defaultButton = [UIButton buttonWithType:UIButtonTypeCustom];
         defaultButton.frame = CGRectMake(i * CGRectGetWidth(_bottomScrollView.frame)/(kButtomNum-1), 0, CGRectGetWidth(_bottomScrollView.frame)/(kButtomNum-1), CGRectGetHeight(_bottomScrollView.frame));
         EaseEmotionManager *emotionManager = [_emotionManagers objectAtIndex:i];
         if (emotionManager.emotionType == EMEmotionDefault) {
-            [defaultButton setTitle:[emotionManager.emotions objectAtIndex:i] forState:UIControlStateNormal];
+            EaseEmotion *emotion = [emotionManager.emotions objectAtIndex:0];
+            [defaultButton setTitle:emotion.emotionThumbnail forState:UIControlStateNormal];
         } else {
-            if ([emotionManager.emotions count] > 0) {
-                [defaultButton setImage:[UIImage imageNamed:[emotionManager.emotions objectAtIndex:0]] forState:UIControlStateNormal];
-                [defaultButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
-                defaultButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-            }
+            [defaultButton setImage:emotionManager.tagImage forState:UIControlStateNormal];
+            [defaultButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+            defaultButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
         }
         [defaultButton setBackgroundColor:[UIColor clearColor]];
         defaultButton.layer.borderWidth = 0.5;
@@ -96,6 +100,8 @@
         [_bottomScrollView addSubview:defaultButton];
     }
     [_bottomScrollView setContentSize:CGSizeMake(number*CGRectGetWidth(_bottomScrollView.frame)/(kButtomNum-1), CGRectGetHeight(_bottomScrollView.frame))];
+    
+    [self reloadEmotionData];
 }
 
 - (void)_clearupButtomScrollView
@@ -110,17 +116,20 @@
 - (void)didSelect:(id)sender
 {
     UIButton *btn = (UIButton*)sender;
+    UIButton *lastBtn = (UIButton*)[_bottomScrollView viewWithTag:_currentSelectIndex];
+    lastBtn.selected = NO;
+    
+    _currentSelectIndex = btn.tag;
+    btn.selected = YES;
     NSInteger index = btn.tag - 1000;
-    if (index < [_emotionManagers count]) {
-        [_facialView loadFacialView:[_emotionManagers objectAtIndex:index] size:CGSizeMake(30, 30)];
-    }
+    [_facialView loadFacialViewWithPage:index];
 }
 
 - (void)reloadEmotionData
 {
     NSInteger index = _currentSelectIndex - 1000;
     if (index < [_emotionManagers count]) {
-        [_facialView loadFacialView:[_emotionManagers objectAtIndex:index] size:CGSizeMake(30, 30)];
+        [_facialView loadFacialView:_emotionManagers size:CGSizeMake(30, 30)];
     }
 }
 
@@ -145,10 +154,10 @@
     }
 }
 
-- (void)sendFace:(NSString *)str
+- (void)sendFace:(EaseEmotion *)emotion
 {
     if (_delegate) {
-        [_delegate sendFaceWithEmotion:str];
+        [_delegate sendFaceWithEmotion:emotion];
     }
 }
 
@@ -166,6 +175,25 @@
 - (void)setEmotionManagers:(NSArray *)emotionManagers
 {
     _emotionManagers = emotionManagers;
+    for (EaseEmotionManager *emotionManager in _emotionManagers) {
+        if (emotionManager.emotionType != EMEmotionGif) {
+            NSMutableArray *array = [NSMutableArray arrayWithArray:emotionManager.emotions];
+            NSInteger maxRow = emotionManager.emotionRow;
+            NSInteger maxCol = emotionManager.emotionCol;
+            NSInteger count = 1;
+            while (1) {
+                NSInteger index = maxRow * maxCol * count - 1;
+                if (index >= [array count]) {
+                    [array addObject:@""];
+                    break;
+                } else {
+                    [array insertObject:@"" atIndex:index];
+                }
+                count++;
+            }
+            emotionManager.emotions = array;
+        }
+    }
     [self _setupButtonScrollView];
 }
 

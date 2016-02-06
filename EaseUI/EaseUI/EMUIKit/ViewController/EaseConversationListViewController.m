@@ -16,6 +16,9 @@
 #import "NSDate+Category.h"
 
 @interface EaseConversationListViewController () <IChatManagerDelegate>
+{
+    dispatch_queue_t easeRefreshQueue;
+}
 
 @end
 
@@ -69,13 +72,16 @@
         cell = [[EaseConversationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
+    if ([self.dataArray count] <= indexPath.row) {
+        return cell;
+    }
     id<IConversationModel> model = [self.dataArray objectAtIndex:indexPath.row];
     cell.model = model;
     
     if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTitleForConversationModel:)]) {
-        cell.detailLabel.text = [_dataSource conversationListViewController:self latestMessageTitleForConversationModel:model];
+        cell.detailLabel.attributedText =  [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:[_dataSource conversationListViewController:self latestMessageTitleForConversationModel:model] textFont:cell.detailLabel.font];
     } else {
-        cell.detailLabel.text = [self _latestMessageTitleForConversationModel:model];
+        cell.detailLabel.attributedText =  [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:[self _latestMessageTitleForConversationModel:model]textFont:cell.detailLabel.font];
     }
     
     if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTimeForConversationModel:)]) {
@@ -122,37 +128,43 @@
 
 - (void)tableViewDidTriggerHeaderRefresh
 {
-    NSArray *conversations = [[EaseMob sharedInstance].chatManager conversations];
-    NSArray* sorted = [conversations sortedArrayUsingComparator:
-                       ^(EMConversation *obj1, EMConversation* obj2){
-                           EMMessage *message1 = [obj1 latestMessage];
-                           EMMessage *message2 = [obj2 latestMessage];
-                           if(message1.timestamp > message2.timestamp) {
-                               return(NSComparisonResult)NSOrderedAscending;
-                           }else {
-                               return(NSComparisonResult)NSOrderedDescending;
-                           }
-                       }];
-    
-    
-    
-    [self.dataArray removeAllObjects];
-    for (EMConversation *converstion in sorted) {
-        EaseConversationModel *model = nil;
-        if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:modelForConversation:)]) {
-            model = [_dataSource conversationListViewController:self
-                                           modelForConversation:converstion];
-        }
-        else{
-            model = [[EaseConversationModel alloc] initWithConversation:converstion];
+    if (easeRefreshQueue == nil) {
+        easeRefreshQueue = dispatch_queue_create("com.ease.easeui.refresh", DISPATCH_QUEUE_SERIAL);
+    }
+    __weak typeof(self) weakself = self;
+    dispatch_async(easeRefreshQueue, ^{
+        NSArray *conversations = [[EaseMob sharedInstance].chatManager conversations];
+        NSArray* sorted = [conversations sortedArrayUsingComparator:
+                           ^(EMConversation *obj1, EMConversation* obj2){
+                               EMMessage *message1 = [obj1 latestMessage];
+                               EMMessage *message2 = [obj2 latestMessage];
+                               if(message1.timestamp > message2.timestamp) {
+                                   return(NSComparisonResult)NSOrderedAscending;
+                               }else {
+                                   return(NSComparisonResult)NSOrderedDescending;
+                               }
+                           }];
+        
+        
+        
+        [weakself.dataArray removeAllObjects];
+        for (EMConversation *converstion in sorted) {
+            EaseConversationModel *model = nil;
+            if (weakself.dataSource && [weakself.dataSource respondsToSelector:@selector(conversationListViewController:modelForConversation:)]) {
+                model = [weakself.dataSource conversationListViewController:weakself
+                                               modelForConversation:converstion];
+            }
+            else{
+                model = [[EaseConversationModel alloc] initWithConversation:converstion];
+            }
+            
+            if (model) {
+                [weakself.dataArray addObject:model];
+            }
         }
         
-        if (model) {
-            [self.dataArray addObject:model];
-        }
-    }
-
-    [self tableViewDidFinishTriggerHeader:YES reload:YES];
+        [weakself tableViewDidFinishTriggerHeader:YES reload:YES];
+    });
 }
 
 #pragma mark - IChatMangerDelegate
@@ -190,7 +202,7 @@
         id<IEMMessageBody> messageBody = lastMessage.messageBodies.lastObject;
         switch (messageBody.messageBodyType) {
             case eMessageBodyType_Image:{
-                latestMessageTitle = NSLocalizedString(@"message.image1", @"[image]");
+                latestMessageTitle = NSEaseLocalizedString(@"message.image1", @"[image]");
             } break;
             case eMessageBodyType_Text:{
                 NSString *didReceiveText = [EaseConvertToCommonEmoticonsHelper
@@ -198,16 +210,16 @@
                 latestMessageTitle = didReceiveText;
             } break;
             case eMessageBodyType_Voice:{
-                latestMessageTitle = NSLocalizedString(@"message.voice1", @"[voice]");
+                latestMessageTitle = NSEaseLocalizedString(@"message.voice1", @"[voice]");
             } break;
             case eMessageBodyType_Location: {
-                latestMessageTitle = NSLocalizedString(@"message.location1", @"[location]");
+                latestMessageTitle = NSEaseLocalizedString(@"message.location1", @"[location]");
             } break;
             case eMessageBodyType_Video: {
-                latestMessageTitle = NSLocalizedString(@"message.video1", @"[video]");
+                latestMessageTitle = NSEaseLocalizedString(@"message.video1", @"[video]");
             } break;
             case eMessageBodyType_File: {
-                latestMessageTitle = NSLocalizedString(@"message.file1", @"[file]");
+                latestMessageTitle = NSEaseLocalizedString(@"message.file1", @"[file]");
             } break;
             default: {
             } break;
@@ -219,7 +231,7 @@
 - (NSString *)_latestMessageTimeForConversationModel:(id<IConversationModel>)conversationModel
 {
     NSString *latestMessageTime = @"";
-    EMMessage *lastMessage = [conversationModel.conversation latestMessage];;
+    EMMessage *lastMessage = [conversationModel.conversation latestMessage];
     if (lastMessage) {
         double timeInterval = lastMessage.timestamp ;
         if(timeInterval > 140000000000) {

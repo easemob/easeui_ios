@@ -11,11 +11,21 @@
 
 @interface EaseEmotionEscape : NSObject
 
-+(NSMutableAttributedString *) attributtedStringFromText:(NSString *) aInputText;
++ (EaseEmotionEscape *)sharedInstance;
 
-+(NSAttributedString *) attStringFromTextForChatting:(NSString *) aInputText;
++ (NSMutableAttributedString *) attributtedStringFromText:(NSString *) aInputText;
 
-+(NSAttributedString *) attStringFromTextForInputView:(NSString *) aInputText;
++ (NSAttributedString *) attStringFromTextForChatting:(NSString *) aInputText;
+
++ (NSAttributedString *) attStringFromTextForInputView:(NSString *) aInputText;
+
+- (NSAttributedString *) attStringFromTextForChatting:(NSString *) aInputText textFont:(UIFont*)font;
+
+- (NSAttributedString *) attStringFromTextForInputView:(NSString *) aInputText textFont:(UIFont*)font;
+
+- (void) setEaseEmotionEscapePattern:(NSString*)pattern;
+
+- (void) setEaseEmotionEscapeDictionary:(NSDictionary*)dict;
 
 @end
 

@@ -47,9 +47,10 @@ static EaseSDKHelper *helper = nil;
 - (void)commonInit
 {
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
-        [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:30 / 255.0 green:167 / 255.0 blue:252 / 255.0 alpha:1.0]];
-        [[UINavigationBar appearance] setTitleTextAttributes:
-         [NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:245 / 255.0 green:245 / 255.0 blue:245 / 255.0 alpha:1.0], NSForegroundColorAttributeName, [UIFont fontWithName:@ "HelveticaNeue-CondensedBlack" size:21.0], NSFontAttributeName, nil]];
+        //用户自己设置比较方便
+//        [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:30 / 255.0 green:167 / 255.0 blue:252 / 255.0 alpha:1.0]];
+//        [[UINavigationBar appearance] setTitleTextAttributes:
+//         [NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:245 / 255.0 green:245 / 255.0 blue:245 / 255.0 alpha:1.0], NSForegroundColorAttributeName, [UIFont fontWithName:@ "HelveticaNeue-CondensedBlack" size:21.0], NSFontAttributeName, nil]];
     }
 }
 
@@ -200,18 +201,28 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     //注册apns
     [self _registerRemoteNotification];
     
-    //注册easemob sdk
-    [[EaseMob sharedInstance] registerSDKWithAppKey:appkey
+    BOOL flag = NO;
+    if ([otherConfig objectForKey:@"easeSandBox"]) {
+        flag = [[otherConfig objectForKey:@"easeSandBox"] boolValue];
+    }
+    if (!flag) {
+        //注册easemob sdk
+        [[EaseMob sharedInstance] registerSDKWithAppKey:appkey
                                        apnsCertName:apnsCertName
                                         otherConfig:otherConfig];
+    }
     
     // 注册环信监听
-    [self registerEaseMobLiteNotification];
+    [self registerEaseMobNotification];
     
     //启动easemob sdk
     [[EaseMob sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
     
     [[EaseMob sharedInstance].chatManager setIsAutoFetchBuddyList:YES];
+    
+    if ([otherConfig objectForKey:kEaseUISDKConfigIsUseLite]) {
+        _isLite = YES;
+    }
 }
 
 #pragma mark - EMChatManagerLoginDelegate
@@ -221,13 +232,13 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     UIAlertView *alertView = nil;
     if (error) {
-        alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"login.errorAutoLogin", @"Automatic logon failure") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+        alertView = [[UIAlertView alloc] initWithTitle:NSEaseLocalizedString(@"prompt", @"Prompt") message:NSEaseLocalizedString(@"login.errorAutoLogin", @"Automatic logon failure") delegate:nil cancelButtonTitle:NSEaseLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
         
         //发送自动登陆状态通知
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
     }
     else{
-        alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"login.beginAutoLogin", @"Start automatic login...") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+        alertView = [[UIAlertView alloc] initWithTitle:NSEaseLocalizedString(@"prompt", @"Prompt") message:NSEaseLocalizedString(@"login.beginAutoLogin", @"Start automatic login...") delegate:nil cancelButtonTitle:NSEaseLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
         
         //将旧版的coredata数据导入新的数据库
         EMError *error = [[EaseMob sharedInstance].chatManager importDataToNewDatabase];
@@ -244,7 +255,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     UIAlertView *alertView = nil;
     if (error) {
-        alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"login.errorAutoLogin", @"Automatic logon failure") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+        alertView = [[UIAlertView alloc] initWithTitle:NSEaseLocalizedString(@"prompt", @"Prompt") message:NSEaseLocalizedString(@"login.errorAutoLogin", @"Automatic logon failure") delegate:nil cancelButtonTitle:NSEaseLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
         
         //发送自动登陆状态通知
         //        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
@@ -253,7 +264,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
         //获取群组列表
         [[EaseMob sharedInstance].chatManager asyncFetchMyGroupsList];
         
-        alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"login.endAutoLogin", @"End automatic login...") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+        alertView = [[UIAlertView alloc] initWithTitle:NSEaseLocalizedString(@"prompt", @"Prompt") message:NSEaseLocalizedString(@"login.endAutoLogin", @"End automatic login...") delegate:nil cancelButtonTitle:NSEaseLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     }
     
     [alertView show];

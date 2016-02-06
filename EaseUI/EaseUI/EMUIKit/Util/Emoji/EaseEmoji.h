@@ -41,4 +41,14 @@
  @result iOS表情字符串数组
  */
 + (NSArray *)allEmoji;
+
+/*!
+ @method
+ @brief 判断字符是否为Emoji
+ @discussion
+ @param string 需要判断是否为emoji的字符
+ @result 字符是否为Emoji
+ */
++ (BOOL)stringContainsEmoji:(NSString *)string;
+
 @end

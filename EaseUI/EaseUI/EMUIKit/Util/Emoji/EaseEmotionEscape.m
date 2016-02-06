@@ -20,11 +20,51 @@
 
 @end
 
+@interface EaseEmotionEscape ()
+{
+    NSString *_urlPattern;
+    NSDictionary *_dict;
+}
+
+@end
+
 @implementation EaseEmotionEscape
 
-+(NSMutableAttributedString *) attributtedStringFromText:(NSString *) aInputText
+static EaseEmotionEscape *_sharedInstance = nil;
+
++ (EaseEmotionEscape *)sharedInstance
 {
-    NSString *urlPattern = @"\\\\::([a-z]+)([0-9]+)]";
+    if (_sharedInstance == nil)
+    {
+        @synchronized(self) {
+            _sharedInstance = [[EaseEmotionEscape alloc] init];
+        }
+    }
+    return _sharedInstance;
+}
+
++ (NSMutableAttributedString *) attributtedStringFromText:(NSString *) aInputText
+{
+    return nil;
+}
+
++ (NSAttributedString *) attStringFromTextForChatting:(NSString *) aInputText
+{
+    return nil;
+}
+
++ (NSAttributedString *) attStringFromTextForInputView:(NSString *) aInputText
+{
+    return nil;
+}
+
+- (NSMutableAttributedString *) attributtedStringFromText:(NSString *) aInputText
+{
+    if (_urlPattern == nil || _urlPattern.length == 0) {
+        NSMutableAttributedString * string = [[ NSMutableAttributedString alloc ] initWithString:aInputText attributes:nil ];
+        return string;
+    }
+    NSString *urlPattern = _urlPattern;
     NSError *error = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:urlPattern options:NSRegularExpressionCaseInsensitive error:&error ];
     
@@ -33,41 +73,28 @@
     
     for (NSTextCheckingResult *match in [matches reverseObjectEnumerator]) {
         NSRange matchRange = [match range];
-        //            if(NSTextCheckingTypeRegularExpression == [match resultType])
-        //                NSLog(@"%@",[match grammarDetails]);
         NSString *subStr = [aInputText substringWithRange:matchRange];
         
-        NSString *typePattern = @"([a-z]+)";
-        NSString *namePattern = @"([0-9]+)";
-        NSRegularExpression *typeRegex = [NSRegularExpression regularExpressionWithPattern:typePattern options:NSRegularExpressionCaseInsensitive error:&error ];
-        NSArray* typeMatches = [typeRegex matchesInString:subStr options:NSMatchingReportCompletion range:NSMakeRange(0, [subStr length])];
-        NSString *type;
-        for (NSTextCheckingResult *submatch in typeMatches) {
-            type = [subStr substringWithRange:[submatch range]];
-        }
-        
-        NSRegularExpression *nameRegex = [NSRegularExpression regularExpressionWithPattern:namePattern options:NSRegularExpressionCaseInsensitive error:&error ];
-        NSArray* nameMatches = [nameRegex matchesInString:subStr options:NSMatchingReportCompletion range:NSMakeRange(0, [subStr length])];
-        NSString *number;
-        for (NSTextCheckingResult *submatch in nameMatches) {
-            number = [subStr substringWithRange:[submatch range]];
-        }
-
         EMTextAttachment * textAttachment = [[EMTextAttachment alloc ] initWithData:nil ofType:nil];
-        textAttachment.imageName = number;
+        textAttachment.imageName = subStr;
         UIImage * emojiImage;
-        
-        if ([type isEqualToString:@"a"]) {
-            NSString *emojiName = [NSString stringWithFormat:@"a%@",number];
-            emojiImage = [UIImage imageNamed:emojiName];
+        NSString *emojiName = @"";
+        if (_dict) {
+            emojiName = [_dict objectForKey:subStr];
         }
+        
+        if (emojiName == nil || emojiName.length == 0) {
+            emojiName = subStr;
+        }
+        
+        emojiImage = [UIImage imageNamed:emojiName];
         
         NSAttributedString * textAttachmentString;
         if (emojiImage) {
             textAttachment.image = emojiImage ;
             textAttachmentString = [NSAttributedString attributedStringWithAttachment:textAttachment];
         }else{
-            NSString *str = [EaseEmotionEscape getEmojiTextByKey:subStr];
+            NSString *str = [self getEmojiTextByKey:subStr];
             if (str != nil) {
                 str = [NSString stringWithFormat:@"[%@]", str];
                 textAttachmentString = [[NSAttributedString alloc] initWithString:str];
@@ -82,32 +109,34 @@
         }
     }
     
-    //    [regex replaceMatchesInString:string.mutableString options:NSMatchingReportCompletion range:NSMakeRange(0, [string.mutableString length]) withTemplate:@""];
     return string;
 }
 
-+(NSAttributedString *) attStringFromTextForChatting:(NSString *) aInputText
+- (NSAttributedString *) attStringFromTextForChatting:(NSString *) aInputText textFont:(UIFont*)font
 {
-    NSMutableAttributedString * string = [EaseEmotionEscape attributtedStringFromText:aInputText];
-    NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:0];
-    [string addAttribute:NSParagraphStyleAttributeName
-                   value:paragraphStyle
-                   range:NSMakeRange(0, [string length])];
+    NSMutableAttributedString * string = [self attributtedStringFromText:aInputText];
+//    NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+//    paragraphStyle.lineSpacing = 0.0;
+//    [string addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [string length])];
+    if (font) {
+        [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
+    }
     return string;
 }
 
-+(NSAttributedString *) attStringFromTextForInputView:(NSString *) aInputText
+- (NSAttributedString *) attStringFromTextForInputView:(NSString *) aInputText textFont:(UIFont*)font
 {
-    NSMutableAttributedString * string = [EaseEmotionEscape attributtedStringFromText:aInputText];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineSpacing = 1.0;
-    [string addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, string.length)];
-    [string addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:16.0f] range:NSMakeRange(0, string.length)];
+    NSMutableAttributedString * string = [self attributtedStringFromText:aInputText];
+//    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+//    paragraphStyle.lineSpacing = 0.0;
+//    [string addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, string.length)];
+    if (font) {
+        [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
+    }
     return string;
 }
 
-+(NSString*) getEmojiTextByKey:(NSString*) aKey
+- (NSString*) getEmojiTextByKey:(NSString*) aKey
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *plistPaht = [paths objectAtIndex:0];
@@ -115,6 +144,21 @@
     NSMutableDictionary *emojiKeyValue = [[NSMutableDictionary alloc] initWithContentsOfFile: fileName];
     return [emojiKeyValue objectForKey:aKey];
     //    NSLog(@"write data is :%@",writeData);
+}
+
+- (NSString*) getEmojiImageNameByKey:(NSString*) aKey
+{
+    return nil;
+}
+
+- (void) setEaseEmotionEscapePattern:(NSString *)pattern
+{
+    _urlPattern = pattern;
+}
+
+- (void) setEaseEmotionEscapeDictionary:(NSDictionary*)dict
+{
+    _dict = dict;
 }
 
 @end

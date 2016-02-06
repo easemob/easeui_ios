@@ -34,7 +34,6 @@
                 EMTextMessageBody *textBody = (EMTextMessageBody *)_firstMessageBody;
                 // 表情映射。
                 NSString *didReceiveText = [EaseConvertToCommonEmoticonsHelper convertToSystemEmoticons:textBody.text];
-                self.attrBody = [EaseEmotionEscape attStringFromTextForChatting:didReceiveText];
                 self.text = didReceiveText;
             }
                 break;
