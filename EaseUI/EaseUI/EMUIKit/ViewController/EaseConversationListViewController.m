@@ -38,6 +38,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self registerHelperNotification];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -69,6 +70,9 @@
         cell = [[EaseConversationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
+    if ([self.dataArray count] <= indexPath.row) {
+        return cell;
+    }
     id<IConversationModel> model = [self.dataArray objectAtIndex:indexPath.row];
     cell.model = model;
     
@@ -179,6 +183,7 @@
 
 - (void)dealloc{
     [self unregisterNotifications];
+    [self removeHelperNotification];
 }
 
 #pragma mark - private
@@ -230,6 +235,30 @@
         latestMessageTime = [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:timeInterval]];
     }
     return latestMessageTime;
+}
+
+#pragma mark - Helper
+
+// 注册 EaseMessageAppreciationHelper 通知
+- (void)registerHelperNotification
+{
+    [[MessageRevokeManager sharedInstance] registerNotification:self selector:@selector(updateMainUINotification:)];
+    [[RemoveAfterReadManager sharedInstance] registerNotification:self selector:@selector(updateMainUINotification:)];
+}
+//取消 EaseMessageAppreciationHelper 通知
+- (void)removeHelperNotification
+{
+    [[MessageRevokeManager sharedInstance] removeNotification:self];
+    [[RemoveAfterReadManager sharedInstance] removeNotification:self];
+}
+
+#pragma mark - NSNotification
+/**
+ *  阅后即焚或消息回撤处理结果，刷新UI的通知，需要子类去实现
+ */
+- (void)updateMainUINotification:(NSNotification *)notification
+{
+    
 }
 
 @end

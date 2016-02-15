@@ -21,6 +21,8 @@
 #import "EMCDDeviceManager+ProximitySensor.h"
 #import "UIViewController+HUD.h"
 #import "EaseSDKHelper.h"
+#import "EaseMessageReadManager.h"
+#import "EaseMessageAppreciationHelper.h"
 
 @class EaseMessageViewController;
 
@@ -155,7 +157,7 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 
 @end
 
-@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, IChatManagerDelegate, IEMChatProgressDelegate, EMCallManagerCallDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate>
+@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, IChatManagerDelegate, IEMChatProgressDelegate, EMCallManagerCallDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate, EMReadManagerProtocol>
 
 @property (weak, nonatomic) id<EaseMessageViewControllerDelegate> delegate;
 
@@ -238,5 +240,21 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
  */
 -(void)addMessageToDataSource:(EMMessage *)message
                      progress:(id<IEMChatProgressDelegate>)progress;
+
+/**
+ *  开启阅后即焚
+ */
+- (void)enableRemoveAfterRead;
+
+/**
+ *  关闭阅后即焚
+ */
+- (void)disableRemoveAfterRead;
+
+/**
+ *  阅后即焚或消息回撤处理结果，刷新UI的通知，需要子类去实现
+ *  notification.object为被撤销的消息，类型为NSArray
+ */
+- (void)updateMainUINotification:(NSNotification *)notification;
 
 @end
