@@ -26,6 +26,7 @@
 #import "EaseEmotionEscape.h"
 #import "EaseEmotionManager.h"
 #import "EaseSDKHelper.h"
+#import "EaseMessageAppreciationHelper.h"
 #import "EMCDDeviceManager.h"
 #import "EaseConvertToCommonEmoticonsHelper.h"
 

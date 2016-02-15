@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7115315F1C717DEA005D1D0D /* EaseMessageAppreciationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7115315E1C717DEA005D1D0D /* EaseMessageAppreciationHelper.m */; };
+		711531601C717E0A005D1D0D /* EaseMessageAppreciationHelper.h in Helper */ = {isa = PBXBuildFile; fileRef = 7115315D1C717DEA005D1D0D /* EaseMessageAppreciationHelper.h */; };
 		D250D3A21BD8D14400C8D553 /* EaseUI.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D3A11BD8D14400C8D553 /* EaseUI.m */; };
 		D250D3A81BD8D14400C8D553 /* libEaseUI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D250D39C1BD8D14400C8D553 /* libEaseUI.a */; };
 		D250D4C01BD8D1CB00C8D553 /* EMAudioPlayerUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D3C11BD8D1CB00C8D553 /* EMAudioPlayerUtil.m */; };
@@ -343,6 +345,7 @@
 			dstPath = "$(PROJECT_DIR)/export/include";
 			dstSubfolderSpec = 0;
 			files = (
+				711531601C717E0A005D1D0D /* EaseMessageAppreciationHelper.h in Helper */,
 				D2AA62C01BD907AC0059D684 /* EaseSDKHelper.h in Helper */,
 			);
 			name = Helper;
@@ -593,6 +596,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7115315D1C717DEA005D1D0D /* EaseMessageAppreciationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseMessageAppreciationHelper.h; sourceTree = "<group>"; };
+		7115315E1C717DEA005D1D0D /* EaseMessageAppreciationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseMessageAppreciationHelper.m; sourceTree = "<group>"; };
 		D250D39C1BD8D14400C8D553 /* libEaseUI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libEaseUI.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D250D39F1BD8D14400C8D553 /* EaseUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EaseUI.h; sourceTree = "<group>"; };
 		D250D3A11BD8D14400C8D553 /* EaseUI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EaseUI.m; sourceTree = "<group>"; };
@@ -1337,6 +1342,8 @@
 			children = (
 				D250D4561BD8D1CB00C8D553 /* EaseSDKHelper.h */,
 				D250D4571BD8D1CB00C8D553 /* EaseSDKHelper.m */,
+				7115315D1C717DEA005D1D0D /* EaseMessageAppreciationHelper.h */,
+				7115315E1C717DEA005D1D0D /* EaseMessageAppreciationHelper.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -2126,6 +2133,7 @@
 				D250D4C61BD8D1CB00C8D553 /* EMCDDeviceManagerBase.m in Sources */,
 				D250D4CE1BD8D1CB00C8D553 /* MJRefreshComponent.m in Sources */,
 				D250D5281BD8D1CB00C8D553 /* EaseRecordView.m in Sources */,
+				7115315F1C717DEA005D1D0D /* EaseMessageAppreciationHelper.m in Sources */,
 				D250D5231BD8D1CB00C8D553 /* EaseImageView.m in Sources */,
 				D250D4D41BD8D1CB00C8D553 /* MJRefreshLegendFooter.m in Sources */,
 				D250D5021BD8D1CB00C8D553 /* EaseUserModel.m in Sources */,

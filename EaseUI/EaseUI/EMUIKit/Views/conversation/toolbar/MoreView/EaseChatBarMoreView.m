@@ -43,7 +43,10 @@
 @property (nonatomic, strong) UIButton *locationButton;
 @property (nonatomic, strong) UIButton *videoButton;
 @property (nonatomic, strong) UIButton *audioCallButton;
-@property (nonatomic, strong) UIButton *videoCallButton;
+@property (nonatomic, strong) UIButton *videoCallButton;;
+
+//阅后即焚
+@property (nonatomic, strong) UIButton *readFireButton;
 
 @end
 
@@ -129,6 +132,22 @@
         _videoCallButton.tag =MOREVIEW_BUTTON_TAG + 4;
         _maxIndex = 4;
         [_scrollview addSubview:_videoCallButton];
+        
+        //阅后即焚
+        _readFireButton =[UIButton buttonWithType:UIButtonTypeCustom];
+        [_readFireButton setFrame:CGRectMake(insets * 2 + CHAT_BUTTON_SIZE, 10 * 2 + CHAT_BUTTON_SIZE + 10, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
+        [_readFireButton setBackgroundColor:[UIColor orangeColor]];
+        _readFireButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        [_readFireButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        [_readFireButton setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
+        [_readFireButton setTitle:@"阅后即焚" forState:UIControlStateNormal];
+        [_readFireButton setTitle:@"阅后即焚" forState:UIControlStateHighlighted];
+        _readFireButton.layer.cornerRadius = 10;
+        [_readFireButton addTarget:self action:@selector(readFireAction) forControlEvents:UIControlEventTouchUpInside];
+        _readFireButton.tag =MOREVIEW_BUTTON_TAG + 5;
+        _maxIndex = 5;
+        [_scrollview addSubview:_readFireButton];
+        
     }
     else if (type == EMChatToolbarTypeGroup)
     {
@@ -321,6 +340,24 @@
 {
     if (_delegate && [_delegate respondsToSelector:@selector(moreViewVideoCallAction:)]) {
         [_delegate moreViewVideoCallAction:self];
+    }
+}
+
+
+//阅后即焚
+- (void)readFireAction {
+    BOOL isSelected = _readFireButton.selected;
+    if (isSelected)
+    {
+        [_readFireButton setTitle:@"阅读即焚" forState:UIControlStateNormal];
+    }
+    else {
+        [_readFireButton setTitle:@"取消功能" forState:UIControlStateNormal];
+    }
+    _readFireButton.selected = !isSelected;
+    if (_delegate && [_delegate respondsToSelector:@selector(moreView:removeAfterRead:)])
+    {
+        [_delegate moreView:self removeAfterRead:!isSelected];
     }
 }
 

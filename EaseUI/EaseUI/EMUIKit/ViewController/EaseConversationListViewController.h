@@ -10,6 +10,7 @@
 
 #import "EaseConversationModel.h"
 #import "EaseConversationCell.h"
+#import "EaseMessageAppreciationHelper.h"
 
 typedef NS_ENUM(int, DXDeleteConvesationType) {
     DXDeleteConvesationOnly,
@@ -58,5 +59,10 @@ typedef NS_ENUM(int, DXDeleteConvesationType) {
 @property (weak, nonatomic) id<EaseConversationListViewControllerDataSource> dataSource;
 
 - (void)tableViewDidTriggerHeaderRefresh;
+
+/**
+ *  阅后即焚或消息回撤处理结果，刷新UI的通知，需要子类去实现
+ */
+- (void)updateMainUINotification:(NSNotification *)notification;
 
 @end
