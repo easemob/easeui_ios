@@ -194,18 +194,16 @@
  *
  */
 - (void)updateInfoDic:(NSDictionary *)dic{
-//    @synchronized(self)
-//    {
-//        
-//    }
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if (dic) {
-        [userDefaults setObject:dic forKey:UserDefaultKey(self.account)];
-    }else {
-        [userDefaults removeObjectForKey:UserDefaultKey(self.account)];
+    @synchronized(self) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        if (dic) {
+            [userDefaults setObject:dic forKey:UserDefaultKey(self.account)];
+        }else {
+            [userDefaults removeObjectForKey:UserDefaultKey(self.account)];
+        }
+        [userDefaults synchronize];
+        self.infoDic = dic;
     }
-    self.infoDic = dic;
 }
 
 /**
