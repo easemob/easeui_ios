@@ -22,7 +22,8 @@
 #import "UIViewController+HUD.h"
 #import "EaseSDKHelper.h"
 #import "EaseMessageReadManager.h"
-#import "EaseMessageAppreciationHelper.h"
+#import "MessageRevokeManager.h"
+#import "RemoveAfterReadManager.h"
 
 @class EaseMessageViewController;
 

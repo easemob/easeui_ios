@@ -491,7 +491,7 @@
     {
         EMMessage *message = messages[i];
         // 阅后即焚
-        if ([RemoveAfterReadManager isReadAfterRemoveMessage:message])
+        if ([RemoveAfterReadManager isRemoveAfterReadMessage:message])
         {
             continue;
         }
@@ -546,7 +546,7 @@
     
     EaseLocationViewController *locationController = [[EaseLocationViewController alloc] initWithLocation:CLLocationCoordinate2DMake(model.latitude, model.longitude)];
     // 阅后即焚
-    if (!model.isSender && [RemoveAfterReadManager isReadAfterRemoveMessage:model.message]) {
+    if (!model.isSender && [RemoveAfterReadManager isRemoveAfterReadMessage:model.message]) {
         locationController.localMessageModel = model;
         locationController.delegate = self;
     }
@@ -574,7 +574,7 @@
         
         NSURL *videoURL = [NSURL fileURLWithPath:localPath];
         EaseMessageReadManager *readManager = [EaseMessageReadManager defaultManager];
-        if (!weakModel.isSender &&[RemoveAfterReadManager isReadAfterRemoveMessage:weakModel.message])
+        if (!weakModel.isSender &&[RemoveAfterReadManager isRemoveAfterReadMessage:weakModel.message])
         {
             readManager.delegate = self;
         }
@@ -605,7 +605,7 @@
 {
     __weak EaseMessageViewController *weakSelf = self;
     __weak id<IMessageModel> weakModel = model;
-    if (!model.isSender && [RemoveAfterReadManager isReadAfterRemoveMessage:model.message]) {
+    if (!model.isSender && [RemoveAfterReadManager isRemoveAfterReadMessage:model.message]) {
         EaseMessageReadManager *manager = [EaseMessageReadManager defaultManager];
         manager.delegate = self;
     }
@@ -701,7 +701,7 @@
         EaseMessageReadManager *readManager = [EaseMessageReadManager defaultManager];
         if (isPrepare) {
             _isPlayingAudio = YES;
-            if (!model.isSender && [RemoveAfterReadManager isReadAfterRemoveMessage:model.message]) {
+            if (!model.isSender && [RemoveAfterReadManager isRemoveAfterReadMessage:model.message]) {
                 readManager.delegate = self;
             }
             __weak EaseMessageViewController *weakSelf = self;
@@ -1292,7 +1292,7 @@
     if ([self.conversation.chatter isEqualToString:message.conversationChatter]) {
         [self addMessageToDataSource:message progress:nil];
         // 阅后即焚
-        if ([RemoveAfterReadManager isReadAfterRemoveMessage:message])
+        if ([RemoveAfterReadManager isRemoveAfterReadMessage:message])
         {
             return;
         }
@@ -1372,7 +1372,7 @@
         return;
     }
     // 阅后即焚
-    if ([RemoveAfterReadManager isReadAfterRemoveMessage:model.message])
+    if ([RemoveAfterReadManager isRemoveAfterReadMessage:model.message])
     {
         //此处不需要继续处理
         return;
@@ -1676,17 +1676,26 @@
 
 - (void)sendTextMessage:(NSString *)text
 {
-    [self sendTextMessage:text withExt:nil];
+    NSDictionary *_ext = nil;
+    if (_removeAfterRead)
+    {
+        _ext = [RemoveAfterReadManager structureRemoveAfterReadMessageExt:nil];
+    }
+    [self sendTextMessage:text withExt:_ext];
 }
 
 - (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext
 {
+    NSDictionary *_ext = nil;
+    if (_removeAfterRead)
+    {
+        _ext = [RemoveAfterReadManager structureRemoveAfterReadMessageExt:nil];
+    }
     EMMessage *message = [EaseSDKHelper sendTextMessage:text
                                                      to:self.conversation.chatter
                                             messageType:[self _messageTypeFromConversationType]
                                       requireEncryption:NO
-                                             messageExt:ext
-                                        removeAfterRead:_removeAfterRead];
+                                             messageExt:_ext];
     [self addMessageToDataSource:message
                         progress:nil];
 }
@@ -1695,14 +1704,19 @@
                           longitude:(double)longitude
                          andAddress:(NSString *)address
 {
+    NSDictionary *_ext = nil;
+    if (_removeAfterRead)
+    {
+        _ext = [RemoveAfterReadManager structureRemoveAfterReadMessageExt:nil];
+    }
     EMMessage *message = [EaseSDKHelper sendLocationMessageWithLatitude:latitude
                                                               longitude:longitude
                                                                 address:address
                                                                      to:self.conversation.chatter
                                                             messageType:[self _messageTypeFromConversationType]
                                                       requireEncryption:NO
-                                                             messageExt:nil
-                                                        removeAfterRead:_removeAfterRead];
+                                                             messageExt:_ext];
+    
     [self addMessageToDataSource:message
                         progress:nil];
 }
@@ -1716,14 +1730,18 @@
     else{
         progress = self;
     }
-    
+    NSDictionary *_ext = nil;
+    if (_removeAfterRead)
+    {
+        _ext = [RemoveAfterReadManager structureRemoveAfterReadMessageExt:nil];
+    }
     EMMessage *message = [EaseSDKHelper sendImageMessageWithImage:image
                                                                to:self.conversation.chatter
                                                       messageType:[self _messageTypeFromConversationType]
                                                 requireEncryption:NO
-                                                       messageExt:nil
-                                                         progress:progress
-                                                  removeAfterRead:_removeAfterRead];
+                                                       messageExt:_ext
+                                                         progress:progress];
+    
     [self addMessageToDataSource:message
                         progress:progress];
 }
@@ -1738,15 +1756,18 @@
     else{
         progress = self;
     }
-    
+    NSDictionary *_ext = nil;
+    if (_removeAfterRead)
+    {
+        _ext = [RemoveAfterReadManager structureRemoveAfterReadMessageExt:nil];
+    }
     EMMessage *message = [EaseSDKHelper sendVoiceMessageWithLocalPath:localPath
                                                              duration:duration
                                                                    to:self.conversation.chatter
                                                           messageType:[self _messageTypeFromConversationType]
                                                     requireEncryption:NO
-                                                           messageExt:nil
-                                                             progress:progress
-                                                      removeAfterRead:_removeAfterRead];
+                                                           messageExt:_ext
+                                                             progress:progress];
     [self addMessageToDataSource:message
                         progress:progress];
 }
@@ -1761,14 +1782,17 @@
     else{
         progress = self;
     }
-    
+    NSDictionary *_ext = nil;
+    if (_removeAfterRead)
+    {
+        _ext = [RemoveAfterReadManager structureRemoveAfterReadMessageExt:nil];
+    }
     EMMessage *message = [EaseSDKHelper sendVideoMessageWithURL:url
                                                              to:self.conversation.chatter
                                                     messageType:[self _messageTypeFromConversationType]
                                               requireEncryption:NO
-                                                     messageExt:nil
-                                                       progress:progress
-                                                removeAfterRead:_removeAfterRead];
+                                                     messageExt:_ext
+                                                       progress:progress];
     [self addMessageToDataSource:message
                         progress:progress];
 }

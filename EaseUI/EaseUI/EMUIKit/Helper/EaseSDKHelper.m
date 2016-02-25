@@ -7,7 +7,7 @@
 //
 
 #import "EaseSDKHelper.h"
-#import "EaseMessageAppreciationHelper.h"
+
 #import "EaseConvertToCommonEmoticonsHelper.h"
 
 @interface EMChatImageOptions : NSObject<IChatImageOptions>
@@ -274,22 +274,20 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                    messageType:(EMMessageType)messageType
              requireEncryption:(BOOL)requireEncryption
                     messageExt:(NSDictionary *)messageExt
-               removeAfterRead:(BOOL)isRemove
 
 {
     // 表情映射。
     NSString *willSendText = [EaseConvertToCommonEmoticonsHelper convertToCommonEmoticons:text];
     EMChatText *textChat = [[EMChatText alloc] initWithText:willSendText];
     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithChatObject:textChat];
-    EMMessage *message = [[EMMessage alloc] initWithReceiver:toUser
-                                                      bodies:@[body]];
+    EMMessage *message = [[EMMessage alloc] initWithReceiver:toUser bodies:[NSArray arrayWithObject:body]];
     message.requireEncryption = requireEncryption;
     message.messageType = messageType;
     message.ext = messageExt;
-
-    return [self sendMessage:message
-                    progress:nil
-             removeAfterRead:isRemove];
+    EMMessage *retMessage = [[EaseMob sharedInstance].chatManager asyncSendMessage:message
+                                                                          progress:nil];
+    
+    return retMessage;
 }
 
 + (EMMessage *)sendLocationMessageWithLatitude:(double)latitude
@@ -299,19 +297,17 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                                    messageType:(EMMessageType)messageType
                              requireEncryption:(BOOL)requireEncryption
                                     messageExt:(NSDictionary *)messageExt
-                               removeAfterRead:(BOOL)isRemove
 {
     EMChatLocation *chatLocation = [[EMChatLocation alloc] initWithLatitude:latitude longitude:longitude address:address];
     EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithChatObject:chatLocation];
-    EMMessage *message = [[EMMessage alloc] initWithReceiver:to
-                                                      bodies:@[body]];
+    EMMessage *message = [[EMMessage alloc] initWithReceiver:to bodies:[NSArray arrayWithObject:body]];
     message.requireEncryption = requireEncryption;
     message.messageType = messageType;
     message.ext = messageExt;
-
-    return [self sendMessage:message
-                    progress:nil
-             removeAfterRead:isRemove];
+    EMMessage *retMessage = [[EaseMob sharedInstance].chatManager asyncSendMessage:message
+                                                                          progress:nil];
+    
+    return retMessage;
 }
 
 + (EMMessage *)sendImageMessageWithImage:(UIImage *)image
@@ -320,16 +316,8 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                        requireEncryption:(BOOL)requireEncryption
                               messageExt:(NSDictionary *)messageExt
                                 progress:(id<IEMChatProgressDelegate>)progress
-                         removeAfterRead:(BOOL)isRemove
 {
-    return [self sendImageMessageWithImage:image
-                                        to:to
-                               messageType:messageType
-                         requireEncryption:requireEncryption
-                                messageExt:messageExt
-                                   quality:0.6
-                                  progress:progress
-                           removeAfterRead:isRemove];
+    return [self sendImageMessageWithImage:image to:to messageType:messageType requireEncryption:requireEncryption messageExt:messageExt quality:0.6 progress:progress];
 }
 
 + (EMMessage *)sendImageMessageWithImage:(UIImage *)image
@@ -339,7 +327,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                               messageExt:(NSDictionary *)messageExt
                                  quality:(float)quality
                                 progress:(id<IEMChatProgressDelegate>)progress
-                         removeAfterRead:(BOOL)isRemove
 {
     id<IChatImageOptions> options = [[EMChatImageOptions alloc] init];
     [options setCompressionQuality:quality];
@@ -347,15 +334,14 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     EMChatImage *chatImage = [[EMChatImage alloc] initWithUIImage:image displayName:@"image.jpg"];
     [chatImage setImageOptions:options];
     EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithImage:chatImage thumbnailImage:nil];
-    EMMessage *message = [[EMMessage alloc] initWithReceiver:to
-                                                      bodies:@[body]];
+    EMMessage *message = [[EMMessage alloc] initWithReceiver:to bodies:[NSArray arrayWithObject:body]];
     message.requireEncryption = requireEncryption;
     message.messageType = messageType;
     message.ext = messageExt;
+    EMMessage *retMessage = [[EaseMob sharedInstance].chatManager asyncSendMessage:message
+                                                                          progress:progress];
     
-    return [self sendMessage:message
-                    progress:progress
-             removeAfterRead:isRemove];
+    return retMessage;
 }
 
 + (EMMessage *)sendVoiceMessageWithLocalPath:(NSString *)localPath
@@ -365,20 +351,18 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                            requireEncryption:(BOOL)requireEncryption
                                   messageExt:(NSDictionary *)messageExt
                                     progress:(id<IEMChatProgressDelegate>)progress
-                             removeAfterRead:(BOOL)isRemove
 {
     EMChatVoice *chatVoice = [[EMChatVoice alloc] initWithFile:localPath displayName:@"audio"];
     chatVoice.duration = duration;
     EMVoiceMessageBody *body = [[EMVoiceMessageBody alloc] initWithChatObject:chatVoice];
-    EMMessage *message = [[EMMessage alloc] initWithReceiver:to
-                                                      bodies:@[body]];
+    EMMessage *message = [[EMMessage alloc] initWithReceiver:to bodies:[NSArray arrayWithObject:body]];
     message.requireEncryption = requireEncryption;
     message.messageType = messageType;
     message.ext = messageExt;
- 
-    return [self sendMessage:message
-                    progress:progress
-             removeAfterRead:isRemove];
+    EMMessage *retMessage = [[EaseMob sharedInstance].chatManager asyncSendMessage:message
+                                                                          progress:progress];
+    
+    return retMessage;
 }
 
 + (EMMessage *)sendVideoMessageWithURL:(NSURL *)url
@@ -387,7 +371,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                      requireEncryption:(BOOL)requireEncryption
                             messageExt:(NSDictionary *)messageExt
                               progress:(id<IEMChatProgressDelegate>)progress
-                       removeAfterRead:(BOOL)isRemove
 {
     EMChatVideo *chatVideo = [[EMChatVideo alloc] initWithFile:[url relativePath] displayName:@"video.mp4"];
     EMVideoMessageBody *body = [[EMVideoMessageBody alloc] initWithChatObject:chatVideo];
@@ -395,23 +378,9 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     message.requireEncryption = requireEncryption;
     message.messageType = messageType;
     message.ext = messageExt;
-
-    return [self sendMessage:message
-                    progress:progress
-             removeAfterRead:isRemove];
-}
-
-+ (EMMessage *)sendMessage:(EMMessage *)message
-                  progress:(id<IEMChatProgressDelegate>)progress
-           removeAfterRead:(BOOL)isRemove{
-    
-    if (isRemove) {
-        message = [[RemoveAfterReadManager sharedInstance]
-                      setupToNeedRemoveMessage:message];
-    }
     EMMessage *retMessage = [[EaseMob sharedInstance].chatManager asyncSendMessage:message
                                                                           progress:progress];
-
+    
     return retMessage;
 }
 

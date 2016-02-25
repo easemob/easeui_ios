@@ -10,7 +10,8 @@
 
 #import "EaseConversationModel.h"
 #import "EaseConversationCell.h"
-#import "EaseMessageAppreciationHelper.h"
+#import "MessageRevokeManager.h"
+#import "RemoveAfterReadManager.h"
 
 typedef NS_ENUM(int, DXDeleteConvesationType) {
     DXDeleteConvesationOnly,

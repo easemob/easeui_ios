@@ -41,8 +41,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                             to:(NSString *)to
                    messageType:(EMMessageType)messageType
              requireEncryption:(BOOL)requireEncryption
-                    messageExt:(NSDictionary *)messageExt
-               removeAfterRead:(BOOL)isRemove;
+                    messageExt:(NSDictionary *)messageExt;
 
 + (EMMessage *)sendLocationMessageWithLatitude:(double)latitude
                                      longitude:(double)longitude
@@ -50,8 +49,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                                             to:(NSString *)to
                                    messageType:(EMMessageType)messageType
                              requireEncryption:(BOOL)requireEncryption
-                                    messageExt:(NSDictionary *)messageExt
-                               removeAfterRead:(BOOL)isRemove;
+                                    messageExt:(NSDictionary *)messageExt;
 
 + (EMMessage *)sendImageMessageWithImage:(UIImage *)image
                                       to:(NSString *)to
@@ -59,16 +57,14 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                        requireEncryption:(BOOL)requireEncryption
                               messageExt:(NSDictionary *)messageExt
                                  quality:(float)quality
-                                progress:(id<IEMChatProgressDelegate>)progress
-                         removeAfterRead:(BOOL)isRemove;
+                                progress:(id<IEMChatProgressDelegate>)progress;
 
 + (EMMessage *)sendImageMessageWithImage:(UIImage *)image
                                       to:(NSString *)to
                              messageType:(EMMessageType)messageType
                        requireEncryption:(BOOL)requireEncryption
                               messageExt:(NSDictionary *)messageExt
-                                progress:(id<IEMChatProgressDelegate>)progress
-                         removeAfterRead:(BOOL)isRemove;
+                                progress:(id<IEMChatProgressDelegate>)progress;
 
 + (EMMessage *)sendVoiceMessageWithLocalPath:(NSString *)localPath
                                     duration:(NSInteger)duration
@@ -76,16 +72,14 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                            messageType:(EMMessageType)messageType
                      requireEncryption:(BOOL)requireEncryption
                             messageExt:(NSDictionary *)messageExt
-                                    progress:(id<IEMChatProgressDelegate>)progress
-                             removeAfterRead:(BOOL)isRemove;
+                                    progress:(id<IEMChatProgressDelegate>)progress;
 
 + (EMMessage *)sendVideoMessageWithURL:(NSURL *)url
                                     to:(NSString *)to
                            messageType:(EMMessageType)messageType
                      requireEncryption:(BOOL)requireEncryption
                             messageExt:(NSDictionary *)messageExt
-                              progress:(id<IEMChatProgressDelegate>)progress
-                       removeAfterRead:(BOOL)isRemove;
+                              progress:(id<IEMChatProgressDelegate>)progress;
 
 #pragma mark - call
 

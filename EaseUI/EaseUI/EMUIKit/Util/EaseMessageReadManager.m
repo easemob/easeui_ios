@@ -223,7 +223,7 @@ static EaseMessageReadManager *detailInstance = nil;
     return model;
 }
 
-#pragma mark - 视屏
+#pragma mark - 视频操作
 
 //播放视频
 - (void)showMoviePlayerWithVideoURL:(NSURL *)videoURL messageModel:(id<IMessageModel>)messageModel {
