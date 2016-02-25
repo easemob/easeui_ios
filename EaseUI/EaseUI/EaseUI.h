@@ -26,7 +26,6 @@
 #import "EaseEmotionEscape.h"
 #import "EaseEmotionManager.h"
 #import "EaseSDKHelper.h"
-#import "EaseMessageAppreciationHelper.h"
 #import "EMCDDeviceManager.h"
 #import "EaseConvertToCommonEmoticonsHelper.h"
 
@@ -37,6 +36,8 @@
 #import "UIViewController+HUD.h"
 #import "UIViewController+DismissKeyboard.h"
 
+#import "MessageRevokeManager.h"
+#import "RemoveAfterReadManager.h"
 @interface EaseUI : NSObject
 
 @end

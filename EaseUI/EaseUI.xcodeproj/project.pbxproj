@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		71C7B7321C7EA933005ACB0A /* MessageRevokeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71C7B72F1C7EA933005ACB0A /* MessageRevokeManager.m */; };
+		71C7B7331C7EA933005ACB0A /* RemoveAfterReadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71C7B7311C7EA933005ACB0A /* RemoveAfterReadManager.m */; };
+		71C7B7341C7EA940005ACB0A /* MessageRevokeManager.h in Helper */ = {isa = PBXBuildFile; fileRef = 71C7B72E1C7EA933005ACB0A /* MessageRevokeManager.h */; };
+		71C7B7351C7EA940005ACB0A /* RemoveAfterReadManager.h in Helper */ = {isa = PBXBuildFile; fileRef = 71C7B7301C7EA933005ACB0A /* RemoveAfterReadManager.h */; };
 		D250D3A21BD8D14400C8D553 /* EaseUI.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D3A11BD8D14400C8D553 /* EaseUI.m */; };
 		D250D3A81BD8D14400C8D553 /* libEaseUI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D250D39C1BD8D14400C8D553 /* libEaseUI.a */; };
 		D250D4C01BD8D1CB00C8D553 /* EMAudioPlayerUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D3C11BD8D1CB00C8D553 /* EMAudioPlayerUtil.m */; };
@@ -343,6 +347,8 @@
 			dstPath = "$(PROJECT_DIR)/export/include";
 			dstSubfolderSpec = 0;
 			files = (
+				71C7B7341C7EA940005ACB0A /* MessageRevokeManager.h in Helper */,
+				71C7B7351C7EA940005ACB0A /* RemoveAfterReadManager.h in Helper */,
 				D2AA62C01BD907AC0059D684 /* EaseSDKHelper.h in Helper */,
 			);
 			name = Helper;
@@ -593,6 +599,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		71C7B72E1C7EA933005ACB0A /* MessageRevokeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageRevokeManager.h; sourceTree = "<group>"; };
+		71C7B72F1C7EA933005ACB0A /* MessageRevokeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageRevokeManager.m; sourceTree = "<group>"; };
+		71C7B7301C7EA933005ACB0A /* RemoveAfterReadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoveAfterReadManager.h; sourceTree = "<group>"; };
+		71C7B7311C7EA933005ACB0A /* RemoveAfterReadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoveAfterReadManager.m; sourceTree = "<group>"; };
 		D250D39C1BD8D14400C8D553 /* libEaseUI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libEaseUI.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D250D39F1BD8D14400C8D553 /* EaseUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EaseUI.h; sourceTree = "<group>"; };
 		D250D3A11BD8D14400C8D553 /* EaseUI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EaseUI.m; sourceTree = "<group>"; };
@@ -1337,6 +1347,10 @@
 			children = (
 				D250D4561BD8D1CB00C8D553 /* EaseSDKHelper.h */,
 				D250D4571BD8D1CB00C8D553 /* EaseSDKHelper.m */,
+				71C7B72E1C7EA933005ACB0A /* MessageRevokeManager.h */,
+				71C7B72F1C7EA933005ACB0A /* MessageRevokeManager.m */,
+				71C7B7301C7EA933005ACB0A /* RemoveAfterReadManager.h */,
+				71C7B7311C7EA933005ACB0A /* RemoveAfterReadManager.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -2133,6 +2147,7 @@
 				D250D4F21BD8D1CB00C8D553 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
 				D250D5171BD8D1CB00C8D553 /* EaseBaseMessageCell.m in Sources */,
 				D250D4D81BD8D1CB00C8D553 /* UIView+MJExtension.m in Sources */,
+				71C7B7321C7EA933005ACB0A /* MessageRevokeManager.m in Sources */,
 				D250D5151BD8D1CB00C8D553 /* EaseViewController.m in Sources */,
 				D250D4D21BD8D1CB00C8D553 /* MJRefreshGifHeader.m in Sources */,
 				D250D4DD1BD8D1CB00C8D553 /* MWPhotoBrowser.m in Sources */,
@@ -2185,6 +2200,7 @@
 				D250D5111BD8D1CB00C8D553 /* EaseLocationViewController.m in Sources */,
 				D250D4E71BD8D1CB00C8D553 /* EMSDWebImageManager.m in Sources */,
 				D250D51F1BD8D1CB00C8D553 /* EaseBubbleView+Voice.m in Sources */,
+				71C7B7331C7EA933005ACB0A /* RemoveAfterReadManager.m in Sources */,
 				D250D5041BD8D1CB00C8D553 /* NSDateFormatter+Category.m in Sources */,
 				D250D5251BD8D1CB00C8D553 /* EaseFaceView.m in Sources */,
 				D250D4DC1BD8D1CB00C8D553 /* MWPhoto.m in Sources */,
