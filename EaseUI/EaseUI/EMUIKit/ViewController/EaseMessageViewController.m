@@ -1317,7 +1317,7 @@
     // 隐藏键盘
     [self.chatToolbar endEditing:YES];
     
-//    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:eCallSessionTypeAudio]}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:0]}];
 }
 
 - (void)moreViewVideoCallAction:(EaseChatBarMoreView *)moreView
@@ -1325,7 +1325,7 @@
     // 隐藏键盘
     [self.chatToolbar endEditing:YES];
     
-//    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:eCallSessionTypeVideo]}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:1]}];
 }
 
 #pragma mark - EMLocationViewDelegate
