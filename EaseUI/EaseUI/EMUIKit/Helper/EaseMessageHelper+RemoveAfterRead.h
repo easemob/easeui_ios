@@ -1,30 +1,14 @@
 //
-//  RemoveAfterReadManager.h
+//  EaseMessageHelper+RemoveAfterRead.h
 //  EaseUI
 //
-//  Created by WYZ on 16/2/24.
+//  Created by WYZ on 16/2/17.
 //  Copyright © 2016年 easemob. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EaseMob.h"
+#import "EaseMessageHelper.h"
 
-@interface RemoveAfterReadManager : NSObject
-
-// 初始化manager，如果发现有需要焚毁的消息会直接焚毁
-+ (RemoveAfterReadManager *)sharedInstance;
-
-/**
- * 注册阅后即焚消息处理完成后UI更新通知
- *
- */
-- (void)registerNotification:(id)observer selector:(SEL)action;
-
-/**
- * 释放阅后即焚消息处理完成后UI更新通知
- *
- */
-- (void)removeNotification:(id)observer;
+@interface EaseMessageHelper (RemoveAfterRead)
 
 /**
  * 验证消息是否为阅后即焚消息
@@ -48,7 +32,6 @@
  * @return 携带阅后即焚信息的扩展
  */
 + (NSDictionary *)structureRemoveAfterReadMessageExt:(NSDictionary *)originalExt;
-
 
 /**
  *  以下用于聊天页面的处理

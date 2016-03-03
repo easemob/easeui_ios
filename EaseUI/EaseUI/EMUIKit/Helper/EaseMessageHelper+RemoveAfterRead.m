@@ -1,19 +1,20 @@
 //
-//  RemoveAfterReadManager.m
+//  EaseMessageHelper+RemoveAfterRead.m
 //  EaseUI
 //
-//  Created by WYZ on 16/2/24.
+//  Created by WYZ on 16/2/17.
 //  Copyright © 2016年 easemob. All rights reserved.
 //
 
-#import "RemoveAfterReadManager.h"
+#import "EaseMessageHelper+RemoveAfterRead.h"
+#import "objc/runtime.h"
 
-/** @brief 阅后即焚消息处理完成的通知 */
-#define KEM_REMOVEAFTERREAD_NOTIFICATION   @"em_removeAfterRead_notification"
+static char infoDicKey;
+
 /** @brief 阅后即焚消息扩展字段 */
 #define KEM_REMOVEAFTERREAD                @"em_readFire"
 /** @brief 已读阅后即焚消息在NSUserDefaults保存的key前缀 */
-#define KEM_REMOVEAFTERREAD_PREFIX         @"em_removeAfterReadSavePrefix"
+#define KEM_REMOVEAFTERREAD_PREFIX                @"readFirePrefix"
 /** @brief NSUserDefaults中保存当前已阅读但未发送ack回执的阅后即焚消息信息 */
 #define NEED_REMOVE_MESSAGE_DIC            @"em_needRemoveMessages"
 /** @brief NSUserDefaults中保存当前阅读的阅后即焚消息信息 */
@@ -21,63 +22,67 @@
 //需要发送ack的阅后即焚消息信息在NSUserDefaults中的存放key
 #define UserDefaultKey(username) [[KEM_REMOVEAFTERREAD_PREFIX stringByAppendingString:@"_"] stringByAppendingString:username]
 
-@interface RemoveAfterReadManager () <IChatManagerDelegate>{
-    dispatch_queue_t _queue;
-}
-@property (nonatomic, assign) id<IChatManager> chatManager;
+@interface EaseMessageHelper()
+
 @property (nonatomic, strong) NSDictionary *infoDic;
-@property (nonatomic, strong) NSString *account;
+
 @end
 
-@implementation RemoveAfterReadManager
+@implementation EaseMessageHelper (RemoveAfterRead)
 
-+ (RemoveAfterReadManager *)sharedInstance
+#pragma mark - getter
+
+- (BOOL)isConnected
 {
-    static RemoveAfterReadManager *manager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        manager = [[RemoveAfterReadManager alloc] init];
-    });
-    
-    return manager;
+    return [self.chatManager isConnected];
 }
 
-- (instancetype)init{
-    if (self = [super init]) {
-        _queue = dispatch_queue_create("com.removeAfterReadManager", DISPATCH_QUEUE_SERIAL);
-        [self.chatManager addDelegate:self delegateQueue:nil];
-        [self addMessageToNeedRemoveDic:[self currentMsg]];
-        [self sendAllNeedRemoveMessage];
-    }
-    
-    return self;
+- (NSDictionary *)needRemoveDic
+{
+    return [self.infoDic objectForKey:NEED_REMOVE_MESSAGE_DIC];
+}
+
+- (NSDictionary *)infoDic
+{
+    return objc_getAssociatedObject(self, &infoDicKey);
+}
+
+#pragma mark - setter
+
+- (void)setInfoDic:(NSDictionary *)infoDic
+{
+    objc_setAssociatedObject(self, &infoDicKey, infoDic, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 #pragma mark - IChatManagerDelegate
 
-- (void)didAutoReconnectFinishedWithError:(NSError *)error{
+- (void)didAutoReconnectFinishedWithError:(NSError *)error
+{
     if (!error) {
+        [self addMessageToNeedRemoveDic:[self currentMsg]];
         [self sendAllNeedRemoveMessage];
     }
 }
 
 - (void)didAutoLoginWithInfo:(NSDictionary *)loginInfo
-                       error:(EMError *)error{
+                       error:(EMError *)error
+{
     if (!error) {
+        [self addMessageToNeedRemoveDic:[self currentMsg]];
         [self sendAllNeedRemoveMessage];
     }
 }
 
--(void)didLogoffWithError:(EMError *)error{
+-(void)didLogoffWithError:(EMError *)error
+{
     if (!error) {
         self.infoDic = nil;
-        self.account = nil;
     }
 }
 
 - (void)didReceiveHasReadResponse:(EMReceipt *)resp
 {
-    [self handleReceiveReceipt:resp];
+    [self handleReceiveHasReadResponse:resp];
 }
 
 #pragma mark - private
@@ -95,7 +100,7 @@
         if ([weakSelf isConnected]) {
             [weakSelf.chatManager sendReadAckForMessage:aMessage];
             NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-            NSMutableDictionary *dic = [[userDefault objectForKey:UserDefaultKey(self.account)] mutableCopy];
+            NSMutableDictionary *dic = [[userDefault objectForKey:UserDefaultKey(weakSelf.account)] mutableCopy];
             if (!dic) {
                 dic = [[NSMutableDictionary alloc] init];
             }
@@ -111,16 +116,15 @@
  * 为NSUserDefaults记录的已读阅后即焚消息发送ack回执，并删除该消息
  *
  */
-- (void)sendAllNeedRemoveMessage
-{
+- (void)sendAllNeedRemoveMessage{
     __weak typeof(self) weakSelf = self;
     dispatch_async(_queue, ^{
         if ([weakSelf isConnected]) {
             for (NSString *chatter in [weakSelf.needRemoveDic allKeys]) {
-                EMConversation *conversation = [self.chatManager
+                EMConversation *conversation = [weakSelf.chatManager
                                                 conversationForChatter:chatter
                                                 conversationType:eConversationTypeChat];
-                
+
                 NSArray *msgs = [conversation loadMessagesWithIds:weakSelf.needRemoveDic[chatter]];
                 for (EMMessage *msg in msgs) {
                     [weakSelf.chatManager sendReadAckForMessage:msg];
@@ -141,12 +145,12 @@
 /**
  * 将指定消息信息加入到待发送ack阅后即焚消息字典中
  *
- * @param messageInfo 指定的消息信息，数组长度为2，第一个元素为消息所在会话的chatter，第二个元素为消息id
+ * @param msg 指定的消息信息，数组长度为2，第一个元素为消息所在会话的chatter，第二个元素为消息id
  *
  */
 - (void)addMessageToNeedRemoveDic:(NSArray *)messageInfo
 {
-    if (!messageInfo || messageInfo.count != 2)
+    if (!messageInfo && messageInfo.count != 2)
     {
         return;
     }
@@ -174,8 +178,7 @@
     [self updateInfoDic:dic];
 }
 
-- (NSArray *)currentMsg
-{
+- (NSArray *)currentMsg{
     return self.infoDic[NEED_REMOVE_CURRENT_MESSAGE];
 }
 
@@ -189,10 +192,6 @@
     [self updateInfoDic:dic];
 }
 
-/**
- * 更新self.infoDic属性，并更新userDefaults中当前用户存储的关于阅后即焚数据
- *
- */
 - (void)updateInfoDic:(NSDictionary *)dic{
     @synchronized(self) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -212,54 +211,38 @@
  * @param resp ACK回执
  *
  */
-- (void)handleReceiveReceipt:(EMReceipt *)resp
+- (void)handleReceiveHasReadResponse:(EMReceipt *)resp
 {
-    EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:resp.conversationChatter
-                                                                               conversationType:eConversationTypeChat];
-    if (!conversation)
-    {
-        return;
-    }
-    EMMessage *message = [conversation loadMessageWithId:resp.chatId];
-    
-    if (![RemoveAfterReadManager isRemoveAfterReadMessage:message])
-    {
-        return;
-    }
-    if ([conversation removeMessage:message])
-    {
-        if (!conversation.latestMessage) {
-            [self.chatManager removeConversationByChatter:resp.conversationChatter
-                                           deleteMessages:NO
-                                              append2Chat:YES];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(_queue, ^{
+        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:resp.conversationChatter
+                                                                                   conversationType:eConversationTypeChat];
+        if (!conversation)
+        {
+            return;
         }
-        NSArray *messages = [NSArray arrayWithObjects:message, nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REMOVEAFTERREAD_NOTIFICATION object:messages];
-    }
+        EMMessage *message = [conversation loadMessageWithId:resp.chatId];
+        
+        if (![EaseMessageHelper isRemoveAfterReadMessage:message])
+        {
+            return;
+        }
+        if ([conversation removeMessage:message])
+        {
+            if (!conversation.latestMessage) {
+                [weakSelf.chatManager removeConversationByChatter:resp.conversationChatter
+                                               deleteMessages:NO
+                                                  append2Chat:YES];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [multicastDelegate emHelper:weakSelf handleRemoveAfterReadMessage:message];
+            });
+        }
+    });
 }
+
 
 #pragma mark - public
-
-/**
- * 注册阅后即焚消息处理完成后UI更新通知
- *
- */
-- (void)registerNotification:(id)observer selector:(SEL)action
-{
-    [[NSNotificationCenter defaultCenter] addObserver:observer
-                                             selector:action
-                                                 name:KEM_REMOVEAFTERREAD_NOTIFICATION object:nil];
-}
-
-/**
- * 释放阅后即焚消息处理完成后UI更新通知
- *
- */
-- (void)removeNotification:(id)observer
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:observer
-                                                    name:KEM_REMOVEAFTERREAD_NOTIFICATION object:nil];
-}
 
 /**
  * 验证消息是否为阅后即焚消息
@@ -277,6 +260,10 @@
  * @param aMessage 正在读取的消息
  */
 - (void)updateCurrentMsg:(EMMessage *)aMessage{
+    if (!aMessage)
+    {
+        return;
+    }
     NSMutableDictionary *dic = [self.infoDic mutableCopy];
     if (!dic) {
         dic = [[NSMutableDictionary alloc] init];
@@ -284,6 +271,7 @@
     dic[NEED_REMOVE_CURRENT_MESSAGE] = @[aMessage.conversationChatter,aMessage.messageId];
     [self updateInfoDic:dic];
 }
+
 
 /**
  * 构造阅后即焚消息的ext
@@ -303,67 +291,39 @@
 }
 
 /**
- * 聊天页面,被选中阅后即焚消息处理
+ * 被选中阅后即焚消息处理
  *
  * @param message 待处理消息
  *
  */
-- (void)handleRemoveAfterReadMessage:(EMMessage *)message
+- (void)handleRemoveAfterReadMessage:(EMMessage *)message;
 {
     if (!message) {
         return;
     }
-    EMConversation *conversation = [self.chatManager conversationForChatter:message.conversationChatter conversationType:(EMConversationType)message.messageType];
-    if (!conversation) {
-        return;
-    }
-    if (![message.from isEqualToString:self.account])
-    {
-        //如果是消息接收者，要发送ack，消息发送者只需要接收到ack删除消息
-        if ([self isConnected])
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(_queue, ^{
+        EMConversation *conversation = [self.chatManager conversationForChatter:message.conversationChatter
+                                                               conversationType:(EMConversationType)message.messageType];
+        if (![message.from isEqualToString:self.account])
         {
-            if ([conversation removeMessageWithId:message.messageId])
+            //如果是消息接收者，要发送ack，消息发送者只需要接收到ack删除消息
+            if ([self isConnected])
             {
-                [conversation markMessageWithId:message.messageId asRead:YES];
-                [self sendRemoveMessageAction:message];
-                NSArray *messages = [NSArray arrayWithObjects:message, nil];
-                [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REMOVEAFTERREAD_NOTIFICATION object:messages];
+                if ([conversation removeMessageWithId:message.messageId])
+                {
+                    [conversation markMessageWithId:message.messageId asRead:YES];
+                    [self sendRemoveMessageAction:message];
+                }
             }
+            else {
+                [self addMessageToNeedRemoveDic:@[message.conversationChatter,message.messageId]];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [multicastDelegate emHelper:weakSelf handleRemoveAfterReadMessage:message];
+            });
         }
-        else {
-            [self addMessageToNeedRemoveDic:@[message.conversationChatter,message.messageId]];
-            NSArray *messages = [NSArray arrayWithObjects:message, nil];
-            [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REMOVEAFTERREAD_NOTIFICATION object:messages];
-        }
-    }
+    });
 }
-
-#pragma mark - getter
-
-- (BOOL)isConnected{
-    return [self.chatManager isConnected];
-}
-
-- (NSString *)account{
-    return [[self.chatManager loginInfo] objectForKey:kSDKUsername];
-}
-
-- (NSDictionary *)infoDic{
-    if (!_infoDic) {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        _infoDic = [userDefaults objectForKey:UserDefaultKey(self.account)];
-    }
-    
-    return _infoDic;
-}
-
-- (id<IChatManager>)chatManager{
-    return [EaseMob sharedInstance].chatManager;
-}
-
-- (NSDictionary *)needRemoveDic{
-    return [self.infoDic objectForKey:NEED_REMOVE_MESSAGE_DIC];
-}
-
 
 @end

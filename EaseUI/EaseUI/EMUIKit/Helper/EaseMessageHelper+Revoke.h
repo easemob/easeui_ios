@@ -1,17 +1,14 @@
 //
-//  MessageRevokeManager.h
+//  EaseMessageHelper+Revoke.h
 //  EaseUI
 //
-//  Created by WYZ on 16/2/24.
+//  Created by easemob on 16/2/17.
 //  Copyright © 2016年 easemob. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EaseMob.h"
+#import "EaseMessageHelper.h"
 
-@interface MessageRevokeManager : NSObject
-
-+ (MessageRevokeManager *)sharedInstance;
+@interface EaseMessageHelper (Revoke)
 
 /**
  * 发送回撤cmd消息
@@ -28,9 +25,6 @@
  */
 + (BOOL)isRevokeCMDMessage:(EMMessage *)message;
 
-// 从cmd消息ext中得到被回撤的消息id
-+ (NSString *)getRevokedMessageIdFromCmdMessageExt:(EMMessage *)cmdMessage;
-
 /**
  * 验证消息是否符合撤销原则(如2分钟内发送)
  *
@@ -40,15 +34,11 @@
 + (BOOL)canRevokeMessage:(EMMessage *)message;
 
 /**
- * 注册消息回撤完成后UI更新通知
+ * 获取cmd消息，处理消息撤销
  *
+ * @param cmdMessages 接收的cmd消息
+ * @return 返回被删除的消息
  */
-- (void)registerNotification:(id)observer selector:(SEL)action;
-
-/**
- * 释放消息回撤完成后UI更新通知
- *
- */
-- (void)removeNotification:(id)observer;
+- (EMMessage *)handleReceiveRevokeCmdMessage:(EMMessage *)cmdMessage;
 
 @end
