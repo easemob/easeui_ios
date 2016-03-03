@@ -12,6 +12,10 @@
 #import "NSDate+Category.h"
 #import "EaseUsersListViewController.h"
 
+#import "EaseMessageHelper.h"
+#import "EaseMessageHelper+InputState.h"
+#import "EaseMessageHelper+GroupAt.h"
+
 #define KHintAdjustY    50
 
 @interface EaseMessageViewController ()<EaseMessageCellDelegate>
@@ -21,7 +25,6 @@
     UILongPressGestureRecognizer *_lpgr;
     
     dispatch_queue_t _messageQueue;
-    BOOL _removeAfterRead;
 }
 
 @property (strong, nonatomic) id<IMessageModel> playingVoiceModel;
@@ -104,7 +107,7 @@
                                              selector:@selector(didBecomeActive)
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
-    [self registerHelperNotification];
+    [self configEaseMessageHelper];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -133,7 +136,7 @@
         [_imagePicker dismissViewControllerAnimated:NO completion:nil];
         _imagePicker = nil;
     }
-    [self removeHelperNotification];
+    [self removeEaseMessageHelper];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -491,7 +494,7 @@
     {
         EMMessage *message = messages[i];
         // 阅后即焚
-        if ([RemoveAfterReadManager isRemoveAfterReadMessage:message])
+        if ([EaseMessageHelper checkMessage:message] == emHelperTypeRemoveAfterRead)
         {
             continue;
         }
@@ -546,7 +549,9 @@
     
     EaseLocationViewController *locationController = [[EaseLocationViewController alloc] initWithLocation:CLLocationCoordinate2DMake(model.latitude, model.longitude)];
     // 阅后即焚
-    if (!model.isSender && [RemoveAfterReadManager isRemoveAfterReadMessage:model.message]) {
+    if (!model.isSender &&
+        [EaseMessageHelper checkMessage:model.message] == emHelperTypeRemoveAfterRead)
+    {
         locationController.localMessageModel = model;
         locationController.delegate = self;
     }
@@ -574,7 +579,8 @@
         
         NSURL *videoURL = [NSURL fileURLWithPath:localPath];
         EaseMessageReadManager *readManager = [EaseMessageReadManager defaultManager];
-        if (!weakModel.isSender &&[RemoveAfterReadManager isRemoveAfterReadMessage:weakModel.message])
+        if (!weakModel.isSender &&
+            [EaseMessageHelper checkMessage:weakModel.message] == emHelperTypeRemoveAfterRead)
         {
             readManager.delegate = self;
         }
@@ -605,7 +611,9 @@
 {
     __weak EaseMessageViewController *weakSelf = self;
     __weak id<IMessageModel> weakModel = model;
-    if (!model.isSender && [RemoveAfterReadManager isRemoveAfterReadMessage:model.message]) {
+    if (!model.isSender &&
+        [EaseMessageHelper checkMessage:model.message] == emHelperTypeRemoveAfterRead)
+    {
         EaseMessageReadManager *manager = [EaseMessageReadManager defaultManager];
         manager.delegate = self;
     }
@@ -701,7 +709,9 @@
         EaseMessageReadManager *readManager = [EaseMessageReadManager defaultManager];
         if (isPrepare) {
             _isPlayingAudio = YES;
-            if (!model.isSender && [RemoveAfterReadManager isRemoveAfterReadMessage:model.message]) {
+            if (!model.isSender &&
+                [EaseMessageHelper checkMessage:model.message] == emHelperTypeRemoveAfterRead)
+            {
                 readManager.delegate = self;
             }
             __weak EaseMessageViewController *weakSelf = self;
@@ -1003,7 +1013,6 @@
         case eMessageBodyType_Video:
         {
             [self _videoMessageCellSelected:model];
-            
         }
             break;
         case eMessageBodyType_File:
@@ -1064,6 +1073,99 @@
     }
     [_menuController setMenuItems:nil];
 }
+
+//控制光标位置
+- (void)inputTextViewDidChangeSelection:(EaseTextView *)inputTextView
+{
+    if (self.conversation.conversationType == eConversationTypeChat) {
+        return;
+    }
+    //控制光标不可以插入被@的群组成员id中间
+    NSRange selectRange = inputTextView.selectedRange;
+    if ([EaseMessageHelper fetchSelectOccupantIdList])
+    {
+        NSArray *occupantIdList = [[EaseMessageHelper fetchSelectOccupantIdList] mutableCopy];
+        NSString *textContent = inputTextView.text;
+        for (NSString *occupantId in occupantIdList)
+        {
+            NSString *atString = [@"@" stringByAppendingFormat:@"%@ ",occupantId];
+            NSRange atRange = [textContent rangeOfString:atString];
+            if (selectRange.location > atRange.location && selectRange.location <= atRange.location + atRange.length)
+            {
+                selectRange.location = atRange.length + atRange.location;
+                inputTextView.selectedRange = selectRange;
+                break;
+            }
+        }
+    }
+}
+
+- (BOOL)inputTextView:(EaseTextView *)inputTextView
+ didChangeTextInRange:(NSRange)range
+      replacementText:(NSString *)text
+{
+    //单聊且输入状态开关打开的时候处理输入状态提示功能
+    if (self.conversation.conversationType == eConversationTypeChat &&
+        [EaseMessageHelper inputStateIsValid])
+    {
+        if (text.length > 0 || (inputTextView.text.length > 1 && text.length == 0))
+        {
+            //正在输入，文本框中会有输入字符 或 正在删除，文本框中字符多余1
+            [EaseMessageHelper canSendInputCmdMsgToChatter:self.conversation.chatter status:YES];
+        }
+        else if (inputTextView.text.length == 1 && text.length == 0)
+        {
+            //正在删除，当前只剩最后一个字符,此时文字将要清空，标示这输入状态结束
+            [EaseMessageHelper canSendInputCmdMsgToChatter:self.conversation.chatter status:NO];
+        }
+        return YES;
+    }
+    //非单聊处理群组@功能
+    //删除@的成员(可能同时多次 @同一组员)
+    if ([EaseMessageHelper fetchSelectOccupantIdList] && text.length == 0)
+    {
+        NSArray *occupantIdList = [[EaseMessageHelper fetchSelectOccupantIdList] mutableCopy];
+        NSString *textContent = inputTextView.text;
+        NSRange searchRange = NSMakeRange(0, textContent.length); //匹配字符串范围
+        for (NSUInteger i = 0;i < occupantIdList.count; i++)
+        {
+            NSString *occupantId = occupantIdList[i];
+            NSString *atString = [@"@" stringByAppendingFormat:@"%@ ",occupantId];
+            //获取atString所在位置
+            NSRange atRange = [textContent rangeOfString:atString options:NSCaseInsensitiveSearch range:searchRange];
+            if (atRange.length > 0 && range.location > atRange.location && range.location <= atRange.location + atRange.length)
+            {
+                atString = [atString stringByReplacingOccurrencesOfString:@" " withString:@""];
+                inputTextView.text = [inputTextView.text stringByReplacingOccurrencesOfString:atString withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(atRange.location, atRange.length - 1)];
+                NSRange selectedRange = range;
+                selectedRange.location -= atRange.length - 1;
+                inputTextView.selectedRange = selectedRange;
+                [EaseMessageHelper removeOccupantIdByIndex:i];
+                break;
+            }
+            if (atRange.length > 0) {
+                NSUInteger location = atRange.location + atRange.length;
+                NSUInteger length = textContent.length - location;
+                if (length == 0) {
+                    continue;
+                }
+                searchRange = NSMakeRange(location, length);
+            }
+        }
+        if (inputTextView.text.length == 0 || ![EaseMessageHelper fetchSelectOccupantIdList])
+        {//文本中文字全部删除
+            [self resetEaseMessageHelpType];
+            [EaseMessageHelper markSelectOccupantId:nil];
+        }
+    }
+    if ([text isEqualToString:@"@"])
+    {//输入@，弹出成员选择列表（或其他UI选择方式）
+        [self changeEaseMessageHelpType:emHelperTypeGroupAt];
+        [self performSelector:@selector(handleEaseMessageHelp:) withObject:[NSNumber numberWithInteger:range.location] afterDelay:0.3];
+    }
+    return YES;
+}
+
 
 - (void)didSendText:(NSString *)text
 {
@@ -1292,7 +1394,7 @@
     if ([self.conversation.chatter isEqualToString:message.conversationChatter]) {
         [self addMessageToDataSource:message progress:nil];
         // 阅后即焚
-        if ([RemoveAfterReadManager isRemoveAfterReadMessage:message])
+        if ([EaseMessageHelper checkMessage:message] == emHelperTypeRemoveAfterRead)
         {
             return;
         }
@@ -1372,7 +1474,7 @@
         return;
     }
     // 阅后即焚
-    if ([RemoveAfterReadManager isRemoveAfterReadMessage:model.message])
+    if ([EaseMessageHelper checkMessage:model.message] == emHelperTypeRemoveAfterRead)
     {
         //此处不需要继续处理
         return;
@@ -1676,26 +1778,19 @@
 
 - (void)sendTextMessage:(NSString *)text
 {
-    NSDictionary *_ext = nil;
-    if (_removeAfterRead)
-    {
-        _ext = [RemoveAfterReadManager structureRemoveAfterReadMessageExt:nil];
-    }
-    [self sendTextMessage:text withExt:_ext];
+    [self sendTextMessage:text withExt:nil];
 }
 
 - (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext
 {
-    NSDictionary *_ext = nil;
-    if (_removeAfterRead)
-    {
-        _ext = [RemoveAfterReadManager structureRemoveAfterReadMessageExt:nil];
-    }
+    NSDictionary *_ext = [[EaseMessageHelper structureEaseMessageHelperExt:ext
+                                                                  bodyType:eMessageBodyType_Text] mutableCopy];
     EMMessage *message = [EaseSDKHelper sendTextMessage:text
                                                      to:self.conversation.chatter
                                             messageType:[self _messageTypeFromConversationType]
                                       requireEncryption:NO
                                              messageExt:_ext];
+    [EaseMessageHelper resetInputStateCmdMessageSendTime:self.conversation.conversationType];
     [self addMessageToDataSource:message
                         progress:nil];
 }
@@ -1704,11 +1799,8 @@
                           longitude:(double)longitude
                          andAddress:(NSString *)address
 {
-    NSDictionary *_ext = nil;
-    if (_removeAfterRead)
-    {
-        _ext = [RemoveAfterReadManager structureRemoveAfterReadMessageExt:nil];
-    }
+    NSDictionary *_ext = [[EaseMessageHelper structureEaseMessageHelperExt:nil
+                                                                  bodyType:eMessageBodyType_Location] mutableCopy];
     EMMessage *message = [EaseSDKHelper sendLocationMessageWithLatitude:latitude
                                                               longitude:longitude
                                                                 address:address
@@ -1716,7 +1808,7 @@
                                                             messageType:[self _messageTypeFromConversationType]
                                                       requireEncryption:NO
                                                              messageExt:_ext];
-    
+    [EaseMessageHelper resetInputStateCmdMessageSendTime:self.conversation.conversationType];
     [self addMessageToDataSource:message
                         progress:nil];
 }
@@ -1730,18 +1822,15 @@
     else{
         progress = self;
     }
-    NSDictionary *_ext = nil;
-    if (_removeAfterRead)
-    {
-        _ext = [RemoveAfterReadManager structureRemoveAfterReadMessageExt:nil];
-    }
+    NSDictionary *_ext = [[EaseMessageHelper structureEaseMessageHelperExt:nil
+                                                                  bodyType:eMessageBodyType_Image] mutableCopy];
     EMMessage *message = [EaseSDKHelper sendImageMessageWithImage:image
                                                                to:self.conversation.chatter
                                                       messageType:[self _messageTypeFromConversationType]
                                                 requireEncryption:NO
                                                        messageExt:_ext
                                                          progress:progress];
-    
+    [EaseMessageHelper resetInputStateCmdMessageSendTime:self.conversation.conversationType];
     [self addMessageToDataSource:message
                         progress:progress];
 }
@@ -1756,11 +1845,8 @@
     else{
         progress = self;
     }
-    NSDictionary *_ext = nil;
-    if (_removeAfterRead)
-    {
-        _ext = [RemoveAfterReadManager structureRemoveAfterReadMessageExt:nil];
-    }
+    NSDictionary *_ext = [[EaseMessageHelper structureEaseMessageHelperExt:nil
+                                                                  bodyType:eMessageBodyType_Voice] mutableCopy];
     EMMessage *message = [EaseSDKHelper sendVoiceMessageWithLocalPath:localPath
                                                              duration:duration
                                                                    to:self.conversation.chatter
@@ -1768,6 +1854,7 @@
                                                     requireEncryption:NO
                                                            messageExt:_ext
                                                              progress:progress];
+    [EaseMessageHelper resetInputStateCmdMessageSendTime:self.conversation.conversationType];
     [self addMessageToDataSource:message
                         progress:progress];
 }
@@ -1782,29 +1869,38 @@
     else{
         progress = self;
     }
-    NSDictionary *_ext = nil;
-    if (_removeAfterRead)
-    {
-        _ext = [RemoveAfterReadManager structureRemoveAfterReadMessageExt:nil];
-    }
+    NSDictionary *_ext = [[EaseMessageHelper structureEaseMessageHelperExt:nil
+                                                                  bodyType:eMessageBodyType_Video] mutableCopy];
     EMMessage *message = [EaseSDKHelper sendVideoMessageWithURL:url
                                                              to:self.conversation.chatter
                                                     messageType:[self _messageTypeFromConversationType]
                                               requireEncryption:NO
                                                      messageExt:_ext
                                                        progress:progress];
+    [EaseMessageHelper resetInputStateCmdMessageSendTime:self.conversation.conversationType];
     [self addMessageToDataSource:message
                         progress:progress];
 }
 
-- (void)enableRemoveAfterRead{
-    _removeAfterRead = YES;
+/**
+ *  帮助类型更改
+ */
+- (void)changeEaseMessageHelpType:(EMHelperType)helpType
+{
+    if ([EaseMessageHelper sharedInstance].emHelperType == helpType)
+    {
+        return;
+    }
+    [[EaseMessageHelper sharedInstance] setEmHelperType:helpType];
 }
 
-- (void)disableRemoveAfterRead{
-    _removeAfterRead = NO;
+/**
+ *  重置帮助类型
+ */
+- (void)resetEaseMessageHelpType
+{
+    [[EaseMessageHelper sharedInstance] setEmHelperType:emHelperTypeDefault];
 }
-
 
 #pragma mark - notifycation
 - (void)didBecomeActive
@@ -1830,29 +1926,28 @@
     }
 }
 
-/**
- *  阅后即焚或消息回撤处理结果，刷新UI的通知
- */
-- (void)updateMainUINotification:(NSNotification *)notification
-{
-    
-}
-
 #pragma mark - Helper
 
-// 注册 EaseMessageAppreciationHelper 通知
-- (void)registerHelperNotification
+// 注册 EaseMessageHelperProtocal
+- (void)configEaseMessageHelper
 {
-    [[MessageRevokeManager sharedInstance] registerNotification:self
-                                                       selector:@selector(updateMainUINotification:)];
-    [[RemoveAfterReadManager sharedInstance] registerNotification:self
-                                                         selector:@selector(updateMainUINotification:)];
+    [[EaseMessageHelper sharedInstance] addDelegate:self];
 }
-//取消 EaseMessageAppreciationHelper 通知
-- (void)removeHelperNotification
+//取消 EaseMessageHelperProtocal
+- (void)removeEaseMessageHelper
 {
-    [[MessageRevokeManager sharedInstance] removeNotification:self];
-    [[RemoveAfterReadManager sharedInstance] removeNotification:self];
+    [[EaseMessageHelper sharedInstance] removeDelegate:self];
+    //清空被群组@成员列表
+    [EaseMessageHelper markSelectOccupantId:nil];
+}
+
+//延迟0.3秒执行，为了使inputText中textView的delegate方法执行完成
+- (void)handleEaseMessageHelp:(NSNumber *)index
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:handleEaseMessageHelp:index:)])
+    {
+        [_delegate messageViewController:self handleEaseMessageHelp:[EaseMessageHelper sharedInstance].emHelperType index:index.integerValue + 1];
+    }
 }
 
 @end

@@ -537,7 +537,20 @@
         
         return NO;
     }
+    #warning group@
+    if (self.delegate && [self.delegate respondsToSelector:@selector(inputTextView:didChangeTextInRange:replacementText:)])
+    {
+        return [self.delegate inputTextView:self.inputTextView didChangeTextInRange:range replacementText:text];
+    }
+    
     return YES;
+}
+
+- (void)textViewDidChangeSelection:(UITextView *)textView
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(inputTextViewDidChangeSelection:)]) {
+        [self.delegate inputTextViewDidChangeSelection:self.inputTextView];
+    }
 }
 
 - (void)textViewDidChange:(UITextView *)textView

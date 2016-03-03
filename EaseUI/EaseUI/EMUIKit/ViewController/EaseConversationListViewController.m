@@ -14,6 +14,7 @@
 #import "EaseConversationCell.h"
 #import "EaseConvertToCommonEmoticonsHelper.h"
 #import "NSDate+Category.h"
+#import "EaseMessageHelper.h"
 
 @interface EaseConversationListViewController () <IChatManagerDelegate>
 
@@ -38,7 +39,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self registerHelperNotification];
+    [self configEaseMessageHelper];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -76,17 +77,28 @@
     id<IConversationModel> model = [self.dataArray objectAtIndex:indexPath.row];
     cell.model = model;
     
-    if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTitleForConversationModel:)]) {
-        cell.detailLabel.text = [_dataSource conversationListViewController:self latestMessageTitleForConversationModel:model];
-    } else {
-        cell.detailLabel.text = [self _latestMessageTitleForConversationModel:model];
-    }
-    
+//    if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTitleForConversationModel:)]) {
+//        cell.detailLabel.text = [_dataSource conversationListViewController:self latestMessageTitleForConversationModel:model];
+//    } else {
+//        cell.detailLabel.text = [self _latestMessageTitleForConversationModel:model];
+//    }
+//    
     if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTimeForConversationModel:)]) {
         cell.timeLabel.text = [_dataSource conversationListViewController:self latestMessageTimeForConversationModel:model];
     } else {
         cell.timeLabel.text = [self _latestMessageTimeForConversationModel:model];
     }
+    
+    NSAttributedString *attributedString = nil;
+    if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageAttributedTitleForConversationModel:)])
+    {
+        attributedString = [_dataSource conversationListViewController:self latestMessageAttributedTitleForConversationModel:model];
+    }
+    if (!attributedString) {
+        attributedString = [[NSAttributedString alloc] initWithString:[self _latestMessageTimeForConversationModel:model]];
+    }
+    cell.detailLabel.attributedText = attributedString;
+    
     
     return cell;
 }
@@ -183,7 +195,7 @@
 
 - (void)dealloc{
     [self unregisterNotifications];
-    [self removeHelperNotification];
+    [self removeEaseMessageHelper];
 }
 
 #pragma mark - private
@@ -239,26 +251,16 @@
 
 #pragma mark - Helper
 
-// 注册 EaseMessageAppreciationHelper 通知
-- (void)registerHelperNotification
+// 注册 EaseMessageHelperProtocal
+- (void)configEaseMessageHelper
 {
-    [[MessageRevokeManager sharedInstance] registerNotification:self selector:@selector(updateMainUINotification:)];
-    [[RemoveAfterReadManager sharedInstance] registerNotification:self selector:@selector(updateMainUINotification:)];
+    [[EaseMessageHelper sharedInstance] addDelegate:self];
 }
-//取消 EaseMessageAppreciationHelper 通知
-- (void)removeHelperNotification
+//取消 EaseMessageHelperProtocal
+- (void)removeEaseMessageHelper
 {
-    [[MessageRevokeManager sharedInstance] removeNotification:self];
-    [[RemoveAfterReadManager sharedInstance] removeNotification:self];
+    [[EaseMessageHelper sharedInstance] removeDelegate:self];
 }
 
-#pragma mark - NSNotification
-/**
- *  阅后即焚或消息回撤处理结果，刷新UI的通知，需要子类去实现
- */
-- (void)updateMainUINotification:(NSNotification *)notification
-{
-    
-}
 
 @end

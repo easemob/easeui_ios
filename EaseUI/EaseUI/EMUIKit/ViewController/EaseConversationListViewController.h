@@ -10,8 +10,7 @@
 
 #import "EaseConversationModel.h"
 #import "EaseConversationCell.h"
-#import "MessageRevokeManager.h"
-#import "RemoveAfterReadManager.h"
+#import "EaseMessageHelperProtocal.h"
 
 typedef NS_ENUM(int, DXDeleteConvesationType) {
     DXDeleteConvesationOnly,
@@ -48,22 +47,20 @@ typedef NS_ENUM(int, DXDeleteConvesationType) {
 - (NSString *)conversationListViewController:(EaseConversationListViewController *)conversationListViewController
       latestMessageTitleForConversationModel:(id<IConversationModel>)conversationModel;
 
+- (NSAttributedString *)conversationListViewController:(EaseConversationListViewController *)conversationListViewController
+      latestMessageAttributedTitleForConversationModel:(id<IConversationModel>)conversationModel;
+
 - (NSString *)conversationListViewController:(EaseConversationListViewController *)conversationListViewController
        latestMessageTimeForConversationModel:(id<IConversationModel>)conversationModel;
 
 @end
 
 
-@interface EaseConversationListViewController : EaseRefreshTableViewController
+@interface EaseConversationListViewController : EaseRefreshTableViewController<EaseMessageHelperProtocal>
 
 @property (weak, nonatomic) id<EaseConversationListViewControllerDelegate> delegate;
 @property (weak, nonatomic) id<EaseConversationListViewControllerDataSource> dataSource;
 
 - (void)tableViewDidTriggerHeaderRefresh;
-
-/**
- *  阅后即焚或消息回撤处理结果，刷新UI的通知，需要子类去实现
- */
-- (void)updateMainUINotification:(NSNotification *)notification;
 
 @end

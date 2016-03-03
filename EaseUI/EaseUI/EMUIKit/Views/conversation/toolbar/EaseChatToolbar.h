@@ -117,6 +117,16 @@
 - (void)inputTextViewWillBeginEditing:(EaseTextView *)inputTextView;
 
 /**
+ *  文本输入改变时，判断是否改变输入内容
+ */
+- (BOOL)inputTextView:(EaseTextView *)inputTextView didChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+
+/**
+ *  文本输入改变时，光标位置改变
+ */
+- (void)inputTextViewDidChangeSelection:(EaseTextView *)inputTextView;
+
+/**
  *  发送文字消息，可能包含系统自带表情
  *
  *  @param text 文字消息
@@ -162,6 +172,7 @@
  *  当手指再次进入按钮的范围内时，主要也是为了通知外部的HUD
  */
 - (void)didDragInsideAction:(UIView *)recordView;
+
 
 @required
 /**
