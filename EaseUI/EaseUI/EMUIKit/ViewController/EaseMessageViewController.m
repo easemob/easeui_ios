@@ -1628,7 +1628,6 @@
                                                               address:address
                                                                    to:self.conversation.conversationId
                                                           messageType:[self _messageTypeFromConversationType]
-                                                    requireEncryption:NO
                                                            messageExt:nil];
     [self _sendMessage:message];
 }
@@ -1646,9 +1645,7 @@
     EMMessage *message = [EaseSDKHelper sendImageMessageWithImageData:imageData
                                                                    to:self.conversation.conversationId
                                                           messageType:[self _messageTypeFromConversationType]
-                                                    requireEncryption:NO
-                                                           messageExt:nil
-                                                             progress:progress];
+                                                           messageExt:nil];
     [self _sendMessage:message];
 }
 
@@ -1665,9 +1662,7 @@
     EMMessage *message = [EaseSDKHelper sendImageMessageWithImage:image
                                                              to:self.conversation.conversationId
                                                     messageType:[self _messageTypeFromConversationType]
-                                              requireEncryption:NO
-                                                     messageExt:nil
-                                                       progress:progress];
+                                                     messageExt:nil];
     [self _sendMessage:message];
 }
 
@@ -1686,9 +1681,7 @@
                                                            duration:duration
                                                                  to:self.conversation.conversationId
                                                         messageType:[self _messageTypeFromConversationType]
-                                                  requireEncryption:NO
-                                                         messageExt:nil
-                                                           progress:progress];
+                                                         messageExt:nil];
     [self _sendMessage:message];
 }
 
@@ -1705,9 +1698,7 @@
     EMMessage *message = [EaseSDKHelper sendVideoMessageWithURL:url
                                                            to:self.conversation.conversationId
                                                   messageType:[self _messageTypeFromConversationType]
-                                            requireEncryption:NO
-                                                   messageExt:nil
-                                                     progress:progress];
+                                                   messageExt:nil];
     [self _sendMessage:message];
 }
 

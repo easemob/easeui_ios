@@ -44,37 +44,28 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                                        address:(NSString *)address
                                             to:(NSString *)to
                                    messageType:(EMChatType)messageType
-                             requireEncryption:(BOOL)requireEncryption
                                     messageExt:(NSDictionary *)messageExt;
 
 + (EMMessage *)sendImageMessageWithImageData:(NSData *)imageData
                                           to:(NSString *)to
                                  messageType:(EMChatType)messageType
-                           requireEncryption:(BOOL)requireEncryption
-                                  messageExt:(NSDictionary *)messageExt
-                                    progress:(id)progress;
+                                  messageExt:(NSDictionary *)messageExt;
 
 + (EMMessage *)sendImageMessageWithImage:(UIImage *)image
                                       to:(NSString *)to
                              messageType:(EMChatType)messageType
-                       requireEncryption:(BOOL)requireEncryption
-                              messageExt:(NSDictionary *)messageExt
-                                progress:(id)progress;
+                              messageExt:(NSDictionary *)messageExt;
 
 + (EMMessage *)sendVoiceMessageWithLocalPath:(NSString *)localPath
                                     duration:(NSInteger)duration
                                           to:(NSString *)to
-                           messageType:(EMChatType)messageType
-                     requireEncryption:(BOOL)requireEncryption
-                            messageExt:(NSDictionary *)messageExt
-                                    progress:(id)progress;
+                                messageType:(EMChatType)messageType
+                                  messageExt:(NSDictionary *)messageExt;
 
 + (EMMessage *)sendVideoMessageWithURL:(NSURL *)url
                                     to:(NSString *)to
                            messageType:(EMChatType)messageType
-                     requireEncryption:(BOOL)requireEncryption
-                            messageExt:(NSDictionary *)messageExt
-                              progress:(id)progress;
+                            messageExt:(NSDictionary *)messageExt;
 
 #pragma mark - call
 
