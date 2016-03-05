@@ -21,8 +21,12 @@
 #import "EMCDDeviceManager+ProximitySensor.h"
 #import "UIViewController+HUD.h"
 #import "EaseSDKHelper.h"
+#import "EaseMessageReadManager.h"
+#import "EaseMessageHelperProtocal.h"
+#import "EaseMessageHelper.h"
 
 @class EaseMessageViewController;
+@class EaseMessageHelper;
 
 @protocol EaseMessageViewControllerDelegate <NSObject>
 
@@ -85,6 +89,12 @@
 - (void)messageViewController:(EaseMessageViewController *)viewController
               didSelectRecordView:(UIView *)recordView
                 withEvenType:(EaseRecordViewType)type;
+
+/**
+ * 消息输入第一字符为@
+ */
+- (void)messageViewController:(EaseMessageViewController *)viewController
+        handleEaseMessageHelp:(EMHelperType)easeMessageHelpType index:(NSInteger)index;
 
 @end
 
@@ -155,7 +165,7 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 
 @end
 
-@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, IChatManagerDelegate, IEMChatProgressDelegate, EMCallManagerCallDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate>
+@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, IChatManagerDelegate, IEMChatProgressDelegate, EMCallManagerCallDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate, EMReadManagerProtocol, EaseMessageHelperProtocal>
 
 @property (weak, nonatomic) id<EaseMessageViewControllerDelegate> delegate;
 
@@ -183,7 +193,7 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 //显示的EMMessage类型的消息列表
 @property (strong, nonatomic) NSMutableArray *messsagesSource;
 
-@property (strong, nonatomic) UIView *chatToolbar;
+@property (strong, nonatomic) EaseChatToolbar *chatToolbar;
 
 @property(strong, nonatomic) EaseChatBarMoreView *chatBarMoreView;
 
@@ -238,5 +248,15 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
  */
 -(void)addMessageToDataSource:(EMMessage *)message
                      progress:(id<IEMChatProgressDelegate>)progress;
+
+/**
+ *  帮助类型更改
+ */
+- (void)changeEaseMessageHelpType:(EMHelperType)helpType;
+
+/**
+ *  重置帮助类型
+ */
+- (void)resetEaseMessageHelpType;
 
 @end
