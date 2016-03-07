@@ -10,6 +10,7 @@
 
 #import "EaseConversationModel.h"
 #import "EaseConversationCell.h"
+#import "EaseMessageHelperProtocal.h"
 
 typedef NS_ENUM(int, DXDeleteConvesationType) {
     DXDeleteConvesationOnly,
@@ -62,6 +63,19 @@ typedef NS_ENUM(int, DXDeleteConvesationType) {
 - (NSString *)conversationListViewController:(EaseConversationListViewController *)conversationListViewController
       latestMessageTitleForConversationModel:(id<IConversationModel>)conversationModel;
 
+
+/*!
+ @method
+ @brief 获取最后一条消息显示的内容(以NSAttributedString的格式)
+ @discussion 用户根据conversationModel实现,实现自定义会话中最后一条消息文案的显示内容
+ @param conversationListViewController 当前会话列表视图
+ @param IConversationModel 会话模型
+ @result 返回用户最后一条消息显示的内容
+ */
+- (NSAttributedString *)conversationListViewController:(EaseConversationListViewController *)conversationListViewController
+      latestMessageAttributedTitleForConversationModel:(id<IConversationModel>)conversationModel;
+
+
 /*!
  @method
  @brief 获取最后一条消息显示的时间
@@ -76,7 +90,7 @@ typedef NS_ENUM(int, DXDeleteConvesationType) {
 @end
 
 
-@interface EaseConversationListViewController : EaseRefreshTableViewController <EMChatManagerDelegate,EMGroupManagerDelegate>
+@interface EaseConversationListViewController : EaseRefreshTableViewController <EMChatManagerDelegate,EMGroupManagerDelegate, EaseMessageHelperProtocal>
 
 @property (weak, nonatomic) id<EaseConversationListViewControllerDelegate> delegate;
 @property (weak, nonatomic) id<EaseConversationListViewControllerDataSource> dataSource;

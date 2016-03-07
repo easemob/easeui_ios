@@ -21,6 +21,9 @@
 #import "EMCDDeviceManager+ProximitySensor.h"
 #import "UIViewController+HUD.h"
 #import "EaseSDKHelper.h"
+#import "EaseMessageHelperProtocal.h"
+#import "EaseMessageHelper.h"
+
 
 @class EaseMessageViewController;
 
@@ -134,6 +137,12 @@
 - (void)messageViewController:(EaseMessageViewController *)viewController
               didSelectRecordView:(UIView *)recordView
                 withEvenType:(EaseRecordViewType)type;
+
+/**
+ * 针对EaseMessageHelper的处理(群组@消息,输入字符为@会调用}
+ */
+- (void)messageViewController:(EaseMessageViewController *)viewController
+        handleEaseMessageHelp:(EMHelperType)easeMessageHelpType index:(NSInteger)index;
 @end
 
 
@@ -292,7 +301,7 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 
 @end
 
-@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, EMChatManagerDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate,EMChatroomManagerDelegate>
+@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, EMChatManagerDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate,EMChatroomManagerDelegate, EaseMessageHelperProtocal>
 
 @property (weak, nonatomic) id<EaseMessageViewControllerDelegate> delegate;
 
@@ -350,7 +359,7 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
  @property
  @brief 底部输入控件
  */
-@property (strong, nonatomic) UIView *chatToolbar;
+@property (strong, nonatomic) EaseChatToolbar *chatToolbar;
 
 /*!
  @property
@@ -468,5 +477,22 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
  */
 -(void)addMessageToDataSource:(EMMessage *)message
                      progress:(id)progress;
+
+/*!
+ @method
+ @brief EMHelperType更改
+ @discussion
+ @param helpType
+ @result
+ */
+- (void)changeEaseMessageHelpType:(EMHelperType)helpType;
+
+/*!
+ @method
+ @brief 重置EMHelperType为emHelperTypeDefault
+ @discussion
+ @result
+ */
+- (void)resetEaseMessageHelpType;
 
 @end

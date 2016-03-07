@@ -556,6 +556,13 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             }
         }
         switch (_model.bodyType) {
+            case EMMessageBodyTypeText:
+            {
+                if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
+                    [_delegate messageCellSelected:_model];
+                }
+            }
+                break;
             case EMMessageBodyTypeImage:
             {
                 if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {

@@ -33,6 +33,7 @@
 		71788F341C8D8D9F00D3A006 /* EaseMessageHelper+Revoke.h in Helper */ = {isa = PBXBuildFile; fileRef = 71788F281C8D8D8B00D3A006 /* EaseMessageHelper+Revoke.h */; };
 		71788F351C8D8D9F00D3A006 /* EaseMessageHelperProtocal.h in Helper */ = {isa = PBXBuildFile; fileRef = 71788F2A1C8D8D8B00D3A006 /* EaseMessageHelperProtocal.h */; };
 		71788F381C8D8DE200D3A006 /* EaseMessageMulticastBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 71788F371C8D8DE200D3A006 /* EaseMessageMulticastBase.m */; };
+		71788F391C8D8EE600D3A006 /* EaseCustomMessageCell.h in Views/conversation/MessageCell */ = {isa = PBXBuildFile; fileRef = D20AA3EA1BEA23DD00594EFB /* EaseCustomMessageCell.h */; };
 		D20AA3E91BEA1E7400594EFB /* EaseBubbleView+Gif.m in Sources */ = {isa = PBXBuildFile; fileRef = D20AA3E81BEA1E7400594EFB /* EaseBubbleView+Gif.m */; };
 		D20AA3EC1BEA23DD00594EFB /* EaseCustomMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D20AA3EB1BEA23DD00594EFB /* EaseCustomMessageCell.m */; };
 		D250D3A21BD8D14400C8D553 /* EaseUI.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D3A11BD8D14400C8D553 /* EaseUI.m */; };
@@ -471,6 +472,7 @@
 			dstPath = "$(PROJECT_DIR)/export/include/Views/conversation/MessageCell";
 			dstSubfolderSpec = 0;
 			files = (
+				71788F391C8D8EE600D3A006 /* EaseCustomMessageCell.h in Views/conversation/MessageCell */,
 				D2AA62DD1BD909930059D684 /* EaseBaseMessageCell.h in Views/conversation/MessageCell */,
 				D2AA62DE1BD909930059D684 /* EaseMessageCell.h in Views/conversation/MessageCell */,
 				D2AA62DF1BD909930059D684 /* EaseMessageTimeCell.h in Views/conversation/MessageCell */,

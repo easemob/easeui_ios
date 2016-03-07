@@ -13,6 +13,7 @@
 #import "EaseConversationCell.h"
 #import "EaseConvertToCommonEmoticonsHelper.h"
 #import "NSDate+Category.h"
+#import "EaseMessageHelper.h"
 
 @interface EaseConversationListViewController ()
 {
@@ -39,6 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self configEaseMessageHelpe];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -77,11 +79,15 @@
     id<IConversationModel> model = [self.dataArray objectAtIndex:indexPath.row];
     cell.model = model;
     
-    if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTitleForConversationModel:)]) {
-        cell.detailLabel.attributedText =  [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:[_dataSource conversationListViewController:self latestMessageTitleForConversationModel:model] textFont:cell.detailLabel.font];
-    } else {
-        cell.detailLabel.attributedText =  [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:[self _latestMessageTitleForConversationModel:model]textFont:cell.detailLabel.font];
+    NSAttributedString *attributeString = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:[self _latestMessageTitleForConversationModel:model]textFont:cell.detailLabel.font];
+    
+    if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageAttributedTitleForConversationModel:)]) {
+        attributeString = [_dataSource conversationListViewController:self latestMessageAttributedTitleForConversationModel:model];
     }
+    else if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTitleForConversationModel:)]) {
+        attributeString =  [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:[_dataSource conversationListViewController:self latestMessageTitleForConversationModel:model] textFont:cell.detailLabel.font];
+    }
+    cell.detailLabel.attributedText = attributeString;
     
     if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTimeForConversationModel:)]) {
         cell.timeLabel.text = [_dataSource conversationListViewController:self latestMessageTimeForConversationModel:model];
@@ -216,6 +222,7 @@
 
 - (void)dealloc{
     [self unregisterNotifications];
+    [self removeEaseMessageHelper];
 }
 
 #pragma mark - private
@@ -267,6 +274,19 @@
         latestMessageTime = [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:timeInterval]];
     }
     return latestMessageTime;
+}
+
+#pragma mark - Helper
+
+// 注册 EaseMessageHelperProtocal
+- (void)configEaseMessageHelpe
+{
+    [[EaseMessageHelper sharedInstance] addDelegate:self];
+}
+//取消 EaseMessageHelperProtocal
+- (void)removeEaseMessageHelper
+{
+    [[EaseMessageHelper sharedInstance] removeDelegate:self];
 }
 
 @end
