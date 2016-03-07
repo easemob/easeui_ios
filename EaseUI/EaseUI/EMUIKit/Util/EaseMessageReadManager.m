@@ -14,6 +14,8 @@
 #import "UIImageView+EMWebCache.h"
 #import "EMCDDeviceManager.h"
 
+#import <MediaPlayer/MediaPlayer.h>
+
 #define IMAGE_MAX_SIZE_5k 5120*2880
 
 static EaseMessageReadManager *detailInstance = nil;
@@ -30,6 +32,10 @@ static EaseMessageReadManager *detailInstance = nil;
 @end
 
 @implementation EaseMessageReadManager
+{
+    id<IMessageModel> photoMessageModel; //专用于接收图片消息
+    id<IMessageModel> movieMessageModel; //专用于接收视频
+}
 
 + (id)defaultManager
 {
@@ -110,13 +116,23 @@ static EaseMessageReadManager *detailInstance = nil;
     return nil;
 }
 
+- (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser {
+    
+    //阅后即焚,需要判断是否为阅后即焚的信息
+    if (_delegate && [_delegate respondsToSelector:@selector(readMessageFinished:)])
+    {
+        [_delegate readMessageFinished:photoMessageModel];
+    }
+    photoMessageModel = nil;
+    [photoBrowser dismissViewControllerAnimated:YES completion:nil];
+}
 
 #pragma mark - private
 
 
 #pragma mark - public
 
-- (void)showBrowserWithImages:(NSArray *)imageArray
+- (void)showBrowserWithImages:(NSArray *)imageArray messageModel:(id<IMessageModel>)model
 {
     if (imageArray && [imageArray count] > 0) {
         NSMutableArray *photoArray = [NSMutableArray array];
@@ -143,6 +159,7 @@ static EaseMessageReadManager *detailInstance = nil;
         
         self.photos = photoArray;
     }
+    photoMessageModel = model;
     
     UIViewController *rootController = [self.keyWindow rootViewController];
     [rootController presentViewController:self.photoNavigationController animated:YES completion:nil];
@@ -220,5 +237,34 @@ static EaseMessageReadManager *detailInstance = nil;
     UIGraphicsEndImageContext();
     return scaledImage;
 }
+
+#pragma mark - 视屏
+
+//播放视频
+- (void)showMoviePlayerWithVideoURL:(NSURL *)videoURL messageModel:(id<IMessageModel>)messageModel {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+    
+    movieMessageModel = messageModel;
+    MPMoviePlayerViewController *moviePlayerController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
+    [moviePlayerController.moviePlayer prepareToPlay];
+    moviePlayerController.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
+    
+    UIViewController *rootController = [self.keyWindow rootViewController];
+    [rootController presentMoviePlayerViewControllerAnimated:moviePlayerController];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+}
+
+- (void)moviePlayFinish:(NSNotification *)notification {
+    if (!movieMessageModel) {
+        return;
+    }
+    if (_delegate && [_delegate respondsToSelector:@selector(readMessageFinished:)])
+    {
+        [_delegate readMessageFinished:movieMessageModel];
+    }
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+}
+
 
 @end
