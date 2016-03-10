@@ -10,6 +10,7 @@
 
 #import "EaseConversationModel.h"
 #import "EaseConversationCell.h"
+#import "EaseMessageHelperProtocal.h"
 
 typedef NS_ENUM(int, DXDeleteConvesationType) {
     DXDeleteConvesationOnly,
@@ -52,7 +53,7 @@ typedef NS_ENUM(int, DXDeleteConvesationType) {
 @end
 
 
-@interface EaseConversationListViewController : EaseRefreshTableViewController
+@interface EaseConversationListViewController : EaseRefreshTableViewController<EaseMessageHelperProtocal>
 
 @property (weak, nonatomic) id<EaseConversationListViewControllerDelegate> delegate;
 @property (weak, nonatomic) id<EaseConversationListViewControllerDataSource> dataSource;

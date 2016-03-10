@@ -21,8 +21,12 @@
 #import "EMCDDeviceManager+ProximitySensor.h"
 #import "UIViewController+HUD.h"
 #import "EaseSDKHelper.h"
+#import "EaseMessageReadManager.h"
+#import "EaseMessageHelperProtocal.h"
+#import "EaseMessageHelper.h"
 
 @class EaseMessageViewController;
+@class EaseMessageHelper;
 
 @protocol EaseMessageViewControllerDelegate <NSObject>
 
@@ -155,7 +159,7 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 
 @end
 
-@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, IChatManagerDelegate, IEMChatProgressDelegate, EMCallManagerCallDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate>
+@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, IChatManagerDelegate, IEMChatProgressDelegate, EMCallManagerCallDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate, EMReadManagerProtocol, EaseMessageHelperProtocal>
 
 @property (weak, nonatomic) id<EaseMessageViewControllerDelegate> delegate;
 
@@ -183,7 +187,7 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 //显示的EMMessage类型的消息列表
 @property (strong, nonatomic) NSMutableArray *messsagesSource;
 
-@property (strong, nonatomic) UIView *chatToolbar;
+@property (strong, nonatomic) EaseChatToolbar *chatToolbar;
 
 @property(strong, nonatomic) EaseChatBarMoreView *chatBarMoreView;
 
@@ -238,5 +242,15 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
  */
 -(void)addMessageToDataSource:(EMMessage *)message
                      progress:(id<IEMChatProgressDelegate>)progress;
+
+/**
+ *  EaseMessageHelperType更改
+ */
+- (void)changeEaseMessageHelpType:(EMHelperType)helpType;
+
+/**
+ *  重置EaseMessageHelperType为emHelperTypeDefault
+ */
+- (void)resetEaseMessageHelpType;
 
 @end

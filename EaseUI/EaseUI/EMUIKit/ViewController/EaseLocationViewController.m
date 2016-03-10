@@ -70,7 +70,8 @@ static EaseLocationViewController *defaultLocation = nil;
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     [backButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/back"] forState:UIControlStateNormal];
-    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
+//    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
+    [backButton addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     [self.navigationItem setLeftBarButtonItem:backItem];
     
@@ -112,6 +113,16 @@ static EaseLocationViewController *defaultLocation = nil;
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+}
+
+#pragma mark - backAction 
+
+- (void)backAction {
+    if (_delegate && [_delegate respondsToSelector:@selector(locationMessageReadAck:)])
+    {
+        [_delegate locationMessageReadAck:self.localMessageModel];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - MKMapViewDelegate

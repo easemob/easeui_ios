@@ -14,6 +14,7 @@
 #import "EaseConversationCell.h"
 #import "EaseConvertToCommonEmoticonsHelper.h"
 #import "NSDate+Category.h"
+#import "EaseMessageHelper.h"
 
 @interface EaseConversationListViewController () <IChatManagerDelegate>
 
@@ -38,6 +39,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self configEaseMessageHelper];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -77,7 +79,7 @@
     } else {
         cell.detailLabel.text = [self _latestMessageTitleForConversationModel:model];
     }
-    
+
     if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:latestMessageTimeForConversationModel:)]) {
         cell.timeLabel.text = [_dataSource conversationListViewController:self latestMessageTimeForConversationModel:model];
     } else {
@@ -179,6 +181,7 @@
 
 - (void)dealloc{
     [self unregisterNotifications];
+    [self removeEaseMessageHelper];
 }
 
 #pragma mark - private
@@ -231,5 +234,19 @@
     }
     return latestMessageTime;
 }
+
+#pragma mark - Helper
+
+// 注册 EaseMessageHelperProtocal
+- (void)configEaseMessageHelper
+{
+    [[EaseMessageHelper sharedInstance] addDelegate:self];
+}
+//取消 EaseMessageHelperProtocal
+- (void)removeEaseMessageHelper
+{
+    [[EaseMessageHelper sharedInstance] removeDelegate:self];
+}
+
 
 @end
