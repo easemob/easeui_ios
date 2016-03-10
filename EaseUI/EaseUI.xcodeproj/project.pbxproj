@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		718ADC301C91835E00FA37B2 /* EaseMessageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 718ADC2A1C91835E00FA37B2 /* EaseMessageHelper.m */; };
+		718ADC311C91835E00FA37B2 /* EaseMessageHelper+RemoveAfterRead.m in Sources */ = {isa = PBXBuildFile; fileRef = 718ADC2C1C91835E00FA37B2 /* EaseMessageHelper+RemoveAfterRead.m */; };
+		718ADC321C91835E00FA37B2 /* EaseMessageHelper+Revoke.m in Sources */ = {isa = PBXBuildFile; fileRef = 718ADC2E1C91835E00FA37B2 /* EaseMessageHelper+Revoke.m */; };
+		718ADC331C91836D00FA37B2 /* EaseMessageHelper.h in Helper */ = {isa = PBXBuildFile; fileRef = 718ADC291C91835E00FA37B2 /* EaseMessageHelper.h */; };
+		718ADC341C91836D00FA37B2 /* EaseMessageHelper+RemoveAfterRead.h in Helper */ = {isa = PBXBuildFile; fileRef = 718ADC2B1C91835E00FA37B2 /* EaseMessageHelper+RemoveAfterRead.h */; };
+		718ADC351C91836D00FA37B2 /* EaseMessageHelper+Revoke.h in Helper */ = {isa = PBXBuildFile; fileRef = 718ADC2D1C91835E00FA37B2 /* EaseMessageHelper+Revoke.h */; };
+		718ADC361C91836D00FA37B2 /* EaseMessageHelperProtocal.h in Helper */ = {isa = PBXBuildFile; fileRef = 718ADC2F1C91835E00FA37B2 /* EaseMessageHelperProtocal.h */; };
+		718ADC391C91838400FA37B2 /* EaseMessageMulticastBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 718ADC381C91838400FA37B2 /* EaseMessageMulticastBase.m */; };
 		D250D3A21BD8D14400C8D553 /* EaseUI.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D3A11BD8D14400C8D553 /* EaseUI.m */; };
 		D250D3A81BD8D14400C8D553 /* libEaseUI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D250D39C1BD8D14400C8D553 /* libEaseUI.a */; };
 		D250D4C01BD8D1CB00C8D553 /* EMAudioPlayerUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D3C11BD8D1CB00C8D553 /* EMAudioPlayerUtil.m */; };
@@ -343,6 +351,10 @@
 			dstPath = "$(PROJECT_DIR)/export/include";
 			dstSubfolderSpec = 0;
 			files = (
+				718ADC331C91836D00FA37B2 /* EaseMessageHelper.h in Helper */,
+				718ADC341C91836D00FA37B2 /* EaseMessageHelper+RemoveAfterRead.h in Helper */,
+				718ADC351C91836D00FA37B2 /* EaseMessageHelper+Revoke.h in Helper */,
+				718ADC361C91836D00FA37B2 /* EaseMessageHelperProtocal.h in Helper */,
 				D2AA62C01BD907AC0059D684 /* EaseSDKHelper.h in Helper */,
 			);
 			name = Helper;
@@ -593,6 +605,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		718ADC291C91835E00FA37B2 /* EaseMessageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseMessageHelper.h; sourceTree = "<group>"; };
+		718ADC2A1C91835E00FA37B2 /* EaseMessageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseMessageHelper.m; sourceTree = "<group>"; };
+		718ADC2B1C91835E00FA37B2 /* EaseMessageHelper+RemoveAfterRead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EaseMessageHelper+RemoveAfterRead.h"; sourceTree = "<group>"; };
+		718ADC2C1C91835E00FA37B2 /* EaseMessageHelper+RemoveAfterRead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EaseMessageHelper+RemoveAfterRead.m"; sourceTree = "<group>"; };
+		718ADC2D1C91835E00FA37B2 /* EaseMessageHelper+Revoke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EaseMessageHelper+Revoke.h"; sourceTree = "<group>"; };
+		718ADC2E1C91835E00FA37B2 /* EaseMessageHelper+Revoke.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EaseMessageHelper+Revoke.m"; sourceTree = "<group>"; };
+		718ADC2F1C91835E00FA37B2 /* EaseMessageHelperProtocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseMessageHelperProtocal.h; sourceTree = "<group>"; };
+		718ADC371C91838400FA37B2 /* EaseMessageMulticastBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseMessageMulticastBase.h; sourceTree = "<group>"; };
+		718ADC381C91838400FA37B2 /* EaseMessageMulticastBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseMessageMulticastBase.m; sourceTree = "<group>"; };
 		D250D39C1BD8D14400C8D553 /* libEaseUI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libEaseUI.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D250D39F1BD8D14400C8D553 /* EaseUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EaseUI.h; sourceTree = "<group>"; };
 		D250D3A11BD8D14400C8D553 /* EaseUI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EaseUI.m; sourceTree = "<group>"; };
@@ -1337,6 +1358,13 @@
 			children = (
 				D250D4561BD8D1CB00C8D553 /* EaseSDKHelper.h */,
 				D250D4571BD8D1CB00C8D553 /* EaseSDKHelper.m */,
+				718ADC291C91835E00FA37B2 /* EaseMessageHelper.h */,
+				718ADC2A1C91835E00FA37B2 /* EaseMessageHelper.m */,
+				718ADC2B1C91835E00FA37B2 /* EaseMessageHelper+RemoveAfterRead.h */,
+				718ADC2C1C91835E00FA37B2 /* EaseMessageHelper+RemoveAfterRead.m */,
+				718ADC2D1C91835E00FA37B2 /* EaseMessageHelper+Revoke.h */,
+				718ADC2E1C91835E00FA37B2 /* EaseMessageHelper+Revoke.m */,
+				718ADC2F1C91835E00FA37B2 /* EaseMessageHelperProtocal.h */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -1369,6 +1397,8 @@
 				D250D4751BD8D1CB00C8D553 /* EaseConvertToCommonEmoticonsHelper.m */,
 				D250D4761BD8D1CB00C8D553 /* EaseMessageReadManager.h */,
 				D250D4771BD8D1CB00C8D553 /* EaseMessageReadManager.m */,
+				718ADC371C91838400FA37B2 /* EaseMessageMulticastBase.h */,
+				718ADC381C91838400FA37B2 /* EaseMessageMulticastBase.m */,
 				D250D4781BD8D1CB00C8D553 /* Emoji */,
 			);
 			path = Util;
@@ -2121,6 +2151,7 @@
 				D250D4C41BD8D1CB00C8D553 /* EMCDDeviceManager+ProximitySensor.m in Sources */,
 				D250D4E41BD8D1CB00C8D553 /* EMSDWebImageDecoder.m in Sources */,
 				D250D4C91BD8D1CB00C8D553 /* EMVoiceConverter.mm in Sources */,
+				718ADC301C91835E00FA37B2 /* EaseMessageHelper.m in Sources */,
 				D250D51A1BD8D1CB00C8D553 /* EaseBubbleView+File.m in Sources */,
 				D250D4F71BD8D1CB00C8D553 /* PSTCollectionViewFlowLayout.m in Sources */,
 				D250D4C61BD8D1CB00C8D553 /* EMCDDeviceManagerBase.m in Sources */,
@@ -2128,6 +2159,8 @@
 				D250D5281BD8D1CB00C8D553 /* EaseRecordView.m in Sources */,
 				D250D5231BD8D1CB00C8D553 /* EaseImageView.m in Sources */,
 				D250D4D41BD8D1CB00C8D553 /* MJRefreshLegendFooter.m in Sources */,
+				718ADC391C91838400FA37B2 /* EaseMessageMulticastBase.m in Sources */,
+				718ADC311C91835E00FA37B2 /* EaseMessageHelper+RemoveAfterRead.m in Sources */,
 				D250D5021BD8D1CB00C8D553 /* EaseUserModel.m in Sources */,
 				D250D4FD1BD8D1CB00C8D553 /* PSTGridLayoutRow.m in Sources */,
 				D250D4F21BD8D1CB00C8D553 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
@@ -2143,6 +2176,7 @@
 				D250D4FF1BD8D1CB00C8D553 /* EaseSDKHelper.m in Sources */,
 				D250D4EA1BD8D1CB00C8D553 /* NSData+EMImageContentType.m in Sources */,
 				D250D5031BD8D1CB00C8D553 /* NSDate+Category.m in Sources */,
+				718ADC321C91835E00FA37B2 /* EaseMessageHelper+Revoke.m in Sources */,
 				D250D4F41BD8D1CB00C8D553 /* PSTCollectionViewCell.m in Sources */,
 				D250D5211BD8D1CB00C8D553 /* EaseChatToolbar.m in Sources */,
 				D250D3A21BD8D14400C8D553 /* EaseUI.m in Sources */,
