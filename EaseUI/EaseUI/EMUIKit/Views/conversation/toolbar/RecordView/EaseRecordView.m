@@ -129,8 +129,10 @@
     double voiceSound = 0;
     voiceSound = [[EMCDDeviceManager sharedInstance] emPeekRecorderVoiceMeter];
     int index = voiceSound*[_voiceMessageAnimationImages count];
-    if (index > [_voiceMessageAnimationImages count]) {
+    if (index >= [_voiceMessageAnimationImages count]) {
         _recordAnimationView.image = [UIImage imageNamed:[_voiceMessageAnimationImages lastObject]];
+    } else if (index <= 0){
+        _recordAnimationView.image = [UIImage imageNamed:[_voiceMessageAnimationImages objectAtIndex:0]];
     } else {
         _recordAnimationView.image = [UIImage imageNamed:[_voiceMessageAnimationImages objectAtIndex:index]];
     }
