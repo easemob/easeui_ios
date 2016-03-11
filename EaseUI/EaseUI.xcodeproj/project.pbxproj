@@ -15,6 +15,7 @@
 		718ADC351C91836D00FA37B2 /* EaseMessageHelper+Revoke.h in Helper */ = {isa = PBXBuildFile; fileRef = 718ADC2D1C91835E00FA37B2 /* EaseMessageHelper+Revoke.h */; };
 		718ADC361C91836D00FA37B2 /* EaseMessageHelperProtocal.h in Helper */ = {isa = PBXBuildFile; fileRef = 718ADC2F1C91835E00FA37B2 /* EaseMessageHelperProtocal.h */; };
 		718ADC391C91838400FA37B2 /* EaseMessageMulticastBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 718ADC381C91838400FA37B2 /* EaseMessageMulticastBase.m */; };
+		D22579AC1C927CEA0084AE11 /* EaseMessageMulticastBase.h in Util */ = {isa = PBXBuildFile; fileRef = 718ADC371C91838400FA37B2 /* EaseMessageMulticastBase.h */; };
 		D250D3A21BD8D14400C8D553 /* EaseUI.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D3A11BD8D14400C8D553 /* EaseUI.m */; };
 		D250D3A81BD8D14400C8D553 /* libEaseUI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D250D39C1BD8D14400C8D553 /* libEaseUI.a */; };
 		D250D4C01BD8D1CB00C8D553 /* EMAudioPlayerUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D3C11BD8D1CB00C8D553 /* EMAudioPlayerUtil.m */; };
@@ -384,6 +385,7 @@
 			dstPath = "$(PROJECT_DIR)/export/include/Util";
 			dstSubfolderSpec = 0;
 			files = (
+				D22579AC1C927CEA0084AE11 /* EaseMessageMulticastBase.h in Util */,
 				D2AA65141BD915B50059D684 /* EaseEmoji.h in Util */,
 				D2AA65151BD915B50059D684 /* EaseEmojiEmoticons.h in Util */,
 				D2AA65161BD915B50059D684 /* EaseEmotionEscape.h in Util */,
