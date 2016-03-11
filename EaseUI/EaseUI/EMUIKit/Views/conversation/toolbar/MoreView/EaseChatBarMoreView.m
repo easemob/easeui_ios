@@ -43,7 +43,10 @@
 @property (nonatomic, strong) UIButton *locationButton;
 @property (nonatomic, strong) UIButton *videoButton;
 @property (nonatomic, strong) UIButton *audioCallButton;
-@property (nonatomic, strong) UIButton *videoCallButton;
+@property (nonatomic, strong) UIButton *videoCallButton;;
+
+//阅后即焚
+@property (nonatomic, strong) UIButton *removeAfterReadButton;
 
 @end
 
@@ -129,6 +132,22 @@
         _videoCallButton.tag =MOREVIEW_BUTTON_TAG + 4;
         _maxIndex = 4;
         [_scrollview addSubview:_videoCallButton];
+        
+        //阅后即焚
+        _removeAfterReadButton =[UIButton buttonWithType:UIButtonTypeCustom];
+        [_removeAfterReadButton setFrame:CGRectMake(insets * 2 + CHAT_BUTTON_SIZE, 10 * 2 + CHAT_BUTTON_SIZE + 10, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
+        [_removeAfterReadButton setBackgroundColor:[UIColor orangeColor]];
+        _removeAfterReadButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        [_removeAfterReadButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        [_removeAfterReadButton setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
+        [_removeAfterReadButton setTitle:@"阅后即焚" forState:UIControlStateNormal];
+        [_removeAfterReadButton setTitle:@"阅后即焚" forState:UIControlStateHighlighted];
+        _removeAfterReadButton.layer.cornerRadius = 10;
+        [_removeAfterReadButton addTarget:self action:@selector(removeAfterReadAction) forControlEvents:UIControlEventTouchUpInside];
+        _removeAfterReadButton.tag =MOREVIEW_BUTTON_TAG + 5;
+        _maxIndex = 5;
+        [_scrollview addSubview:_removeAfterReadButton];
+        
     }
     else if (type == EMChatToolbarTypeGroup)
     {
@@ -321,6 +340,24 @@
 {
     if (_delegate && [_delegate respondsToSelector:@selector(moreViewVideoCallAction:)]) {
         [_delegate moreViewVideoCallAction:self];
+    }
+}
+
+
+//阅后即焚
+- (void)removeAfterReadAction {
+    BOOL isSelected = _removeAfterReadButton.selected;
+    if (isSelected)
+    {
+        [_removeAfterReadButton setTitle:@"阅读即焚" forState:UIControlStateNormal];
+    }
+    else {
+        [_removeAfterReadButton setTitle:@"取消功能" forState:UIControlStateNormal];
+    }
+    _removeAfterReadButton.selected = !isSelected;
+    if (_delegate && [_delegate respondsToSelector:@selector(moreView:removeAfterRead:)])
+    {
+        [_delegate moreView:self removeAfterRead:!isSelected];
     }
 }
 

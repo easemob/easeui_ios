@@ -92,4 +92,15 @@ typedef enum{
  */
 - (void)moreView:(EaseChatBarMoreView *)moreView didItemInMoreViewAtIndex:(NSInteger)index;
 
+
+/*!
+ @method
+ @brief 阅后即焚
+ @discussion
+ @param moreView    功能view
+ @param isRemove    是否开启此功能
+ @result
+ */
+- (void)moreView:(EaseChatBarMoreView *)moreView removeAfterRead:(BOOL)isRemove;
+
 @end

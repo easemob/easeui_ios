@@ -36,6 +36,10 @@
 #import "UIViewController+HUD.h"
 #import "UIViewController+DismissKeyboard.h"
 
+#import "EaseMessageHelper.h"
+#import "EaseMessageHelper+Revoke.h"
+#import "EaseMessageHelper+RemoveAfterRead.h"
+
 @interface EaseUI : NSObject
 
 @end
