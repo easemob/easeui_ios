@@ -215,6 +215,11 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 - (void)sendTextMessage:(NSString *)text;
 
 /**
+ *  发送带扩展属性的文本消息
+ */
+- (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext;
+
+/**
  *  发送图片消息
  */
 - (void)sendImageMessage:(UIImage *)image;
@@ -252,5 +257,12 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
  *  重置EaseMessageHelperType为emHelperTypeDefault
  */
 - (void)resetEaseMessageHelpType;
+
+/**
+ *  显示长按菜单
+ */
+- (void)showMenuViewController:(UIView *)showInView
+                   andIndexPath:(NSIndexPath *)indexPath
+                    messageType:(MessageBodyType)messageType;
 
 @end

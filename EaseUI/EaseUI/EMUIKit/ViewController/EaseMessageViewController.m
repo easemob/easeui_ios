@@ -305,7 +305,7 @@
     return bCanRecord;
 }
 
-- (void)_showMenuViewController:(UIView *)showInView
+- (void)showMenuViewController:(UIView *)showInView
                    andIndexPath:(NSIndexPath *)indexPath
                     messageType:(MessageBodyType)messageType
 {
@@ -851,7 +851,7 @@
                 EaseMessageCell *cell = (EaseMessageCell *)[self.tableView cellForRowAtIndexPath:indexPath];
                 [cell becomeFirstResponder];
                 _menuIndexPath = indexPath;
-                [self _showMenuViewController:cell.bubbleView andIndexPath:indexPath messageType:cell.model.bodyType];
+                [self showMenuViewController:cell.bubbleView andIndexPath:indexPath messageType:cell.model.bodyType];
             }
         }
     }
