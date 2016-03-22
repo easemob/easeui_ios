@@ -16,7 +16,7 @@
 
 #define KHintAdjustY    50
 
-@interface EaseMessageViewController ()<EaseMessageCellDelegate>
+@interface EaseMessageViewController ()
 {
     UIMenuItem *_copyMenuItem;
     UIMenuItem *_deleteMenuItem;
@@ -252,7 +252,7 @@
         NSMutableArray *unreadMessages = [NSMutableArray array];
         for (EMMessage *message in self.messsagesSource)
         {
-            if ([self _shouldSendHasReadAckForMessage:message read:NO])
+            if ([self shouldSendHasReadAckForMessage:message read:NO])
             {
                 [unreadMessages addObject:message];
             }
@@ -460,8 +460,8 @@
     }
 }
 
-- (BOOL)_shouldSendHasReadAckForMessage:(EMMessage *)message
-                                   read:(BOOL)read
+- (BOOL)shouldSendHasReadAckForMessage:(EMMessage *)message
+                                  read:(BOOL)read
 {
     NSString *account = [[EaseMob sharedInstance].chatManager loginInfo][kSDKUsername];
     if (message.messageType != eMessageTypeChat || message.isReadAcked || [account isEqualToString:message.from] || ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) || !self.isViewDidAppear)
@@ -502,7 +502,7 @@
                          shouldSendHasReadAckForMessage:message read:NO];
         }
         else{
-            isSend = [self _shouldSendHasReadAckForMessage:message
+            isSend = [self shouldSendHasReadAckForMessage:message
                                                       read:isRead];
         }
         
@@ -1809,7 +1809,7 @@
         NSMutableArray *unreadMessages = [NSMutableArray array];
         for (EMMessage *message in self.messsagesSource)
         {
-            if ([self _shouldSendHasReadAckForMessage:message read:NO])
+            if ([self shouldSendHasReadAckForMessage:message read:NO])
             {
                 [unreadMessages addObject:message];
             }

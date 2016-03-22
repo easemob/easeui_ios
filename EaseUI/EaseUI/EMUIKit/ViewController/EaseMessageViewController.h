@@ -159,7 +159,7 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 
 @end
 
-@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, IChatManagerDelegate, IEMChatProgressDelegate, EMCallManagerCallDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate, EMReadManagerProtocol, EaseMessageHelperProtocal>
+@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, IChatManagerDelegate, IEMChatProgressDelegate, EMCallManagerCallDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate, EMReadManagerProtocol, EaseMessageHelperProtocal, EaseMessageCellDelegate>
 
 @property (weak, nonatomic) id<EaseMessageViewControllerDelegate> delegate;
 
@@ -264,5 +264,8 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 - (void)showMenuViewController:(UIView *)showInView
                    andIndexPath:(NSIndexPath *)indexPath
                     messageType:(MessageBodyType)messageType;
+
+- (BOOL)shouldSendHasReadAckForMessage:(EMMessage *)message
+                                  read:(BOOL)read;
 
 @end
