@@ -499,7 +499,7 @@
         BOOL isSend = YES;
         if (_dataSource && [_dataSource respondsToSelector:@selector(messageViewController:shouldSendHasReadAckForMessage:read:)]) {
             isSend = [_dataSource messageViewController:self
-                         shouldSendHasReadAckForMessage:message read:NO];
+                         shouldSendHasReadAckForMessage:message read:isRead];
         }
         else{
             isSend = [self shouldSendHasReadAckForMessage:message
