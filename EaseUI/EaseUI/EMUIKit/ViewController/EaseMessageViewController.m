@@ -16,7 +16,7 @@
 
 #define KHintAdjustY    50
 
-@interface EaseMessageViewController ()<EaseMessageCellDelegate>
+@interface EaseMessageViewController ()
 {
     UIMenuItem *_copyMenuItem;
     UIMenuItem *_deleteMenuItem;
@@ -252,7 +252,7 @@
         NSMutableArray *unreadMessages = [NSMutableArray array];
         for (EMMessage *message in self.messsagesSource)
         {
-            if ([self _shouldSendHasReadAckForMessage:message read:NO])
+            if ([self shouldSendHasReadAckForMessage:message read:NO])
             {
                 [unreadMessages addObject:message];
             }
@@ -305,7 +305,7 @@
     return bCanRecord;
 }
 
-- (void)_showMenuViewController:(UIView *)showInView
+- (void)showMenuViewController:(UIView *)showInView
                    andIndexPath:(NSIndexPath *)indexPath
                     messageType:(MessageBodyType)messageType
 {
@@ -460,8 +460,8 @@
     }
 }
 
-- (BOOL)_shouldSendHasReadAckForMessage:(EMMessage *)message
-                                   read:(BOOL)read
+- (BOOL)shouldSendHasReadAckForMessage:(EMMessage *)message
+                                  read:(BOOL)read
 {
     NSString *account = [[EaseMob sharedInstance].chatManager loginInfo][kSDKUsername];
     if (message.messageType != eMessageTypeChat || message.isReadAcked || [account isEqualToString:message.from] || ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) || !self.isViewDidAppear)
@@ -499,10 +499,10 @@
         BOOL isSend = YES;
         if (_dataSource && [_dataSource respondsToSelector:@selector(messageViewController:shouldSendHasReadAckForMessage:read:)]) {
             isSend = [_dataSource messageViewController:self
-                         shouldSendHasReadAckForMessage:message read:NO];
+                         shouldSendHasReadAckForMessage:message read:isRead];
         }
         else{
-            isSend = [self _shouldSendHasReadAckForMessage:message
+            isSend = [self shouldSendHasReadAckForMessage:message
                                                       read:isRead];
         }
         
@@ -851,7 +851,7 @@
                 EaseMessageCell *cell = (EaseMessageCell *)[self.tableView cellForRowAtIndexPath:indexPath];
                 [cell becomeFirstResponder];
                 _menuIndexPath = indexPath;
-                [self _showMenuViewController:cell.bubbleView andIndexPath:indexPath messageType:cell.model.bodyType];
+                [self showMenuViewController:cell.bubbleView andIndexPath:indexPath messageType:cell.model.bodyType];
             }
         }
     }
@@ -1809,7 +1809,7 @@
         NSMutableArray *unreadMessages = [NSMutableArray array];
         for (EMMessage *message in self.messsagesSource)
         {
-            if ([self _shouldSendHasReadAckForMessage:message read:NO])
+            if ([self shouldSendHasReadAckForMessage:message read:NO])
             {
                 [unreadMessages addObject:message];
             }
