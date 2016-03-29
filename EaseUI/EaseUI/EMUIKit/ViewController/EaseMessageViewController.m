@@ -391,9 +391,8 @@
     if ([compatiblePresets containsObject:AVAssetExportPresetHighestQuality]) {
         AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]initWithAsset:avAsset
                                                                               presetName:AVAssetExportPresetHighestQuality];
-        mp4Url = [movUrl copy];
-        mp4Url = [mp4Url URLByDeletingPathExtension];
-        mp4Url = [mp4Url URLByAppendingPathExtension:@"mp4"];
+        NSString *mp4Path = [NSString stringWithFormat:@"%@/%d%d.mp4", [EMCDDeviceManager dataPath], (int)[[NSDate date] timeIntervalSince1970], arc4random() % 100000];
+        mp4Url = [NSURL fileURLWithPath:mp4Path];
         exportSession.outputURL = mp4Url;
         exportSession.shouldOptimizeForNetworkUse = YES;
         exportSession.outputFileType = AVFileTypeMPEG4;
