@@ -42,4 +42,7 @@
 // 当前是否正在录音
 -(BOOL)isRecording;
 
+// 返回存储数据的路径
++ (NSString*)dataPath;
+
 @end

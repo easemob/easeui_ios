@@ -24,6 +24,20 @@ typedef NS_ENUM(NSInteger, EMAudioSession){
 
 @implementation EMCDDeviceManager (Media)
 #pragma mark - AudioPlayer
+
++ (NSString*)dataPath
+{
+    NSString *dataPath = [NSString stringWithFormat:@"%@/Library/appdata/chatbuffer", NSHomeDirectory()];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    if(![fm fileExistsAtPath:dataPath]){
+        [fm createDirectoryAtPath:dataPath
+      withIntermediateDirectories:YES
+                       attributes:nil
+                            error:nil];
+    }
+    return dataPath;
+}
+
 // 播放音频
 - (void)asyncPlayingWithPath:(NSString *)aFilePath
                   completion:(void(^)(NSError *error))completon{
@@ -125,17 +139,8 @@ typedef NS_ENUM(NSInteger, EMAudioSession){
                            isActive:YES];
     
     _recorderStartDate = [NSDate date];
-    
-    NSString *recordPath = NSHomeDirectory();
-    recordPath = [NSString stringWithFormat:@"%@/Library/appdata/chatbuffer/%@",recordPath,fileName];
-    NSFileManager *fm = [NSFileManager defaultManager];
-    if(![fm fileExistsAtPath:[recordPath stringByDeletingLastPathComponent]]){
-        [fm createDirectoryAtPath:[recordPath stringByDeletingLastPathComponent]
-      withIntermediateDirectories:YES
-                       attributes:nil
-                            error:nil];
-    }
-    
+
+    NSString *recordPath = [NSString stringWithFormat:@"%@/%@", [EMCDDeviceManager dataPath], fileName];
     [EMAudioRecorderUtil asyncStartRecordingWithPreparePath:recordPath
                                                  completion:completion];
 }
