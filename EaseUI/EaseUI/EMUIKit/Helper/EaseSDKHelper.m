@@ -157,7 +157,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                                        address:(NSString *)address
                                             to:(NSString *)to
                                    messageType:(EMChatType)messageType
-                             requireEncryption:(BOOL)requireEncryption
                                     messageExt:(NSDictionary *)messageExt
 {
     EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:latitude longitude:longitude address:address];
@@ -170,9 +169,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 + (EMMessage *)sendImageMessageWithImageData:(NSData *)imageData
                                           to:(NSString *)to
                                  messageType:(EMChatType)messageType
-                           requireEncryption:(BOOL)requireEncryption
                                   messageExt:(NSDictionary *)messageExt
-                                    progress:(id)progress
 {
     EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:imageData displayName:@"image.png"];
     NSString *from = [[EMClient sharedClient] currentUsername];
@@ -184,22 +181,18 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 + (EMMessage *)sendImageMessageWithImage:(UIImage *)image
                                       to:(NSString *)to
                              messageType:(EMChatType)messageType
-                       requireEncryption:(BOOL)requireEncryption
                               messageExt:(NSDictionary *)messageExt
-                                progress:(id)progress
 {
     NSData *data = UIImageJPEGRepresentation(image, 1);
     
-    return [self sendImageMessageWithImageData:data to:to messageType:messageType requireEncryption:requireEncryption messageExt:messageExt progress:progress];
+    return [self sendImageMessageWithImageData:data to:to messageType:messageType messageExt:messageExt];
 }
 
 + (EMMessage *)sendVoiceMessageWithLocalPath:(NSString *)localPath
                                     duration:(NSInteger)duration
                                           to:(NSString *)to
                                  messageType:(EMChatType)messageType
-                           requireEncryption:(BOOL)requireEncryption
                                   messageExt:(NSDictionary *)messageExt
-                                    progress:(id)progress
 {
     EMVoiceMessageBody *body = [[EMVoiceMessageBody alloc] initWithLocalPath:localPath displayName:@"audio"];
     body.duration = (int)duration;
@@ -212,9 +205,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 + (EMMessage *)sendVideoMessageWithURL:(NSURL *)url
                                     to:(NSString *)to
                            messageType:(EMChatType)messageType
-                     requireEncryption:(BOOL)requireEncryption
                             messageExt:(NSDictionary *)messageExt
-                              progress:(id)progress
 {
     EMVideoMessageBody *body = [[EMVideoMessageBody alloc] initWithLocalPath:[url path] displayName:@"video.mp4"];
     NSString *from = [[EMClient sharedClient] currentUsername];
