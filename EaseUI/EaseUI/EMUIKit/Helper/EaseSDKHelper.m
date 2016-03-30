@@ -148,6 +148,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:willSendText];
     NSString *from = [[EMClient sharedClient] currentUsername];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:toUser from:from to:toUser body:body ext:messageExt];
+    message.chatType = messageType;
     
     return message;
 }
@@ -162,6 +163,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:latitude longitude:longitude address:address];
     NSString *from = [[EMClient sharedClient] currentUsername];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
+    message.chatType = messageType;
     
     return message;
 }
@@ -174,6 +176,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:imageData displayName:@"image.png"];
     NSString *from = [[EMClient sharedClient] currentUsername];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
+    message.chatType = messageType;
     
     return message;
 }
@@ -198,6 +201,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     body.duration = (int)duration;
     NSString *from = [[EMClient sharedClient] currentUsername];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
+    message.chatType = messageType;
     
     return message;
 }
@@ -210,6 +214,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     EMVideoMessageBody *body = [[EMVideoMessageBody alloc] initWithLocalPath:[url path] displayName:@"video.mp4"];
     NSString *from = [[EMClient sharedClient] currentUsername];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
+    message.chatType = messageType;
     
     return message;
 }
