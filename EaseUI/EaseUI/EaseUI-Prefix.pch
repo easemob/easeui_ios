@@ -1,10 +1,14 @@
-//
-//  PrefixHeader.pch
-//  EaseUI
-//
-//  Created by EaseMob on 15/10/21.
-//  Copyright (c) 2015年 easemob. All rights reserved.
-//
+/************************************************************
+ *  * Hyphenate CONFIDENTIAL
+ * __________________
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Hyphenate Inc.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Hyphenate Inc.
+ */
 
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
@@ -13,8 +17,7 @@
     #import <UIKit/UIKit.h>
 
     #import "EMSDK.h"
+    #import "EaseUI.h"
 
 //    #import "EMClient+Call.h"
-
-#define NSEaseLocalizedString(key, comment) [[NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"EaseUIResource" withExtension:@"bundle"]] localizedStringForKey:(key) value:@"" table:nil]
 #endif
