@@ -13,6 +13,10 @@
 #define KNOTIFICATION_CALL @"callOutWithChatter"
 #define KNOTIFICATION_CALL_CLOSE @"callControllerClose"
 
+#define kMessageAtExt       @"em_apns_ext"
+#define kMessageAtTitle     @"em_push_title"
+#define kMessageAtTarget    @"em_push_at_target"
+
 #define kSDKConfigEnableConsoleLogger @"SDKConfigEnableConsoleLogger"
 #define kEaseUISDKConfigIsUseLite @"isUselibEaseMobClientSDKLite"
 
@@ -38,6 +42,12 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                             to:(NSString *)to
                    messageType:(EMChatType)messageType
                     messageExt:(NSDictionary *)messageExt;
+
++ (EMMessage *)sendCmdMessage:(NSString *)action
+                            to:(NSString *)to
+                   messageType:(EMChatType)messageType
+                    messageExt:(NSDictionary *)messageExt
+                     cmdParams:(NSArray *)params;
 
 + (EMMessage *)sendLocationMessageWithLatitude:(double)latitude
                                      longitude:(double)longitude

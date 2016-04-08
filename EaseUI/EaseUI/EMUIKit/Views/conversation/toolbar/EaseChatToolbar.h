@@ -137,6 +137,20 @@
 - (void)didSendText:(NSString *)text withExt:(NSDictionary*)ext;
 
 /**
+ *  用户输入@
+ *
+ *  @param location 用户输入@的位置
+ */
+- (BOOL)didInputAtInLocation:(NSUInteger)location;
+
+/**
+ *  用户删除字符
+ *
+ *  @param location 用户删除字符的位置
+ */
+- (BOOL)didDeleteCharacterFromLocation:(NSUInteger)location;
+
+/**
  *  发送第三方表情，不会添加到文字输入框中
  *
  *  @param faceLocalPath 选中的表情的本地路径
