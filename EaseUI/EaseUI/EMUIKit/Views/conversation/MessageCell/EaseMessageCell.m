@@ -20,6 +20,7 @@
 #import "EaseBubbleView+File.h"
 #import "UIImageView+EMWebCache.h"
 #import "EaseEmotionEscape.h"
+#import "EaseLocalDefine.h"
 
 CGFloat const EaseMessageCellPadding = 10;
 
@@ -317,11 +318,12 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             case EMMessageBodyTypeVoice:
             {
                 if (_bubbleView.voiceImageView) {
-//                    if ([self.sendMessageVoiceAnimationImages count] > 0 && [self.recvMessageVoiceAnimationImages count] > 0) {
-//                        self.bubbleView.voiceImageView.image = self.model.isSender ?[self.sendMessageVoiceAnimationImages objectAtIndex:0] : [self.recvMessageVoiceAnimationImages objectAtIndex:0];
-//                    }
-                    self.bubbleView.voiceImageView.image = self.model.isSender ? [UIImage imageNamed:@"chat_sender_audio_playing_full"] : [UIImage imageNamed:@"chat_receiver_audio_playing_full"];
-                    _bubbleView.voiceImageView.animationImages = self.model.isSender ? self.sendMessageVoiceAnimationImages:self.recvMessageVoiceAnimationImages;
+                    if ([self.sendMessageVoiceAnimationImages count] > 0 && [self.recvMessageVoiceAnimationImages count] > 0) {
+                        self.bubbleView.voiceImageView.image = self.model.isSender ?[self.sendMessageVoiceAnimationImages objectAtIndex:0] : [self.recvMessageVoiceAnimationImages objectAtIndex:0];
+                        _bubbleView.voiceImageView.animationImages = self.model.isSender ? self.sendMessageVoiceAnimationImages:self.recvMessageVoiceAnimationImages;
+                    } else {
+                        self.bubbleView.voiceImageView.image = self.model.isSender ?[UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_full"]: [UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing_full"];
+                    }
                 }
                 if (!self.model.isSender) {
                     if (self.model.isMediaPlayed){

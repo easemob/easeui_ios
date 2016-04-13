@@ -15,6 +15,7 @@
 #import "EaseLocationViewController.h"
 
 #import "UIViewController+HUD.h"
+#import "EaseLocalDefine.h"
 
 static EaseLocationViewController *defaultLocation = nil;
 

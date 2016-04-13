@@ -10,9 +10,9 @@
  * from Hyphenate Inc.
  */
 
-// Include any system framework and library headers here that should be included in all compilation units.
-// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#ifndef EaseLocalDefine_h
+#define EaseLocalDefine_h
 
-#ifdef __OBJC__
-    #import <UIKit/UIKit.h>
-#endif
+#define NSEaseLocalizedString(key, comment) [[NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"EaseUIResource" withExtension:@"bundle"]] localizedStringForKey:(key) value:@"" table:nil]
+
+#endif /* EaseLocalDefine_h */

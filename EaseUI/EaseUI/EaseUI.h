@@ -38,8 +38,7 @@
 #import "UIImageView+EMWebCache.h"
 #import "UIViewController+HUD.h"
 #import "UIViewController+DismissKeyboard.h"
-
-#define NSEaseLocalizedString(key, comment) [[NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"EaseUIResource" withExtension:@"bundle"]] localizedStringForKey:(key) value:@"" table:nil]
+#import "EaseLocalDefine.h"
 
 @interface EaseUI : NSObject
 
