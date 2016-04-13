@@ -754,7 +754,7 @@
 //            moreMessages = [weakSelf.dataSource messageViewController:weakSelf loadMessageFromTimestamp:timestamp count:count];
         }
         else{
-            moreMessages = [weakSelf.conversation loadMoreMessagesFromId:messageId limit:(int)count];
+            moreMessages = [weakSelf.conversation loadMoreMessagesFromId:messageId limit:(int)count direction:EMMessageSearchDirectionUp];
         }
         
         if ([moreMessages count] == 0) {
