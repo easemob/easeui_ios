@@ -50,7 +50,8 @@
                     self.thumbnailImage = [UIImage imageWithContentsOfFile:imgMessageBody.thumbnailLocalPath];
                 }
                 else{
-                    self.thumbnailImage = [self scaleImage:self.image toScale:0.1];
+                    CGSize size = self.image.size;
+                    self.thumbnailImage = size.width * size.height > 200 * 200 ? [self scaleImage:self.image toScale:sqrt((200 * 200) / (size.width * size.height))] : self.image;
                 }
                 
                 self.thumbnailImageSize = self.thumbnailImage.size;
