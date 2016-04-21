@@ -13,6 +13,7 @@
 #import "EaseUsersListViewController.h"
 
 #import "UIViewController+HUD.h"
+#import "EaseMessageViewController.h"
 
 @interface EaseUsersListViewController ()
 
@@ -34,6 +35,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -117,20 +120,23 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (_delegate && [_delegate respondsToSelector:@selector(userListViewController:didSelectUserModel:)]) {
-        id<IUserModel> model = nil;
-        if ([_dataSource respondsToSelector:@selector(userListViewController:userModelForIndexPath:)]) {
-            model = [_dataSource userListViewController:self userModelForIndexPath:indexPath];
-        }
-        else {
-            model = [self.dataArray objectAtIndex:indexPath.row];
-        }
-        
-        if (model) {
-            [_delegate userListViewController:self didSelectUserModel:model];
-        }
+    id<IUserModel> model = nil;
+    if (_dataSource && [_dataSource respondsToSelector:@selector(userListViewController:userModelForIndexPath:)]) {
+        model = [_dataSource userListViewController:self userModelForIndexPath:indexPath];
     }
-}
+    else {
+        model = [self.dataArray objectAtIndex:indexPath.row];
+    }
+    
+    if (model) {
+        if (_delegate && [_delegate respondsToSelector:@selector(userListViewController:didSelectUserModel:)]) {
+            [_delegate userListViewController:self didSelectUserModel:model];
+        } else {
+            EaseMessageViewController *viewController = [[EaseMessageViewController alloc] initWithConversationChatter:model.buddy conversationType:EMConversationTypeChat];
+            viewController.title = model.nickname;
+            [self.navigationController pushViewController:viewController animated:YES];
+        }
+    }}
 
 #pragma mark - data
 

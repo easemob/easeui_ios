@@ -15,6 +15,8 @@
 #import "EaseConversationModel.h"
 #import "EaseConversationCell.h"
 
+#import "EMSDK.h"
+
 typedef NS_ENUM(int, DXDeleteConvesationType) {
     DXDeleteConvesationOnly,
     DXDeleteConvesationWithMessages,
@@ -36,15 +38,6 @@ typedef NS_ENUM(int, DXDeleteConvesationType) {
             didSelectConversationModel:(id<IConversationModel>)conversationModel;
 
 @optional
-
-//- (void)conversationListViewController:(EaseConversationListViewController *)conversationListViewController
-//                 didDeleteConversation:(id<IConversationModel>)conversation
-//                          deletionMode:(DXDeleteConvesationType)deletionType;
-//
-//- (void)conversationListViewController:(EaseConversationListViewController *)conversationListViewController
-//           didFailDeletingConversation:(id<IConversationModel>)conversation
-//                          deletionMode:(DXDeleteConvesationType)deletionType;
-
 
 @end
 

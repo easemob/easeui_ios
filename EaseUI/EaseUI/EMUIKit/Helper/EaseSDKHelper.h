@@ -14,6 +14,8 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
+#import "EMSDK.h"
+
 #define KNOTIFICATION_LOGINCHANGE @"loginStateChange"
 #define KNOTIFICATION_CALL @"callOutWithChatter"
 #define KNOTIFICATION_CALL_CLOSE @"callControllerClose"

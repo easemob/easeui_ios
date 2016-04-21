@@ -13,8 +13,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-//#import "EMChatManagerDefs.h"
-//#import "IEMChatProgressDelegate.h"
+#import "EMSDK.h"
 
 @class EMMessage;
 @protocol IMessageModel <NSObject>
