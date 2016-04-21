@@ -180,7 +180,6 @@
     [super viewWillDisappear:animated];
     
     self.isViewDidAppear = NO;
-    [_conversation markAllMessagesAsRead];
     [[EMCDDeviceManager sharedInstance] disableProximitySensor];
 }
 
