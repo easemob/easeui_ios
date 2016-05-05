@@ -21,6 +21,7 @@
 #define kEMMessageImageSizeHeight 120
 #define kEMMessageLocationHeight 95
 #define kEMMessageVoiceHeight 23
+#define KEMMessageVcardHeight 100
 
 extern CGFloat const EaseMessageCellPadding;
 

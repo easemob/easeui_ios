@@ -25,6 +25,7 @@
 #import "EMCDDeviceManager+ProximitySensor.h"
 #import "UIViewController+HUD.h"
 #import "EaseSDKHelper.h"
+#import "EaseVcardHelper.h"
 
 @class EaseMessageViewController;
 
@@ -419,6 +420,16 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
  @result
  */
 - (void)sendTextMessage:(NSString *)text;
+
+/*!
+ @method
+ @brief 发送文本消息
+ @discussion
+ @param text 文本消息
+ @param ext 消息扩展
+ @result
+ */
+- (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext;
 
 /*!
  @method

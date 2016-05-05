@@ -221,6 +221,8 @@
 "message.location" = "location";
 "message.voice" = "audio";
 "message.video" = "video";
+"message.vcard" = "vcard";
+"message.vcard1" = "[vcard]";
 "message.image1" = "[image]";
 "message.location1" = "[location]";
 "message.voice1" = "[audio]";
@@ -246,6 +248,7 @@
 "message.startRecordFail" = "failure to start recording";
 "message.noMessage" = "All messages cleared";
 "message.forbiddenWords" = "Your message contains forbidden words";
+"message.personalVcard" = "personal vcard";
 
 //media
 "media.timeShort" = "The recording time is too short";

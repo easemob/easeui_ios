@@ -92,4 +92,13 @@ typedef enum{
  */
 - (void)moreView:(EaseChatBarMoreView *)moreView didItemInMoreViewAtIndex:(NSInteger)index;
 
+/*!
+ @method
+ @brief 名片
+ @discussion
+ @param moreView    功能view
+ @result
+ */
+- (void)moreViewVcardAction:(EaseChatBarMoreView *)moreView;
+
 @end

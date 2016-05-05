@@ -23,6 +23,8 @@
 #import "EaseEmotionEscape.h"
 #import "EaseLocalDefine.h"
 
+#import "EaseVcardHelper.h"
+
 CGFloat const EaseMessageCellPadding = 10;
 
 NSString *const EaseMessageCellIdentifierRecvText = @"EaseMessageCellRecvText";
@@ -31,6 +33,7 @@ NSString *const EaseMessageCellIdentifierRecvVoice = @"EaseMessageCellRecvVoice"
 NSString *const EaseMessageCellIdentifierRecvVideo = @"EaseMessageCellRecvVideo";
 NSString *const EaseMessageCellIdentifierRecvImage = @"EaseMessageCellRecvImage";
 NSString *const EaseMessageCellIdentifierRecvFile = @"EaseMessageCellRecvFile";
+NSString *const EaseMessageCellIdentifierRecvVcard = @"EaseMessageCellRecvVcard";
 
 NSString *const EaseMessageCellIdentifierSendText = @"EaseMessageCellSendText";
 NSString *const EaseMessageCellIdentifierSendLocation = @"EaseMessageCellSendLocation";
@@ -38,6 +41,8 @@ NSString *const EaseMessageCellIdentifierSendVoice = @"EaseMessageCellSendVoice"
 NSString *const EaseMessageCellIdentifierSendVideo = @"EaseMessageCellSendVideo";
 NSString *const EaseMessageCellIdentifierSendImage = @"EaseMessageCellSendImage";
 NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
+NSString *const EaseMessageCellIdentifierSendVcard = @"EaseMessageCellSendVcard";
+
 
 @interface EaseMessageCell()
 {
@@ -151,6 +156,10 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
         switch (messageType) {
             case EMMessageBodyTypeText:
             {
+                if ([EaseVcardHelper isVcardMessage:model.message]) {
+                    [_bubbleView setupVcardBubbleView];
+                    break;
+                }
                 [_bubbleView setupTextBubbleView];
                 
                 _bubbleView.textLabel.font = _messageTextFont;
@@ -218,7 +227,11 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     //bubble view
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-EaseMessageCellPadding]];
     
-    self.bubbleMaxWidthConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.bubbleMaxWidth];
+    NSLayoutRelation layoutRelation = NSLayoutRelationLessThanOrEqual;
+    if ([EaseVcardHelper isVcardMessage:self.model.message]) {
+        layoutRelation = NSLayoutRelationEqual;
+    }
+    self.bubbleMaxWidthConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:layoutRelation toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.bubbleMaxWidth];
     [self addConstraint:self.bubbleMaxWidthConstraint];
 //    self.bubbleMaxWidthConstraint.active = YES;
     
@@ -277,7 +290,11 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     [self removeConstraint:self.bubbleMaxWidthConstraint];
 //    self.bubbleMaxWidthConstraint.active = NO;
     
-    self.bubbleMaxWidthConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.bubbleMaxWidth];
+    NSLayoutRelation layoutRelation = NSLayoutRelationLessThanOrEqual;
+    if ([EaseVcardHelper isVcardMessage:self.model.message]) {
+        layoutRelation = NSLayoutRelationEqual;
+    }
+    self.bubbleMaxWidthConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:layoutRelation toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.bubbleMaxWidth];
     [self addConstraint:self.bubbleMaxWidthConstraint];
 //    self.bubbleMaxWidthConstraint.active = YES;
 }
@@ -293,6 +310,25 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
         switch (model.bodyType) {
             case EMMessageBodyTypeText:
             {
+                if ([EaseVcardHelper isVcardMessage:model.message]) {
+                    NSString *avatarUrl = [EaseVcardHelper fetchAvatarURLFromVcard:model.message];
+                    if (avatarUrl.length > 0) {
+                        [_bubbleView.headImageView sd_setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:model.avatarImage];
+                    }
+                    else {
+                        _bubbleView.headImageView.image = model.avatarImage;
+                    }
+                    NSString *nickname = [EaseVcardHelper fetchNicknameFromVcard:model.message];
+                    if (nickname.length > 0) {
+                        _bubbleView.nickLabel.text = nickname;
+                    }
+                    NSString *username = [EaseVcardHelper fetchUsernameFromVcard:model.message];
+                    if (username.length > 0) {
+                        _bubbleView.usernameLabel.text = username;
+                    }
+                    _bubbleView.usernameLabel.text = [EaseVcardHelper fetchUsernameFromVcard:model.message];
+                    break;
+                }
                 _bubbleView.textLabel.attributedText = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:self.messageTextFont];
             }
                 break;
@@ -421,6 +457,10 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             switch (_messageType) {
                 case EMMessageBodyTypeText:
                 {
+                    if ([EaseVcardHelper isVcardMessage:self.model.message]) {
+                        [_bubbleView updateVcardMargin:_bubbleMargin];
+                        break;
+                    }
                     [_bubbleView updateTextMargin:_bubbleMargin];
                 }
                     break;
@@ -563,6 +603,13 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             }
         }
         switch (_model.bodyType) {
+            case EMMessageBodyTypeText:
+            {
+                if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
+                    [_delegate messageCellSelected:_model];
+                }
+            }
+                break;
             case EMMessageBodyTypeImage:
             {
                 if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
@@ -654,8 +701,13 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     NSString *cellIdentifier = nil;
     if (model.isSender) {
         switch (model.bodyType) {
-            case EMMessageBodyTypeText:
+            case EMMessageBodyTypeText:{
+                if ([EaseVcardHelper isVcardMessage:model.message]) {
+                    cellIdentifier = EaseMessageCellIdentifierSendVcard;
+                    break;
+                }
                 cellIdentifier = EaseMessageCellIdentifierSendText;
+            }
                 break;
             case EMMessageBodyTypeImage:
                 cellIdentifier = EaseMessageCellIdentifierSendImage;
@@ -678,8 +730,13 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     }
     else{
         switch (model.bodyType) {
-            case EMMessageBodyTypeText:
+            case EMMessageBodyTypeText:{
+                if ([EaseVcardHelper isVcardMessage:model.message]) {
+                    cellIdentifier = EaseMessageCellIdentifierRecvVcard;
+                    break;
+                }
                 cellIdentifier = EaseMessageCellIdentifierRecvText;
+            }
                 break;
             case EMMessageBodyTypeImage:
                 cellIdentifier = EaseMessageCellIdentifierRecvImage;
@@ -722,6 +779,10 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     switch (model.bodyType) {
         case EMMessageBodyTypeText:
         {
+            if ([EaseVcardHelper isVcardMessage:model.message]) {
+                height = KEMMessageVcardHeight;
+                break;
+            }
             NSAttributedString *text = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:cell.messageTextFont];
             CGRect rect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
             height += (rect.size.height > 20 ? rect.size.height : 20) + 10;

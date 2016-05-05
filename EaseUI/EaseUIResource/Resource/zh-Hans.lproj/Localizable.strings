@@ -221,6 +221,8 @@
 "message.location" = "位置";
 "message.voice" = "音频";
 "message.video" = "视频";
+"message.vcard" = "名片";
+"message.vcard1" = "[名片]";
 "message.image1" = "[图片]";
 "message.location1" = "[位置]";
 "message.voice1" = "[音频]";
@@ -244,6 +246,7 @@
 "message.startRecordFail" = "开始录音失败";
 "message.noMessage" = "消息已经清空";
 "message.forbiddenWords" = "你的消息包含不当言论";
+"message.personalVcard" = "个人名片";
 
 //media
 "media.timeShort" = "录音时间太短了";

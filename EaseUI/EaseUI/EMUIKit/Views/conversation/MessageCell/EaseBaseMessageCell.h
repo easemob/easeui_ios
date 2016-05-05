@@ -18,6 +18,7 @@ extern NSString *const EaseMessageCellIdentifierSendVoice;
 extern NSString *const EaseMessageCellIdentifierSendVideo;
 extern NSString *const EaseMessageCellIdentifierSendImage;
 extern NSString *const EaseMessageCellIdentifierSendFile;
+extern NSString *const EaseMessageCellIdentifierSendVcard;
 
 @interface EaseBaseMessageCell : EaseMessageCell
 {

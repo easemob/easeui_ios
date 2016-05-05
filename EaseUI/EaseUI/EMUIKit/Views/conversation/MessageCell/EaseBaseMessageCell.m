@@ -14,6 +14,8 @@
 
 #import "UIImageView+EMWebCache.h"
 
+#import "EaseVcardHelper.h"
+
 @interface EaseBaseMessageCell()
 
 @property (strong, nonatomic) UILabel *nameLabel;
@@ -246,7 +248,7 @@
             {
                 _statusButton.hidden = YES;
                 [_activity stopAnimating];
-                if (self.model.isMessageRead) {
+                if (self.model.isMessageRead && ![EaseVcardHelper isVcardMessage:model.message]) {
                     _hasRead.hidden = NO;
                 }
             }

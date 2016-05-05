@@ -44,6 +44,8 @@
 @property (nonatomic, strong) UIButton *videoButton;
 @property (nonatomic, strong) UIButton *audioCallButton;
 @property (nonatomic, strong) UIButton *videoCallButton;
+//名片
+@property (nonatomic, strong) UIButton *vcardButton;
 
 @end
 
@@ -129,15 +131,46 @@
         _videoCallButton.tag =MOREVIEW_BUTTON_TAG + 4;
         _maxIndex = 4;
         [_scrollview addSubview:_videoCallButton];
+        
+        [_scrollview addSubview:self.vcardButton];
     }
     else if (type == EMChatToolbarTypeGroup)
     {
+        [_scrollview addSubview:self.vcardButton];
         frame.size.height = 80;
     }
     self.frame = frame;
     _scrollview.frame = CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame));
     _pageControl.frame = CGRectMake(0, CGRectGetHeight(frame) - 20, CGRectGetWidth(frame), 20);
     _pageControl.hidden = _pageControl.numberOfPages<=1;
+}
+
+//名片
+- (UIButton *)vcardButton {
+    if (!_vcardButton) {
+        _vcardButton =[UIButton buttonWithType:UIButtonTypeCustom];
+        NSInteger currentIndex = _maxIndex + 1;
+        NSInteger currentRowIndex = currentIndex / MOREVIEW_COL;
+        NSInteger currentColIndex = currentIndex % MOREVIEW_COL;
+        CGFloat insets = (self.frame.size.width - 4 * CHAT_BUTTON_SIZE) / 5;
+        CGFloat x = insets * (currentColIndex + 1) + CHAT_BUTTON_SIZE * currentColIndex;
+        CGFloat y = 10;
+        if (currentRowIndex == 1) {
+            y = 10 * 2 + CHAT_BUTTON_SIZE + 10;
+        }
+        [_vcardButton setFrame:CGRectMake(x, y, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
+        _vcardButton.backgroundColor = [UIColor orangeColor];
+        _vcardButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_vcardButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_vcardButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+        [_vcardButton setTitle:NSLocalizedString(@"message.vcard", @"vcard") forState:UIControlStateNormal];
+        [_vcardButton setTitle:NSLocalizedString(@"message.vcard", @"vcard") forState:UIControlStateHighlighted];
+        _vcardButton.layer.cornerRadius = 10;
+        [_vcardButton addTarget:self action:@selector(vcardAction) forControlEvents:UIControlEventTouchUpInside];
+        _vcardButton.tag =MOREVIEW_BUTTON_TAG + currentIndex;
+        _maxIndex = currentIndex;
+    }
+    return _vcardButton;
 }
 
 - (void)insertItemWithImage:(UIImage *)image highlightedImage:(UIImage *)highLightedImage title:(NSString *)title
@@ -329,6 +362,13 @@
     UIButton *button = (UIButton*)sender;
     if (button && _delegate && [_delegate respondsToSelector:@selector(moreView:didItemInMoreViewAtIndex:)]) {
         [_delegate moreView:self didItemInMoreViewAtIndex:button.tag-MOREVIEW_BUTTON_TAG];
+    }
+}
+
+//名片
+- (void)vcardAction{
+    if (_delegate && [_delegate respondsToSelector:@selector(moreViewVcardAction:)]) {
+        [_delegate moreViewVcardAction:self];
     }
 }
 
