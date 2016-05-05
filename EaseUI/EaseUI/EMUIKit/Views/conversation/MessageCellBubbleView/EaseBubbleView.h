@@ -21,6 +21,7 @@ extern NSString *const EaseMessageCellIdentifierSendVoice;
 extern NSString *const EaseMessageCellIdentifierSendVideo;
 extern NSString *const EaseMessageCellIdentifierSendImage;
 extern NSString *const EaseMessageCellIdentifierSendFile;
+extern NSString *const EaseMessageCellIdentifierSendVcard;
 
 extern NSString *const EaseMessageCellIdentifierRecvText;
 extern NSString *const EaseMessageCellIdentifierRecvLocation;
@@ -28,6 +29,7 @@ extern NSString *const EaseMessageCellIdentifierRecvVoice;
 extern NSString *const EaseMessageCellIdentifierRecvVideo;
 extern NSString *const EaseMessageCellIdentifierRecvImage;
 extern NSString *const EaseMessageCellIdentifierRecvFile;
+extern NSString *const EaseMessageCellIdentifierRecvVcard;
 
 @interface EaseBubbleView : UIView
 {
@@ -66,6 +68,13 @@ extern NSString *const EaseMessageCellIdentifierRecvFile;
 @property (strong, nonatomic) UIImageView *fileIconView;
 @property (strong, nonatomic) UILabel *fileNameLabel;
 @property (strong, nonatomic) UILabel *fileSizeLabel;
+
+//vcard
+@property (strong, nonatomic) UILabel *titleLabel;
+@property (strong, nonatomic) UIView *lineView;
+@property (strong, nonatomic) UIImageView *headImageView;
+@property (strong, nonatomic) UILabel *nickLabel;
+@property (strong, nonatomic) UILabel *usernameLabel;
 
 - (instancetype)initWithMargin:(UIEdgeInsets)margin
                       isSender:(BOOL)isSender;

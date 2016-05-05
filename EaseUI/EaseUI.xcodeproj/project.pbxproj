@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7137EC201CDAF1B900D91A0B /* EaseVcardHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7137EC1F1CDAF1B900D91A0B /* EaseVcardHelper.m */; };
+		7137EC211CDAF1C400D91A0B /* EaseVcardHelper.h in Helper */ = {isa = PBXBuildFile; fileRef = 7137EC1E1CDAF1B900D91A0B /* EaseVcardHelper.h */; };
+		7137EC251CDAF26500D91A0B /* EaseVcardModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7137EC241CDAF26500D91A0B /* EaseVcardModel.m */; };
+		7137EC261CDAF26F00D91A0B /* IVcardModel.h in Model */ = {isa = PBXBuildFile; fileRef = 7137EC221CDAF25D00D91A0B /* IVcardModel.h */; };
+		7137EC271CDAF27600D91A0B /* EaseVcardModel.h in Model */ = {isa = PBXBuildFile; fileRef = 7137EC231CDAF26500D91A0B /* EaseVcardModel.h */; };
+		7137EC2A1CDAF2ED00D91A0B /* EaseBubbleView+Vcard.m in Sources */ = {isa = PBXBuildFile; fileRef = 7137EC291CDAF2ED00D91A0B /* EaseBubbleView+Vcard.m */; };
+		7137EC2B1CDAF34200D91A0B /* EaseBubbleView+Vcard.h in Views/conversation/MessageCellBubbleView */ = {isa = PBXBuildFile; fileRef = 7137EC281CDAF2ED00D91A0B /* EaseBubbleView+Vcard.h */; };
 		D206D35B1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34C1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png */; };
 		D206D35C1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34D1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png */; };
 		D206D35D1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34E1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png */; };
@@ -372,6 +379,7 @@
 			dstPath = "$(PROJECT_DIR)/export/include";
 			dstSubfolderSpec = 0;
 			files = (
+				7137EC211CDAF1C400D91A0B /* EaseVcardHelper.h in Helper */,
 				D2AA62C01BD907AC0059D684 /* EaseSDKHelper.h in Helper */,
 			);
 			name = Helper;
@@ -383,6 +391,8 @@
 			dstPath = "$(PROJECT_DIR)/export/include/Model";
 			dstSubfolderSpec = 0;
 			files = (
+				7137EC271CDAF27600D91A0B /* EaseVcardModel.h in Model */,
+				7137EC261CDAF26F00D91A0B /* IVcardModel.h in Model */,
 				D2AA643D1BD913970059D684 /* IConversationModel.h in Model */,
 				D2AA62C21BD907D50059D684 /* EaseConversationModel.h in Model */,
 				D2AA62C31BD907D50059D684 /* EaseMessageModel.h in Model */,
@@ -464,6 +474,7 @@
 			dstPath = "$(PROJECT_DIR)/export/include/Views/conversation/MessageCellBubbleView";
 			dstSubfolderSpec = 0;
 			files = (
+				7137EC2B1CDAF34200D91A0B /* EaseBubbleView+Vcard.h in Views/conversation/MessageCellBubbleView */,
 				D2AA62E11BD909E20059D684 /* EaseBubbleView+File.h in Views/conversation/MessageCellBubbleView */,
 				D2AA62E21BD909E20059D684 /* EaseBubbleView+Image.h in Views/conversation/MessageCellBubbleView */,
 				D2AA62E31BD909E20059D684 /* EaseBubbleView+Location.h in Views/conversation/MessageCellBubbleView */,
@@ -631,6 +642,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7137EC1E1CDAF1B900D91A0B /* EaseVcardHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseVcardHelper.h; sourceTree = "<group>"; };
+		7137EC1F1CDAF1B900D91A0B /* EaseVcardHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseVcardHelper.m; sourceTree = "<group>"; };
+		7137EC221CDAF25D00D91A0B /* IVcardModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IVcardModel.h; sourceTree = "<group>"; };
+		7137EC231CDAF26500D91A0B /* EaseVcardModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseVcardModel.h; sourceTree = "<group>"; };
+		7137EC241CDAF26500D91A0B /* EaseVcardModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseVcardModel.m; sourceTree = "<group>"; };
+		7137EC281CDAF2ED00D91A0B /* EaseBubbleView+Vcard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EaseBubbleView+Vcard.h"; sourceTree = "<group>"; };
+		7137EC291CDAF2ED00D91A0B /* EaseBubbleView+Vcard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EaseBubbleView+Vcard.m"; sourceTree = "<group>"; };
 		D206D34C1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_receiver_audio_playing000@2x.png"; sourceTree = "<group>"; };
 		D206D34D1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_receiver_audio_playing001@2x.png"; sourceTree = "<group>"; };
 		D206D34E1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_receiver_audio_playing002@2x.png"; sourceTree = "<group>"; };
@@ -1174,6 +1192,8 @@
 			children = (
 				D250D4561BD8D1CB00C8D553 /* EaseSDKHelper.h */,
 				D250D4571BD8D1CB00C8D553 /* EaseSDKHelper.m */,
+				7137EC1E1CDAF1B900D91A0B /* EaseVcardHelper.h */,
+				7137EC1F1CDAF1B900D91A0B /* EaseVcardHelper.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -1187,11 +1207,14 @@
 				D250D45C1BD8D1CB00C8D553 /* EaseMessageModel.m */,
 				D250D45D1BD8D1CB00C8D553 /* EaseUserModel.h */,
 				D250D45E1BD8D1CB00C8D553 /* EaseUserModel.m */,
+				7137EC231CDAF26500D91A0B /* EaseVcardModel.h */,
+				7137EC241CDAF26500D91A0B /* EaseVcardModel.m */,
 				D250D45F1BD8D1CB00C8D553 /* IConversationModel.h */,
 				D250D4601BD8D1CB00C8D553 /* IMessageModel.h */,
 				D250D4611BD8D1CB00C8D553 /* IModelCell.h */,
 				D250D4621BD8D1CB00C8D553 /* IModelChatCell.h */,
 				D250D4631BD8D1CB00C8D553 /* IUserModel.h */,
+				7137EC221CDAF25D00D91A0B /* IVcardModel.h */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1325,6 +1348,8 @@
 				D250D4A41BD8D1CB00C8D553 /* EaseBubbleView+Video.m */,
 				D250D4A51BD8D1CB00C8D553 /* EaseBubbleView+Voice.h */,
 				D250D4A61BD8D1CB00C8D553 /* EaseBubbleView+Voice.m */,
+				7137EC281CDAF2ED00D91A0B /* EaseBubbleView+Vcard.h */,
+				7137EC291CDAF2ED00D91A0B /* EaseBubbleView+Vcard.m */,
 				D250D4A71BD8D1CB00C8D553 /* EaseBubbleView.h */,
 				D250D4A81BD8D1CB00C8D553 /* EaseBubbleView.m */,
 			);
@@ -1945,6 +1970,7 @@
 			files = (
 				D250D4C81BD8D1CB00C8D553 /* wav.mm in Sources */,
 				D250D5221BD8D1CB00C8D553 /* EaseChatToolbarItem.m in Sources */,
+				7137EC2A1CDAF2ED00D91A0B /* EaseBubbleView+Vcard.m in Sources */,
 				D250D4C41BD8D1CB00C8D553 /* EMCDDeviceManager+ProximitySensor.m in Sources */,
 				D2F2C9B21C10604700F4AE1E /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
 				D250D4C91BD8D1CB00C8D553 /* EMVoiceConverter.mm in Sources */,
@@ -1957,6 +1983,7 @@
 				D2F2C9851C10604700F4AE1E /* MBProgressHUD+Add.m in Sources */,
 				D2F2C9BC1C10604700F4AE1E /* PSTGridLayoutItem.m in Sources */,
 				D250D5231BD8D1CB00C8D553 /* EaseImageView.m in Sources */,
+				7137EC251CDAF26500D91A0B /* EaseVcardModel.m in Sources */,
 				D250D5021BD8D1CB00C8D553 /* EaseUserModel.m in Sources */,
 				D2F2C98D1C10604700F4AE1E /* MJRefreshAutoNormalFooter.m in Sources */,
 				D2F2C9871C10604700F4AE1E /* MJRefreshAutoFooter.m in Sources */,
@@ -1977,6 +2004,7 @@
 				D250D51B1BD8D1CB00C8D553 /* EaseBubbleView+Image.m in Sources */,
 				D250D4FF1BD8D1CB00C8D553 /* EaseSDKHelper.m in Sources */,
 				D2F2C9B01C10604700F4AE1E /* UIImageView+EMWebCache.m in Sources */,
+				7137EC201CDAF1B900D91A0B /* EaseVcardHelper.m in Sources */,
 				D2F2C98C1C10604700F4AE1E /* MJRefreshAutoGifFooter.m in Sources */,
 				D2F2C99E1C10604700F4AE1E /* MWTapDetectingImageView.m in Sources */,
 				D2F2C9A21C10604700F4AE1E /* EMSDImageCache.m in Sources */,

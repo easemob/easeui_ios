@@ -18,6 +18,7 @@
 #import "EaseBubbleView+Voice.h"
 #import "EaseBubbleView+Video.h"
 #import "EaseBubbleView+File.h"
+#import "EaseBubbleView+Vcard.h"
 #import "UIImageView+EMWebCache.h"
 #import "EaseEmotionEscape.h"
 #import "EaseLocalDefine.h"

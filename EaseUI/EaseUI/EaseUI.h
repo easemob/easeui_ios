@@ -40,6 +40,8 @@
 #import "UIViewController+DismissKeyboard.h"
 #import "EaseLocalDefine.h"
 
+#import "EaseVcardHelper.h"
+
 @interface EaseUI : NSObject
 
 @end

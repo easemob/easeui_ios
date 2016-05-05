@@ -19,6 +19,7 @@
 #import "EaseBubbleView+Voice.h"
 #import "EaseBubbleView+Video.h"
 #import "EaseBubbleView+File.h"
+#import "EaseBubbleView+Vcard.h"
 
 @interface EaseBubbleView()
 
