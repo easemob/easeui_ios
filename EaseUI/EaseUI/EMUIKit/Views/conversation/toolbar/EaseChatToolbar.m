@@ -551,8 +551,6 @@
 {
     NSString *chatText = self.inputTextView.text;
     
-    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:self.inputTextView.attributedText];
-    
     if (!isDelete && str.length > 0) {
         self.inputTextView.text = [NSString stringWithFormat:@"%@%@",chatText,str];
     }
