@@ -222,6 +222,7 @@
 {
     if ([_conversation.chatter isEqualToString:chatroom.chatroomId])
     {
+        [[EaseMob sharedInstance].chatManager removeConversationByChatter:_conversation.chatter deleteMessages:YES append2Chat:YES];
         _isKicked = YES;
         CGRect frame = self.chatToolbar.frame;
         [self showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.remove", @"be removed from chatroom\'%@\'"), chatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
