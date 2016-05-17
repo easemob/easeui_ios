@@ -71,6 +71,10 @@
         cell = [[EaseConversationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
+    if ([self.dataArray count] <= indexPath.row) {
+        return cell;
+    }
+    
     id<IConversationModel> model = [self.dataArray objectAtIndex:indexPath.row];
     cell.model = model;
     
@@ -141,9 +145,9 @@
     [self.dataArray removeAllObjects];
     for (EMConversation *converstion in sorted) {
         EaseConversationModel *model = nil;
-        if (_dataSource && [_dataSource respondsToSelector:@selector(conversationListViewController:modelForConversation:)]) {
-            model = [_dataSource conversationListViewController:self
-                                           modelForConversation:converstion];
+        if (self.dataSource && [self.dataSource respondsToSelector:@selector(conversationListViewController:modelForConversation:)]) {
+            model = [self.dataSource conversationListViewController:self
+                                                   modelForConversation:converstion];
         }
         else{
             model = [[EaseConversationModel alloc] initWithConversation:converstion];
@@ -153,8 +157,9 @@
             [self.dataArray addObject:model];
         }
     }
-
-    [self tableViewDidFinishTriggerHeader:YES reload:YES];
+    
+    [self.tableView reloadData];
+    [self tableViewDidFinishTriggerHeader:YES reload:NO];
 }
 
 #pragma mark - IChatMangerDelegate
