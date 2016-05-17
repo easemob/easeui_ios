@@ -17,22 +17,10 @@
 #import "EaseMessageHelper.h"
 
 @interface EaseConversationListViewController () <IChatManagerDelegate>
-{
-    dispatch_queue_t _refreshQueue;
-}
 
 @end
 
 @implementation EaseConversationListViewController
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        _refreshQueue = dispatch_queue_create("com.easemob.conversation.refresh", DISPATCH_QUEUE_SERIAL);
-    }
-    return self;
-}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -140,40 +128,38 @@
 
 - (void)tableViewDidTriggerHeaderRefresh
 {
-    __weak typeof(self) weakself = self;
-    dispatch_async(_refreshQueue, ^{
-        NSArray *conversations = [[EaseMob sharedInstance].chatManager conversations];
-        NSArray* sorted = [conversations sortedArrayUsingComparator:
-                           ^(EMConversation *obj1, EMConversation* obj2){
-                               EMMessage *message1 = [obj1 latestMessage];
-                               EMMessage *message2 = [obj2 latestMessage];
-                               if(message1.timestamp > message2.timestamp) {
-                                   return(NSComparisonResult)NSOrderedAscending;
-                               }else {
-                                   return(NSComparisonResult)NSOrderedDescending;
-                               }
-                           }];
-        
-        
-        
-        [weakself.dataArray removeAllObjects];
-        for (EMConversation *converstion in sorted) {
-            EaseConversationModel *model = nil;
-            if (weakself.dataSource && [weakself.dataSource respondsToSelector:@selector(conversationListViewController:modelForConversation:)]) {
-                model = [weakself.dataSource conversationListViewController:weakself
-                                               modelForConversation:converstion];
-            }
-            else{
-                model = [[EaseConversationModel alloc] initWithConversation:converstion];
-            }
-            
-            if (model) {
-                [weakself.dataArray addObject:model];
-            }
+    NSArray *conversations = [[EaseMob sharedInstance].chatManager conversations];
+    NSArray* sorted = [conversations sortedArrayUsingComparator:
+                       ^(EMConversation *obj1, EMConversation* obj2){
+                           EMMessage *message1 = [obj1 latestMessage];
+                           EMMessage *message2 = [obj2 latestMessage];
+                           if(message1.timestamp > message2.timestamp) {
+                               return(NSComparisonResult)NSOrderedAscending;
+                           }else {
+                               return(NSComparisonResult)NSOrderedDescending;
+                           }
+                       }];
+    
+    
+    
+    [self.dataArray removeAllObjects];
+    for (EMConversation *converstion in sorted) {
+        EaseConversationModel *model = nil;
+        if (self.dataSource && [self.dataSource respondsToSelector:@selector(conversationListViewController:modelForConversation:)]) {
+            model = [self.dataSource conversationListViewController:self
+                                                   modelForConversation:converstion];
+        }
+        else{
+            model = [[EaseConversationModel alloc] initWithConversation:converstion];
         }
         
-        [weakself tableViewDidFinishTriggerHeader:YES reload:YES];
-    });
+        if (model) {
+            [self.dataArray addObject:model];
+        }
+    }
+    
+    [self.tableView reloadData];
+    [self tableViewDidFinishTriggerHeader:YES reload:NO];
 }
 
 #pragma mark - IChatMangerDelegate
