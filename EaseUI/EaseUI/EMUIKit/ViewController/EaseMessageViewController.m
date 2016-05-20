@@ -1685,8 +1685,20 @@
     if (self.conversation.type == EMConversationTypeGroupChat) {
         NSArray *targets = [self _searchAtTargets:text];
         if ([targets count]) {
-            NSString *title = [NSString stringWithFormat:NSLocalizedString(@"group.atPushTitle",@"%@@you in group chat"), [EMClient sharedClient].pushOptions.nickname];
-            ext = @{kMessageAtExt : @{kMessageAtTitle : title, kMessageAtTarget : targets}};
+            __block BOOL atAll = NO;
+            [targets enumerateObjectsUsingBlock:^(NSString *target, NSUInteger idx, BOOL *stop) {
+                if ([target compare:kMessageAtAll options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+                    atAll = YES;
+                }
+            }];
+            if (atAll) {
+                NSString *title = NSLocalizedString(@"group.atAll", nil);
+                ext = @{kMessageAtTitle: title, kMessageAtList: kMessageAtAll};
+            }
+            else {
+                NSString *title = [NSString stringWithFormat:NSLocalizedString(@"group.atPushTitle",@"%@@you in group chat"), [EMClient sharedClient].pushOptions.nickname];
+                ext = @{kMessageAtTitle: title, kMessageAtList: targets};
+            }
         }
     }
     [self sendTextMessage:text withExt:ext];
@@ -1884,12 +1896,16 @@
 - (NSArray*)_searchAtTargets:(NSString*)text
 {
     NSMutableArray *targets = nil;
-    if ([self.atTargets count] && text.length > 1) {
+    if (text.length > 1) {
         targets = [NSMutableArray array];
         NSArray *splits = [text componentsSeparatedByString:@"@"];
         if ([splits count]) {
             for (NSString *split in splits) {
                 if (split.length) {
+                    if ([split compare:kMessageAtAll options:NSCaseInsensitiveSearch range:NSMakeRange(0, kMessageAtAll.length)] == NSOrderedSame) {
+                        [targets addObject:kMessageAtAll];
+                        return targets;
+                    }
                     for (EaseAtTarget *target in self.atTargets) {
                         if (target.userId) {
                             if ([split hasPrefix:target.userId] || (target.nickname && [split hasPrefix:target.nickname])) {

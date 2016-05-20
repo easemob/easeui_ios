@@ -13,9 +13,9 @@
 #define KNOTIFICATION_CALL @"callOutWithChatter"
 #define KNOTIFICATION_CALL_CLOSE @"callControllerClose"
 
-#define kMessageAtExt       @"em_apns_ext"
 #define kMessageAtTitle     @"em_push_title"
-#define kMessageAtTarget    @"em_push_at_target"
+#define kMessageAtList      @"em_at_list"
+#define kMessageAtAll       @"all"
 
 #define kSDKConfigEnableConsoleLogger @"SDKConfigEnableConsoleLogger"
 #define kEaseUISDKConfigIsUseLite @"isUselibEaseMobClientSDKLite"
