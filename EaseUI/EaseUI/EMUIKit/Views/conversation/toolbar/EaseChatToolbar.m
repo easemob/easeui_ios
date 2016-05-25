@@ -566,22 +566,41 @@
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:self.inputTextView.attributedText];
     
     if (!isDelete && str.length > 0) {
-        NSRange range = [self.inputTextView selectedRange];
-        [attr insertAttributedString:[[EaseEmotionEscape sharedInstance] attStringFromTextForInputView:str textFont:self.inputTextView.font] atIndex:range.location];
-        self.inputTextView.attributedText = attr;
-//        self.inputTextView.text = @"";
-//        self.inputTextView.text = [NSString stringWithFormat:@"%@%@",chatText,str];
+        if (self.version >= 7.0) {
+            NSRange range = [self.inputTextView selectedRange];
+            [attr insertAttributedString:[[EaseEmotionEscape sharedInstance] attStringFromTextForInputView:str textFont:self.inputTextView.font] atIndex:range.location];
+            self.inputTextView.attributedText = attr;
+        } else {
+            self.inputTextView.text = @"";
+            self.inputTextView.text = [NSString stringWithFormat:@"%@%@",chatText,str];
+        }
     }
     else {
-        if (chatText.length > 0) {
-            NSInteger length = 1;
-            if (chatText.length >= 2) {
+        if (self.version >= 7.0) {
+            if (chatText.length > 0) {
+                NSInteger length = 1;
+                if (chatText.length >= 2) {
+                    NSString *subStr = [chatText substringFromIndex:chatText.length-2];
+                    if ([EaseEmoji stringContainsEmoji:subStr]) {
+                        length = 2;
+                    }
+                }
+                self.inputTextView.attributedText = [self backspaceText:attr length:length];
+            }
+        } else {
+            if (chatText.length >= 2)
+            {
                 NSString *subStr = [chatText substringFromIndex:chatText.length-2];
-                if ([EaseEmoji stringContainsEmoji:subStr]) {
-                    length = 2;
+                if ([(EaseFaceView *)self.faceView stringIsFace:subStr]) {
+                    self.inputTextView.text = [chatText substringToIndex:chatText.length-2];
+                    [self textViewDidChange:self.inputTextView];
+                    return;
                 }
             }
-            self.inputTextView.attributedText = [self backspaceText:attr length:length];
+            
+            if (chatText.length > 0) {
+                self.inputTextView.text = [chatText substringToIndex:chatText.length-1];
+            }
         }
     }
     
