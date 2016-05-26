@@ -56,7 +56,6 @@
                 
                 self.thumbnailImageSize = self.thumbnailImage.size;
                 self.imageSize = imgMessageBody.size;
-                self.fileLocalPath = imgMessageBody.localPath;
                 if (!_isSender) {
                     self.fileURLPath = imgMessageBody.remotePath;
                 }
@@ -80,7 +79,6 @@
                 }
                 
                 // 音频路径
-                self.fileLocalPath = voiceBody.localPath;
                 self.fileURLPath = voiceBody.remotePath;
             }
                 break;
@@ -97,7 +95,6 @@
                 }
                 
                 // 视频路径
-                self.fileLocalPath = videoBody.localPath;
                 self.fileURLPath = videoBody.remotePath;
             }
                 break;
@@ -150,6 +147,26 @@
 - (BOOL)isMessageRead
 {
     return _message.isReadAcked;
+}
+
+- (NSString *)fileLocalPath
+{
+    if (_firstMessageBody) {
+        switch (_firstMessageBody.type) {
+            case EMMessageBodyTypeVideo:
+            case EMMessageBodyTypeImage:
+            case EMMessageBodyTypeVoice:
+            case EMMessageBodyTypeFile:
+            {
+                EMFileMessageBody *fileBody = (EMFileMessageBody *)_firstMessageBody;
+                return fileBody.localPath;
+            }
+                break;
+            default:
+                break;
+        }
+    }
+    return nil;
 }
 
 - (UIImage *)scaleImage:(UIImage *)image toScale:(float)scaleSize
