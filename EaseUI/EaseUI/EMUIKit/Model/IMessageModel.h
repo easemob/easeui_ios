@@ -84,7 +84,7 @@
 @property (nonatomic) float progress;
 
 //消息：附件本地地址
-@property (strong, nonatomic) NSString *fileLocalPath;
+@property (strong, nonatomic, readonly) NSString *fileLocalPath;
 //消息：压缩附件本地地址
 @property (strong, nonatomic) NSString *thumbnailFileLocalPath;
 //消息：附件下载地址
