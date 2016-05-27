@@ -30,7 +30,7 @@
 
 #define IOS_VERSION [[UIDevice currentDevice] systemVersion]>=9.0
 
-@interface EaseMessageViewController ()<EaseMessageCellDelegate>
+@interface EaseMessageViewController ()
 {
     UIMenuItem *_copyMenuItem;
     UIMenuItem *_deleteMenuItem;
@@ -279,7 +279,7 @@
         NSMutableArray *unreadMessages = [NSMutableArray array];
         for (EMMessage *message in self.messsagesSource)
         {
-            if ([self _shouldSendHasReadAckForMessage:message read:NO])
+            if ([self shouldSendHasReadAckForMessage:message read:NO])
             {
                 [unreadMessages addObject:message];
             }
@@ -352,7 +352,7 @@
     return bCanRecord;
 }
 
-- (void)_showMenuViewController:(UIView *)showInView
+- (void)showMenuViewController:(UIView *)showInView
                    andIndexPath:(NSIndexPath *)indexPath
                     messageType:(EMMessageBodyType)messageType
 {
@@ -506,7 +506,7 @@
     }
 }
 
-- (BOOL)_shouldSendHasReadAckForMessage:(EMMessage *)message
+- (BOOL)shouldSendHasReadAckForMessage:(EMMessage *)message
                                    read:(BOOL)read
 {
     NSString *account = [[EMClient sharedClient] currentUsername];
@@ -540,10 +540,10 @@
         BOOL isSend = YES;
         if (_dataSource && [_dataSource respondsToSelector:@selector(messageViewController:shouldSendHasReadAckForMessage:read:)]) {
             isSend = [_dataSource messageViewController:self
-                         shouldSendHasReadAckForMessage:message read:NO];
+                         shouldSendHasReadAckForMessage:message read:isRead];
         }
         else{
-            isSend = [self _shouldSendHasReadAckForMessage:message
+            isSend = [self shouldSendHasReadAckForMessage:message
                                                       read:isRead];
         }
         
@@ -863,7 +863,7 @@
                 EaseMessageCell *cell = (EaseMessageCell *)[self.tableView cellForRowAtIndexPath:indexPath];
                 [cell becomeFirstResponder];
                 _menuIndexPath = indexPath;
-                [self _showMenuViewController:cell.bubbleView andIndexPath:indexPath messageType:cell.model.bodyType];
+                [self showMenuViewController:cell.bubbleView andIndexPath:indexPath messageType:cell.model.bodyType];
             }
         }
     }
@@ -1730,7 +1730,7 @@
         NSMutableArray *unreadMessages = [NSMutableArray array];
         for (EMMessage *message in self.messsagesSource)
         {
-            if ([self _shouldSendHasReadAckForMessage:message read:NO])
+            if ([self shouldSendHasReadAckForMessage:message read:NO])
             {
                 [unreadMessages addObject:message];
             }
