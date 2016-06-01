@@ -777,39 +777,39 @@
         //格式化消息
         NSArray *formattedMessages = [weakSelf formatMessages:moreMessages];
         
-        NSInteger scrollToIndex = 0;
-        if (isAppend) {
-            [weakSelf.messsagesSource insertObjects:moreMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [moreMessages count])]];
-            
-            //合并消息
-            id object = [weakSelf.dataArray firstObject];
-            if ([object isKindOfClass:[NSString class]])
-            {
-                NSString *timestamp = object;
-                [formattedMessages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id model, NSUInteger idx, BOOL *stop) {
-                    if ([model isKindOfClass:[NSString class]] && [timestamp isEqualToString:model])
-                    {
-                        [weakSelf.dataArray removeObjectAtIndex:0];
-                        *stop = YES;
-                    }
-                }];
-            }
-            scrollToIndex = [weakSelf.dataArray count];
-            [weakSelf.dataArray insertObjects:formattedMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formattedMessages count])]];
-        }
-        else{
-            [weakSelf.messsagesSource removeAllObjects];
-            [weakSelf.messsagesSource addObjectsFromArray:moreMessages];
-            
-            [weakSelf.dataArray removeAllObjects];
-            [weakSelf.dataArray addObjectsFromArray:formattedMessages];
-        }
-        
-        EMMessage *latest = [weakSelf.messsagesSource lastObject];
-        weakSelf.messageTimeIntervalTag = latest.timestamp;
-        
         //刷新页面
         dispatch_async(dispatch_get_main_queue(), ^{
+            NSInteger scrollToIndex = 0;
+            if (isAppend) {
+                [weakSelf.messsagesSource insertObjects:moreMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [moreMessages count])]];
+                
+                //合并消息
+                id object = [weakSelf.dataArray firstObject];
+                if ([object isKindOfClass:[NSString class]])
+                {
+                    NSString *timestamp = object;
+                    [formattedMessages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id model, NSUInteger idx, BOOL *stop) {
+                        if ([model isKindOfClass:[NSString class]] && [timestamp isEqualToString:model])
+                        {
+                            [weakSelf.dataArray removeObjectAtIndex:0];
+                            *stop = YES;
+                        }
+                    }];
+                }
+                scrollToIndex = [weakSelf.dataArray count];
+                [weakSelf.dataArray insertObjects:formattedMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formattedMessages count])]];
+            }
+            else{
+                [weakSelf.messsagesSource removeAllObjects];
+                [weakSelf.messsagesSource addObjectsFromArray:moreMessages];
+                
+                [weakSelf.dataArray removeAllObjects];
+                [weakSelf.dataArray addObjectsFromArray:formattedMessages];
+            }
+            
+            EMMessage *latest = [weakSelf.messsagesSource lastObject];
+            weakSelf.messageTimeIntervalTag = latest.timestamp;
+        
             [weakSelf.tableView reloadData];
             
             [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - scrollToIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
@@ -1603,6 +1603,36 @@
 
 #pragma mark - send message
 
+- (void)_refreshAfterSentMessage:(EMMessage*)aMessage
+{
+    if ([self.messsagesSource count] && [EMClient sharedClient].options.sortMessageByServerTime) {
+        NSString *msgId = aMessage.messageId;
+        EMMessage *last = self.messsagesSource.lastObject;
+        if ([last isKindOfClass:[EMMessage class]] && ![last.messageId isEqualToString:msgId]) {
+            
+            __block NSUInteger index = NSNotFound;
+            index = NSNotFound;
+            [self.messsagesSource enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(EMMessage *obj, NSUInteger idx, BOOL *stop) {
+                if ([obj isKindOfClass:[EMMessage class]] && [obj.messageId isEqualToString:msgId]) {
+                    index = idx;
+                    *stop = YES;
+                }
+            }];
+            if (index != NSNotFound) {
+                [self.messsagesSource removeObjectAtIndex:index];
+                [self.messsagesSource addObject:aMessage];
+                
+                //格式化消息
+                NSArray *formattedMessages = [self formatMessages:self.messsagesSource];
+                [self.dataArray removeAllObjects];
+                [self.dataArray addObjectsFromArray:formattedMessages];
+                self.messageTimeIntervalTag = aMessage.timestamp;
+            }
+        }
+    }
+    [self.tableView reloadData];
+}
+
 - (void)_sendMessage:(EMMessage *)message
 {
     if (self.conversation.type == EMConversationTypeGroupChat){
@@ -1617,7 +1647,12 @@
     
     __weak typeof(self) weakself = self;
     [[EMClient sharedClient].chatManager asyncSendMessage:message progress:nil completion:^(EMMessage *aMessage, EMError *aError) {
-        [weakself.tableView reloadData];
+        if (!aError) {
+            [weakself _refreshAfterSentMessage:aMessage];
+        }
+        else {
+            [weakself.tableView reloadData];
+        }
     }];
 }
 
@@ -1745,38 +1780,34 @@
 }
 
 #pragma mark - private
-- (void)_reloadTableViewDataWithMessage:(EMMessage *)message{
-    __weak EaseMessageViewController *weakSelf = self;
-    dispatch_async(_messageQueue, ^{
-        if ([weakSelf.conversation.conversationId isEqualToString:message.conversationId])
-        {
-            for (int i = 0; i < weakSelf.dataArray.count; i ++) {
-                id object = [weakSelf.dataArray objectAtIndex:i];
-                if ([object isKindOfClass:[EaseMessageModel class]]) {
-                    id<IMessageModel> model = object;
-                    if ([message.messageId isEqualToString:model.messageId]) {
-                        id<IMessageModel> model = nil;
-                        if (weakSelf.dataSource && [weakSelf.dataSource respondsToSelector:@selector(messageViewController:modelForMessage:)]) {
-                            model = [weakSelf.dataSource messageViewController:self modelForMessage:message];
-                        }
-                        else{
-                            model = [[EaseMessageModel alloc] initWithMessage:message];
-                            model.avatarImage = [UIImage imageNamed:@"EaseUIResource.bundle/user"];
-                            model.failImageName = @"imageDownloadFail";
-                        }
-                        
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [weakSelf.tableView beginUpdates];
-                            [weakSelf.dataArray replaceObjectAtIndex:i withObject:model];
-                            [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                            [weakSelf.tableView endUpdates];
-                        });
-                        break;
+- (void)_reloadTableViewDataWithMessage:(EMMessage *)message
+{
+    if ([self.conversation.conversationId isEqualToString:message.conversationId])
+    {
+        for (int i = 0; i < self.dataArray.count; i ++) {
+            id object = [self.dataArray objectAtIndex:i];
+            if ([object isKindOfClass:[EaseMessageModel class]]) {
+                id<IMessageModel> model = object;
+                if ([message.messageId isEqualToString:model.messageId]) {
+                    id<IMessageModel> model = nil;
+                    if (self.dataSource && [self.dataSource respondsToSelector:@selector(messageViewController:modelForMessage:)]) {
+                        model = [self.dataSource messageViewController:self modelForMessage:message];
                     }
+                    else{
+                        model = [[EaseMessageModel alloc] initWithMessage:message];
+                        model.avatarImage = [UIImage imageNamed:@"EaseUIResource.bundle/user"];
+                        model.failImageName = @"imageDownloadFail";
+                    }
+                    
+                    [self.tableView beginUpdates];
+                    [self.dataArray replaceObjectAtIndex:i withObject:model];
+                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                    [self.tableView endUpdates];
+                    break;
                 }
             }
         }
-    });
+    }
 }
 
 - (void)_updateMessageStatus:(EMMessage *)aMessage
