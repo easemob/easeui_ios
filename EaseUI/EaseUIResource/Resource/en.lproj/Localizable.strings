@@ -327,6 +327,19 @@
 "setting.saving" = "saving...";
 "setting.saveFailed" = "save failed";
 
+//UI
+"ui.pulldowntorefresh" = "Pull To Refresh";
+"ui.releasetorefresh" = "Release to Refresh";
+"ui.refreshing" = "Refreshing...";
+"ui.clickorpull" = "Click or pull up to download more";
+"ui.downloading" = "Downloading more...";
+"ui.downloadcomplete" = "Download complete";
+"ui.pulluptorefresh" = "Pull up to download more";
+"ui.releasetodownload" = "Release to download";
+"ui.lastupdate" = "Last update:";
+"ui.lastupdatenorecord" = "Last update: no records";
+"ui.today" = "HH:mm a";
+
 //NSDateCategory
 "NSDateCategory.text1" = "one minute";
 "NSDateCategory.text2" = "%.f minutes ago";

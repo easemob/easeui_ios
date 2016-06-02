@@ -326,6 +326,19 @@
 "setting.saving" = "修改中...";
 "setting.saveFailed" = "修改失败";
 
+//UI
+"ui.pulldowntorefresh" = "下拉可以刷新";
+"ui.releasetorefresh" = "松开立即刷新";
+"ui.refreshing" = "正在刷新数据中...";
+"ui.clickorpull" = "点击或上拉加载更多";
+"ui.downloading" = "正在加载更多的数据...";
+"ui.downloadcomplete" = "已经全部加载完毕";
+"ui.pulluptorefresh" = "上拉可以加载更多";
+"ui.releasetodownload" = "松开立即加载更多";
+"ui.lastupdate" = "最后更新:";
+"ui.lastupdatenorecord" = "最后更新: 无记录";
+"ui.today" = "今天 HH:mm";
+
 //NSDateCategory
 "NSDateCategory.text1" = "1分钟内";
 "NSDateCategory.text2" = "%.f分钟前";
