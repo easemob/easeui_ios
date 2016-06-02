@@ -147,12 +147,12 @@
         EMError *error = nil;
         NSArray *buddyList = [[EMClient sharedClient].contactManager getContactsFromServerWithError:&error];
         if (!error) {
-            [weakself.dataArray removeAllObjects];
             NSMutableArray *contactsSource = [NSMutableArray arrayWithArray:buddyList];
+            NSMutableArray *tempDataArray = [NSMutableArray array];
             
             //从获取的数据中剔除黑名单中的好友
             NSArray *blockList = [[EMClient sharedClient].contactManager getBlackListFromDB];
-            for (NSInteger i = (buddyList.count - 1); i >= 0; i--) {
+            for (NSInteger i = 0; i < buddyList.count; i++) {
                 NSString *buddy = [buddyList objectAtIndex:i];
                 if (![blockList containsObject:buddy]) {
                     [contactsSource addObject:buddy];
@@ -166,12 +166,17 @@
                     }
                     
                     if(model){
-                        [weakself.dataArray addObject:model];
+                        [tempDataArray addObject:model];
                     }
                 }
             }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakself.dataArray removeAllObjects];
+                [weakself.dataArray addObjectsFromArray:tempDataArray];
+                [weakself.tableView reloadData];
+            });
         }
-        [weakself tableViewDidFinishTriggerHeader:YES reload:YES];
+        [weakself tableViewDidFinishTriggerHeader:YES reload:NO];
     });
 }
 

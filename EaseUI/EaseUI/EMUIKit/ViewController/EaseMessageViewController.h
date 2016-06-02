@@ -296,7 +296,7 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 
 @end
 
-@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, EMChatManagerDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate,EMChatroomManagerDelegate>
+@interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, EMChatManagerDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate,EMChatroomManagerDelegate, EaseMessageCellDelegate>
 
 @property (weak, nonatomic) id<EaseMessageViewControllerDelegate> delegate;
 
@@ -422,6 +422,16 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 
 /*!
  @method
+ @brief 发送文本消息
+ @discussion
+ @param text 文本消息
+ @param ext  扩展信息
+ @result
+ */
+- (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext;
+
+/*!
+ @method
  @brief 发送图片消息
  @discussion
  @param image 发送图片
@@ -472,5 +482,29 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
  */
 -(void)addMessageToDataSource:(EMMessage *)message
                      progress:(id)progress;
+
+/*!
+ @method
+ @brief 显示消息长按菜单
+ @discussion
+ @param showInView  菜单的父视图
+ @param showInView  索引
+ @param messageType 消息类型
+ @result
+ */
+-(void)showMenuViewController:(UIView *)showInView
+                 andIndexPath:(NSIndexPath *)indexPath
+                  messageType:(EMMessageBodyType)messageType;
+
+/*!
+ @method
+ @brief 判断消息是否要发送已读回执
+ @discussion
+ @param message 聊天消息
+ @param read    是否附件消息已读
+ @result
+ */
+-(BOOL)shouldSendHasReadAckForMessage:(EMMessage *)message
+                                 read:(BOOL)read;
 
 @end
