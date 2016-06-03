@@ -328,8 +328,8 @@
 "setting.saveFailed" = "save failed";
 
 //UI
-"ui.pullDownToRefresh" = "Pull To Refresh";
-"ui.releaseToRefresh" = "Release to Refresh";
+"ui.pullDownToRefresh" = "Pull to refresh";
+"ui.releaseToRefresh" = "Release to refresh";
 "ui.refreshing" = "Refreshing...";
 "ui.clickOrPull" = "Click or pull up to download more";
 "ui.downloading" = "Downloading more...";
