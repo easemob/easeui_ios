@@ -53,10 +53,10 @@
     [super prepare];
     
     // 初始化文字
-    [self setTitle:NSLocalizedString(@"ui.pulluptorefresh", @"Pull up to download more") forState:MJRefreshStateIdle];
-    [self setTitle:NSLocalizedString(@"ui.releasetodownload", @"Release to download") forState:MJRefreshStatePulling];
+    [self setTitle:NSLocalizedString(@"ui.pullUpToRefresh", @"Pull up to download more") forState:MJRefreshStateIdle];
+    [self setTitle:NSLocalizedString(@"ui.releaseToDownload", @"Release to download") forState:MJRefreshStatePulling];
     [self setTitle:NSLocalizedString(@"ui.downloading", @"Downloading more...") forState:MJRefreshStateRefreshing];
-    [self setTitle:NSLocalizedString(@"ui.downloadcomplete", @"Download complete") forState:MJRefreshStateNoMoreData];
+    [self setTitle:NSLocalizedString(@"ui.downloadComplete", @"Download complete") forState:MJRefreshStateNoMoreData];
 }
 
 - (void)placeSubviews

@@ -96,9 +96,9 @@
         NSString *time = [formatter stringFromDate:lastUpdatedTime];
         
         // 3.显示日期
-        self.lastUpdatedTimeLabel.text = [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"ui.lastupdate", @"Last update:"),time];
+        self.lastUpdatedTimeLabel.text = [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"ui.lastUpdate", @"Last update:"),time];
     } else {
-        self.lastUpdatedTimeLabel.text = NSLocalizedString(@"ui.lastupdatenorecord", @"Last update: no records");
+        self.lastUpdatedTimeLabel.text = NSLocalizedString(@"ui.lastUpdateNoRecords", @"Last update: no records");
     }
 }
 
@@ -108,8 +108,8 @@
     [super prepare];
     
     // 初始化文字
-    [self setTitle:NSLocalizedString(@"ui.pulldowntorefresh", @"Pull To Refresh") forState:MJRefreshStateIdle];
-    [self setTitle:NSLocalizedString(@"ui.releasetorefresh", @"Release To Refresh") forState:MJRefreshStatePulling];
+    [self setTitle:NSLocalizedString(@"ui.pullDownToRefresh", @"Pull To Refresh") forState:MJRefreshStateIdle];
+    [self setTitle:NSLocalizedString(@"ui.releaseToRefresh", @"Release To Refresh") forState:MJRefreshStatePulling];
     [self setTitle:NSLocalizedString(@"ui.refreshing", @"Refreshing data") forState:MJRefreshStateRefreshing];
 }
 

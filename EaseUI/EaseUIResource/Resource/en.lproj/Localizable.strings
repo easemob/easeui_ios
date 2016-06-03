@@ -328,16 +328,16 @@
 "setting.saveFailed" = "save failed";
 
 //UI
-"ui.pulldowntorefresh" = "Pull To Refresh";
-"ui.releasetorefresh" = "Release to Refresh";
+"ui.pullDownToRefresh" = "Pull To Refresh";
+"ui.releaseToRefresh" = "Release to Refresh";
 "ui.refreshing" = "Refreshing...";
-"ui.clickorpull" = "Click or pull up to download more";
+"ui.clickOrPull" = "Click or pull up to download more";
 "ui.downloading" = "Downloading more...";
-"ui.downloadcomplete" = "Download complete";
-"ui.pulluptorefresh" = "Pull up to download more";
-"ui.releasetodownload" = "Release to download";
-"ui.lastupdate" = "Last update:";
-"ui.lastupdatenorecord" = "Last update: no records";
+"ui.downloadComplete" = "Download complete";
+"ui.pullUpToRefresh" = "Pull up to download more";
+"ui.releaseToDownload" = "Release to download";
+"ui.lastUpdate" = "Last update:";
+"ui.lastUpdateNoRecords" = "Last update: no records";
 "ui.today" = "HH:mm a";
 
 //NSDateCategory

@@ -57,9 +57,9 @@
     [super prepare];
     
     // 初始化文字
-    [self setTitle:NSLocalizedString(@"ui.clickorpull", @"Click or pull up to download") forState:MJRefreshStateIdle];
+    [self setTitle:NSLocalizedString(@"ui.clickOrPull", @"Click or pull up to download") forState:MJRefreshStateIdle];
     [self setTitle:NSLocalizedString(@"ui.downloading", @"Downloading...") forState:MJRefreshStateRefreshing];
-    [self setTitle:NSLocalizedString(@"ui.downloadcomplete", @"Download complete") forState:MJRefreshStateNoMoreData];
+    [self setTitle:NSLocalizedString(@"ui.downloadComplete", @"Download complete") forState:MJRefreshStateNoMoreData];
     
     // 监听label
     self.stateLabel.userInteractionEnabled = YES;
