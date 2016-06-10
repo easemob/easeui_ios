@@ -1,13 +1,13 @@
 /************************************************************
- *  * EaseMob CONFIDENTIAL
+ *  * Hyphenate CONFIDENTIAL
  * __________________
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of EaseMob Technologies.
+ * the property of Hyphenate Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from EaseMob Technologies.
+ * from Hyphenate Inc.
  */
 
 #import "EMCDDeviceManagerBase.h"
@@ -15,34 +15,31 @@
 @interface EMCDDeviceManager (Media)
 
 #pragma mark - AudioPlayer
-// 播放音频
+// Play the audio
 - (void)asyncPlayingWithPath:(NSString *)aFilePath
                   completion:(void(^)(NSError *error))completon;
-// 停止播放
+// Stop playing
 - (void)stopPlaying;
 
 - (void)stopPlayingWithChangeCategory:(BOOL)isChange;
 
-// 当前是否正在播放
 -(BOOL)isPlaying;
 
 #pragma mark - AudioRecorder
-// 开始录音
+// Start recording
 - (void)asyncStartRecordingWithFileName:(NSString *)fileName
                                 completion:(void(^)(NSError *error))completion;
 
-// 停止录音
+// Stop recording
 -(void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath,
                                                  NSInteger aDuration,
                                                  NSError *error))completion;
-// 取消录音
+// Cancel recording
 -(void)cancelCurrentRecording;
 
-
-// 当前是否正在录音
 -(BOOL)isRecording;
 
-// 返回存储数据的路径
+// Get the saved data path
 + (NSString*)dataPath;
 
 @end

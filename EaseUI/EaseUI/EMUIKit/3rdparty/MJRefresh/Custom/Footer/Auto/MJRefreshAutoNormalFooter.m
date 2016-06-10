@@ -3,7 +3,6 @@
 //  MJRefreshExample
 //
 //  Created by MJ Lee on 15/4/24.
-//  Copyright (c) 2015年 小码哥. All rights reserved.
 //
 
 #import "MJRefreshAutoNormalFooter.h"
@@ -13,7 +12,8 @@
 @end
 
 @implementation MJRefreshAutoNormalFooter
-#pragma mark - 懒加载子控件
+
+#pragma mark - Lazy initialization
 - (UIActivityIndicatorView *)loadingView
 {
     if (!_loadingView) {
@@ -31,7 +31,7 @@
     self.loadingView = nil;
     [self setNeedsLayout];
 }
-#pragma makr - 重写父类的方法
+#pragma makr - Overwrite parent class methods
 - (void)prepare
 {
     [super prepare];
@@ -45,7 +45,6 @@
     
     if (self.loadingView.constraints.count) return;
     
-    // 圈圈
     CGFloat loadingCenterX = self.mj_w * 0.5;
     if (!self.isRefreshingTitleHidden) {
         loadingCenterX -= 100;
@@ -58,7 +57,6 @@
 {
     MJRefreshCheckState
     
-    // 根据状态做事情
     if (state == MJRefreshStateNoMoreData || state == MJRefreshStateIdle) {
         [self.loadingView stopAnimating];
     } else if (state == MJRefreshStateRefreshing) {

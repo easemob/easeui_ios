@@ -1,15 +1,14 @@
 /************************************************************
- *  * EaseMob CONFIDENTIAL
+ *  * Hyphenate CONFIDENTIAL
  * __________________
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of EaseMob Technologies.
+ * the property of Hyphenate Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from EaseMob Technologies.
+ * from Hyphenate Inc.
  */
-
 #import "EMAudioRecorderUtil.h"
 #import "EaseLocalDefine.h"
 
@@ -29,24 +28,24 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
 @implementation EMAudioRecorderUtil
 
 #pragma mark - Public
-// 当前是否正在录音
+
 +(BOOL)isRecording{
     return [[EMAudioRecorderUtil sharedInstance] isRecording];
 }
 
-// 开始录音
+// Start recording
 + (void)asyncStartRecordingWithPreparePath:(NSString *)aFilePath
                                 completion:(void(^)(NSError *error))completion{
     [[EMAudioRecorderUtil sharedInstance] asyncStartRecordingWithPreparePath:aFilePath
                                                                   completion:completion];
 }
 
-// 停止录音
+// Stop recording
 +(void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath))completion{
     [[EMAudioRecorderUtil sharedInstance] asyncStopRecordingWithCompletion:completion];
 }
 
-// 取消录音
+// Cancel recording
 +(void)cancelCurrentRecording{
     [[EMAudioRecorderUtil sharedInstance] cancelCurrentRecording];
 }
@@ -102,7 +101,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
     return !!_recorder;
 }
 
-// 开始录音，文件放到aFilePath下
+// Start recording，save the audio file to the path
 - (void)asyncStartRecordingWithPreparePath:(NSString *)aFilePath
                                 completion:(void(^)(NSError *error))completion
 {
@@ -134,7 +133,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
     }
 }
 
-// 停止录音
+// Stop recording
 -(void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath))completion{
     recordFinish = completion;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -142,7 +141,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
     });
 }
 
-// 取消录音
+// Cancel recording
 - (void)cancelCurrentRecording
 {
     _recorder.delegate = nil;

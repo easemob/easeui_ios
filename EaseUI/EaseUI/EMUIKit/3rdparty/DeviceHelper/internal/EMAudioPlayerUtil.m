@@ -1,13 +1,13 @@
 /************************************************************
- *  * EaseMob CONFIDENTIAL
+ *  * Hyphenate CONFIDENTIAL
  * __________________
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of EaseMob Technologies.
+ * the property of Hyphenate Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from EaseMob Technologies.
+ * from Hyphenate Inc.
  */
 
 #import "EMAudioPlayerUtil.h"
@@ -55,13 +55,12 @@ static EMAudioPlayerUtil *audioPlayerUtil = nil;
     return audioPlayerUtil;
 }
 
-// 当前是否正在播放
 - (BOOL)isPlaying
 {
     return !!_player;
 }
 
-// 得到当前播放音频路径
+// Get the path of what is currently being played
 - (NSString *)playingFilePath
 {
     NSString *path = nil;
@@ -108,7 +107,6 @@ static EMAudioPlayerUtil *audioPlayerUtil = nil;
     [_player play];
 }
 
-// 停止当前播放
 - (void)stopCurrentPlaying{
     if(_player){
         _player.delegate = nil;

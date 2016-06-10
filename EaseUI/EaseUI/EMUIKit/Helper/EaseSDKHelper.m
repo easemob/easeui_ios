@@ -56,7 +56,6 @@ static EaseSDKHelper *helper = nil;
 
 #pragma mark - app delegate notifications
 
-// 监听系统生命周期回调，以便将需要的事件传给SDK
 - (void)_setupAppDelegateNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -82,7 +81,7 @@ static EaseSDKHelper *helper = nil;
 }
 
 #pragma mark - register apns
-// 注册推送
+
 - (void)_registerRemoteNotification
 {
     UIApplication *application = [UIApplication sharedApplication];
@@ -96,7 +95,6 @@ static EaseSDKHelper *helper = nil;
     }
     
 #if !TARGET_IPHONE_SIMULATOR
-    //iOS8 注册APNS
     if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
         [application registerForRemoteNotifications];
     }else{
@@ -108,18 +106,15 @@ static EaseSDKHelper *helper = nil;
 #endif
 }
 
-#pragma mark - init easemob
+#pragma mark - init Hyphenate
 
-- (void)easemobApplication:(UIApplication *)application
+- (void)hyphenateApplication:(UIApplication *)application
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                     appkey:(NSString *)appkey
               apnsCertName:(NSString *)apnsCertName
                otherConfig:(NSDictionary *)otherConfig
 {
-    //注册AppDelegate默认回调监听
     [self _setupAppDelegateNotifications];
-    
-    //注册apns
     [self _registerRemoteNotification];
     
     EMOptions *options = [EMOptions optionsWithAppkey:appkey];
@@ -148,7 +143,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                     messageExt:(NSDictionary *)messageExt
 
 {
-    // 表情映射。
     NSString *willSendText = [EaseConvertToCommonEmoticonsHelper convertToCommonEmoticons:text];
     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:willSendText];
     NSString *from = [[EMClient sharedClient] currentUsername];

@@ -39,7 +39,6 @@
 }
 
 - (void)tapAnywhereToDismissKeyboard:(UIGestureRecognizer *)gestureRecognizer {
-    //此method会将self.view里所有的subview的first responder都resign掉
     [self.view endEditing:YES];
 }
 

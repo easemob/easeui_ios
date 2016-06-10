@@ -82,13 +82,13 @@
     self.view.backgroundColor = [UIColor colorWithRed:248 / 255.0 green:248 / 255.0 blue:248 / 255.0 alpha:1.0];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    //初始化页面
+    //Initialization
     CGFloat chatbarHeight = [EaseChatToolbar defaultHeight];
     EMChatToolbarType barType = self.conversation.type == EMConversationTypeChat ? EMChatToolbarTypeChat : EMChatToolbarTypeGroup;
     self.chatToolbar = [[EaseChatToolbar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - chatbarHeight, self.view.frame.size.width, chatbarHeight) type:barType];
     self.chatToolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;    
     
-    //初始化手势
+    //Initializa the gesture recognizer
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyBoardHidden:)];
     [self.view addGestureRecognizer:tap];
     
@@ -96,9 +96,9 @@
     _lpgr.minimumPressDuration = 0.5;
     [self.tableView addGestureRecognizer:_lpgr];
     
-    _messageQueue = dispatch_queue_create("easemob.com", NULL);
+    _messageQueue = dispatch_queue_create("hyphenate.com", NULL);
     
-    //注册代理
+    //Register the delegate
     [EMCDDeviceManager sharedInstance].delegate = self;
     [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].roomManager addDelegate:self delegateQueue:nil];
@@ -482,7 +482,7 @@
         EMImageMessageBody *imageBody = (EMImageMessageBody *)messageBody;
         if (imageBody.thumbnailDownloadStatus > EMDownloadStatusSuccessed)
         {
-            //下载缩略图
+            //download the message thumbnail
             [[[EMClient sharedClient] chatManager] asyncDownloadMessageThumbnail:message progress:nil completion:completion];
         }
     }
@@ -491,7 +491,7 @@
         EMVideoMessageBody *videoBody = (EMVideoMessageBody *)messageBody;
         if (videoBody.thumbnailDownloadStatus > EMDownloadStatusSuccessed)
         {
-            //下载缩略图
+            //download the message thumbnail
             [[[EMClient sharedClient] chatManager] asyncDownloadMessageThumbnail:message progress:nil completion:completion];
         }
     }
@@ -500,7 +500,7 @@
         EMVoiceMessageBody *voiceBody = (EMVoiceMessageBody*)messageBody;
         if (voiceBody.downloadStatus > EMDownloadStatusSuccessed)
         {
-            //下载语言
+            //download the message attachment
             [[EMClient sharedClient].chatManager asyncDownloadMessageAttachments:message progress:nil completion:completion];
         }
     }
@@ -592,7 +592,6 @@
     
     EMVideoMessageBody *videoBody = (EMVideoMessageBody*)model.message.body;
     
-    //判断本地路劲是否存在
     NSString *localPath = [model.fileLocalPath length] > 0 ? model.fileLocalPath : videoBody.localPath;
     if ([localPath length] == 0) {
         [self showHint:NSEaseLocalizedString(@"message.videoFail", @"video for failure!")];
@@ -600,7 +599,7 @@
     }
     
     dispatch_block_t block = ^{
-        //发送已读回执
+        //send the acknowledgement
         [self _sendHasReadResponseForMessages:@[model.message]
                                        isRead:YES];
         
@@ -655,7 +654,7 @@
         if (imageBody.thumbnailDownloadStatus == EMDownloadStatusSuccessed) {
             if (imageBody.downloadStatus == EMDownloadStatusSuccessed)
             {
-                //发送已读回执
+                //send the acknowledgement
                 [weakSelf _sendHasReadResponseForMessages:@[model.message] isRead:YES];
                 NSString *localPath = model.message == nil ? model.fileLocalPath : [imageBody localPath];
                 if (localPath && localPath.length > 0) {
@@ -676,7 +675,7 @@
             [[EMClient sharedClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
                 [weakSelf hideHud];
                 if (!error) {
-                    //发送已读回执
+                    //send the acknowledgement
                     [weakSelf _sendHasReadResponseForMessages:@[model.message] isRead:YES];
                     NSString *localPath = message == nil ? model.fileLocalPath : [(EMImageMessageBody*)message.body localPath];
                     if (localPath && localPath.length > 0) {
@@ -696,7 +695,7 @@
                 [weakSelf showHint:NSEaseLocalizedString(@"message.imageFail", @"image for failure!")];
             }];
         }else{
-            //获取缩略图
+            //get the message thumbnail
             [[EMClient sharedClient].chatManager asyncDownloadMessageThumbnail:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
                 if (!error) {
                     [weakSelf _reloadTableViewDataWithMessage:model.message];
@@ -724,9 +723,9 @@
         return;
     }
     
-    // 播放音频
+    // play the audio
     if (model.bodyType == EMMessageBodyTypeVoice) {
-        //发送已读回执
+        //send the acknowledgement
         [self _sendHasReadResponseForMessages:@[model.message] isRead:YES];
         __weak EaseMessageViewController *weakSelf = self;
         BOOL isPrepare = [[EaseMessageReadManager defaultManager] prepareMessageAudioModel:model updateViewCompletion:^(EaseMessageModel *prevAudioModel, EaseMessageModel *currentAudioModel) {
@@ -774,14 +773,14 @@
             return;
         }
         
-        //格式化消息
+        //Format the message
         NSArray *formattedMessages = [weakSelf formatMessages:moreMessages];
         
         NSInteger scrollToIndex = 0;
         if (isAppend) {
             [weakSelf.messsagesSource insertObjects:moreMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [moreMessages count])]];
             
-            //合并消息
+            //combind the message
             id object = [weakSelf.dataArray firstObject];
             if ([object isKindOfClass:[NSString class]])
             {
@@ -808,20 +807,20 @@
         EMMessage *latest = [weakSelf.messsagesSource lastObject];
         weakSelf.messageTimeIntervalTag = latest.timestamp;
         
-        //刷新页面
+        //refresh the page
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableView reloadData];
             
             [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - scrollToIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
         });
         
-        //从数据库导入时重新下载没有下载成功的附件
+        //re-download all messages
         for (EMMessage *message in moreMessages)
         {
             [weakSelf _downloadMessageAttachments:message];
         }
         
-        //发送已读回执
+        //send the acknoledgement
         [weakSelf _sendHasReadResponseForMessages:moreMessages
                                        isRead:NO];
     });
@@ -829,7 +828,6 @@
 
 #pragma mark - GestureRecognizer
 
-// 点击背景隐藏
 -(void)keyBoardHidden:(UITapGestureRecognizer *)tapRecognizer
 {
     if (tapRecognizer.state == UIGestureRecognizerStateEnded) {
@@ -887,7 +885,7 @@
 {
     id object = [self.dataArray objectAtIndex:indexPath.row];
     
-    //时间cell
+    //time cell
     if ([object isKindOfClass:[NSString class]]) {
         NSString *TimeCellIdentifier = [EaseMessageTimeCell cellIdentifier];
         EaseMessageTimeCell *timeCell = (EaseMessageTimeCell *)[tableView dequeueReusableCellWithIdentifier:TimeCellIdentifier];
@@ -919,7 +917,7 @@
             BOOL flag = [_dataSource isEmotionMessageFormessageViewController:self messageModel:model];
             if (flag) {
                 NSString *CellIdentifier = [EaseCustomMessageCell cellIdentifierWithModel:model];
-                //发送cell
+                //send cell
                 EaseCustomMessageCell *sendCell = (EaseCustomMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 
                 // Configure the cell...
@@ -1019,13 +1017,13 @@
                     if (asset) {
                         [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
                             if (data.length > 10 * 1000 * 1000) {
-                                [self showHint:@"图片太大了，换个小点的"];
+                                [self showHint:NSLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
                                 return;
                             }
                             if (data != nil) {
                                 [self sendImageMessageWithData:data];
                             } else {
-                                [self showHint:@"图片太大了，换个小点的"];
+                                [self showHint:NSLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one");
                             }
                         }];
                     }
@@ -1039,7 +1037,7 @@
                         NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:[assetRepresentation size] error:nil];
                         NSData* fileData = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
                         if (fileData.length > 10 * 1000 * 1000) {
-                            [self showHint:@"图片太大了，换个小点的"];
+                            [self showHint:NSLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
                             return;
                         }
                         [self sendImageMessageWithData:fileData];
@@ -1181,9 +1179,6 @@
     }
 }
 
-/**
- *  按下录音按钮开始录音
- */
 - (void)didStartRecordingVoiceAction:(UIView *)recordView
 {
     if ([self.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
@@ -1212,9 +1207,6 @@
     }
 }
 
-/**
- *  手指向上滑动取消录音
- */
 - (void)didCancelRecordingVoiceAction:(UIView *)recordView
 {
     [[EMCDDeviceManager sharedInstance] cancelCurrentRecording];
@@ -1228,9 +1220,6 @@
     }
 }
 
-/**
- *  松开手指完成录音
- */
 - (void)didFinishRecoingVoiceAction:(UIView *)recordView
 {
     if ([self.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
@@ -1289,10 +1278,10 @@
 
 - (void)moreViewPhotoAction:(EaseChatBarMoreView *)moreView
 {
-    // 隐藏键盘
+    // Hide the keyboard
     [self.chatToolbar endEditing:YES];
     
-    // 弹出照片选择
+    // Pop image picker
     self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage];
     [self presentViewController:self.imagePicker animated:YES completion:NULL];
@@ -1303,7 +1292,7 @@
 
 - (void)moreViewTakePicAction:(EaseChatBarMoreView *)moreView
 {
-    // 隐藏键盘
+    // Hide the keyboard
     [self.chatToolbar endEditing:YES];
     
 #if TARGET_IPHONE_SIMULATOR
@@ -1320,7 +1309,7 @@
 
 - (void)moreViewLocationAction:(EaseChatBarMoreView *)moreView
 {
-    // 隐藏键盘
+    // Hide the keyboard
     [self.chatToolbar endEditing:YES];
     
     EaseLocationViewController *locationController = [[EaseLocationViewController alloc] init];
@@ -1330,7 +1319,7 @@
 
 - (void)moreViewAudioCallAction:(EaseChatBarMoreView *)moreView
 {
-    // 隐藏键盘
+    // Hide the keyboard
     [self.chatToolbar endEditing:YES];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:0]}];
@@ -1338,7 +1327,7 @@
 
 - (void)moreViewVideoCallAction:(EaseChatBarMoreView *)moreView
 {
-    // 隐藏键盘
+    // Hide the keyboard
     [self.chatToolbar endEditing:YES];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:1]}];
@@ -1353,7 +1342,7 @@
     [self sendLocationMessageLatitude:latitude longitude:longitude andAddress:address];
 }
 
-#pragma mark - EaseMob
+#pragma mark - Hyphenate
 
 #pragma mark - EMChatManagerDelegate
 
@@ -1532,7 +1521,7 @@
     }
     
     for (EMMessage *message in messages) {
-        //计算時間间隔
+        //Calculate time interval
         CGFloat interval = (self.messageTimeIntervalTag - message.timestamp) / 1000;
         if (self.messageTimeIntervalTag < 0 || interval > 60 || interval < -60) {
             NSDate *messageDate = [NSDate dateWithTimeIntervalInMilliSecondSince1970:(NSTimeInterval)message.timestamp];
@@ -1548,7 +1537,7 @@
             self.messageTimeIntervalTag = message.timestamp;
         }
         
-        //构建数据模型
+        //Construct message model
         id<IMessageModel> model = nil;
         if (_dataSource && [_dataSource respondsToSelector:@selector(messageViewController:modelForMessage:)]) {
             model = [_dataSource messageViewController:self modelForMessage:message];
@@ -1724,7 +1713,6 @@
     self.dataArray = [[self formatMessages:self.messsagesSource] mutableCopy];
     [self.tableView reloadData];
     
-    //回到前台时
     if (self.isViewDidAppear)
     {
         NSMutableArray *unreadMessages = [NSMutableArray array];
