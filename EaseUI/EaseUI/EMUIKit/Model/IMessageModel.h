@@ -31,7 +31,7 @@
 @property (strong, nonatomic) UIImage *avatarImage;
 @property (strong, nonatomic) NSString *text;
 @property (strong, nonatomic) NSAttributedString *attrBody;
-//Placeholder image for network error
+//Placeholder image when download fails
 @property (strong, nonatomic) NSString *failImageName;
 @property (nonatomic) CGSize imageSize;
 @property (nonatomic) CGSize thumbnailImageSize;

@@ -167,7 +167,7 @@ typedef NS_ENUM(NSInteger, EMAudioSession){
             completion(nil,0,error);
         }
         
-        // If the recording tiem is too shorty，in purpose delay one second
+        // If the recording time is too shorty，in purpose delay one second
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)([EMCDDeviceManager recordMinDuration] * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [EMAudioRecorderUtil asyncStopRecordingWithCompletion:^(NSString *recordPath) {
                 [weakSelf setupAudioSessionCategory:EM_DEFAULT isActive:NO];

@@ -22,7 +22,7 @@
     [self scrollViewContentSizeDidChange:nil];
 }
 
-#pragma mark - Overwrite parenet class methods
+#pragma mark - Overwrite parent class methods
 - (void)scrollViewContentOffsetDidChange:(NSDictionary *)change
 {
     [super scrollViewContentOffsetDidChange:change];

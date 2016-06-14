@@ -48,14 +48,14 @@ static void SkipToPCMAudioData(FILE* fpwave)
 }
 
 // Read PCM frame from wave file
-// Return the size of frame
+// Return 0 for error, otherwise return a positive number of the size of frame
 static size_t ReadPCMFrame(short speech[], FILE* fpwave, int nChannels, int nBitsPerSample)
 {
 	size_t nRead = 0;
 	int x = 0, y=0;
 //	unsigned short ush1=0, ush2=0, ush=0;
 	
-	// Size of original PMC frame
+	// Original PCM autio frame data
 	unsigned char  pcmFrame_8b1[PCM_FRAME_SIZE];
 	unsigned char  pcmFrame_8b2[PCM_FRAME_SIZE<<1];
 	unsigned short pcmFrame_16b1[PCM_FRAME_SIZE];
@@ -113,12 +113,12 @@ static size_t ReadPCMFrame(short speech[], FILE* fpwave, int nChannels, int nBit
 }
 
 // WAVE audio processing frequency is 8khz
-// audio processing unit = 8000*0.02 = 160 (decided by audio processing frequency)
+// audio sample processing units = 8000*0.02 = 160 (decided by audio processing frequency)
 // audio channels 1 : 160
 //        2 : 160*2 = 320
-// bps decides the size of processing sample
-// bps = 8 --> 8 bytes unsigned char
-//       16 --> 16 bytes unsigned short
+// bps decides the size of sample
+// bps = 8 --> 8 bits unsigned char
+//       16 --> 16 bits unsigned short
 int EM_EncodeWAVEFileToAMRFile(const char* pchWAVEFilename, const char* pchAMRFileName, int nChannels, int nBitsPerSample)
 {
 	FILE* fpwave;
@@ -257,6 +257,7 @@ static int caclAMRFrameSize(unsigned char frameHeader)
 }
 
 // Read the first AMR frame - (Reference frame)
+// return 0 for error and 1 for success
 static int ReadAMRFrameFirst(FILE* fpamr, unsigned char frameBuffer[], int* stdFrameSize, unsigned char* stdFrameHeader)
 {
 	//memset(frameBuffer, 0, sizeof(frameBuffer));
@@ -347,7 +348,7 @@ int EM_DecodeAMRFileToWAVEFile(const char* pchAMRFileName, const char* pchWAVEFi
 	memset(pcmFrame, 0, PCM_FRAME_SIZE);
 	ReadAMRFrameFirst(fpamr, amrFrame, &stdFrameSize, &stdFrameHeader);
 	
-	// Decode the first AMR audio fram to PCM data
+	// Decode an AMR audio frame to PCM data
 	Decoder_Interface_Decode(destate, amrFrame, pcmFrame, 0);
 	nFrameCount++;
 	fwrite(pcmFrame, sizeof(short), PCM_FRAME_SIZE, fpwave);

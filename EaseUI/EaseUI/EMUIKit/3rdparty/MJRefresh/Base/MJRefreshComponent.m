@@ -161,7 +161,7 @@
     }
 }
 
-#pragma mark Set the transparency
+#pragma mark Set the transparency dynamically
 - (void)setPullingPercent:(CGFloat)pullingPercent
 {
     _pullingPercent = pullingPercent;

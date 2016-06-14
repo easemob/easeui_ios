@@ -814,7 +814,7 @@
             [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - scrollToIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
         });
         
-        //re-download all messages
+        //re-download all messages that are not successfully downloaded
         for (EMMessage *message in moreMessages)
         {
             [weakSelf _downloadMessageAttachments:message];
@@ -1023,7 +1023,7 @@
                             if (data != nil) {
                                 [self sendImageMessageWithData:data];
                             } else {
-                                [self showHint:NSLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one");
+                                [self showHint:NSLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
                             }
                         }];
                     }

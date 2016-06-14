@@ -66,8 +66,8 @@ typedef struct
 // audio channels 1 : 160
 //        2 : 160*2 = 320
 // bps decides the size of processing sample
-// bps = 8 --> 8 bytes unsigned char
-//       16 --> 16 bytes unsigned short
+// bps = 8 --> 8 bits unsigned char
+//       16 --> 16 bits unsigned short
 int EM_EncodeWAVEFileToAMRFile(const char* pchWAVEFilename, const char* pchAMRFileName, int nChannels, int nBitsPerSample);
 
 int EM_DecodeAMRFileToWAVEFile(const char* pchAMRFileName, const char* pchWAVEFilename);
