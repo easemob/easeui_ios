@@ -117,8 +117,8 @@ static size_t ReadPCMFrame(short speech[], FILE* fpwave, int nChannels, int nBit
 // audio channels 1 : 160
 //        2 : 160*2 = 320
 // bps decides the size of sample
-// bps = 8 --> 8 bits unsigned char
-//       16 --> 16 bits unsigned short
+// bps = 8 --> 8 bits
+//       16 --> 16 bits
 int EM_EncodeWAVEFileToAMRFile(const char* pchWAVEFilename, const char* pchAMRFileName, int nChannels, int nBitsPerSample)
 {
 	FILE* fpwave;
@@ -232,7 +232,7 @@ static const int myround(const double x)
 	return((int)(x+0.5));
 } 
 
-// Calculate the AMR frame size based on the frame header size
+// Calculate the AMR frame size with the frame header
 static int caclAMRFrameSize(unsigned char frameHeader)
 {
 	int mode;
@@ -242,7 +242,7 @@ static int caclAMRFrameSize(unsigned char frameHeader)
 	
 	temp1 = frameHeader;
 	
-	// encoding with the first 3 -6 digit od frame header
+	// Get AMR Encode Mode with the 3 - 6 digit of frame header
 	temp1 &= 0x78; // 0111-1000
 	temp1 >>= 3;
 	
@@ -360,7 +360,7 @@ int EM_DecodeAMRFileToWAVEFile(const char* pchAMRFileName, const char* pchWAVEFi
 		memset(pcmFrame, 0, PCM_FRAME_SIZE);
 		if (!ReadAMRFrame(fpamr, amrFrame, stdFrameSize, stdFrameHeader)) break;
 		
-		// Decode the AMR audio frame to PCM data (8k-16-single audio channel)
+		// Decode the AMR audio frame to PCM data
         Decoder_Interface_Decode(destate, amrFrame, pcmFrame, 0);
 		nFrameCount++;
 		fwrite(pcmFrame, sizeof(short), PCM_FRAME_SIZE, fpwave);
