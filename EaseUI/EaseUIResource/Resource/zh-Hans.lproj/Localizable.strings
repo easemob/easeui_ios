@@ -1,10 +1,15 @@
-/* 
-  Localizable.strings
-  EaseUI
+/************************************************************
+ *  * Hyphenate CONFIDENTIAL
+ * __________________
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Hyphenate Inc.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Hyphenate Inc.
+ */
 
-  Created by EaseMob on 15/11/6.
-  Copyright © 2015年 easemob. All rights reserved.
-*/
 "register" = "注册";
 "login" = "登录";
 "logout" = "登出";
@@ -244,6 +249,7 @@
 "message.startRecordFail" = "开始录音失败";
 "message.noMessage" = "消息已经清空";
 "message.forbiddenWords" = "你的消息包含不当言论";
+"message.smallerImage" = "图片太大了，换个小点的";
 
 //media
 "media.timeShort" = "录音时间太短了";

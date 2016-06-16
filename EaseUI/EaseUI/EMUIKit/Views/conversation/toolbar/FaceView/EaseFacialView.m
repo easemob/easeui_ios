@@ -292,7 +292,6 @@
     }
 }
 
-//给faces设置位置
 -(void)loadFacialView:(NSArray*)emotionManagers size:(CGSize)size
 {
     for (UIView *view in [self.scrollview subviews]) {

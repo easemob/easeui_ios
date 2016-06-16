@@ -18,41 +18,33 @@
 #define MESSAGE_ATTR_EXPRESSION_ID @"em_expression_id"
 
 typedef NS_ENUM(NSUInteger, EMEmotionType) {
-    EMEmotionDefault = 0,//默认表情
-    EMEmotionPng,//
-    EMEmotionGif//大表情或者Gif表情
+    EMEmotionDefault = 0,
+    EMEmotionPng,
+    EMEmotionGif
 };
 
 @interface EaseEmotionManager : NSObject
 
-/*!
- @property
- @brief EaseEmotion数组
- */
 @property (nonatomic, strong) NSArray *emotions;
 
 /*!
  @property
- @brief 表情控件显示行数
+ @brief number of lines of emotion
  */
 @property (nonatomic, assign) NSInteger emotionRow;
 
 /*!
  @property
- @brief 表情控件显示列数
+ @brief number of columns of emotion
  */
 @property (nonatomic, assign) NSInteger emotionCol;
 
 /*!
  @property
- @brief 表情类型
+ @brief emotion type
  */
 @property (nonatomic, assign) EMEmotionType emotionType;
 
-/*!
- @property
- @brief 表情控件底部按钮表情
- */
 @property (nonatomic, strong) UIImage *tagImage;
 
 - (id)initWithType:(EMEmotionType)Type
@@ -70,40 +62,16 @@ typedef NS_ENUM(NSUInteger, EMEmotionType) {
 
 @interface EaseEmotion : NSObject
 
-/*!
- @property
- @brief 表情类型
- */
 @property (nonatomic, assign) EMEmotionType emotionType;
 
-/*!
- @property
- @brief 表情文字
- */
 @property (nonatomic, copy) NSString *emotionTitle;
 
-/*!
- @property
- @brief 表情Id
- */
 @property (nonatomic, copy) NSString *emotionId;
 
-/*!
- @property
- @brief 表情本地缩略图地址
- */
 @property (nonatomic, copy) NSString *emotionThumbnail;
 
-/*!
- @property
- @brief 表情本地原始图片地址
- */
 @property (nonatomic, copy) NSString *emotionOriginal;
 
-/*!
- @property
- @brief 表情本地原始网络地址
- */
 @property (nonatomic, copy) NSString *emotionOriginalURL;
 
 - (id)initWithName:(NSString*)emotionTitle

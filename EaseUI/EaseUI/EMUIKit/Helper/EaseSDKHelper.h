@@ -21,7 +21,7 @@
 #define KNOTIFICATION_CALL_CLOSE @"callControllerClose"
 
 #define kSDKConfigEnableConsoleLogger @"SDKConfigEnableConsoleLogger"
-#define kEaseUISDKConfigIsUseLite @"isUselibEaseMobClientSDKLite"
+#define kEaseUISDKConfigIsUseLite @"isUselibHyphenateClientSDKLite"
 
 @interface EaseSDKHelper : NSObject<EMClientDelegate>
 
@@ -31,9 +31,9 @@
 
 + (instancetype)shareHelper;
 
-#pragma mark - init easemob
+#pragma mark - init Hyphenate
 
-- (void)easemobApplication:(UIApplication *)application
+- (void)hyphenateApplication:(UIApplication *)application
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                     appkey:(NSString *)appkey
               apnsCertName:(NSString *)apnsCertName

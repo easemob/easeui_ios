@@ -17,9 +17,7 @@
 @interface EaseRecordView ()
 {
     NSTimer *_timer;
-    // 显示动画的ImageView
     UIImageView *_recordAnimationView;
-    // 提示文字
     UILabel *_textLabel;
 }
 
@@ -88,10 +86,8 @@
     _loosenCancelText = loosenCancelText;
 }
 
-// 录音按钮按下
 -(void)recordButtonTouchDown
 {
-    // 需要根据声音大小切换recordView动画
     _textLabel.text = _upCancelText;
     _textLabel.backgroundColor = [UIColor clearColor];
     _timer = [NSTimer scheduledTimerWithTimeInterval:0.05
@@ -101,24 +97,23 @@
                                              repeats:YES];
     
 }
-// 手指在录音按钮内部时离开
+
 -(void)recordButtonTouchUpInside
 {
     [_timer invalidate];
 }
-// 手指在录音按钮外部时离开
+
 -(void)recordButtonTouchUpOutside
 {
     [_timer invalidate];
 }
-// 手指移动到录音按钮内部
+
 -(void)recordButtonDragInside
 {
     _textLabel.text = _upCancelText;
     _textLabel.backgroundColor = [UIColor clearColor];
 }
 
-// 手指移动到录音按钮外部
 -(void)recordButtonDragOutside
 {
     _textLabel.text = _loosenCancelText;
