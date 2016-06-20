@@ -1118,7 +1118,12 @@
     
     __weak typeof(self) weakself = self;
     [[[EMClient sharedClient] chatManager] asyncResendMessage:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
-        [weakself.tableView reloadData];
+        if (!error) {
+            [weakself _refreshAfterSentMessage:message];
+        }
+        else {
+            [weakself.tableView reloadData];
+        }
     }];
     
     [self.tableView reloadData];
@@ -1608,7 +1613,7 @@
     if ([self.messsagesSource count] && [EMClient sharedClient].options.sortMessageByServerTime) {
         NSString *msgId = aMessage.messageId;
         EMMessage *last = self.messsagesSource.lastObject;
-        if ([last isKindOfClass:[EMMessage class]] && ![last.messageId isEqualToString:msgId]) {
+        if ([last isKindOfClass:[EMMessage class]]) {
             
             __block NSUInteger index = NSNotFound;
             index = NSNotFound;
@@ -1623,10 +1628,13 @@
                 [self.messsagesSource addObject:aMessage];
                 
                 //格式化消息
+                self.messageTimeIntervalTag = -1;
                 NSArray *formattedMessages = [self formatMessages:self.messsagesSource];
                 [self.dataArray removeAllObjects];
                 [self.dataArray addObjectsFromArray:formattedMessages];
-                self.messageTimeIntervalTag = aMessage.timestamp;
+                [self.tableView reloadData];
+                [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                return;
             }
         }
     }
