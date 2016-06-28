@@ -66,7 +66,6 @@
             __weak EaseRefreshTableViewController *weakSelf = self;
             MJRefreshLegendHeader *header = [self.tableView addLegendHeaderWithRefreshingBlock:^{
                 [weakSelf tableViewDidTriggerHeaderRefresh];
-                [weakSelf.tableView.header beginRefreshing];
             }];
             header.updatedTimeHidden = YES;
         }
@@ -84,7 +83,6 @@
             __weak EaseRefreshTableViewController *weakSelf = self;
             [self.tableView addLegendFooterWithRefreshingBlock:^{
                 [weakSelf tableViewDidTriggerFooterRefresh];
-                [weakSelf.tableView.footer beginRefreshing];
             }];
         }
         else{
