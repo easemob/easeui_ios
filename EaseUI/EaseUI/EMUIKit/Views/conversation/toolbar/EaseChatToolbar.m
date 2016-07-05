@@ -525,10 +525,24 @@
         if ([self.delegate respondsToSelector:@selector(didSendText:)]) {
             [self.delegate didSendText:textView.text];
             self.inputTextView.text = @"";
-            [self _willShowInputTextViewToHeight:[self _getTextViewContentH:self.inputTextView]];;
+            [self _willShowInputTextViewToHeight:[self _getTextViewContentH:self.inputTextView]];
         }
         
         return NO;
+    }
+    else if ([text isEqualToString:@"@"]) {
+        if ([self.delegate respondsToSelector:@selector(didInputAtInLocation:)]) {
+            if ([self.delegate didInputAtInLocation:range.location]) {
+                [self _willShowInputTextViewToHeight:[self _getTextViewContentH:self.inputTextView]];
+                return NO;
+            }
+        }
+    }
+    else if ([text length] == 0) {
+        //delete one character
+        if (range.length == 1 && [self.delegate respondsToSelector:@selector(didDeleteCharacterFromLocation:)]) {
+            return ![self.delegate didDeleteCharacterFromLocation:range.location];
+        }
     }
     return YES;
 }
