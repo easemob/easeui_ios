@@ -1200,7 +1200,7 @@
         [self.delegate messageViewController:self selectAtTarget:^(EaseAtTarget *target) {
             __strong EaseMessageViewController *strongSelf = weakSelf;
             if (strongSelf && target) {
-                if (target.userId || target.nickname) {
+                if ([target.userId length] || [target.nickname length]) {
                     [strongSelf.atTargets addObject:target];
                     NSString *insertStr = [NSString stringWithFormat:@"%@ ", target.nickname ? target.nickname : target.userId];
                     EaseChatToolbar *toolbar = (EaseChatToolbar*)strongSelf.chatToolbar;
@@ -1972,7 +1972,7 @@
                         return targets;
                     }
                     for (EaseAtTarget *target in self.atTargets) {
-                        if (target.userId) {
+                        if ([target.userId length]) {
                             if ([split hasPrefix:target.userId] || (target.nickname && [split hasPrefix:target.nickname])) {
                                 [targets addObject:target.userId];
                                 [self.atTargets removeObject:target];
