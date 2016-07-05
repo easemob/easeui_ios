@@ -158,6 +158,23 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     return message;
 }
 
++ (EMMessage *)sendCmdMessage:(NSString *)action
+                            to:(NSString *)to
+                   messageType:(EMChatType)messageType
+                    messageExt:(NSDictionary *)messageExt
+                     cmdParams:(NSArray *)params
+{
+    EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:action];
+    if (params) {
+        body.params = params;
+    }
+    NSString *from = [[EMClient sharedClient] currentUsername];
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
+    message.chatType = messageType;
+    
+    return message;
+}
+
 + (EMMessage *)sendLocationMessageWithLatitude:(double)latitude
                                      longitude:(double)longitude
                                        address:(NSString *)address

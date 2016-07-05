@@ -25,16 +25,29 @@
 #import "EaseCustomMessageCell.h"
 #import "UIImage+EMGIF.h"
 #import "EaseLocalDefine.h"
+#import "EaseSDKHelper.h"
 
 #define KHintAdjustY    50
 
 #define IOS_VERSION [[UIDevice currentDevice] systemVersion]>=9.0
 
-@interface EaseMessageViewController ()
+@implementation EaseAtTarget
+- (instancetype)initWithUserId:(NSString*)userId andNickname:(NSString*)nickname
+{
+    if (self = [super init]) {
+        _userId = [userId copy];
+        _nickname = [nickname copy];
+    }
+    return self;
+}
+@end
+
+@interface EaseMessageViewController ()<EaseMessageCellDelegate>
 {
     UIMenuItem *_copyMenuItem;
     UIMenuItem *_deleteMenuItem;
     UILongPressGestureRecognizer *_lpgr;
+    NSMutableArray *_atTargets;
     
     dispatch_queue_t _messageQueue;
 }
@@ -42,6 +55,7 @@
 @property (strong, nonatomic) id<IMessageModel> playingVoiceModel;
 @property (nonatomic) BOOL isKicked;
 @property (nonatomic) BOOL isPlayingAudio;
+@property (nonatomic, strong) NSMutableArray *atTargets;
 
 @end
 
@@ -267,6 +281,14 @@
     }
     
     return _imagePicker;
+}
+
+- (NSMutableArray*)atTargets
+{
+    if (!_atTargets) {
+        _atTargets = [NSMutableArray array];
+    }
+    return _atTargets;
 }
 
 #pragma mark - setter
@@ -1166,7 +1188,68 @@
 {
     if (text && text.length > 0) {
         [self sendTextMessage:text];
+        [self.atTargets removeAllObjects];
     }
+}
+
+- (BOOL)didInputAtInLocation:(NSUInteger)location
+{
+    if ([self.delegate respondsToSelector:@selector(messageViewController:selectAtTarget:)] && self.conversation.type == EMConversationTypeGroupChat) {
+        location += 1;
+        __weak typeof(self) weakSelf = self;
+        [self.delegate messageViewController:self selectAtTarget:^(EaseAtTarget *target) {
+            __strong EaseMessageViewController *strongSelf = weakSelf;
+            if (strongSelf && target) {
+                if ([target.userId length] || [target.nickname length]) {
+                    [strongSelf.atTargets addObject:target];
+                    NSString *insertStr = [NSString stringWithFormat:@"%@ ", target.nickname ? target.nickname : target.userId];
+                    EaseChatToolbar *toolbar = (EaseChatToolbar*)strongSelf.chatToolbar;
+                    NSMutableString *originStr = [toolbar.inputTextView.text mutableCopy];
+                    NSUInteger insertLocation = location > originStr.length ? originStr.length : location;
+                    [originStr insertString:insertStr atIndex:insertLocation];
+                    toolbar.inputTextView.text = originStr;
+                    toolbar.inputTextView.selectedRange = NSMakeRange(insertLocation + insertStr.length, 0);
+                    [toolbar.inputTextView becomeFirstResponder];
+                }
+            }
+            else if (strongSelf) {
+                EaseChatToolbar *toolbar = (EaseChatToolbar*)strongSelf.chatToolbar;
+                [toolbar.inputTextView becomeFirstResponder];
+            }
+        }];
+        EaseChatToolbar *toolbar = (EaseChatToolbar*)self.chatToolbar;
+        toolbar.inputTextView.text = [NSString stringWithFormat:@"%@@", toolbar.inputTextView.text];
+        [toolbar.inputTextView resignFirstResponder];
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
+
+- (BOOL)didDeleteCharacterFromLocation:(NSUInteger)location
+{
+    EaseChatToolbar *toolbar = (EaseChatToolbar*)self.chatToolbar;
+    if ([toolbar.inputTextView.text length] == location + 1) {
+        //delete last character
+        NSString *inputText = toolbar.inputTextView.text;
+        NSRange range = [inputText rangeOfString:@"@" options:NSBackwardsSearch];
+        if (range.location != NSNotFound) {
+            if (location - range.location > 1) {
+                NSString *sub = [inputText substringWithRange:NSMakeRange(range.location + 1, location - range.location - 1)];
+                for (EaseAtTarget *target in self.atTargets) {
+                    if ([sub isEqualToString:target.userId] || [sub isEqualToString:target.nickname]) {
+                        inputText = range.location > 0 ? [inputText substringToIndex:range.location] : @"";
+                        toolbar.inputTextView.text = inputText;
+                        toolbar.inputTextView.selectedRange = NSMakeRange(inputText.length, 0);
+                        [self.atTargets removeObject:target];
+                        return YES;
+                    }
+                }
+            }
+        }
+    }
+    return NO;
 }
 
 - (void)didSendText:(NSString *)text withExt:(NSDictionary*)ext
@@ -1666,7 +1749,26 @@
 
 - (void)sendTextMessage:(NSString *)text
 {
-    [self sendTextMessage:text withExt:nil];
+    NSDictionary *ext = nil;
+    if (self.conversation.type == EMConversationTypeGroupChat) {
+        NSArray *targets = [self _searchAtTargets:text];
+        if ([targets count]) {
+            __block BOOL atAll = NO;
+            [targets enumerateObjectsUsingBlock:^(NSString *target, NSUInteger idx, BOOL *stop) {
+                if ([target compare:kGroupMessageAtAll options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+                    atAll = YES;
+                    *stop = YES;
+                }
+            }];
+            if (atAll) {
+                ext = @{kGroupMessageAtList: kGroupMessageAtAll};
+            }
+            else {
+                ext = @{kGroupMessageAtList: targets};
+            }
+        }
+    }
+    [self sendTextMessage:text withExt:ext];
 }
 
 - (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext
@@ -1852,6 +1954,37 @@
             }
         }
     }
+}
+
+- (NSArray*)_searchAtTargets:(NSString*)text
+{
+    NSMutableArray *targets = nil;
+    if (text.length > 1) {
+        targets = [NSMutableArray array];
+        NSArray *splits = [text componentsSeparatedByString:@"@"];
+        if ([splits count]) {
+            for (NSString *split in splits) {
+                if (split.length) {
+                    NSString *atALl = NSEaseLocalizedString(@"group.atAll", @"all");
+                    if ([split compare:atALl options:NSCaseInsensitiveSearch range:NSMakeRange(0, atALl.length)] == NSOrderedSame) {
+                        [targets removeAllObjects];
+                        [targets addObject:kGroupMessageAtAll];
+                        return targets;
+                    }
+                    for (EaseAtTarget *target in self.atTargets) {
+                        if ([target.userId length]) {
+                            if ([split hasPrefix:target.userId] || (target.nickname && [split hasPrefix:target.nickname])) {
+                                [targets addObject:target.userId];
+                                [self.atTargets removeObject:target];
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return targets;
 }
 
 
