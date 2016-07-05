@@ -6,6 +6,7 @@
 //
 
 #import "MJRefreshAutoStateFooter.h"
+#import "EaseLocalDefine.h"
 
 @interface MJRefreshAutoStateFooter()
 {
@@ -55,9 +56,9 @@
 {
     [super prepare];
     
-    [self setTitle:MJRefreshAutoFooterIdleText forState:MJRefreshStateIdle];
-    [self setTitle:MJRefreshAutoFooterRefreshingText forState:MJRefreshStateRefreshing];
-    [self setTitle:MJRefreshAutoFooterNoMoreDataText forState:MJRefreshStateNoMoreData];
+    [self setTitle:NSEaseLocalizedString(@"ui.clickOrPull", @"Click or pull up to download") forState:MJRefreshStateIdle];
+    [self setTitle:NSEaseLocalizedString(@"ui.downloading", @"Downloading...") forState:MJRefreshStateRefreshing];
+    [self setTitle:NSEaseLocalizedString(@"ui.downloadComplete", @"Download complete") forState:MJRefreshStateNoMoreData];
     
     self.stateLabel.userInteractionEnabled = YES;
     [self.stateLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(stateLabelClick)]];

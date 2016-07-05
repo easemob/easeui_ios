@@ -133,6 +133,7 @@
 "group.sendingApply" = "发送加群申请...";
 "group.sendApplyRepeat" = "申请已发送";
 "group.maxUserCount" = "群成员个数超了最大值了";
+"group.atAll" = "全体";
 
 //Create Group
 "group.create.addOccupant" = "添加成员";
@@ -331,6 +332,19 @@
 "setting.profileNickname" = "昵称";
 "setting.saving" = "修改中...";
 "setting.saveFailed" = "修改失败";
+
+//UI
+"ui.pullDownToRefresh" = "下拉可以刷新";
+"ui.releaseToRefresh" = "松开立即刷新";
+"ui.refreshing" = "正在刷新数据中...";
+"ui.clickOrPull" = "点击或上拉加载更多";
+"ui.downloading" = "正在加载更多的数据...";
+"ui.downloadComplete" = "已经全部加载完毕";
+"ui.pullUpToRefresh" = "上拉可以加载更多";
+"ui.releaseToDownload" = "松开立即加载更多";
+"ui.lastUpdate" = "最后更新:";
+"ui.lastUpdateNoRecords" = "最后更新: 无记录";
+"ui.today" = "今天 HH:mm";
 
 //NSDateCategory
 "NSDateCategory.text1" = "1分钟内";

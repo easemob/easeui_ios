@@ -132,6 +132,7 @@
 "group.join.fail" = "again failed to join the group, please";
 "group.sendingApply" = "send group of application...";
 "group.sendApplyRepeat" = "application has been sent";
+"group.atAll" = "all";
 
 //Create Group
 "group.create.addOccupant" = "add members";
@@ -332,6 +333,19 @@
 "setting.profileNickname" = "NickName";
 "setting.saving" = "saving...";
 "setting.saveFailed" = "save failed";
+
+//UI
+"ui.pullDownToRefresh" = "Pull to refresh";
+"ui.releaseToRefresh" = "Release to refresh";
+"ui.refreshing" = "Refreshing...";
+"ui.clickOrPull" = "Click or pull up to download more";
+"ui.downloading" = "Downloading more...";
+"ui.downloadComplete" = "Download complete";
+"ui.pullUpToRefresh" = "Pull up to download more";
+"ui.releaseToDownload" = "Release to download";
+"ui.lastUpdate" = "Last update:";
+"ui.lastUpdateNoRecords" = "Last update: no records";
+"ui.today" = "HH:mm a";
 
 //NSDateCategory
 "NSDateCategory.text1" = "one minute";
