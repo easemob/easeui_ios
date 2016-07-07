@@ -168,6 +168,8 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
 
+@property (nonatomic) BOOL isJoinedChatroom;
+
 - (instancetype)initWithConversationChatter:(NSString *)conversationChatter
                            conversationType:(EMConversationType)conversationType;
 
