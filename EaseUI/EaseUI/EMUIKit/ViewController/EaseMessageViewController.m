@@ -227,6 +227,7 @@
                 if (error != nil) {
                     [strongSelf showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.joinFailed",@"join chatroom \'%@\' failed"), chatroomId]];
                 } else {
+                    strongSelf.isJoinedChatroom = YES;
                     [strongSelf saveChatroom:chatroom];
                 }
             }  else {
@@ -234,9 +235,6 @@
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                         EMError *leaveError;
                         [[EMClient sharedClient].roomManager leaveChatroom:chatroomId error:&leaveError];
-                        if (leaveError == nil) {
-                            [[EMClient sharedClient].chatManager deleteConversation:chatroomId deleteMessages:YES];
-                        }
                     });
                 }
             }
