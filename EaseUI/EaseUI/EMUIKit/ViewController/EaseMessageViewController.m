@@ -235,6 +235,7 @@
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                         EMError *leaveError;
                         [[EMClient sharedClient].roomManager leaveChatroom:chatroomId error:&leaveError];
+                        [[EMClient sharedClient].chatManager deleteConversation:chatroomId deleteMessages:YES];
                     });
                 }
             }
