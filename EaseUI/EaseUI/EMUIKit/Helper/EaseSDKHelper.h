@@ -36,11 +36,9 @@
 
 #pragma mark - init Hyphenate
 
-- (void)hyphenateApplication:(UIApplication *)application
-didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-                    appkey:(NSString *)appkey
-              apnsCertName:(NSString *)apnsCertName
-               otherConfig:(NSDictionary *)otherConfig;
+- (void)hyphenateInitWithAppkey:(NSString *)appkey
+                   apnsCertName:(NSString *)apnsCertName
+                    otherConfig:(NSDictionary *)otherConfig;
 
 #pragma mark - send message
 
