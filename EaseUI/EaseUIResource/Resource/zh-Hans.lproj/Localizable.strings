@@ -198,6 +198,7 @@
 "call.answer"="接听";
 "call.hangup"="挂断";
 "call.connectFailed"="建立连接失败";
+"call.remoteOffline"="对方不在线";
 "call.failed"="通话失败";
 "call.suspended"="通话已挂断";
 "call.over"="通话结束";
