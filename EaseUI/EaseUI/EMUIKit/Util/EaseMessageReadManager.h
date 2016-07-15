@@ -31,15 +31,6 @@ typedef void (^PlayBlock)(BOOL playing, EaseMessageModel *messageModel);
 //default
 - (void)showBrowserWithImages:(NSArray *)imageArray;
 
-/**
- *  准备播放语音文件
- *
- *  @param messageModel     要播放的语音文件
- *  @param updateCompletion 需要更新model所在的Cell
- *
- *  @return 若返回NO，则不需要调用播放方法
- *
- */
 - (BOOL)prepareMessageAudioModel:(EaseMessageModel *)messageModel
             updateViewCompletion:(void (^)(EaseMessageModel *prevAudioModel, EaseMessageModel *currentAudioModel))updateCompletion;
 

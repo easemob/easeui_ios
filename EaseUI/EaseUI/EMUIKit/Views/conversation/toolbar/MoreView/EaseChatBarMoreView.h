@@ -26,41 +26,15 @@ typedef enum{
 
 - (instancetype)initWithFrame:(CGRect)frame type:(EMChatToolbarType)type;
 
-/*!
- @method
- @brief 新增一个新的功能按钮
- @discussion
- @param image 按钮图片
- @param highLightedImage 高亮图片
- @param title 按钮标题
- @result
- */
 - (void)insertItemWithImage:(UIImage*)image
            highlightedImage:(UIImage*)highLightedImage
                       title:(NSString*)title;
 
-/*!
- @method
- @brief 修改功能按钮图片
- @discussion
- @param image 按钮图片
- @param highLightedImage 高亮图片
- @param title 按钮标题
- @param index 按钮索引
- @result
- */
 - (void)updateItemWithImage:(UIImage*)image
            highlightedImage:(UIImage*)highLightedImage
                       title:(NSString*)title
                     atIndex:(NSInteger)index;
 
-/*!
- @method
- @brief 根据索引删除功能按钮
- @discussion
- @param index 按钮索引
- @result
- */
 - (void)removeItematIndex:(NSInteger)index;
 
 @end
@@ -69,13 +43,6 @@ typedef enum{
 
 @optional
 
-/*!
- @method
- @brief 默认功能
- @discussion
- @param moreView 功能view
- @result
- */
 - (void)moreViewTakePicAction:(EaseChatBarMoreView *)moreView;
 - (void)moreViewPhotoAction:(EaseChatBarMoreView *)moreView;
 - (void)moreViewLocationAction:(EaseChatBarMoreView *)moreView;

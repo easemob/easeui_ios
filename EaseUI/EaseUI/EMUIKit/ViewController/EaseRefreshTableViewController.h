@@ -27,14 +27,14 @@
 @property (strong, nonatomic) NSMutableDictionary *dataDictionary;
 @property (nonatomic) int page;
 
-@property (nonatomic) BOOL showRefreshHeader;//是否支持下拉刷新
-@property (nonatomic) BOOL showRefreshFooter;//是否支持上拉加载
-@property (nonatomic) BOOL showTableBlankView;//是否显示无数据时默认背景
+@property (nonatomic) BOOL showRefreshHeader;
+@property (nonatomic) BOOL showRefreshFooter;
+@property (nonatomic) BOOL showTableBlankView;
 
 - (instancetype)initWithStyle:(UITableViewStyle)style;
 
-- (void)tableViewDidTriggerHeaderRefresh;//下拉刷新事件
-- (void)tableViewDidTriggerFooterRefresh;//上拉加载事件
+- (void)tableViewDidTriggerHeaderRefresh;
+- (void)tableViewDidTriggerFooterRefresh;
 
 - (void)tableViewDidFinishTriggerHeader:(BOOL)isHeader reload:(BOOL)reload;
 

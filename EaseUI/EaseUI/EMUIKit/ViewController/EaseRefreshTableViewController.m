@@ -173,17 +173,11 @@
     }
 }
 
-/**
- *  下拉刷新事件
- */
 - (void)tableViewDidTriggerHeaderRefresh
 {
     
 }
 
-/**
- *  上拉加载事件
- */
 - (void)tableViewDidTriggerFooterRefresh
 {
     

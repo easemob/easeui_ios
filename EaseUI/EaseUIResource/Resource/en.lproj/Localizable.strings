@@ -1,10 +1,15 @@
-/* 
-  Localizable.strings
-  EaseUI
+/************************************************************
+ *  * Hyphenate CONFIDENTIAL
+ * __________________
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Hyphenate Inc.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Hyphenate Inc.
+ */
 
-  Created by EaseMob on 15/11/6.
-  Copyright © 2015年 easemob. All rights reserved.
-*/
 "register" = "Register";
 "login" = "Login";
 "logout" = "Logout";
@@ -56,7 +61,7 @@
 "hasRead" = "Read";
 
 //app
-"AppName" = "EaseMobDemo";
+"AppName" = "HyphenateDemo";
 
 //error des
 "error.connectServerFail" = "Connect to the server failed!";
@@ -127,6 +132,7 @@
 "group.join.fail" = "again failed to join the group, please";
 "group.sendingApply" = "send group of application...";
 "group.sendApplyRepeat" = "application has been sent";
+"group.atAll" = "all";
 
 //Create Group
 "group.create.addOccupant" = "add members";
@@ -247,6 +253,7 @@
 "message.startRecordFail" = "failure to start recording";
 "message.noMessage" = "All messages cleared";
 "message.forbiddenWords" = "Your message contains forbidden words";
+"message.smallerImage" = "The image size is too large, please choose another one";
 
 //media
 "media.timeShort" = "The recording time is too short";
@@ -313,7 +320,7 @@
 "setting.setBitrate" = "Set Bitrate";
 "setting.setBitrateTips" = "Set Bitrate should be 150-1000";
 "setting.personalInfoUpload" = "HeadImage";
-"setting.edittips" = "After setting this nickname, chat with the iOS client demo project, iOS will display this nickname is not a EaseMob ID, if the other party to use the Android client this setting is not effective";
+"setting.edittips" = "After setting this nickname, chat with the iOS client demo project, iOS will display this nickname is not a Hyphenate ID, if the other party to use the Android client this setting is not effective";
 "setting.iospushname" = "iOS push nickname";
 "setting.useIp" = "Use IP";
 "setting.deleteConWhenLeave" = "Delete conversation when leave a group";
@@ -327,6 +334,19 @@
 "setting.profileNickname" = "NickName";
 "setting.saving" = "saving...";
 "setting.saveFailed" = "save failed";
+
+//UI
+"ui.pullDownToRefresh" = "Pull to refresh";
+"ui.releaseToRefresh" = "Release to refresh";
+"ui.refreshing" = "Refreshing...";
+"ui.clickOrPull" = "Click or pull up to download more";
+"ui.downloading" = "Downloading more...";
+"ui.downloadComplete" = "Download complete";
+"ui.pullUpToRefresh" = "Pull up to download more";
+"ui.releaseToDownload" = "Release to download";
+"ui.lastUpdate" = "Last update:";
+"ui.lastUpdateNoRecords" = "Last update: no records";
+"ui.today" = "HH:mm a";
 
 //NSDateCategory
 "NSDateCategory.text1" = "one minute";

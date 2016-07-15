@@ -3,7 +3,7 @@
 //  Jeans
 //
 //  Created by Jeans Huang on 12-7-22.
-//  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #import "EMVoiceConverter.h"

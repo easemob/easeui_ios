@@ -61,21 +61,18 @@ typedef struct
 	EM_WAVEFORMAT wf;
 }EM_FMTBLOCK;
 
-// WAVE音频采样频率是8khz 
-// 音频样本单元数 = 8000*0.02 = 160 (由采样频率决定)
-// 声道数 1 : 160
+// WAVE audio processing frequency is 8khz
+// audio processing unit = 8000*0.02 = 160 (decided by audio processing frequency)
+// audio channels 1 : 160
 //        2 : 160*2 = 320
-// bps决定样本(sample)大小
-// bps = 8 --> 8位 unsigned char
-//       16 --> 16位 unsigned short
+// bps decides the size of processing sample
+// bps = 8 --> 8 bits
+//       16 --> 16 bit
 int EM_EncodeWAVEFileToAMRFile(const char* pchWAVEFilename, const char* pchAMRFileName, int nChannels, int nBitsPerSample);
 
-// 将AMR文件解码成WAVE文件
 int EM_DecodeAMRFileToWAVEFile(const char* pchAMRFileName, const char* pchWAVEFilename);
 
-//是否是 MP3文件
 int isMP3File(const char *filePath);
 
-//是否是AMR 文件
 int isAMRFile(const char *filePath);
 #endif

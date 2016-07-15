@@ -1,31 +1,30 @@
 /************************************************************
- *  * EaseMob CONFIDENTIAL
+ *  * Hyphenate CONFIDENTIAL
  * __________________
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of EaseMob Technologies.
+ * the property of Hyphenate Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from EaseMob Technologies.
+ * from Hyphenate Inc.
  */
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 @interface EMAudioRecorderUtil : NSObject
 
-// 当前是否正在录音
 +(BOOL)isRecording;
 
-// 开始录音
+// Start recording
 + (void)asyncStartRecordingWithPreparePath:(NSString *)aFilePath
                                 completion:(void(^)(NSError *error))completion;
-// 停止录音
+// Stop recording
 +(void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath))completion;
 
-// 取消录音
+// Cancel recording
 +(void)cancelCurrentRecording;
 
-// current recorder
+// Current recorder
 +(AVAudioRecorder *)recorder;
 @end
