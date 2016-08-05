@@ -44,7 +44,6 @@
 @property (nonatomic, strong) UIButton *videoButton;
 @property (nonatomic, strong) UIButton *audioCallButton;
 @property (nonatomic, strong) UIButton *videoCallButton;
-@property (nonatomic, strong) UIButton *confVideoButton;
 
 @end
 
@@ -130,15 +129,6 @@
         _videoCallButton.tag =MOREVIEW_BUTTON_TAG + 4;
         _maxIndex = 4;
         [_scrollview addSubview:_videoCallButton];
-        
-        _confVideoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-        [_confVideoButton setFrame:CGRectMake(insets * 2 + CHAT_BUTTON_SIZE, 10 * 2 + CHAT_BUTTON_SIZE + 10, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
-        [_confVideoButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_videoCall"] forState:UIControlStateNormal];
-        [_confVideoButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_videoCallSelected"] forState:UIControlStateHighlighted];
-        [_confVideoButton addTarget:self action:@selector(takeVideoConfAction) forControlEvents:UIControlEventTouchUpInside];
-        _confVideoButton.tag =MOREVIEW_BUTTON_TAG + 5;
-        _maxIndex = 5;
-        [_scrollview addSubview:_confVideoButton];
     }
     else if (type == EMChatToolbarTypeGroup)
     {
@@ -331,13 +321,6 @@
 {
     if (_delegate && [_delegate respondsToSelector:@selector(moreViewVideoCallAction:)]) {
         [_delegate moreViewVideoCallAction:self];
-    }
-}
-
-- (void)takeVideoConfAction
-{
-    if (_delegate && [_delegate respondsToSelector:@selector(moreViewVideoConfAction:)]) {
-        [_delegate moreViewVideoConfAction:self];
     }
 }
 

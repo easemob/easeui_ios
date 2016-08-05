@@ -789,7 +789,7 @@
 //            moreMessages = [weakSelf.dataSource messageViewController:weakSelf loadMessageFromTimestamp:timestamp count:count];
         }
         else{
-//            moreMessages = [weakSelf.conversation loadMoreMessagesFromId:messageId limit:(int)count direction:EMMessageSearchDirectionUp];
+            moreMessages = [weakSelf.conversation loadMoreMessagesFromId:messageId limit:(int)count direction:EMMessageSearchDirectionUp];
         }
         
         if ([moreMessages count] == 0) {
@@ -1422,14 +1422,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:1]}];
 }
 
-- (void)moreViewVideoConfAction:(EaseChatBarMoreView *)moreView
-{
-    // 隐藏键盘
-    [self.chatToolbar endEditing:YES];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CONF object:nil];
-}
-
 #pragma mark - EMLocationViewDelegate
 
 -(void)sendLocationLatitude:(double)latitude
@@ -1747,7 +1739,6 @@
 
 - (void)sendTextMessage:(NSString *)text
 {
-//    [self sendTextMessage:text withExt:@{@"em_apns_ext":@{@"em_push_title":@"自定义信息"}}];
     NSDictionary *ext = nil;
     if (self.conversation.type == EMConversationTypeGroupChat) {
         NSArray *targets = [self _searchAtTargets:text];

@@ -15,8 +15,6 @@
 
 #import "EaseConvertToCommonEmoticonsHelper.h"
 
-#import "EMOptions+PrivateDeploy.h"
-
 //@interface EMChatImageOptions : NSObject<IChatImageOptions>
 //
 //@property (assign, nonatomic) CGFloat compressionQuality;
@@ -112,40 +110,24 @@ static EaseSDKHelper *helper = nil;
 
 - (void)hyphenateApplication:(UIApplication *)application
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-                    appkey:(NSString *)aAppkey
+                    appkey:(NSString *)appkey
               apnsCertName:(NSString *)apnsCertName
                otherConfig:(NSDictionary *)otherConfig
 {
     [self _setupAppDelegateNotifications];
     [self _registerRemoteNotification];
     
-    NSString *appkey = @"easemob-demo#chatdemoui";
-//    NSString *appkey = @"easemob-demo#1212";
     EMOptions *options = [EMOptions optionsWithAppkey:appkey];
-    if (NO)
-    {
-        options.enableDnsConfig = NO;
-        options.chatPort = 6717;
-        //        options.chatPort = 5222;
-        options.chatServer = @"120.26.12.158";
-        options.restServer = @"a1.sdb.easemob.com";
+    options.apnsCertName = apnsCertName;
+    options.isAutoAcceptGroupInvitation = NO;
+    if ([otherConfig objectForKey:kSDKConfigEnableConsoleLogger]) {
+        options.enableConsoleLog = YES;
     }
-    options.apnsCertName = @"chatdemoui_dev";
-    options.enableConsoleLog = YES;
-    [[EMClient sharedClient] initializeSDKWithOptions:options];
-    [[EMClient sharedClient] initializeCallRecorder];
     
-//    EMOptions *options = [EMOptions optionsWithAppkey:appkey];
-//    options.apnsCertName = apnsCertName;
-//    options.isAutoAcceptGroupInvitation = NO;
-//    if ([otherConfig objectForKey:kSDKConfigEnableConsoleLogger]) {
-//        options.enableConsoleLog = YES;
-//    }
-//    
-//    BOOL sandBox = [otherConfig objectForKey:@"easeSandBox"] && [[otherConfig objectForKey:@"easeSandBox"] boolValue];
-//    if (!sandBox) {
-//        [[EMClient sharedClient] initializeSDKWithOptions:options];
-//    }
+    BOOL sandBox = [otherConfig objectForKey:@"easeSandBox"] && [[otherConfig objectForKey:@"easeSandBox"] boolValue];
+    if (!sandBox) {
+        [[EMClient sharedClient] initializeSDKWithOptions:options];
+    }
 }
 
 - (void)dealloc

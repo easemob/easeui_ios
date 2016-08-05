@@ -14,12 +14,10 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-//#import "EMSDK.h"
-#import "EMSDKFull.h"
+#import "EMSDK.h"
 
 #define KNOTIFICATION_LOGINCHANGE @"loginStateChange"
 #define KNOTIFICATION_CALL @"callOutWithChatter"
-#define KNOTIFICATION_CONF @"confOutWithChatter"
 #define KNOTIFICATION_CALL_CLOSE @"callControllerClose"
 
 #define kGroupMessageAtList      @"em_at_list"
