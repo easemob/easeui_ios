@@ -53,25 +53,20 @@ typedef NS_ENUM(NSInteger, EMAudioSession){
         [self setupAudioSessionCategory:EM_AUDIOPLAYER
                                isActive:YES];
     }
-    
-    NSString *playPath = aFilePath;
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([EMVoiceConverter isAMRFile:aFilePath]) {
-        playPath = [[aFilePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"wav"];
-        if (![fileManager fileExistsAtPath:playPath]) {
-            BOOL covertRet = [self convertAMR:aFilePath toWAV:playPath];
-            if (!covertRet) {
-                if (completon) {
-                    completon([NSError errorWithDomain:NSEaseLocalizedString(@"error.initRecorderFail", @"File format conversion failed")
-                                                  code:EMErrorFileTypeConvertionFailure
-                                              userInfo:nil]);
-                }
-                return ;
+    NSString *wavFilePath = [[aFilePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"wav"];
+    if (![fileManager fileExistsAtPath:wavFilePath]) {
+        BOOL covertRet = [self convertAMR:aFilePath toWAV:wavFilePath];
+        if (!covertRet) {
+            if (completon) {
+                completon([NSError errorWithDomain:NSEaseLocalizedString(@"error.initRecorderFail", @"File format conversion failed")
+                                              code:EMErrorFileTypeConvertionFailure
+                                          userInfo:nil]);
             }
+            return ;
         }
     }
-    
-    [EMAudioPlayerUtil asyncPlayingWithPath:playPath
+    [EMAudioPlayerUtil asyncPlayingWithPath:wavFilePath
                                  completion:^(NSError *error)
      {
          [self setupAudioSessionCategory:EM_DEFAULT
