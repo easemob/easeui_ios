@@ -48,15 +48,6 @@ typedef enum{
 - (void)moreViewLocationAction:(EaseChatBarMoreView *)moreView;
 - (void)moreViewAudioCallAction:(EaseChatBarMoreView *)moreView;
 - (void)moreViewVideoCallAction:(EaseChatBarMoreView *)moreView;
-
-/*!
- @method
- @brief 发送消息后的回调
- @discussion
- @param moreView 功能view
- @param index    按钮索引
- @result
- */
 - (void)moreView:(EaseChatBarMoreView *)moreView didItemInMoreViewAtIndex:(NSInteger)index;
 
 @end
