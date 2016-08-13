@@ -92,16 +92,11 @@ typedef void(^EaseSelectAtTargetCallback)(EaseAtTarget*);
 - (id)messageViewController:(EaseMessageViewController *)viewController
                   progressDelegateForMessageBodyType:(EMMessageBodyType)messageBodyType;
 
-- (void)messageViewController:(EaseMessageViewController *)viewController
-               updateProgress:(float)progress
-                 messageModel:(id<IMessageModel>)messageModel
-                  messageBody:(EMMessageBody*)messageBody;
-
 - (NSString *)messageViewController:(EaseMessageViewController *)viewController
                       stringForDate:(NSDate *)date;
 
 - (NSArray *)messageViewController:(EaseMessageViewController *)viewController
-          loadMessageFromTimestamp:(long long)timestamp
+                 loadMessageFromId:(NSString*)messageId
                              count:(NSInteger)count;
 
 - (id<IMessageModel>)messageViewController:(EaseMessageViewController *)viewController

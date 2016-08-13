@@ -139,6 +139,9 @@
     [[EaseChatBarMoreView appearance] setMoreViewBackgroundColor:[UIColor colorWithRed:240 / 255.0 green:242 / 255.0 blue:247 / 255.0 alpha:1.0]];
     
     [self tableViewDidTriggerHeaderRefresh];
+    
+    //设置表情
+    [self setupEmotion];
 }
 
 - (void)setupEmotion
@@ -785,8 +788,8 @@
     __weak typeof(self) weakSelf = self;
     dispatch_async(_messageQueue, ^{
         NSArray *moreMessages = nil;
-        if (weakSelf.dataSource && [weakSelf.dataSource respondsToSelector:@selector(messageViewController:loadMessageFromTimestamp:count:)]) {
-//            moreMessages = [weakSelf.dataSource messageViewController:weakSelf loadMessageFromTimestamp:timestamp count:count];
+        if (weakSelf.dataSource && [weakSelf.dataSource respondsToSelector:@selector(messageViewController:loadMessageFromId:count:)]) {
+            moreMessages = [weakSelf.dataSource messageViewController:weakSelf loadMessageFromId:messageId count:count];
         }
         else{
             moreMessages = [weakSelf.conversation loadMoreMessagesFromId:messageId limit:(int)count direction:EMMessageSearchDirectionUp];
@@ -1856,6 +1859,7 @@
 #pragma mark - notifycation
 - (void)didBecomeActive
 {
+    self.messageTimeIntervalTag = -1;
     self.dataArray = [[self formatMessages:self.messsagesSource] mutableCopy];
     [self.tableView reloadData];
     

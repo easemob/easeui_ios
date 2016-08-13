@@ -183,7 +183,7 @@
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     if (_emotionManagers == nil || [_emotionManagers count] == 0) {
-        return 1;
+        return 0;
     }
     return [_emotionManagers count];
 }
