@@ -65,6 +65,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor colorWithRed:248 / 255.0 green:248 / 255.0 blue:248 / 255.0 alpha:1.0];
+    
+    self.tableView.accessibilityIdentifier = @"chat_table";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     //初始化页面
