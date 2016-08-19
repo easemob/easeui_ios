@@ -83,6 +83,8 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.accessibilityIdentifier = @"table_cell";
+        
         _messageType = model.bodyType;
         [self _setupSubviewsWithType:_messageType
                             isSender:model.isSender

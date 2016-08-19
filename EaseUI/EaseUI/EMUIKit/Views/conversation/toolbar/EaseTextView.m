@@ -80,6 +80,8 @@
 #pragma mark - Life cycle
 
 - (void)setup {
+    self.accessibilityIdentifier = @"text_view";
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceiveTextDidChangeNotification:)
                                                  name:UITextViewTextDidChangeNotification
