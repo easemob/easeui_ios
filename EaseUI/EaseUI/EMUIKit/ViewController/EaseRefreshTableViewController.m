@@ -39,6 +39,7 @@
     }
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:self.style];
+    _tableView.accessibilityIdentifier = @"table_view";
     _tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -67,6 +68,7 @@
             MJRefreshLegendHeader *header = [self.tableView addLegendHeaderWithRefreshingBlock:^{
                 [weakSelf tableViewDidTriggerHeaderRefresh];
             }];
+            header.accessibilityIdentifier = @"refresh_header";
             header.updatedTimeHidden = YES;
         }
         else{
@@ -81,9 +83,10 @@
         _showRefreshFooter = showRefreshFooter;
         if (_showRefreshFooter) {
             __weak EaseRefreshTableViewController *weakSelf = self;
-            [self.tableView addLegendFooterWithRefreshingBlock:^{
+            MJRefreshLegendFooter *footer = [self.tableView addLegendFooterWithRefreshingBlock:^{
                 [weakSelf tableViewDidTriggerFooterRefresh];
             }];
+            footer.accessibilityIdentifier = @"refresh_footer";
         }
         else{
             [self.tableView removeFooter];
