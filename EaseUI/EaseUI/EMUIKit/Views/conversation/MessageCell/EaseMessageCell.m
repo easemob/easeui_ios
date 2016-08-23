@@ -83,6 +83,8 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.accessibilityIdentifier = @"table_cell";
+        
         _messageType = model.bodyType;
         [self _setupSubviewsWithType:_messageType
                             isSender:model.isSender
@@ -104,6 +106,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                          model:(id<IMessageModel>)model
 {
     _statusButton = [[UIButton alloc] init];
+    _statusButton.accessibilityIdentifier = @"status";
     _statusButton.translatesAutoresizingMaskIntoConstraints = NO;
     _statusButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [_statusButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/messageSendFail"] forState:UIControlStateNormal];
@@ -124,6 +127,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     [self.contentView addSubview:_avatarView];
     
     _hasRead = [[UILabel alloc] init];
+    _hasRead.accessibilityIdentifier = @"has_read";
     _hasRead.translatesAutoresizingMaskIntoConstraints = NO;
     _hasRead.text = NSLocalizedString(@"hasRead", @"Read");
     _hasRead.textAlignment = NSTextAlignmentCenter;
@@ -133,6 +137,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     [self.contentView addSubview:_hasRead];
     
     _activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    _activity.accessibilityIdentifier = @"sending";
     _activity.translatesAutoresizingMaskIntoConstraints = NO;
     _activity.backgroundColor = [UIColor clearColor];
     _activity.hidden = YES;

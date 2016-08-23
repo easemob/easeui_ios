@@ -44,6 +44,7 @@ CGFloat const EaseConversationCellPadding = 10;
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.accessibilityIdentifier = @"conversation_cell";
         _showAvatar = YES;
         [self _setupSubview];
     }
@@ -68,6 +69,7 @@ CGFloat const EaseConversationCellPadding = 10;
     [self.contentView addSubview:_timeLabel];
     
     _titleLabel = [[UILabel alloc] init];
+    _titleLabel.accessibilityIdentifier = @"title";
     _titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     _titleLabel.numberOfLines = 1;
     _titleLabel.backgroundColor = [UIColor clearColor];

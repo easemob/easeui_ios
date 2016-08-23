@@ -37,6 +37,8 @@ CGFloat const EaseUserCellPadding = 10;
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.accessibilityIdentifier = @"table_cell";
+        
         [self _setupSubview];
         
         UILongPressGestureRecognizer *headerLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(headerLongPress:)];
