@@ -1275,7 +1275,7 @@
         }
     }
     
-    //if ([self _canRecord]) 
+    if ([self _canRecord]) 
     {
         EaseRecordView *tmpView = (EaseRecordView *)recordView;
         tmpView.center = self.view.center;
