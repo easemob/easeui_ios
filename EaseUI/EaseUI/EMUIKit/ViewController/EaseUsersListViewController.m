@@ -144,7 +144,7 @@
             NSMutableArray *tempDataArray = [NSMutableArray array];
             
             // remove the contact that is currently in the black list
-            NSArray *blockList = [[EMClient sharedClient].contactManager getBlackListFromDB];
+            NSArray *blockList = [[EMClient sharedClient].contactManager getBlackList];
             for (NSInteger i = 0; i < buddyList.count; i++) {
                 NSString *buddy = [buddyList objectAtIndex:i];
                 if (![blockList containsObject:buddy]) {

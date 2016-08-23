@@ -84,7 +84,7 @@
         _scrollToBottomWhenAppear = YES;
         _messsagesSource = [NSMutableArray array];
         
-        [_conversation markAllMessagesAsRead];
+        [_conversation markAllMessagesAsRead:nil];
     }
     
     return self;
@@ -235,7 +235,7 @@
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                         EMError *leaveError;
                         [[EMClient sharedClient].roomManager leaveChatroom:chatroomId error:&leaveError];
-                        [[EMClient sharedClient].chatManager deleteConversation:chatroomId deleteMessages:YES];
+                        [[EMClient sharedClient].chatManager deleteConversation:chatroomId isDeleteMessages:YES completion:nil];
                     });
                 }
             }
@@ -312,7 +312,7 @@
             [self _sendHasReadResponseForMessages:unreadMessages isRead:YES];
         }
         
-        [_conversation markAllMessagesAsRead];
+        [_conversation markAllMessagesAsRead:nil];
     }
 }
 
@@ -506,7 +506,7 @@
         if (imageBody.thumbnailDownloadStatus > EMDownloadStatusSuccessed)
         {
             //download the message thumbnail
-            [[[EMClient sharedClient] chatManager] asyncDownloadMessageThumbnail:message progress:nil completion:completion];
+            [[[EMClient sharedClient] chatManager] downloadMessageThumbnail:message progress:nil completion:completion];
         }
     }
     else if ([messageBody type] == EMMessageBodyTypeVideo)
@@ -515,7 +515,7 @@
         if (videoBody.thumbnailDownloadStatus > EMDownloadStatusSuccessed)
         {
             //download the message thumbnail
-            [[[EMClient sharedClient] chatManager] asyncDownloadMessageThumbnail:message progress:nil completion:completion];
+            [[[EMClient sharedClient] chatManager] downloadMessageThumbnail:message progress:nil completion:completion];
         }
     }
     else if ([messageBody type] == EMMessageBodyTypeVoice)
@@ -524,7 +524,7 @@
         if (voiceBody.downloadStatus > EMDownloadStatusSuccessed)
         {
             //download the message attachment
-            [[EMClient sharedClient].chatManager asyncDownloadMessageAttachments:message progress:nil completion:completion];
+            [[EMClient sharedClient].chatManager downloadMessageAttachment:message progress:nil completion:completion];
         }
     }
 }
@@ -580,7 +580,7 @@
     {
         for (EMMessage *message in unreadMessages)
         {
-            [[EMClient sharedClient].chatManager asyncSendReadAckForMessage:message];
+            [[EMClient sharedClient].chatManager sendMessageReadAck:message completion:nil];
         }
     }
 }
@@ -647,7 +647,7 @@
     
     if (videoBody.thumbnailDownloadStatus == EMDownloadStatusFailed || ![[NSFileManager defaultManager] fileExistsAtPath:videoBody.thumbnailLocalPath]) {
         [self showHint:@"begin downloading thumbnail image, click later"];
-        [[EMClient sharedClient].chatManager asyncDownloadMessageThumbnail:model.message progress:nil completion:completion];
+        [[EMClient sharedClient].chatManager downloadMessageThumbnail:model.message progress:nil completion:completion];
         return;
     }
     
@@ -658,7 +658,7 @@
     }
     
     [self showHudInView:self.view hint:NSEaseLocalizedString(@"message.downloadingVideo", @"downloading video...")];
-    [[EMClient sharedClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakSelf hideHud];
         if (!error) {
             block();
@@ -695,7 +695,7 @@
                 }
             }
             [weakSelf showHudInView:weakSelf.view hint:NSEaseLocalizedString(@"message.downloadingImage", @"downloading a image...")];
-            [[EMClient sharedClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+            [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
                 [weakSelf hideHud];
                 if (!error) {
                     //send the acknowledgement
@@ -719,7 +719,7 @@
             }];
         }else{
             //get the message thumbnail
-            [[EMClient sharedClient].chatManager asyncDownloadMessageThumbnail:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+            [[EMClient sharedClient].chatManager downloadMessageThumbnail:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
                 if (!error) {
                     [weakSelf _reloadTableViewDataWithMessage:model.message];
                 }else{
@@ -742,7 +742,7 @@
     else if (downloadStatus == EMDownloadStatusFailed)
     {
         [self showHint:NSEaseLocalizedString(@"message.downloadingAudio", @"downloading voice, click later")];
-        [[EMClient sharedClient].chatManager asyncDownloadMessageAttachments:model.message progress:nil completion:NULL];
+        [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:nil];
         return;
     }
     
@@ -783,70 +783,67 @@
                      append:(BOOL)isAppend
 {
     __weak typeof(self) weakSelf = self;
-    dispatch_async(_messageQueue, ^{
-        NSArray *moreMessages = nil;
-        if (weakSelf.dataSource && [weakSelf.dataSource respondsToSelector:@selector(messageViewController:loadMessageFromTimestamp:count:)]) {
-//            moreMessages = [weakSelf.dataSource messageViewController:weakSelf loadMessageFromTimestamp:timestamp count:count];
-        }
-        else{
-            moreMessages = [weakSelf.conversation loadMoreMessagesFromId:messageId limit:(int)count direction:EMMessageSearchDirectionUp];
-        }
-        
-        if ([moreMessages count] == 0) {
-            return;
-        }
-        
-        //Format the message
-        NSArray *formattedMessages = [weakSelf formatMessages:moreMessages];
-        
-        //refresh the page
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSInteger scrollToIndex = 0;
-            if (isAppend) {
-                [weakSelf.messsagesSource insertObjects:moreMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [moreMessages count])]];
-                
-                //合并消息
-                id object = [weakSelf.dataArray firstObject];
-                if ([object isKindOfClass:[NSString class]])
-                {
-                    NSString *timestamp = object;
-                    [formattedMessages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id model, NSUInteger idx, BOOL *stop) {
-                        if ([model isKindOfClass:[NSString class]] && [timestamp isEqualToString:model])
-                        {
-                            [weakSelf.dataArray removeObjectAtIndex:0];
-                            *stop = YES;
+    void (^refresh)(NSArray *messages) = ^(NSArray *messages) {
+        dispatch_async(_messageQueue, ^{
+            //Format the message
+            NSArray *formattedMessages = [weakSelf formatMessages:messages];
+            
+            //Refresh the page
+            dispatch_async(dispatch_get_main_queue(), ^{
+                EaseMessageViewController *strongSelf = weakSelf;
+                if (strongSelf) {
+                    NSInteger scrollToIndex = 0;
+                    if (isAppend) {
+                        [strongSelf.messsagesSource insertObjects:messages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [messages count])]];
+                        
+                        //Combine the message
+                        id object = [strongSelf.dataArray firstObject];
+                        if ([object isKindOfClass:[NSString class]]) {
+                            NSString *timestamp = object;
+                            [formattedMessages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id model, NSUInteger idx, BOOL *stop) {
+                                if ([model isKindOfClass:[NSString class]] && [timestamp isEqualToString:model]) {
+                                    [strongSelf.dataArray removeObjectAtIndex:0];
+                                    *stop = YES;
+                                }
+                            }];
                         }
-                    }];
+                        scrollToIndex = [strongSelf.dataArray count];
+                        [strongSelf.dataArray insertObjects:formattedMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formattedMessages count])]];
+                    }
+                    else {
+                        [strongSelf.messsagesSource removeAllObjects];
+                        [strongSelf.messsagesSource addObjectsFromArray:messages];
+                        
+                        [strongSelf.dataArray removeAllObjects];
+                        [strongSelf.dataArray addObjectsFromArray:formattedMessages];
+                    }
+                    
+                    EMMessage *latest = [strongSelf.messsagesSource lastObject];
+                    strongSelf.messageTimeIntervalTag = latest.timestamp;
+                    
+                    [strongSelf.tableView reloadData];
+                    
+                    [strongSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - scrollToIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
                 }
-                scrollToIndex = [weakSelf.dataArray count];
-                [weakSelf.dataArray insertObjects:formattedMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formattedMessages count])]];
-            }
-            else{
-                [weakSelf.messsagesSource removeAllObjects];
-                [weakSelf.messsagesSource addObjectsFromArray:moreMessages];
-                
-                [weakSelf.dataArray removeAllObjects];
-                [weakSelf.dataArray addObjectsFromArray:formattedMessages];
+            });
+            
+            //re-download all messages that are not successfully downloaded
+            for (EMMessage *message in messages)
+            {
+                [weakSelf _downloadMessageAttachments:message];
             }
             
-            EMMessage *latest = [weakSelf.messsagesSource lastObject];
-            weakSelf.messageTimeIntervalTag = latest.timestamp;
-        
-            [weakSelf.tableView reloadData];
-            
-            [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - scrollToIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            //send the read acknoledgement
+            [weakSelf _sendHasReadResponseForMessages:messages
+                                               isRead:NO];
         });
-        
-        //re-download all messages that are not successfully downloaded
-        for (EMMessage *message in moreMessages)
-        {
-            [weakSelf _downloadMessageAttachments:message];
+    };
+    
+    [self.conversation loadMessagesStartFromId:messageId count:(int)count searchDirection:EMMessageSearchDirectionUp completion:^(NSArray *aMessages, EMError *aError) {
+        if (!aError && [aMessages count]) {
+            refresh(aMessages);
         }
-        
-        //send the acknoledgement
-        [weakSelf _sendHasReadResponseForMessages:moreMessages
-                                       isRead:NO];
-    });
+    }];
 }
 
 #pragma mark - GestureRecognizer
@@ -1056,8 +1053,8 @@
                 [alasset assetForURL:url resultBlock:^(ALAsset *asset) {
                     if (asset) {
                         ALAssetRepresentation* assetRepresentation = [asset defaultRepresentation];
-                        Byte* buffer = (Byte*)malloc([assetRepresentation size]);
-                        NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:[assetRepresentation size] error:nil];
+                        Byte* buffer = (Byte*)malloc((size_t)[assetRepresentation size]);
+                        NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:(NSUInteger)[assetRepresentation size] error:nil];
                         NSData* fileData = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
                         if (fileData.length > 10 * 1000 * 1000) {
                             [self showHint:NSEaseLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
@@ -1138,7 +1135,7 @@
     }
     
     __weak typeof(self) weakself = self;
-    [[[EMClient sharedClient] chatManager] asyncResendMessage:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[[EMClient sharedClient] chatManager] resendMessage:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         if (!error) {
             [weakself _refreshAfterSentMessage:message];
         }
@@ -1278,7 +1275,8 @@
         }
     }
     
-    if ([self _canRecord]) {
+    //if ([self _canRecord]) 
+    {
         EaseRecordView *tmpView = (EaseRecordView *)recordView;
         tmpView.center = self.view.center;
         [self.view addSubview:tmpView];
@@ -1446,7 +1444,7 @@
             
             if ([self _shouldMarkMessageAsRead])
             {
-                [self.conversation markMessageAsReadWithId:message.messageId];
+                [self.conversation markMessageAsReadWithId:message.messageId error:nil];
             }
         }
     }
@@ -1576,7 +1574,7 @@
         NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:self.menuIndexPath.row];
         NSMutableArray *indexPaths = [NSMutableArray arrayWithObjects:self.menuIndexPath, nil];
         
-        [self.conversation deleteMessageWithId:model.message.messageId];
+        [self.conversation deleteMessageWithId:model.message.messageId error:nil];
         [self.messsagesSource removeObject:model.message];
         
         if (self.menuIndexPath.row - 1 >= 0) {
@@ -1727,7 +1725,7 @@
                         progress:nil];
     
     __weak typeof(self) weakself = self;
-    [[EMClient sharedClient].chatManager asyncSendMessage:message progress:nil completion:^(EMMessage *aMessage, EMError *aError) {
+    [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *aMessage, EMError *aError) {
         if (!aError) {
             [weakself _refreshAfterSentMessage:aMessage];
         }
@@ -1874,7 +1872,7 @@
             [self _sendHasReadResponseForMessages:unreadMessages isRead:YES];
         }
         
-        [_conversation markAllMessagesAsRead];
+        [_conversation markAllMessagesAsRead:nil];
     }
 }
 

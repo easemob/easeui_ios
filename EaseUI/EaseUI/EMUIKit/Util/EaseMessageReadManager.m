@@ -179,13 +179,13 @@ static EaseMessageReadManager *detailInstance = nil;
                     if (![[dict objectForKey:@"isPlayed"] boolValue]) {
                         [dict setObject:@YES forKey:@"isPlayed"];
                         chatMessage.ext = dict;
-                        [[EMClient sharedClient].chatManager updateMessage:chatMessage];
+                        [[EMClient sharedClient].chatManager updateMessage:chatMessage completion:nil];
                     }
                 } else {
                     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:chatMessage.ext];
                     [dic setObject:@YES forKey:@"isPlayed"];
                     chatMessage.ext = dic;
-                    [[EMClient sharedClient].chatManager updateMessage:chatMessage];
+                    [[EMClient sharedClient].chatManager updateMessage:chatMessage completion:nil];
                 }
             }
         }
