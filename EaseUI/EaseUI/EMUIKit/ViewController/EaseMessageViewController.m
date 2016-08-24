@@ -1329,7 +1329,7 @@
             [weakSelf sendVoiceMessageWithLocalPath:recordPath duration:aDuration];
         }
         else {
-            [weakSelf showHudInView:self.view hint:NSEaseLocalizedString(@"media.timeShort", @"The recording time is too short")];
+            [weakSelf showHudInView:self.view hint:error.domain];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [weakSelf hideHud];
             });
