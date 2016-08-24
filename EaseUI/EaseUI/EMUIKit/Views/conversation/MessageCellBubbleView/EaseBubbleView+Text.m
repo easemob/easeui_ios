@@ -42,6 +42,7 @@
 - (void)setupTextBubbleView
 {
     self.textLabel = [[UILabel alloc] init];
+    self.textLabel.accessibilityIdentifier = @"text_label";
     self.textLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.textLabel.backgroundColor = [UIColor clearColor];
     self.textLabel.numberOfLines = 0;

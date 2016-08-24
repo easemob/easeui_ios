@@ -76,6 +76,8 @@
     }
     self = [super initWithFrame:frame];
     if (self) {
+        self.accessibilityIdentifier = @"chatbar";
+
         _horizontalPadding = horizontalPadding;
         _verticalPadding = verticalPadding;
         _inputViewMinHeight = inputViewMinHeight;
@@ -133,6 +135,7 @@
     
     //change input type
     UIButton *styleChangeButton = [[UIButton alloc] init];
+    styleChangeButton.accessibilityIdentifier = @"style";
     styleChangeButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [styleChangeButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_record"] forState:UIControlStateNormal];
     [styleChangeButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_keyboard"] forState:UIControlStateSelected];
@@ -143,6 +146,7 @@
     
     //record
     self.recordButton = [[UIButton alloc] initWithFrame:self.inputTextView.frame];
+    self.recordButton.accessibilityIdentifier = @"record";
     self.recordButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
     [self.recordButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     [self.recordButton setBackgroundImage:[[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_recordBg"] stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
@@ -160,6 +164,7 @@
     
     //emoji
     self.faceButton = [[UIButton alloc] init];
+    self.faceButton.accessibilityIdentifier = @"face";
     self.faceButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [self.faceButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_face"] forState:UIControlStateNormal];
     [self.faceButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_faceSelected"] forState:UIControlStateHighlighted];
@@ -169,6 +174,7 @@
     
     //more
     self.moreButton = [[UIButton alloc] init];
+    self.moreButton.accessibilityIdentifier = @"more";
     self.moreButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [self.moreButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_more"] forState:UIControlStateNormal];
     [self.moreButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_moreSelected"] forState:UIControlStateHighlighted];

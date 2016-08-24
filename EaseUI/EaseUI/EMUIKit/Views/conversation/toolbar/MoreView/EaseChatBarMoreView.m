@@ -70,6 +70,7 @@
 - (void)setupSubviewsForType:(EMChatToolbarType)type
 {
     //self.backgroundColor = [UIColor clearColor];
+    self.accessibilityIdentifier = @"more_view";
     
     _scrollview = [[UIScrollView alloc] init];
     _scrollview.pagingEnabled = YES;
@@ -86,6 +87,7 @@
     CGFloat insets = (self.frame.size.width - 4 * CHAT_BUTTON_SIZE) / 5;
     
     _photoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    _photoButton.accessibilityIdentifier = @"image";
     [_photoButton setFrame:CGRectMake(insets, 10, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
     [_photoButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_photo"] forState:UIControlStateNormal];
     [_photoButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_photoSelected"] forState:UIControlStateHighlighted];
@@ -94,6 +96,7 @@
     [_scrollview addSubview:_photoButton];
     
     _locationButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    _locationButton.accessibilityIdentifier = @"location";
     [_locationButton setFrame:CGRectMake(insets * 2 + CHAT_BUTTON_SIZE, 10, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
     [_locationButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_location"] forState:UIControlStateNormal];
     [_locationButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_locationSelected"] forState:UIControlStateHighlighted];
