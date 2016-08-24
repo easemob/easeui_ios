@@ -247,6 +247,7 @@
 "message.downloadingImage" = "downloading a image...";
 "message.imageFail" = "image for failure!";
 "message.thumImageFail" = "thumbnail for failure!";
+"message.voiceFail" = "voice for failure!";
 "message.simulatorNotSupportCamera" = "simulator does not support taking picture";
 "message.simulatorNotSupportVideo" = "simulator does not support video";
 "message.startRecordFail" = "failure to start recording";

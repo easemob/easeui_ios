@@ -524,7 +524,14 @@
         if (voiceBody.downloadStatus > EMDownloadStatusSuccessed)
         {
             //download the message attachment
-            [[EMClient sharedClient].chatManager downloadMessageAttachment:message progress:nil completion:completion];
+            [[EMClient sharedClient].chatManager downloadMessageAttachment:message progress:nil completion:^(EMMessage *message, EMError *error) {
+                if (!error) {
+                    [weakSelf _reloadTableViewDataWithMessage:message];
+                }
+                else {
+                    [weakSelf showHint:NSEaseLocalizedString(@"message.voiceFail", @"voice for failure!")];
+                }
+            }];
         }
     }
 }
