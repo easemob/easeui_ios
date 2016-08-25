@@ -245,6 +245,7 @@
 "message.downloadingImage" = "正在获取大图...";
 "message.imageFail" = "大图获取失败!";
 "message.thumImageFail" = "缩略图获取失败!";
+"message.voiceFail" = "语音获取失败!";
 "message.simulatorNotSupportCamera" = "模拟器不支持拍照";
 "message.simulatorNotSupportVideo" = "模拟器不支持录像";
 "message.startRecordFail" = "开始录音失败";
