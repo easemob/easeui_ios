@@ -70,7 +70,6 @@
             __weak EaseRefreshTableViewController *weakSelf = self;
             self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
                 [weakSelf tableViewDidTriggerHeaderRefresh];
-                [weakSelf.tableView.mj_header beginRefreshing];
             }];
             //            header.updatedTimeHidden = YES;
         }
@@ -88,7 +87,6 @@
             __weak EaseRefreshTableViewController *weakSelf = self;
             self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
                 [weakSelf tableViewDidTriggerFooterRefresh];
-                [weakSelf.tableView.mj_footer beginRefreshing];
             }];
         }
         else{

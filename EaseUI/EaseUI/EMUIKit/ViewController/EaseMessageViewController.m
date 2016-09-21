@@ -1879,6 +1879,9 @@
         }
         
         [_conversation markAllMessagesAsRead:nil];
+        if (self.dataSource && [self.dataSource respondsToSelector:@selector(messageViewControllerMarkAllMessagesAsRead:)]) {
+            [self.dataSource messageViewControllerMarkAllMessagesAsRead:self];
+        }
     }
 }
 
