@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A807A521D94D4CA004D18CB /* libHyphenateFullSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A807A511D94D4CA004D18CB /* libHyphenateFullSDK.a */; };
 		D206D35B1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34C1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png */; };
 		D206D35C1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34D1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png */; };
 		D206D35D1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34E1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png */; };
@@ -631,6 +632,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3A0FEB311D8E8A62005C6B8F /* libHyphenateFullSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libHyphenateFullSDK.a; path = "../../emclient-ios/newSDK/build/Debug-iphoneos/libHyphenateFullSDK.a"; sourceTree = "<group>"; };
+		3A807A511D94D4CA004D18CB /* libHyphenateFullSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libHyphenateFullSDK.a; path = "../../emclient-ios/newSDK/DerivedData/emsdk/Build/Products/Debug-iphoneos/libHyphenateFullSDK.a"; sourceTree = "<group>"; };
+		3AB62A041D926279000776F0 /* libffmpeg-ios-full.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libffmpeg-ios-full.a"; path = "../../emclient-ios/newSDK/HyphenateSDK/CallManager/Plugin/Record/libffmpeg-ios-full.a"; sourceTree = "<group>"; };
+		3AB62A051D926279000776F0 /* libHyphenateAVRecorder-universal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libHyphenateAVRecorder-universal.a"; path = "../../emclient-ios/newSDK/HyphenateSDK/CallManager/Plugin/Record/libHyphenateAVRecorder-universal.a"; sourceTree = "<group>"; };
+		3AB62A081D9262BC000776F0 /* libbz2.1.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.1.0.tbd; path = usr/lib/libbz2.1.0.tbd; sourceTree = SDKROOT; };
 		D206D34C1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_receiver_audio_playing000@2x.png"; sourceTree = "<group>"; };
 		D206D34D1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_receiver_audio_playing001@2x.png"; sourceTree = "<group>"; };
 		D206D34E1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_receiver_audio_playing002@2x.png"; sourceTree = "<group>"; };
@@ -964,6 +970,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A807A521D94D4CA004D18CB /* libHyphenateFullSDK.a in Frameworks */,
 				D250D4CB1BD8D1CB00C8D553 /* libopencore-amrwb.a in Frameworks */,
 				D250D4CA1BD8D1CB00C8D553 /* libopencore-amrnb.a in Frameworks */,
 			);
@@ -987,6 +994,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A0FEB301D8E8A62005C6B8F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3A807A511D94D4CA004D18CB /* libHyphenateFullSDK.a */,
+				3AB62A081D9262BC000776F0 /* libbz2.1.0.tbd */,
+				3AB62A041D926279000776F0 /* libffmpeg-ios-full.a */,
+				3AB62A051D926279000776F0 /* libHyphenateAVRecorder-universal.a */,
+				3A0FEB311D8E8A62005C6B8F /* libHyphenateFullSDK.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D206D34B1CB509EB007A23FE /* receiver_bubble */ = {
 			isa = PBXGroup;
 			children = (
@@ -1020,6 +1039,7 @@
 				D250D3AB1BD8D14400C8D553 /* EaseUITests */,
 				D2AA63841BD911B10059D684 /* EaseUIResource */,
 				D250D39D1BD8D14400C8D553 /* Products */,
+				3A0FEB301D8E8A62005C6B8F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2137,7 +2157,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -2173,7 +2193,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -2192,15 +2212,13 @@
 				GCC_PREFIX_HEADER = "EaseUI/EaseUI-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../EaseMobSDK/include/**",
-					"$(PROJECT_DIR)/../../emclient-ios/newSDK/export/**",
+					"\"$(SRCROOT)/../../emclient-ios/newSDK/export/include\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrnb",
 					"$(PROJECT_DIR)/EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrwb",
-					"$(PROJECT_DIR)/../EaseMobSDK/lib",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2222,15 +2240,13 @@
 				GCC_PREFIX_HEADER = "EaseUI/EaseUI-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../EaseMobSDK/include/**",
-					"$(PROJECT_DIR)/../../emclient-ios/newSDK/export/**",
+					"\"$(SRCROOT)/../../emclient-ios/newSDK/export/include\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrnb",
 					"$(PROJECT_DIR)/EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrwb",
-					"$(PROJECT_DIR)/../EaseMobSDK/lib",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";

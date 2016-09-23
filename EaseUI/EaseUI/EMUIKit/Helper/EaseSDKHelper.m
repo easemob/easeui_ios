@@ -118,7 +118,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     [self _registerRemoteNotification];
     
     EMOptions *options = [EMOptions optionsWithAppkey:appkey];
-    options.apnsCertName = apnsCertName;
     options.isAutoAcceptGroupInvitation = NO;
     if ([otherConfig objectForKey:kSDKConfigEnableConsoleLogger]) {
         options.enableConsoleLog = YES;
@@ -126,6 +125,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     
     BOOL sandBox = [otherConfig objectForKey:@"easeSandBox"] && [[otherConfig objectForKey:@"easeSandBox"] boolValue];
     if (!sandBox) {
+        options.apnsCertName = apnsCertName;
         [[EMClient sharedClient] initializeSDKWithOptions:options];
     }
 }
