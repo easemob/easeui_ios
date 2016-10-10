@@ -1415,7 +1415,7 @@
 - (void)moreViewAudioCallAction:(EaseChatBarMoreView *)moreView
 {
     // Hide the keyboard
-    [self.chatToolbar endEditing:YES];
+//    [self.chatToolbar endEditing:YES];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:0]}];
 }
@@ -1423,7 +1423,7 @@
 - (void)moreViewVideoCallAction:(EaseChatBarMoreView *)moreView
 {
     // Hide the keyboard
-    [self.chatToolbar endEditing:YES];
+//    [self.chatToolbar endEditing:YES];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:1]}];
 }
