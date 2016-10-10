@@ -96,6 +96,8 @@
     self.view.backgroundColor = [UIColor colorWithRed:248 / 255.0 green:248 / 255.0 blue:248 / 255.0 alpha:1.0];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideImagePicker) name:@"hideImagePicker" object:nil];
+    
     //Initialization
     CGFloat chatbarHeight = [EaseChatToolbar defaultHeight];
     EMChatToolbarType barType = self.conversation.type == EMConversationTypeChat ? EMChatToolbarTypeChat : EMChatToolbarTypeGroup;
@@ -1882,6 +1884,13 @@
         if (self.dataSource && [self.dataSource respondsToSelector:@selector(messageViewControllerMarkAllMessagesAsRead:)]) {
             [self.dataSource messageViewControllerMarkAllMessagesAsRead:self];
         }
+    }
+}
+
+- (void)hideImagePicker
+{
+    if (_imagePicker && [EaseSDKHelper shareHelper].isShowingimagePicker) {
+        [_imagePicker dismissViewControllerAnimated:NO completion:nil];
     }
 }
 
