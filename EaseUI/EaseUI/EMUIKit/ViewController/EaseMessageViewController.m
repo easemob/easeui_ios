@@ -128,6 +128,9 @@
                                              selector:@selector(didBecomeActive)
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(hideImagePicker) name:@"hideImagePicker"
+                                               object:nil];
     
     [[EaseBaseMessageCell appearance] setSendBubbleBackgroundImage:[[UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_bg"] stretchableImageWithLeftCapWidth:5 topCapHeight:35]];
     [[EaseBaseMessageCell appearance] setRecvBubbleBackgroundImage:[[UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_bg"] stretchableImageWithLeftCapWidth:35 topCapHeight:35]];
@@ -1427,6 +1430,14 @@
     
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:1]}];
 }
+
+//- (void)moreViewConferenceCallAction:(EaseChatBarMoreView *)moreView
+//{
+//    // Hide the keyboard
+//    [self.chatToolbar endEditing:YES];
+//    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CONFERENCE object:@{@"chatter":self.conversation.conversationId}];
+//}
 
 #pragma mark - EMLocationViewDelegate
 
