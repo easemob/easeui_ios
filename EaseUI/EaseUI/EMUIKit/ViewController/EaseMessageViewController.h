@@ -130,6 +130,8 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 - (NSDictionary*)emotionExtFormessageViewController:(EaseMessageViewController *)viewController
                                         easeEmotion:(EaseEmotion*)easeEmotion;
 
+- (void)messageViewControllerMarkAllMessagesAsRead:(EaseMessageViewController *)viewController;
+
 @end
 
 @interface EaseMessageViewController : EaseRefreshTableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, EMChatManagerDelegate, EMCDDeviceManagerDelegate, EMChatToolbarDelegate, EaseChatBarMoreViewDelegate, EMLocationViewDelegate,EMChatroomManagerDelegate, EaseMessageCellDelegate>
