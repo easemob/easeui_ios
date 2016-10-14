@@ -204,6 +204,7 @@
 "call.answer"="Answer";
 "call.hangup"="Hangup";
 "call.connectFailed"="Connect failed";
+"call.connectUnsupported"="Unsupported";
 "call.failed"="Call failed";
 "call.suspended"="Call has been suspended";
 "call.over"="Call end";
