@@ -1881,6 +1881,9 @@
         }
         
         [_conversation markAllMessagesAsRead:nil];
+        if (self.dataSource && [self.dataSource respondsToSelector:@selector(messageViewControllerMarkAllMessagesAsRead:)]) {
+            [self.dataSource messageViewControllerMarkAllMessagesAsRead:self];
+        }
     }
 }
 
@@ -1968,7 +1971,7 @@
             for (NSString *split in splits) {
                 if (split.length) {
                     NSString *atALl = NSEaseLocalizedString(@"group.atAll", @"all");
-                    if ([split compare:atALl options:NSCaseInsensitiveSearch range:NSMakeRange(0, atALl.length)] == NSOrderedSame) {
+                    if (split.length >= atALl.length && [split compare:atALl options:NSCaseInsensitiveSearch range:NSMakeRange(0, atALl.length)] == NSOrderedSame) {
                         [targets removeAllObjects];
                         [targets addObject:kGroupMessageAtAll];
                         return targets;
