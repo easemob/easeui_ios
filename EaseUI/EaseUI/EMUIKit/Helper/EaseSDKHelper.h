@@ -42,6 +42,11 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
               apnsCertName:(NSString *)apnsCertName
                otherConfig:(NSDictionary *)otherConfig;
 
+#pragma mark - receive remote notification
+
+- (void)hyphenateApplication:(UIApplication *)application
+didReceiveRemoteNotification:(NSDictionary *)userInfo;
+
 #pragma mark - send message
 
 + (EMMessage *)sendTextMessage:(NSString *)text
