@@ -1431,14 +1431,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:1]}];
 }
 
-//- (void)moreViewConferenceCallAction:(EaseChatBarMoreView *)moreView
-//{
-//    // Hide the keyboard
-//    [self.chatToolbar endEditing:YES];
-//    
-//    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CONFERENCE object:@{@"chatter":self.conversation.conversationId}];
-//}
-
 #pragma mark - EMLocationViewDelegate
 
 -(void)sendLocationLatitude:(double)latitude
