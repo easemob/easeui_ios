@@ -17,15 +17,15 @@
 #import "EMSDK.h"
 
 #define KNOTIFICATION_LOGINCHANGE @"loginStateChange"
-#define KNOTIFICATION_CALL @"callOutWithChatter"
-#define KNOTIFICATION_CALL_CLOSE @"callControllerClose"
-#define KNOTIFICATION_CONFERENCE @"conference"
 
 #define kGroupMessageAtList      @"em_at_list"
 #define kGroupMessageAtAll       @"all"
 
 #define kSDKConfigEnableConsoleLogger @"SDKConfigEnableConsoleLogger"
 #define kEaseUISDKConfigIsUseLite @"isUselibHyphenateClientSDKLite"
+
+#define KNOTIFICATION_CALL @"callOutWithChatter"
+#define KNOTIFICATION_CALL_CLOSE @"callControllerClose"
 
 @interface EaseSDKHelper : NSObject<EMClientDelegate>
 

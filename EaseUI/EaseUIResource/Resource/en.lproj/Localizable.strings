@@ -294,7 +294,8 @@
 "title.groupSubjectChanging" = "Change group name";
 "title.chatroomlist" = "Chatroom List";
 "title.robotlist" = "Robot List";
-"title.conference" = "Mutil Conference";
+"title.conference.voice" = "Mutil Voice Conference";
+"title.conference.video" = "Mutil Video Conference";
 "title.profile" = "Profile";
 
 //setting
