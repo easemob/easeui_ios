@@ -24,17 +24,29 @@ typedef enum{
 
 @property (nonatomic) UIColor *moreViewBackgroundColor UI_APPEARANCE_SELECTOR;  //moreview背景颜色,default whiteColor
 
+/*
+ 
+ */
 - (instancetype)initWithFrame:(CGRect)frame type:(EMChatToolbarType)type;
 
+/*
+ 
+ */
 - (void)insertItemWithImage:(UIImage*)image
            highlightedImage:(UIImage*)highLightedImage
                       title:(NSString*)title;
 
+/*
+ 
+ */
 - (void)updateItemWithImage:(UIImage*)image
            highlightedImage:(UIImage*)highLightedImage
                       title:(NSString*)title
                     atIndex:(NSInteger)index;
 
+/*
+ 
+ */
 - (void)removeItematIndex:(NSInteger)index;
 
 @end
@@ -43,11 +55,34 @@ typedef enum{
 
 @optional
 
+/*
+
+ */
 - (void)moreViewTakePicAction:(EaseChatBarMoreView *)moreView;
+
+/*
+ 
+ */
 - (void)moreViewPhotoAction:(EaseChatBarMoreView *)moreView;
+
+/*
+ 
+ */
 - (void)moreViewLocationAction:(EaseChatBarMoreView *)moreView;
+
+/*
+ 
+ */
 - (void)moreViewAudioCallAction:(EaseChatBarMoreView *)moreView;
+
+/*
+ 
+ */
 - (void)moreViewVideoCallAction:(EaseChatBarMoreView *)moreView;
+
+/*
+ 
+ */
 - (void)moreView:(EaseChatBarMoreView *)moreView didItemInMoreViewAtIndex:(NSInteger)index;
 
 @end
