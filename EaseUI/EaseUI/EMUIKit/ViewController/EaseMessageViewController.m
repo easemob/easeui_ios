@@ -1736,7 +1736,7 @@
     __weak typeof(self) weakself = self;
     [[EMClient sharedClient].chatManager sendMessage:message progress:^(int progress) {
         if (weakself.dataSource && [weakself.dataSource respondsToSelector:@selector(messageViewController:updateProgress:messageModel:messageBody:)]) {
-            [weakself.dataSource messageViewController:self updateProgress:progress messageModel:nil messageBody:message.body];
+            [weakself.dataSource messageViewController:weakself updateProgress:progress messageModel:nil messageBody:message.body];
         }
     } completion:^(EMMessage *aMessage, EMError *aError) {
         if (!aError) {
