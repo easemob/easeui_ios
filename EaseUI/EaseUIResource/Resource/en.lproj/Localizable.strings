@@ -318,14 +318,11 @@
 "setting.saveName" = "Save Nickname";
 "setting.namenotempty" = "Name cannot be empty";
 "setting.personalInfo" = "Personal Information";
-"setting.setBitrate" = "Set Bitrate";
-"setting.setBitrateTips" = "Set Bitrate should be 150-1000";
 "setting.personalInfoUpload" = "HeadImage";
 "setting.edittips" = "After setting this nickname, chat with the iOS client demo project, iOS will display this nickname is not a Hyphenate ID, if the other party to use the Android client this setting is not effective";
 "setting.iospushname" = "iOS push nickname";
 "setting.useIp" = "Use IP";
 "setting.deleteConWhenLeave" = "Delete conversation when leave a group";
-"setting.showCallInfo" = "Show video call info";
 "setting.microphoneNoAuthority" = "No microphone permissions";
 "setting.microphoneAuthority" = "Please open in \"Setting\"-\"Privacy\"-\"Microphone\".";
 "setting.cameraNoAuthority" = "No camera permissions";
@@ -335,6 +332,17 @@
 "setting.profileNickname" = "NickName";
 "setting.saving" = "saving...";
 "setting.saveFailed" = "save failed";
+
+"setting.call" = "Call setting";
+"setting.call.autoResolution" = "Fixed Resolution";
+"setting.autoResolution" = "Auto Resolution";
+"setting.call.bitrate" = "Set Bitrate";
+"setting.call.bitrateTips" = "Set Bitrate should be 150-1000";
+"setting.call.push" = "If the offline send call push";
+"setting.call.resolution" = "Video call resolution";
+"setting.call.maxFramerate" = "Video max framerate";
+"setting.call.minKbps" = "Video min kbps";
+"setting.call.showInfo" = "Show video call info";
 
 //UI
 "ui.pullDownToRefresh" = "Pull to refresh";
