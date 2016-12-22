@@ -43,6 +43,14 @@ typedef NS_ENUM(int, DXDeleteConvesationType) {
 
 @protocol EaseConversationListViewControllerDataSource <NSObject>
 
+/*!
+ @method
+ @brief 构建实现协议IConversationModel的model
+ @discussion 用户可以创建实现协议IConversationModel的自定义conversationModel对象，按照业务需要设置属性值
+ @param conversationListViewController 当前会话列表视图
+ @param conversation 会话对象
+ @result 返回实现协议IConversationModel的model对象
+ */
 - (id<IConversationModel>)conversationListViewController:(EaseConversationListViewController *)conversationListViewController
                         modelForConversation:(EMConversation *)conversation;
 

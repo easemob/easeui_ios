@@ -168,6 +168,12 @@ static EaseLocationViewController *defaultLocation = nil;
 
 #pragma mark - public
 
+/*!
+ @method
+ @brief 开启定位
+ @discussion
+ @result
+ */
 - (void)startLocation
 {
     if([CLLocationManager locationServicesEnabled]){
@@ -187,6 +193,13 @@ static EaseLocationViewController *defaultLocation = nil;
     [self showHudInView:self.view hint:NSEaseLocalizedString(@"location.ongoning", @"locating...")];
 }
 
+/*!
+ @method
+ @brief 地图添加大头针
+ @discussion
+ @param coords  位置信息
+ @result
+ */
 -(void)createAnnotationWithCoords:(CLLocationCoordinate2D)coords
 {
     if (_annotation == nil) {
@@ -199,6 +212,13 @@ static EaseLocationViewController *defaultLocation = nil;
     [_mapView addAnnotation:_annotation];
 }
 
+/*!
+ @method
+ @brief 大头针移动到指定位置
+ @discussion
+ @param locationCoordinate  指定位置
+ @result
+ */
 - (void)removeToLocation:(CLLocationCoordinate2D)locationCoordinate
 {
     [self hideHud];
