@@ -59,6 +59,8 @@ CGFloat const EaseConversationCellPadding = 10;
 
 - (void)_setupSubview
 {
+    self.accessibilityIdentifier = @"table_cell";
+
     _avatarView = [[EaseImageView alloc] init];
     _avatarView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:_avatarView];
@@ -72,6 +74,7 @@ CGFloat const EaseConversationCellPadding = 10;
     [self.contentView addSubview:_timeLabel];
     
     _titleLabel = [[UILabel alloc] init];
+    _titleLabel.accessibilityIdentifier = @"title";
     _titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     _titleLabel.numberOfLines = 1;
     _titleLabel.backgroundColor = [UIColor clearColor];

@@ -40,6 +40,8 @@ CGFloat const EaseUserCellPadding = 10;
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.accessibilityIdentifier = @"table_cell";
+
         [self _setupSubview];
         
         UILongPressGestureRecognizer *headerLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(headerLongPress:)];
@@ -58,6 +60,7 @@ CGFloat const EaseUserCellPadding = 10;
     [self.contentView addSubview:_avatarView];
     
     _titleLabel = [[UILabel alloc] init];
+    _titleLabel.accessibilityIdentifier = @"title";
     _titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     _titleLabel.numberOfLines = 2;
     _titleLabel.backgroundColor = [UIColor clearColor];
