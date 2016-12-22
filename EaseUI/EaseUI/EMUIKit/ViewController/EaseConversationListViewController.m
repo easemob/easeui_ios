@@ -41,6 +41,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -126,7 +127,7 @@
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         EaseConversationModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        [[EMClient sharedClient].chatManager deleteConversation:model.conversation.conversationId deleteMessages:YES];
+        [[EMClient sharedClient].chatManager deleteConversation:model.conversation.conversationId isDeleteMessages:YES completion:nil];
         [self.dataArray removeObjectAtIndex:indexPath.row];
         [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }

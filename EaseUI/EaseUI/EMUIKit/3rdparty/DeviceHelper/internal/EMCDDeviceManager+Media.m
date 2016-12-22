@@ -152,8 +152,8 @@ typedef NS_ENUM(NSInteger, EMAudioSession){
                                         code:EMErrorAudioRecordNotStarted
                                     userInfo:nil];
             completion(nil,0,error);
-            return;
         }
+        return;
     }
     
     __weak typeof(self) weakSelf = self;
@@ -183,12 +183,18 @@ typedef NS_ENUM(NSInteger, EMAudioSession){
                 NSString *amrFilePath = [[recordPath stringByDeletingPathExtension]
                                          stringByAppendingPathExtension:@"amr"];
                 BOOL convertResult = [self convertWAV:recordPath toAMR:amrFilePath];
+                NSError *error = nil;
                 if (convertResult) {
                     // Remove the wav
                     NSFileManager *fm = [NSFileManager defaultManager];
                     [fm removeItemAtPath:recordPath error:nil];
                 }
-                completion(amrFilePath,(int)[self->_recorderEndDate timeIntervalSinceDate:self->_recorderStartDate],nil);
+                else {
+                    error = [NSError errorWithDomain:NSEaseLocalizedString(@"error.initRecorderFail", @"File format conversion failed")
+                                                code:EMErrorFileTypeConvertionFailure
+                                            userInfo:nil];
+                }
+                completion(amrFilePath,(int)[self->_recorderEndDate timeIntervalSinceDate:self->_recorderStartDate],error);
             }
             [weakSelf setupAudioSessionCategory:EM_DEFAULT isActive:NO];
         }

@@ -38,8 +38,8 @@
     [super viewDidLoad];
     
     // Uncomment the following line to preserve selection between presentations.
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-        self.edgesForExtendedLayout =  UIRectEdgeNone;
+    if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
+        [self setEdgesForExtendedLayout:UIRectEdgeNone];
     }
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:self.style];
@@ -71,7 +71,6 @@
             __weak EaseRefreshTableViewController *weakSelf = self;
             self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
                 [weakSelf tableViewDidTriggerHeaderRefresh];
-                [weakSelf.tableView.mj_header beginRefreshing];
             }];
             self.tableView.mj_header.accessibilityIdentifier = @"refresh_header";
             //            header.updatedTimeHidden = YES;
@@ -90,7 +89,6 @@
             __weak EaseRefreshTableViewController *weakSelf = self;
             self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
                 [weakSelf tableViewDidTriggerFooterRefresh];
-                [weakSelf.tableView.mj_footer beginRefreshing];
             }];
             self.tableView.mj_footer.accessibilityIdentifier = @"refresh_footer";
         }

@@ -10,7 +10,7 @@
  * from Hyphenate Inc.
  */
 
-
+#import <UserNotifications/UserNotifications.h>
 #import "EaseSDKHelper.h"
 
 #import "EaseConvertToCommonEmoticonsHelper.h"
@@ -86,7 +86,18 @@ static EaseSDKHelper *helper = nil;
 {
     UIApplication *application = [UIApplication sharedApplication];
     application.applicationIconBadgeNumber = 0;
-    
+
+    if (NSClassFromString(@"UNUserNotificationCenter")) {
+        [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert completionHandler:^(BOOL granted, NSError *error) {
+            if (granted) {
+#if !TARGET_IPHONE_SIMULATOR
+                [application registerForRemoteNotifications];
+#endif
+            }
+        }];
+        return;
+    }
+
     if([application respondsToSelector:@selector(registerUserNotificationSettings:)])
     {
         UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
@@ -128,6 +139,12 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     if (!sandBox) {
         [[EMClient sharedClient] initializeSDKWithOptions:options];
     }
+}
+
+- (void)hyphenateApplication:(UIApplication *)application
+didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    [[EMClient sharedClient] application:application didReceiveRemoteNotification:userInfo];
 }
 
 - (void)dealloc

@@ -111,7 +111,7 @@ CGFloat PSTSimulatorAnimationDragCoefficient(void);
         unsigned int doneFirstLayout : 1;
     }_collectionViewFlags;
     CGPoint _lastLayoutOffset;
-    char filler[400]; // [HACK] Our class needs to be larger than Apple's class for the superclass change to work.
+    char filler[800]; // [HACK] Our class needs to be larger than Apple's class for the superclass change to work.
 }
 @property (nonatomic, strong) PSTCollectionViewData *collectionViewData;
 @property (nonatomic, strong, readonly) PSTCollectionViewExt *extVars;
