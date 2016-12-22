@@ -12,6 +12,8 @@
 
 #import "EaseBaseMessageCell.h"
 
+/** @brief 自定义git图片cell */
+
 @interface EaseCustomMessageCell : EaseBaseMessageCell
 
 @end

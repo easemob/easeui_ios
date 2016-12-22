@@ -34,6 +34,7 @@ CGFloat const EaseConversationCellPadding = 10;
 + (void)initialize
 {
     // UIAppearance Proxy Defaults
+    /** @brief 默认配置 */
     EaseConversationCell *cell = [self appearance];
     cell.titleLabelColor = [UIColor blackColor];
     cell.titleLabelFont = [UIFont systemFontOfSize:17];
@@ -57,6 +58,12 @@ CGFloat const EaseConversationCellPadding = 10;
 
 #pragma mark - private layout subviews
 
+/*!
+ @method
+ @brief 加载视图
+ @discussion
+ @return
+ */
 - (void)_setupSubview
 {
     _avatarView = [[EaseImageView alloc] init];
@@ -94,6 +101,12 @@ CGFloat const EaseConversationCellPadding = 10;
 
 #pragma mark - Setup Constraints
 
+/*!
+ @method
+ @brief 设置avatarView的约束
+ @discussion
+ @return
+ */
 - (void)_setupAvatarViewConstraints
 {
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:EaseConversationCellPadding]];
@@ -103,6 +116,12 @@ CGFloat const EaseConversationCellPadding = 10;
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0]];
 }
 
+/*!
+ @method
+ @brief 设置timeLabel的约束
+ @discussion
+ @return
+ */
 - (void)_setupTimeLabelConstraints
 {
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.timeLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:EaseConversationCellPadding]];
@@ -111,6 +130,12 @@ CGFloat const EaseConversationCellPadding = 10;
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.timeLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeHeight multiplier:0.5 constant:0]];
 }
 
+/*!
+ @method
+ @brief 设置titleLabel的约束
+ @discussion
+ @return
+ */
 - (void)_setupTitleLabelConstraints
 {
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.titleLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:EaseConversationCellPadding]];
@@ -122,6 +147,12 @@ CGFloat const EaseConversationCellPadding = 10;
     [self addConstraint:self.titleWithAvatarLeftConstraint];
 }
 
+/*!
+ @method
+ @brief 设置detailLabel的约束
+ @discussion
+ @return
+ */
 - (void)_setupDetailLabelConstraints
 {
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.detailLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.titleLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
@@ -223,11 +254,25 @@ CGFloat const EaseConversationCellPadding = 10;
 
 #pragma mark - class method
 
+/*!
+ @method
+ @brief 获取cell的重用标识
+ @discussion
+ @param model   消息model
+ @return 返回cell的重用标识
+ */
 + (NSString *)cellIdentifierWithModel:(id)model
 {
     return @"EaseConversationCell";
 }
 
+/*!
+ @method
+ @brief 获取cell的高度
+ @discussion
+ @param model   消息model
+ @return  返回cell的高度
+ */
 + (CGFloat)cellHeightWithModel:(id)model
 {
     return EaseConversationCellMinHeight;

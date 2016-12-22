@@ -62,11 +62,25 @@
     [_bubbleView updateGifMargin:bubbleMargin];
 }
 
+/*!
+ @method
+ @brief 获取cell的重用标识
+ @discussion
+ @param model   消息model
+ @return 返回cell的重用标识
+ */
 + (NSString *)cellIdentifierWithModel:(id<IMessageModel>)model
 {
     return model.isSender?@"EaseMessageCellSendGif":@"EaseMessageCellRecvGif";
 }
 
+/*!
+ @method
+ @brief 获取cell的高度
+ @discussion
+ @param model   消息model
+ @return  返回cell的高度
+ */
 + (CGFloat)cellHeightWithModel:(id<IMessageModel>)model
 {
     return 100;
