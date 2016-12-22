@@ -71,10 +71,24 @@
            inputViewMaxHeight:(CGFloat)inputViewMaxHeight
                          type:(EMChatToolbarType)type;
 
+/*!
+ @method
+ @brief 获取chatToolBar默认的高度
+ @discussion
+ @result  返回chatToolBar默认的高度
+ */
 + (CGFloat)defaultHeight;
+
 
 - (void)cancelTouchRecord;
 
+/*!
+ @method
+ @brief 切换底部的菜单视图
+ @discussion
+ @param bottomView 待切换的菜单
+ @result
+ */
 - (void)willShowBottomView:(UIView *)bottomView;
 
 @end
@@ -112,8 +126,18 @@
  */
 - (void)didSendText:(NSString *)text withExt:(NSDictionary*)ext;
 
+/*
+ *  在光标location位置处是否插入字符@
+ *
+ *  @param location 光标位置
+ */
 - (BOOL)didInputAtInLocation:(NSUInteger)location;
 
+/*
+ *  在光标location位置处是否删除字符@
+ *
+ *  @param location 光标位置
+ */
 - (BOOL)didDeleteCharacterFromLocation:(NSUInteger)location;
 
 /*
