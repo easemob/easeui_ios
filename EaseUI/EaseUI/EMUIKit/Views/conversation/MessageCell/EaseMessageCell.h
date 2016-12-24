@@ -17,20 +17,24 @@
 
 #import "EaseBubbleView.h"
 
+/** @brief 缩略图宽度(当缩略图宽度为0或者宽度大于高度时) */
 #define kEMMessageImageSizeWidth 120
+/** @brief 缩略图高度(当缩略图高度为0或者宽度小于高度时) */
 #define kEMMessageImageSizeHeight 120
+/** @brief 位置消息cell的高度 */
 #define kEMMessageLocationHeight 95
+/** @brief 语音消息cell的高度 */
 #define kEMMessageVoiceHeight 23
 
 extern CGFloat const EaseMessageCellPadding;
 
 typedef enum{
-    EaseMessageCellEvenVideoBubbleTap,
-    EaseMessageCellEventLocationBubbleTap,
-    EaseMessageCellEventImageBubbleTap,
-    EaseMessageCellEventAudioBubbleTap,
-    EaseMessageCellEventFileBubbleTap,
-    EaseMessageCellEventCustomBubbleTap,
+    EaseMessageCellEvenVideoBubbleTap,      /** @brief 视频消息cell点击 */
+    EaseMessageCellEventLocationBubbleTap,  /** @brief 位置消息cell点击 */
+    EaseMessageCellEventImageBubbleTap,     /** @brief 图片消息cell点击 */
+    EaseMessageCellEventAudioBubbleTap,     /** @brief 语音消息cell点击 */
+    EaseMessageCellEventFileBubbleTap,      /** @brief 文件消息cell点击 */
+    EaseMessageCellEventCustomBubbleTap,    /** @brief 自定义gif图片消息cell点击 */
 }EaseMessageCellTapEventType;
 
 @protocol EaseMessageCellDelegate;
@@ -57,6 +61,7 @@ typedef enum{
 
 @property (strong, nonatomic) UILabel *hasRead;
 
+/** @brief 气泡视图 */
 @property (strong, nonatomic) EaseBubbleView *bubbleView;
 
 @property (strong, nonatomic) id<IMessageModel> model;

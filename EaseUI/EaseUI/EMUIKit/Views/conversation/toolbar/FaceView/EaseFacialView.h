@@ -17,9 +17,39 @@
 @protocol EaseFacialViewDelegate
 
 @optional
+
+/*!
+ @method
+ @brief 选中默认表情
+ @discussion
+ @param str 选中的默认表情
+ @result
+ */
 -(void)selectedFacialView:(NSString*)str;
+
+/*!
+ @method
+ @brief 删除默认表情
+ @discussion
+ @result
+ */
 -(void)deleteSelected:(NSString *)str;
+
+/*!
+ @method
+ @brief 点击表情键盘的发送回调
+ @discussion
+ @result
+ */
 -(void)sendFace;
+
+/*!
+ @method
+ @brief 选择自定义表情，直接发送
+ @discussion
+ @param emotion    被选中的自定义表情
+ @result
+ */
 -(void)sendFace:(EaseEmotion *)emotion;
 
 @end

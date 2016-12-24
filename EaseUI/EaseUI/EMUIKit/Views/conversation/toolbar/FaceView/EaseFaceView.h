@@ -18,8 +18,31 @@
 @protocol EMFaceDelegate
 
 @required
+/*!
+ @method
+ @brief 输入表情键盘的默认表情，或者点击删除按钮
+ @discussion
+ @param str       被选择的表情编码
+ @param isDelete  是否为删除操作
+ @result
+ */
 - (void)selectedFacialView:(NSString *)str isDelete:(BOOL)isDelete;
+
+/*!
+ @method
+ @brief 点击表情键盘的发送回调
+ @discussion
+ @result
+ */
 - (void)sendFace;
+
+/*!
+ @method
+ @brief 点击表情键盘的自定义表情，直接发送
+ @discussion
+ @param emotion 自定义表情对象
+ @result
+ */
 - (void)sendFaceWithEmotion:(EaseEmotion *)emotion;
 
 @end

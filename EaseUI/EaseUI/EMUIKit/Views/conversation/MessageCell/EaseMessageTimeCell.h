@@ -12,6 +12,8 @@
 
 #import <UIKit/UIKit.h>
 
+/** @brief 时间提示cell */
+
 @interface EaseMessageTimeCell : UITableViewCell
 
 @property (strong, nonatomic) NSString *title;

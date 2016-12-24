@@ -99,6 +99,12 @@
 
 #pragma mark - setup subviews
 
+/*!
+ @method
+ @brief 加载视图
+ @discussion
+ @result
+ */
 - (void)_setupSubviews
 {
     //backgroundImageView
@@ -278,6 +284,13 @@
     return self.leftItems;
 }
 
+/*!
+ @method
+ @brief 设置toolBar左侧菜单选项
+ @discussion
+ @param inputViewLeftItems 左侧选项
+ @result
+ */
 - (void)setInputViewLeftItems:(NSArray *)inputViewLeftItems
 {
     for (EaseChatToolbarItem *item in self.leftItems) {
@@ -329,6 +342,13 @@
     return self.rightItems;
 }
 
+/*!
+ @method
+ @brief 设置toolBar右侧菜单选项
+ @discussion
+ @param inputViewLeftItems 右侧选项
+ @result
+ */
 - (void)setInputViewRightItems:(NSArray *)inputViewRightItems
 {
     for (EaseChatToolbarItem *item in self.rightItems) {
@@ -380,6 +400,13 @@
 
 #pragma mark - private input view
 
+/*!
+ @method
+ @brief 获取textView的高度(实际为textView的contentSize的高度)
+ @discussion
+ @param textView 文本框
+ @result
+ */
 - (CGFloat)_getTextViewContentH:(UITextView *)textView
 {
     if (self.version >= 7.0)
@@ -390,6 +417,13 @@
     }
 }
 
+/*!
+ @method
+ @brief 通过传入的toHeight，跳转toolBar的高度
+ @discussion
+ @param toHeight
+ @result
+ */
 - (void)_willShowInputTextViewToHeight:(CGFloat)toHeight
 {
     if (toHeight < self.inputViewMinHeight) {
@@ -428,6 +462,13 @@
 
 #pragma mark - private bottom view
 
+/*!
+ @method
+ @brief 调整toolBar的高度
+ @discussion
+ @param bottomHeight 底部菜单的高度
+ @result
+ */
 - (void)_willShowBottomHeight:(CGFloat)bottomHeight
 {
     CGRect fromFrame = self.frame;
@@ -453,6 +494,13 @@
     }
 }
 
+/*!
+ @method
+ @brief 切换菜单视图
+ @discussion
+ @param bottomView 菜单视图
+ @result
+ */
 - (void)_willShowBottomView:(UIView *)bottomView
 {
     if (![self.activityButtomView isEqual:bottomView]) {
@@ -608,6 +656,14 @@
     [self textViewDidChange:self.inputTextView];
 }
 
+/*!
+ @method
+ @brief 删除文本光标前长度为length的字符串
+ @discussion
+ @param attr   待修改的富文本
+ @param length 字符串长度
+ @result   修改后的富文本
+ */
 -(NSMutableAttributedString*)backspaceText:(NSMutableAttributedString*) attr length:(NSInteger)length
 {
     NSRange range = [self.inputTextView selectedRange];

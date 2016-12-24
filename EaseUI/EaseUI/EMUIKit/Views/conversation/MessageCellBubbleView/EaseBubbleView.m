@@ -50,6 +50,12 @@
 
 #pragma mark - Setup Constraints
 
+/*!
+ @method
+ @brief 设置气泡背景图片的约束
+ @discussion
+ @result
+ */
 - (void)_setupBackgroundImageViewConstraints
 {
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundImageView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];

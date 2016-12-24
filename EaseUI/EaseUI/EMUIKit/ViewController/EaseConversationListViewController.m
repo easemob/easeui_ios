@@ -156,6 +156,12 @@
     [self.tableView reloadData];
 }
 
+/*!
+ @method
+ @brief 加载会话列表
+ @discussion
+ @result
+ */
 - (void)tableViewDidTriggerHeaderRefresh
 {
     NSArray *conversations = [[EMClient sharedClient].chatManager getAllConversations];
@@ -216,6 +222,14 @@
 }
 
 #pragma mark - private
+
+/*!
+ @method
+ @brief 获取会话最近一条消息内容提示
+ @discussion
+ @param conversationModel  会话model
+ @result 返回传入会话model最近一条消息提示
+ */
 - (NSString *)_latestMessageTitleForConversationModel:(id<IConversationModel>)conversationModel
 {
     NSString *latestMessageTitle = @"";
@@ -250,6 +264,13 @@
     return latestMessageTitle;
 }
 
+/*!
+ @method
+ @brief 获取会话最近一条消息时间
+ @discussion
+ @param conversationModel  会话model
+ @result 返回传入会话model最近一条消息时间
+ */
 - (NSString *)_latestMessageTimeForConversationModel:(id<IConversationModel>)conversationModel
 {
     NSString *latestMessageTime = @"";

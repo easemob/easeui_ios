@@ -14,13 +14,25 @@
 
 #import "IUserModel.h"
 
+/** @brief 环信用户模型对象 */
+
 @interface EaseUserModel : NSObject<IUserModel>
 
+/** @brief 好友环信id(用户环信id) */
 @property (strong, nonatomic, readonly) NSString *buddy;
+/** @brief 用户昵称 */
 @property (strong, nonatomic) NSString *nickname;
+/** @brief 用户头像url */
 @property (strong, nonatomic) NSString *avatarURLPath;
+/** @brief 用户头像 */
 @property (strong, nonatomic) UIImage *avatarImage;
 
+/*!
+ @method
+ @brief 初始化用户模型
+ @param buddy     好友环信id(用户环信id)
+ @return 用户模型
+ */
 - (instancetype)initWithBuddy:(NSString *)buddy;
 
 @end

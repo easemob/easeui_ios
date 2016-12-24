@@ -15,8 +15,21 @@
 
 @interface EaseBubbleView (Image)
 
+/*!
+ @method
+ @brief 构建图片类型消息气泡视图
+ @discussion
+ @result
+ */
 - (void)setupImageBubbleView;
 
+/*!
+ @method
+ @brief 变更图片类型消息气泡的边距，并更新改子视图约束
+ @discussion
+ @param margin 气泡边距
+ @result
+ */
 - (void)updateImageMargin:(UIEdgeInsets)margin;
 
 @end

@@ -98,6 +98,12 @@
 
 #pragma mark - Setup Constraint
 
+/*!
+ @method
+ @brief 设置头像约束
+ @discussion
+ @result
+ */
 - (void)_setupImageViewConstraint
 {
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0]];
@@ -107,6 +113,12 @@
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
 }
 
+/*!
+ @method
+ @brief 设置角标约束
+ @discussion
+ @result
+ */
 - (void)_setupBadgeViewConstraint
 {
     self.badgeWidthConstraint = [NSLayoutConstraint constraintWithItem:self.badgeView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0 constant:self.badgeSize];

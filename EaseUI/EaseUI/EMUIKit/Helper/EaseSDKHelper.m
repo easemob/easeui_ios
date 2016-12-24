@@ -56,6 +56,7 @@ static EaseSDKHelper *helper = nil;
 
 #pragma mark - app delegate notifications
 
+/** @brief 注册App切入后台和进入前台的通知 */
 - (void)_setupAppDelegateNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -82,6 +83,7 @@ static EaseSDKHelper *helper = nil;
 
 #pragma mark - register apns
 
+/** @brief 注册远程通知 */
 - (void)_registerRemoteNotification
 {
     UIApplication *application = [UIApplication sharedApplication];
