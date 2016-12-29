@@ -13,7 +13,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-#import "EMSDK.h"
+#import <Hyphenate/EMSDK.h>
 
 @class EMMessage;
 
