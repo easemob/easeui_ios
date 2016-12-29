@@ -12,7 +12,7 @@
 
 #import "EaseConversationModel.h"
 
-#import "EMConversation.h"
+#import <Hyphenate/EMConversation.h>
 
 @implementation EaseConversationModel
 

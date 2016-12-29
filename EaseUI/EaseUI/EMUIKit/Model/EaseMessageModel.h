@@ -13,7 +13,7 @@
 #import <Foundation/Foundation.h>
 
 #import "IMessageModel.h"
-#import "EMMessage.h"
+#import <Hyphenate/EMMessage.h>
 
 /** @brief 消息模型 */
 

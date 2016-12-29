@@ -14,7 +14,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-#import "EMSDK.h"
+#import <Hyphenate/EMSDK.h>
 
 /** @brief 登录状态变更的通知 */
 #define KNOTIFICATION_LOGINCHANGE @"loginStateChange"

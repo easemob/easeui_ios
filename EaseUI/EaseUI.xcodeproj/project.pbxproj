@@ -1013,6 +1013,13 @@
 			path = sender_bubble;
 			sourceTree = "<group>";
 		};
+		D21E57531E12467100C50BA0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D250D3931BD8D14400C8D553 = {
 			isa = PBXGroup;
 			children = (
@@ -1020,6 +1027,7 @@
 				D250D3AB1BD8D14400C8D553 /* EaseUITests */,
 				D2AA63841BD911B10059D684 /* EaseUIResource */,
 				D250D39D1BD8D14400C8D553 /* Products */,
+				D21E57531E12467100C50BA0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
