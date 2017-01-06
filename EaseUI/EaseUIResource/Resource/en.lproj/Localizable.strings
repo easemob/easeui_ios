@@ -165,6 +165,10 @@
 "group.destroy" = "dismiss group";
 "group.leave" = "quit the group";
 "group.id" = "groupID";
+"group.owner" = "Owner";
+"group.admins" = "Admins";
+"group.members" = "Members";
+"group.mutes" = "Mutes";
 "group.occupantCount" = "members count";
 "group.addingOccupant" = "add a group member...";
 "group.fetchInfoFail" = "failed to get the group details, please try again later";
@@ -172,6 +176,15 @@
 "group.destroyFail" = "dessolve group failed";
 "group.leaveFail" = "exit the group failure";
 "group.addOccupantFail" = "Failed to add group member, please try again later";
+"group.removeMember" = "Remove from group";
+"group.removeBan" = "Remove from blacklist";
+"group.changeOwner" = "Change owner";
+"group.changeOwnerFail" = "Failed to change owner";
+"group.addAdmin" = "Add to admin";
+"group.removeAdmin" = "Remove from Admin";
+"group.toMute" = "Mute 60s";
+"group.unmute" = "Unmute";
+"group.fetchMuteFail" = "fail to get mutes: %@";
 
 //Group Setting
 "group.setting.receiveAndPrompt" = "recv and notification group messages";
