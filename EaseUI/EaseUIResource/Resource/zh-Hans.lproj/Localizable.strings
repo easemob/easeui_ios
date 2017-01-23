@@ -167,7 +167,7 @@
 "group.id" = "群组ID";
 "group.owner" = "群主";
 "group.admins" = "管理员";
-"group.members" = "群成员";
+"group.members" = "普通成员";
 "group.mutes" = "被禁言成员";
 "group.occupantCount" = "群组人数";
 "group.addingOccupant" = "添加组成员...";
@@ -198,6 +198,11 @@
 //Chatroom detail
 "chatroom.somebodyInvite" = "%@ 邀请你加入聊天室\'%@\'";
 "chatroom.id" = "聊天室Id";
+"chatroom.owner" = "创建者";
+"chatroom.admins" = "管理员";
+"chatroom.members" = "成员列表";
+"chatroom.blacklist" = "黑名单列表";
+"chatroom.mutes" = "被禁言成员";
 "chatroom.occupantCount" = "聊天室人数";
 "chatroom.description" = "描述";
 "chatroom.joining" = "正在加入...";
@@ -206,6 +211,16 @@
 "chatroom.join" = "\'%@\'加入聊天室\'%@\'";
 "chatroom.leave" = "\'%@\'离开聊天室\'%@\'";
 "chatroom.remove" = "被踢出聊天室\'%@\'";
+"chatroom.create.inputName" = "请输入聊天室名称";
+"chatroom.create.inputDescribe" = "请输入聊天室简介";
+"chatroom.create.ongoing" = "创建聊天室...";
+"chatroom.create.success" = "创建聊天室成功";
+"chatroom.create.fail" = "创建聊天室失败，请重新操作";
+
+"chatroom.destroy" = "解散聊天室";
+"chatroom.leave" = "退出聊天室";
+"chatroom.destroyFail" = "解散聊天室失败";
+"chatroom.leaveFail" = "退出聊天室失败";
 
 //call
 "call.initFailed"="通话建立失败";
@@ -305,6 +320,7 @@
 "title.chatroomlist" = "聊天室列表";
 "title.robotlist" = "环信助手";
 "title.profile" = "详细资料";
+"title.createChatroom" = "创建聊天室";
 
 
 //setting
