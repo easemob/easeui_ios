@@ -271,7 +271,7 @@
                             username:(NSString *)aUsername
 {
     CGRect frame = self.chatToolbar.frame;
-    [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.leave", @"\'%@\'leave chatroom\'%@\'"), aUsername, aChatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
+    [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.leave.hint", @"\'%@\'leave chatroom\'%@\'"), aUsername, aChatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
 }
 
 - (void)didReceiveKickedFromChatroom:(EMChatroom *)aChatroom
@@ -282,6 +282,7 @@
         _isKicked = YES;
         CGRect frame = self.chatToolbar.frame;
         [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.remove", @"be removed from chatroom\'%@\'"), aChatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
+        [self.navigationController popToViewController:self animated:NO];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
