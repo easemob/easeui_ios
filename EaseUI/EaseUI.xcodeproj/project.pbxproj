@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3A8EF7391E1B52C800D3C751 /* Hyphenate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A8EF7381E1B52C800D3C751 /* Hyphenate.framework */; };
 		D206D35B1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34C1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png */; };
 		D206D35C1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34D1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png */; };
 		D206D35D1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34E1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png */; };
@@ -200,6 +199,7 @@
 		D2AA65151BD915B50059D684 /* EaseEmojiEmoticons.h in Util */ = {isa = PBXBuildFile; fileRef = D250D47B1BD8D1CB00C8D553 /* EaseEmojiEmoticons.h */; };
 		D2AA65161BD915B50059D684 /* EaseEmotionEscape.h in Util */ = {isa = PBXBuildFile; fileRef = D250D47D1BD8D1CB00C8D553 /* EaseEmotionEscape.h */; };
 		D2AA65171BD915B50059D684 /* EaseEmotionManager.h in Util */ = {isa = PBXBuildFile; fileRef = D250D47F1BD8D1CB00C8D553 /* EaseEmotionManager.h */; };
+		D2AC4F1D1E4ADBD3005A3A77 /* Hyphenate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AC4F1C1E4ADBD3005A3A77 /* Hyphenate.framework */; };
 		D2CBFB281CBE739D003A8717 /* EaseLocalDefine.h in Util */ = {isa = PBXBuildFile; fileRef = D2CBFB271CBE717C003A8717 /* EaseLocalDefine.h */; };
 		D2F152C81C522EB200BBE3B3 /* in.caf in Resources */ = {isa = PBXBuildFile; fileRef = D2F152C71C522EB200BBE3B3 /* in.caf */; };
 		D2F2C9851C10604700F4AE1E /* MBProgressHUD+Add.m in Sources */ = {isa = PBXBuildFile; fileRef = D2F2C8FC1C10604700F4AE1E /* MBProgressHUD+Add.m */; };
@@ -831,6 +831,7 @@
 		D2AA63C11BD911FE0059D684 /* VoiceSearchFeedback019@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VoiceSearchFeedback019@2x.png"; sourceTree = "<group>"; };
 		D2AA63C21BD911FE0059D684 /* VoiceSearchFeedback020@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VoiceSearchFeedback020@2x.png"; sourceTree = "<group>"; };
 		D2AA63C31BD911FE0059D684 /* user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user@2x.png"; sourceTree = "<group>"; };
+		D2AC4F1C1E4ADBD3005A3A77 /* Hyphenate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Hyphenate.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/emsdk-bhvtkviqbswivogqngmheuhoilvi/Build/Products/Debug-iphoneos/Hyphenate.framework"; sourceTree = "<group>"; };
 		D2CBFB271CBE717C003A8717 /* EaseLocalDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EaseLocalDefine.h; sourceTree = "<group>"; };
 		D2F152C71C522EB200BBE3B3 /* in.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = in.caf; sourceTree = "<group>"; };
 		D2F2C8FB1C10604700F4AE1E /* MBProgressHUD+Add.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+Add.h"; sourceTree = "<group>"; };
@@ -966,7 +967,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A8EF7391E1B52C800D3C751 /* Hyphenate.framework in Frameworks */,
+				D2AC4F1D1E4ADBD3005A3A77 /* Hyphenate.framework in Frameworks */,
 				D250D4CB1BD8D1CB00C8D553 /* libopencore-amrwb.a in Frameworks */,
 				D250D4CA1BD8D1CB00C8D553 /* libopencore-amrnb.a in Frameworks */,
 			);
@@ -1019,6 +1020,7 @@
 		D21E57531E12467100C50BA0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D2AC4F1C1E4ADBD3005A3A77 /* Hyphenate.framework */,
 				3A8EF7381E1B52C800D3C751 /* Hyphenate.framework */,
 			);
 			name = Frameworks;
