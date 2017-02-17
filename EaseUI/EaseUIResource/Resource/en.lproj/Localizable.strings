@@ -165,6 +165,10 @@
 "group.destroy" = "dismiss group";
 "group.leave" = "quit the group";
 "group.id" = "groupID";
+"group.owner" = "Owner";
+"group.admins" = "Admin List";
+"group.members" = "Member List";
+"group.mutes" = "Mutes";
 "group.occupantCount" = "members count";
 "group.addingOccupant" = "add a group member...";
 "group.fetchInfoFail" = "failed to get the group details, please try again later";
@@ -172,6 +176,15 @@
 "group.destroyFail" = "dessolve group failed";
 "group.leaveFail" = "exit the group failure";
 "group.addOccupantFail" = "Failed to add group member, please try again later";
+"group.removeMember" = "Remove from group";
+"group.removeBan" = "Remove from blacklist";
+"group.changeOwner" = "Change owner";
+"group.changeOwnerFail" = "Failed to change owner";
+"group.addAdmin" = "Add to admin";
+"group.removeAdmin" = "Remove from Admin";
+"group.toMute" = "Mute";
+"group.unmute" = "Unmute";
+"group.fetchMuteFail" = "fail to get mutes: %@";
 
 //Group Setting
 "group.setting.receiveAndPrompt" = "recv and notification group messages";
@@ -185,14 +198,29 @@
 //Chatroom detail
 "chatroom.somebodyInvite" = "%@ invite you to join chatroom \'%@\'";
 "chatroom.id" = "chatroomId";
+"chatroom.owner" = "Owner";
+"chatroom.admins" = "Admin List";
+"chatroom.members" = "Member List";
+"chatroom.blacklist" = "Blacklist";
+"chatroom.mutes" = "Mute List";
 "chatroom.occupantCount" = "members count";
 "chatroom.description" = "description";
 "chatroom.joining" = "Joining...";
 "chatroom.fetchInfoFail" = "Failed to get the chatroom details";
 "chatroom.joinFailed" = "join chatroom \'%@\' failed";
 "chatroom.join" = "\'%@\'join chatroom\'%@\'";
-"chatroom.leave" = "\'%@\'leave chatroom\'%@\'";
+"chatroom.leave.hint" = "\'%@\'leave chatroom\'%@\'";
 "chatroom.remove" = "be removed from chatroom\'%@\'";
+"chatroom.create.inputName" = "Please input chatroom name";
+"chatroom.create.inputDescribe" = "Please input chatroom description";
+"chatroom.create.ongoing" = "create a chatroom...";
+"chatroom.create.success" = "create chatroom success";
+"chatroom.create.fail" = "Failed to create a chatroom, please operate again";
+
+"chatroom.destroy" = "Destroy the chatroom";
+"chatroom.leave" = "Leave the chatroom";
+"chatroom.destroyFail" = "Destroy the chatroom failure";
+"chatroom.leaveFail" = "Leave the chatroom failure";
 
 //call
 "call.initFailed"="Establish call failure";
@@ -292,9 +320,10 @@
 "title.apply" = "Application and notification";
 "title.groupApply" = "Group Notification";
 "title.groupSubjectChanging" = "Change group name";
-"title.chatroomlist" = "Chatroom List";
+"title.chatroom" = "Chatroom";
 "title.robotlist" = "Robot List";
 "title.profile" = "Profile";
+"title.createChatroom" = "Create a chatroom";
 
 //setting
 "setting.autoLogin" = "automatic login";
@@ -310,6 +339,7 @@
 
 "setting.uploadLog" = "upload run log";
 "setting.sdkVersion" = "SDK version";
+"setting.emailLog" = "email send log";
 "setting.uploading" = "uploading...";
 "setting.uploadSuccess" = "uploaded successfully";
 "setting.uploadFail" = "uploaded failed";
@@ -323,6 +353,7 @@
 "setting.iospushname" = "iOS push nickname";
 "setting.useIp" = "Use IP";
 "setting.deleteConWhenLeave" = "Delete conversation when leave a group";
+"setting.autoAcceptGrupInvite" = "Auto accept group invite";
 "setting.microphoneNoAuthority" = "No microphone permissions";
 "setting.microphoneAuthority" = "Please open in \"Setting\"-\"Privacy\"-\"Microphone\".";
 "setting.cameraNoAuthority" = "No camera permissions";
