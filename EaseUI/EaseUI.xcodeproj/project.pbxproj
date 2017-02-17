@@ -124,7 +124,6 @@
 		D250D5271BD8D1CB00C8D553 /* EaseChatBarMoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D4B91BD8D1CB00C8D553 /* EaseChatBarMoreView.m */; };
 		D250D5281BD8D1CB00C8D553 /* EaseRecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D4BC1BD8D1CB00C8D553 /* EaseRecordView.m */; };
 		D250D5291BD8D1CB00C8D553 /* EaseConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D4BF1BD8D1CB00C8D553 /* EaseConversationCell.m */; };
-		D250D5981BD8D23900C8D553 /* libEaseMobClientSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D250D5941BD8D23800C8D553 /* libEaseMobClientSDK.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		D262C9A81BD8D54700B08382 /* EaseUI.h in include */ = {isa = PBXBuildFile; fileRef = D250D39F1BD8D14400C8D553 /* EaseUI.h */; };
 		D2A42AA81BDA4C070089902B /* EaseUIResource.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = D2AA63831BD911B10059D684 /* EaseUIResource.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D2AA62C01BD907AC0059D684 /* EaseSDKHelper.h in Helper */ = {isa = PBXBuildFile; fileRef = D250D4561BD8D1CB00C8D553 /* EaseSDKHelper.h */; };
@@ -1003,7 +1002,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D250D5981BD8D23900C8D553 /* libEaseMobClientSDK.a in Frameworks */,
 				D250D4CB1BD8D1CB00C8D553 /* libopencore-amrwb.a in Frameworks */,
 				D250D4CA1BD8D1CB00C8D553 /* libopencore-amrnb.a in Frameworks */,
 			);
@@ -2376,6 +2374,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(PROJECT_DIR)/../EaseMobSDK/include",
+					"$(PROJECT_DIR)/../../emclient-ios/EaseMobClientSDK/export/include/**",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2401,6 +2400,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(PROJECT_DIR)/../EaseMobSDK/include",
+					"$(PROJECT_DIR)/../../emclient-ios/EaseMobClientSDK/export/include/**",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
