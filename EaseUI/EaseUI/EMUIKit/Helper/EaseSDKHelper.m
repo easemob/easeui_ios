@@ -218,7 +218,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     }
     if (!flag) {
         NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-        NSNumber *httpsOnly = [ud objectForKey:@"identifier_httpsonly_enable"];
+        NSNumber *httpsOnly = [ud objectForKey:@"identifier_httpsonly"];
         [[EaseMob sharedInstance].chatManager setIsUseHttpsOnly:[httpsOnly boolValue]];
         
         //注册easemob sdk
