@@ -217,6 +217,10 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
         flag = [[otherConfig objectForKey:@"easeSandBox"] boolValue];
     }
     if (!flag) {
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        NSNumber *httpsOnly = [ud objectForKey:@"identifier_httpsonly_enable"];
+        [[EaseMob sharedInstance].chatManager setIsUseHttpsOnly:[httpsOnly boolValue]];
+        
         //注册easemob sdk
         [[EaseMob sharedInstance] registerSDKWithAppKey:appkey
                                            apnsCertName:apnsCertName
