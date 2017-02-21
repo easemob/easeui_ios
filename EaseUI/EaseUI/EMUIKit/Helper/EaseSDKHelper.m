@@ -137,6 +137,12 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
         options.enableConsoleLog = YES;
     }
     
+    BOOL isHttpsOnly = NO;
+    if ([otherConfig objectForKey:@"httpsOnly"]) {
+        isHttpsOnly = [[otherConfig objectForKey:@"httpsOnly"] boolValue];
+    }
+    options.usingHttpsOnly = isHttpsOnly;
+    
     BOOL sandBox = [otherConfig objectForKey:@"easeSandBox"] && [[otherConfig objectForKey:@"easeSandBox"] boolValue];
     if (!sandBox) {
         [[EMClient sharedClient] initializeSDKWithOptions:options];
