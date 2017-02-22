@@ -200,7 +200,7 @@
 "chatroom.id" = "chatroomId";
 "chatroom.owner" = "Owner";
 "chatroom.admins" = "Admin List";
-"chatroom.members" = "Member List";
+"chatroom.onlineMembers" = "Online member List";
 "chatroom.blacklist" = "Blacklist";
 "chatroom.mutes" = "Mute List";
 "chatroom.occupantCount" = "members count";
