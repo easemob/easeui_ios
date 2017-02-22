@@ -14,7 +14,11 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-#import <Hyphenate/EMSDK.h>
+#if ENABLE_LITE == 1
+#import <HyphenateLite/HyphenateLite.h>
+#else
+#import <Hyphenate/Hyphenate.h>
+#endif
 
 /** @brief 登录状态变更的通知 */
 #define KNOTIFICATION_LOGINCHANGE @"loginStateChange"
