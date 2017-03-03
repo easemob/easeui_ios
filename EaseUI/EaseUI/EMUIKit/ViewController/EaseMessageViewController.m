@@ -773,18 +773,13 @@
                 NSString *localPath = model.message == nil ? model.fileLocalPath : [imageBody localPath];
                 if (localPath && localPath.length > 0) {
                     UIImage *image = [UIImage imageWithContentsOfFile:localPath];
-                    
-                    if (image)
-                    {
+                    if (image) {
                         [[EaseMessageReadManager defaultManager] showBrowserWithImages:@[image]];
+                        return;
                     }
-                    else
-                    {
-                        NSLog(@"Read %@ failed!", localPath);
-                    }
-                    return;
                 }
             }
+            
             [weakSelf showHudInView:weakSelf.view hint:NSEaseLocalizedString(@"message.downloadingImage", @"downloading a image...")];
             [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
                 [weakSelf hideHud];
