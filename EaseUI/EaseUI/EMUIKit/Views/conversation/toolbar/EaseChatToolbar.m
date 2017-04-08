@@ -629,6 +629,11 @@
 
 - (void)chatKeyboardWillChangeFrame:(NSNotification *)notification
 {
+    if([self.delegate respondsToSelector:@selector(inputTextShouldChangeFrameOnKeyboardWillShow:)]) {
+        if([self.delegate inputTextShouldChangeFrameOnKeyboardWillShow:self.inputTextView] == NO){
+            return;
+        }
+    }
     NSDictionary *userInfo = notification.userInfo;
     CGRect endFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect beginFrame = [userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
