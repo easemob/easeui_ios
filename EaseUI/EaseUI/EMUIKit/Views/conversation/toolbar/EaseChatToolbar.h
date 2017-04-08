@@ -101,6 +101,14 @@
 @protocol EMChatToolbarDelegate <NSObject>
 
 @optional
+  
+/*
+ *  当键盘弹起时,是否禁止改变frame
+ *
+ *  @param inputTextView 输入框对象
+ *  @return 默认不禁止 YES
+ */
+- (BOOL)inputTextShouldChangeFrameOnKeyboardWillShow:(EaseTextView *)inputTextView;
 
 /**
  *  文字输入框开始编辑
