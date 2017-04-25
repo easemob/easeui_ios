@@ -13,7 +13,11 @@
 #import <Foundation/Foundation.h>
 
 #import "IMessageModel.h"
+#if ENABLE_LITE == 1
+#import <HyphenateLite/EMMessage.h>
+#else
 #import <Hyphenate/EMMessage.h>
+#endif
 
 /** @brief 消息模型 */
 
