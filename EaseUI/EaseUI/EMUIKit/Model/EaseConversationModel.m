@@ -12,7 +12,11 @@
 
 #import "EaseConversationModel.h"
 
+#if ENABLE_LITE == 1
+#import <HyphenateLite/EMConversation.h>
+#else
 #import <Hyphenate/EMConversation.h>
+#endif
 
 @implementation EaseConversationModel
 

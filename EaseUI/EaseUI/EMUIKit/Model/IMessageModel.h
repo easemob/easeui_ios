@@ -13,7 +13,11 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-#import <Hyphenate/EMSDK.h>
+#if ENABLE_LITE == 1
+#import <HyphenateLite/HyphenateLite.h>
+#else
+#import <Hyphenate/Hyphenate.h>
+#endif
 
 @class EMMessage;
 

@@ -17,7 +17,7 @@
 
 #pragma mark - private
 
-- (void)_setupImageBubbleMarginConstraints
+- (void)_setupGifBubbleMarginConstraints
 {
     NSLayoutConstraint *marginTopConstraint = [NSLayoutConstraint constraintWithItem:self.imageView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:self.margin.top];
     NSLayoutConstraint *marginBottomConstraint = [NSLayoutConstraint constraintWithItem:self.imageView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-self.margin.bottom];
@@ -33,9 +33,9 @@
     [self addConstraints:self.marginConstraints];
 }
 
-- (void)_setupImageBubbleConstraints
+- (void)_setupGifBubbleConstraints
 {
-    [self _setupImageBubbleMarginConstraints];
+    [self _setupGifBubbleMarginConstraints];
 }
 
 #pragma mark - public
@@ -48,7 +48,7 @@
     [self addSubview:self.imageView];
     self.backgroundImageView.hidden = YES;
     
-    [self _setupImageBubbleConstraints];
+    [self _setupGifBubbleConstraints];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:100]];
 }
 
@@ -60,7 +60,7 @@
     _margin = margin;
     
     [self removeConstraints:self.marginConstraints];
-    [self _setupImageBubbleMarginConstraints];
+    [self _setupGifBubbleMarginConstraints];
 }
 
 @end
