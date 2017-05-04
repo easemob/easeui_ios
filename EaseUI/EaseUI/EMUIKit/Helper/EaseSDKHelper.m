@@ -18,6 +18,10 @@
 
 static EaseSDKHelper *helper = nil;
 
+@interface EaseSDKHelper () <EMChatManagerDelegate>
+
+@end
+
 @implementation EaseSDKHelper
 
 @synthesize isShowingimagePicker = _isShowingimagePicker;
@@ -115,6 +119,7 @@ static EaseSDKHelper *helper = nil;
 - (void)appWillEnterForeground:(NSNotification*)notif
 {
     [[EaseMob sharedInstance] applicationWillEnterForeground:notif.object];
+    [self _registerRemoteNotification];
 }
 
 - (void)appDidFinishLaunching:(NSNotification*)notif
@@ -179,7 +184,6 @@ static EaseSDKHelper *helper = nil;
     }
     
 #if !TARGET_IPHONE_SIMULATOR
-    //iOS8 注册APNS
     if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
         [application registerForRemoteNotifications];
     }else{
@@ -228,7 +232,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     }
     
     // 注册环信监听
-    [self registerEaseMobLiteNotification];
+    [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
     
     //启动easemob sdk
     [[EaseMob sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];

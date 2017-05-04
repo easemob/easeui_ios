@@ -8,7 +8,6 @@
 
 #import "EaseMessageViewController.h"
 
-#import "NSObject+EaseMob.h"
 #import "NSDate+Category.h"
 #import "EaseUsersListViewController.h"
 
@@ -95,7 +94,7 @@
     
     //注册代理
     [EMCDDeviceManager sharedInstance].delegate = self;
-    [self registerEaseMobNotification];
+    [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
     
     
     if (self.conversation.conversationType == eConversationTypeChatRoom)
@@ -121,7 +120,7 @@
     
     [[EMCDDeviceManager sharedInstance] stopPlaying];
     [EMCDDeviceManager sharedInstance].delegate = nil;
-    [self unregisterEaseMobNotification];
+    [[EaseMob sharedInstance].chatManager removeDelegate:self];
     
     if (_conversation.conversationType == eConversationTypeChatRoom && !_isKicked)
     {

@@ -10,7 +10,6 @@
 #import <Foundation/Foundation.h>
 
 #import "EaseMob.h"
-#import "NSObject+EaseMob.h"
 
 #define KNOTIFICATION_LOGINCHANGE @"loginStateChange"
 #define KNOTIFICATION_CALL @"callOutWithChatter"
