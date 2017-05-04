@@ -263,6 +263,8 @@
         {
             [self _sendHasReadResponseForMessages:unreadMessages isRead:YES];
         }
+        
+        [_conversation markAllMessagesAsRead:YES];
     }
 }
 
