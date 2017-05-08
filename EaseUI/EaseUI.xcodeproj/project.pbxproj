@@ -87,7 +87,6 @@
 		D250D5021BD8D1CB00C8D553 /* EaseUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D45E1BD8D1CB00C8D553 /* EaseUserModel.m */; };
 		D250D5031BD8D1CB00C8D553 /* NSDate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D4671BD8D1CB00C8D553 /* NSDate+Category.m */; };
 		D250D5041BD8D1CB00C8D553 /* NSDateFormatter+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D4691BD8D1CB00C8D553 /* NSDateFormatter+Category.m */; };
-		D250D5051BD8D1CB00C8D553 /* NSObject+EaseMob.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D46B1BD8D1CB00C8D553 /* NSObject+EaseMob.m */; };
 		D250D5061BD8D1CB00C8D553 /* NSString+Valid.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D46D1BD8D1CB00C8D553 /* NSString+Valid.m */; };
 		D250D5071BD8D1CB00C8D553 /* UIViewController+DismissKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D46F1BD8D1CB00C8D553 /* UIViewController+DismissKeyboard.m */; };
 		D250D5081BD8D1CB00C8D553 /* UIViewController+HUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D4711BD8D1CB00C8D553 /* UIViewController+HUD.m */; };
@@ -136,7 +135,6 @@
 		D2AA62C81BD907D50059D684 /* IUserModel.h in Model */ = {isa = PBXBuildFile; fileRef = D250D4631BD8D1CB00C8D553 /* IUserModel.h */; };
 		D2AA62CA1BD9082C0059D684 /* NSDate+Category.h in Util */ = {isa = PBXBuildFile; fileRef = D250D4661BD8D1CB00C8D553 /* NSDate+Category.h */; };
 		D2AA62CB1BD9082C0059D684 /* NSDateFormatter+Category.h in Util */ = {isa = PBXBuildFile; fileRef = D250D4681BD8D1CB00C8D553 /* NSDateFormatter+Category.h */; };
-		D2AA62CC1BD9082C0059D684 /* NSObject+EaseMob.h in Util */ = {isa = PBXBuildFile; fileRef = D250D46A1BD8D1CB00C8D553 /* NSObject+EaseMob.h */; };
 		D2AA62CD1BD9082C0059D684 /* NSString+Valid.h in Util */ = {isa = PBXBuildFile; fileRef = D250D46C1BD8D1CB00C8D553 /* NSString+Valid.h */; };
 		D2AA62CE1BD9082C0059D684 /* UIViewController+DismissKeyboard.h in Util */ = {isa = PBXBuildFile; fileRef = D250D46E1BD8D1CB00C8D553 /* UIViewController+DismissKeyboard.h */; };
 		D2AA62CF1BD9082C0059D684 /* UIViewController+HUD.h in Util */ = {isa = PBXBuildFile; fileRef = D250D4701BD8D1CB00C8D553 /* UIViewController+HUD.h */; };
@@ -391,7 +389,6 @@
 				D2AA65171BD915B50059D684 /* EaseEmotionManager.h in Util */,
 				D2AA62CA1BD9082C0059D684 /* NSDate+Category.h in Util */,
 				D2AA62CB1BD9082C0059D684 /* NSDateFormatter+Category.h in Util */,
-				D2AA62CC1BD9082C0059D684 /* NSObject+EaseMob.h in Util */,
 				D2AA62CD1BD9082C0059D684 /* NSString+Valid.h in Util */,
 				D2AA62CE1BD9082C0059D684 /* UIViewController+DismissKeyboard.h in Util */,
 				D2AA62CF1BD9082C0059D684 /* UIViewController+HUD.h in Util */,
@@ -778,8 +775,6 @@
 		D250D4671BD8D1CB00C8D553 /* NSDate+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Category.m"; sourceTree = "<group>"; };
 		D250D4681BD8D1CB00C8D553 /* NSDateFormatter+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+Category.h"; sourceTree = "<group>"; };
 		D250D4691BD8D1CB00C8D553 /* NSDateFormatter+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+Category.m"; sourceTree = "<group>"; };
-		D250D46A1BD8D1CB00C8D553 /* NSObject+EaseMob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+EaseMob.h"; sourceTree = "<group>"; };
-		D250D46B1BD8D1CB00C8D553 /* NSObject+EaseMob.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+EaseMob.m"; sourceTree = "<group>"; };
 		D250D46C1BD8D1CB00C8D553 /* NSString+Valid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Valid.h"; sourceTree = "<group>"; };
 		D250D46D1BD8D1CB00C8D553 /* NSString+Valid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Valid.m"; sourceTree = "<group>"; };
 		D250D46E1BD8D1CB00C8D553 /* UIViewController+DismissKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+DismissKeyboard.h"; sourceTree = "<group>"; };
@@ -1411,8 +1406,6 @@
 				D250D4671BD8D1CB00C8D553 /* NSDate+Category.m */,
 				D250D4681BD8D1CB00C8D553 /* NSDateFormatter+Category.h */,
 				D250D4691BD8D1CB00C8D553 /* NSDateFormatter+Category.m */,
-				D250D46A1BD8D1CB00C8D553 /* NSObject+EaseMob.h */,
-				D250D46B1BD8D1CB00C8D553 /* NSObject+EaseMob.m */,
 				D250D46C1BD8D1CB00C8D553 /* NSString+Valid.h */,
 				D250D46D1BD8D1CB00C8D553 /* NSString+Valid.m */,
 				D250D46E1BD8D1CB00C8D553 /* UIViewController+DismissKeyboard.h */,
@@ -2232,7 +2225,6 @@
 				D250D5141BD8D1CB00C8D553 /* EaseUsersListViewController.m in Sources */,
 				D250D4D91BD8D1CB00C8D553 /* MWCaptionView.m in Sources */,
 				D250D5091BD8D1CB00C8D553 /* EaseChineseToPinyin.m in Sources */,
-				D250D5051BD8D1CB00C8D553 /* NSObject+EaseMob.m in Sources */,
 				D250D4D71BD8D1CB00C8D553 /* UIScrollView+MJRefresh.m in Sources */,
 				D250D4EF1BD8D1CB00C8D553 /* UIImageView+EMHighlightedWebCache.m in Sources */,
 				D250D5261BD8D1CB00C8D553 /* EaseFacialView.m in Sources */,
@@ -2376,6 +2368,7 @@
 					"$(PROJECT_DIR)/../EaseMobSDK/include",
 					"$(PROJECT_DIR)/../../emclient-ios/EaseMobClientSDK/export/include/**",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrnb",
@@ -2402,6 +2395,7 @@
 					"$(PROJECT_DIR)/../EaseMobSDK/include",
 					"$(PROJECT_DIR)/../../emclient-ios/EaseMobClientSDK/export/include/**",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrnb",
