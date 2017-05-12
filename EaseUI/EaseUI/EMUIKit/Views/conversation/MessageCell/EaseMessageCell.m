@@ -76,6 +76,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     
     cell.messageVoiceDurationColor = [UIColor grayColor];
     cell.messageVoiceDurationFont = [UIFont systemFontOfSize:12];
+    cell.voiceCellWidth = 75.f;
     
     cell.messageFileNameColor = [UIColor blackColor];
     cell.messageFileNameFont = [UIFont systemFontOfSize:13];

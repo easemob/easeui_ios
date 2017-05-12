@@ -116,6 +116,9 @@
             break;
         case EMMessageBodyTypeVoice:
         {
+            [self removeConstraint:self.bubbleWithImageConstraint];
+            self.bubbleWithImageConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:[EaseMessageCell appearance].voiceCellWidth];
+            [self addConstraint:self.bubbleWithImageConstraint];
         }
             break;
         case EMMessageBodyTypeVideo:
