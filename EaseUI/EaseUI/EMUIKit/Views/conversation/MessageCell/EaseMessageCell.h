@@ -138,6 +138,11 @@ typedef enum{
 @property (nonatomic) UIFont *messageVoiceDurationFont UI_APPEARANCE_SELECTOR; //default [UIFont systemFontOfSize:12];
 
 /*
+ *  语音消息显示宽度
+ */
+@property (nonatomic) CGFloat voiceCellWidth UI_APPEARANCE_SELECTOR; //default 75;
+
+/*
  *  文件消息名称显示字体
  */
 @property (nonatomic) UIFont *messageFileNameFont UI_APPEARANCE_SELECTOR; //default [UIFont systemFontOfSize:13];
