@@ -100,7 +100,7 @@
             case EMMessageBodyTypeFile:
             {
                 EMFileMessageBody *fileMessageBody = (EMFileMessageBody *)_firstMessageBody;
-                self.fileIconName = @"chat_item_file";
+                self.fileIconName = @"EaseUIResource.bundle/chat_item_file";
                 self.fileName = fileMessageBody.displayName;
                 self.fileSize = fileMessageBody.fileLength;
                 

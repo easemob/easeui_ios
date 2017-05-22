@@ -473,6 +473,16 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 
 /*!
  @method
+ @brief 发送视频消息
+ @discussion
+ @param url 视频url
+ @result
+ */
+- (void)sendFileMessageWith:(EMMessage *)message;
+
+
+/*!
+ @method
  @brief 添加消息
  @discussion
  @param message 聊天消息类

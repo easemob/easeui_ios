@@ -1956,6 +1956,10 @@
     [self _sendMessage:message];
 }
 
+- (void)sendFileMessageWith:(EMMessage *)message {
+    [self _sendMessage:message];
+}
+
 #pragma mark - notifycation
 - (void)didBecomeActive
 {
