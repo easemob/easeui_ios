@@ -1138,10 +1138,6 @@
                 [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
                     if (asset) {
                         [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
-                            if (data.length > 10 * 1000 * 1000) {
-                                [self showHint:NSEaseLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
-                                return;
-                            }
                             if (data != nil) {
                                 [self sendImageMessageWithData:data];
                             } else {
@@ -1158,10 +1154,6 @@
                         Byte* buffer = (Byte*)malloc((size_t)[assetRepresentation size]);
                         NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:(NSUInteger)[assetRepresentation size] error:nil];
                         NSData* fileData = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
-                        if (fileData.length > 10 * 1000 * 1000) {
-                            [self showHint:NSEaseLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
-                            return;
-                        }
                         [self sendImageMessageWithData:fileData];
                     }
                 } failureBlock:NULL];
@@ -1963,6 +1955,7 @@
 #pragma mark - notifycation
 - (void)didBecomeActive
 {
+    self.messageTimeIntervalTag = -1;
     self.dataArray = [[self formatMessages:self.messsagesSource] mutableCopy];
     [self.tableView reloadData];
     
