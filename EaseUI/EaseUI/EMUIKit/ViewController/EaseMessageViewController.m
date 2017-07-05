@@ -1963,6 +1963,7 @@
 #pragma mark - notifycation
 - (void)didBecomeActive
 {
+    self.messageTimeIntervalTag = -1;
     self.dataArray = [[self formatMessages:self.messsagesSource] mutableCopy];
     [self.tableView reloadData];
     
