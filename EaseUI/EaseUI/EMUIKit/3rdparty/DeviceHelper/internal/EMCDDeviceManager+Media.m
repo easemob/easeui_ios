@@ -55,15 +55,19 @@ typedef NS_ENUM(NSInteger, EMAudioSession){
     }
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *wavFilePath = [[aFilePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"wav"];
-    if (![fileManager fileExistsAtPath:wavFilePath]) {
-        BOOL covertRet = [self convertAMR:aFilePath toWAV:wavFilePath];
-        if (!covertRet) {
-            if (completon) {
-                completon([NSError errorWithDomain:NSEaseLocalizedString(@"error.initRecorderFail", @"File format conversion failed")
-                                              code:EMErrorFileTypeConvertionFailure
-                                          userInfo:nil]);
+    if ([EMVoiceConverter isMP3File:aFilePath]) {
+        wavFilePath = aFilePath;
+    } else {
+        if (![fileManager fileExistsAtPath:wavFilePath]) {
+            BOOL covertRet = [self convertAMR:aFilePath toWAV:wavFilePath];
+            if (!covertRet) {
+                if (completon) {
+                    completon([NSError errorWithDomain:NSEaseLocalizedString(@"error.initRecorderFail", @"File format conversion failed")
+                                                  code:EMErrorFileTypeConvertionFailure
+                                              userInfo:nil]);
+                }
+                return ;
             }
-            return ;
         }
     }
     [EMAudioPlayerUtil asyncPlayingWithPath:wavFilePath
