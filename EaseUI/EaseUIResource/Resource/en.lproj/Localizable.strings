@@ -98,6 +98,9 @@
 "apns.failToBindDeviceToken" = "Fail to bind device token";
 "apns.content" = "Apns content";
 
+//record
+"record.failToPermission" = "No recording permission";
+
 //friend
 "friend.add" = "add friend";
 "friend.somebodyAddWithName" = "%@ add you as a friend";
