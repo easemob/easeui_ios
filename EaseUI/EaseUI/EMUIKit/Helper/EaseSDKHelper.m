@@ -157,7 +157,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo
 
 - (void)dealloc
 {
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - send message
