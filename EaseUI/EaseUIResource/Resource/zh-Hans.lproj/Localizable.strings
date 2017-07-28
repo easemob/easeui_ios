@@ -98,6 +98,9 @@
 "apns.failToBindDeviceToken" = "消息推送与设备绑定失败";
 "apns.content" = "推送内容";
 
+//recrod
+"record.failToPermission" = "没有录音权限";
+
 //friend
 "friend.add" = "添加好友";
 "friend.somebodyAddWithName" = "%@ 添加你为好友";

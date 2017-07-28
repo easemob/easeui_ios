@@ -31,6 +31,13 @@
 
 #define IOS_VERSION [[UIDevice currentDevice] systemVersion]>=9.0
 
+typedef enum : NSUInteger {
+    EMRequestRecord,
+    EMCanRecord,
+    EMCanNotRecord,
+} EMRecordResponse;
+
+
 @implementation EaseAtTarget
 - (instancetype)initWithUserId:(NSString*)userId andNickname:(NSString*)nickname
 {
@@ -50,6 +57,7 @@
     NSMutableArray *_atTargets;
     
     dispatch_queue_t _messageQueue;
+    BOOL _isRecording;
 }
 
 @property (strong, nonatomic) id<IMessageModel> playingVoiceModel;
@@ -102,7 +110,7 @@
     CGFloat chatbarHeight = [EaseChatToolbar defaultHeight];
     EMChatToolbarType barType = self.conversation.type == EMConversationTypeChat ? EMChatToolbarTypeChat : EMChatToolbarTypeGroup;
     self.chatToolbar = [[EaseChatToolbar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - chatbarHeight, self.view.frame.size.width, chatbarHeight) type:barType];
-    self.chatToolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;    
+    self.chatToolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     
     //Initializa the gesture recognizer
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyBoardHidden:)];
@@ -118,7 +126,7 @@
     [EMCDDeviceManager sharedInstance].delegate = self;
     [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].roomManager addDelegate:self delegateQueue:nil];
-
+    
     if (self.conversation.type == EMConversationTypeChatRoom)
     {
         [self joinChatroom:self.conversation.conversationId];
@@ -369,7 +377,7 @@
 /*!
  @method
  @brief tableView滑动到底部
- @discussion 
+ @discussion
  @result
  */
 - (void)_scrollViewToBottom:(BOOL)animated
@@ -385,27 +393,30 @@
  @method
  @brief 当前设备是否可以录音
  @discussion
+ @param aComplation 判断结果
  @result
  */
-- (BOOL)_canRecord
+- (void)_canRecordComplation:(void(^)(EMRecordResponse))aComplation
 {
-    __block BOOL bCanRecord = YES;
-    if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0"] != NSOrderedAscending)
-    {
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) {
-            [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
-                bCanRecord = granted;
-            }];
-        }
+    AVAuthorizationStatus videoAuthStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
+    if (videoAuthStatus == AVAuthorizationStatusNotDetermined) {
+        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+            if (aComplation) {
+                aComplation(EMRequestRecord);
+            }
+        }];
     }
-    
-    return bCanRecord;
+    else if(videoAuthStatus == AVAuthorizationStatusRestricted || videoAuthStatus == AVAuthorizationStatusDenied) {
+        aComplation(EMCanNotRecord);
+    }
+    else{
+        aComplation(EMCanRecord);
+    }
 }
 
 - (void)showMenuViewController:(UIView *)showInView
-                   andIndexPath:(NSIndexPath *)indexPath
-                    messageType:(EMMessageBodyType)messageType
+                  andIndexPath:(NSIndexPath *)indexPath
+                   messageType:(EMMessageBodyType)messageType
 {
     if (_menuController == nil) {
         _menuController = [UIMenuController sharedMenuController];
@@ -593,7 +604,7 @@
  @result
  */
 - (BOOL)shouldSendHasReadAckForMessage:(EMMessage *)message
-                                   read:(BOOL)read
+                                  read:(BOOL)read
 {
     NSString *account = [[EMClient sharedClient] currentUsername];
     if (message.chatType != EMChatTypeChat || message.isReadAcked || message.direction == EMMessageDirectionSend || ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) || !self.isViewDidAppear)
@@ -637,7 +648,7 @@
         }
         else{
             isSend = [self shouldSendHasReadAckForMessage:message
-                                                      read:isRead];
+                                                     read:isRead];
         }
         
         if (isSend)
@@ -1138,10 +1149,6 @@
                 [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
                     if (asset) {
                         [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
-                            if (data.length > 10 * 1000 * 1000) {
-                                [self showHint:NSEaseLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
-                                return;
-                            }
                             if (data != nil) {
                                 [self sendImageMessageWithData:data];
                             } else {
@@ -1158,10 +1165,6 @@
                         Byte* buffer = (Byte*)malloc((size_t)[assetRepresentation size]);
                         NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:(NSUInteger)[assetRepresentation size] error:nil];
                         NSData* fileData = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
-                        if (fileData.length > 10 * 1000 * 1000) {
-                            [self showHint:NSEaseLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
-                            return;
-                        }
                         [self sendImageMessageWithData:fileData];
                     }
                 } failureBlock:NULL];
@@ -1204,7 +1207,7 @@
             break;
         case EMMessageBodyTypeLocation:
         {
-             [self _locationMessageCellSelected:model];
+            [self _locationMessageCellSelected:model];
         }
             break;
         case EMMessageBodyTypeVoice:
@@ -1215,7 +1218,7 @@
         case EMMessageBodyTypeVideo:
         {
             [self _videoMessageCellSelected:model];
-
+            
         }
             break;
         case EMMessageBodyTypeFile:
@@ -1377,59 +1380,87 @@
         }
     }
     
-    if ([self _canRecord]) {
-        EaseRecordView *tmpView = (EaseRecordView *)recordView;
-        tmpView.center = self.view.center;
-        [self.view addSubview:tmpView];
-        [self.view bringSubviewToFront:recordView];
-        int x = arc4random() % 100000;
-        NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
-        NSString *fileName = [NSString stringWithFormat:@"%d%d",(int)time,x];
-        
-        [[EMCDDeviceManager sharedInstance] asyncStartRecordingWithFileName:fileName completion:^(NSError *error)
-         {
-             if (error) {
-                 NSLog(@"%@",NSEaseLocalizedString(@"message.startRecordFail", @"failure to start recording"));
-             }
-         }];
-    }
+    [self _canRecordComplation:^(EMRecordResponse recordResponse) {
+        switch (recordResponse) {
+            case EMRequestRecord:
+                
+                break;
+            case EMCanRecord:
+            {
+                _isRecording = YES;
+                EaseRecordView *tmpView = (EaseRecordView *)recordView;
+                tmpView.center = self.view.center;
+                [self.view addSubview:tmpView];
+                [self.view bringSubviewToFront:recordView];
+                int x = arc4random() % 100000;
+                NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
+                NSString *fileName = [NSString stringWithFormat:@"%d%d",(int)time,x];
+                
+                [[EMCDDeviceManager sharedInstance] asyncStartRecordingWithFileName:fileName completion:^(NSError *error)
+                 {
+                     if (error) {
+                         NSLog(@"%@",NSEaseLocalizedString(@"message.startRecordFail", @"failure to start recording"));
+                         _isRecording = NO;
+                     }
+                 }];
+                
+            }
+                break;
+            case EMCanNotRecord:
+            {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"record.failToPermission", @"No recording permission") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+                [alertView show];
+            }
+                break;
+            default:
+                break;
+        }
+    }];
 }
+
 
 - (void)didCancelRecordingVoiceAction:(UIView *)recordView
 {
-    [[EMCDDeviceManager sharedInstance] cancelCurrentRecording];
-    if ([self.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
-        [self.delegate messageViewController:self didSelectRecordView:recordView withEvenType:EaseRecordViewTypeTouchUpOutside];
-    } else {
-        if ([self.recordView isKindOfClass:[EaseRecordView class]]) {
-            [(EaseRecordView *)self.recordView recordButtonTouchUpOutside];
+    if(_isRecording) {
+        [[EMCDDeviceManager sharedInstance] cancelCurrentRecording];
+        if ([self.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
+            [self.delegate messageViewController:self didSelectRecordView:recordView withEvenType:EaseRecordViewTypeTouchUpOutside];
+        } else {
+            if ([self.recordView isKindOfClass:[EaseRecordView class]]) {
+                [(EaseRecordView *)self.recordView recordButtonTouchUpOutside];
+            }
+            [self.recordView removeFromSuperview];
         }
-        [self.recordView removeFromSuperview];
+        
+        _isRecording = NO;
     }
 }
 
 - (void)didFinishRecoingVoiceAction:(UIView *)recordView
 {
-    if ([self.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
-        [self.delegate messageViewController:self didSelectRecordView:recordView withEvenType:EaseRecordViewTypeTouchUpInside];
-    } else {
-        if ([self.recordView isKindOfClass:[EaseRecordView class]]) {
-            [(EaseRecordView *)self.recordView recordButtonTouchUpInside];
+    if (_isRecording) {
+        if ([self.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
+            [self.delegate messageViewController:self didSelectRecordView:recordView withEvenType:EaseRecordViewTypeTouchUpInside];
+        } else {
+            if ([self.recordView isKindOfClass:[EaseRecordView class]]) {
+                [(EaseRecordView *)self.recordView recordButtonTouchUpInside];
+            }
+            [self.recordView removeFromSuperview];
         }
-        [self.recordView removeFromSuperview];
+        __weak typeof(self) weakSelf = self;
+        [[EMCDDeviceManager sharedInstance] asyncStopRecordingWithCompletion:^(NSString *recordPath, NSInteger aDuration, NSError *error) {
+            if (!error) {
+                [weakSelf sendVoiceMessageWithLocalPath:recordPath duration:aDuration];
+            }
+            else {
+                [weakSelf showHudInView:self.view hint:error.domain];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakSelf hideHud];
+                });
+            }
+        }];
+        _isRecording = NO;
     }
-    __weak typeof(self) weakSelf = self;
-    [[EMCDDeviceManager sharedInstance] asyncStopRecordingWithCompletion:^(NSString *recordPath, NSInteger aDuration, NSError *error) {
-        if (!error) {
-            [weakSelf sendVoiceMessageWithLocalPath:recordPath duration:aDuration];
-        }
-        else {
-            [weakSelf showHudInView:self.view hint:error.domain];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [weakSelf hideHud];
-            });
-        }
-    }];
 }
 
 - (void)didDragInsideAction:(UIView *)recordView
@@ -1699,7 +1730,7 @@
     self.menuIndexPath = nil;
 }
 
-#pragma mark - public 
+#pragma mark - public
 
 - (NSArray *)formatMessages:(NSArray *)messages
 {
@@ -1735,7 +1766,7 @@
             model.avatarImage = [UIImage imageNamed:@"EaseUIResource.bundle/user"];
             model.failImageName = @"imageDownloadFail";
         }
-
+        
         if (model) {
             [formattedArray addObject:model];
         }
@@ -1749,7 +1780,7 @@
 {
     [self.messsagesSource addObject:message];
     
-     __weak EaseMessageViewController *weakSelf = self;
+    __weak EaseMessageViewController *weakSelf = self;
     dispatch_async(_messageQueue, ^{
         NSArray *messages = [weakSelf formatMessages:@[message]];
         
@@ -1762,7 +1793,6 @@
 }
 
 #pragma mark - public
-
 - (void)tableViewDidTriggerHeaderRefresh
 {
     self.messageTimeIntervalTag = -1;
@@ -1867,9 +1897,9 @@
 - (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext
 {
     EMMessage *message = [EaseSDKHelper sendTextMessage:text
-                                                   to:self.conversation.conversationId
-                                          messageType:[self _messageTypeFromConversationType]
-                                           messageExt:ext];
+                                                     to:self.conversation.conversationId
+                                            messageType:[self _messageTypeFromConversationType]
+                                             messageExt:ext];
     [self _sendMessage:message];
 }
 
@@ -1878,11 +1908,11 @@
                          andAddress:(NSString *)address
 {
     EMMessage *message = [EaseSDKHelper sendLocationMessageWithLatitude:latitude
-                                                            longitude:longitude
-                                                              address:address
-                                                                   to:self.conversation.conversationId
-                                                          messageType:[self _messageTypeFromConversationType]
-                                                           messageExt:nil];
+                                                              longitude:longitude
+                                                                address:address
+                                                                     to:self.conversation.conversationId
+                                                            messageType:[self _messageTypeFromConversationType]
+                                                             messageExt:nil];
     [self _sendMessage:message];
 }
 
@@ -1914,9 +1944,9 @@
     }
     
     EMMessage *message = [EaseSDKHelper sendImageMessageWithImage:image
-                                                             to:self.conversation.conversationId
-                                                    messageType:[self _messageTypeFromConversationType]
-                                                     messageExt:nil];
+                                                               to:self.conversation.conversationId
+                                                      messageType:[self _messageTypeFromConversationType]
+                                                       messageExt:nil];
     [self _sendMessage:message];
 }
 
@@ -1932,10 +1962,10 @@
     }
     
     EMMessage *message = [EaseSDKHelper sendVoiceMessageWithLocalPath:localPath
-                                                           duration:duration
-                                                                 to:self.conversation.conversationId
-                                                        messageType:[self _messageTypeFromConversationType]
-                                                         messageExt:nil];
+                                                             duration:duration
+                                                                   to:self.conversation.conversationId
+                                                          messageType:[self _messageTypeFromConversationType]
+                                                           messageExt:nil];
     [self _sendMessage:message];
 }
 
@@ -1950,9 +1980,9 @@
     }
     
     EMMessage *message = [EaseSDKHelper sendVideoMessageWithURL:url
-                                                           to:self.conversation.conversationId
-                                                  messageType:[self _messageTypeFromConversationType]
-                                                   messageExt:nil];
+                                                             to:self.conversation.conversationId
+                                                    messageType:[self _messageTypeFromConversationType]
+                                                     messageExt:nil];
     [self _sendMessage:message];
 }
 
@@ -1963,6 +1993,7 @@
 #pragma mark - notifycation
 - (void)didBecomeActive
 {
+    self.messageTimeIntervalTag = -1;
     self.dataArray = [[self formatMessages:self.messsagesSource] mutableCopy];
     [self.tableView reloadData];
     
