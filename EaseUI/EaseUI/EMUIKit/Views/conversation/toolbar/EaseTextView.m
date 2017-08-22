@@ -133,23 +133,21 @@
                                             rect.size.height);
         
         [self.placeHolderTextColor set];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_7_0
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+        paragraphStyle.alignment = self.textAlignment;
         
-        if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_0) {
-            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-            paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
-            paragraphStyle.alignment = self.textAlignment;
-            
-            [self.placeHolder drawInRect:placeHolderRect
-                          withAttributes:@{ NSFontAttributeName : self.font,
-                                            NSForegroundColorAttributeName : self.placeHolderTextColor,
-                                            NSParagraphStyleAttributeName : paragraphStyle }];
-        }
-        else {
-            [self.placeHolder drawInRect:placeHolderRect
-                                withFont:self.font
-                           lineBreakMode:NSLineBreakByTruncatingTail
-                               alignment:self.textAlignment];
-        }
+        [self.placeHolder drawInRect:placeHolderRect
+                      withAttributes:@{ NSFontAttributeName : self.font,
+                                        NSForegroundColorAttributeName : self.placeHolderTextColor,
+                                        NSParagraphStyleAttributeName : paragraphStyle }];
+#else
+        [self.placeHolder drawInRect:placeHolderRect
+                            withFont:self.font
+                       lineBreakMode:NSLineBreakByTruncatingTail
+                           alignment:self.textAlignment];
+#endif
     }
 }
 
