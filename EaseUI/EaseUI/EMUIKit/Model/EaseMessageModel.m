@@ -57,6 +57,7 @@
                 self.imageSize = imgMessageBody.size;
                 if (!_isSender) {
                     self.fileURLPath = imgMessageBody.remotePath;
+                    self.thumbnailFileURLPath = imgMessageBody.thumbnailRemotePath;
                 }
             }
                 break;
