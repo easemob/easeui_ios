@@ -287,7 +287,7 @@
 "message.noMessage" = "All messages cleared";
 "message.forbiddenWords" = "Your message contains forbidden words";
 "message.smallerImage" = "The image size is too large, please choose another one";
-"message.autoTransfer" = "Please customize the upload attachment method";
+"message.autoTransfer" = "Please customize the transfer attachment method";
 
 //media
 "media.timeShort" = "The recording time is too short";
