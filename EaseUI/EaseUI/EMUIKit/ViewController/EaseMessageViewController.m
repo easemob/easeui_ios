@@ -393,24 +393,24 @@ typedef enum : NSUInteger {
  @method
  @brief 当前设备是否可以录音
  @discussion
- @param aComplation 判断结果
+ @param aCompletion 判断结果
  @result
  */
-- (void)_canRecordComplation:(void(^)(EMRecordResponse))aComplation
+- (void)_canRecordCompletion:(void(^)(EMRecordResponse))aCompletion
 {
     AVAuthorizationStatus videoAuthStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
     if (videoAuthStatus == AVAuthorizationStatusNotDetermined) {
         [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-            if (aComplation) {
-                aComplation(EMRequestRecord);
+            if (aCompletion) {
+                aCompletion(EMRequestRecord);
             }
         }];
     }
     else if(videoAuthStatus == AVAuthorizationStatusRestricted || videoAuthStatus == AVAuthorizationStatusDenied) {
-        aComplation(EMCanNotRecord);
+        aCompletion(EMCanNotRecord);
     }
     else{
-        aComplation(EMCanRecord);
+        aCompletion(EMCanRecord);
     }
 }
 
@@ -1380,7 +1380,7 @@ typedef enum : NSUInteger {
         }
     }
     
-    [self _canRecordComplation:^(EMRecordResponse recordResponse) {
+    [self _canRecordCompletion:^(EMRecordResponse recordResponse) {
         switch (recordResponse) {
             case EMRequestRecord:
                 
