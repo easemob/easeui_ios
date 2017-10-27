@@ -393,24 +393,24 @@ typedef enum : NSUInteger {
  @method
  @brief 当前设备是否可以录音
  @discussion
- @param aComplation 判断结果
+ @param aCompletion 判断结果
  @result
  */
-- (void)_canRecordComplation:(void(^)(EMRecordResponse))aComplation
+- (void)_canRecordCompletion:(void(^)(EMRecordResponse))aCompletion
 {
     AVAuthorizationStatus videoAuthStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
     if (videoAuthStatus == AVAuthorizationStatusNotDetermined) {
         [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-            if (aComplation) {
-                aComplation(EMRequestRecord);
+            if (aCompletion) {
+                aCompletion(EMRequestRecord);
             }
         }];
     }
     else if(videoAuthStatus == AVAuthorizationStatusRestricted || videoAuthStatus == AVAuthorizationStatusDenied) {
-        aComplation(EMCanNotRecord);
+        aCompletion(EMCanNotRecord);
     }
     else{
-        aComplation(EMCanRecord);
+        aCompletion(EMCanRecord);
     }
 }
 
@@ -792,12 +792,12 @@ typedef enum : NSUInteger {
             }
             
             [weakSelf showHudInView:weakSelf.view hint:NSEaseLocalizedString(@"message.downloadingImage", @"downloading a image...")];
-            [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+            [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMMessage *aMessage, EMError *error) {
                 [weakSelf hideHud];
                 if (!error) {
                     //send the acknowledgement
                     [weakSelf _sendHasReadResponseForMessages:@[model.message] isRead:YES];
-                    NSString *localPath = message == nil ? model.fileLocalPath : [(EMImageMessageBody*)message.body localPath];
+                    NSString *localPath = aMessage == nil ? model.fileLocalPath : [(EMImageMessageBody*)aMessage.body localPath];
                     if (localPath && localPath.length > 0) {
                         UIImage *image = [UIImage imageWithContentsOfFile:localPath];
                         //                                weakSelf.isScrollToBottom = NO;
@@ -1380,7 +1380,7 @@ typedef enum : NSUInteger {
         }
     }
     
-    [self _canRecordComplation:^(EMRecordResponse recordResponse) {
+    [self _canRecordCompletion:^(EMRecordResponse recordResponse) {
         switch (recordResponse) {
             case EMRequestRecord:
                 
@@ -1844,6 +1844,7 @@ typedef enum : NSUInteger {
 }
 
 - (void)_sendMessage:(EMMessage *)message
+    isNeedUploadFile:(BOOL)isUploadFile
 {
     if (self.conversation.type == EMConversationTypeGroupChat){
         message.chatType = EMChatTypeGroupChat;
@@ -1856,18 +1857,23 @@ typedef enum : NSUInteger {
                         progress:nil];
     
     __weak typeof(self) weakself = self;
-    [[EMClient sharedClient].chatManager sendMessage:message progress:^(int progress) {
-        if (weakself.dataSource && [weakself.dataSource respondsToSelector:@selector(messageViewController:updateProgress:messageModel:messageBody:)]) {
-            [weakself.dataSource messageViewController:weakself updateProgress:progress messageModel:nil messageBody:message.body];
-        }
-    } completion:^(EMMessage *aMessage, EMError *aError) {
-        if (!aError) {
-            [weakself _refreshAfterSentMessage:aMessage];
-        }
-        else {
-            [weakself.tableView reloadData];
-        }
-    }];
+    if (![EMClient sharedClient].options.isAutoTransferMessageAttachments && isUploadFile) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"message.autoTransfer", @"Please customize the upload attachment method") delegate:nil cancelButtonTitle:NSLocalizedString(@"sure", @"OK") otherButtonTitles:nil, nil];
+        [alertView show];
+    } else {
+        [[EMClient sharedClient].chatManager sendMessage:message progress:^(int progress) {
+            if (weakself.dataSource && [weakself.dataSource respondsToSelector:@selector(messageViewController:updateProgress:messageModel:messageBody:)]) {
+                [weakself.dataSource messageViewController:weakself updateProgress:progress messageModel:nil messageBody:message.body];
+            }
+        } completion:^(EMMessage *aMessage, EMError *aError) {
+            if (!aError) {
+                [weakself _refreshAfterSentMessage:aMessage];
+            }
+            else {
+                [weakself.tableView reloadData];
+            }
+        }];
+    }
 }
 
 - (void)sendTextMessage:(NSString *)text
@@ -1896,24 +1902,16 @@ typedef enum : NSUInteger {
 
 - (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext
 {
-    EMMessage *message = [EaseSDKHelper sendTextMessage:text
-                                                     to:self.conversation.conversationId
-                                            messageType:[self _messageTypeFromConversationType]
-                                             messageExt:ext];
-    [self _sendMessage:message];
+    EMMessage *message = [EaseSDKHelper getTextMessage:text to:self.conversation.conversationId messageType:[self _messageTypeFromConversationType] messageExt:ext];
+    [self _sendMessage:message isNeedUploadFile:NO];
 }
 
 - (void)sendLocationMessageLatitude:(double)latitude
                           longitude:(double)longitude
                          andAddress:(NSString *)address
 {
-    EMMessage *message = [EaseSDKHelper sendLocationMessageWithLatitude:latitude
-                                                              longitude:longitude
-                                                                address:address
-                                                                     to:self.conversation.conversationId
-                                                            messageType:[self _messageTypeFromConversationType]
-                                                             messageExt:nil];
-    [self _sendMessage:message];
+    EMMessage *message = [EaseSDKHelper getLocationMessageWithLatitude:latitude longitude:longitude address:address to:self.conversation.conversationId messageType:[self _messageTypeFromConversationType] messageExt:nil];
+    [self _sendMessage:message isNeedUploadFile:NO];
 }
 
 - (void)sendImageMessageWithData:(NSData *)imageData
@@ -1926,11 +1924,8 @@ typedef enum : NSUInteger {
         progress = self;
     }
     
-    EMMessage *message = [EaseSDKHelper sendImageMessageWithImageData:imageData
-                                                                   to:self.conversation.conversationId
-                                                          messageType:[self _messageTypeFromConversationType]
-                                                           messageExt:nil];
-    [self _sendMessage:message];
+    EMMessage *message = [EaseSDKHelper getImageMessageWithImageData:imageData to:self.conversation.conversationId messageType:[self _messageTypeFromConversationType] messageExt:nil];
+    [self _sendMessage:message isNeedUploadFile:YES];
 }
 
 - (void)sendImageMessage:(UIImage *)image
@@ -1943,11 +1938,8 @@ typedef enum : NSUInteger {
         progress = self;
     }
     
-    EMMessage *message = [EaseSDKHelper sendImageMessageWithImage:image
-                                                               to:self.conversation.conversationId
-                                                      messageType:[self _messageTypeFromConversationType]
-                                                       messageExt:nil];
-    [self _sendMessage:message];
+    EMMessage *message = [EaseSDKHelper getImageMessageWithImage:image to:self.conversation.conversationId messageType:[self _messageTypeFromConversationType] messageExt:nil];
+    [self _sendMessage:message isNeedUploadFile:YES];
 }
 
 - (void)sendVoiceMessageWithLocalPath:(NSString *)localPath
@@ -1961,12 +1953,8 @@ typedef enum : NSUInteger {
         progress = self;
     }
     
-    EMMessage *message = [EaseSDKHelper sendVoiceMessageWithLocalPath:localPath
-                                                             duration:duration
-                                                                   to:self.conversation.conversationId
-                                                          messageType:[self _messageTypeFromConversationType]
-                                                           messageExt:nil];
-    [self _sendMessage:message];
+    EMMessage *message = [EaseSDKHelper getVoiceMessageWithLocalPath:localPath duration:duration to:self.conversation.conversationId messageType:[self _messageTypeFromConversationType] messageExt:nil];
+    [self _sendMessage:message isNeedUploadFile:YES];
 }
 
 - (void)sendVideoMessageWithURL:(NSURL *)url
@@ -1979,15 +1967,12 @@ typedef enum : NSUInteger {
         progress = self;
     }
     
-    EMMessage *message = [EaseSDKHelper sendVideoMessageWithURL:url
-                                                             to:self.conversation.conversationId
-                                                    messageType:[self _messageTypeFromConversationType]
-                                                     messageExt:nil];
-    [self _sendMessage:message];
+    EMMessage *message = [EaseSDKHelper getVideoMessageWithURL:url to:self.conversation.conversationId messageType:[self _messageTypeFromConversationType] messageExt:nil];
+    [self _sendMessage:message isNeedUploadFile:YES];
 }
 
 - (void)sendFileMessageWith:(EMMessage *)message {
-    [self _sendMessage:message];
+    [self _sendMessage:message isNeedUploadFile:YES];
 }
 
 #pragma mark - notifycation
