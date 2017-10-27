@@ -792,7 +792,7 @@ typedef enum : NSUInteger {
             }
             
             [weakSelf showHudInView:weakSelf.view hint:NSEaseLocalizedString(@"message.downloadingImage", @"downloading a image...")];
-            [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+            [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMMessage *aMessage, EMError *error) {
                 [weakSelf hideHud];
                 if (!error) {
                     //send the acknowledgement
@@ -1843,35 +1843,6 @@ typedef enum : NSUInteger {
     [self.tableView reloadData];
 }
 
-- (void)_uploadMessageAttachments:(EMMessage *)aMessage
-{
-    __weak typeof(self) weakself = self;
-    [[EMClient sharedClient].chatManager uploadMessageAttachment:aMessage progress:^(int progress) {
-//        if (weakself.dataSource && [weakself.dataSource respondsToSelector:@selector(messageViewController:updateProgress:messageModel:messageBody:)]) {
-//            [weakself.dataSource messageViewController:weakself updateProgress:progress messageModel:nil messageBody:message.body];
-//        }
-    } completion:^(EMMessage *message, EMError *error) {
-        message.status = EMMessageStatusSucceed;
-        if (error) {
-            message.status = EMMessageStatusFailed;
-        }
-        [self.conversation insertMessage:message error:nil];
-        
-        if (error == nil) {
-            [[EMClient sharedClient].chatManager sendMessage:message progress:^(int progress) {
-                
-            } completion:^(EMMessage *aMessage, EMError *aError) {
-                if (!aError) {
-                    [weakself _refreshAfterSentMessage:aMessage];
-                }
-                else {
-                    [weakself.tableView reloadData];
-                }
-            }];
-        }
-    }];
-}
-
 - (void)_sendMessage:(EMMessage *)message
     isNeedUploadFile:(BOOL)isUploadFile
 {
@@ -1887,7 +1858,8 @@ typedef enum : NSUInteger {
     
     __weak typeof(self) weakself = self;
     if (![EMClient sharedClient].options.isAutoTransferMessageAttachments && isUploadFile) {
-        [self _uploadMessageAttachments:message];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"message.autoTransfer", @"Please customize the upload attachment method") delegate:nil cancelButtonTitle:NSLocalizedString(@"sure", @"OK") otherButtonTitles:nil, nil];
+        [alertView show];
     } else {
         [[EMClient sharedClient].chatManager sendMessage:message progress:^(int progress) {
             if (weakself.dataSource && [weakself.dataSource respondsToSelector:@selector(messageViewController:updateProgress:messageModel:messageBody:)]) {
@@ -1902,7 +1874,6 @@ typedef enum : NSUInteger {
             }
         }];
     }
-    
 }
 
 - (void)sendTextMessage:(NSString *)text
