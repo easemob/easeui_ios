@@ -538,6 +538,12 @@ typedef enum : NSUInteger {
     return type;
 }
 
+- (void)_customDownloadMessageFile:(EMMessage *)aMessage
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"message.autoTransfer", @"Please customize the  transfer attachment method") delegate:nil cancelButtonTitle:NSLocalizedString(@"sure", @"OK") otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
 /*!
  @method
  @brief 下载消息附件
@@ -559,13 +565,18 @@ typedef enum : NSUInteger {
         }
     };
     
+    BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
     EMMessageBody *messageBody = message.body;
     if ([messageBody type] == EMMessageBodyTypeImage) {
         EMImageMessageBody *imageBody = (EMImageMessageBody *)messageBody;
         if (imageBody.thumbnailDownloadStatus > EMDownloadStatusSuccessed)
         {
             //download the message thumbnail
-            [[[EMClient sharedClient] chatManager] downloadMessageThumbnail:message progress:nil completion:completion];
+            if (isCustomDownload) {
+                [self _customDownloadMessageFile:message];
+            } else {
+               [[[EMClient sharedClient] chatManager] downloadMessageThumbnail:message progress:nil completion:completion];
+            }
         }
     }
     else if ([messageBody type] == EMMessageBodyTypeVideo)
@@ -574,7 +585,11 @@ typedef enum : NSUInteger {
         if (videoBody.thumbnailDownloadStatus > EMDownloadStatusSuccessed)
         {
             //download the message thumbnail
-            [[[EMClient sharedClient] chatManager] downloadMessageThumbnail:message progress:nil completion:completion];
+            if (isCustomDownload) {
+                [self _customDownloadMessageFile:message];
+            } else {
+                [[[EMClient sharedClient] chatManager] downloadMessageThumbnail:message progress:nil completion:completion];
+            }
         }
     }
     else if ([messageBody type] == EMMessageBodyTypeVoice)
@@ -583,14 +598,18 @@ typedef enum : NSUInteger {
         if (voiceBody.downloadStatus > EMDownloadStatusSuccessed)
         {
             //download the message attachment
-            [[EMClient sharedClient].chatManager downloadMessageAttachment:message progress:nil completion:^(EMMessage *message, EMError *error) {
-                if (!error) {
-                    [weakSelf _reloadTableViewDataWithMessage:message];
-                }
-                else {
-                    [weakSelf showHint:NSEaseLocalizedString(@"message.voiceFail", @"voice for failure!")];
-                }
-            }];
+            if (isCustomDownload) {
+                [self _customDownloadMessageFile:message];
+            } else {
+                [[EMClient sharedClient].chatManager downloadMessageAttachment:message progress:nil completion:^(EMMessage *message, EMError *error) {
+                    if (!error) {
+                        [weakSelf _reloadTableViewDataWithMessage:message];
+                    }
+                    else {
+                        [weakSelf showHint:NSEaseLocalizedString(@"message.voiceFail", @"voice for failure!")];
+                    }
+                }];
+            }
         }
     }
 }
@@ -606,7 +625,6 @@ typedef enum : NSUInteger {
 - (BOOL)shouldSendHasReadAckForMessage:(EMMessage *)message
                                   read:(BOOL)read
 {
-    NSString *account = [[EMClient sharedClient] currentUsername];
     if (message.chatType != EMChatTypeChat || message.isReadAcked || message.direction == EMMessageDirectionSend || ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) || !self.isViewDidAppear)
     {
         return NO;
@@ -728,6 +746,7 @@ typedef enum : NSUInteger {
         [self presentMoviePlayerViewControllerAnimated:moviePlayerController];
     };
     
+    BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
     __weak typeof(self) weakSelf = self;
     void (^completion)(EMMessage *aMessage, EMError *error) = ^(EMMessage *aMessage, EMError *error) {
         if (!error)
@@ -742,7 +761,11 @@ typedef enum : NSUInteger {
     
     if (videoBody.thumbnailDownloadStatus == EMDownloadStatusFailed || ![[NSFileManager defaultManager] fileExistsAtPath:videoBody.thumbnailLocalPath]) {
         [self showHint:@"begin downloading thumbnail image, click later"];
-        [[EMClient sharedClient].chatManager downloadMessageThumbnail:model.message progress:nil completion:completion];
+        if (isCustomDownload) {
+            [self _customDownloadMessageFile:model.message];
+        } else {
+            [[EMClient sharedClient].chatManager downloadMessageThumbnail:model.message progress:nil completion:completion];
+        }
         return;
     }
     
@@ -753,14 +776,18 @@ typedef enum : NSUInteger {
     }
     
     [self showHudInView:self.view hint:NSEaseLocalizedString(@"message.downloadingVideo", @"downloading video...")];
-    [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
-        [weakSelf hideHud];
-        if (!error) {
-            block();
-        }else{
-            [weakSelf showHint:NSEaseLocalizedString(@"message.videoFail", @"video for failure!")];
-        }
-    }];
+    if (isCustomDownload) {
+        [self _customDownloadMessageFile:model.message];
+    } else {
+        [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+            [weakSelf hideHud];
+            if (!error) {
+                block();
+            }else{
+                [weakSelf showHint:NSEaseLocalizedString(@"message.videoFail", @"video for failure!")];
+            }
+        }];
+    }
 }
 
 /*!
@@ -775,6 +802,7 @@ typedef enum : NSUInteger {
     __weak EaseMessageViewController *weakSelf = self;
     EMImageMessageBody *imageBody = (EMImageMessageBody*)[model.message body];
     
+    BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
     if ([imageBody type] == EMMessageBodyTypeImage) {
         if (imageBody.thumbnailDownloadStatus == EMDownloadStatusSuccessed) {
             if (imageBody.downloadStatus == EMDownloadStatusSuccessed)
@@ -792,7 +820,8 @@ typedef enum : NSUInteger {
             }
             
             [weakSelf showHudInView:weakSelf.view hint:NSEaseLocalizedString(@"message.downloadingImage", @"downloading a image...")];
-            [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMMessage *aMessage, EMError *error) {
+
+            void (^completion)(EMMessage *aMessage, EMError *error) = ^(EMMessage *aMessage, EMError *error) {
                 [weakSelf hideHud];
                 if (!error) {
                     //send the acknowledgement
@@ -800,7 +829,7 @@ typedef enum : NSUInteger {
                     NSString *localPath = aMessage == nil ? model.fileLocalPath : [(EMImageMessageBody*)aMessage.body localPath];
                     if (localPath && localPath.length > 0) {
                         UIImage *image = [UIImage imageWithContentsOfFile:localPath];
-                        //                                weakSelf.isScrollToBottom = NO;
+//                        weakSelf.isScrollToBottom = NO;
                         if (image)
                         {
                             [[EaseMessageReadManager defaultManager] showBrowserWithImages:@[image]];
@@ -813,16 +842,26 @@ typedef enum : NSUInteger {
                     }
                 }
                 [weakSelf showHint:NSEaseLocalizedString(@"message.imageFail", @"image for failure!")];
-            }];
+            };
+            
+            if (isCustomDownload) {
+                [self _customDownloadMessageFile:model.message];
+            } else {
+                [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:completion];
+            }
         }else{
             //get the message thumbnail
-            [[EMClient sharedClient].chatManager downloadMessageThumbnail:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
-                if (!error) {
-                    [weakSelf _reloadTableViewDataWithMessage:model.message];
-                }else{
-                    [weakSelf showHint:NSEaseLocalizedString(@"message.thumImageFail", @"thumbnail for failure!")];
-                }
-            }];
+            if (isCustomDownload) {
+                [self _customDownloadMessageFile:model.message];
+            } else {
+                [[EMClient sharedClient].chatManager downloadMessageThumbnail:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+                    if (!error) {
+                        [weakSelf _reloadTableViewDataWithMessage:model.message];
+                    }else{
+                        [weakSelf showHint:NSEaseLocalizedString(@"message.thumImageFail", @"thumbnail for failure!")];
+                    }
+                }];
+            }
         }
     }
 }
@@ -846,7 +885,13 @@ typedef enum : NSUInteger {
     else if (downloadStatus == EMDownloadStatusFailed)
     {
         [self showHint:NSEaseLocalizedString(@"message.downloadingAudio", @"downloading voice, click later")];
-        [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:nil];
+        BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
+        if (isCustomDownload) {
+            [self _customDownloadMessageFile:model.message];
+        } else {
+            [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:nil];
+        }
+        
         return;
     }
     
@@ -1787,7 +1832,7 @@ typedef enum : NSUInteger {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.dataArray addObjectsFromArray:messages];
             [weakSelf.tableView reloadData];
-            [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[weakSelf.dataArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[weakSelf.dataArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
         });
     });
 }
@@ -1835,7 +1880,7 @@ typedef enum : NSUInteger {
                 [self.dataArray removeAllObjects];
                 [self.dataArray addObjectsFromArray:formattedMessages];
                 [self.tableView reloadData];
-                [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                 return;
             }
         }
@@ -1853,14 +1898,14 @@ typedef enum : NSUInteger {
         message.chatType = EMChatTypeChatRoom;
     }
     
-    [self addMessageToDataSource:message
-                        progress:nil];
-    
     __weak typeof(self) weakself = self;
     if (![EMClient sharedClient].options.isAutoTransferMessageAttachments && isUploadFile) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"message.autoTransfer", @"Please customize the upload attachment method") delegate:nil cancelButtonTitle:NSLocalizedString(@"sure", @"OK") otherButtonTitles:nil, nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"message.autoTransfer", @"Please customize the transfer attachment method") delegate:nil cancelButtonTitle:NSLocalizedString(@"sure", @"OK") otherButtonTitles:nil, nil];
         [alertView show];
     } else {
+        [self addMessageToDataSource:message
+                            progress:nil];
+        
         [[EMClient sharedClient].chatManager sendMessage:message progress:^(int progress) {
             if (weakself.dataSource && [weakself.dataSource respondsToSelector:@selector(messageViewController:updateProgress:messageModel:messageBody:)]) {
                 [weakself.dataSource messageViewController:weakself updateProgress:progress messageModel:nil messageBody:message.body];
