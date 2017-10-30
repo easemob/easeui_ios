@@ -1832,7 +1832,7 @@ typedef enum : NSUInteger {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.dataArray addObjectsFromArray:messages];
             [weakSelf.tableView reloadData];
-            [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[weakSelf.dataArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[weakSelf.dataArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
         });
     });
 }
@@ -1880,7 +1880,7 @@ typedef enum : NSUInteger {
                 [self.dataArray removeAllObjects];
                 [self.dataArray addObjectsFromArray:formattedMessages];
                 [self.tableView reloadData];
-                [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                 return;
             }
         }
