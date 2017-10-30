@@ -1853,14 +1853,14 @@ typedef enum : NSUInteger {
         message.chatType = EMChatTypeChatRoom;
     }
     
-    [self addMessageToDataSource:message
-                        progress:nil];
-    
     __weak typeof(self) weakself = self;
     if (![EMClient sharedClient].options.isAutoTransferMessageAttachments && isUploadFile) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"message.autoTransfer", @"Please customize the upload attachment method") delegate:nil cancelButtonTitle:NSLocalizedString(@"sure", @"OK") otherButtonTitles:nil, nil];
         [alertView show];
     } else {
+        [self addMessageToDataSource:message
+                            progress:nil];
+        
         [[EMClient sharedClient].chatManager sendMessage:message progress:^(int progress) {
             if (weakself.dataSource && [weakself.dataSource respondsToSelector:@selector(messageViewController:updateProgress:messageModel:messageBody:)]) {
                 [weakself.dataSource messageViewController:weakself updateProgress:progress messageModel:nil messageBody:message.body];
