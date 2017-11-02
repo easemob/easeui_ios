@@ -565,7 +565,7 @@ typedef enum : NSUInteger {
         }
     };
     
-    BOOL isCustomDownload = [EMClient sharedClient].options.isAutoTransferMessageAttachments;
+    BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
     BOOL isAutoDownloadThumbnail = ([EMClient sharedClient].options.isAutoDownloadThumbnail);
     EMMessageBody *messageBody = message.body;
     if ([messageBody type] == EMMessageBodyTypeImage) {
@@ -751,7 +751,7 @@ typedef enum : NSUInteger {
         [self presentMoviePlayerViewControllerAnimated:moviePlayerController];
     };
     
-    BOOL isCustomDownload = [EMClient sharedClient].options.isAutoTransferMessageAttachments;
+    BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
     __weak typeof(self) weakSelf = self;
     void (^completion)(EMMessage *aMessage, EMError *error) = ^(EMMessage *aMessage, EMError *error) {
         if (!error)
@@ -807,7 +807,7 @@ typedef enum : NSUInteger {
     __weak EaseMessageViewController *weakSelf = self;
     EMImageMessageBody *imageBody = (EMImageMessageBody*)[model.message body];
     
-    BOOL isCustomDownload = [EMClient sharedClient].options.isAutoTransferMessageAttachments;
+    BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
     if ([imageBody type] == EMMessageBodyTypeImage) {
         if (imageBody.thumbnailDownloadStatus == EMDownloadStatusSuccessed) {
             if (imageBody.downloadStatus == EMDownloadStatusSuccessed)
@@ -890,7 +890,7 @@ typedef enum : NSUInteger {
     else if (downloadStatus == EMDownloadStatusFailed || downloadStatus == EMDownloadStatusPending)
     {
         [self showHint:NSEaseLocalizedString(@"message.downloadingAudio", @"downloading voice, click later")];
-        BOOL isCustomDownload = [EMClient sharedClient].options.isAutoTransferMessageAttachments;
+        BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
         if (isCustomDownload) {
             [self _customDownloadMessageFile:model.message];
         } else {
@@ -1904,7 +1904,7 @@ typedef enum : NSUInteger {
     }
     
     __weak typeof(self) weakself = self;
-    if ([EMClient sharedClient].options.isAutoTransferMessageAttachments && isUploadFile) {
+    if (!([EMClient sharedClient].options.isAutoTransferMessageAttachments) && isUploadFile) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"message.autoTransfer", @"Please customize the transfer attachment method") delegate:nil cancelButtonTitle:NSLocalizedString(@"sure", @"OK") otherButtonTitles:nil, nil];
         [alertView show];
     } else {
