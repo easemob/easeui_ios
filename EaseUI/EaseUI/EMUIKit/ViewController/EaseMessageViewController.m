@@ -1906,7 +1906,7 @@ typedef enum : NSUInteger {
     }
     
     __weak typeof(self) weakself = self;
-    if (![EMClient sharedClient].options.isAutoTransferMessageAttachments && isUploadFile) {
+    if (!([EMClient sharedClient].options.isAutoTransferMessageAttachments) && isUploadFile) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"message.autoTransfer", @"Please customize the transfer attachment method") delegate:nil cancelButtonTitle:NSLocalizedString(@"sure", @"OK") otherButtonTitles:nil, nil];
         [alertView show];
     } else {
