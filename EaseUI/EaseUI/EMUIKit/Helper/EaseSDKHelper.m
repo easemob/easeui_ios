@@ -145,6 +145,14 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     }
     options.usingHttpsOnly = isHttpsOnly;
     
+    NSUserDefaults *udefaults = [NSUserDefaults standardUserDefaults];
+    if ([udefaults objectForKey:@"uploadMessageFile"]) {
+        options.isAutoTransferMessageAttachments = [[udefaults objectForKey:@"uploadMessageFile"] boolValue];
+    }
+    if ([udefaults objectForKey:@"autoDownloadMessageThumbnail"]) {
+        options.isAutoDownloadThumbnail = [[udefaults objectForKey:@"autoDownloadMessageThumbnail"] boolValue];
+    }
+    
     BOOL sandBox = [otherConfig objectForKey:@"easeSandBox"] && [[otherConfig objectForKey:@"easeSandBox"] boolValue];
     if (!sandBox) {
         [[EMClient sharedClient] initializeSDKWithOptions:options];
