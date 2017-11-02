@@ -566,6 +566,7 @@ typedef enum : NSUInteger {
     };
     
     BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
+    BOOL isAutoDownloadThumbnail = ([EMClient sharedClient].options.isAutoDownloadThumbnail);
     EMMessageBody *messageBody = message.body;
     if ([messageBody type] == EMMessageBodyTypeImage) {
         EMImageMessageBody *imageBody = (EMImageMessageBody *)messageBody;
@@ -575,7 +576,9 @@ typedef enum : NSUInteger {
             if (isCustomDownload) {
                 [self _customDownloadMessageFile:message];
             } else {
-               [[[EMClient sharedClient] chatManager] downloadMessageThumbnail:message progress:nil completion:completion];
+                if (isAutoDownloadThumbnail) {
+                    [[[EMClient sharedClient] chatManager] downloadMessageThumbnail:message progress:nil completion:completion];
+                }
             }
         }
     }
@@ -588,7 +591,9 @@ typedef enum : NSUInteger {
             if (isCustomDownload) {
                 [self _customDownloadMessageFile:message];
             } else {
-                [[[EMClient sharedClient] chatManager] downloadMessageThumbnail:message progress:nil completion:completion];
+                if (isAutoDownloadThumbnail) {
+                    [[[EMClient sharedClient] chatManager] downloadMessageThumbnail:message progress:nil completion:completion];
+                }
             }
         }
     }
@@ -882,7 +887,7 @@ typedef enum : NSUInteger {
         [self showHint:NSEaseLocalizedString(@"message.downloadingAudio", @"downloading voice, click later")];
         return;
     }
-    else if (downloadStatus == EMDownloadStatusFailed)
+    else if (downloadStatus == EMDownloadStatusFailed || downloadStatus == EMDownloadStatusPending)
     {
         [self showHint:NSEaseLocalizedString(@"message.downloadingAudio", @"downloading voice, click later")];
         BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
