@@ -146,8 +146,8 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     options.usingHttpsOnly = isHttpsOnly;
     
     NSUserDefaults *udefaults = [NSUserDefaults standardUserDefaults];
-    if ([udefaults objectForKey:@"uploadMessageFile"]) {
-        options.isAutoTransferMessageAttachments = [[udefaults objectForKey:@"uploadMessageFile"] boolValue];
+    if ([udefaults objectForKey:@"autoTransferMessageFile"]) {
+        options.isAutoTransferMessageAttachments = [[udefaults objectForKey:@"autoTransferMessageFile"] boolValue];
     }
     if ([udefaults objectForKey:@"autoDownloadMessageThumbnail"]) {
         options.isAutoDownloadThumbnail = [[udefaults objectForKey:@"autoDownloadMessageThumbnail"] boolValue];
