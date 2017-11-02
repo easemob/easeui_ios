@@ -123,15 +123,46 @@
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        EaseConversationModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        [[EMClient sharedClient].chatManager deleteConversation:model.conversation.conversationId isDeleteMessages:YES completion:nil];
-        [self.dataArray removeObjectAtIndex:indexPath.row];
-        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+- (nullable UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self setupCellEditActions:indexPath];
+}
+
+- (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self setupCellEditActions:indexPath];
+}
+
+#pragma mark - Action
+
+- (void)deleteCellAction:(NSIndexPath *)aIndexPath
+{
+    EaseConversationModel *model = [self.dataArray objectAtIndex:aIndexPath.row];
+    [[EMClient sharedClient].chatManager deleteConversation:model.conversation.conversationId isDeleteMessages:YES completion:nil];
+    [self.dataArray removeObjectAtIndex:aIndexPath.row];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:aIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (id)setupCellEditActions:(NSIndexPath *)aIndexPath
+{
+    if ([UIDevice currentDevice].systemVersion.floatValue < 11.0) {
+        UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"delete",@"Delete") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+            [self deleteCellAction:indexPath];
+        }];
+        deleteAction.backgroundColor = [UIColor redColor];
+        return @[deleteAction];
+    } else {
+        UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:NSLocalizedString(@"delete",@"Delete") handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+            [self deleteCellAction:aIndexPath];
+        }];
+        deleteAction.backgroundColor = [UIColor redColor];
+        
+        UISwipeActionsConfiguration *config = [UISwipeActionsConfiguration configurationWithActions:@[deleteAction]];
+        config.performsFirstActionWithFullSwipe = NO;
+        return config;
     }
 }
+
 
 #pragma mark - data
 
