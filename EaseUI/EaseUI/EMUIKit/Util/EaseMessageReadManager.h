@@ -12,14 +12,14 @@
 
 #import <Foundation/Foundation.h>
 
-#import "MWPhotoBrowser.h"
 #import "EaseMessageModel.h"
 
 typedef void (^FinishBlock)(BOOL success);
 typedef void (^PlayBlock)(BOOL playing, EaseMessageModel *messageModel);
 
+@class MWPhotoBrowser;
 @class EMChatFireBubbleView;
-@interface EaseMessageReadManager : NSObject<MWPhotoBrowserDelegate>
+@interface EaseMessageReadManager : NSObject
 
 @property (strong, nonatomic) MWPhotoBrowser *photoBrowser;
 @property (strong, nonatomic) FinishBlock finishBlock;
