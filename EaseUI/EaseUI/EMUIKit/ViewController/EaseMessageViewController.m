@@ -540,8 +540,10 @@ typedef enum : NSUInteger {
 
 - (void)_customDownloadMessageFile:(EMMessage *)aMessage
 {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"message.autoTransfer", @"Please customize the  transfer attachment method") delegate:nil cancelButtonTitle:NSLocalizedString(@"sure", @"OK") otherButtonTitles:nil, nil];
-    [alertView show];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"message.autoTransfer", @"Please customize the  transfer attachment method") delegate:nil cancelButtonTitle:NSLocalizedString(@"sure", @"OK") otherButtonTitles:nil, nil];
+        [alertView show];
+    });
 }
 
 /*!
@@ -606,14 +608,16 @@ typedef enum : NSUInteger {
             if (isCustomDownload) {
                 [self _customDownloadMessageFile:message];
             } else {
-                [[EMClient sharedClient].chatManager downloadMessageAttachment:message progress:nil completion:^(EMMessage *message, EMError *error) {
-                    if (!error) {
-                        [weakSelf _reloadTableViewDataWithMessage:message];
-                    }
-                    else {
-                        [weakSelf showHint:NSEaseLocalizedString(@"message.voiceFail", @"voice for failure!")];
-                    }
-                }];
+                if (isAutoDownloadThumbnail) {
+                    [[EMClient sharedClient].chatManager downloadMessageAttachment:message progress:nil completion:^(EMMessage *message, EMError *error) {
+                        if (!error) {
+                            [weakSelf _reloadTableViewDataWithMessage:message];
+                        }
+                        else {
+                            [weakSelf showHint:NSEaseLocalizedString(@"message.voiceFail", @"voice for failure!")];
+                        }
+                    }];
+                }
             }
         }
     }
