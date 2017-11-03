@@ -284,6 +284,7 @@
 "message.noMessage" = "消息已经清空";
 "message.forbiddenWords" = "你的消息包含不当言论";
 "message.smallerImage" = "图片太大了，换个小点的";
+"message.autoTransfer" = "请自定义上传或者下载附件方法";
 
 //media
 "media.timeShort" = "录音时间太短了";

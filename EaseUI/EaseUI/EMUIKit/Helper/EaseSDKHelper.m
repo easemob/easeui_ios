@@ -93,7 +93,9 @@ static EaseSDKHelper *helper = nil;
         [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert completionHandler:^(BOOL granted, NSError *error) {
             if (granted) {
 #if !TARGET_IPHONE_SIMULATOR
-                [application registerForRemoteNotifications];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [application registerForRemoteNotifications];
+                });
 #endif
             }
         }];
@@ -143,6 +145,14 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     }
     options.usingHttpsOnly = isHttpsOnly;
     
+    NSUserDefaults *udefaults = [NSUserDefaults standardUserDefaults];
+    if ([udefaults objectForKey:@"autoTransferMessageFile"]) {
+        options.isAutoTransferMessageAttachments = [[udefaults objectForKey:@"autoTransferMessageFile"] boolValue];
+    }
+    if ([udefaults objectForKey:@"autoDownloadMessageThumbnail"]) {
+        options.isAutoDownloadThumbnail = [[udefaults objectForKey:@"autoDownloadMessageThumbnail"] boolValue];
+    }
+    
     BOOL sandBox = [otherConfig objectForKey:@"easeSandBox"] && [[otherConfig objectForKey:@"easeSandBox"] boolValue];
     if (!sandBox) {
         [[EMClient sharedClient] initializeSDKWithOptions:options];
@@ -162,26 +172,26 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo
 
 #pragma mark - send message
 
-+ (EMMessage *)sendTextMessage:(NSString *)text
-                            to:(NSString *)toUser
-                   messageType:(EMChatType)messageType
-                    messageExt:(NSDictionary *)messageExt
++ (EMMessage *)getTextMessage:(NSString *)text
+                           to:(NSString *)to
+                  messageType:(EMChatType)messageType
+                   messageExt:(NSDictionary *)messageExt
 
 {
     NSString *willSendText = [EaseConvertToCommonEmoticonsHelper convertToCommonEmoticons:text];
     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:willSendText];
     NSString *from = [[EMClient sharedClient] currentUsername];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:toUser from:from to:toUser body:body ext:messageExt];
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
     message.chatType = messageType;
     
     return message;
 }
 
-+ (EMMessage *)sendCmdMessage:(NSString *)action
-                            to:(NSString *)to
-                   messageType:(EMChatType)messageType
-                    messageExt:(NSDictionary *)messageExt
-                     cmdParams:(NSArray *)params
++ (EMMessage *)getCmdMessage:(NSString *)action
+                          to:(NSString *)to
+                 messageType:(EMChatType)messageType
+                  messageExt:(NSDictionary *)messageExt
+                   cmdParams:(NSArray *)params
 {
     EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:action];
     if (params) {
@@ -194,12 +204,12 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo
     return message;
 }
 
-+ (EMMessage *)sendLocationMessageWithLatitude:(double)latitude
-                                     longitude:(double)longitude
-                                       address:(NSString *)address
-                                            to:(NSString *)to
-                                   messageType:(EMChatType)messageType
-                                    messageExt:(NSDictionary *)messageExt
++ (EMMessage *)getLocationMessageWithLatitude:(double)latitude
+                                    longitude:(double)longitude
+                                      address:(NSString *)address
+                                           to:(NSString *)to
+                                  messageType:(EMChatType)messageType
+                                   messageExt:(NSDictionary *)messageExt
 {
     EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:latitude longitude:longitude address:address];
     NSString *from = [[EMClient sharedClient] currentUsername];
@@ -209,10 +219,10 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo
     return message;
 }
 
-+ (EMMessage *)sendImageMessageWithImageData:(NSData *)imageData
-                                          to:(NSString *)to
-                                 messageType:(EMChatType)messageType
-                                  messageExt:(NSDictionary *)messageExt
++ (EMMessage *)getImageMessageWithImageData:(NSData *)imageData
+                                         to:(NSString *)to
+                                messageType:(EMChatType)messageType
+                                 messageExt:(NSDictionary *)messageExt
 {
     EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:imageData displayName:@"image"];
     NSString *from = [[EMClient sharedClient] currentUsername];
@@ -222,21 +232,21 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo
     return message;
 }
 
-+ (EMMessage *)sendImageMessageWithImage:(UIImage *)image
-                                      to:(NSString *)to
-                             messageType:(EMChatType)messageType
-                              messageExt:(NSDictionary *)messageExt
++ (EMMessage *)getImageMessageWithImage:(UIImage *)image
+                                     to:(NSString *)to
+                            messageType:(EMChatType)messageType
+                             messageExt:(NSDictionary *)messageExt
 {
     NSData *data = UIImageJPEGRepresentation(image, 1);
     
-    return [self sendImageMessageWithImageData:data to:to messageType:messageType messageExt:messageExt];
+    return [self getImageMessageWithImageData:data to:to messageType:messageType messageExt:messageExt];
 }
 
-+ (EMMessage *)sendVoiceMessageWithLocalPath:(NSString *)localPath
-                                    duration:(NSInteger)duration
-                                          to:(NSString *)to
-                                 messageType:(EMChatType)messageType
-                                  messageExt:(NSDictionary *)messageExt
++ (EMMessage *)getVoiceMessageWithLocalPath:(NSString *)localPath
+                                   duration:(NSInteger)duration
+                                         to:(NSString *)to
+                                messageType:(EMChatType)messageType
+                                 messageExt:(NSDictionary *)messageExt
 {
     EMVoiceMessageBody *body = [[EMVoiceMessageBody alloc] initWithLocalPath:localPath displayName:@"audio"];
     body.duration = (int)duration;
@@ -247,10 +257,10 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo
     return message;
 }
 
-+ (EMMessage *)sendVideoMessageWithURL:(NSURL *)url
-                                    to:(NSString *)to
-                           messageType:(EMChatType)messageType
-                            messageExt:(NSDictionary *)messageExt
++ (EMMessage *)getVideoMessageWithURL:(NSURL *)url
+                                   to:(NSString *)to
+                          messageType:(EMChatType)messageType
+                           messageExt:(NSDictionary *)messageExt
 {
     EMVideoMessageBody *body = [[EMVideoMessageBody alloc] initWithLocalPath:[url path] displayName:@"video.mp4"];
     NSString *from = [[EMClient sharedClient] currentUsername];
