@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3A8EF7391E1B52C800D3C751 /* Hyphenate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A8EF7381E1B52C800D3C751 /* Hyphenate.framework */; };
+		3ACE1BC21FB00E4C008CA43F /* EMImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACE1BC11FB00E4C008CA43F /* EMImageManager.m */; };
 		D206D35B1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34C1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png */; };
 		D206D35C1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34D1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png */; };
 		D206D35D1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34E1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png */; };
@@ -507,6 +508,8 @@
 
 /* Begin PBXFileReference section */
 		3A8EF7381E1B52C800D3C751 /* Hyphenate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Hyphenate.framework; path = "../../emclient-ios/newSDK/build/Release-iphoneos/Hyphenate.framework"; sourceTree = "<group>"; };
+		3ACE1BC01FB00E4C008CA43F /* EMImageManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EMImageManager.h; sourceTree = "<group>"; };
+		3ACE1BC11FB00E4C008CA43F /* EMImageManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EMImageManager.m; sourceTree = "<group>"; };
 		D206D34C1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_receiver_audio_playing000@2x.png"; sourceTree = "<group>"; };
 		D206D34D1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_receiver_audio_playing001@2x.png"; sourceTree = "<group>"; };
 		D206D34E1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_receiver_audio_playing002@2x.png"; sourceTree = "<group>"; };
@@ -976,6 +979,8 @@
 			children = (
 				D250D4561BD8D1CB00C8D553 /* EaseSDKHelper.h */,
 				D250D4571BD8D1CB00C8D553 /* EaseSDKHelper.m */,
+				3ACE1BC01FB00E4C008CA43F /* EMImageManager.h */,
+				3ACE1BC11FB00E4C008CA43F /* EMImageManager.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -1626,6 +1631,7 @@
 				D250D5281BD8D1CB00C8D553 /* EaseRecordView.m in Sources */,
 				D2F2C9851C10604700F4AE1E /* MBProgressHUD+Add.m in Sources */,
 				D250D5231BD8D1CB00C8D553 /* EaseImageView.m in Sources */,
+				3ACE1BC21FB00E4C008CA43F /* EMImageManager.m in Sources */,
 				D250D5021BD8D1CB00C8D553 /* EaseUserModel.m in Sources */,
 				D2F2C98D1C10604700F4AE1E /* MJRefreshAutoNormalFooter.m in Sources */,
 				D2F2C9871C10604700F4AE1E /* MJRefreshAutoFooter.m in Sources */,

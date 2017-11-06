@@ -18,7 +18,8 @@
 #import "EaseBubbleView+Voice.h"
 #import "EaseBubbleView+Video.h"
 #import "EaseBubbleView+File.h"
-#import "UIImageView+EMWebCache.h"
+
+#import "EMImageManager.h"
 #import "EaseEmotionEscape.h"
 #import "EaseLocalDefine.h"
 
@@ -347,7 +348,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 if (!image) {
                     image = _model.image;
                     if (!image) {
-                        [_bubbleView.imageView sd_setImageWithURL:[NSURL URLWithString:_model.thumbnailFileURLPath] placeholderImage:[UIImage imageNamed:_model.failImageName]];
+                        [[EMImageManager sharedManager] showImageWithView:_bubbleView.imageView imageUrl:_model.thumbnailFileURLPath defaultImage:[UIImage imageNamed:_model.failImageName]];
                     } else {
                         _bubbleView.imageView.image = image;
                     }
@@ -395,7 +396,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 if (!image) {
                     image = _model.image;
                     if (!image) {
-                        [_bubbleView.videoImageView sd_setImageWithURL:[NSURL URLWithString:_model.fileURLPath] placeholderImage:[UIImage imageNamed:_model.failImageName]];
+                        [[EMImageManager sharedManager] showImageWithView:_bubbleView.videoImageView imageUrl:_model.fileURLPath defaultImage:[UIImage imageNamed:_model.failImageName]];
                     } else {
                         _bubbleView.videoImageView.image = image;
                     }

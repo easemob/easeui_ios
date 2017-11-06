@@ -254,7 +254,7 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
  @param messageModel 消息模型
  @result
  */
-- (EaseEmotion*)emotionURLFormessageViewController:(EaseMessageViewController *)viewController
+- (EaseEmotion*)emotionURLForMessageViewController:(EaseMessageViewController *)viewController
                                       messageModel:(id<IMessageModel>)messageModel;
 
 /*!

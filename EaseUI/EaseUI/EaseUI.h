@@ -24,7 +24,6 @@
 #import "EaseBubbleView.h"
 #import "EaseUserCell.h"
 
-
 #import "EaseChineseToPinyin.h"
 #import "EaseEmoji.h"
 #import "EaseEmotionEscape.h"
@@ -32,10 +31,10 @@
 #import "EaseSDKHelper.h"
 #import "EMCDDeviceManager.h"
 #import "EaseConvertToCommonEmoticonsHelper.h"
+#import "EMImageManager.h"
 
 #import "NSDate+Category.h"
 #import "NSString+Valid.h"
-#import "UIImageView+EMWebCache.h"
 #import "UIViewController+HUD.h"
 #import "UIViewController+DismissKeyboard.h"
 #import "EaseLocalDefine.h"
