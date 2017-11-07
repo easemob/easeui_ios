@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class EaseEmotion;
+
 @protocol EMImageManagerDelegate
 
 @optional
@@ -16,17 +18,21 @@
                     imageUrl:(NSString *)aUrl
                 defaultImage:(UIImage *)aDefaultImg;
 
+// UIImage, NSString, NSURL
+- (void)didShowBrowserWithImages:(NSArray *)aImages
+                    currentIndex:(NSInteger)aIndex;
+
+- (UIImage *)getGIFImageWithEmotion:(EaseEmotion *)aEmotion;
+
 @end
 
-@class EaseEmotion;
 @interface EMImageManager : NSObject
+
+@property (nonatomic, weak) id<EMImageManagerDelegate> delegate;
 
 + (instancetype)sharedManager;
 
-- (void)addDelegate:(id<EMImageManagerDelegate>)aDelegate
-              queue:(dispatch_queue_t)aQueue;
-
-- (void)removeDelegate:(id<EMImageManagerDelegate>)aDelegate;
+- (void)setDelegate:(id<EMImageManagerDelegate>)aDelegate;
 
 - (void)showImageWithView:(UIImageView *)aImgView
                  imageUrl:(NSString *)aUrl

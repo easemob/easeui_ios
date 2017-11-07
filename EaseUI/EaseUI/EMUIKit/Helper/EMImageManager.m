@@ -12,8 +12,6 @@ static EMImageManager *sharedManager = nil;
 
 @interface EMImageManager()
 
-@property (nonatomic, strong) NSMutableArray *delegates;
-
 @end
 
 @implementation EMImageManager
@@ -22,7 +20,7 @@ static EMImageManager *sharedManager = nil;
 {
     self = [super init];
     if (self) {
-        _delegates = [[NSMutableArray alloc] init];
+        
     }
     
     return self;
@@ -38,28 +36,30 @@ static EMImageManager *sharedManager = nil;
     return sharedManager;
 }
 
-- (void)addDelegate:(id<EMImageManagerDelegate>)aDelegate
-              queue:(dispatch_queue_t)aQueue
-{
-    if (aDelegate) {
-        [self.delegates addObject:aDelegate];
-    }
-}
-
-- (void)removeDelegate:(id<EMImageManagerDelegate>)aDelegate
-{
-    [self.delegates removeObject:aDelegate];
-}
-
 - (void)showImageWithView:(UIImageView *)aImgView
                  imageUrl:(NSString *)aUrl
              defaultImage:(UIImage *)aDefaultImg
 {
-    for (NSInteger i = 0; i < [self.delegates count]; i++) {
-        id delegate = [self.delegates objectAtIndex:i];
-        if ([delegate respondsToSelector:@selector(didShowImageWithView:imageUrl:defaultImage:)]) {
-            [delegate didShowImageWithView:aImgView imageUrl:aUrl defaultImage:aDefaultImg];
-        }
+    if (self.delegate) {
+        [self.delegate didShowImageWithView:aImgView imageUrl:aUrl defaultImage:aDefaultImg];
+    }
+}
+
+- (UIImage *)getGIFImageWithEmotion:(EaseEmotion *)aEmotion
+{
+    if (self.delegate) {
+        return [self.delegate getGIFImageWithEmotion:aEmotion];
+    }
+    
+    return nil;
+}
+
+// UIImage, NSString, NSURL
+- (void)showBrowserWithImages:(NSArray *)aImages
+                 currentIndex:(NSInteger)aIndex
+{
+    if (self.delegate) {
+        [self.delegate didShowBrowserWithImages:aImages currentIndex:aIndex];
     }
 }
 
