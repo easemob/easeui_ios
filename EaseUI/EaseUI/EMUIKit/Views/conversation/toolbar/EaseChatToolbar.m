@@ -525,7 +525,7 @@
 {
     if (beginFrame.origin.y == [[UIScreen mainScreen] bounds].size.height)
     {
-        [self _willShowBottomHeight:toFrame.size.height];
+        [self _willShowBottomHeight:toFrame.size.height - iPhoneX_BOTTOM_HEIGHT];
         if (self.activityButtomView) {
             [self.activityButtomView removeFromSuperview];
         }
@@ -536,7 +536,7 @@
         [self _willShowBottomHeight:0];
     }
     else{
-        [self _willShowBottomHeight:toFrame.size.height];
+        [self _willShowBottomHeight:toFrame.size.height - iPhoneX_BOTTOM_HEIGHT];
     }
 }
 
