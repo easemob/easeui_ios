@@ -13,6 +13,7 @@
 #import "EaseRefreshTableViewController.h"
 
 #import "MJRefresh.h"
+#import "EaseLocalDefine.h"
 
 @interface EaseRefreshTableViewController ()
 
@@ -40,6 +41,10 @@
     // Uncomment the following line to preserve selection between presentations.
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
         [self setEdgesForExtendedLayout:UIRectEdgeNone];
+    }
+    
+    if (@available(iOS 11.0, *)) {
+        self.additionalSafeAreaInsets = UIEdgeInsetsMake(0, 0, iPhoneX_BOTTOM_HEIGHT, 0);
     }
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:self.style];
