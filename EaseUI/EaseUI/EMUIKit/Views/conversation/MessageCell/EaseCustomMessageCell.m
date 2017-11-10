@@ -11,9 +11,9 @@
  */
 
 #import "EaseCustomMessageCell.h"
+
+#import "EMImageManager.h"
 #import "EaseBubbleView+Gif.h"
-#import "UIImageView+EMWebCache.h"
-#import "UIImage+EMGIF.h"
 #import "IMessageModel.h"
 
 @interface EaseCustomMessageCell ()
@@ -38,13 +38,13 @@
 {
     UIImage *image = model.image;
     if (!image) {
-        [self.bubbleView.imageView sd_setImageWithURL:[NSURL URLWithString:model.fileURLPath] placeholderImage:[UIImage imageNamed:model.failImageName]];
+        [[EMImageManager sharedManager] showImageWithView:self.bubbleView.imageView imageUrl:model.fileURLPath defaultImage:[UIImage imageNamed:model.failImageName]];
     } else {
         _bubbleView.imageView.image = image;
     }
     
     if (model.avatarURLPath) {
-        [self.avatarView sd_setImageWithURL:[NSURL URLWithString:model.avatarURLPath] placeholderImage:model.avatarImage];
+        [[EMImageManager sharedManager] showImageWithView:self.imageView imageUrl:model.avatarURLPath defaultImage:[UIImage imageNamed:model.avatarImage]];
     } else {
         self.avatarView.image = model.avatarImage;
     }
