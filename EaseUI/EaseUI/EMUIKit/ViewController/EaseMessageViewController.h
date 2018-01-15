@@ -480,6 +480,9 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
  */
 - (void)sendFileMessageWith:(EMMessage *)message;
 
+- (void)sendMessage:(EMMessage *)message
+   isNeedUploadFile:(BOOL)isUploadFile;
+
 
 /*!
  @method

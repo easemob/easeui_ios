@@ -26,6 +26,9 @@
         _firstMessageBody = message.body;
         _isMediaPlaying = NO;
         
+        _isDing = NO;
+        _dingReadCount = 0;
+        
         _nickname = message.from;
         _isSender = message.direction == EMMessageDirectionSend ? YES : NO;
         
