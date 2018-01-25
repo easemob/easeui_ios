@@ -106,4 +106,6 @@ typedef NS_ENUM(int, DXDeleteConvesationType) {
  */
 - (void)refreshAndSortView;
 
+- (void)deleteCellAction:(NSIndexPath *)aIndexPath;
+
 @end

@@ -282,10 +282,10 @@
                 [_activity stopAnimating];
                 if (self.model.isMessageRead) {
                     _hasRead.hidden = NO;
-                    _hasRead.text = NSEaseLocalizedString(@"hasRead", @"Read");
+                    _hasRead.text = NSLocalizedString(@"hasRead", @"Read");
                 } else if (self.model.isDing) {
                     _hasRead.hidden = NO;
-                    _hasRead.text = [NSString stringWithFormat:@"%@ %@", @(self.model.dingReadCount), NSEaseLocalizedString(@"hasRead", @"Read")];
+                    _hasRead.text = [NSString stringWithFormat:@"%@ %@", @(self.model.dingReadCount), NSLocalizedString(@"hasRead", @"Read")];
                 }
             }
                 break;
