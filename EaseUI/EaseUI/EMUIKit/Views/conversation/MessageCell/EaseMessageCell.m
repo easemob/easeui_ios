@@ -613,51 +613,9 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 return;
             }
         }
-        switch (_model.bodyType) {
-            case EMMessageBodyTypeImage:
-            {
-                if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
-                    [_delegate messageCellSelected:_model];
-                }
-            }
-                break;
-            case EMMessageBodyTypeLocation:
-            {
-                if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
-                    [_delegate messageCellSelected:_model];
-                }
-            }
-                break;
-            case EMMessageBodyTypeVoice:
-            {
-//                _model.isMediaPlaying = !_model.isMediaPlaying;
-//                if (_model.isMediaPlaying) {
-//                    [_bubbleView.voiceImageView startAnimating];
-//                }
-//                else{
-//                    [_bubbleView.voiceImageView stopAnimating];
-//                }
-                if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
-                    [_delegate messageCellSelected:_model];
-                }
-            }
-                break;
-            case EMMessageBodyTypeVideo:
-            {
-                if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
-                    [_delegate messageCellSelected:_model];
-                }
-            }
-                break;
-            case EMMessageBodyTypeFile:
-            {
-                if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
-                    [_delegate messageCellSelected:_model];
-                }
-            }
-                break;
-            default:
-                break;
+        
+        if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
+            [_delegate messageCellSelected:_model];
         }
     }
 }

@@ -88,7 +88,6 @@
 @property (strong, nonatomic) NSString *thumbnailFileURLPath;
 
 @property (nonatomic) BOOL isDing;
-
 @property (nonatomic) NSInteger dingReadCount;
 
 /*!
