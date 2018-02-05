@@ -1901,8 +1901,8 @@ typedef enum : NSUInteger {
     [self.tableView reloadData];
 }
 
-- (void)_sendMessage:(EMMessage *)message
-    isNeedUploadFile:(BOOL)isUploadFile
+- (void)sendMessage:(EMMessage *)message
+   isNeedUploadFile:(BOOL)isUploadFile
 {
     if (self.conversation.type == EMConversationTypeGroupChat){
         message.chatType = EMChatTypeGroupChat;
@@ -1961,7 +1961,7 @@ typedef enum : NSUInteger {
 - (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext
 {
     EMMessage *message = [EaseSDKHelper getTextMessage:text to:self.conversation.conversationId messageType:[self _messageTypeFromConversationType] messageExt:ext];
-    [self _sendMessage:message isNeedUploadFile:NO];
+    [self sendMessage:message isNeedUploadFile:NO];
 }
 
 - (void)sendLocationMessageLatitude:(double)latitude
@@ -1969,7 +1969,7 @@ typedef enum : NSUInteger {
                          andAddress:(NSString *)address
 {
     EMMessage *message = [EaseSDKHelper getLocationMessageWithLatitude:latitude longitude:longitude address:address to:self.conversation.conversationId messageType:[self _messageTypeFromConversationType] messageExt:nil];
-    [self _sendMessage:message isNeedUploadFile:NO];
+    [self sendMessage:message isNeedUploadFile:NO];
 }
 
 - (void)sendImageMessageWithData:(NSData *)imageData
@@ -1983,7 +1983,7 @@ typedef enum : NSUInteger {
     }
     
     EMMessage *message = [EaseSDKHelper getImageMessageWithImageData:imageData to:self.conversation.conversationId messageType:[self _messageTypeFromConversationType] messageExt:nil];
-    [self _sendMessage:message isNeedUploadFile:YES];
+    [self sendMessage:message isNeedUploadFile:YES];
 }
 
 - (void)sendImageMessage:(UIImage *)image
@@ -1997,7 +1997,7 @@ typedef enum : NSUInteger {
     }
     
     EMMessage *message = [EaseSDKHelper getImageMessageWithImage:image to:self.conversation.conversationId messageType:[self _messageTypeFromConversationType] messageExt:nil];
-    [self _sendMessage:message isNeedUploadFile:YES];
+    [self sendMessage:message isNeedUploadFile:YES];
 }
 
 - (void)sendVoiceMessageWithLocalPath:(NSString *)localPath
@@ -2012,7 +2012,7 @@ typedef enum : NSUInteger {
     }
     
     EMMessage *message = [EaseSDKHelper getVoiceMessageWithLocalPath:localPath duration:duration to:self.conversation.conversationId messageType:[self _messageTypeFromConversationType] messageExt:nil];
-    [self _sendMessage:message isNeedUploadFile:YES];
+    [self sendMessage:message isNeedUploadFile:YES];
 }
 
 - (void)sendVideoMessageWithURL:(NSURL *)url
@@ -2026,11 +2026,11 @@ typedef enum : NSUInteger {
     }
     
     EMMessage *message = [EaseSDKHelper getVideoMessageWithURL:url to:self.conversation.conversationId messageType:[self _messageTypeFromConversationType] messageExt:nil];
-    [self _sendMessage:message isNeedUploadFile:YES];
+    [self sendMessage:message isNeedUploadFile:YES];
 }
 
 - (void)sendFileMessageWith:(EMMessage *)message {
-    [self _sendMessage:message isNeedUploadFile:YES];
+    [self sendMessage:message isNeedUploadFile:YES];
 }
 
 #pragma mark - notifycation

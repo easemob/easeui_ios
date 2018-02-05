@@ -93,6 +93,9 @@
 /** @brief 图片消息(或视频消息)的缩略图远程地址 */
 @property (strong, nonatomic) NSString *thumbnailFileURLPath;
 
+@property (nonatomic) BOOL isDing;
+@property (nonatomic) NSInteger dingReadCount;
+
 /*!
  @method
  @brief 初始化消息对象模型
