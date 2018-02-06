@@ -405,10 +405,10 @@ typedef enum : NSUInteger {
     AVAuthorizationStatus videoAuthStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
     if (videoAuthStatus == AVAuthorizationStatusNotDetermined) {
         [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-            if (aCompletion) {
-                aCompletion(granted ? EMCanRecord : EMRequestRecord);
-            }
         }];
+        if (aCompletion) {
+            aCompletion(EMRequestRecord);
+        }
     }
     else if(videoAuthStatus == AVAuthorizationStatusRestricted || videoAuthStatus == AVAuthorizationStatusDenied) {
         aCompletion(EMCanNotRecord);
@@ -1430,7 +1430,6 @@ typedef enum : NSUInteger {
 
 - (void)didStartRecordingVoiceAction:(UIView *)recordView
 {
-    
     __weak typeof(self) weakSelf = self;
     [self _canRecordCompletion:^(EMRecordResponse recordResponse) {
         switch (recordResponse) {
