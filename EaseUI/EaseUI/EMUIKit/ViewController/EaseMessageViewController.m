@@ -405,10 +405,10 @@ typedef enum : NSUInteger {
     AVAuthorizationStatus videoAuthStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
     if (videoAuthStatus == AVAuthorizationStatusNotDetermined) {
         [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-            if (aCompletion) {
-                aCompletion(granted ? EMCanRecord : EMRequestRecord);
-            }
         }];
+        if (aCompletion) {
+            aCompletion(EMRequestRecord);
+        }
     }
     else if(videoAuthStatus == AVAuthorizationStatusRestricted || videoAuthStatus == AVAuthorizationStatusDenied) {
         aCompletion(EMCanNotRecord);
@@ -1429,14 +1429,7 @@ typedef enum : NSUInteger {
 
 - (void)didStartRecordingVoiceAction:(UIView *)recordView
 {
-    if ([self.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
-        [self.delegate messageViewController:self didSelectRecordView:recordView withEvenType:EaseRecordViewTypeTouchDown];
-    } else {
-        if ([self.recordView isKindOfClass:[EaseRecordView class]]) {
-            [(EaseRecordView *)self.recordView recordButtonTouchDown];
-        }
-    }
-    
+    __weak typeof(self) weakSelf = self;
     [self _canRecordCompletion:^(EMRecordResponse recordResponse) {
         switch (recordResponse) {
             case EMRequestRecord:
@@ -1444,11 +1437,20 @@ typedef enum : NSUInteger {
                 break;
             case EMCanRecord:
             {
+                if ([weakSelf.delegate respondsToSelector:@selector(messageViewController:didSelectRecordView:withEvenType:)]) {
+                    [weakSelf.delegate messageViewController:weakSelf
+                                         didSelectRecordView:recordView
+                                                withEvenType:EaseRecordViewTypeTouchDown];
+                } else {
+                    if ([weakSelf.recordView isKindOfClass:[EaseRecordView class]]) {
+                        [(EaseRecordView *)weakSelf.recordView recordButtonTouchDown];
+                    }
+                }
                 _isRecording = YES;
                 EaseRecordView *tmpView = (EaseRecordView *)recordView;
                 tmpView.center = self.view.center;
-                [self.view addSubview:tmpView];
-                [self.view bringSubviewToFront:recordView];
+                [weakSelf.view addSubview:tmpView];
+                [weakSelf.view bringSubviewToFront:recordView];
                 int x = arc4random() % 100000;
                 NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
                 NSString *fileName = [NSString stringWithFormat:@"%d%d",(int)time,x];
