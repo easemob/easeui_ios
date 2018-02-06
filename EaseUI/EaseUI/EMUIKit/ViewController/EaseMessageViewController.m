@@ -1451,8 +1451,8 @@ typedef enum : NSUInteger {
                 _isRecording = YES;
                 EaseRecordView *tmpView = (EaseRecordView *)recordView;
                 tmpView.center = self.view.center;
-                [self.view addSubview:tmpView];
-                [self.view bringSubviewToFront:recordView];
+                [weakSelf.view addSubview:tmpView];
+                [weakSelf.view bringSubviewToFront:recordView];
                 int x = arc4random() % 100000;
                 NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
                 NSString *fileName = [NSString stringWithFormat:@"%d%d",(int)time,x];
