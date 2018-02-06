@@ -607,13 +607,6 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             return;
         }
         
-        if ([self respondsToSelector:@selector(isCustomBubbleView:)] && [self isCustomBubbleView:_model]) {
-            if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
-                [_delegate messageCellSelected:_model];
-                return;
-            }
-        }
-        
         if ([_delegate respondsToSelector:@selector(messageCellSelected:)]) {
             [_delegate messageCellSelected:_model];
         }

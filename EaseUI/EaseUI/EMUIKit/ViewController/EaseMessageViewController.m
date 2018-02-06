@@ -1089,61 +1089,60 @@ typedef enum : NSUInteger {
         timeCell.title = object;
         return timeCell;
     }
-    else{
-        id<IMessageModel> model = object;
-        if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:cellForMessageModel:)]) {
-            UITableViewCell *cell = [_delegate messageViewController:tableView cellForMessageModel:model];
-            if (cell) {
-                if ([cell isKindOfClass:[EaseMessageCell class]]) {
-                    EaseMessageCell *emcell= (EaseMessageCell*)cell;
-                    if (emcell.delegate == nil) {
-                        emcell.delegate = self;
-                    }
+    
+    id<IMessageModel> model = object;
+    if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:cellForMessageModel:)]) {
+        UITableViewCell *cell = [_delegate messageViewController:tableView cellForMessageModel:model];
+        if (cell) {
+            if ([cell isKindOfClass:[EaseMessageCell class]]) {
+                EaseMessageCell *emcell= (EaseMessageCell*)cell;
+                if (emcell.delegate == nil) {
+                    emcell.delegate = self;
                 }
-                return cell;
             }
+            return cell;
         }
-        
-        if (_dataSource && [_dataSource respondsToSelector:@selector(isEmotionMessageFormessageViewController:messageModel:)]) {
-            BOOL flag = [_dataSource isEmotionMessageFormessageViewController:self messageModel:model];
-            if (flag) {
-                NSString *CellIdentifier = [EaseCustomMessageCell cellIdentifierWithModel:model];
-                //send cell
-                EaseCustomMessageCell *sendCell = (EaseCustomMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-                
-                // Configure the cell...
-                if (sendCell == nil) {
-                    sendCell = [[EaseCustomMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier model:model];
-                    sendCell.selectionStyle = UITableViewCellSelectionStyleNone;
-                }
-                
-                if (_dataSource && [_dataSource respondsToSelector:@selector(emotionURLFormessageViewController:messageModel:)]) {
-                    EaseEmotion *emotion = [_dataSource emotionURLFormessageViewController:self messageModel:model];
-                    if (emotion) {
-                        model.image = [UIImage sd_animatedGIFNamed:emotion.emotionOriginal];
-                        model.fileURLPath = emotion.emotionOriginalURL;
-                    }
-                }
-                sendCell.model = model;
-                sendCell.delegate = self;
-                return sendCell;
-            }
-        }
-        
-        NSString *CellIdentifier = [EaseMessageCell cellIdentifierWithModel:model];
-        
-        EaseBaseMessageCell *sendCell = (EaseBaseMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        // Configure the cell...
-        if (sendCell == nil) {
-            sendCell = [[EaseBaseMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier model:model];
-            sendCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            sendCell.delegate = self;
-        }
-        
-        sendCell.model = model;
-        return sendCell;
     }
+    
+    if (_dataSource && [_dataSource respondsToSelector:@selector(isEmotionMessageFormessageViewController:messageModel:)]) {
+        BOOL flag = [_dataSource isEmotionMessageFormessageViewController:self messageModel:model];
+        if (flag) {
+            NSString *CellIdentifier = [EaseCustomMessageCell cellIdentifierWithModel:model];
+            //send cell
+            EaseCustomMessageCell *sendCell = (EaseCustomMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            // Configure the cell...
+            if (sendCell == nil) {
+                sendCell = [[EaseCustomMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier model:model];
+                sendCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            
+            if (_dataSource && [_dataSource respondsToSelector:@selector(emotionURLFormessageViewController:messageModel:)]) {
+                EaseEmotion *emotion = [_dataSource emotionURLFormessageViewController:self messageModel:model];
+                if (emotion) {
+                    model.image = [UIImage sd_animatedGIFNamed:emotion.emotionOriginal];
+                    model.fileURLPath = emotion.emotionOriginalURL;
+                }
+            }
+            sendCell.model = model;
+            sendCell.delegate = self;
+            return sendCell;
+        }
+    }
+    
+    NSString *CellIdentifier = [EaseMessageCell cellIdentifierWithModel:model];
+    
+    EaseBaseMessageCell *sendCell = (EaseBaseMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    // Configure the cell...
+    if (sendCell == nil) {
+        sendCell = [[EaseBaseMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier model:model];
+        sendCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        sendCell.delegate = self;
+    }
+    
+    sendCell.model = model;
+    return sendCell;
 }
 
 #pragma mark - Table view delegate
@@ -1623,7 +1622,7 @@ typedef enum : NSUInteger {
 
 #pragma mark - EMChatManagerDelegate
 
-- (void)didReceiveMessages:(NSArray *)aMessages
+- (void)messagesDidReceive:(NSArray *)aMessages
 {
     for (EMMessage *message in aMessages) {
         if ([self.conversation.conversationId isEqualToString:message.conversationId]) {
@@ -1640,7 +1639,7 @@ typedef enum : NSUInteger {
     }
 }
 
-- (void)didReceiveCmdMessages:(NSArray *)aCmdMessages
+- (void)cmdMessagesDidReceive:(NSArray *)aCmdMessages
 {
     for (EMMessage *message in aCmdMessages) {
         if ([self.conversation.conversationId isEqualToString:message.conversationId]) {
@@ -1901,8 +1900,7 @@ typedef enum : NSUInteger {
     [self.tableView reloadData];
 }
 
-- (void)sendMessage:(EMMessage *)message
-   isNeedUploadFile:(BOOL)isUploadFile
+- (void)sendMessage:(EMMessage *)message isNeedUploadFile:(BOOL)isUploadFile
 {
     if (self.conversation.type == EMConversationTypeGroupChat){
         message.chatType = EMChatTypeGroupChat;
