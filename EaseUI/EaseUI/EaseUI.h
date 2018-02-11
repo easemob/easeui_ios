@@ -12,6 +12,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "UIImageView+WebCache.h"
+
 #import "EaseConversationListViewController.h"
 #import "EaseMessageViewController.h"
 #import "EaseUsersListViewController.h"
@@ -24,7 +26,6 @@
 #import "EaseBubbleView.h"
 #import "EaseUserCell.h"
 
-
 #import "EaseChineseToPinyin.h"
 #import "EaseEmoji.h"
 #import "EaseEmotionEscape.h"
@@ -35,7 +36,6 @@
 
 #import "NSDate+Category.h"
 #import "NSString+Valid.h"
-#import "UIImageView+EMWebCache.h"
 #import "UIViewController+HUD.h"
 #import "UIViewController+DismissKeyboard.h"
 #import "EaseLocalDefine.h"
