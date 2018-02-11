@@ -12,8 +12,9 @@
 
 #import "EaseUserCell.h"
 
+#import "UIImageView+WebCache.h"
+
 #import "EaseImageView.h"
-#import "UIImageView+EMWebCache.h"
 
 CGFloat const EaseUserCellPadding = 10;
 

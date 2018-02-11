@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MessageUI/MessageUI.h>
 #import "MWPhoto.h"
 #import "MWPhotoProtocol.h"
 #import "MWCaptionView.h"
@@ -39,7 +38,7 @@
 
 @end
 
-@interface MWPhotoBrowser : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
+@interface MWPhotoBrowser : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, weak) IBOutlet id<MWPhotoBrowserDelegate> delegate;
 @property (nonatomic) BOOL zoomPhotosToFill;
@@ -50,11 +49,17 @@
 @property (nonatomic) BOOL enableGrid;
 @property (nonatomic) BOOL enableSwipeToDismiss;
 @property (nonatomic) BOOL startOnGrid;
+@property (nonatomic) BOOL autoPlayOnAppear;
 @property (nonatomic) NSUInteger delayToHideElements;
 @property (nonatomic, readonly) NSUInteger currentIndex;
 
+// Customise image selection icons as they are the only icons with a colour tint
+// Icon should be located in the app's main bundle
+@property (nonatomic, strong) NSString *customImageSelectedIconName;
+@property (nonatomic, strong) NSString *customImageSelectedSmallIconName;
+
 // Init
-- (id)initWithPhotos:(NSArray *)photosArray  __attribute__((deprecated("Use initWithDelegate: instead"))); // Depreciated
+- (id)initWithPhotos:(NSArray *)photosArray;
 - (id)initWithDelegate:(id <MWPhotoBrowserDelegate>)delegate;
 
 // Reloads the photo browser and refetches data
@@ -62,7 +67,6 @@
 
 // Set page that photo browser starts on
 - (void)setCurrentPhotoIndex:(NSUInteger)index;
-- (void)setInitialPageIndex:(NSUInteger)index  __attribute__((deprecated("Use setCurrentPhotoIndex: instead"))); // Depreciated
 
 // Navigation
 - (void)showNextPhotoAnimated:(BOOL)animated;

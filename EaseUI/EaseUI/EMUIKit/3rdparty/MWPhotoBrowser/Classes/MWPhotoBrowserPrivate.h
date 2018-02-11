@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
+#import <MediaPlayer/MediaPlayer.h>
 #import "MWGridViewController.h"
 #import "MWZoomingScrollView.h"
 
@@ -18,7 +19,7 @@
     NSUInteger _photoCount;
     NSMutableArray *_photos;
     NSMutableArray *_thumbPhotos;
-	NSArray *_depreciatedPhotoData; // Depreciated
+	NSArray *_fixedPhotosArray; // Provided via init
 	
 	// Views
 	UIScrollView *_pagingScrollView;
@@ -35,7 +36,6 @@
 	NSTimer *_controlVisibilityTimer;
 	UIBarButtonItem *_previousButton, *_nextButton, *_actionButton, *_doneButton;
     MBProgressHUD *_progressHUD;
-    UIActionSheet *_actionsSheet;
     
     // Grid
     MWGridViewController *_gridController;
@@ -52,6 +52,11 @@
     UIBarButtonItem *_previousViewControllerBackButton;
     UIImage *_previousNavigationBarBackgroundImageDefault;
     UIImage *_previousNavigationBarBackgroundImageLandscapePhone;
+    
+    // Video
+    MPMoviePlayerViewController *_currentVideoPlayerViewController;
+    NSUInteger _currentVideoIndex;
+    UIActivityIndicatorView *_currentVideoLoadingIndicator;
     
     // Misc
     BOOL _hasBelongedToViewController;
@@ -126,11 +131,6 @@
 - (void)setPhotoSelected:(BOOL)selected atIndex:(NSUInteger)index;
 - (void)loadAdjacentPhotosIfNecessary:(id<MWPhoto>)photo;
 - (void)releaseAllUnderlyingPhotos:(BOOL)preserveCurrent;
-
-// Actions
-- (void)savePhoto;
-- (void)copyPhoto;
-- (void)emailPhoto;
 
 @end
 
