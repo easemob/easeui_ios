@@ -44,7 +44,7 @@ CGFloat const EaseConversationCellPadding = 10;
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.accessibilityIdentifier = @"conversation_cell";
+        self.accessibilityIdentifier = @"table_cell";
         _showAvatar = YES;
         [self _setupSubview];
     }
