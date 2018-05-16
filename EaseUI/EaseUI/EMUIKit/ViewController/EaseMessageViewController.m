@@ -287,16 +287,32 @@ typedef enum : NSUInteger {
     [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.leave.hint", @"\'%@\'leave chatroom\'%@\'"), aUsername, aChatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
 }
 
-- (void)didReceiveKickedFromChatroom:(EMChatroom *)aChatroom
-                              reason:(EMChatroomBeKickedReason)aReason
+- (void)didDismissFromChatroom:(EMChatroom *)aChatroom
+                        reason:(EMChatroomBeKickedReason)aReason
 {
     if ([_conversation.conversationId isEqualToString:aChatroom.chatroomId])
     {
         _isKicked = YES;
-        CGRect frame = self.chatToolbar.frame;
-        [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.remove", @"be removed from chatroom\'%@\'"), aChatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
-        [self.navigationController popToViewController:self animated:NO];
-        [self.navigationController popViewControllerAnimated:YES];
+        __weak typeof(self) weakself = self;
+        if (aReason == EMChatroomBeKickedReasonOffline) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"(ಥ_ಥ)" message:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.removeForOffline", nil), aChatroom.chatroomId] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"chatroom.join", @"Join") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakself joinChatroom:weakself.conversation.conversationId];
+            }];
+            [alertController addAction:okAction];
+            
+            [alertController addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"alert.cancel", @"Cancel") style: UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [weakself.navigationController popToViewController:self animated:NO];
+                [weakself.navigationController popViewControllerAnimated:YES];
+            }]];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+        } else {
+            CGRect frame = self.chatToolbar.frame;
+            [self showHint:[NSString stringWithFormat:NSEaseLocalizedString(@"chatroom.remove", @"be removed from chatroom\'%@\'"), aChatroom.chatroomId] yOffset:-frame.size.height + KHintAdjustY];
+            [self.navigationController popToViewController:self animated:NO];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 }
 
