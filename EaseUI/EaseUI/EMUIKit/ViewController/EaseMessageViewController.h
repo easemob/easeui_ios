@@ -100,6 +100,17 @@ typedef void(^EaseSelectAtTargetCallback)(EaseAtTarget*);
 
 /*!
  @method
+ @brief 点击实时音视频消息
+ @discussion 选中消息的回调,用户可以自定义处理
+ @param viewController 当前消息视图
+ @param messageModel 消息模型
+ @result
+ */
+- (void)messageViewController:(EaseMessageViewController *)viewController
+    didSelectCallMessageModel:(id<IMessageModel>)messageModel;
+
+/*!
+ @method
  @brief 选中底部功能按钮
  @discussion 消息发送成功的回调,用户可以自定义处理
  @param viewController 当前消息视图

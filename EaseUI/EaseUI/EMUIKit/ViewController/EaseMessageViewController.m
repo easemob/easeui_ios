@@ -955,6 +955,13 @@ typedef enum : NSUInteger {
     }
 }
 
+- (void)_callMessageCellSelected:(id<IMessageModel>)model
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(messageViewController:didSelectCallMessageModel:)]) {
+        [self.delegate messageViewController:self didSelectCallMessageModel:model];
+    }
+}
+
 #pragma mark - pivate data
 
 /*!
@@ -1273,6 +1280,16 @@ typedef enum : NSUInteger {
     }
     
     switch (model.bodyType) {
+        case EMMessageBodyTypeText:
+        {
+            if (model.message.direction == EMMessageDirectionReceive) {
+                NSString *conferenceId = [model.message.ext objectForKey:@"conferenceId"];
+                if ([conferenceId length] > 0) {
+                    [self _callMessageCellSelected:model];
+                }
+            }
+        }
+            break;
         case EMMessageBodyTypeImage:
         {
             _scrollToBottomWhenAppear = NO;
