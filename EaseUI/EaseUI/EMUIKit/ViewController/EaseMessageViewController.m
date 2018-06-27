@@ -1958,12 +1958,7 @@ typedef enum : NSUInteger {
                 [weakself.dataSource messageViewController:weakself updateProgress:progress messageModel:nil messageBody:message.body];
             }
         } completion:^(EMMessage *aMessage, EMError *aError) {
-            if (!aError) {
-                [weakself _refreshAfterSentMessage:aMessage];
-            }
-            else {
-                [weakself.tableView reloadData];
-            }
+            [weakself.tableView reloadData];
         }];
     }
 }
