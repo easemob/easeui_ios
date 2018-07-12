@@ -1376,11 +1376,32 @@ typedef enum : NSUInteger {
     [_menuController setMenuItems:nil];
 }
 
+- (void)inputTextViewDidBeginEditing:(EaseTextView *)inputTextView
+{
+    if (self.conversation.type == EMConversationTypeChat) {
+        NSString *from = [[EMClient sharedClient] currentUsername];
+        
+        EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:@"TypingBegin"];
+        body.isDeliverOnlineOnly = YES;
+        EMMessage *msg = [[EMMessage alloc] initWithConversationID:self.conversation.conversationId from:from to:self.conversation.conversationId body:body ext:nil];
+        [[EMClient sharedClient].chatManager sendMessage:msg progress:nil completion:nil];
+    }
+}
+
 - (void)didSendText:(NSString *)text
 {
     if (text && text.length > 0) {
         [self sendTextMessage:text];
         [self.atTargets removeAllObjects];
+    }
+    
+    if (self.conversation.type == EMConversationTypeChat) {
+        NSString *from = [[EMClient sharedClient] currentUsername];
+        
+        EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:@"TypingEnd"];
+        body.isDeliverOnlineOnly = YES;
+        EMMessage *msg = [[EMMessage alloc] initWithConversationID:self.conversation.conversationId from:from to:self.conversation.conversationId body:body ext:nil];
+        [[EMClient sharedClient].chatManager sendMessage:msg progress:nil completion:nil];
     }
 }
 
@@ -1679,7 +1700,14 @@ typedef enum : NSUInteger {
 {
     for (EMMessage *message in aCmdMessages) {
         if ([self.conversation.conversationId isEqualToString:message.conversationId]) {
-            [self showHint:NSEaseLocalizedString(@"receiveCmd", @"receive cmd message")];
+            EMCmdMessageBody *body = (EMCmdMessageBody *)message.body;
+            if ([body.action isEqualToString:@"TypingBegin"]) {
+                self.title = @"Typing...";
+            } else if ([body.action isEqualToString:@"TypingEnd"]) {
+                self.title = self.conversation.conversationId;
+            } else {
+                [self showHint:NSEaseLocalizedString(@"receiveCmd", @"receive cmd message")];
+            }
             break;
         }
     }
