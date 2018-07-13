@@ -66,6 +66,8 @@ typedef enum : NSUInteger {
 @property (nonatomic) BOOL isPlayingAudio;
 @property (nonatomic, strong) NSMutableArray *atTargets;
 
+@property (nonatomic) BOOL isTyping;
+
 @end
 
 @implementation EaseMessageViewController
@@ -155,6 +157,9 @@ typedef enum : NSUInteger {
     self.tableView.estimatedRowHeight = 0;
     self.tableView.estimatedSectionHeaderHeight = 0;
     self.tableView.estimatedSectionFooterHeight = 0;
+    
+    NSUserDefaults *uDefaults = [NSUserDefaults standardUserDefaults];
+    self.isTyping = [uDefaults boolForKey:@"MessageShowTyping"];
 }
 
 /*!
@@ -1378,7 +1383,7 @@ typedef enum : NSUInteger {
 
 - (void)inputTextViewDidBeginEditing:(EaseTextView *)inputTextView
 {
-    if (self.conversation.type == EMConversationTypeChat) {
+    if (self.conversation.type == EMConversationTypeChat && self.isTyping) {
         NSString *from = [[EMClient sharedClient] currentUsername];
         
         EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:@"TypingBegin"];
@@ -1395,7 +1400,7 @@ typedef enum : NSUInteger {
         [self.atTargets removeAllObjects];
     }
     
-    if (self.conversation.type == EMConversationTypeChat) {
+    if (self.conversation.type == EMConversationTypeChat && self.isTyping) {
         NSString *from = [[EMClient sharedClient] currentUsername];
         
         EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:@"TypingEnd"];
@@ -1703,12 +1708,13 @@ typedef enum : NSUInteger {
             EMCmdMessageBody *body = (EMCmdMessageBody *)message.body;
             if ([body.action isEqualToString:@"TypingBegin"]) {
                 self.title = @"Typing...";
+                continue;
             } else if ([body.action isEqualToString:@"TypingEnd"]) {
                 self.title = self.conversation.conversationId;
-            } else {
-                [self showHint:NSEaseLocalizedString(@"receiveCmd", @"receive cmd message")];
+                continue;
             }
-            break;
+            
+            [self showHint:NSEaseLocalizedString(@"receiveCmd", @"receive cmd message")];
         }
     }
 }
