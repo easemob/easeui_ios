@@ -624,6 +624,11 @@
 - (void)selectedFacialView:(NSString *)str isDelete:(BOOL)isDelete
 {
     NSString *chatText = self.inputTextView.text;
+    if (self.isTextViewInputEnd && [str length] > 0) {
+        if ([self.delegate respondsToSelector:@selector(inputTextViewDidBeginEditing:)]) {
+            [self.delegate inputTextViewDidBeginEditing:self.inputTextView];
+        }
+    }
     
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:self.inputTextView.attributedText];
     
