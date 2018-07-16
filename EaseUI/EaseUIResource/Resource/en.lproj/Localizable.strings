@@ -289,6 +289,8 @@
 "message.smallerImage" = "The image size is too large, please choose another one";
 "message.autoTransfer" = "Please customize the transfer attachment method";
 
+"message.typing" = "Typing...";
+
 //media
 "media.timeShort" = "The recording time is too short";
 

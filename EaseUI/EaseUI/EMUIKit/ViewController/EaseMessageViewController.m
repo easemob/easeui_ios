@@ -1707,7 +1707,7 @@ typedef enum : NSUInteger {
         if ([self.conversation.conversationId isEqualToString:message.conversationId]) {
             EMCmdMessageBody *body = (EMCmdMessageBody *)message.body;
             if ([body.action isEqualToString:@"TypingBegin"]) {
-                self.title = @"Typing...";
+                self.title = NSEaseLocalizedString(@"typing", @"Typing...");
                 continue;
             } else if ([body.action isEqualToString:@"TypingEnd"]) {
                 self.title = self.conversation.conversationId;
