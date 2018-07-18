@@ -35,6 +35,8 @@
 @property (nonatomic) NSLayoutConstraint *inputViewWidthItemsLeftConstraint;
 @property (nonatomic) NSLayoutConstraint *inputViewWidthoutItemsLeftConstraint;
 
+@property (nonatomic) BOOL isTextViewInputEnd;
+
 @end
 
 @implementation EaseChatToolbar
@@ -89,6 +91,7 @@
         _version = [[[UIDevice currentDevice] systemVersion] floatValue];
         _activityButtomView = nil;
         _isShowButtomView = NO;
+        _isTextViewInputEnd = YES;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatKeyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
         
@@ -546,6 +549,7 @@
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
+    self.isTextViewInputEnd = NO;
     if ([self.delegate respondsToSelector:@selector(inputTextViewWillBeginEditing:)]) {
         [self.delegate inputTextViewWillBeginEditing:self.inputTextView];
     }
@@ -572,6 +576,7 @@
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
+    self.isTextViewInputEnd = YES;
     [textView resignFirstResponder];
 }
 
@@ -582,6 +587,7 @@
             [self.delegate didSendText:textView.text];
             self.inputTextView.text = @"";
             [self _willShowInputTextViewToHeight:[self _getTextViewContentH:self.inputTextView]];
+            self.isTextViewInputEnd = YES;
         }
         
         return NO;
@@ -599,7 +605,12 @@
         if (range.length == 1 && [self.delegate respondsToSelector:@selector(didDeleteCharacterFromLocation:)]) {
             return ![self.delegate didDeleteCharacterFromLocation:range.location];
         }
+    } else if (self.isTextViewInputEnd && [textView.text length] == 0 && [text length] > 0) {
+        if ([self.delegate respondsToSelector:@selector(inputTextViewDidBeginEditing:)]) {
+            [self.delegate inputTextViewDidBeginEditing:self.inputTextView];
+        }
     }
+    
     return YES;
 }
 
@@ -613,6 +624,11 @@
 - (void)selectedFacialView:(NSString *)str isDelete:(BOOL)isDelete
 {
     NSString *chatText = self.inputTextView.text;
+    if (self.isTextViewInputEnd && [str length] > 0) {
+        if ([self.delegate respondsToSelector:@selector(inputTextViewDidBeginEditing:)]) {
+            [self.delegate inputTextViewDidBeginEditing:self.inputTextView];
+        }
+    }
     
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:self.inputTextView.attributedText];
     

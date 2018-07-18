@@ -66,6 +66,8 @@ typedef enum : NSUInteger {
 @property (nonatomic) BOOL isPlayingAudio;
 @property (nonatomic, strong) NSMutableArray *atTargets;
 
+@property (nonatomic) BOOL isTyping;
+
 @end
 
 @implementation EaseMessageViewController
@@ -155,6 +157,9 @@ typedef enum : NSUInteger {
     self.tableView.estimatedRowHeight = 0;
     self.tableView.estimatedSectionHeaderHeight = 0;
     self.tableView.estimatedSectionFooterHeight = 0;
+    
+    NSUserDefaults *uDefaults = [NSUserDefaults standardUserDefaults];
+    self.isTyping = [uDefaults boolForKey:@"MessageShowTyping"];
 }
 
 /*!
@@ -955,6 +960,13 @@ typedef enum : NSUInteger {
     }
 }
 
+- (void)_callMessageCellSelected:(id<IMessageModel>)model
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(messageViewController:didSelectCallMessageModel:)]) {
+        [self.delegate messageViewController:self didSelectCallMessageModel:model];
+    }
+}
+
 #pragma mark - pivate data
 
 /*!
@@ -1273,6 +1285,16 @@ typedef enum : NSUInteger {
     }
     
     switch (model.bodyType) {
+        case EMMessageBodyTypeText:
+        {
+            if (model.message.direction == EMMessageDirectionReceive) {
+                NSString *conferenceId = [model.message.ext objectForKey:@"conferenceId"];
+                if ([conferenceId length] > 0) {
+                    [self _callMessageCellSelected:model];
+                }
+            }
+        }
+            break;
         case EMMessageBodyTypeImage:
         {
             _scrollToBottomWhenAppear = NO;
@@ -1359,11 +1381,32 @@ typedef enum : NSUInteger {
     [_menuController setMenuItems:nil];
 }
 
+- (void)inputTextViewDidBeginEditing:(EaseTextView *)inputTextView
+{
+    if (self.conversation.type == EMConversationTypeChat && self.isTyping) {
+        NSString *from = [[EMClient sharedClient] currentUsername];
+        
+        EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:@"TypingBegin"];
+        body.isDeliverOnlineOnly = YES;
+        EMMessage *msg = [[EMMessage alloc] initWithConversationID:self.conversation.conversationId from:from to:self.conversation.conversationId body:body ext:nil];
+        [[EMClient sharedClient].chatManager sendMessage:msg progress:nil completion:nil];
+    }
+}
+
 - (void)didSendText:(NSString *)text
 {
     if (text && text.length > 0) {
         [self sendTextMessage:text];
         [self.atTargets removeAllObjects];
+    }
+    
+    if (self.conversation.type == EMConversationTypeChat && self.isTyping) {
+        NSString *from = [[EMClient sharedClient] currentUsername];
+        
+        EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:@"TypingEnd"];
+        body.isDeliverOnlineOnly = YES;
+        EMMessage *msg = [[EMMessage alloc] initWithConversationID:self.conversation.conversationId from:from to:self.conversation.conversationId body:body ext:nil];
+        [[EMClient sharedClient].chatManager sendMessage:msg progress:nil completion:nil];
     }
 }
 
@@ -1662,8 +1705,16 @@ typedef enum : NSUInteger {
 {
     for (EMMessage *message in aCmdMessages) {
         if ([self.conversation.conversationId isEqualToString:message.conversationId]) {
+            EMCmdMessageBody *body = (EMCmdMessageBody *)message.body;
+            if ([body.action isEqualToString:@"TypingBegin"]) {
+                self.title = NSEaseLocalizedString(@"message.typing", @"Typing...");
+                continue;
+            } else if ([body.action isEqualToString:@"TypingEnd"]) {
+                self.title = self.conversation.conversationId;
+                continue;
+            }
+            
             [self showHint:NSEaseLocalizedString(@"receiveCmd", @"receive cmd message")];
-            break;
         }
     }
 }
@@ -1941,12 +1992,7 @@ typedef enum : NSUInteger {
                 [weakself.dataSource messageViewController:weakself updateProgress:progress messageModel:nil messageBody:message.body];
             }
         } completion:^(EMMessage *aMessage, EMError *aError) {
-            if (!aError) {
-                [weakself _refreshAfterSentMessage:aMessage];
-            }
-            else {
-                [weakself.tableView reloadData];
-            }
+            [weakself.tableView reloadData];
         }];
     }
 }

@@ -286,6 +286,8 @@
 "message.smallerImage" = "图片太大了，换个小点的";
 "message.autoTransfer" = "请自定义上传或者下载附件方法";
 
+"message.typing" = "正在输入...";
+
 //media
 "media.timeShort" = "录音时间太短了";
 
