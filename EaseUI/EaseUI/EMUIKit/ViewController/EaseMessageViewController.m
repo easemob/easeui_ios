@@ -1287,8 +1287,11 @@ typedef enum : NSUInteger {
     switch (model.bodyType) {
         case EMMessageBodyTypeText:
         {
-            if (model.message.direction == EMMessageDirectionReceive) {
+            if (model.message.direction == EMMessageDirectionReceive && [model.message.ext count] > 0) {
                 NSString *conferenceId = [model.message.ext objectForKey:@"conferenceId"];
+                if ([conferenceId length] == 0) {
+                    conferenceId = [model.message.ext objectForKey:@"em_conference_id"];
+                }
                 if ([conferenceId length] > 0) {
                     [self _callMessageCellSelected:model];
                 }
