@@ -117,6 +117,10 @@ typedef enum{
  */
 - (void)moreViewVideoCallAction:(EaseChatBarMoreView *)moreView;
 
+- (void)moreViewCommunicationAction:(EaseChatBarMoreView *)moreView;
+
+- (void)moreViewLiveAction:(EaseChatBarMoreView *)moreView;
+
 /*!
  @method
  @brief 自定义功能

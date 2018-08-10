@@ -31,9 +31,10 @@
 
 @interface EaseChatBarMoreView ()<UIScrollViewDelegate>
 {
-    EMChatToolbarType _type;
     NSInteger _maxIndex;
 }
+
+@property (nonatomic) EMChatToolbarType type;
 
 @property (nonatomic, strong) UIScrollView *scrollview;
 @property (nonatomic, strong) UIPageControl *pageControl;
@@ -113,30 +114,34 @@
     _takePicButton.tag = MOREVIEW_BUTTON_TAG + 2;
     _maxIndex = 2;
     [_scrollview addSubview:_takePicButton];
+    
+    _audioCallButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_audioCall"]
+                         highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_audioCallSelected"]
+                                    title:nil];
+    [_audioCallButton setFrame:CGRectMake(insets * 4 + CHAT_BUTTON_SIZE.width * 3, 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
+    [_audioCallButton addTarget:self action:@selector(takeAudioCallAction) forControlEvents:UIControlEventTouchUpInside];
+    _audioCallButton.tag = MOREVIEW_BUTTON_TAG + 3;
+    [_scrollview addSubview:_audioCallButton];
+    
+    _videoCallButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_videoCall"]
+                         highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_videoCallSelected"]
+                                    title:nil];
+    [_videoCallButton setFrame:CGRectMake(insets, 10 * 2 + CHAT_BUTTON_SIZE.height + 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
+    [_videoCallButton addTarget:self action:@selector(takeVideoCallAction) forControlEvents:UIControlEventTouchUpInside];
+    _videoCallButton.tag =MOREVIEW_BUTTON_TAG + 4;
+    _maxIndex = 4;
+    [_scrollview addSubview:_videoCallButton];
 
     CGRect frame = self.frame;
+    frame.size.height = 150;
     if (type == EMChatToolbarTypeChat) {
-        frame.size.height = 150;
-        _audioCallButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_audioCall"]
-                             highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_audioCallSelected"]
-                                        title:@"语音"];
-        [_audioCallButton setFrame:CGRectMake(insets * 4 + CHAT_BUTTON_SIZE.width * 3, 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
-        [_audioCallButton addTarget:self action:@selector(takeAudioCallAction) forControlEvents:UIControlEventTouchUpInside];
-        _audioCallButton.tag = MOREVIEW_BUTTON_TAG + 3;
-        [_scrollview addSubview:_audioCallButton];
-        
-        _videoCallButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_videoCall"]
-                             highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_videoCallSelected"]
-                                        title:@"视频"];
-        [_videoCallButton setFrame:CGRectMake(insets, 10 * 2 + CHAT_BUTTON_SIZE.height + 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
-        [_videoCallButton addTarget:self action:@selector(takeVideoCallAction) forControlEvents:UIControlEventTouchUpInside];
-        _videoCallButton.tag =MOREVIEW_BUTTON_TAG + 4;
-        _maxIndex = 4;
-        [_scrollview addSubview:_videoCallButton];
+        [_audioCallButton setTitle:@"语音" forState:UIControlStateNormal];
+        [_videoCallButton setTitle:@"视频" forState:UIControlStateNormal];
     }
     else if (type == EMChatToolbarTypeGroup)
     {
-        frame.size.height = 80;
+        [_audioCallButton setTitle:@"多人会议" forState:UIControlStateNormal];
+        [_videoCallButton setTitle:@"互动会议" forState:UIControlStateNormal];
     }
     self.frame = frame;
     _scrollview.frame = CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame));
@@ -329,15 +334,31 @@
 
 - (void)takeAudioCallAction
 {
-    if (_delegate && [_delegate respondsToSelector:@selector(moreViewAudioCallAction:)]) {
-        [_delegate moreViewAudioCallAction:self];
+    if (_delegate) {
+        if (self.type == EMChatToolbarTypeChat) {
+            if ([_delegate respondsToSelector:@selector(moreViewAudioCallAction:)]) {
+                [_delegate moreViewAudioCallAction:self];
+            }
+        } else if (self.type == EMChatToolbarTypeGroup) {
+            if ([_delegate respondsToSelector:@selector(moreViewCommunicationAction:)]) {
+                [_delegate moreViewCommunicationAction:self];
+            }
+        }
     }
 }
 
 - (void)takeVideoCallAction
 {
-    if (_delegate && [_delegate respondsToSelector:@selector(moreViewVideoCallAction:)]) {
-        [_delegate moreViewVideoCallAction:self];
+    if (_delegate) {
+        if (self.type == EMChatToolbarTypeChat) {
+            if ([_delegate respondsToSelector:@selector(moreViewVideoCallAction:)]) {
+                [_delegate moreViewVideoCallAction:self];
+            }
+        } else if (self.type == EMChatToolbarTypeGroup) {
+            if ([_delegate respondsToSelector:@selector(moreViewLiveAction:)]) {
+                [_delegate moreViewLiveAction:self];
+            }
+        }
     }
 }
 
