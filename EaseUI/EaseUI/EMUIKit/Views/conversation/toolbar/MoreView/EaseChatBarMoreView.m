@@ -141,7 +141,7 @@
     else if (type == EMChatToolbarTypeGroup)
     {
         [_audioCallButton setTitle:@"多人会议" forState:UIControlStateNormal];
-        [_videoCallButton setTitle:@"直播" forState:UIControlStateNormal];
+        [_videoCallButton setTitle:@"互动会议" forState:UIControlStateNormal];
     }
     self.frame = frame;
     _scrollview.frame = CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame));
