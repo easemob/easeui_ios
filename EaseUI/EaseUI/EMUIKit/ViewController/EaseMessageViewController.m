@@ -1663,7 +1663,7 @@ typedef enum : NSUInteger {
     // Hide the keyboard
     [self.chatToolbar endEditing:YES];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:0]}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_MAKE1V1CALL object:@{@"chatter":self.conversation.conversationId, @"type":@(EMCallTypeVoice)}];
 }
 
 - (void)moreViewVideoCallAction:(EaseChatBarMoreView *)moreView
@@ -1671,7 +1671,7 @@ typedef enum : NSUInteger {
     // Hide the keyboard
     [self.chatToolbar endEditing:YES];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:1]}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_MAKE1V1CALL object:@{@"chatter":self.conversation.conversationId, @"type":@(EMCallTypeVideo)}];
 }
 
 #pragma mark - EMLocationViewDelegate
