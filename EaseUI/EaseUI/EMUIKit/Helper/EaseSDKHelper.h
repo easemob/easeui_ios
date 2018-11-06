@@ -23,9 +23,7 @@
 /** @brief 登录状态变更的通知 */
 #define KNOTIFICATION_LOGINCHANGE @"loginStateChange"
 /** @brief 实时音视频呼叫 */
-#define KNOTIFICATION_CALL @"callOutWithChatter"
-/** @brief 关闭实时音视频 */
-#define KNOTIFICATION_CALL_CLOSE @"callControllerClose"
+#define KNOTIFICATION_MAKE1V1CALL @"EMMake1v1Call"
 /** @brief 群组消息ext的字段，用于存放被@的环信id数组 */
 #define kGroupMessageAtList      @"em_at_list"
 /** @brief 群组消息ext字典中，kGroupMessageAtList字段的值，用于@所有人 */
