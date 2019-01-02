@@ -23,18 +23,18 @@
 {
     NSTimeInterval timeInterval = -[self timeIntervalSinceNow];
 	if (timeInterval < 60) {
-        return NSEaseLocalizedString(@"NSDateCategory.text1", @"");
+        return @"1分钟内";
 	} else if (timeInterval < 3600) {
-        return [NSString stringWithFormat:NSEaseLocalizedString(@"NSDateCategory.text2", @""), timeInterval / 60];
+        return [NSString stringWithFormat:@"%.f分钟前", timeInterval / 60];
 	} else if (timeInterval < 86400) {
-        return [NSString stringWithFormat:NSEaseLocalizedString(@"NSDateCategory.text3", @""), timeInterval / 3600];
+        return [NSString stringWithFormat:@"%.f小时前", timeInterval / 3600];
 	} else if (timeInterval < 2592000) {//within 30 days
-        return [NSString stringWithFormat:NSEaseLocalizedString(@"NSDateCategory.text4", @""), timeInterval / 86400];
+        return [NSString stringWithFormat:@"%.f天前", timeInterval / 86400];
     } else if (timeInterval < 31536000) {//30 days to a year
-        NSDateFormatter *dateFormatter = [NSDateFormatter dateFormatterWithFormat:NSEaseLocalizedString(@"NSDateCategory.text5", @"")];
+        NSDateFormatter *dateFormatter = [NSDateFormatter dateFormatterWithFormat:@"M月d日"];
         return [dateFormatter stringFromDate:self];
     } else {
-        return [NSString stringWithFormat:NSEaseLocalizedString(@"NSDateCategory.text6", @""), timeInterval / 31536000];
+        return [NSString stringWithFormat:@"%.f年前", timeInterval / 31536000];
     }
 }
 
@@ -49,7 +49,7 @@
         return [dateFormatter stringFromDate:self];
 	} else if ([[dateFormatter dateFromString:currentDay] timeIntervalSinceDate:[dateFormatter dateFromString:theDay]] == 86400) {//one day ago
         [dateFormatter setDateFormat:@"ah:mm"];
-        return [NSString stringWithFormat:NSEaseLocalizedString(@"NSDateCategory.text7", @'"'), [dateFormatter stringFromDate:self]];
+        return [NSString stringWithFormat:@"昨天 %@", [dateFormatter stringFromDate:self]];
     } else if ([[dateFormatter dateFromString:currentDay] timeIntervalSinceDate:[dateFormatter dateFromString:theDay]] < 86400 * 7) {//within a week
         [dateFormatter setDateFormat:@"EEEE ah:mm"];
         return [dateFormatter stringFromDate:self];
@@ -83,21 +83,21 @@
         if (hour <= 24 && hour >= 0) {
             dateFormatter = [NSDateFormatter dateFormatterWithFormat:@"HH:mm"];
         }else if (hour < 0 && hour >= -24) {
-            dateFormatter = [NSDateFormatter dateFormatterWithFormat:NSEaseLocalizedString(@"NSDateCategory.text8", @"")];
+            dateFormatter = [NSDateFormatter dateFormatterWithFormat:@"昨天HH:mm"];
         }else {
             dateFormatter = [NSDateFormatter dateFormatterWithFormat:@"yyyy-MM-dd HH:mm"];
         }
     }else {
         if (hour >= 0 && hour <= 6) {
-            dateFormatter = [NSDateFormatter dateFormatterWithFormat:NSEaseLocalizedString(@"NSDateCategory.text9", @"")];
+            dateFormatter = [NSDateFormatter dateFormatterWithFormat:@"凌晨hh:mm"];
         }else if (hour > 6 && hour <=11 ) {
-            dateFormatter = [NSDateFormatter dateFormatterWithFormat:NSEaseLocalizedString(@"NSDateCategory.text10", @"")];
+            dateFormatter = [NSDateFormatter dateFormatterWithFormat:@"上午hh:mm"];
         }else if (hour > 11 && hour <= 17) {
-            dateFormatter = [NSDateFormatter dateFormatterWithFormat:NSEaseLocalizedString(@"NSDateCategory.text11", @"")];
+            dateFormatter = [NSDateFormatter dateFormatterWithFormat:@"下午hh:mm"];
         }else if (hour > 17 && hour <= 24) {
-            dateFormatter = [NSDateFormatter dateFormatterWithFormat:NSEaseLocalizedString(@"NSDateCategory.text12", @"")];
+            dateFormatter = [NSDateFormatter dateFormatterWithFormat:@"晚上hh:mm"];
         }else if (hour < 0 && hour >= -24){
-            dateFormatter = [NSDateFormatter dateFormatterWithFormat:NSEaseLocalizedString(@"NSDateCategory.text13", @"")];
+            dateFormatter = [NSDateFormatter dateFormatterWithFormat:@"昨天HH:mm"];
         }else  {
             dateFormatter = [NSDateFormatter dateFormatterWithFormat:@"yyyy-MM-dd HH:mm"];
         }
@@ -117,17 +117,17 @@
     
     NSInteger timeInterval = -[self timeIntervalSinceNow];
     if (timeInterval < 60) {
-        return NSEaseLocalizedString(@"NSDateCategory.text1", @"");
+        return @"1分钟内";
 	} else if (timeInterval < 3600) {//within an hour
-        return [NSString stringWithFormat:NSEaseLocalizedString(@"NSDateCategory.text2", @""), timeInterval / 60];
+        return [NSString stringWithFormat:@"%.f分钟前", timeInterval / 60];
 	} else if (timeInterval < 21600) {//within 6 hour
-        return [NSString stringWithFormat:NSEaseLocalizedString(@"NSDateCategory.text3", @""), timeInterval / 3600];
+        return [NSString stringWithFormat:@"%.f小时前", timeInterval / 3600];
 	} else if ([theDay isEqualToString:currentDay]) {//current day
 		[dateFormatter setDateFormat:@"HH:mm"];
-        return [NSString stringWithFormat:NSEaseLocalizedString(@"NSDateCategory.text14", @""), [dateFormatter stringFromDate:self]];
+        return [NSString stringWithFormat:@"今天 %@", [dateFormatter stringFromDate:self]];
 	} else if ([[dateFormatter dateFromString:currentDay] timeIntervalSinceDate:[dateFormatter dateFromString:theDay]] == 86400) {//one day ago
         [dateFormatter setDateFormat:@"HH:mm"];
-        return [NSString stringWithFormat:NSEaseLocalizedString(@"NSDateCategory.text7", @""), [dateFormatter stringFromDate:self]];
+        return [NSString stringWithFormat:@"昨天 %@", [dateFormatter stringFromDate:self]];
     } else {
 		[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
         return [dateFormatter stringFromDate:self];

@@ -402,6 +402,8 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
  */
 @property (nonatomic) BOOL isJoinedChatroom;
 
+@property (nonatomic) BOOL isTyping;
+
 /*!
   @method
   @brief 初始化聊天页面

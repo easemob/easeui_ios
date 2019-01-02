@@ -77,7 +77,7 @@ static EMAudioPlayerUtil *audioPlayerUtil = nil;
     NSError *error = nil;
     NSFileManager *fm = [NSFileManager defaultManager];
     if (![fm fileExistsAtPath:aFilePath]) {
-        error = [NSError errorWithDomain:NSEaseLocalizedString(@"error.notFound", @"File path not exist")
+        error = [NSError errorWithDomain:@"文件路径不存在"
                                     code:-1
                                 userInfo:nil];
         if (playFinish) {
@@ -92,7 +92,7 @@ static EMAudioPlayerUtil *audioPlayerUtil = nil;
     _player = [[AVAudioPlayer alloc] initWithContentsOfURL:wavUrl error:&error];
     if (error || !_player) {
         _player = nil;
-        error = [NSError errorWithDomain:NSEaseLocalizedString(@"error.initPlayerFail", @"Failed to initialize AVAudioPlayer")
+        error = [NSError errorWithDomain:@"初始化AVAudioPlayer失败!"
                                     code:-1
                                 userInfo:nil];
         if (playFinish) {
@@ -143,7 +143,7 @@ static EMAudioPlayerUtil *audioPlayerUtil = nil;
 - (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player
                                  error:(NSError *)error{
     if (playFinish) {
-        NSError *error = [NSError errorWithDomain:NSEaseLocalizedString(@"error.palyFail", @"Play failure")
+        NSError *error = [NSError errorWithDomain:@"播放失败!"
                                              code:-1
                                          userInfo:nil];
         playFinish(error);

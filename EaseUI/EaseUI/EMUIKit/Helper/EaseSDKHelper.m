@@ -125,38 +125,9 @@ static EaseSDKHelper *helper = nil;
 
 - (void)hyphenateApplication:(UIApplication *)application
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-                    appkey:(NSString *)appkey
-              apnsCertName:(NSString *)apnsCertName
-               otherConfig:(NSDictionary *)otherConfig
 {
     [self _setupAppDelegateNotifications];
     [self _registerRemoteNotification];
-    
-    EMOptions *options = [EMOptions optionsWithAppkey:appkey];
-    options.apnsCertName = apnsCertName;
-    options.isAutoAcceptGroupInvitation = NO;
-    if ([otherConfig objectForKey:kSDKConfigEnableConsoleLogger]) {
-        options.enableConsoleLog = YES;
-    }
-    
-    BOOL isHttpsOnly = NO;
-    if ([otherConfig objectForKey:@"httpsOnly"]) {
-        isHttpsOnly = [[otherConfig objectForKey:@"httpsOnly"] boolValue];
-    }
-    options.usingHttpsOnly = isHttpsOnly;
-    
-    NSUserDefaults *udefaults = [NSUserDefaults standardUserDefaults];
-    if ([udefaults objectForKey:@"autoTransferMessageFile"]) {
-        options.isAutoTransferMessageAttachments = [[udefaults objectForKey:@"autoTransferMessageFile"] boolValue];
-    }
-    if ([udefaults objectForKey:@"autoDownloadMessageThumbnail"]) {
-        options.isAutoDownloadThumbnail = [[udefaults objectForKey:@"autoDownloadMessageThumbnail"] boolValue];
-    }
-    
-    BOOL sandBox = [otherConfig objectForKey:@"easeSandBox"] && [[otherConfig objectForKey:@"easeSandBox"] boolValue];
-    if (!sandBox) {
-        [[EMClient sharedClient] initializeSDKWithOptions:options];
-    }
 }
 
 - (void)hyphenateApplication:(UIApplication *)application
