@@ -56,9 +56,9 @@
 {
     [super prepare];
     
-    [self setTitle:NSEaseLocalizedString(@"ui.clickOrPull", @"Click or pull up to download") forState:MJRefreshStateIdle];
-    [self setTitle:NSEaseLocalizedString(@"ui.downloading", @"Downloading...") forState:MJRefreshStateRefreshing];
-    [self setTitle:NSEaseLocalizedString(@"ui.downloadComplete", @"Download complete") forState:MJRefreshStateNoMoreData];
+    [self setTitle:@"点击或上拉加载更多" forState:MJRefreshStateIdle];
+    [self setTitle:@"正在加载更多的数据..." forState:MJRefreshStateRefreshing];
+    [self setTitle:@"已经全部加载完毕" forState:MJRefreshStateNoMoreData];
     
     self.stateLabel.userInteractionEnabled = YES;
     [self.stateLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(stateLabelClick)]];

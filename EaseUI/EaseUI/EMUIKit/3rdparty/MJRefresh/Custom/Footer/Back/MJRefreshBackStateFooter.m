@@ -53,10 +53,10 @@
 {
     [super prepare];
     
-    [self setTitle:NSEaseLocalizedString(@"ui.pullUpToRefresh", @"Pull up to download more") forState:MJRefreshStateIdle];
-    [self setTitle:NSEaseLocalizedString(@"ui.releaseToDownload", @"Release to download") forState:MJRefreshStatePulling];
-    [self setTitle:NSEaseLocalizedString(@"ui.downloading", @"Downloading more...") forState:MJRefreshStateRefreshing];
-    [self setTitle:NSEaseLocalizedString(@"ui.downloadComplete", @"Download complete") forState:MJRefreshStateNoMoreData];
+    [self setTitle:@"上拉可以加载更多" forState:MJRefreshStateIdle];
+    [self setTitle:@"松开立即加载更多" forState:MJRefreshStatePulling];
+    [self setTitle:@"正在加载更多的数据..." forState:MJRefreshStateRefreshing];
+    [self setTitle:@"已经全部加载完毕" forState:MJRefreshStateNoMoreData];
 }
 
 - (void)placeSubviews

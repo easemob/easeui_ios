@@ -195,6 +195,7 @@
     if (!cell) {
         
     }
+    
     [cell sizeToFit];
     EaseEmotionManager *emotionManager = [_emotionManagers objectAtIndex:indexPath.section];
     EaseEmotion *emotion = [emotionManager.emotions objectAtIndex:indexPath.row];

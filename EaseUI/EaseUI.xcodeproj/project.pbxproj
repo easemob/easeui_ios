@@ -24,6 +24,7 @@
 		3A0D7E7520303FA400BA7C70 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0D7E5F20303FA400BA7C70 /* UIImageView+WebCache.m */; };
 		3A0D7E7620303FA400BA7C70 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0D7E6220303FA400BA7C70 /* UIView+WebCacheOperation.m */; };
 		3A0D7E7720303FA400BA7C70 /* UIButton+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0D7E6620303FA400BA7C70 /* UIButton+WebCache.m */; };
+		3ADB58B62074D3F600926348 /* Hyphenate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADB58B72074D3F600926348 /* Hyphenate.framework */; };
 		D206D35B1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34C1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png */; };
 		D206D35C1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34D1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png */; };
 		D206D35D1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D206D34E1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png */; };
@@ -95,7 +96,6 @@
 		D250D5281BD8D1CB00C8D553 /* EaseRecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D4BC1BD8D1CB00C8D553 /* EaseRecordView.m */; };
 		D250D5291BD8D1CB00C8D553 /* EaseConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D250D4BF1BD8D1CB00C8D553 /* EaseConversationCell.m */; };
 		D262C9A81BD8D54700B08382 /* EaseUI.h in include */ = {isa = PBXBuildFile; fileRef = D250D39F1BD8D14400C8D553 /* EaseUI.h */; };
-		D26E1F311BEC8736008B01A4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D26E1F331BEC8736008B01A4 /* Localizable.strings */; };
 		D29E684B1BE9B37E0052F8A8 /* FixFopen.c in Sources */ = {isa = PBXBuildFile; fileRef = D29E684A1BE9B37E0052F8A8 /* FixFopen.c */; };
 		D2A42AA81BDA4C070089902B /* EaseUIResource.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = D2AA63831BD911B10059D684 /* EaseUIResource.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D2AA62C01BD907AC0059D684 /* EaseSDKHelper.h in Helper */ = {isa = PBXBuildFile; fileRef = D250D4561BD8D1CB00C8D553 /* EaseSDKHelper.h */; };
@@ -635,6 +635,7 @@
 		3A0D7E6620303FA400BA7C70 /* UIButton+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+WebCache.m"; sourceTree = "<group>"; };
 		3A0D7E6720303FA400BA7C70 /* UIImage+GIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+GIF.h"; sourceTree = "<group>"; };
 		3A8EF7381E1B52C800D3C751 /* Hyphenate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Hyphenate.framework; path = "../../emclient-ios/newSDK/build/Release-iphoneos/Hyphenate.framework"; sourceTree = "<group>"; };
+		3ADB58B72074D3F600926348 /* Hyphenate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Hyphenate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D206D34C1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_receiver_audio_playing000@2x.png"; sourceTree = "<group>"; };
 		D206D34D1CB509EB007A23FE /* chat_receiver_audio_playing001@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_receiver_audio_playing001@2x.png"; sourceTree = "<group>"; };
 		D206D34E1CB509EB007A23FE /* chat_receiver_audio_playing002@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_receiver_audio_playing002@2x.png"; sourceTree = "<group>"; };
@@ -775,8 +776,6 @@
 		D250D4BC1BD8D1CB00C8D553 /* EaseRecordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseRecordView.m; sourceTree = "<group>"; };
 		D250D4BE1BD8D1CB00C8D553 /* EaseConversationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseConversationCell.h; sourceTree = "<group>"; };
 		D250D4BF1BD8D1CB00C8D553 /* EaseConversationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseConversationCell.m; sourceTree = "<group>"; };
-		D26E1F321BEC8736008B01A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		D26E1F341BEC874F008B01A4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		D29E684A1BE9B37E0052F8A8 /* FixFopen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = FixFopen.c; sourceTree = "<group>"; };
 		D2AA63831BD911B10059D684 /* EaseUIResource.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EaseUIResource.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2AA63861BD911B10059D684 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -935,6 +934,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3ADB58B62074D3F600926348 /* Hyphenate.framework in Frameworks */,
 				D250D4CB1BD8D1CB00C8D553 /* libopencore-amrwb.a in Frameworks */,
 				D250D4CA1BD8D1CB00C8D553 /* libopencore-amrnb.a in Frameworks */,
 			);
@@ -1027,6 +1027,7 @@
 		D21E57531E12467100C50BA0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3ADB58B72074D3F600926348 /* Hyphenate.framework */,
 				3A0D7DE720303ACE00BA7C70 /* Hyphenate.framework */,
 				3A8EF7381E1B52C800D3C751 /* Hyphenate.framework */,
 			);
@@ -1442,7 +1443,6 @@
 				D2AA63AD1BD911FE0059D684 /* messageVideo@2x.png */,
 				D2AA63AE1BD911FE0059D684 /* recordView */,
 				D2AA63C31BD911FE0059D684 /* user@2x.png */,
-				D26E1F331BEC8736008B01A4 /* Localizable.strings */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -1886,7 +1886,6 @@
 				D206D35B1CB509EB007A23FE /* chat_receiver_audio_playing000@2x.png in Resources */,
 				D2AA63F41BD911FE0059D684 /* VoiceSearchFeedback015@2x.png in Resources */,
 				D2AA63DE1BD911FE0059D684 /* chatBar_recordSelected@2x.png in Resources */,
-				D26E1F311BEC8736008B01A4 /* Localizable.strings in Resources */,
 				D2AA63C71BD911FE0059D684 /* chat_location_preview@2x.png in Resources */,
 				D2AA63C51BD911FE0059D684 /* back@2x.png in Resources */,
 				D2AA63EB1BD911FE0059D684 /* VoiceSearchFeedback006@2x.png in Resources */,
@@ -2073,18 +2072,6 @@
 		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXVariantGroup section */
-		D26E1F331BEC8736008B01A4 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D26E1F321BEC8736008B01A4 /* en */,
-				D26E1F341BEC874F008B01A4 /* zh-Hans */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
 		D250D3AE1BD8D14400C8D553 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2178,6 +2165,7 @@
 					"$(PROJECT_DIR)/EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrnb",
 					"$(PROJECT_DIR)/EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrwb",
 				);
+				MACH_O_TYPE = mh_dylib;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -2200,6 +2188,7 @@
 					"$(PROJECT_DIR)/EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrnb",
 					"$(PROJECT_DIR)/EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrwb",
 				);
+				MACH_O_TYPE = mh_dylib;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
