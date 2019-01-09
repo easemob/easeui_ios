@@ -1434,7 +1434,6 @@ typedef enum : NSUInteger {
             }
         }];
         EaseChatToolbar *toolbar = (EaseChatToolbar*)self.chatToolbar;
-        toolbar.inputTextView.text = [NSString stringWithFormat:@"%@@", toolbar.inputTextView.text];
         [toolbar.inputTextView resignFirstResponder];
         return YES;
     }
