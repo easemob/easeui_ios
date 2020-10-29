@@ -1,0 +1,16 @@
+use_frameworks!
+
+def all_example_pods
+  pod 'EaseIMKit', :path => './'
+end
+
+example_project_path = 'Examples/EaseIMKitDemo/EaseIMKitDemo'
+
+workspace 'EaseIMKit.xcworkspace'
+
+
+target 'EaseIMKitDemo' do
+  project example_project_path
+  platform :ios, '9.0'
+  all_example_pods
+end

@@ -1,0 +1,16 @@
+PODS:
+  - EaseIMKit (0.0.1)
+
+DEPENDENCIES:
+  - EaseIMKit (from `./`)
+
+EXTERNAL SOURCES:
+  EaseIMKit:
+    :path: "./"
+
+SPEC CHECKSUMS:
+  EaseIMKit: c4c162708bd1969b0622ee30fcb14a5265facf84
+
+PODFILE CHECKSUM: 2090c6cd0857fa63279b4d6f91da82b11c26d9b6
+
+COCOAPODS: 1.10.0.beta.2
