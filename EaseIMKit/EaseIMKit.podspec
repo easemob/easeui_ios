@@ -15,6 +15,6 @@ Pod::Spec.new do |s|
 
   s.requires_arc = true
 
-  s.source_files = 'EaseIMKit/*/*.{h,m}', 'EaseIMKit/EaseIMKit.h'
+  s.source_files = 'EaseIMKit/**/*.{h,m}'
   
 end
