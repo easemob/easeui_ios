@@ -7,8 +7,10 @@
 //
 
 #import "ViewController.h"
+#import <EaseIMKit/EaseIMKit.h>
+#import "ConversationCellModel.h"
 
-@interface ViewController ()
+@interface ViewController ()<EaseConversationVCDelegate>
 
 @end
 
@@ -16,8 +18,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    EaseConversationsViewController *conVC = [[EaseConversationsViewController alloc] initWithOptions:nil];
+    conVC.delegate = self;
+    [self.view addSubview:conVC.view];
+    [self addChildViewController:conVC];
+    conVC.view.frame = self.view.bounds;
 }
 
+
+#pragma mark - EaseConversationVCDelegate
+- (id<EaseConversationCellModelDelegate>)conversationCellForModel:(NSString *)conversationId
+                                                 conversationType:(EMConversationType)aType{
+    
+    return [[ConversationCellModel alloc] init];
+}
 
 @end

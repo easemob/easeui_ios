@@ -6,26 +6,37 @@
 //
 
 #import "EaseConversationsViewController.h"
+#import <Hyphenate/Hyphenate.h>
 
-@interface EaseConversationsViewController ()
-
+@interface EaseConversationsViewController ()<EMChatManagerDelegate>
+{
+    EaseConversationVCOptions *_options;
+}
 @end
 
 @implementation EaseConversationsViewController
 
+- (instancetype)initWithOptions:(EaseConversationVCOptions *)options {
+ if (self = [super init]) {
+     _options = options;
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [EMClient.sharedClient.chatManager addDelegate:self delegateQueue:nil];
+    [self reloadViewWithModel];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)reloadViewWithModel {
+    
 }
-*/
+
+#pragma mark - EMChatManagerDelegate
+- (void)messagesDidReceive:(NSArray *)aMessages {
+    
+}
 
 @end

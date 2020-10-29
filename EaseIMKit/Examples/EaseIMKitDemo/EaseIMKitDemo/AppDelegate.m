@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import <EaseIMKit/EaseIMKit.h>
+#import <Hyphenate/Hyphenate.h>
 
 @interface AppDelegate ()
 
@@ -18,6 +18,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    EMOptions *options = [EMOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
+    [EMClient.sharedClient initializeSDKWithOptions:options];
     
     return YES;
 }

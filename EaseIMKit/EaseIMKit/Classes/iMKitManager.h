@@ -1,5 +1,5 @@
 //
-//  EaseConversationCellDelegate.h
+//  iMKitManager.h
 //  EaseIMKit
 //
 //  Created by 杜洁鹏 on 2020/10/29.
@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol EaseConversationCellDelegate <NSObject>
+@interface iMKitManager : NSObject
 
 @end
 

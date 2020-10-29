@@ -6,11 +6,23 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Hyphenate/Hyphenate.h>
+#import "EaseConversationVCOptions.h"
+#import "EaseConversationCellModelDelegate.h"
 
-NS_ASSUME_NONNULL_BEGIN
 
-@interface EaseConversationsViewController : UIViewController
+@protocol EaseConversationVCDelegate <NSObject>
+
+@optional
+- (id<EaseConversationCellModelDelegate>)conversationCellForModel:(NSString *)conversationId
+                                                     conversationType:(EMConversationType)aType;
 
 @end
 
-NS_ASSUME_NONNULL_END
+@interface EaseConversationsViewController : UIViewController
+- (instancetype)initWithOptions:(EaseConversationVCOptions *)options;
+
+@property (nonatomic, assign) id<EaseConversationVCDelegate> delegate;
+
+@end
+
