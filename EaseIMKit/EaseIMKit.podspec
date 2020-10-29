@@ -17,4 +17,6 @@ Pod::Spec.new do |s|
 
   s.source_files = 'EaseIMKit/**/*.{h,m}'
   
+  s.dependency 'Hyphenate', '~> 3.7.1'
+  
 end

@@ -2,6 +2,7 @@ use_frameworks!
 
 def all_example_pods
   pod 'EaseIMKit', :path => './'
+  pod 'Hyphenate', '~> 3.7.1'
 end
 
 example_project_path = 'Examples/EaseIMKitDemo/EaseIMKitDemo'

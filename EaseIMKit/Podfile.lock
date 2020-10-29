@@ -1,16 +1,24 @@
 PODS:
-  - EaseIMKit (0.0.1)
+  - EaseIMKit (0.0.1):
+    - Hyphenate (~> 3.7.1)
+  - Hyphenate (3.7.1)
 
 DEPENDENCIES:
   - EaseIMKit (from `./`)
+  - Hyphenate (~> 3.7.1)
+
+SPEC REPOS:
+  trunk:
+    - Hyphenate
 
 EXTERNAL SOURCES:
   EaseIMKit:
     :path: "./"
 
 SPEC CHECKSUMS:
-  EaseIMKit: a27342f948a42fbd2888c300166f6a08902637e3
+  EaseIMKit: 8bf5074b4cf3e619b88a5828496c9d0066069040
+  Hyphenate: 6c819a238b48a3fad61dbf3a4a436d0f9c4c9527
 
-PODFILE CHECKSUM: 2090c6cd0857fa63279b4d6f91da82b11c26d9b6
+PODFILE CHECKSUM: e1e496c2a5e1d524dfa8b7c298c872e1f77a3281
 
 COCOAPODS: 1.10.0.beta.2
