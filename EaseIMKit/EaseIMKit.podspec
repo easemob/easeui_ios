@@ -18,5 +18,11 @@ Pod::Spec.new do |s|
   s.source_files = 'EaseIMKit/**/*.{h,m}'
   
   s.dependency 'Hyphenate', '~> 3.7.1'
+  s.dependency 'Masonry'
+  s.dependency 'MJRefresh'
+  s.dependency 'MBProgressHUD', '~> 1.1.0'
+  s.dependency 'SDWebImage', '~> 4.0'
+  s.dependency 'SDWebImage/GIF'
+  s.dependency 'FLAnimatedImage', '~> 1.0'
   
 end

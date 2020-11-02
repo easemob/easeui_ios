@@ -7,20 +7,19 @@
 
 #import <UIKit/UIKit.h>
 #import <Hyphenate/Hyphenate.h>
-#import "EaseConversationVCOptions.h"
+#import "EaseConversationCellOptions.h"
 #import "EaseConversationCellModelDelegate.h"
-
+#import "EMRefreshViewController.h"
 
 @protocol EaseConversationVCDelegate <NSObject>
 
 @optional
-- (id<EaseConversationCellModelDelegate>)conversationCellForModel:(NSString *)conversationId
-                                                     conversationType:(EMConversationType)aType;
+- (id<EaseConversationCellModelDelegate>)conversationCellForModel:(EMConversation *)conversation;
 
 @end
 
-@interface EaseConversationsViewController : UIViewController
-- (instancetype)initWithOptions:(EaseConversationVCOptions *)options;
+@interface EaseConversationsViewController : EMRefreshViewController
+- (instancetype)initWithOptions:(EaseConversationCellOptions *)options;
 
 @property (nonatomic, assign) id<EaseConversationVCDelegate> delegate;
 
