@@ -9,11 +9,11 @@
 #import "ConversationCellModel.h"
 
 @implementation ConversationCellModel
-- (NSString *)showName {
-    return @"nickname";
+
+- (UIImage *)avatarImg {
+    return nil;
 }
 
-- (NSString *)avatarStr {
-    return @"";
-}
 @end
+
+

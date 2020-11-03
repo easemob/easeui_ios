@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <EaseIMKit/EaseIMKit.h>
+#import <EaseIMKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ConversationCellModel : NSObject <EaseConversationCellModelDelegate>
-@property (nonatomic, copy) NSString *showName;
-@property (nonatomic, copy) NSString *avatarStr;
+
+@property (nonatomic, copy) UIImage *avatarImg; //头像
+
 @end
 
 NS_ASSUME_NONNULL_END
