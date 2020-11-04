@@ -14,6 +14,9 @@ typedef enum {
     EMAvatarStyleCorner = 0, //圆角
     EMAvatarStyleRectangular,  //矩形
     EMAvatarStyleCircular,  //圆形
+    
+    EMAvatarMIN = EMAvatarStyleCorner,
+    EMAvatarMAX = EMAvatarStyleCircular,
 } EMAvatarStyle;
 
 /*!
@@ -21,7 +24,10 @@ typedef enum {
  */
 typedef enum {
     EMRightForCell = 0,    //cell右方
-    EMTopRightCornerForAvatar //头像右上角
+    EMTopRightCornerForAvatar, //头像右上角
+    
+    EMPositionMIN = EMRightForCell,
+    EMPositionMAX = EMTopRightCornerForAvatar,
 } EMUnReadCountViewPosition;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -29,8 +35,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EaseConversationCellOptions : NSObject
 
 @property (nonatomic, copy) UIColor *bgColor; //会话列表皮肤
-
-@property (nonatomic) CGFloat heightForCell; //cell高度
 
 @property (nonatomic) EMAvatarStyle avatarStyle; //头像风格
 
