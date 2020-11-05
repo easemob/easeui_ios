@@ -15,7 +15,7 @@
 @class EaseConversationCell;
 @protocol EaseConversationCellDelegate <NSObject>
 @optional
-- (void)conversatioonCellDidTouchEnd:(EaseConversationCell *)aCell;
+- (void)conversationCellDidTouchEnd:(EaseConversationCell *)aCell;
 - (void)conversationCellDidLongPress:(EaseConversationCell *)aCell;
 @end
 
