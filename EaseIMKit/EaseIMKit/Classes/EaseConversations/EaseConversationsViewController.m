@@ -8,8 +8,6 @@
 #import "EaseConversationsViewController.h"
 #import "EMRealtimeSearch.h"
 #import "EMConversationHelper.h"
-
-#import "EaseConversationCell.h"
 #import "UIViewController+Search.h"
 
 #import "PellTableViewSelect.h"
@@ -21,6 +19,7 @@
 @interface EaseConversationsViewController ()<EMChatManagerDelegate, EMGroupManagerDelegate, EMSearchControllerDelegate, EMConversationsDelegate,EaseConversationCellDelegate,EMContactManagerDelegate,EMNotificationsDelegate>
 {
     EaseConversationCellOptions *_options;
+    BOOL _isReloadViewWithOption; //重新刷新会话列表
 }
 @property (nonatomic) BOOL isViewAppear;
 @property (nonatomic) BOOL isNeedReload;
@@ -46,6 +45,7 @@
 - (instancetype)initWithOptions:(EaseConversationCellOptions *)options {
  if (self = [super init]) {
      _options = options;
+     _isReloadViewWithOption = NO;
     }
     
     return self;
@@ -54,9 +54,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.isNeedsSearchModule = YES;
     self.isAddBlankView = NO;
     [self _setupSubviews];
-    
     [[EMNotificationHelper shared] addDelegate:self];
     [self didNotificationsUnreadCountUpdate:[EMNotificationHelper shared].unreadCount];
     [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
@@ -73,11 +73,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(AgreeJoinGroupInvite:) name:NOTIF_ADD_SOCIAL_CONTACT object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationControllerBack) name:SYSTEM_NOTIF_DETAIL object:nil];
-    [self reloadViewWithModel];
 }
 
-- (void)reloadViewWithModel {
-    
+- (void)reloadViewWithOption {
+    _isReloadViewWithOption = YES;
+    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -126,16 +126,20 @@
 
 - (void)_setupSubviews
 {
-    self.view.backgroundColor = _options.bgColor;
+    self.view.backgroundColor = _options.convesationsListBgColor;
     self.showRefreshHeader = YES;
     
-    [self enableSearchController];
-    [self.searchButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view);
-        make.left.equalTo(self.view).offset(15);
-        make.right.equalTo(self.view).offset(-15);
-        make.height.equalTo(@36);
-    }];
+    if (self.isNeedsSearchModule) {
+        [self enableSearchController];
+        [self.searchButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.view);
+            make.left.equalTo(self.view).offset(15);
+            make.right.equalTo(self.view).offset(-15);
+            make.height.equalTo(@36);
+        }];
+        [self _setupSearchResultController];
+    }
+    
     self.blankPerchView = _options.blankPerchView;
     [self.view addSubview:self.blankPerchView];
     [self.blankPerchView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -147,13 +151,15 @@
     self.tableView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.searchButton.mas_bottom).offset(15);
+        if (self.isNeedsSearchModule) {
+            make.top.equalTo(self.searchButton.mas_bottom).offset(15);
+        } else {
+            make.top.equalTo(self.view);
+        }
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
         make.bottom.equalTo(self.view);
     }];
-    
-    [self _setupSearchResultController];
 }
 
 //空白占位视图
@@ -177,13 +183,15 @@
     self.resultController.tableView.rowHeight = 60;
     [self.resultController setCellForRowAtIndexPathCompletion:^UITableViewCell *(UITableView *tableView, NSIndexPath *indexPath) {
         EaseConversationCell *cell = (EaseConversationCell *)[tableView dequeueReusableCellWithIdentifier:@"EaseConversationCell"];
-        if (cell == nil) {
+        if (cell == nil || self->_isReloadViewWithOption == YES) {
+            self->_isReloadViewWithOption = NO;
             cell = [[EaseConversationCell alloc] initWithConversationCellOptions:self->_options];
         }
         
         NSInteger row = indexPath.row;
         id<EaseConversationModelDelegate> model = [weakself.resultController.dataArray objectAtIndex:row];
         cell.model = model;
+        cell.delegate = weakself;
         return cell;
     }];
     [self.resultController setCanEditRowAtIndexPath:^BOOL(UITableView *tableView, NSIndexPath *indexPath) {
@@ -201,6 +209,10 @@
         [weakself.resultController.tableView reloadData];
     }];
     [self.resultController setDidSelectRowAtIndexPathCompletion:^(UITableView *tableView, NSIndexPath *indexPath) {
+        if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+            [weakself.delegate tableView:tableView dataSource:weakself.resultController.dataArray  didSelectRowAtIndexPath:indexPath];
+            return;
+        }
         NSInteger row = indexPath.row;
         id<EaseConversationModelDelegate> model = [weakself.resultController.dataArray objectAtIndex:row];
         weakself.resultController.searchBar.text = @"";
@@ -234,7 +246,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EaseConversationCell *cell = (EaseConversationCell *)[tableView dequeueReusableCellWithIdentifier:@"EaseConversationCell"];
-    if (cell == nil) {
+    if (cell == nil || _isReloadViewWithOption == YES) {
+        _isReloadViewWithOption = NO;
         cell = [[EaseConversationCell alloc] initWithConversationCellOptions:_options];
     }
     
@@ -259,8 +272,13 @@
 }
 
 #pragma mark - Table view delegate
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+        [self.delegate tableView:tableView dataSource:self.dataArray didSelectRowAtIndexPath:indexPath];
+        return;
+    }
     __weak typeof(self) weakself = self;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSInteger row = indexPath.row;
@@ -465,12 +483,16 @@
 }
 
 #pragma mark - EaseConversationCellDelegate
+
 //长按
 - (void)conversationCellDidLongPress:(EaseConversationCell *)aCell
 {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(conversationCellDidLongPress:)]) {
+        [self.delegate conversationCellDidLongPress:aCell];
+        return;
+    }
     self.menuIndexPath = [self.tableView indexPathForCell:aCell];
     [self _menuViewController:aCell];
-    
 }
 
 #pragma mark - NSNotification
@@ -647,7 +669,7 @@
 - (void)_loadAllConversationsFromDBWithIsShowHud:(BOOL)aIsShowHUD
 {
     if (aIsShowHUD) {
-        //[self showHudInView:self.view hint:@"加载会话列表..."];
+        [self showHudInView:self.view hint:@"加载会话列表..."];
     }
     
     __weak typeof(self) weakself = self;

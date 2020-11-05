@@ -27,7 +27,7 @@
         self.selectionStyle = UITableViewCellSelectionStyleDefault;
         self.selectedBackgroundView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width, self.contentView.frame.size.height)];
         self.selectedBackgroundView.backgroundColor = [UIColor colorWithRed:233/255.0 green:233/255.0 blue:233/255.0 alpha:1.0];
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = options.conversationCellBgColor;
         _conversationCellOptions = options;
         if (!_conversationCellOptions) {
             _conversationCellOptions = [[EaseConversationCellOptions alloc]init];
@@ -49,7 +49,8 @@
         make.top.equalTo(self.contentView).offset(14);
         make.left.equalTo(self.contentView).offset(16);
         make.bottom.equalTo(self.contentView).offset(-14);
-        make.width.equalTo(self.avatarView.mas_height).multipliedBy(1);
+        make.height.equalTo(@(_conversationCellOptions.avatarSize.height));
+        make.width.equalTo(@(_conversationCellOptions.avatarSize.width));
     }];
     _avatarView.layer.cornerRadius = _avatarView.frame.size.width / 4;
     if (_conversationCellOptions.avatarStyle == EMAvatarStyleRectangular)
@@ -58,7 +59,7 @@
         _avatarView.layer.cornerRadius = _avatarView.frame.size.width / 2;
     
     _timeLabel = [[UILabel alloc] init];
-    _timeLabel.font = [UIFont systemFontOfSize:12];
+    _timeLabel.font = [UIFont systemFontOfSize:_conversationCellOptions.wordSizeForCellTimestamp];
     _timeLabel.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1.0];
     _timeLabel.backgroundColor = [UIColor clearColor];
     [_timeLabel setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
@@ -71,7 +72,7 @@
     _nameLabel = [[UILabel alloc] init];
     _nameLabel.backgroundColor = [UIColor clearColor];
     _nameLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1.0];
-    _nameLabel.font = [UIFont systemFontOfSize:16];
+    _nameLabel.font = [UIFont systemFontOfSize:_conversationCellOptions.wordSizeForCellTitle];
     [self.contentView addSubview:_nameLabel];
     [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.contentView.mas_centerY);
@@ -101,7 +102,7 @@
     _detailLabel = [[UILabel alloc] init];
     _detailLabel.translatesAutoresizingMaskIntoConstraints = NO;
     _detailLabel.backgroundColor = [UIColor clearColor];
-    _detailLabel.font = [UIFont systemFontOfSize:16];
+    _detailLabel.font = [UIFont systemFontOfSize:_conversationCellOptions.wordSizeForCellDetail];
     _detailLabel.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1.0];
     [self.contentView addSubview:_detailLabel];
     [_detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {

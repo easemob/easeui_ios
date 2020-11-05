@@ -14,8 +14,13 @@
 {
     self = [super init];
     if (self) {
-        _bgColor = [UIColor whiteColor];
+        _convesationsListBgColor = [UIColor whiteColor];
+        _conversationCellBgColor = [UIColor whiteColor];
         _avatarStyle = EMAvatarStyleCorner;
+        _avatarSize = CGSizeMake(40, 40);
+        _wordSizeForCellTitle = 18.0;
+        _wordSizeForCellDetail = 16.0;
+        _wordSizeForCellTimestamp = 12.0;
         _unReadCountPosition = EMRightForCell;
         _unReadCountViewBgColor = [UIColor redColor];
         _longer = 20;
@@ -49,16 +54,45 @@
 
 #pragma mark - Setter
 
-- (void)setBgColor:(UIColor *)bgColor
+- (void)setConvesationsListBgColor:(UIColor *)convesationsListBgColor
 {
-    if (bgColor)
-        _bgColor = bgColor;
+    if (convesationsListBgColor)
+        _convesationsListBgColor = convesationsListBgColor;
+}
+
+- (void)setConversationCellBgColor:(UIColor *)conversationCellBgColor
+{
+    if (conversationCellBgColor)
+        _conversationCellBgColor = conversationCellBgColor;
 }
 
 - (void)setAvatarStyle:(EMAvatarStyle)avatarStyle
 {
     if (avatarStyle >= EMAvatarMIN && avatarStyle <= EMAvatarMAX)
         _avatarStyle = avatarStyle;
+}
+
+- (void)setAvatarSize:(CGSize)avatarSize
+{
+    
+}
+
+- (void)setWordSizeForCellTitle:(CGFloat)wordSizeForCellTitle
+{
+    if (wordSizeForCellTitle)
+        _wordSizeForCellTitle = wordSizeForCellTitle;
+}
+
+- (void)setWordSizeForCellDetail:(CGFloat)wordSizeForCellDetail
+{
+    if (wordSizeForCellDetail)
+        _wordSizeForCellDetail = wordSizeForCellDetail;
+}
+
+- (void)setWordSizeForCellTimestamp:(CGFloat)wordSizeForCellTimestamp
+{
+    if (wordSizeForCellTimestamp)
+        _wordSizeForCellTimestamp;
 }
 
 - (void)setUnReadCountPosition:(EMUnReadCountViewPosition)unReadCountPosition
