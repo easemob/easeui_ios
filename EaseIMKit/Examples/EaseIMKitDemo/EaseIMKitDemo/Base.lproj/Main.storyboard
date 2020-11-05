@@ -23,7 +23,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1050.7246376811595" y="87.723214285714278"/>
+            <point key="canvasLocation" x="1406" y="-678"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="ACG-Ll-dZE">
@@ -31,12 +31,14 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="gXz-sZ-0kI" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wOL-b6-EpX">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="QcZ-XK-Fbz"/>
                         <segue destination="D97-Os-aP2" kind="relationship" relationship="viewControllers" id="8xL-05-gfD"/>
+                        <segue destination="UKX-cm-zRT" kind="relationship" relationship="viewControllers" id="kWV-Ys-DRz"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RaK-Pb-2mu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -57,7 +59,38 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w9e-Qc-xrH" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="141" y="943"/>
+            <point key="canvasLocation" x="1406" y="88"/>
+        </scene>
+        <!--我-->
+        <scene sceneID="kFA-rh-t5W">
+            <objects>
+                <viewController id="UKX-cm-zRT" customClass="SettingsViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nki-ih-Zno">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="7s3-Ll-3Co"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="我" id="Jb9-Wf-LOC"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8un-6X-sLt" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="141" y="964"/>
+        </scene>
+        <!--Login View Controller-->
+        <scene sceneID="x7D-SE-itU">
+            <objects>
+                <viewController id="oXW-xV-MnB" customClass="LoginViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2ma-Nc-2Zc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="kqc-cd-R8G"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8gA-Ly-23f" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1410" y="498"/>
         </scene>
     </scenes>
     <resources>
