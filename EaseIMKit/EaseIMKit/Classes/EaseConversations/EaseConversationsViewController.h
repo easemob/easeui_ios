@@ -14,7 +14,7 @@
 @protocol EaseConversationVCDelegate <NSObject>
 
 @optional
-- (id<EaseConversationCellModelDelegate>)conversationCellForModel:(EMConversation *)conversation;
+- (id<EaseConversationCellModelDelegate>)conversationCellForModel:(id<EaseConversationModelDelegate>)model;
 
 @end
 

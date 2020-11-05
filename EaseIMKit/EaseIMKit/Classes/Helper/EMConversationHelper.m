@@ -1,26 +1,127 @@
 //
 //  EMConversationHelper.m
-//  ChatDemo-UI3.0
+//  EaseUIKit
 //
 //  Created by XieYajie on 2019/1/14.
-//  Copyright © 2019 XieYajie. All rights reserved.
+//  Update © 2020 zhangchong. All rights reserved.
 //
 
 #import "EMConversationHelper.h"
-
 #import "EMMulticastDelegate.h"
+#import "EaseConversationStickController.h"
 
 @implementation EMConversationModel
 
-- (instancetype)initWithEMModel:(EMConversation *)aModel
+- (instancetype)initWithEMConversation:(EMConversation *)conversation
 {
     self = [super init];
     if (self) {
-        _emModel = aModel;
-        _name = aModel.conversationId;
+        _conversationTheme = [self getConversationTheme:conversation];
+        if (!_conversationTheme)
+            _conversationTheme = conversation.conversationId;
+        _conversationModelType = EaseConversation;
+        _timestamp = conversation.latestMessage.timestamp;
+        _stickTime = [self getConversationStickTime:conversation];
+        _isStick = [self isConversationStick:conversation];
+        
+        _conversationId = conversation.conversationId;
+        _conversationType = conversation.type;
+        _unreadMessagesCount = conversation.unreadMessagesCount;
+        _ext = conversation.ext;
+        _latestMessage = conversation.latestMessage;
     }
     
     return self;
+}
+
+//会话主题
+- (NSString *)getConversationTheme:(EMConversation*)conversation
+{
+    NSString *theme = nil;
+    if (conversation.type == EMConversationTypeGroupChat || conversation.type == EMConversationTypeChatRoom) {
+        theme = [conversation.ext objectForKey:@"subject"];
+        if ([theme length] == 0 && conversation.type == EMConversationTypeGroupChat) {
+            NSArray *groupArray = [[EMClient sharedClient].groupManager getJoinedGroups];
+            for (EMGroup *group in groupArray) {
+                if ([group.groupId isEqualToString:conversation.conversationId]) {
+                    NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
+                    [ext setObject:group.groupName forKey:@"subject"];
+                    [ext setObject:[NSNumber numberWithBool:group.isPublic] forKey:@"isPublic"];
+                    conversation.ext = ext;
+                    theme = group.groupName;
+                    break;
+                }
+            }
+        }
+    }
+    return theme;
+}
+
+//是否置顶
+- (BOOL)isConversationStick:(EMConversation*)conversation
+{
+    if ([conversation.ext objectForKey:CONVERSATION_STICK] && ![(NSNumber *)[conversation.ext objectForKey:CONVERSATION_STICK] isEqualToNumber:[NSNumber numberWithLong:0]]) {
+        return YES;
+    }
+    return NO;
+}
+
+//置顶时间
+- (long)getConversationStickTime:(EMConversation*)conversation
+{
+    long stickTime = [(NSNumber *)[conversation.ext objectForKey:CONVERSATION_STICK] longValue];
+    return stickTime;
+}
+
+@end
+
+@implementation EMSystemNotificationModel
+
+- (instancetype)initNotificationModel
+{
+    self = [super init];
+    if (self) {
+        EMNotificationModel* notifcationModel = [EMNotificationHelper.shared.notificationList objectAtIndex:0];
+        
+        _conversationTheme = @"系统通知";
+        _latestNotificTime = notifcationModel.time;
+        _conversationModelType = EaseSystemNotification;
+        
+        _stickTime = [self getNotificationStickTime];
+        _timestamp = [self getLatestNotificTimestamp:notifcationModel.time];
+        _isStick = [self isNotificationStick];
+        _notificationSender = notifcationModel.sender;
+        _notificationType = notifcationModel.type;
+    }
+    
+    return self;
+}
+
+- (long long)getLatestNotificTimestamp:(NSString*)timestamp
+{
+    //最后一个系统通知信息时间
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *notiTime = [dateFormatter dateFromString:timestamp];
+    NSTimeInterval notiTimeInterval = [notiTime timeIntervalSince1970];
+    return [[NSNumber numberWithDouble:notiTimeInterval] longLongValue];
+}
+
+//是否置顶
+- (BOOL)isNotificationStick
+{
+    EMNotificationModel* notifcationModel = [EMNotificationHelper.shared.notificationList objectAtIndex:0];
+    if (notifcationModel.stickTime && ![notifcationModel.stickTime isEqualToNumber:[NSNumber numberWithLong:0]])
+        return YES;
+    return NO;
+}
+
+//置顶时间
+- (long)getNotificationStickTime
+{
+    EMNotificationModel* notifcationModel = [EMNotificationHelper.shared.notificationList objectAtIndex:0];
+    long stickTime = [notifcationModel.stickTime longValue];
+    return stickTime;
 }
 
 @end
@@ -78,10 +179,12 @@ static EMConversationHelper *shared = nil;
 {
     NSMutableArray *retArray = [[NSMutableArray alloc] init];
     
-    NSArray *groupArray = [[EMClient sharedClient].groupManager getJoinedGroups];
+    //NSArray *groupArray = [[EMClient sharedClient].groupManager getJoinedGroups];
     for (int i = 0; i < [aConversations count]; i++) {
         EMConversation *conversation = aConversations[i];
-        EMConversationModel *model = [[EMConversationModel alloc] initWithEMModel:conversation];
+        //EMConversationModel *model = [[EMConversationModel alloc] initWithEMModel:conversation];
+        id<EaseConversationModelDelegate> conversationModel = [[EMConversationModel alloc] initWithEMConversation:conversation];
+        /*
         if (conversation.type == EMConversationTypeGroupChat || conversation.type == EMConversationTypeChatRoom) {
             NSString *name = [conversation.ext objectForKey:@"subject"];
             if ([name length] == 0 && conversation.type == EMConversationTypeGroupChat) {
@@ -98,25 +201,31 @@ static EMConversationHelper *shared = nil;
             }
             
             model.name = name;
-        }
-        [retArray addObject:model];
+        }*/
+        [retArray addObject:conversationModel];
     }
     
     return retArray;
 }
 
++ (EMConversation *)getConversationWithConversationModel:(EMConversationModel *)conversationModel
+{
+    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:conversationModel.conversationId type:conversationModel.conversationType createIfNotExist:YES];
+    return conversation;
+}
+
 + (EMConversationModel *)modelFromContact:(NSString *)aContact
 {
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:aContact type:EMConversationTypeChat createIfNotExist:YES];
-    EMConversationModel *model = [[EMConversationModel alloc] initWithEMModel:conversation];
+    EMConversationModel *model = [[EMConversationModel alloc] initWithEMConversation:conversation];
     return model;
 }
 
 + (EMConversationModel *)modelFromGroup:(EMGroup *)aGroup
 {
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:aGroup.groupId type:EMConversationTypeGroupChat createIfNotExist:YES];
-    EMConversationModel *model = [[EMConversationModel alloc] initWithEMModel:conversation];
-    model.name = aGroup.groupName;
+    EMConversationModel *model = [[EMConversationModel alloc] initWithEMConversation:conversation];
+    model.conversationTheme = aGroup.groupName;
     
     NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
     [ext setObject:aGroup.groupName forKey:@"subject"];
@@ -129,8 +238,8 @@ static EMConversationHelper *shared = nil;
 + (EMConversationModel *)modelFromChatroom:(EMChatroom *)aChatroom
 {
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:aChatroom.chatroomId type:EMConversationTypeChatRoom createIfNotExist:YES];
-    EMConversationModel *model = [[EMConversationModel alloc] initWithEMModel:conversation];
-    model.name = aChatroom.subject;
+    EMConversationModel *model = [[EMConversationModel alloc] initWithEMConversation:conversation];
+    model.conversationTheme = aChatroom.subject;
     
     NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
     [ext setObject:aChatroom.subject forKey:@"subject"];
@@ -141,7 +250,7 @@ static EMConversationHelper *shared = nil;
 
 + (void)markAllAsRead:(EMConversationModel *)aConversationModel
 {
-    [aConversationModel.emModel markAllMessagesAsRead:nil];
+    [[EMConversationHelper getConversationWithConversationModel:aConversationModel] markAllMessagesAsRead:nil];
     
     EMConversationHelper *helper = [EMConversationHelper shared];
     [helper.delegates didConversationUnreadCountToZero:aConversationModel];

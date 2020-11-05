@@ -7,15 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3C4E552E2550226000486510 /* defaultAvatar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C4E552C2550224B00486510 /* defaultAvatar@2x.png */; };
-		3C4E552F2550226000486510 /* defaultAvatar@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C4E552D2550226000486510 /* defaultAvatar@3x.png */; };
+		3C0FC5DE2552BD8200026186 /* ConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0FC5DD2552BD8200026186 /* ConversationViewController.m */; };
 		6821891C4265850E39A38FB0 /* Pods_EaseIMKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 388F9279879A5BC867FA00EF /* Pods_EaseIMKitDemo.framework */; };
 		903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7925540390005E6BB1 /* ConversationsViewController.m */; };
 		903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7E2554039B005E6BB1 /* ContactsViewController.m */; };
 		90A03A2E254A70E100D57B73 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A2D254A70E100D57B73 /* AppDelegate.m */; };
 		90A03A31254A70E100D57B73 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A30254A70E100D57B73 /* SceneDelegate.m */; };
-		90A03A34254A70E100D57B73 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A33254A70E100D57B73 /* ViewController.m */; };
-		90A03A37254A70E100D57B73 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A35254A70E100D57B73 /* Main.storyboard */; };
 		90A03A39254A70E200D57B73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A38254A70E200D57B73 /* Assets.xcassets */; };
 		90A03A3F254A70E200D57B73 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A3E254A70E200D57B73 /* main.m */; };
 		90A0472A254ADF0100CEAF50 /* ConversationCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A04729254ADF0100CEAF50 /* ConversationCellModel.m */; };
@@ -23,9 +20,9 @@
 
 /* Begin PBXFileReference section */
 		388F9279879A5BC867FA00EF /* Pods_EaseIMKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EaseIMKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C0FC5DC2552BD8200026186 /* ConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationViewController.h; sourceTree = "<group>"; };
+		3C0FC5DD2552BD8200026186 /* ConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationViewController.m; sourceTree = "<group>"; };
 		3C307C55254FBCDE003696CA /* EaseIMKitDemo-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EaseIMKitDemo-Prefix.pch"; sourceTree = "<group>"; };
-		3C4E552C2550224B00486510 /* defaultAvatar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defaultAvatar@2x.png"; sourceTree = "<group>"; };
-		3C4E552D2550226000486510 /* defaultAvatar@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defaultAvatar@3x.png"; sourceTree = "<group>"; };
 		6F3E72642FD7C6CC7CBA7ACD /* Pods-EaseIMKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKitDemo.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		903EAE7825540390005E6BB1 /* ConversationsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConversationsViewController.h; sourceTree = "<group>"; };
 		903EAE7925540390005E6BB1 /* ConversationsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConversationsViewController.m; sourceTree = "<group>"; };
@@ -36,9 +33,6 @@
 		90A03A2D254A70E100D57B73 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		90A03A2F254A70E100D57B73 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		90A03A30254A70E100D57B73 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
-		90A03A32254A70E100D57B73 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		90A03A33254A70E100D57B73 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		90A03A36254A70E100D57B73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		90A03A38254A70E200D57B73 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		90A03A3D254A70E200D57B73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90A03A3E254A70E200D57B73 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -131,11 +125,8 @@
 				90A03A2D254A70E100D57B73 /* AppDelegate.m */,
 				90A03A2F254A70E100D57B73 /* SceneDelegate.h */,
 				90A03A30254A70E100D57B73 /* SceneDelegate.m */,
-				90A03A32254A70E100D57B73 /* ViewController.h */,
-				90A03A33254A70E100D57B73 /* ViewController.m */,
-				3C4E552C2550224B00486510 /* defaultAvatar@2x.png */,
-				3C4E552D2550226000486510 /* defaultAvatar@3x.png */,
-				90A03A35254A70E100D57B73 /* Main.storyboard */,
+				3C0FC5DC2552BD8200026186 /* ConversationViewController.h */,
+				3C0FC5DD2552BD8200026186 /* ConversationViewController.m */,
 				90A03A38254A70E200D57B73 /* Assets.xcassets */,
 				90A03A3D254A70E200D57B73 /* Info.plist */,
 				3C307C55254FBCDE003696CA /* EaseIMKitDemo-Prefix.pch */,
@@ -212,10 +203,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C4E552F2550226000486510 /* defaultAvatar@3x.png in Resources */,
-				3C4E552E2550226000486510 /* defaultAvatar@2x.png in Resources */,
 				90A03A39254A70E200D57B73 /* Assets.xcassets in Resources */,
-				90A03A37254A70E100D57B73 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,27 +257,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				90A0472A254ADF0100CEAF50 /* ConversationCellModel.m in Sources */,
-				90A03A34254A70E100D57B73 /* ViewController.m in Sources */,
 				90A03A2E254A70E100D57B73 /* AppDelegate.m in Sources */,
 				903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */,
 				903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */,
 				90A03A3F254A70E200D57B73 /* main.m in Sources */,
 				90A03A31254A70E100D57B73 /* SceneDelegate.m in Sources */,
+				3C0FC5DE2552BD8200026186 /* ConversationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		90A03A35254A70E100D57B73 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				90A03A36254A70E100D57B73 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		90A03A40254A70E200D57B73 /* Debug */ = {
