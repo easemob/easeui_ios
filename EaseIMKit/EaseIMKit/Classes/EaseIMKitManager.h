@@ -1,5 +1,5 @@
 //
-//  iMKitManager.h
+//  EaseIMKitManager.h
 //  EaseIMKit
 //
 //  Created by 杜洁鹏 on 2020/10/29.
@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface iMKitManager : NSObject
+@interface EaseIMKitManager : NSObject
 
 @end
 

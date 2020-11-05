@@ -17,21 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    EaseConversationsViewController *conVC = [[EaseConversationsViewController alloc] initWithOptions:nil];
-    conVC.delegate = self;
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    UIViewController *rootViewController = window.rootViewController;
-    if ([rootViewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *nav = (UINavigationController *)rootViewController;
-        [nav pushViewController:conVC animated:NO];
-    }
-    /*
-    [self.view addSubview:conVC.view];
-    [conVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    }];
-    [self addChildViewController:conVC];
-    conVC.view.frame = self.view.bounds;*/
+
 }
 
 #pragma mark - EaseConversationVCDelegate
