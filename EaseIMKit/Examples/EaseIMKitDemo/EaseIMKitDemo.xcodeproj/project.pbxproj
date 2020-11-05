@@ -11,6 +11,7 @@
 		6821891C4265850E39A38FB0 /* Pods_EaseIMKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 388F9279879A5BC867FA00EF /* Pods_EaseIMKitDemo.framework */; };
 		903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7925540390005E6BB1 /* ConversationsViewController.m */; };
 		903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7E2554039B005E6BB1 /* ContactsViewController.m */; };
+		903EAEA325540811005E6BB1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 903EAEA125540811005E6BB1 /* Main.storyboard */; };
 		90A03A2E254A70E100D57B73 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A2D254A70E100D57B73 /* AppDelegate.m */; };
 		90A03A31254A70E100D57B73 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A30254A70E100D57B73 /* SceneDelegate.m */; };
 		90A03A39254A70E200D57B73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A38254A70E200D57B73 /* Assets.xcassets */; };
@@ -28,6 +29,7 @@
 		903EAE7925540390005E6BB1 /* ConversationsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConversationsViewController.m; sourceTree = "<group>"; };
 		903EAE7D2554039B005E6BB1 /* ContactsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
 		903EAE7E2554039B005E6BB1 /* ContactsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
+		903EAEA225540811005E6BB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		90A03A29254A70E100D57B73 /* EaseIMKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EaseIMKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90A03A2C254A70E100D57B73 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		90A03A2D254A70E100D57B73 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				90A03A30254A70E100D57B73 /* SceneDelegate.m */,
 				3C0FC5DC2552BD8200026186 /* ConversationViewController.h */,
 				3C0FC5DD2552BD8200026186 /* ConversationViewController.m */,
+				903EAEA125540811005E6BB1 /* Main.storyboard */,
 				90A03A38254A70E200D57B73 /* Assets.xcassets */,
 				90A03A3D254A70E200D57B73 /* Info.plist */,
 				3C307C55254FBCDE003696CA /* EaseIMKitDemo-Prefix.pch */,
@@ -204,6 +207,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				90A03A39254A70E200D57B73 /* Assets.xcassets in Resources */,
+				903EAEA325540811005E6BB1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,6 +271,17 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		903EAEA125540811005E6BB1 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				903EAEA225540811005E6BB1 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		90A03A40254A70E200D57B73 /* Debug */ = {
