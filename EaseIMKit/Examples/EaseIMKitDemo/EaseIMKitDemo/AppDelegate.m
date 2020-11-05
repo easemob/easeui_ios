@@ -20,7 +20,7 @@
     // Override point for customization after application launch.
     EMOptions *options = [EMOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
     [EMClient.sharedClient initializeSDKWithOptions:options];
-    
+
     return YES;
 }
 
