@@ -49,15 +49,15 @@
 #pragma mark - table view delegate & datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
+    return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NString *cellId = @"ContactCell";
+    static NSString *cellId = @"ContactCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
