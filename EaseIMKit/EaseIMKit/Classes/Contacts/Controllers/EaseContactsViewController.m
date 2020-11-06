@@ -35,7 +35,7 @@
 - (void)_setupSubViews {
     [self.view addSubview:self.tableView];
     [self.tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view);
+        make.left.equalTo(self.view);
         make.top.equalTo(self.view);
         make.size.equalTo(self.view);
     }];
@@ -49,11 +49,11 @@
 #pragma mark - table view delegate & datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 0;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 0;
+    return 15;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -70,6 +70,7 @@
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero];
+        _tableView.tableFooterView = [UIView new];
         _tableView.delegate = self;
         _tableView.dataSource = self;
     }
