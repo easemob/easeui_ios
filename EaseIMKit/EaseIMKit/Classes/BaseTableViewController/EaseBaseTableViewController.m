@@ -23,6 +23,10 @@
         make.top.equalTo(self.view);
         make.size.equalTo(self.view);
     }];
+    
+    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentOffset.y - self.tableView.refreshControl.frame.size.height) animated:NO];
+    [self.tableView.refreshControl beginRefreshing];
+    [self.tableView.refreshControl sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
 

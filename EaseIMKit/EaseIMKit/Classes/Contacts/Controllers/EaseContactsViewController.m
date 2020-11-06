@@ -6,7 +6,7 @@
 //
 
 #import "EaseContactsViewController.h"
-
+#import <Hyphenate/Hyphenate.h>
 #import <Masonry/Masonry.h>
 
 @interface EaseContactsViewController ()
@@ -14,6 +14,7 @@
     EaseContactsViewModel *_viewModel;
 }
 
+@property (nonatomic, strong) NSArray *contacts;
 
 @end
 
@@ -36,7 +37,9 @@
 }
 
 - (void)refreshTabView {
-    [self endRefresh];
+    [EMClient.sharedClient.contactManager getContactsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
+        [self endRefresh];
+    }];
 }
 
 @end
