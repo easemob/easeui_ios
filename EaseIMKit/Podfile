@@ -12,6 +12,6 @@ workspace 'EaseIMKit.xcworkspace'
 
 target 'EaseIMKitDemo' do
   project example_project_path
-  platform :ios, '9.0'
+  platform :ios, '11.0'
   all_example_pods
 end
