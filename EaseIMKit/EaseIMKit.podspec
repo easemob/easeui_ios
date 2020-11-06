@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name = 'EaseIMKit'
   s.version = '0.0.1'
 
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = '11.0'
 
 
   s.license = 'MIT'
