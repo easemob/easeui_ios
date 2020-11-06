@@ -84,9 +84,47 @@
                     <view key="view" contentMode="scaleToFill" id="2ma-Nc-2Zc">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mta-OA-pzJ">
+                                <rect key="frame" x="20" y="124" width="374" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="qRH-Np-FUh"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="izS-yT-rKG">
+                                <rect key="frame" x="20" y="204" width="374" height="40"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rHh-ph-f1D">
+                                <rect key="frame" x="20" y="324" width="374" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="loginAction:" destination="oXW-xV-MnB" eventType="touchUpInside" id="BaG-92-sBt"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="kqc-cd-R8G"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="rHh-ph-f1D" firstAttribute="leading" secondItem="izS-yT-rKG" secondAttribute="leading" id="70F-Rp-ckK"/>
+                            <constraint firstItem="rHh-ph-f1D" firstAttribute="trailing" secondItem="izS-yT-rKG" secondAttribute="trailing" id="AxJ-Nk-fv0"/>
+                            <constraint firstItem="izS-yT-rKG" firstAttribute="top" secondItem="mta-OA-pzJ" secondAttribute="bottom" constant="40" id="Kzd-bL-gxT"/>
+                            <constraint firstItem="izS-yT-rKG" firstAttribute="leading" secondItem="mta-OA-pzJ" secondAttribute="leading" id="MVU-Zc-6Yi"/>
+                            <constraint firstItem="izS-yT-rKG" firstAttribute="trailing" secondItem="mta-OA-pzJ" secondAttribute="trailing" id="PDg-ec-LMV"/>
+                            <constraint firstItem="kqc-cd-R8G" firstAttribute="trailing" secondItem="mta-OA-pzJ" secondAttribute="trailing" constant="20" id="Q41-Sa-JaA"/>
+                            <constraint firstItem="izS-yT-rKG" firstAttribute="height" secondItem="mta-OA-pzJ" secondAttribute="height" id="Twy-uz-xKc"/>
+                            <constraint firstItem="mta-OA-pzJ" firstAttribute="top" secondItem="kqc-cd-R8G" secondAttribute="top" constant="80" id="bnJ-wa-Y2x"/>
+                            <constraint firstItem="rHh-ph-f1D" firstAttribute="top" secondItem="izS-yT-rKG" secondAttribute="bottom" constant="80" id="oip-Q9-dfb"/>
+                            <constraint firstItem="mta-OA-pzJ" firstAttribute="leading" secondItem="kqc-cd-R8G" secondAttribute="leading" constant="20" id="pVT-nx-Loc"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="pwdTextField" destination="izS-yT-rKG" id="BdN-vo-pb4"/>
+                        <outlet property="usernameTextField" destination="mta-OA-pzJ" id="bAK-O9-Bm1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8gA-Ly-23f" sceneMemberID="firstResponder"/>
             </objects>

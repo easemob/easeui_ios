@@ -8,7 +8,7 @@
 #import "EaseContactsViewController.h"
 #import <Masonry/Masonry.h>
 
-@interface EaseContactsViewController () /* <UITableViewDelegate, UITableViewDataSource> */
+@interface EaseContactsViewController () <UITableViewDelegate, UITableViewDataSource>
 {
     EaseContactsViewModel *_viewModel;
 }
@@ -46,12 +46,32 @@
     
 }
 
+#pragma mark - table view delegate & datasource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NString *cellId = @"ContactCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+    }
+    
+    return cell;
+}
+
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero];
-//        _tableView.delegate = self;
-//        _tableView.dataSource = self;
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
     }
     
     return _tableView;
