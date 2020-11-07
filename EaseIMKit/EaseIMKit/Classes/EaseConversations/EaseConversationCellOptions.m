@@ -92,7 +92,7 @@
 - (void)setWordSizeForCellTimestamp:(CGFloat)wordSizeForCellTimestamp
 {
     if (wordSizeForCellTimestamp)
-        _wordSizeForCellTimestamp;
+        _wordSizeForCellTimestamp = wordSizeForCellTimestamp;
 }
 
 - (void)setUnReadCountPosition:(EMUnReadCountViewPosition)unReadCountPosition
