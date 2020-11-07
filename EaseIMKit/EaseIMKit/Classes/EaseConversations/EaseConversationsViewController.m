@@ -16,7 +16,7 @@
 #import "EMHeaders.h"
 #import "EaseConversationStickController.h"
 
-@interface EaseConversationsViewController ()<EMChatManagerDelegate, EMGroupManagerDelegate, EMSearchControllerDelegate, EMConversationsDelegate,EaseConversationCellDelegate,EMContactManagerDelegate,EMNotificationsDelegate>
+@interface EaseConversationsViewController ()<EMChatManagerDelegate, EMGroupManagerDelegate, EMSearchControllerDelegate, EMConversationsDelegate,EMContactManagerDelegate,EMNotificationsDelegate>
 {
     EaseConversationCellOptions *_options;
     BOOL _isReloadViewWithOption; //重新刷新会话列表
@@ -25,18 +25,20 @@
 @property (nonatomic) BOOL isNeedReload;
 @property (nonatomic) BOOL isNeedReloadSorted;
 @property (nonatomic) BOOL isAddBlankView;
-
+/*
 @property (nonatomic, strong) UIMenuItem *deleteMenuItem;
 @property (nonatomic, strong) UIMenuItem *stickMenuItem;
 @property (nonatomic, strong) UIMenuItem *cancelStickMenuItem;
 @property (nonatomic, strong) UIMenuController *menuController;
 @property (strong, nonatomic) NSIndexPath *menuIndexPath;
-
+*/
 @property (nonatomic, strong) UIButton *addImageBtn;
 
 @property (nonatomic, strong) UIView *blankPerchView;
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+
+@property (nonatomic) BOOL isNeedsSearchModule; //是否需要搜索组件
 
 @end
 
@@ -54,7 +56,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.isNeedsSearchModule = YES;
+    self.isNeedsSearchModule = NO;
     self.isAddBlankView = NO;
     [self _setupSubviews];
     [[EMNotificationHelper shared] addDelegate:self];
@@ -191,7 +193,6 @@
         NSInteger row = indexPath.row;
         id<EaseConversationModelDelegate> model = [weakself.resultController.dataArray objectAtIndex:row];
         cell.model = model;
-        cell.delegate = weakself;
         return cell;
     }];
     [self.resultController setCanEditRowAtIndexPath:^BOOL(UITableView *tableView, NSIndexPath *indexPath) {
@@ -209,8 +210,8 @@
         [weakself.resultController.tableView reloadData];
     }];
     [self.resultController setDidSelectRowAtIndexPathCompletion:^(UITableView *tableView, NSIndexPath *indexPath) {
-        if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
-            [weakself.delegate tableView:tableView dataSource:weakself.resultController.dataArray  didSelectRowAtIndexPath:indexPath];
+        if (weakself.conversationVCDelegate && [weakself.conversationVCDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+            [weakself.conversationVCDelegate tableView:tableView dataSource:weakself.resultController.dataArray  didSelectRowAtIndexPath:indexPath];
             return;
         }
         NSInteger row = indexPath.row;
@@ -253,9 +254,8 @@
     
     id<EaseConversationModelDelegate> model = [self.dataArray objectAtIndex:indexPath.row];
     cell.model = model;
-    cell.delegate = self;
-    if (self.delegate) {
-        id<EaseConversationCellModelDelegate> cellModel = [self.delegate conversationCellForModel:model];
+    if (self.conversationVCDelegate && [self.conversationVCDelegate respondsToSelector:@selector(conversationCellForModel:)]) {
+        id<EaseConversationCellModelDelegate> cellModel = [self.conversationVCDelegate conversationCellForModel:model];
         if (cellModel && cellModel.avatarImg) {
             cell.avatarView.image = cellModel.avatarImg;
         }
@@ -275,8 +275,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
-        [self.delegate tableView:tableView dataSource:self.dataArray didSelectRowAtIndexPath:indexPath];
+    if (self.conversationVCDelegate && [self.conversationVCDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+        [self.conversationVCDelegate tableView:tableView dataSource:self.dataArray didSelectRowAtIndexPath:indexPath];
         return;
     }
     __weak typeof(self) weakself = self;
@@ -294,18 +294,45 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
-    return NO;
+    return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger row = indexPath.row;
-    EMConversationModel *model = (EMConversationModel *)[self.dataArray objectAtIndex:row];
-    [[EMClient sharedClient].chatManager deleteConversation:model.conversationId
-                                           isDeleteMessages:YES
-                                                 completion:nil];
-    [self.dataArray removeObjectAtIndex:row];
-    [self.tableView reloadData];
+    id<EaseConversationModelDelegate> model = [self.dataArray objectAtIndex:indexPath.row];
+    
+    __weak typeof(self) weakself = self;
+    UITableViewRowAction *deleteConversationAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        [weakself _deleteConversation:indexPath];
+    }];
+    deleteConversationAction.backgroundColor = [UIColor colorWithRed: 253 / 255.0 green: 81 / 255.0 blue: 84 / 255.0 alpha:1.0];
+    
+    UITableViewRowAction *stickConversationAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"置顶" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        [weakself _stickConversation:indexPath];
+    }];
+    stickConversationAction.backgroundColor = [UIColor colorWithRed: 203 / 255.0 green: 125 / 255.0 blue: 50 / 255.0 alpha:1.0];
+    
+    UITableViewRowAction *cancelStickConversationAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"取消置顶" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        [weakself _cancelStickConversation:indexPath];
+    }];
+    cancelStickConversationAction.backgroundColor = [UIColor colorWithRed: 203 / 255.0 green: 125 / 255.0 blue: 50 / 255.0 alpha:1.0];
+    
+    UITableViewRowAction *customRowAction = nil;
+    if (self.conversationVCDelegate && [self.conversationVCDelegate respondsToSelector:@selector(sideslipCustomAction:)]) {
+        customRowAction = [self.conversationVCDelegate sideslipCustomAction:model];
+    }
+    
+    NSMutableArray<UITableViewRowAction *> *sideslipArray = [[NSMutableArray alloc]init];
+    [sideslipArray addObject:deleteConversationAction];
+    if(model.isStick) {
+        [sideslipArray addObject:cancelStickConversationAction];
+    } else {
+        [sideslipArray addObject:stickConversationAction];
+    }
+    if (customRowAction) {
+        [sideslipArray addObject:customRowAction];
+    }
+    return [sideslipArray copy];
 }
 
 #pragma mark - EMChatManagerDelegate
@@ -351,7 +378,6 @@
                 }
             }
             [self _reSortedConversationModelsAndReloadView];
-            //[self performSelector:@selector(_reSortedConversationModelsAndReloadView) withObject:nil afterDelay:0.8];
         }
     } else {
         self.isNeedReload = YES;
@@ -482,19 +508,6 @@
     [self _loadAllConversationsFromDBWithIsShowHud:(NO)];
 }
 
-#pragma mark - EaseConversationCellDelegate
-
-//长按
-- (void)conversationCellDidLongPress:(EaseConversationCell *)aCell
-{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(conversationCellDidLongPress:)]) {
-        [self.delegate conversationCellDidLongPress:aCell];
-        return;
-    }
-    self.menuIndexPath = [self.tableView indexPathForCell:aCell];
-    [self _menuViewController:aCell];
-}
-
 #pragma mark - NSNotification
 
 - (void)handleGroupSubjectUpdated:(NSNotification *)aNotif
@@ -535,9 +548,9 @@
 #pragma mark - UIMenuController
 
 //删除会话
-- (void)_deleteConversation
+- (void)_deleteConversation:(NSIndexPath *)indexPath
 {
-    NSInteger row = self.menuIndexPath.row;
+    NSInteger row = indexPath.row;
     EMConversationModel *model = (EMConversationModel *)[self.dataArray objectAtIndex:row];
     [[EMClient sharedClient].chatManager deleteConversation:model.conversationId
                                            isDeleteMessages:YES
@@ -548,21 +561,22 @@
 }
 
 //置顶
-- (void)_stickConversation
+- (void)_stickConversation:(NSIndexPath *)indexPath
 {
-    id<EaseConversationModelDelegate> model = [self.dataArray objectAtIndex:self.menuIndexPath.row];
+    id<EaseConversationModelDelegate> model = [self.dataArray objectAtIndex:indexPath.row];
     [EaseConversationStickController stickConversation:model];
     [self _reSortedConversationModelsAndReloadView];
 }
 
 //取消置顶
-- (void)_cancelStickConversation
+- (void)_cancelStickConversation:(NSIndexPath *)indexPath
 {
-    id<EaseConversationModelDelegate> model = [self.dataArray objectAtIndex:self.menuIndexPath.row];
+    id<EaseConversationModelDelegate> model = [self.dataArray objectAtIndex:indexPath.row];
     [EaseConversationStickController cancelStickConversation:model];
     [self _reSortedConversationModelsAndReloadView];
 }
 
+/*
 - (BOOL)canBecomeFirstResponder
 {
     return YES;
@@ -575,7 +589,7 @@
 }
 -(BOOL)canPerformAction:(SEL)action withSender:(id)sender{
     
-    if (action ==@selector(_deleteConversation) || action ==@selector(_stickConversation) || action == @selector(_cancelStickConversation)){
+    if (action ==@selector(_deleteConversation:) || action ==@selector(_stickConversation:) || action == @selector(_cancelStickConversation:)){
         
         return YES;
         
@@ -583,10 +597,10 @@
     
     return NO;//隐藏系统默认的菜单项
 }
+
 //UIMenuController菜单
 - (void)_menuViewController:(EaseConversationCell *)aCell
 {
-    //[self canBecomeFirstResponder];
     [self becomeFirstResponder];
     NSMutableArray *items = [[NSMutableArray alloc] init];
     if(aCell.model.isStick) {
@@ -600,7 +614,7 @@
     [self.menuController setMenuItems:items];
     [self.menuController setTargetRect:aCell.frame inView:self.tableView];
     [self.menuController setMenuVisible:YES animated:YES];
-}
+}*/
 
 #pragma mark - Data
 
@@ -636,6 +650,11 @@
 //重排序会话model
 - (void)_reSortedConversationModelsAndReloadView
 {
+    for (int i = 0; i < [self.dataArray count]; i++) {
+        id<EaseConversationModelDelegate> model = self.dataArray[i];
+        id<EaseConversationModelDelegate> renewalModel = [model renewalModelWithModel:model];
+        self.dataArray[i] = renewalModel != nil ? renewalModel : model;
+    }
     NSArray *sorted = [self.dataArray sortedArrayUsingComparator:^(id<EaseConversationModelDelegate> obj1, id<EaseConversationModelDelegate> obj2) {
         if(obj1.timestamp > obj2.timestamp) {
             return(NSComparisonResult)NSOrderedAscending;
@@ -646,18 +665,19 @@
     
     NSMutableArray *conversationModels = [NSMutableArray array];
     for (id<EaseConversationModelDelegate> model in sorted) {
-        EMConversationModel *conversationModel = (EMConversationModel*)model;
-        if (![EMConversationHelper getConversationWithConversationModel:conversationModel].latestMessage) {
-            [EMClient.sharedClient.chatManager deleteConversation:conversationModel.conversationId
-                                                 isDeleteMessages:NO
-                                                       completion:nil];
-            continue;
+        if (model.conversationModelType == EaseConversation) {
+            EMConversationModel *conversationModel = (EMConversationModel*)model;
+            if (![EMConversationHelper getConversationWithConversationModel:conversationModel].latestMessage) {
+                [EMClient.sharedClient.chatManager deleteConversation:conversationModel.conversationId
+                                                     isDeleteMessages:NO
+                                                           completion:nil];
+                continue;
+            }
         }
         [conversationModels addObject:model];
     }
     
-    NSMutableArray *modelArray = [self _insertSystemNotify:conversationModels];//插入系统通知
-    NSMutableArray *finalDataArray = [self _stickSortedConversationModels:[modelArray copy]];//置顶重排序
+    NSMutableArray *finalDataArray = [self _stickSortedConversationModels:[conversationModels copy]];//置顶重排序
     if ([self.dataArray count] > 0)
         [self.dataArray removeAllObjects];
     self.dataArray = finalDataArray;
@@ -715,7 +735,7 @@
         return modelArray;
     }
     //系统通知插入到 dataarray 中
-    id<EaseConversationModelDelegate> notificationModel = (id<EaseConversationModelDelegate>)[[EMNotificationModel alloc]init];
+    id<EaseConversationModelDelegate> notificationModel = (id<EaseConversationModelDelegate>)[[EMSystemNotificationModel alloc]initNotificationModel];
     //系统通知插入排序到会话列表中
     int low = 0, high = (int)([modelArray count] - 1);
     while (low <= high) {
@@ -745,11 +765,11 @@
     }
     return _dateFormatter;
 }
-
+/*
 - (UIMenuItem *)deleteMenuItem
 {
     if (_deleteMenuItem == nil) {
-        _deleteMenuItem = [[UIMenuItem alloc] initWithTitle:@"删除会话" action:@selector(_deleteConversation)];
+        _deleteMenuItem = [[UIMenuItem alloc] initWithTitle:@"删除会话" action:@selector(_deleteConversation:)];
     }
     
     return _deleteMenuItem;
@@ -758,7 +778,7 @@
 - (UIMenuItem *)stickMenuItem
 {
     if (_stickMenuItem == nil) {
-        _stickMenuItem = [[UIMenuItem alloc] initWithTitle:@"置顶" action:@selector(_stickConversation)];
+        _stickMenuItem = [[UIMenuItem alloc] initWithTitle:@"置顶" action:@selector(_stickConversation:)];
     }
     
     return _stickMenuItem;
@@ -767,7 +787,7 @@
 - (UIMenuItem *)cancelStickMenuItem
 {
     if (_cancelStickMenuItem == nil) {
-        _cancelStickMenuItem = [[UIMenuItem alloc] initWithTitle:@"取消置顶" action:@selector(_cancelStickConversation)];
+        _cancelStickMenuItem = [[UIMenuItem alloc] initWithTitle:@"取消置顶" action:@selector(_cancelStickConversation:)];
     }
     
     return _cancelStickMenuItem;
@@ -780,6 +800,6 @@
     }
     
     return _menuController;
-}
+}*/
 
 @end
