@@ -53,6 +53,9 @@ static NSDateFormatter *_dateFormatter = nil;
         [conversationModel setExt:ext];
         [conversationModel setIsStick:NO];
         [conversationModel setStickTime:[EaseConversationStickController getConversationStickTime:conversationModel]];
+        
+        EMConversation *conversation = [EMConversationHelper getConversationWithConversationModel:conversationModel];
+        [conversation setExt:ext];
     } else if (model.conversationModelType == EaseSystemNotification) {
         EMNotificationModel* notifcationModel = [EMNotificationHelper.shared.notificationList objectAtIndex:0];
         notifcationModel.stickTime = [NSNumber numberWithLong:0];
