@@ -39,6 +39,7 @@ static EMDemoOptions *sharedOptions = nil;
         self.isShowCallInfo = YES;
         self.isUseBackCamera = NO;
         
+        self.isVisibleOnConversationList = YES;
         self.isReceiveNewMsgNotice = YES;
         self.willRecord = NO;
         self.willMergeStrem = NO;
@@ -95,7 +96,8 @@ static EMDemoOptions *sharedOptions = nil;
         self.isShowCallInfo = [aDecoder decodeBoolForKey:kOptions_ShowCallInfo];
         self.isUseBackCamera = [aDecoder decodeBoolForKey:kOptions_UseBackCamera];
 
-        self.isReceiveNewMsgNotice = [aDecoder decodeBoolForKey:kOptions_IsReceiveNewMsgNotice];
+        self.isVisibleOnConversationList = [aDecoder decodeBoolForKey:kOptions_isReceiveNewMsgNotice];
+        self.isReceiveNewMsgNotice = [aDecoder decodeBoolForKey:kOptions_isReceiveNewMsgNotice];
         self.willRecord = [aDecoder decodeBoolForKey:kOptions_WillRecord];
         self.willMergeStrem = [aDecoder decodeBoolForKey:kOptions_WillMergeStrem];
         self.enableConsoleLog = [aDecoder decodeBoolForKey:kOptions_EnableConsoleLog];
@@ -137,7 +139,8 @@ static EMDemoOptions *sharedOptions = nil;
     [aCoder encodeBool:self.isShowCallInfo forKey:kOptions_ShowCallInfo];
     [aCoder encodeBool:self.isUseBackCamera forKey:kOptions_UseBackCamera];
     
-    [aCoder encodeBool:self.isReceiveNewMsgNotice forKey:kOptions_IsReceiveNewMsgNotice];
+    [aCoder encodeBool:self.isVisibleOnConversationList forKey:kOptions_isReceiveNewMsgNotice];
+    [aCoder encodeBool:self.isReceiveNewMsgNotice forKey:kOptions_isReceiveNewMsgNotice];
     [aCoder encodeBool:self.willRecord forKey:kOptions_WillRecord];
     [aCoder encodeBool:self.willMergeStrem forKey:kOptions_WillMergeStrem];
     [aCoder encodeBool:self.enableConsoleLog forKey:kOptions_EnableConsoleLog];
@@ -174,6 +177,7 @@ static EMDemoOptions *sharedOptions = nil;
     retModel.isOfflineHangup = self.isOfflineHangup;
     retModel.isShowCallInfo = self.isShowCallInfo;
     retModel.isUseBackCamera = self.isUseBackCamera;
+    retModel.isVisibleOnConversationList = self.isVisibleOnConversationList;
     retModel.isReceiveNewMsgNotice = self.isReceiveNewMsgNotice;
     retModel.willRecord = self.willRecord;
     retModel.willMergeStrem = self.willMergeStrem;

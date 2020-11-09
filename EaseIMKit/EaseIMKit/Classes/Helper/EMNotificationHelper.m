@@ -245,14 +245,14 @@ static EMNotificationHelper *shared = nil;
         }
     }
 
+    [self.notificationList insertObject:aModel atIndex:0];
+    [self archive];
     if (!self.isCheckUnreadCount) {
         aModel.isRead = YES;
     } else {
         ++_unreadCount;
         [self notificationsUnreadCountUpdate:_unreadCount];
     }
-    [self.notificationList insertObject:aModel atIndex:0];
-    [self archive];
     
     [self notificationsUpdate];
 }
@@ -372,7 +372,7 @@ static EMNotificationHelper *shared = nil;
     model.groupId = aGroup.groupId;
     model.type = EMNotificationModelTypeGroupJoin;
     model.message = [NSString stringWithFormat:@"\"%@\"申请加入群组\"%@\",是否同意该申请？",aUsername, aGroup.groupName];
-    [[EMNotificationHelper shared] insertModel:model];
+    [self insertModel:model];
 }
 
 @end
