@@ -230,13 +230,16 @@
         //系统通知
         [self _setnotificationModel:model];
     } else if (model.conversationModelType == EaseConversation) {
+        NSString *bundlePath = [[NSBundle bundleForClass:[self class]].resourcePath stringByAppendingPathComponent:@"/EaseIMKit.bundle"];
+        NSBundle *resource_bundle = [NSBundle bundleWithPath:bundlePath];
+     
         EMConversationModel *conversationModel = (EMConversationModel*)model;
         if (conversationModel.conversationType == EMConversationTypeChat)
-            self.avatarView.image = [UIImage imageNamed:@"defaultAvatar"];
+            self.avatarView.image = [UIImage imageNamed:@"defaultAvatar" inBundle:resource_bundle compatibleWithTraitCollection:nil];
         if (conversationModel.conversationType == EMConversationTypeGroupChat)
-            self.avatarView.image = [UIImage imageNamed:@"groupConversation"];
+            self.avatarView.image = [UIImage imageNamed:@"groupConversation" inBundle:resource_bundle compatibleWithTraitCollection:nil];
         if (conversationModel.conversationType == EMConversationTypeChatRoom)
-            self.avatarView.image = [UIImage imageNamed:@"chatroomConversation"];
+            self.avatarView.image = [UIImage imageNamed:@"chatroomConversation" inBundle:resource_bundle compatibleWithTraitCollection:nil];
         self.nameLabel.text = conversationModel.conversationTheme;
         self.detailLabel.attributedText = [self _getDetailWithModel:conversationModel];
         self.timeLabel.text = [self _getTimeWithModel:conversationModel];
@@ -253,8 +256,10 @@
 
 -(void)_setnotificationModel:(id<EaseConversationModelDelegate>)model
 {
+    NSString *bundlePath = [[NSBundle bundleForClass:[self class]].resourcePath stringByAppendingPathComponent:@"/EaseIMKit.bundle"];
+    NSBundle *resource_bundle = [NSBundle bundleWithPath:bundlePath];
     EMSystemNotificationModel *notificationModel = (EMSystemNotificationModel *)model;
-    self.avatarView.image = [UIImage imageNamed:@"systemNotify"];
+    self.avatarView.image = [UIImage imageNamed:@"systemNotify" inBundle:resource_bundle compatibleWithTraitCollection:nil];
     self.nameLabel.text = @"系统通知";
     if (notificationModel.notificationType == EMNotificationModelTypeContact)
         self.detailLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"好友申请来自：%@",notificationModel.notificationSender]];
