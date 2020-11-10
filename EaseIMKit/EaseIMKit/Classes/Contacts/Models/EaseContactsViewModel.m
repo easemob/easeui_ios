@@ -11,6 +11,9 @@
 - (instancetype)init {
     if (self = [super init]) {
         _canRefresh = YES;
+        _avatarType = Corner;
+        _letterIndex = YES;
+        _cellHeight = 60;
     }
     return self;
 }
