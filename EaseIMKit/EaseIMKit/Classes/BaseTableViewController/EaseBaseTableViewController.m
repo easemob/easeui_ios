@@ -24,13 +24,16 @@
         make.size.equalTo(self.view);
     }];
     
+}
+
+
+#pragma mark - actions
+- (void)beginRefresh {
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentOffset.y - self.tableView.refreshControl.frame.size.height) animated:NO];
     [self.tableView.refreshControl beginRefreshing];
     [self.tableView.refreshControl sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
-
-#pragma mark - actions
 -(void)refreshTabView
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -44,6 +47,7 @@
 - (void)endRefresh {
     if (self.tableView.isRefreshing) {
         [self.tableView endRefreshing];
+        [self.tableView reloadData];
     }
 }
 
@@ -68,15 +72,23 @@
 }
 
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.easeDelegate && [self.easeDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+        [self.easeDelegate tableView:tableView didSelectRowAtIndexPath:indexPath];
+    }else {
+        // Do default;
+    }
+}
+
+
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero];
         _tableView.tableFooterView = [UIView new];
-        [_tableView enableRefresh:@"下拉刷新" color:UIColor.redColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        
+        [_tableView enableRefresh:@"下拉刷新" color:UIColor.redColor];
         [_tableView.refreshControl addTarget:self action:@selector(refreshTabView) forControlEvents:UIControlEventValueChanged];
     }
     

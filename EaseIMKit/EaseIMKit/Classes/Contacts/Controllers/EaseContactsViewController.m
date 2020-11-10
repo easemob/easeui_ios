@@ -9,7 +9,7 @@
 #import <Hyphenate/Hyphenate.h>
 #import <Masonry/Masonry.h>
 
-@interface EaseContactsViewController ()
+@interface EaseContactsViewController () <UITableViewDelegate, UITableViewDataSource>
 {
     EaseContactsViewModel *_viewModel;
 }
@@ -30,6 +30,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self beginRefresh];
 }
 
 - (void)refreshViewWithModel:(EaseContactsViewModel *)viewModel {
@@ -37,9 +38,29 @@
 }
 
 - (void)refreshTabView {
+    __block typeof(self) weakSelf = self;
     [EMClient.sharedClient.contactManager getContactsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
+        if (!aError) {
+            weakSelf.contacts = aList;
+        }
         [self endRefresh];
     }];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *cellId = @"ContactCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+    }
+    
+    cell.textLabel.text = self.contacts[indexPath.row];
+    
+    return cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.contacts.count;
 }
 
 @end
