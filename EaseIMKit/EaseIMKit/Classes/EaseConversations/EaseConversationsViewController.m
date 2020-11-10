@@ -211,7 +211,7 @@
     }];
     [self.resultController setDidSelectRowAtIndexPathCompletion:^(UITableView *tableView, NSIndexPath *indexPath) {
         if (weakself.conversationVCDelegate && [weakself.conversationVCDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
-            [weakself.conversationVCDelegate tableView:tableView dataSource:weakself.resultController.dataArray  didSelectRowAtIndexPath:indexPath];
+            [weakself.conversationVCDelegate tableView:tableView dataArray:weakself.resultController.dataArray  didSelectRowAtIndexPath:indexPath];
             return;
         }
         NSInteger row = indexPath.row;
@@ -276,7 +276,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.conversationVCDelegate && [self.conversationVCDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
-        [self.conversationVCDelegate tableView:tableView dataSource:self.dataArray didSelectRowAtIndexPath:indexPath];
+        [self.conversationVCDelegate tableView:tableView dataArray:self.dataArray didSelectRowAtIndexPath:indexPath];
         return;
     }
     __weak typeof(self) weakself = self;
@@ -297,42 +297,48 @@
     return YES;
 }
 
-- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(tvos)
 {
     id<EaseConversationModelDelegate> model = [self.dataArray objectAtIndex:indexPath.row];
     
     __weak typeof(self) weakself = self;
-    UITableViewRowAction *deleteConversationAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+    UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"删除" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+        [tableView setEditing:NO animated:YES];
         [weakself _deleteConversation:indexPath];
     }];
-    deleteConversationAction.backgroundColor = [UIColor colorWithRed: 253 / 255.0 green: 81 / 255.0 blue: 84 / 255.0 alpha:1.0];
+    deleteAction.backgroundColor = [UIColor colorWithRed: 253 / 255.0 green: 81 / 255.0 blue: 84 / 255.0 alpha:1.0];
     
-    UITableViewRowAction *stickConversationAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"置顶" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+    UIContextualAction *stickConversationAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"置顶" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+        [tableView setEditing:NO animated:YES];
         [weakself _stickConversation:indexPath];
     }];
     stickConversationAction.backgroundColor = [UIColor colorWithRed: 203 / 255.0 green: 125 / 255.0 blue: 50 / 255.0 alpha:1.0];
     
-    UITableViewRowAction *cancelStickConversationAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"取消置顶" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+    UIContextualAction *cancelStickConversationAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"取消置顶" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+        [tableView setEditing:NO animated:YES];
         [weakself _cancelStickConversation:indexPath];
     }];
     cancelStickConversationAction.backgroundColor = [UIColor colorWithRed: 203 / 255.0 green: 125 / 255.0 blue: 50 / 255.0 alpha:1.0];
     
-    UITableViewRowAction *customRowAction = nil;
-    if (self.conversationVCDelegate && [self.conversationVCDelegate respondsToSelector:@selector(sideslipCustomAction:)]) {
-        customRowAction = [self.conversationVCDelegate sideslipCustomAction:model];
+    UIContextualAction *customContextualAction = nil;
+    if (self.conversationVCDelegate && [self.conversationVCDelegate respondsToSelector:@selector(sideslipCustomAction:dataArray:trailingSwipeActionsConfigurationForRowAtIndexPath:)]) {
+        customContextualAction = [self.conversationVCDelegate sideslipCustomAction:tableView dataArray:self.dataArray trailingSwipeActionsConfigurationForRowAtIndexPath:indexPath];
     }
     
-    NSMutableArray<UITableViewRowAction *> *sideslipArray = [[NSMutableArray alloc]init];
-    [sideslipArray addObject:deleteConversationAction];
+    NSMutableArray<UIContextualAction *> *sideslipArray = [[NSMutableArray alloc]init];
+    [sideslipArray addObject:deleteAction];
     if(model.isStick) {
         [sideslipArray addObject:cancelStickConversationAction];
     } else {
         [sideslipArray addObject:stickConversationAction];
     }
-    if (customRowAction) {
-        [sideslipArray addObject:customRowAction];
+    if (customContextualAction) {
+        [sideslipArray addObject:customContextualAction];
     }
-    return [sideslipArray copy];
+    
+    UISwipeActionsConfiguration *actions = [UISwipeActionsConfiguration configurationWithActions:sideslipArray];
+    actions.performsFirstActionWithFullSwipe = NO;
+    return actions;
 }
 
 #pragma mark - EMChatManagerDelegate
@@ -534,15 +540,23 @@
 }
 
 #pragma mark - EMNotificationsDelegate
-- (void)didNotificationsUpdate
-{
-    [self _reSortedConversationModelsAndReloadView];
-}
 
 - (void)didNotificationsUnreadCountUpdate:(NSInteger)aUnreadCount
 {
     EMNotificationHelper.shared.unreadCount = aUnreadCount;
-    [self _reSortedConversationModelsAndReloadView];
+    if ([EMDemoOptions sharedOptions].isVisibleOnConversationList == YES) {
+        [self _reSortedConversationModelsAndReloadView];
+    }
+}
+
+- (void)didNotificationsUpdate
+{
+    if ([EMDemoOptions sharedOptions].isVisibleOnConversationList == NO) {
+        [self _insertSystemNotify:self.dataArray];
+        [self _reSortedConversationModelsAndReloadView];
+        [EMDemoOptions sharedOptions].isVisibleOnConversationList = YES;
+        [EMDemoOptions.sharedOptions archive];
+    }
 }
 
 #pragma mark - UIMenuController
@@ -551,10 +565,18 @@
 - (void)_deleteConversation:(NSIndexPath *)indexPath
 {
     NSInteger row = indexPath.row;
-    EMConversationModel *model = (EMConversationModel *)[self.dataArray objectAtIndex:row];
-    [[EMClient sharedClient].chatManager deleteConversation:model.conversationId
-                                           isDeleteMessages:YES
-                                                 completion:nil];
+    id<EaseConversationModelDelegate> model = [self.dataArray objectAtIndex:row];
+    if (model.conversationModelType == EaseConversation)
+    {
+        EMConversationModel *conversationModel = (EMConversationModel *)model;
+        [[EMClient sharedClient].chatManager deleteConversation:conversationModel.conversationId
+                                               isDeleteMessages:YES
+                                                     completion:nil];
+    } else if (model.conversationModelType == EaseSystemNotification) {
+        [EMDemoOptions sharedOptions].isVisibleOnConversationList = NO;
+        [EMDemoOptions.sharedOptions archive];
+    }
+    
     [self.dataArray removeObjectAtIndex:row];
     [self.tableView reloadData];
     [self addBlankPerchView];
@@ -707,8 +729,10 @@
         }];
 
         NSArray *models = [EMConversationHelper modelsFromEMConversations:sorted];
-        
-        NSMutableArray *modelArray = [weakself _insertSystemNotify:[models mutableCopy]];//插入系统通知
+        NSMutableArray *modelArray = [[NSMutableArray alloc]initWithArray:models];
+        if ([EMDemoOptions sharedOptions].isVisibleOnConversationList == YES) {
+            modelArray = [weakself _insertSystemNotify:[models mutableCopy]];//插入系统通知
+        }
         NSMutableArray *finalDataArray = [weakself _stickSortedConversationModels:[modelArray copy]];//置顶重排序
         
         if ([weakself.dataArray count] > 0)

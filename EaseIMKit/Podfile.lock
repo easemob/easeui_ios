@@ -1,7 +1,7 @@
 PODS:
   - EaseIMKit (0.0.1):
     - FLAnimatedImage (~> 1.0)
-    - Hyphenate (~> 3.7.1)
+    - Hyphenate (~> 3.7.2)
     - Masonry
     - MBProgressHUD (~> 1.1.0)
     - MJRefresh
@@ -37,7 +37,7 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  EaseIMKit: d6fffd25ec3f28f39065c069220a085a20ba1910
+  EaseIMKit: 78cc7826467c145477b4f99de5b25f90828f7156
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Hyphenate: a9da397810e08c4b3173a5c8f04868165ec48b9c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201

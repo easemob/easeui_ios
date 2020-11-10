@@ -36,7 +36,8 @@ static NSString *kOptions_OfflineHangup = @"OfflineHangup";
 static NSString *kOptions_ShowCallInfo = @"ShowCallInfo";
 static NSString *kOptions_UseBackCamera = @"UseBackCamera";
 
-static NSString *kOptions_IsReceiveNewMsgNotice = @"IsReceiveNewMsgNotice";
+static NSString *kNotifications_isVisibleOnConversationList = @"isVisibleOnConversationList";
+static NSString *kOptions_isReceiveNewMsgNotice = @"IsReceiveNewMsgNotice";
 static NSString *kOptions_WillRecord = @"WillRecord";
 static NSString *kOptions_WillMergeStrem = @"WillMergeStrem";
 static NSString *kOptions_EnableConsoleLog = @"enableConsoleLog";
@@ -85,6 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL isShowCallInfo;
 @property (nonatomic) BOOL isUseBackCamera;
 
+@property (nonatomic) BOOL isVisibleOnConversationList;
 @property (nonatomic) BOOL isReceiveNewMsgNotice;
 @property (nonatomic) BOOL willRecord;
 @property (nonatomic) BOOL willMergeStrem;

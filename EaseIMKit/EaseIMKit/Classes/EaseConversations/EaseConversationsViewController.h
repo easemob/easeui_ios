@@ -24,20 +24,22 @@
 - (id<EaseConversationCellModelDelegate>)conversationCellForModel:(id<EaseConversationModelDelegate>)cellModel;
 
 /**
- * 会话列表cell侧滑功能区，可添加一项Action
+ * 会话列表cell侧滑自定义功能区，可添加一项Action
  *
- * @param   cellModel  id<EaseConversationModelDelegate> 类型 数据源
+ * @param   tableView  当前操作的 tableview
+ * @param   dataArray  id<EaseConversationModelDelegate> 类型 数据源
+ * @param   indexPath 当前点击的   indexPath
  */
-- (UITableViewRowAction *)sideslipCustomAction:(id<EaseConversationModelDelegate>)cellModel;
+- (UIContextualAction *)sideslipCustomAction:(UITableView *)tableView dataArray:(NSMutableArray *)dataArray trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(tvos);
 
 /**
- * 会话列表cell 点击 事件
+ * 会话列表cell 选中 事件
  *
  * @param   tableView  当前点击的 tableview
  * @param   dataArray  id<EaseConversationModelDelegate> 类型 数据源
  * @param   indexPath 当前点击的   indexPath
  */
-- (void)tableView:(UITableView *)tableView dataSource:(NSMutableArray *)dataArray didSelectRowAtIndexPath:(NSIndexPath *)indexPath; 
+- (void)tableView:(UITableView *)tableView dataArray:(NSMutableArray *)dataArray didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
