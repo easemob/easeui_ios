@@ -10,7 +10,7 @@
 
 #import "EMBadgeLabel.h"
 #import "EaseConversationCellOptions.h"
-#import "EMConversationHelper.h"
+#import "EaseConversationModelUtil.h"
 
 @interface EaseConversationCell : UITableViewCell
 

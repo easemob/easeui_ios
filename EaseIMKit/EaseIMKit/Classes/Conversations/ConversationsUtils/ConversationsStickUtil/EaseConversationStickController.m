@@ -6,6 +6,8 @@
 //
 
 #import "EaseConversationStickController.h"
+#import "EaseConversationModel.h"
+#import "EaseSystemNotiModel.h"
 
 static NSDateFormatter *_dateFormatter = nil;
 @implementation EaseConversationStickController
@@ -20,7 +22,7 @@ static NSDateFormatter *_dateFormatter = nil;
     NSNumber *stickTime = [NSNumber numberWithLong:stickTimeInterval];
     
     if (model.conversationModelType == EaseConversation) {
-        EMConversationModel* conversationModel = (EMConversationModel*)model;
+        EaseConversationModel* conversationModel = (EaseConversationModel*)model;
         NSMutableDictionary *ext = [[NSMutableDictionary alloc]initWithDictionary:conversationModel.ext];
         [ext setObject:stickTime forKey:CONVERSATION_STICK];
         //重置会话model
@@ -28,14 +30,14 @@ static NSDateFormatter *_dateFormatter = nil;
         [conversationModel setIsStick:YES];
         [conversationModel setStickTime:[EaseConversationStickController getConversationStickTime:conversationModel]];
         
-        EMConversation *conversation = [EMConversationHelper getConversationWithConversationModel:conversationModel];
+        EMConversation *conversation = [EaseConversationModelUtil getConversationWithConversationModel:conversationModel];
         [conversation setExt:ext];
     } else if(model.conversationModelType == EaseSystemNotification) {
         EMNotificationModel* notifcationModel = [EMNotificationHelper.shared.notificationList objectAtIndex:0];
         notifcationModel.stickTime = stickTime;
         [[EMNotificationHelper shared] archive];
         
-        EMSystemNotificationModel *systemNotificModel = (EMSystemNotificationModel *)model;
+        EaseSystemNotiModel *systemNotificModel = (EaseSystemNotiModel *)model;
         //重置系统通知model
         [systemNotificModel setIsStick:YES];
         [systemNotificModel setStickTime:[EaseConversationStickController getConversationStickTime:systemNotificModel]];
@@ -46,7 +48,7 @@ static NSDateFormatter *_dateFormatter = nil;
 + (void)cancelStickConversation:(id<EaseConversationModelDelegate>)model
 {
     if (model.conversationModelType == EaseConversation) {
-        EMConversationModel* conversationModel = (EMConversationModel*)model;
+        EaseConversationModel* conversationModel = (EaseConversationModel*)model;
         NSMutableDictionary *ext = [[NSMutableDictionary alloc]initWithDictionary:conversationModel.ext];
         [ext setObject:[NSNumber numberWithLong:0] forKey:CONVERSATION_STICK];
         //重置会话model
@@ -54,14 +56,14 @@ static NSDateFormatter *_dateFormatter = nil;
         [conversationModel setIsStick:NO];
         [conversationModel setStickTime:[EaseConversationStickController getConversationStickTime:conversationModel]];
         
-        EMConversation *conversation = [EMConversationHelper getConversationWithConversationModel:conversationModel];
+        EMConversation *conversation = [EaseConversationModelUtil getConversationWithConversationModel:conversationModel];
         [conversation setExt:ext];
     } else if (model.conversationModelType == EaseSystemNotification) {
         EMNotificationModel* notifcationModel = [EMNotificationHelper.shared.notificationList objectAtIndex:0];
         notifcationModel.stickTime = [NSNumber numberWithLong:0];
         [[EMNotificationHelper shared] archive];
         
-        EMSystemNotificationModel *systemNotificModel = (EMSystemNotificationModel *)model;
+        EaseSystemNotiModel *systemNotificModel = (EaseSystemNotiModel *)model;
         //重置系统通知model
         [systemNotificModel setIsStick:NO];
         [systemNotificModel setStickTime:[EaseConversationStickController getConversationStickTime:systemNotificModel]];
@@ -72,7 +74,7 @@ static NSDateFormatter *_dateFormatter = nil;
 + (BOOL)isConversationStick:(id<EaseConversationModelDelegate>)model
 {
     if (model.conversationModelType == EaseConversation) {
-        EMConversationModel* conversationModel = (EMConversationModel*)model;
+        EaseConversationModel* conversationModel = (EaseConversationModel*)model;
         if ([conversationModel.ext objectForKey:CONVERSATION_STICK] && ![(NSNumber *)[conversationModel.ext objectForKey:CONVERSATION_STICK] isEqualToNumber:[NSNumber numberWithLong:0]]) {
             return YES;
         }
@@ -90,7 +92,7 @@ static NSDateFormatter *_dateFormatter = nil;
 {
     long stickTime = 0;
     if (model.conversationModelType == EaseConversation) {
-        EMConversationModel* conversationModel = (EMConversationModel*)model;
+        EaseConversationModel* conversationModel = (EaseConversationModel*)model;
         stickTime = [(NSNumber *)[conversationModel.ext objectForKey:CONVERSATION_STICK] longValue];
     } else if (model.conversationModelType == EaseSystemNotification) {
         EMNotificationModel* notifcationModel = [EMNotificationHelper.shared.notificationList objectAtIndex:0];

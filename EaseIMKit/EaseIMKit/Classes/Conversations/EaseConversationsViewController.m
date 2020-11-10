@@ -7,16 +7,17 @@
 
 #import "EaseConversationsViewController.h"
 #import "EMRealtimeSearch.h"
-#import "EMConversationHelper.h"
+#import "EaseConversationModelUtil.h"
 #import "UIViewController+Search.h"
 
 #import "PellTableViewSelect.h"
 #import "EMNotificationViewController.h"
 #import "EMDateHelper.h"
 #import "EMHeaders.h"
+#import "EaseSystemNotiModel.h"
 #import "EaseConversationStickController.h"
 
-@interface EaseConversationsViewController ()<EMChatManagerDelegate, EMGroupManagerDelegate, EMSearchControllerDelegate, EMConversationsDelegate,EMContactManagerDelegate,EMNotificationsDelegate>
+@interface EaseConversationsViewController ()<EMChatManagerDelegate, EMGroupManagerDelegate, EMSearchControllerDelegate, EaseConversationsDelegate,EMContactManagerDelegate,EMNotificationsDelegate>
 {
     EaseConversationCellOptions *_options;
     BOOL _isReloadViewWithOption; //重新刷新会话列表
@@ -63,7 +64,7 @@
     [self didNotificationsUnreadCountUpdate:[EMNotificationHelper shared].unreadCount];
     [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
-    [[EMConversationHelper shared] addDelegate:self];
+    [[EaseConversationModelUtil shared] addDelegate:self];
     [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
     [self _loadAllConversationsFromDBWithIsShowHud:YES];
     
@@ -120,7 +121,7 @@
     [EMNotificationHelper destoryShared];
     [[EMClient sharedClient].chatManager removeDelegate:self];
     [[EMClient sharedClient].groupManager removeDelegate:self];
-    [[EMConversationHelper shared] removeDelegate:self];
+    [[EaseConversationModelUtil shared] removeDelegate:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -204,7 +205,7 @@
         }
         
         NSInteger row = indexPath.row;
-        EMConversationModel *model = (EMConversationModel*)[weakself.resultController.dataArray objectAtIndex:row];
+        EaseConversationModel *model = (EaseConversationModel*)[weakself.resultController.dataArray objectAtIndex:row];
         [[EMClient sharedClient].chatManager deleteConversation:model.conversationId isDeleteMessages:YES completion:nil];
         [weakself.resultController.dataArray removeObjectAtIndex:row];
         [weakself.resultController.tableView reloadData];
@@ -256,8 +257,13 @@
     cell.model = model;
     if (self.conversationVCDelegate && [self.conversationVCDelegate respondsToSelector:@selector(conversationCellForModel:)]) {
         id<EaseConversationCellModelDelegate> cellModel = [self.conversationVCDelegate conversationCellForModel:model];
-        if (cellModel && cellModel.avatarImg) {
-            cell.avatarView.image = cellModel.avatarImg;
+        if (cellModel) {
+            if (cellModel.avatarImg) {
+                cell.avatarView.image = cellModel.avatarImg;
+            }
+            if (cellModel.nickName) {
+                cell.nameLabel.text = cellModel.nickName;
+            }
         }
     }
     [cell setSeparatorInset:UIEdgeInsetsMake(0, cell.avatarView.frame.size.height + 23, 0, 1)];
@@ -436,7 +442,7 @@
 
 #pragma mark - EMConversationsDelegate
 
-- (void)didConversationUnreadCountToZero:(EMConversationModel *)aConversation
+- (void)didConversationUnreadCountToZero:(EaseConversationModel *)aConversation
 {
     NSInteger index = [self.dataArray indexOfObject:aConversation];
     [self.tableView beginUpdates];
@@ -525,7 +531,7 @@
     
     NSString *groupId = group.groupId;
     for (id<EaseConversationModelDelegate> model in self.dataArray) {
-        EMConversationModel *conversationModel = (EMConversationModel *)model;
+        EaseConversationModel *conversationModel = (EaseConversationModel *)model;
         if ([conversationModel.conversationId isEqualToString:groupId]) {
             conversationModel.conversationTheme = group.groupName;
             [self.tableView reloadData];
@@ -568,7 +574,7 @@
     id<EaseConversationModelDelegate> model = [self.dataArray objectAtIndex:row];
     if (model.conversationModelType == EaseConversation)
     {
-        EMConversationModel *conversationModel = (EMConversationModel *)model;
+        EaseConversationModel *conversationModel = (EaseConversationModel *)model;
         [[EMClient sharedClient].chatManager deleteConversation:conversationModel.conversationId
                                                isDeleteMessages:YES
                                                      completion:nil];
@@ -688,8 +694,8 @@
     NSMutableArray *conversationModels = [NSMutableArray array];
     for (id<EaseConversationModelDelegate> model in sorted) {
         if (model.conversationModelType == EaseConversation) {
-            EMConversationModel *conversationModel = (EMConversationModel*)model;
-            if (![EMConversationHelper getConversationWithConversationModel:conversationModel].latestMessage) {
+            EaseConversationModel *conversationModel = (EaseConversationModel*)model;
+            if (![EaseConversationModelUtil getConversationWithConversationModel:conversationModel].latestMessage) {
                 [EMClient.sharedClient.chatManager deleteConversation:conversationModel.conversationId
                                                      isDeleteMessages:NO
                                                            completion:nil];
@@ -728,7 +734,7 @@
             
         }];
 
-        NSArray *models = [EMConversationHelper modelsFromEMConversations:sorted];
+        NSArray *models = [EaseConversationModelUtil modelsFromEMConversations:sorted];
         NSMutableArray *modelArray = [[NSMutableArray alloc]initWithArray:models];
         if ([EMDemoOptions sharedOptions].isVisibleOnConversationList == YES) {
             modelArray = [weakself _insertSystemNotify:[models mutableCopy]];//插入系统通知
@@ -759,7 +765,7 @@
         return modelArray;
     }
     //系统通知插入到 dataarray 中
-    id<EaseConversationModelDelegate> notificationModel = (id<EaseConversationModelDelegate>)[[EMSystemNotificationModel alloc]initNotificationModel];
+    id<EaseConversationModelDelegate> notificationModel = (id<EaseConversationModelDelegate>)[[EaseSystemNotiModel alloc]initNotificationModel];
     //系统通知插入排序到会话列表中
     int low = 0, high = (int)([modelArray count] - 1);
     while (low <= high) {

@@ -9,7 +9,8 @@
 #import "EaseConversationCell.h"
 #import "EMHeaders.h"
 #import "EMDateHelper.h"
-#import "EMConversationHelper.h"
+#import "EaseConversationModelUtil.h"
+#import "EaseSystemNotiModel.h"
 
 
 @interface EaseConversationCell()<UIGestureRecognizerDelegate>
@@ -124,7 +125,7 @@
 
 #pragma mark - setter
 
-- (NSAttributedString *)_getDetailWithModel:(EMConversationModel *)conversationModel
+- (NSAttributedString *)_getDetailWithModel:(EaseConversationModel *)conversationModel
 {
     NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:@""];
     
@@ -207,7 +208,7 @@
     return attributedStr;
 }
 
-- (NSString *)_getTimeWithModel:(EMConversationModel *)conversationModel
+- (NSString *)_getTimeWithModel:(EaseConversationModel *)conversationModel
 {
     NSString *latestMessageTime = @"";
     EMMessage *lastMessage = conversationModel.latestMessage;
@@ -233,7 +234,7 @@
         NSString *bundlePath = [[NSBundle bundleForClass:[self class]].resourcePath stringByAppendingPathComponent:@"/EaseIMKit.bundle"];
         NSBundle *resource_bundle = [NSBundle bundleWithPath:bundlePath];
      
-        EMConversationModel *conversationModel = (EMConversationModel*)model;
+        EaseConversationModel *conversationModel = (EaseConversationModel*)model;
         if (conversationModel.conversationType == EMConversationTypeChat)
             self.avatarView.image = [UIImage imageNamed:@"defaultAvatar" inBundle:resource_bundle compatibleWithTraitCollection:nil];
         if (conversationModel.conversationType == EMConversationTypeGroupChat)
@@ -258,7 +259,7 @@
 {
     NSString *bundlePath = [[NSBundle bundleForClass:[self class]].resourcePath stringByAppendingPathComponent:@"/EaseIMKit.bundle"];
     NSBundle *resource_bundle = [NSBundle bundleWithPath:bundlePath];
-    EMSystemNotificationModel *notificationModel = (EMSystemNotificationModel *)model;
+    EaseSystemNotiModel *notificationModel = (EaseSystemNotiModel *)model;
     self.avatarView.image = [UIImage imageNamed:@"systemNotify" inBundle:resource_bundle compatibleWithTraitCollection:nil];
     self.nameLabel.text = @"系统通知";
     if (notificationModel.notificationType == EMNotificationModelTypeContact)

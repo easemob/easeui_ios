@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) UIImage *avatarImg; //头像
 
+@property (nonatomic, copy) NSString *nickName; //会话对象昵称
+
 @end
 
 NS_ASSUME_NONNULL_END
