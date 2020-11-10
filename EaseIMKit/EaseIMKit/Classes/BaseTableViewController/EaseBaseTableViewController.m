@@ -10,7 +10,7 @@
 #import <Masonry/Masonry.h>
 
 @interface EaseBaseTableViewController () <UITableViewDelegate, UITableViewDataSource>
-@property (nonatomic, strong) UITableView *tableView;
+
 @end
 
 @implementation EaseBaseTableViewController
@@ -45,9 +45,9 @@
 }
 
 - (void)endRefresh {
+    [self.tableView reloadData];
     if (self.tableView.isRefreshing) {
         [self.tableView endRefreshing];
-        [self.tableView reloadData];
     }
 }
 
@@ -62,7 +62,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellId = @"ContactCell";
+    static NSString *cellId = @"baseCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
@@ -73,11 +73,7 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.easeDelegate && [self.easeDelegate respondsToSelector:@selector(easeTableView:didSelectRowAtIndexPath:)]) {
-        [self.easeDelegate easeTableView:tableView didSelectRowAtIndexPath:indexPath];
-    }else {
-        // Do default;
-    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -88,6 +84,8 @@
         _tableView.tableFooterView = [UIView new];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.rowHeight = UITableViewAutomaticDimension;
+        _tableView.estimatedRowHeight = 60;
         [_tableView enableRefresh:@"下拉刷新" color:UIColor.redColor];
         [_tableView.refreshControl addTarget:self action:@selector(refreshTabView) forControlEvents:UIControlEventValueChanged];
     }

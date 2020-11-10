@@ -20,7 +20,9 @@ typedef enum {
 
 @interface EaseContactsViewModel : NSObject
 @property (nonatomic) BOOL canRefresh;
-@property (nonatomic, assign) EaseContactAvatarStyle avatarType;
+@property (nonatomic) EaseContactAvatarStyle avatarType;
+@property (nonatomic) BOOL letterIndex;
+@property (nonatomic) CGFloat cellHeight;
 @end
 
 NS_ASSUME_NONNULL_END

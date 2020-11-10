@@ -1,5 +1,5 @@
 //
-//  EaseContactCellModelDelegate.h
+//  EaseContactModelDelegate.h
 //  EaseIMKit
 //
 //  Created by 杜洁鹏 on 2020/11/5.
@@ -12,15 +12,17 @@ NS_ASSUME_NONNULL_BEGIN
 typedef enum : NSUInteger {
     Normal,
     Contact,
-} EaseContactCellModelType;
+} EaseContactModelType;
 
 
-@protocol EaseContactCellModelDelegate <NSObject>
+@protocol EaseContactModelDelegate <NSObject>
 
 @required
 @property (nonatomic, copy, readonly) NSString *avatarURL; // 显示头像的url
+@property (nonatomic, copy, readonly) UIImage *defaultAvatar; // 默认头像显示
 @property (nonatomic, copy, readonly) NSString *showName; // 显示头像的昵称
-@property (nonatomic, assign) EaseContactCellModelType type;
+@property (nonatomic, copy, readonly) NSString *firstLetter; // 首字母
+@property (nonatomic, assign) EaseContactModelType type;
 
 @end
 
