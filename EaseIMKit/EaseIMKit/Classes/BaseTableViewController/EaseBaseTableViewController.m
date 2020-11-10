@@ -73,8 +73,8 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.easeDelegate && [self.easeDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
-        [self.easeDelegate tableView:tableView didSelectRowAtIndexPath:indexPath];
+    if (self.easeDelegate && [self.easeDelegate respondsToSelector:@selector(easeTableView:didSelectRowAtIndexPath:)]) {
+        [self.easeDelegate easeTableView:tableView didSelectRowAtIndexPath:indexPath];
     }else {
         // Do default;
     }

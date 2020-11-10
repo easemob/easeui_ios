@@ -11,13 +11,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol EaseTableViewDelegaate <NSObject>
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(nonnull NSIndexPath *)indexPath;
+- (void)easeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(nonnull NSIndexPath *)indexPath;
 
 @end
 
 @interface EaseBaseTableViewController : UIViewController
 
-@property (nonatomic, assign) id<EaseTableViewDelegaate>easeDelegate;
+@property (nonatomic, weak) id<EaseTableViewDelegaate> easeDelegate;
 
 // 主动刷新
 - (void)beginRefresh;
