@@ -6,6 +6,7 @@
 //
 
 #import "EaseContactsViewController.h"
+#import "EaseContactCellModel.h"
 #import <Hyphenate/Hyphenate.h>
 #import <Masonry/Masonry.h>
 
@@ -14,7 +15,6 @@
     EaseContactsViewModel *_viewModel;
 }
 
-@property (nonatomic, strong) NSArray *contacts;
 
 @end
 
@@ -33,7 +33,7 @@
     [self beginRefresh];
 }
 
-- (void)refreshViewWithModel:(EaseContactsViewModel *)viewModel {
+- (void)resetViewModel:(EaseContactsViewModel *)viewModel {
     _viewModel = viewModel;
 }
 
@@ -41,7 +41,12 @@
     __block typeof(self) weakSelf = self;
     [EMClient.sharedClient.contactManager getContactsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
         if (!aError) {
-            weakSelf.contacts = aList;
+            NSMutableArray<EaseContactCellModelDelegate> *contacts = [NSMutableArray<EaseContactCellModelDelegate> array];
+            for (NSString *username in aList) {
+                EaseContactCellModel *model = [[EaseContactCellModel alloc] initWithShowName:username];
+                [contacts addObject:model];
+            }
+            weakSelf.contacts = contacts;
         }
         [self endRefresh];
     }];
@@ -54,7 +59,9 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     
-    cell.textLabel.text = self.contacts[indexPath.row];
+    id<EaseContactCellModelDelegate> easeContactModel = self.contacts[indexPath.row];
+    
+    cell.textLabel.text = easeContactModel.showName;
     
     return cell;
 }

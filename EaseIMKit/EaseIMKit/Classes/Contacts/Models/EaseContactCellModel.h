@@ -10,7 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EaseContactCellModel : NSObject
+@interface EaseContactCellModel : NSObject <EaseContactCellModelDelegate>
+- (instancetype)initWithShowName:(NSString *)showName;
 @end
 
 NS_ASSUME_NONNULL_END

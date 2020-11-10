@@ -9,7 +9,7 @@
 #import "ContactsViewController.h"
 #import <EaseIMKit.h>
 
-@interface ContactsViewController ()
+@interface ContactsViewController () <EaseTableViewDelegaate>
 
 @end
 
@@ -19,10 +19,14 @@
     [super viewDidLoad];
     EaseContactsViewModel *model = [[EaseContactsViewModel alloc] init];
     EaseContactsViewController *contactsVC = [[EaseContactsViewController alloc] initWithViewModel:model];
+    contactsVC.easeDelegate = self;
     [self.view addSubview:contactsVC.view];
     contactsVC.view.frame = self.view.bounds;
     [self addChildViewController:contactsVC];
 }
 
+- (void)easeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
 
 @end

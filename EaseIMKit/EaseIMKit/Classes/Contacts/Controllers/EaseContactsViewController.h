@@ -7,16 +7,18 @@
 
 #import <UIKit/UIKit.h>
 #import "EaseBaseTableViewController.h"
+#import "EaseContactCellModelDelegate.h"
 #import "EaseContactsViewModel.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseContactsViewController : EaseBaseTableViewController
+@property (nonatomic, strong) NSArray<EaseContactCellModelDelegate> *contacts;
 
 - (instancetype)initWithViewModel:(EaseContactsViewModel *)model;
 
-- (void)refreshViewWithModel:(EaseContactsViewModel *)viewModel;
+- (void)resetViewModel:(EaseContactsViewModel *)viewModel;
 
 @end
 
