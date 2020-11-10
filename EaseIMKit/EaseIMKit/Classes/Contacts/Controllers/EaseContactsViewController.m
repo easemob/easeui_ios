@@ -30,6 +30,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self beginRefresh];
 }
 
 - (void)refreshViewWithModel:(EaseContactsViewModel *)viewModel {

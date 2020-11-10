@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UITableView (Refresh)
 - (void)enableRefresh:(NSString *)title color:(UIColor *)tintColor;
+- (void)disableRefresh;
+
 - (BOOL)isRefreshing;
 - (void)endRefreshing;
 @end

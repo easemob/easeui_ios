@@ -8,5 +8,10 @@
 #import "EaseContactsViewModel.h"
 
 @implementation EaseContactsViewModel
-
+- (instancetype)init {
+    if (self = [super init]) {
+        _canRefresh = YES;
+    }
+    return self;
+}
 @end

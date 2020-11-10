@@ -16,6 +16,10 @@
     self.refreshControl = refreshControl;
 }
 
+- (void)disableRefresh {
+    self.refreshControl = nil;
+}
+
 - (BOOL)isRefreshing {
     return [self.refreshControl isRefreshing];
 }

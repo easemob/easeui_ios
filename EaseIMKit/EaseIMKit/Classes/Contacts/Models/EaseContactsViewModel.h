@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseContactsViewModel : NSObject
-
+@property (nonatomic) BOOL canRefresh;
 @end
 
 NS_ASSUME_NONNULL_END

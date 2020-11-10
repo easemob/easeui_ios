@@ -10,7 +10,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseBaseTableViewController : UIViewController
-// 开始刷新
+
+// 主动刷新
+- (void)beginRefresh;
+
+// 刷新时执行
 - (void)refreshTabView;
 
 // 关闭刷新
