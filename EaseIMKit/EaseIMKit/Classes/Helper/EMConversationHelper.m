@@ -16,10 +16,10 @@
 {
     self = [super init];
     if (self) {
+        _conversationModelType = EaseConversation;
         _conversationTheme = [self getConversationTheme:conversation];
         if (!_conversationTheme)
             _conversationTheme = conversation.conversationId;
-        _conversationModelType = EaseConversation;
         _timestamp = conversation.latestMessage.timestamp;
         _stickTime = [self getConversationStickTime:conversation];
         _isStick = [self isConversationStick:conversation];
@@ -32,6 +32,32 @@
     }
     
     return self;
+}
+
+//更新会话列表model
+- (id<EaseConversationModelDelegate>)renewalModelWithModel:(id<EaseConversationModelDelegate>)model
+{
+    if (model.conversationModelType != EaseConversation)
+        return nil;
+    EMConversationModel *conversationModel = (EMConversationModel *)model;
+    [self renewalModelWithConversationModel:conversationModel];
+    return conversationModel;
+}
+
+//更新操作
+- (void)renewalModelWithConversationModel:(EMConversationModel *)conversationModel
+{
+    EMConversation *conversation = [EMConversationHelper getConversationWithConversationModel:conversationModel];
+    conversationModel.conversationTheme = [self getConversationTheme:conversation];
+    if (!conversationModel.conversationTheme)
+        conversationModel.conversationTheme = conversation.conversationId;
+    conversationModel.timestamp = conversation.latestMessage.timestamp;
+    conversationModel.stickTime = [self getConversationStickTime:conversation];
+    conversationModel.isStick = [self isConversationStick:conversation];
+    
+    conversationModel.unreadMessagesCount = conversation.unreadMessagesCount;
+    conversationModel.ext = conversation.ext;
+    conversationModel.latestMessage = conversation.latestMessage;
 }
 
 //会话主题
@@ -81,12 +107,10 @@
 {
     self = [super init];
     if (self) {
-        EMNotificationModel* notifcationModel = [EMNotificationHelper.shared.notificationList objectAtIndex:0];
-        
         _conversationTheme = @"系统通知";
-        _latestNotificTime = notifcationModel.time;
         _conversationModelType = EaseSystemNotification;
-        
+        EMNotificationModel* notifcationModel = [EMNotificationHelper.shared.notificationList objectAtIndex:0];
+        _latestNotificTime = notifcationModel.time;
         _stickTime = [self getNotificationStickTime];
         _timestamp = [self getLatestNotificTimestamp:notifcationModel.time];
         _isStick = [self isNotificationStick];
@@ -95,6 +119,27 @@
     }
     
     return self;
+}
+
+//更新系统通知model
+- (id<EaseConversationModelDelegate>)renewalModelWithModel:(id<EaseConversationModelDelegate>)model
+{
+    if (model.conversationModelType != EaseSystemNotification)
+        return nil;
+    EMSystemNotificationModel* notificModel = (EMSystemNotificationModel*)model;
+    [self renewalNotificationModel:notificModel];
+    return notificModel;
+}
+
+//更新
+- (void)renewalNotificationModel:(EMSystemNotificationModel*)notificModel{
+    EMNotificationModel* notifcationModel = [EMNotificationHelper.shared.notificationList objectAtIndex:0];
+    notificModel.latestNotificTime = notifcationModel.time;
+    notificModel.stickTime = [self getNotificationStickTime];
+    notificModel.timestamp = [self getLatestNotificTimestamp:notifcationModel.time];
+    notificModel.isStick = [self isNotificationStick];
+    notificModel.notificationSender = notifcationModel.sender;
+    notificModel.notificationType = notifcationModel.type;
 }
 
 - (long long)getLatestNotificTimestamp:(NSString*)timestamp
@@ -178,30 +223,10 @@ static EMConversationHelper *shared = nil;
 + (NSArray<EMConversationModel *> *)modelsFromEMConversations:(NSArray<EMConversation *> *)aConversations
 {
     NSMutableArray *retArray = [[NSMutableArray alloc] init];
-    
-    //NSArray *groupArray = [[EMClient sharedClient].groupManager getJoinedGroups];
+
     for (int i = 0; i < [aConversations count]; i++) {
         EMConversation *conversation = aConversations[i];
-        //EMConversationModel *model = [[EMConversationModel alloc] initWithEMModel:conversation];
         id<EaseConversationModelDelegate> conversationModel = [[EMConversationModel alloc] initWithEMConversation:conversation];
-        /*
-        if (conversation.type == EMConversationTypeGroupChat || conversation.type == EMConversationTypeChatRoom) {
-            NSString *name = [conversation.ext objectForKey:@"subject"];
-            if ([name length] == 0 && conversation.type == EMConversationTypeGroupChat) {
-                for (EMGroup *group in groupArray) {
-                    if ([group.groupId isEqualToString:conversation.conversationId]) {
-                        NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
-                        [ext setObject:group.groupName forKey:@"subject"];
-                        [ext setObject:[NSNumber numberWithBool:group.isPublic] forKey:@"isPublic"];
-                        conversation.ext = ext;
-                        name = group.groupName;
-                        break;
-                    }
-                }
-            }
-            
-            model.name = name;
-        }*/
         [retArray addObject:conversationModel];
     }
     

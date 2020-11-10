@@ -29,6 +29,8 @@ typedef enum {
 @property (nonatomic) BOOL isStick; //会话是否置顶
 @property (nonatomic) long stickTime; //会话置顶时间
 
+- (id<EaseConversationModelDelegate>)renewalModelWithModel:(id<EaseConversationModelDelegate>)model;
+
 @end
 
 //会话聊天model
@@ -36,7 +38,7 @@ typedef enum {
 
 @property (nonatomic, copy, readonly) NSString *conversationId; //会话id
 @property (nonatomic, assign, readonly) EMConversationType conversationType; //会话聊天类型
-@property (nonatomic, assign, readonly) int unreadMessagesCount; //对话中未读取的消息数量
+@property (nonatomic, assign) int unreadMessagesCount; //对话中未读取的消息数量
 @property (nonatomic, copy) NSDictionary *ext; //会话扩展属性
 @property (nonatomic, strong) EMMessage *latestMessage; //会话最新一条消息
 
@@ -47,6 +49,8 @@ typedef enum {
 @property (nonatomic) long stickTime; //会话置顶时间
 
 - (instancetype)initWithEMConversation:(EMConversation *)conversation;
+//更新会话列表model
+- (id<EaseConversationModelDelegate>)renewalModelWithModel:(id<EaseConversationModelDelegate>)model;
 @end
 
 //系统通知model
@@ -63,6 +67,8 @@ typedef enum {
 @property (nonatomic) long stickTime; //会话置顶时间
 
 - (instancetype)initNotificationModel;
+//更新系统通知model
+- (id<EaseConversationModelDelegate>)renewalModelWithModel:(id<EaseConversationModelDelegate>)model;
 
 @end
 

@@ -16,30 +16,39 @@
 
 @optional
 
-- (id<EaseConversationCellModelDelegate>)conversationCellForModel:(id<EaseConversationModelDelegate>)model; //头像数据等
+/**
+ * 会话列表 cell 部分数据源     头像等
+ *
+ * @param   cellModel  id<EaseConversationModelDelegate> 类型 数据源
+ */
+- (id<EaseConversationCellModelDelegate>)conversationCellForModel:(id<EaseConversationModelDelegate>)cellModel;
 
 /**
+ * 会话列表cell侧滑自定义功能区，可添加一项Action
  *
- * 会话列表cell '点击' 事件
+ * @param   tableView  当前操作的 tableview
+ * @param   dataArray  id<EaseConversationModelDelegate> 类型 数据源
+ * @param   indexPath 当前点击的   indexPath
+ */
+- (UIContextualAction *)sideslipCustomAction:(UITableView *)tableView dataArray:(NSMutableArray *)dataArray trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(tvos);
+
+/**
+ * 会话列表cell 选中 事件
  *
  * @param   tableView  当前点击的 tableview
- * @param   dataSource  id<EaseConversationModelDelegate> 类型 数据源
- * @param   didSelectRowAtIndexPath 当前点击的   indexPath
+ * @param   dataArray  id<EaseConversationModelDelegate> 类型 数据源
+ * @param   indexPath 当前点击的   indexPath
  */
-- (void)tableView:(UITableView *)tableView dataSource:(NSMutableArray *)dataArray didSelectRowAtIndexPath:(NSIndexPath *)indexPath; 
-
-- (void)conversationCellDidLongPress:(EaseConversationCell *)aCell; //会话列表cell'长按'事件
+- (void)tableView:(UITableView *)tableView dataArray:(NSMutableArray *)dataArray didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
 @interface EaseConversationsViewController : EMRefreshViewController
 
-@property (nonatomic) BOOL isNeedsSearchModule; //是否需要搜索组件
-
 - (instancetype)initWithOptions:(EaseConversationCellOptions *)options; //初始化
 - (void)reloadViewWithOption; //根据 option 重新刷新会话列表
 
-@property (nonatomic, assign) id<EaseConversationVCDelegate> delegate;
+@property (nonatomic, assign) id<EaseConversationVCDelegate> conversationVCDelegate;
 
 @end
 

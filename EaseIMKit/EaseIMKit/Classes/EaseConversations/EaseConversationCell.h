@@ -12,17 +12,8 @@
 #import "EaseConversationCellOptions.h"
 #import "EMConversationHelper.h"
 
-@class EaseConversationCell;
-@protocol EaseConversationCellDelegate <NSObject>
-@optional
-- (void)conversationCellDidTouchEnd:(EaseConversationCell *)aCell;
-- (void)conversationCellDidLongPress:(EaseConversationCell *)aCell;
-@end
-
-
 @interface EaseConversationCell : UITableViewCell
 
-@property (nonatomic, assign) id<EaseConversationCellDelegate> delegate;
 @property (nonatomic, strong) UIImageView *avatarView;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *detailLabel;
@@ -31,6 +22,5 @@
 @property (nonatomic, assign) id<EaseConversationModelDelegate> model;
 
 - (instancetype)initWithConversationCellOptions:(EaseConversationCellOptions*)options;
-- (void)setSelectedStatus;
 
 @end

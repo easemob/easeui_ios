@@ -49,8 +49,7 @@
         make.top.equalTo(self.contentView).offset(14);
         make.left.equalTo(self.contentView).offset(16);
         make.bottom.equalTo(self.contentView).offset(-14);
-        make.height.equalTo(@(_conversationCellOptions.avatarSize.height));
-        make.width.equalTo(@(_conversationCellOptions.avatarSize.width));
+        make.width.equalTo(self.avatarView.mas_height).multipliedBy(1);
     }];
     _avatarView.layer.cornerRadius = _avatarView.frame.size.width / 4;
     if (_conversationCellOptions.avatarStyle == EMAvatarStyleRectangular)
@@ -111,14 +110,6 @@
         make.right.equalTo(self.badgeLabel.mas_left).offset(-5);
         make.bottom.equalTo(self.contentView).offset(-8);
     }];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cellTapAction:)];
-    tap.delegate = self;
-    [self addGestureRecognizer:tap];
-    tap.delaysTouchesBegan = YES;
-    tap.delaysTouchesEnded = YES;
-    
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(cellLongPressAction:)];
-    [self addGestureRecognizer:longPress];
 
     self.selectionStyle = UITableViewCellSelectionStyleGray;
 }
@@ -129,34 +120,6 @@
         return NO;
     }
     return YES;
-}
-
-#pragma mark - Action
-
-- (void)cellTapAction:(UITapGestureRecognizer *)aTap
-{
-    if(aTap.state == UIGestureRecognizerStateBegan) {
-    }
-
-}
-
-- (void)cellLongPressAction:(UILongPressGestureRecognizer *)aLongPress
-{
-    if (aLongPress.state == UIGestureRecognizerStateBegan) {
-        self.selected = YES;
-        if (self.delegate && [self.delegate respondsToSelector:@selector(conversationCellDidLongPress:)]) {
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setSelectedStatus) name:UIMenuControllerDidHideMenuNotification object:nil];
-            [self.delegate conversationCellDidLongPress:self];
-        }
-    }
-}
-
-- (void)setSelectedStatus
-{
-    if(!_model.isStick) {
-        self.selected = NO;
-    }
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIMenuControllerDidHideMenuNotification object:nil];
 }
 
 #pragma mark - setter
@@ -267,13 +230,16 @@
         //系统通知
         [self _setnotificationModel:model];
     } else if (model.conversationModelType == EaseConversation) {
+        NSString *bundlePath = [[NSBundle bundleForClass:[self class]].resourcePath stringByAppendingPathComponent:@"/EaseIMKit.bundle"];
+        NSBundle *resource_bundle = [NSBundle bundleWithPath:bundlePath];
+     
         EMConversationModel *conversationModel = (EMConversationModel*)model;
         if (conversationModel.conversationType == EMConversationTypeChat)
-            self.avatarView.image = [UIImage imageNamed:@"defaultAvatar"];
+            self.avatarView.image = [UIImage imageNamed:@"defaultAvatar" inBundle:resource_bundle compatibleWithTraitCollection:nil];
         if (conversationModel.conversationType == EMConversationTypeGroupChat)
-            self.avatarView.image = [UIImage imageNamed:@"groupConversation"];
+            self.avatarView.image = [UIImage imageNamed:@"groupConversation" inBundle:resource_bundle compatibleWithTraitCollection:nil];
         if (conversationModel.conversationType == EMConversationTypeChatRoom)
-            self.avatarView.image = [UIImage imageNamed:@"chatroomConversation"];
+            self.avatarView.image = [UIImage imageNamed:@"chatroomConversation" inBundle:resource_bundle compatibleWithTraitCollection:nil];
         self.nameLabel.text = conversationModel.conversationTheme;
         self.detailLabel.attributedText = [self _getDetailWithModel:conversationModel];
         self.timeLabel.text = [self _getTimeWithModel:conversationModel];
@@ -290,8 +256,10 @@
 
 -(void)_setnotificationModel:(id<EaseConversationModelDelegate>)model
 {
+    NSString *bundlePath = [[NSBundle bundleForClass:[self class]].resourcePath stringByAppendingPathComponent:@"/EaseIMKit.bundle"];
+    NSBundle *resource_bundle = [NSBundle bundleWithPath:bundlePath];
     EMSystemNotificationModel *notificationModel = (EMSystemNotificationModel *)model;
-    self.avatarView.image = [UIImage imageNamed:@"systemNotify"];
+    self.avatarView.image = [UIImage imageNamed:@"systemNotify" inBundle:resource_bundle compatibleWithTraitCollection:nil];
     self.nameLabel.text = @"系统通知";
     if (notificationModel.notificationType == EMNotificationModelTypeContact)
         self.detailLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"好友申请来自：%@",notificationModel.notificationSender]];
