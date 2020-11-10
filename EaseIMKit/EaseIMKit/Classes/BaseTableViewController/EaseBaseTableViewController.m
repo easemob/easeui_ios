@@ -47,6 +47,7 @@
 - (void)endRefresh {
     if (self.tableView.isRefreshing) {
         [self.tableView endRefreshing];
+        [self.tableView reloadData];
     }
 }
 
@@ -71,6 +72,13 @@
 }
 
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.easeDelegate && [self.easeDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+        [self.easeDelegate tableView:tableView didSelectRowAtIndexPath:indexPath];
+    }else {
+        // Do default;
+    }
+}
 
 
 #pragma mark - getter

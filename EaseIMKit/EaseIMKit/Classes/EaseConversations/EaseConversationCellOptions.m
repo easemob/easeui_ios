@@ -68,8 +68,9 @@
 
 - (void)setAvatarStyle:(EMAvatarStyle)avatarStyle
 {
-    if (avatarStyle >= EMAvatarMIN && avatarStyle <= EMAvatarMAX)
+    if (avatarStyle >= EMAvatarMIN && avatarStyle <= EMAvatarMAX) {
         _avatarStyle = avatarStyle;
+    }
 }
 
 - (void)setAvatarSize:(CGSize)avatarSize
