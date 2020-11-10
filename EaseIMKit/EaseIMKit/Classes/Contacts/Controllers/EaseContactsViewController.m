@@ -157,6 +157,10 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:heightForItem:)]) {
+        return [self.easeTableViewDelegate easeTableView:tableView heightForItem:[self modelWithIndexPath:indexPath]];
+    }
+
     return _viewModel.cellHeight;
 }
 

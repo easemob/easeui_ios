@@ -23,7 +23,6 @@
         make.top.equalTo(self.view);
         make.size.equalTo(self.view);
     }];
-    
 }
 
 

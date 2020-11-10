@@ -37,12 +37,11 @@
     [ret addObject:item];
     [ret addObject:item];
     [ret addObject:item];
-    [ret addObject:item];
     return ret;
 }
 
 - (void)easeTableView:(nonnull UITableView *)tableView didSelectItem:(nonnull id<EaseContactModelDelegate>)item {
-    
+
 }
 
 @end

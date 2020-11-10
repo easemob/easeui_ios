@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NormalItem : NSObject <EaseContactModelDelegate>
 @property (nonatomic, copy) NSString *showName;
 @property (nonatomic, copy) NSString *avatarURL;
-@property (nonatomic, copy) NSString *defaultAvatar;
+@property (nonatomic, copy) UIImage *defaultAvatar;
 @end
 
 NS_ASSUME_NONNULL_END

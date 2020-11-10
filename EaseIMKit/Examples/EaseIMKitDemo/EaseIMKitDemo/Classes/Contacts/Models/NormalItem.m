@@ -10,4 +10,12 @@
 
 @implementation NormalItem
 
+@synthesize firstLetter;
+@synthesize type;
+
+- (EaseContactModelType)type{
+    return Normal;
+}
+
+
 @end

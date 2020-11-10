@@ -14,7 +14,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol EaseContactsTableViewDelegate  <NSObject>
+
+@optional
 - (void)easeTableView:(UITableView *)tableView didSelectItem:(id<EaseContactModelDelegate>)item;
+- (CGFloat)easeTableView:(UITableView *)tableView heightForItem:(id<EaseContactModelDelegate>)item;
 @end
 
 @interface EaseContactsViewController : EaseBaseTableViewController
