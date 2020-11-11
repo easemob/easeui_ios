@@ -13,8 +13,8 @@
 @synthesize firstLetter;
 @synthesize type;
 
-- (EaseContactModelType)type{
-    return Normal;
+- (EaseContactItemType)type{
+    return Custom;
 }
 
 

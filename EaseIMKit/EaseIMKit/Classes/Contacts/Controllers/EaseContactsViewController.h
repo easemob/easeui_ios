@@ -7,23 +7,19 @@
 
 #import <UIKit/UIKit.h>
 #import "EaseBaseTableViewController.h"
-#import "EaseContactModelDelegate.h"
+#import "EaseContactDelegate.h"
 #import "EaseContactsViewModel.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol EaseContactsTableViewDelegate  <NSObject>
+@protocol EaseContactsTableViewDelegate <EaseTableViewDelegate>
 
-@optional
-- (void)easeTableView:(UITableView *)tableView didSelectItem:(id<EaseContactModelDelegate>)item;
-- (CGFloat)easeTableView:(UITableView *)tableView heightForItem:(id<EaseContactModelDelegate>)item;
 @end
 
 @interface EaseContactsViewController : EaseBaseTableViewController
-@property (nonatomic, strong) NSArray<EaseContactModelDelegate> *normalItems;
-@property (nonatomic, strong) NSArray<EaseContactModelDelegate> *contacts;
-@property (nonatomic, weak) id<EaseContactsTableViewDelegate> easeTableViewDelegate;
+@property (nonatomic, strong) NSArray<EaseContactDelegate> *normalItems;
+@property (nonatomic, strong) NSArray<EaseContactDelegate> *contacts;
 
 - (instancetype)initWithViewModel:(EaseContactsViewModel *)model;
 

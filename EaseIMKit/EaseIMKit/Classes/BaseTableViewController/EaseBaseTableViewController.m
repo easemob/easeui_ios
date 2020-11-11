@@ -10,10 +10,19 @@
 #import <Masonry/Masonry.h>
 
 @interface EaseBaseTableViewController () <UITableViewDelegate, UITableViewDataSource>
-
+{
+    
+}
 @end
 
 @implementation EaseBaseTableViewController
+
+- (instancetype)initWithModel:(EaseBaseTableViewModel *)aModel {
+    if(self = [super init]) {
+        self.viewModel = aModel;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -23,8 +32,26 @@
         make.top.equalTo(self.view);
         make.size.equalTo(self.view);
     }];
+    
+    [self resetViewModel:self.viewModel];
 }
 
+
+- (void)resetViewModel:(EaseBaseTableViewModel *)viewModel {
+    _viewModel = viewModel;
+    [self _setupSubViews];
+    if (_viewModel.canRefresh) {
+        [self beginRefresh];
+    }else {
+        [self.tableView disableRefresh];
+        [self refreshTabView];
+    }
+}
+
+
+- (void)_setupSubViews {
+    // 配置基本ui属性
+}
 
 #pragma mark - actions
 - (void)beginRefresh {
@@ -61,6 +88,11 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:cellforItem:)]) {
+        return [self.easeTableViewDelegate easeTableView:tableView cellforItem:self.dataAry[indexPath.row]];
+    }
+    
     static NSString *cellId = @"baseCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
@@ -74,6 +106,36 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:canEditRowAtItem:)]) {
+        return [self.easeTableViewDelegate easeTableView:tableView canEditRowAtItem:self.dataAry[indexPath.row]];
+    }
+    
+    return _viewModel.cellCanEdit;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete | UITableViewCellEditingStyleInsert;
+}
+
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:heightForItem:)]) {
+        return [self.easeTableViewDelegate easeTableView:tableView heightForItem:self.dataAry[indexPath.row]];
+    }
+    
+    return self.viewModel.cellHeight;
+}
+
 
 
 #pragma mark - getter
@@ -92,5 +154,12 @@
     return _tableView;
 }
 
+- (NSMutableArray<EaseItemDelegate> *)dataAry {
+    if (!_dataAry) {
+        _dataAry = [[NSMutableArray<EaseItemDelegate> alloc] init];;
+    }
+    
+    return _dataAry;;
+}
 
 @end

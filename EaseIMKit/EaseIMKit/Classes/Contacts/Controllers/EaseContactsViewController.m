@@ -13,7 +13,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Masonry/Masonry.h>
 
-@interface EaseContactsViewController () <UITableViewDelegate, UITableViewDataSource, EMContactManagerDelegate>
+@interface EaseContactsViewController () <EMContactManagerDelegate>
 {
     EaseContactsViewModel *_viewModel;
 }
@@ -25,11 +25,11 @@
 @end
 
 @implementation EaseContactsViewController
+@synthesize viewModel = _viewModel;
 
 - (instancetype)initWithViewModel:(EaseContactsViewModel *)model {
-    if (self = [super init]) {
-        _viewModel = model;
-
+    if (self = [super initWithModel:model]) {
+        
     }
     return self;
 }
@@ -37,24 +37,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [EMClient.sharedClient.contactManager addDelegate:self delegateQueue:nil];
-    [self resetViewModel:_viewModel];
+    [self refreshTabView];
 }
 
 - (void)resetViewModel:(EaseContactsViewModel *)viewModel {
-    _viewModel = viewModel;
-    if (_viewModel.canRefresh) {
-        [self beginRefresh];
-    }else {
-        [self.tableView disableRefresh];
-        [self refreshTabView];
-    }
+    [super resetViewModel:viewModel];
 }
 
 - (void)refreshTabView {
     __block typeof(self) weakSelf = self;
     [EMClient.sharedClient.contactManager getContactsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
         if (!aError) {
-            NSMutableArray<EaseContactModelDelegate> *contacts = [NSMutableArray<EaseContactModelDelegate> array];
+            NSMutableArray<EaseContactDelegate> *contacts = [NSMutableArray<EaseContactDelegate> array];
             for (NSString *username in aList) {
                 EaseContactModel *model = [[EaseContactModel alloc] initWithShowName:username];
                 [contacts addObject:model];
@@ -76,7 +70,7 @@
         cell = [[EaseContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     
-    id<EaseContactModelDelegate> easeContactModel;
+    id<EaseContactDelegate> easeContactModel;
     if (!_viewModel.letterIndex) {
         if (indexPath.section == 0) {
             easeContactModel = self.normalItems[indexPath.row];
@@ -94,15 +88,6 @@
     cell.model = easeContactModel;
     
     return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:didSelectItem:)]) {
-        [self.easeTableViewDelegate easeTableView:tableView didSelectItem:[self modelWithIndexPath:indexPath]];
-    }else {
-        // Do default;
-    }
 }
 
 
@@ -156,32 +141,25 @@
     return contacts.count;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:heightForItem:)]) {
-        return [self.easeTableViewDelegate easeTableView:tableView heightForItem:[self modelWithIndexPath:indexPath]];
-    }
 
-    return _viewModel.cellHeight;
-}
-
-- (id<EaseContactModelDelegate>)modelWithIndexPath:(NSIndexPath *)indexPath {
+- (id<EaseContactDelegate>)modelWithIndexPath:(NSIndexPath *)indexPath {
     if (!_viewModel.letterIndex) {
-        return (id<EaseContactModelDelegate>)self.contacts[indexPath.row];
+        return (id<EaseContactDelegate>)self.contacts[indexPath.row];
     }
     NSArray *letterAry = self.contactLists[indexPath.section];
-    return (id<EaseContactModelDelegate>)letterAry[indexPath.row];
+    return (id<EaseContactDelegate>)letterAry[indexPath.row];
 }
 
 
 
-- (void)sortContact:(NSArray<EaseContactModelDelegate> *)contacts {
+- (void)sortContact:(NSArray<EaseContactDelegate> *)contacts {
     
-    NSArray *ret = [contacts sortedArrayUsingComparator:^NSComparisonResult(id <EaseContactModelDelegate> obj1, id<EaseContactModelDelegate> obj2) {
+    NSArray *ret = [contacts sortedArrayUsingComparator:^NSComparisonResult(id <EaseContactDelegate> obj1, id<EaseContactDelegate> obj2) {
         return [obj1.showName compare:obj2.showName options:NSLiteralSearch];
     }];
     
     if (!_viewModel.letterIndex) {
-        self.contacts = (NSArray<EaseContactModelDelegate> *)ret;
+        self.contacts = (NSArray<EaseContactDelegate> *)ret;
     }
 
     NSMutableArray *letters = [NSMutableArray array];
