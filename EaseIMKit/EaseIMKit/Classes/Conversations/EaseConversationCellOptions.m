@@ -56,19 +56,21 @@
 
 - (void)setConvesationsListBgColor:(UIColor *)convesationsListBgColor
 {
-    if (convesationsListBgColor)
+    if (convesationsListBgColor) {
         _convesationsListBgColor = convesationsListBgColor;
+    }
 }
 
 - (void)setConversationCellBgColor:(UIColor *)conversationCellBgColor
 {
-    if (conversationCellBgColor)
+    if (conversationCellBgColor) {
         _conversationCellBgColor = conversationCellBgColor;
+    }
 }
 
 - (void)setAvatarStyle:(EMAvatarStyle)avatarStyle
 {
-    if (avatarStyle >= EMAvatarMIN && avatarStyle <= EMAvatarMAX) {
+    if (avatarStyle >= 0 && avatarStyle <= 2) {
         _avatarStyle = avatarStyle;
     }
 }
@@ -80,44 +82,51 @@
 
 - (void)setWordSizeForCellTitle:(CGFloat)wordSizeForCellTitle
 {
-    if (wordSizeForCellTitle)
+    if (wordSizeForCellTitle) {
         _wordSizeForCellTitle = wordSizeForCellTitle;
+    }
 }
 
 - (void)setWordSizeForCellDetail:(CGFloat)wordSizeForCellDetail
 {
-    if (wordSizeForCellDetail)
+    if (wordSizeForCellDetail) {
         _wordSizeForCellDetail = wordSizeForCellDetail;
+    }
 }
 
 - (void)setWordSizeForCellTimestamp:(CGFloat)wordSizeForCellTimestamp
 {
-    if (wordSizeForCellTimestamp)
+    if (wordSizeForCellTimestamp) {
         _wordSizeForCellTimestamp = wordSizeForCellTimestamp;
+    }
 }
 
 - (void)setUnReadCountPosition:(EMUnReadCountViewPosition)unReadCountPosition
 {
-    if (unReadCountPosition >= EMPositionMIN && unReadCountPosition <= EMPositionMAX)
+    if (unReadCountPosition >= 0 && unReadCountPosition <= 1) {
         _unReadCountPosition = unReadCountPosition;
+    }
 }
 
 - (void)setUnReadCountViewBgColor:(UIColor *)unReadCountViewBgColor
 {
-    if (unReadCountViewBgColor)
+    if (unReadCountViewBgColor) {
         _unReadCountViewBgColor = unReadCountViewBgColor;
+    }
 }
 
 - (void)setLonger:(CGFloat)longer
 {
-    if (longer >= 20 && longer <= 40)
+    if (longer >= 20 && longer <= 40) {
         _longer = longer;
+    }
 }
 
 - (void)setBlankPerchView:(UIView *)blankPerchView
 {
-    if (blankPerchView)
+    if (blankPerchView) {
         _blankPerchView = blankPerchView;
+    }
 }
 
 @end

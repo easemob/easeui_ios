@@ -9,8 +9,8 @@
 #import "EaseConversationCell.h"
 #import "EMHeaders.h"
 #import "EMDateHelper.h"
-#import "EMConversationHelper.h"
-
+#import "EaseConversationModelUtil.h"
+#import "EaseConversationExtController.h"
 
 @interface EaseConversationCell()<UIGestureRecognizerDelegate>
 
@@ -124,7 +124,7 @@
 
 #pragma mark - setter
 
-- (NSAttributedString *)_getDetailWithModel:(EMConversationModel *)conversationModel
+- (NSAttributedString *)_getDetailWithModel:(EaseConversationModel *)conversationModel
 {
     NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:@""];
     
@@ -178,26 +178,24 @@
         default:
             break;
     }
-    
-//    if (lastMessage.direction == EMMessageDirectionReceive) {
-//        NSString *from = lastMessage.from;
-//        latestMessageTitle = [NSString stringWithFormat:@"%@: %@", from, latestMessageTitle];
-//    }
-    
-    NSDictionary *ext = conversationModel.ext;
+
+    /*
     if (ext && [ext[kConversation_IsRead] isEqualToString:kConversation_AtAll]) {
         NSString *allMsg = @"[有全体消息]";
         latestMessageTitle = [NSString stringWithFormat:@"%@ %@", allMsg, latestMessageTitle];
         attributedStr = [[NSMutableAttributedString alloc] initWithString:latestMessageTitle];
         [attributedStr setAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:1.0 green:.0 blue:.0 alpha:0.5]} range:NSMakeRange(0, allMsg.length)];
-    } else if (ext && [ext[kConversation_IsRead] isEqualToString:kConversation_AtYou]) {
+    } else */
+    EMConversation *conversation = [EaseConversationModelUtil getConversationWithConversationModel:conversationModel];
+    
+    if ([EaseConversationExtController isConversationAtMe:conversation]) {
         NSString *atStr = @"[有人@我]";
         latestMessageTitle = [NSString stringWithFormat:@"%@ %@", atStr, latestMessageTitle];
         attributedStr = [[NSMutableAttributedString alloc] initWithString:latestMessageTitle];
         [attributedStr setAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:255/255.0 green:43/255.0 blue:43/255.0 alpha:1.0]} range:NSMakeRange(0, atStr.length)];
-    } else if (ext && [ext objectForKey:kConversation_Draft] && ![[ext objectForKey:kConversation_Draft] isEqualToString:@""]){
+    } else if ([EaseConversationExtController getChatDraft:conversation] && ![[EaseConversationExtController getChatDraft:conversation] isEqualToString:@""]){
         NSString *draftStr = @"[草稿]";
-        latestMessageTitle = [NSString stringWithFormat:@"%@ %@", draftStr, [ext objectForKey:kConversation_Draft]];
+        latestMessageTitle = [NSString stringWithFormat:@"%@ %@", draftStr, [EaseConversationExtController getChatDraft:conversation]];
         attributedStr = [[NSMutableAttributedString alloc] initWithString:latestMessageTitle];
         [attributedStr setAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:255/255.0 green:43/255.0 blue:43/255.0 alpha:1.0]} range:NSMakeRange(0, draftStr.length)];
     } else {
@@ -207,7 +205,7 @@
     return attributedStr;
 }
 
-- (NSString *)_getTimeWithModel:(EMConversationModel *)conversationModel
+- (NSString *)_getTimeWithModel:(EaseConversationModel *)conversationModel
 {
     NSString *latestMessageTime = @"";
     EMMessage *lastMessage = conversationModel.latestMessage;
@@ -223,59 +221,30 @@
     return latestMessageTime;
 }
 
-- (void)setModel:(id<EaseConversationModelDelegate>)model
+- (void)setModel:(EaseConversationModel*)model
 {
     _model = model;
-    if (model.conversationModelType == EaseSystemNotification) {
-        //系统通知
-        [self _setnotificationModel:model];
-    } else if (model.conversationModelType == EaseConversation) {
-        NSString *bundlePath = [[NSBundle bundleForClass:[self class]].resourcePath stringByAppendingPathComponent:@"/EaseIMKit.bundle"];
-        NSBundle *resource_bundle = [NSBundle bundleWithPath:bundlePath];
-     
-        EMConversationModel *conversationModel = (EMConversationModel*)model;
-        if (conversationModel.conversationType == EMConversationTypeChat)
-            self.avatarView.image = [UIImage imageNamed:@"defaultAvatar" inBundle:resource_bundle compatibleWithTraitCollection:nil];
-        if (conversationModel.conversationType == EMConversationTypeGroupChat)
-            self.avatarView.image = [UIImage imageNamed:@"groupConversation" inBundle:resource_bundle compatibleWithTraitCollection:nil];
-        if (conversationModel.conversationType == EMConversationTypeChatRoom)
-            self.avatarView.image = [UIImage imageNamed:@"chatroomConversation" inBundle:resource_bundle compatibleWithTraitCollection:nil];
-        self.nameLabel.text = conversationModel.conversationTheme;
-        self.detailLabel.attributedText = [self _getDetailWithModel:conversationModel];
-        self.timeLabel.text = [self _getTimeWithModel:conversationModel];
-        
-        if (conversationModel.unreadMessagesCount == 0) {
-            self.badgeLabel.value = @"";
-            self.badgeLabel.hidden = YES;
-        } else {
-            self.badgeLabel.value = [NSString stringWithFormat:@" %@ ", conversationModel.unreadMessagesCount > 99 ? (conversationModel.unreadMessagesCount > 199 ? @"..." : @"99+") : @(conversationModel.unreadMessagesCount)];
-            self.badgeLabel.hidden = NO;
-        }
-    }
-}
-
--(void)_setnotificationModel:(id<EaseConversationModelDelegate>)model
-{
-    NSString *bundlePath = [[NSBundle bundleForClass:[self class]].resourcePath stringByAppendingPathComponent:@"/EaseIMKit.bundle"];
-    NSBundle *resource_bundle = [NSBundle bundleWithPath:bundlePath];
-    EMSystemNotificationModel *notificationModel = (EMSystemNotificationModel *)model;
-    self.avatarView.image = [UIImage imageNamed:@"systemNotify" inBundle:resource_bundle compatibleWithTraitCollection:nil];
-    self.nameLabel.text = @"系统通知";
-    if (notificationModel.notificationType == EMNotificationModelTypeContact)
-        self.detailLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"好友申请来自：%@",notificationModel.notificationSender]];
-    if (notificationModel.notificationType == EMNotificationModelTypeGroupJoin)
-        self.detailLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"加群申请来自：%@",notificationModel.notificationSender]];
-    if (notificationModel.notificationType == EMNotificationModelTypeGroupInvite)
-        self.detailLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"加群邀请来自：%@",notificationModel.notificationSender]];
-    self.timeLabel.text = [notificationModel.latestNotificTime substringToIndex:10];
-    if (EMNotificationHelper.shared.unreadCount == 0) {
+    /*
+    if (_model.conversationType == EMConversationTypeChat)
+        self.avatarView.image = [IconResourceManage imageNamed:@"defaultAvatar" class:[self class]];
+    if (_model.conversationType == EMConversationTypeGroupChat)
+        self.avatarView.image = [IconResourceManage imageNamed:@"groupConversation" class:[self class]];
+    if (_model.conversationType == EMConversationTypeChatRoom)
+        self.avatarView.image = [IconResourceManage imageNamed:@"chatroomConversation" class:[self class]];
+    if ([_model.conversationId isEqualToString:EMSYSTEMNOTIFICATIONID])
+        self.avatarView.image = [IconResourceManage imageNamed:@"systemNotify" class:[self class]];*/
+    self.avatarView.image = _model.avatarImg;
+    self.nameLabel.text = _model.conversationNickname;
+    self.detailLabel.attributedText = [self _getDetailWithModel:_model];
+    self.timeLabel.text = [self _getTimeWithModel:_model];
+    
+    if (_model.unreadMessagesCount == 0) {
         self.badgeLabel.value = @"";
         self.badgeLabel.hidden = YES;
     } else {
-        self.badgeLabel.value = [NSString stringWithFormat:@" %@ ", EMNotificationHelper.shared.unreadCount > 99 ? (EMNotificationHelper.shared.unreadCount > 199 ? @"..." : @"99+") : @(EMNotificationHelper.shared.unreadCount)];
+        self.badgeLabel.value = [NSString stringWithFormat:@" %@ ", _model.unreadMessagesCount > 99 ? (_model.unreadMessagesCount > 199 ? @"..." : @"99+") : @(_model.unreadMessagesCount)];
         self.badgeLabel.hidden = NO;
     }
-
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

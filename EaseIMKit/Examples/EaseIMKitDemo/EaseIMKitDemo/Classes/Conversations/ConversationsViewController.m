@@ -29,7 +29,7 @@
         make.bottom.equalTo(self.view);
     }];
 }
-
+   
 #pragma mark - EaseConversationVCDelegate
 
 - (UIContextualAction *)sideslipCustomAction:(UITableView *)tableView dataArray:(NSMutableArray *)dataArray trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath

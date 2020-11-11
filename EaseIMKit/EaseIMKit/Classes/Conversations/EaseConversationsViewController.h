@@ -9,8 +9,8 @@
 #import <Hyphenate/Hyphenate.h>
 #import "EaseConversationCellOptions.h"
 #import "EaseConversationCellModelDelegate.h"
-#import "EMRefreshViewController.h"
 #import "EaseConversationCell.h"
+#import "EaseBaseTableViewController.h"
 
 @protocol EaseConversationVCDelegate <NSObject>
 
@@ -21,7 +21,7 @@
  *
  * @param   cellModel  id<EaseConversationModelDelegate> 类型 数据源
  */
-- (id<EaseConversationCellModelDelegate>)conversationCellForModel:(id<EaseConversationModelDelegate>)cellModel;
+- (id<EaseConversationCellModelDelegate>)conversationCellForModel:(EaseConversationModel*)cellModel;
 
 /**
  * 会话列表cell侧滑自定义功能区，可添加一项Action
@@ -41,12 +41,22 @@
  */
 - (void)tableView:(UITableView *)tableView dataArray:(NSMutableArray *)dataArray didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 
+/**
+ * 排序会话列表
+ *
+ * @param   modelList  会话列表（EaseConversationModel *）类型数据源
+ */
+- (NSArray *)sortConversationsList:(NSArray<EaseConversationModel *> *)modelList;
+
+//是否需要系统通知：好友/群 申请等   默认需要
+- (BOOL)isNeedsSystemNotification;
+
 @end
 
-@interface EaseConversationsViewController : EMRefreshViewController
+@interface EaseConversationsViewController : EaseBaseTableViewController
 
 - (instancetype)initWithOptions:(EaseConversationCellOptions *)options; //初始化
-- (void)reloadViewWithOption; //根据 option 重新刷新会话列表
+- (void)reloadViewWithOption:(EaseConversationCellOptions*)options; //根据 option 重新刷新会话列表
 
 @property (nonatomic, assign) id<EaseConversationVCDelegate> conversationVCDelegate;
 

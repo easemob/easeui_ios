@@ -39,7 +39,7 @@ static EMDemoOptions *sharedOptions = nil;
         self.isShowCallInfo = YES;
         self.isUseBackCamera = NO;
         
-        self.isVisibleOnConversationList = YES;
+        self.isVisibleOnConversationList = NO;
         self.isReceiveNewMsgNotice = YES;
         self.willRecord = NO;
         self.willMergeStrem = NO;
