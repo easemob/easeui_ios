@@ -57,7 +57,7 @@
 }
 
 
-- (void)setModel:(id<EaseContactModelDelegate>)model {
+- (void)setModel:(id<EaseContactDelegate>)model {
     _model = model;
     self.showNameLabel.text = _model.showName;
     [self.avatarImageView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL] placeholderImage:_model.defaultAvatar];

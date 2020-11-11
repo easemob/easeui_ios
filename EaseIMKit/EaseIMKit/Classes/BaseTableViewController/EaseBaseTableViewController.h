@@ -6,12 +6,33 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EaseBaseTableViewModel.h"
+#import "EaseItemDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+@protocol EaseTableViewDelegate  <NSObject>
+
+@optional
+- (void)easeTableView:(UITableView *)tableView didSelectItem:(id<EaseItemDelegate>)item;
+- (CGFloat)easeTableView:(UITableView *)tableView heightForItem:(id<EaseItemDelegate>)item;
+- (UITableViewCell *)easeTableView:(UITableView *)tableView cellforItem:(id<EaseItemDelegate>)item;
+- (BOOL)easeTableView:(UITableView *)tableView canEditRowAtItem:(id<EaseItemDelegate>)item;
+- (nullable NSArray<UITableViewRowAction *> *)easeTableView:(UITableView *)tableView editActionsForRowAtItem:(id<EaseItemDelegate>)item;
+@end
+
 
 @interface EaseBaseTableViewController : UIViewController
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) EaseBaseTableViewModel *viewModel;
+@property (nonatomic, strong) NSMutableArray<EaseItemDelegate> * dataAry;
+
+@property (nonatomic, weak) id<EaseTableViewDelegate> easeTableViewDelegate;
+
+- (instancetype)initWithModel:(EaseBaseTableViewModel *)aModel;
+
+- (void)resetViewModel:(EaseBaseTableViewModel *)viewModel;
 
 // 主动刷新
 - (void)beginRefresh;

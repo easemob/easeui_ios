@@ -29,7 +29,7 @@
     return @"";
 }
 
-- (EaseContactModelType)type {
+- (EaseContactItemType)type {
     return Contact;
 }
 

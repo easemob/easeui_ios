@@ -6,12 +6,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EaseContactModelDelegate.h"
+#import "EaseContactDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseContactCell : UITableViewCell
-@property (nonatomic) id<EaseContactModelDelegate> model;
+@property (nonatomic) id<EaseContactDelegate> model;
 @end
 
 NS_ASSUME_NONNULL_END

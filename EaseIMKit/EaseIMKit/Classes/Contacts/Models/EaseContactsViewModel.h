@@ -6,23 +6,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "EaseBaseTableViewModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-/*!
- *  头像风格
- */
-typedef enum {
-    Corner = 0, //圆角
-    Rectangular,  //矩形
-    Circular,  //圆形
-} EaseContactAvatarStyle;
 
-@interface EaseContactsViewModel : NSObject
-@property (nonatomic) BOOL canRefresh;
-@property (nonatomic) EaseContactAvatarStyle avatarType;
+@interface EaseContactsViewModel : EaseBaseTableViewModel
+
 @property (nonatomic) BOOL letterIndex;
-@property (nonatomic) CGFloat cellHeight;
+
 @end
 
 NS_ASSUME_NONNULL_END

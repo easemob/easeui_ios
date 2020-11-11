@@ -56,7 +56,7 @@
     self.isAddBlankView = NO;
     [self _setupSubviews];
     [[EMNotificationHelper shared] addDelegate:self];
-    [self didNotificationsUnreadCountUpdate:[EMNotificationHelper shared].unreadCount];
+//    [self didNotificationsUnreadCountUpdate:[EMNotificationHelper shared].unreadCount];
     [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
     [[EaseConversationModelUtil shared] addDelegate:self];

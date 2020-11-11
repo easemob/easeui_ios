@@ -19,28 +19,41 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     EaseContactsViewModel *model = [[EaseContactsViewModel alloc] init];
-    model.letterIndex = YES;
-    model.canRefresh = YES;
+//    model.letterIndex = NO;
+//    model.canRefresh = YES;
     EaseContactsViewController *contactsVC = [[EaseContactsViewController alloc] initWithViewModel:model];
     contactsVC.normalItems = [self titleItem];
     contactsVC.easeTableViewDelegate = self;
     
     [self.view addSubview:contactsVC.view];
+//    contactsVC.view.frame = CGRectMake(50, 200, 300, 400);
     contactsVC.view.frame = self.view.bounds;
     [self addChildViewController:contactsVC];
 }
 
-- (NSArray<EaseContactModelDelegate> *)titleItem {
-    NSMutableArray<EaseContactModelDelegate> *ret = [NSMutableArray<EaseContactModelDelegate> array];
-    NormalItem *item = [[NormalItem alloc] init];
-    item.showName = @"test";
-    [ret addObject:item];
-    [ret addObject:item];
-    [ret addObject:item];
+
+- (NSArray<EaseContactDelegate> *)titleItem {
+    NSMutableArray<EaseContactDelegate> *ret = [NSMutableArray<EaseContactDelegate> array];
+    NormalItem *item1 = [[NormalItem alloc] init];
+    item1.showName = @"群组管理";
+    
+    NormalItem *item2 = [[NormalItem alloc] init];
+    item2.showName = @"聊天室管理";
+    
+    NormalItem *item3 = [[NormalItem alloc] init];
+    item3.showName = @"好友管理";
+    
+    NormalItem *item4 = [[NormalItem alloc] init];
+    item4.showName = @"通知管理";
+    
+    [ret addObject:item1];
+    [ret addObject:item2];
+    [ret addObject:item3];
+    [ret addObject:item4];
     return ret;
 }
 
-- (void)easeTableView:(nonnull UITableView *)tableView didSelectItem:(nonnull id<EaseContactModelDelegate>)item {
+- (void)easeTableView:(nonnull UITableView *)tableView didSelectItem:(nonnull id<EaseContactDelegate>)item {
 
 }
 

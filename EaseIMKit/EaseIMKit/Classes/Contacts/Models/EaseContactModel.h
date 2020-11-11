@@ -6,11 +6,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EaseContactModelDelegate.h"
+#import "EaseContactDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EaseContactModel : NSObject <EaseContactModelDelegate>
+@interface EaseContactModel : NSObject <EaseContactDelegate>
 - (instancetype)initWithShowName:(NSString *)showName;
 @end
 
