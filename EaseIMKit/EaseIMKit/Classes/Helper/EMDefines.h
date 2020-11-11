@@ -33,6 +33,8 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 #define CONVERSATION_ID @"conversationId"
 #define CONVERSATION_OBJECT @"conversationObject"
 
+#define EMSYSTEMNOTIFICATIONID @"emSystemNotificationId"
+
 //账号状态
 #define ACCOUNT_LOGIN_CHANGED @"loginStateChange"
 

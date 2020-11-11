@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, EMNotificationModelType) {
 
 @property (nonatomic) BOOL isCheckUnreadCount;
 
-@property (nonatomic) NSInteger unreadCount;
+@property (nonatomic) int unreadCount;
 
 + (instancetype)shared;
 
@@ -65,11 +65,7 @@ typedef NS_ENUM(NSInteger, EMNotificationModelType) {
 
 - (void)removeDelegate:(id<EMNotificationsDelegate>)aDelegate;
 
-//- (void)insertModel:(EMNotificationModel *)aModel;
-
 - (void)markAllAsRead;
-
-//- (NSInteger)getUnreadCount;
 
 - (void)archive;
 
@@ -81,7 +77,7 @@ typedef NS_ENUM(NSInteger, EMNotificationModelType) {
 
 - (void)didNotificationsUpdate;
 
-- (void)didNotificationsUnreadCountUpdate:(NSInteger)aUnreadCount;
+- (void)didNotificationsUnreadCountUpdate:(int)aUnreadCount;
 
 @end
 

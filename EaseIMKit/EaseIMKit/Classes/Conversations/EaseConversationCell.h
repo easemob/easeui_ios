@@ -19,7 +19,7 @@
 @property (nonatomic, strong) UILabel *detailLabel;
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) EMBadgeLabel *badgeLabel;
-@property (nonatomic, assign) id<EaseConversationModelDelegate> model;
+@property (nonatomic, assign) EaseConversationModel *model;
 
 - (instancetype)initWithConversationCellOptions:(EaseConversationCellOptions*)options;
 

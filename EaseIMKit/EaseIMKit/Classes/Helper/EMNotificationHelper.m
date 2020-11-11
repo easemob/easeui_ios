@@ -144,9 +144,9 @@ static EMNotificationHelper *shared = nil;
     }
 }
 
-- (NSInteger)getUnreadCount
+- (int)getUnreadCount
 {
-    NSInteger ret = 0;
+    int ret = 0;
     for (EMNotificationModel *model in self.notificationList) {
         if (!model.isRead) {
             ++ret;

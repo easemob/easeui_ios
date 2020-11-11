@@ -8,8 +8,9 @@
 
 #import "ContactsViewController.h"
 #import <EaseIMKit.h>
+#import "NormalItem.h"
 
-@interface ContactsViewController () <EaseTableViewDelegaate>
+@interface ContactsViewController () <EaseContactsTableViewDelegate>
 
 @end
 
@@ -18,15 +19,29 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     EaseContactsViewModel *model = [[EaseContactsViewModel alloc] init];
+    model.letterIndex = YES;
+    model.canRefresh = YES;
     EaseContactsViewController *contactsVC = [[EaseContactsViewController alloc] initWithViewModel:model];
-    contactsVC.easeDelegate = self;
+    contactsVC.normalItems = [self titleItem];
+    contactsVC.easeTableViewDelegate = self;
+    
     [self.view addSubview:contactsVC.view];
     contactsVC.view.frame = self.view.bounds;
     [self addChildViewController:contactsVC];
 }
 
-- (void)easeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (NSArray<EaseContactModelDelegate> *)titleItem {
+    NSMutableArray<EaseContactModelDelegate> *ret = [NSMutableArray<EaseContactModelDelegate> array];
+    NormalItem *item = [[NormalItem alloc] init];
+    item.showName = @"test";
+    [ret addObject:item];
+    [ret addObject:item];
+    [ret addObject:item];
+    return ret;
+}
+
+- (void)easeTableView:(nonnull UITableView *)tableView didSelectItem:(nonnull id<EaseContactModelDelegate>)item {
+
 }
 
 @end

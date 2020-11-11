@@ -14,9 +14,6 @@ typedef enum {
     EMAvatarStyleCorner = 0, //圆角
     EMAvatarStyleRectangular,  //矩形
     EMAvatarStyleCircular,  //圆形
-    
-    EMAvatarMIN = EMAvatarStyleCorner,
-    EMAvatarMAX = EMAvatarStyleCircular,
 } EMAvatarStyle;
 
 /*!
@@ -25,9 +22,6 @@ typedef enum {
 typedef enum {
     EMRightForCell = 0,    //cell右方
     EMTopRightCornerForAvatar, //头像右上角
-    
-    EMPositionMIN = EMRightForCell,
-    EMPositionMAX = EMTopRightCornerForAvatar,
 } EMUnReadCountViewPosition;
 
 NS_ASSUME_NONNULL_BEGIN

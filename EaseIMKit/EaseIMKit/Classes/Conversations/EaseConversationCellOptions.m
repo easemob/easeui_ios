@@ -70,7 +70,7 @@
 
 - (void)setAvatarStyle:(EMAvatarStyle)avatarStyle
 {
-    if (avatarStyle >= EMAvatarMIN && avatarStyle <= EMAvatarMAX) {
+    if (avatarStyle >= 0 && avatarStyle <= 2) {
         _avatarStyle = avatarStyle;
     }
 }
@@ -103,7 +103,7 @@
 
 - (void)setUnReadCountPosition:(EMUnReadCountViewPosition)unReadCountPosition
 {
-    if (unReadCountPosition >= EMPositionMIN && unReadCountPosition <= EMPositionMAX) {
+    if (unReadCountPosition >= 0 && unReadCountPosition <= 1) {
         _unReadCountPosition = unReadCountPosition;
     }
 }

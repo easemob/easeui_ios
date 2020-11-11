@@ -7,7 +7,6 @@
 
 #import "EaseConversationModelUtil.h"
 #import "EMMulticastDelegate.h"
-#import "EaseConversationStickController.h"
 
 static EaseConversationModelUtil *shared = nil;
 @interface EaseConversationModelUtil()
@@ -63,7 +62,7 @@ static EaseConversationModelUtil *shared = nil;
 
     for (int i = 0; i < [aConversations count]; i++) {
         EMConversation *conversation = aConversations[i];
-        id<EaseConversationModelDelegate> conversationModel = [[EaseConversationModel alloc] initWithEMConversation:conversation];
+        EaseConversationModel *conversationModel = [[EaseConversationModel alloc] initWithEMConversation:conversation];
         [retArray addObject:conversationModel];
     }
     
@@ -87,7 +86,7 @@ static EaseConversationModelUtil *shared = nil;
 {
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:aGroup.groupId type:EMConversationTypeGroupChat createIfNotExist:YES];
     EaseConversationModel *model = [[EaseConversationModel alloc] initWithEMConversation:conversation];
-    model.conversationTheme = aGroup.groupName;
+    model.conversationNickname = aGroup.groupName;
     
     NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
     [ext setObject:aGroup.groupName forKey:@"subject"];
@@ -101,7 +100,7 @@ static EaseConversationModelUtil *shared = nil;
 {
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:aChatroom.chatroomId type:EMConversationTypeChatRoom createIfNotExist:YES];
     EaseConversationModel *model = [[EaseConversationModel alloc] initWithEMConversation:conversation];
-    model.conversationTheme = aChatroom.subject;
+    model.conversationNickname = aChatroom.subject;
     
     NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
     [ext setObject:aChatroom.subject forKey:@"subject"];

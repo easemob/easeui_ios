@@ -14,6 +14,8 @@
     return nil;
 }
 
+@synthesize nickName;
+
 @end
 
 

@@ -7,7 +7,6 @@
 
 #import "EMNotificationHelper.h"
 #import "EaseConversationModel.h"
-#import "EaseConversationModelDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 static NSString *kConversation_IsRead = @"kHaveAtMessage";//群聊@功能
