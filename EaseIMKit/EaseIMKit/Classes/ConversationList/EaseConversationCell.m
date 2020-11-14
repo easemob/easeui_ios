@@ -7,31 +7,29 @@
 //
 
 #import "EaseConversationCell.h"
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 #import "EMDateHelper.h"
 #import "EaseConversationModelUtil.h"
 #import "EaseConversationExtController.h"
+#import "IconResourceManage.h"
 
 @interface EaseConversationCell()<UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) EaseConversationCellOptions *conversationCellOptions;
+@property (nonatomic, strong) EaseConversationViewModel *conversationCellViewModel;
 
 @end
 
 @implementation EaseConversationCell
 
-- (instancetype)initWithConversationCellOptions:(EaseConversationCellOptions*)options
+- (instancetype)initWithConversationViewModel:(EaseConversationViewModel*)viewModel
 {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EMConversationCell"];
     if (self){
         self.selectionStyle = UITableViewCellSelectionStyleDefault;
         self.selectedBackgroundView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width, self.contentView.frame.size.height)];
         self.selectedBackgroundView.backgroundColor = [UIColor colorWithRed:233/255.0 green:233/255.0 blue:233/255.0 alpha:1.0];
-        self.backgroundColor = options.conversationCellBgColor;
-        _conversationCellOptions = options;
-        if (!_conversationCellOptions) {
-            _conversationCellOptions = [[EaseConversationCellOptions alloc]init];
-        }
+        self.backgroundColor = viewModel.cellBgColor;
+        _conversationCellViewModel = viewModel;
         [self _setupSubview];
     }
     return self;
@@ -52,13 +50,13 @@
         make.width.equalTo(self.avatarView.mas_height).multipliedBy(1);
     }];
     _avatarView.layer.cornerRadius = _avatarView.frame.size.width / 4;
-    if (_conversationCellOptions.avatarStyle == EMAvatarStyleRectangular)
+    if (_conversationCellViewModel.avatarType == Rectangular)
         _avatarView.layer.cornerRadius = 0;
-    if (_conversationCellOptions.avatarStyle == EMAvatarStyleCircular)
+    if (_conversationCellViewModel.avatarType == Circular)
         _avatarView.layer.cornerRadius = _avatarView.frame.size.width / 2;
     
     _timeLabel = [[UILabel alloc] init];
-    _timeLabel.font = [UIFont systemFontOfSize:_conversationCellOptions.wordSizeForCellTimestamp];
+    _timeLabel.font = [UIFont systemFontOfSize:_conversationCellViewModel.wordSizeForCellTimestamp];
     _timeLabel.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1.0];
     _timeLabel.backgroundColor = [UIColor clearColor];
     [_timeLabel setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
@@ -71,7 +69,7 @@
     _nameLabel = [[UILabel alloc] init];
     _nameLabel.backgroundColor = [UIColor clearColor];
     _nameLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1.0];
-    _nameLabel.font = [UIFont systemFontOfSize:_conversationCellOptions.wordSizeForCellTitle];
+    _nameLabel.font = [UIFont systemFontOfSize:_conversationCellViewModel.wordSizeForCellTitle];
     [self.contentView addSubview:_nameLabel];
     [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.contentView.mas_centerY);
@@ -79,18 +77,18 @@
         make.right.equalTo(self.timeLabel.mas_left);
     }];
     
-    bool badgeLongerIsValid = (_conversationCellOptions.longer >= 20 && _conversationCellOptions.longer <=  _avatarView.frame.size.width / 2);
+    bool badgeLongerIsValid = (_conversationCellViewModel.longer >= 20 && _conversationCellViewModel.longer <=  _avatarView.frame.size.width / 2);
     _badgeLabel = [[EMBadgeLabel alloc] init];
     _badgeLabel.clipsToBounds = YES;
-    _badgeLabel.layer.cornerRadius = badgeLongerIsValid ? _conversationCellOptions.longer / 2 : 10;
+    _badgeLabel.layer.cornerRadius = badgeLongerIsValid ? _conversationCellViewModel.longer / 2 : 10;
     [self.contentView addSubview:_badgeLabel];
     [_badgeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_centerY).offset(3);
         make.right.equalTo(self.contentView).offset(-15);
-        make.height.equalTo(badgeLongerIsValid ? @(_conversationCellOptions.longer) : @20);
-        make.width.greaterThanOrEqualTo(badgeLongerIsValid ? @(_conversationCellOptions.longer) : @20);
+        make.height.equalTo(badgeLongerIsValid ? @(_conversationCellViewModel.longer) : @20);
+        make.width.greaterThanOrEqualTo(badgeLongerIsValid ? @(_conversationCellViewModel.longer) : @20);
     }];
-    if (_conversationCellOptions.unReadCountPosition == EMTopRightCornerForAvatar) {
+    if (_conversationCellViewModel.unReadCountPosition == EMTopRightCornerForAvatar) {
         //未读数在头像右上角
         [_badgeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(_avatarView.mas_top);
@@ -101,7 +99,7 @@
     _detailLabel = [[UILabel alloc] init];
     _detailLabel.translatesAutoresizingMaskIntoConstraints = NO;
     _detailLabel.backgroundColor = [UIColor clearColor];
-    _detailLabel.font = [UIFont systemFontOfSize:_conversationCellOptions.wordSizeForCellDetail];
+    _detailLabel.font = [UIFont systemFontOfSize:_conversationCellViewModel.wordSizeForCellDetail];
     _detailLabel.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1.0];
     [self.contentView addSubview:_detailLabel];
     [_detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -124,11 +122,11 @@
 
 #pragma mark - setter
 
-- (NSAttributedString *)_getDetailWithModel:(EaseConversationModel *)conversationModel
+- (NSAttributedString *)_getDetailWithModel:(id<EaseConversationItemModelDelegate>)conversationItemModel
 {
     NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:@""];
     
-    EMMessage *lastMessage = conversationModel.latestMessage;
+    EMMessage *lastMessage = conversationItemModel.latestMessage;
     if (!lastMessage) {
         return attributedStr;
     }
@@ -186,7 +184,7 @@
         attributedStr = [[NSMutableAttributedString alloc] initWithString:latestMessageTitle];
         [attributedStr setAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:1.0 green:.0 blue:.0 alpha:0.5]} range:NSMakeRange(0, allMsg.length)];
     } else */
-    EMConversation *conversation = [EaseConversationModelUtil getConversationWithConversationModel:conversationModel];
+    EMConversation *conversation = [EaseConversationModelUtil getConversationWithConversationModel:conversationItemModel];
     
     if ([EaseConversationExtController isConversationAtMe:conversation]) {
         NSString *atStr = @"[有人@我]";
@@ -205,10 +203,10 @@
     return attributedStr;
 }
 
-- (NSString *)_getTimeWithModel:(EaseConversationModel *)conversationModel
+- (NSString *)_getTimeWithModel:(id<EaseConversationItemModelDelegate>)conversationItemModel
 {
     NSString *latestMessageTime = @"";
-    EMMessage *lastMessage = conversationModel.latestMessage;
+    EMMessage *lastMessage = conversationItemModel.latestMessage;
     if (lastMessage) {
         double timeInterval = lastMessage.timestamp ;
         if(timeInterval > 140000000000) {
@@ -220,29 +218,19 @@
     }
     return latestMessageTime;
 }
-
-- (void)setModel:(EaseConversationModel*)model
+- (void)setConversationItemModel:(id<EaseConversationItemModelDelegate>)conversationItemModel
 {
-    _model = model;
-    /*
-    if (_model.conversationType == EMConversationTypeChat)
-        self.avatarView.image = [IconResourceManage imageNamed:@"defaultAvatar" class:[self class]];
-    if (_model.conversationType == EMConversationTypeGroupChat)
-        self.avatarView.image = [IconResourceManage imageNamed:@"groupConversation" class:[self class]];
-    if (_model.conversationType == EMConversationTypeChatRoom)
-        self.avatarView.image = [IconResourceManage imageNamed:@"chatroomConversation" class:[self class]];
-    if ([_model.conversationId isEqualToString:EMSYSTEMNOTIFICATIONID])
-        self.avatarView.image = [IconResourceManage imageNamed:@"systemNotify" class:[self class]];*/
-    self.avatarView.image = _model.avatarImg;
-    self.nameLabel.text = _model.conversationNickname;
-    self.detailLabel.attributedText = [self _getDetailWithModel:_model];
-    self.timeLabel.text = [self _getTimeWithModel:_model];
+    _conversationItemModel = conversationItemModel;
+    self.avatarView.image = _conversationItemModel.defaultAvatar;
+    self.nameLabel.text = _conversationItemModel.showName;
+    self.detailLabel.attributedText = [self _getDetailWithModel:_conversationItemModel];
+    self.timeLabel.text = [self _getTimeWithModel:_conversationItemModel];
     
-    if (_model.unreadMessagesCount == 0) {
+    if (_conversationItemModel.unreadMessagesCount == 0) {
         self.badgeLabel.value = @"";
         self.badgeLabel.hidden = YES;
     } else {
-        self.badgeLabel.value = [NSString stringWithFormat:@" %@ ", _model.unreadMessagesCount > 99 ? (_model.unreadMessagesCount > 199 ? @"..." : @"99+") : @(_model.unreadMessagesCount)];
+        self.badgeLabel.value = [NSString stringWithFormat:@" %@ ", _conversationItemModel.unreadMessagesCount > 99 ? (_conversationItemModel.unreadMessagesCount > 199 ? @"..." : @"99+") : @(_conversationItemModel.unreadMessagesCount)];
         self.badgeLabel.hidden = NO;
     }
 }
@@ -250,12 +238,12 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
     {
         [super setSelected:selected animated:animated];
-        self.badgeLabel.backgroundColor = _conversationCellOptions.unReadCountViewBgColor;
+        self.badgeLabel.backgroundColor = _conversationCellViewModel.unReadCountViewBgColor;
     }
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
     {
         [super setHighlighted:highlighted animated:animated];
-        self.badgeLabel.backgroundColor = _conversationCellOptions.unReadCountViewBgColor;
+        self.badgeLabel.backgroundColor = _conversationCellViewModel.unReadCountViewBgColor;
     }
 
 @end

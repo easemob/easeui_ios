@@ -6,16 +6,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
+#import "EaseConversationItemModelDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseConversationExtController : NSObject
 
 //置顶会话
-+ (void)stickConversation:(EaseConversationModel*)model;
++ (void)stickConversation:(id<EaseConversationItemModelDelegate>)model;
 //取消置顶会话
-+ (void)cancelStickConversation:(EaseConversationModel*)model;
++ (void)cancelStickConversation:(id<EaseConversationItemModelDelegate>)model;
 
 //设置群聊@提醒
 + (void)groupChatAtOperate:(EMConversation*)conversation;

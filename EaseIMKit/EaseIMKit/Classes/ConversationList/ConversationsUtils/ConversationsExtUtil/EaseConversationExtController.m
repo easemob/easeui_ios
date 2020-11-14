@@ -6,13 +6,12 @@
 //
 
 #import "EaseConversationExtController.h"
-#import "EaseConversationModel.h"
 
 static NSDateFormatter *_dateFormatter = nil;
 @implementation EaseConversationExtController
 
 //置顶会话
-+ (void)stickConversation:(EaseConversationModel*)model
++ (void)stickConversation:(id<EaseConversationItemModelDelegate>)model
 {
     NSDate *date = [NSDate date];
     NSDateFormatter *formatter = [EaseConversationExtController getDataFormatter];
@@ -20,22 +19,20 @@ static NSDateFormatter *_dateFormatter = nil;
     NSTimeInterval stickTimeInterval = [time timeIntervalSince1970];
     NSNumber *stickTime = [NSNumber numberWithLong:stickTimeInterval];
     
-    EaseConversationModel* conversationModel = (EaseConversationModel*)model;
-    NSMutableDictionary *ext = [[NSMutableDictionary alloc]initWithDictionary:conversationModel.ext];
+    NSMutableDictionary *ext = [[NSMutableDictionary alloc]initWithDictionary:model.ext];
     [ext setObject:stickTime forKey:CONVERSATION_STICK];
     //重置会话
-    EMConversation *conversation = [EaseConversationModelUtil getConversationWithConversationModel:conversationModel];
+    EMConversation *conversation = [EaseConversationModelUtil getConversationWithConversationModel:model];
     [conversation setExt:ext];
 }
 
 //取消置顶会话
-+ (void)cancelStickConversation:(EaseConversationModel*)model
++ (void)cancelStickConversation:(id<EaseConversationItemModelDelegate>)model
 {
-    EaseConversationModel* conversationModel = (EaseConversationModel*)model;
-    NSMutableDictionary *ext = [[NSMutableDictionary alloc]initWithDictionary:conversationModel.ext];
+    NSMutableDictionary *ext = [[NSMutableDictionary alloc]initWithDictionary:model.ext];
     [ext setObject:[NSNumber numberWithLong:0] forKey:CONVERSATION_STICK];
     //重置会话
-    EMConversation *conversation = [EaseConversationModelUtil getConversationWithConversationModel:conversationModel];
+    EMConversation *conversation = [EaseConversationModelUtil getConversationWithConversationModel:model];
     [conversation setExt:ext];
 }
 

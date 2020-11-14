@@ -7,7 +7,7 @@
 //
 
 #import "EMDemoOptions.h"
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 
 #import <Hyphenate/EMOptions+PrivateDeploy.h>
 

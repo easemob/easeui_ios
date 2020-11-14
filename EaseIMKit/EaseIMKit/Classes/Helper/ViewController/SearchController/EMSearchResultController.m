@@ -7,7 +7,7 @@
 //
 
 #import "EMSearchResultController.h"
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 #import "MJRefresh.h"
 
 @interface EMSearchResultController ()<UITableViewDelegate, UITableViewDataSource>

@@ -6,7 +6,7 @@
 //
 
 #import "EMNotificationHelper.h"
-#import "EaseConversationModel.h"
+#import "EaseConversationItemModelDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 static NSString *kConversation_IsRead = @"kHaveAtMessage";//群聊@功能
@@ -23,18 +23,18 @@ static NSString *kConversation_Draft = @"kDraft";//草稿
 
 + (instancetype)shared;
 
-+ (NSArray<EaseConversationModel *> *)modelsFromEMConversations:(NSArray<EMConversation *> *)aConversations;
++ (NSArray<id<EaseConversationItemModelDelegate>> *)modelsFromEMConversations:(NSArray<EMConversation *> *)aConversations;
 
-+ (EMConversation *)getConversationWithConversationModel:(EaseConversationModel *)conversationModel;
++ (EMConversation *)getConversationWithConversationModel:(id<EaseConversationItemModelDelegate>)conversationItemModel;
 
-+ (EaseConversationModel *)modelFromContact:(NSString *)aContact;
++ (id<EaseConversationItemModelDelegate>)modelFromContact:(NSString *)aContact;
 
-+ (EaseConversationModel *)modelFromGroup:(EMGroup *)aGroup;
++ (id<EaseConversationItemModelDelegate>)modelFromGroup:(EMGroup *)aGroup;
 
-+ (EaseConversationModel *)modelFromChatroom:(EMChatroom *)aChatroom;
++ (id<EaseConversationItemModelDelegate>)modelFromChatroom:(EMChatroom *)aChatroom;
 
 //调用该方法，会触发[EMConversationsDelegate didConversationUnreadCountToZero:]
-+ (void)markAllAsRead:(EaseConversationModel *)aConversationModel;
++ (void)markAllAsRead:(id<EaseConversationItemModelDelegate>)conversationItemModel;
 
 //调用该方法，会触发[EMConversationsDelegate didResortConversationsLatestMessage]
 + (void)resortConversationsLatestMessage;
@@ -46,7 +46,7 @@ static NSString *kConversation_Draft = @"kDraft";//草稿
 
 @optional
 
-- (void)didConversationUnreadCountToZero:(EaseConversationModel *)aConversation;
+- (void)didConversationUnreadCountToZero:(id<EaseConversationItemModelDelegate>)conversationItemModel;
 
 - (void)didResortConversationsLatestMessage;
 

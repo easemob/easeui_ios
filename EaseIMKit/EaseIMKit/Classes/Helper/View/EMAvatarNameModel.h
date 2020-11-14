@@ -6,7 +6,7 @@
 //  Copyright © 2020 娜塔莎. All rights reserved.
 //
 
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

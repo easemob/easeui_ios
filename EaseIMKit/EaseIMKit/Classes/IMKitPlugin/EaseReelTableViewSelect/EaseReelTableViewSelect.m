@@ -1,9 +1,9 @@
 
-#import "PellTableViewSelect.h"
+#import "EaseReelTableViewSelect.h"
 #import "Masonry.h"
 #define  LeftView 10.0f
 #define  TopToView 10.0f
-@interface  PellTableViewSelect()<UITableViewDataSource,UITableViewDelegate>
+@interface  EaseReelTableViewSelect()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic,copy) NSArray *selectData;
 @property (nonatomic,copy) void(^action)(NSInteger index);
@@ -12,10 +12,10 @@
 
 
 
-PellTableViewSelect * backgroundView;
+EaseReelTableViewSelect * backgroundView;
 UITableView * tableView;
 
-@implementation PellTableViewSelect
+@implementation EaseReelTableViewSelect
 
 
 - (instancetype)init{
@@ -42,11 +42,11 @@ UITableView * tableView;
                                        action:(void(^)(NSInteger index))action animated:(BOOL)animate
 {
     if (backgroundView != nil) {
-        [PellTableViewSelect hiden];
+        [EaseReelTableViewSelect hiden];
     }
     UIWindow *win = [[[UIApplication sharedApplication] windows] firstObject];
     
-    backgroundView = [[PellTableViewSelect alloc] initWithFrame:win.bounds];
+    backgroundView = [[EaseReelTableViewSelect alloc] initWithFrame:win.bounds];
     backgroundView.action = action;
     backgroundView.imagesData = images ;
     backgroundView.selectData = selectData;
@@ -95,7 +95,7 @@ UITableView * tableView;
 }
 + (void)tapBackgroundClick
 {
-    [PellTableViewSelect hiden];
+    [EaseReelTableViewSelect hiden];
 }
 + (void)hiden
 {
@@ -135,9 +135,9 @@ UITableView * tableView;
     if (self.action) {
         self.action(indexPath.row);
     }
-    [PellTableViewSelect hiden];
+    [EaseReelTableViewSelect hiden];
 }
-/*
+
 #pragma mark 绘制三角形
 - (void)drawRect:(CGRect)rect
 
@@ -174,6 +174,6 @@ UITableView * tableView;
                       kCGPathFillStroke);//绘制路径path
     
 //    [self setNeedsDisplay];
-}*/
+}
 
 @end

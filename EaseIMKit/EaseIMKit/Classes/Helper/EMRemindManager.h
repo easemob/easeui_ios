@@ -6,7 +6,7 @@
 //  Copyright © 2019 杜洁鹏. All rights reserved.
 //
 
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

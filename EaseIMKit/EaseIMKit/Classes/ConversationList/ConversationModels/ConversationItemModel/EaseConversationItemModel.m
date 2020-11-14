@@ -1,22 +1,23 @@
 //
-//  EaseConversationModel.m
+//  EaseConversationItemModel.m
 //  EaseIMKit
 //
 //  Created by 娜塔莎 on 2020/11/10.
 //
 
-#import "EaseConversationModel.h"
+#import "EaseConversationItemModel.h"
 #import "EaseConversationModelUtil.h"
 #import "EMDefines.h"
 #import "IconResourceManage.h"
 
-@interface EaseConversationModel()
+
+@interface EaseConversationItemModel()
 
 @property (nonatomic, strong) EMConversation *conversation;
 
 @end
 
-@implementation EaseConversationModel
+@implementation EaseConversationItemModel
 
 - (instancetype)initWithEMConversation:(EMConversation *)conversation
 {
@@ -53,7 +54,7 @@
 
 #pragma mark - getter
 
-- (NSString*)conversationId
+- (NSString*)itemId
 {
     return _conversation.conversationId;
 }
@@ -82,7 +83,12 @@
     return _conversation.latestMessage;
 }
 
-- (UIImage*)avatarImg
+- (long long)timestamp
+{
+    return _conversation.latestMessage.timestamp;
+}
+
+- (UIImage*)defaultAvatar
 {
     if (_conversation.type == EMConversationTypeChat)
         return [IconResourceManage imageNamed:@"defaultAvatar" class:[self class]];
@@ -96,17 +102,17 @@
     return nil;
 }
 
-- (NSString*)conversationNickname
+- (NSString*)showName
 {
-    _conversationNickname = [self getConversationNickname:_conversation];
-    if (!_conversationNickname) {
-        _conversationNickname = _conversation.conversationId;
-        if ([_conversationNickname isEqualToString:EMSYSTEMNOTIFICATIONID]) {
-            _conversationNickname = @"系统通知";
+    NSString *showName = [self getConversationNickname:_conversation];
+    if (!showName) {
+        showName = _conversation.conversationId;
+        if ([showName isEqualToString:EMSYSTEMNOTIFICATIONID]) {
+            showName = @"系统通知";
         }
     }
     
-    return _conversationNickname;
+    return showName;
 }
 
 - (BOOL)isStick
@@ -125,5 +131,21 @@
     
     return NO;
 }
+
+@synthesize avatarURL;
+
+@synthesize ext;
+
+@synthesize latestMessage;
+
+@synthesize isStick;
+
+@synthesize timestamp;
+
+@synthesize unreadMessagesCount;
+
+@synthesize defaultAvatar;
+
+@synthesize showName;
 
 @end

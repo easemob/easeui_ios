@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-
 #import <Hyphenate/Hyphenate.h>
 
 #import <Masonry/Masonry.h>
 
+#import "EaseIMKitCallBackReason.h"
 #import "EMDefines.h"
 #import "EMColorDefine.h"
 

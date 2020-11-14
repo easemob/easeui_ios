@@ -2,7 +2,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface PellTableViewSelect : UIView
+@interface EaseReelTableViewSelect : UIView
 /**
  *  创建一个弹出下拉控件
  *

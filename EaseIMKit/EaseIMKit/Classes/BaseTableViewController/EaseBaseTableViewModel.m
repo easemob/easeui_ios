@@ -14,6 +14,8 @@
         _avatarType = Corner;
         _cellHeight = 60;
         _cellCanEdit = YES;
+        _cellBgColor = [UIColor whiteColor];
+        _viewBgColor = [UIColor whiteColor];
     }
     
     return self;
