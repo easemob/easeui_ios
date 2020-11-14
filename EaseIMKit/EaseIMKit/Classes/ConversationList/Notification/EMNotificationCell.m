@@ -7,7 +7,7 @@
 //
 
 #import "EMNotificationCell.h"
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 #import "EMNotificationHelper.h"
 
 @interface EMNotificationCell()

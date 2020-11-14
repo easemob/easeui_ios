@@ -7,7 +7,7 @@
 //
 
 #import "EMSearchBar.h"
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 
 @interface EMSearchBar()<UITextFieldDelegate>
 

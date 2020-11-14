@@ -7,6 +7,7 @@
 //
 
 #import <Hyphenate/Hyphenate.h>
+#import "EaseIMKitCallBackReason.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,12 +16,6 @@ typedef NS_ENUM(NSInteger, EMNotificationModelStatus) {
     EMNotificationModelStatusAgreed,
     EMNotificationModelStatusDeclined,
     EMNotificationModelStatusExpired,
-};
-
-typedef NS_ENUM(NSInteger, EMNotificationModelType) {
-    EMNotificationModelTypeContact = 0,
-    EMNotificationModelTypeGroupInvite,
-    EMNotificationModelTypeGroupJoin,
 };
 
 @interface EMNotificationModel : NSObject <NSCoding>
@@ -37,11 +32,9 @@ typedef NS_ENUM(NSInteger, EMNotificationModelType) {
 
 @property (nonatomic) EMNotificationModelStatus status;
 
-@property (nonatomic) EMNotificationModelType type;
+@property (nonatomic) EaseIMKitCallBackReason type;
 
 @property (nonatomic) BOOL isRead;
-
-@property (nonatomic, strong) NSNumber *stickTime;
 
 @end
 

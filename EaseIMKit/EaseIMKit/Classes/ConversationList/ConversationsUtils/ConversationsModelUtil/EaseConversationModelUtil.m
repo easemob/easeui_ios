@@ -7,6 +7,7 @@
 
 #import "EaseConversationModelUtil.h"
 #import "EMMulticastDelegate.h"
+#import "EaseConversationItemModel.h"
 
 static EaseConversationModelUtil *shared = nil;
 @interface EaseConversationModelUtil()
@@ -56,37 +57,37 @@ static EaseConversationModelUtil *shared = nil;
 
 #pragma mark - Class Methods
 
-+ (NSArray<EaseConversationModel *> *)modelsFromEMConversations:(NSArray<EMConversation *> *)aConversations
++ (NSArray<id<EaseConversationItemModelDelegate>> *)modelsFromEMConversations:(NSArray<EMConversation *> *)aConversations
 {
     NSMutableArray *retArray = [[NSMutableArray alloc] init];
 
     for (int i = 0; i < [aConversations count]; i++) {
         EMConversation *conversation = aConversations[i];
-        EaseConversationModel *conversationModel = [[EaseConversationModel alloc] initWithEMConversation:conversation];
+        id<EaseConversationItemModelDelegate>conversationModel = [[EaseConversationItemModel alloc] initWithEMConversation:conversation];
         [retArray addObject:conversationModel];
     }
     
     return retArray;
 }
 
-+ (EMConversation *)getConversationWithConversationModel:(EaseConversationModel *)conversationModel
++ (EMConversation *)getConversationWithConversationModel:(id<EaseConversationItemModelDelegate>)conversationModel
 {
-    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:conversationModel.conversationId type:conversationModel.conversationType createIfNotExist:YES];
+    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:conversationModel.itemId type:conversationModel.conversationType createIfNotExist:YES];
     return conversation;
 }
 
-+ (EaseConversationModel *)modelFromContact:(NSString *)aContact
++ (id<EaseConversationItemModelDelegate>)modelFromContact:(NSString *)aContact
 {
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:aContact type:EMConversationTypeChat createIfNotExist:YES];
-    EaseConversationModel *model = [[EaseConversationModel alloc] initWithEMConversation:conversation];
+    id<EaseConversationItemModelDelegate>model = [[EaseConversationItemModel alloc] initWithEMConversation:conversation];
     return model;
 }
 
-+ (EaseConversationModel *)modelFromGroup:(EMGroup *)aGroup
++ (id<EaseConversationItemModelDelegate>)modelFromGroup:(EMGroup *)aGroup
 {
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:aGroup.groupId type:EMConversationTypeGroupChat createIfNotExist:YES];
-    EaseConversationModel *model = [[EaseConversationModel alloc] initWithEMConversation:conversation];
-    model.conversationNickname = aGroup.groupName;
+    id<EaseConversationItemModelDelegate>model = [[EaseConversationItemModel alloc] initWithEMConversation:conversation];
+    model.showName = aGroup.groupName;
     
     NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
     [ext setObject:aGroup.groupName forKey:@"subject"];
@@ -96,11 +97,11 @@ static EaseConversationModelUtil *shared = nil;
     return model;
 }
 
-+ (EaseConversationModel *)modelFromChatroom:(EMChatroom *)aChatroom
++ (id<EaseConversationItemModelDelegate>)modelFromChatroom:(EMChatroom *)aChatroom
 {
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:aChatroom.chatroomId type:EMConversationTypeChatRoom createIfNotExist:YES];
-    EaseConversationModel *model = [[EaseConversationModel alloc] initWithEMConversation:conversation];
-    model.conversationNickname = aChatroom.subject;
+    id<EaseConversationItemModelDelegate>model = [[EaseConversationItemModel alloc] initWithEMConversation:conversation];
+    model.showName = aChatroom.subject;
     
     NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
     [ext setObject:aChatroom.subject forKey:@"subject"];
@@ -109,7 +110,7 @@ static EaseConversationModelUtil *shared = nil;
     return model;
 }
 
-+ (void)markAllAsRead:(EaseConversationModel *)aConversationModel
++ (void)markAllAsRead:(id<EaseConversationItemModelDelegate>)aConversationModel
 {
     [[EaseConversationModelUtil getConversationWithConversationModel:aConversationModel] markAllMessagesAsRead:nil];
     

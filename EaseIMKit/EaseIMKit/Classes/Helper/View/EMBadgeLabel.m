@@ -7,7 +7,7 @@
 //
 
 #import "EMBadgeLabel.h"
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 
 @interface EMBadgeLabel()
 

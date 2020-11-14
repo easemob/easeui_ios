@@ -18,9 +18,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    EaseConversationsViewController *conversationsController = [[EaseConversationsViewController alloc]initWithOptions:nil];
+    [EaseIMKitManager.shareEaseIMKit.conversationListController addDelegate:self];
+    EaseConversationsViewController *conversationsController = (EaseConversationsViewController *)EaseIMKitManager.shareEaseIMKit.conversationListController;
     [self addChildViewController:conversationsController];
-    conversationsController.conversationVCDelegate = self;
     [self.view addSubview:conversationsController.view];
     [conversationsController.view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view).offset(44);
@@ -31,6 +31,14 @@
 }
    
 #pragma mark - EaseConversationVCDelegate
+
+- (NSString *)requestDidReceiveShowMessage:(NSString *)conversationId requestUser:(NSString *)requestUser reason:(EaseIMKitCallBackReason)reason
+{
+    if (reason == ContanctsRequestDidReceive) {
+        return @"空洞洞";
+    }
+    return nil;
+}
 
 - (UIContextualAction *)sideslipCustomAction:(UITableView *)tableView dataArray:(NSMutableArray *)dataArray trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath
 {

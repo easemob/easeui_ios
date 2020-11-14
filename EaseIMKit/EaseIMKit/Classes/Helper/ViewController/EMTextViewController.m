@@ -7,7 +7,7 @@
 //
 
 #import "EMTextViewController.h"
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 #import "EMTextView.h"
 
 @interface EMTextViewController ()<UITextViewDelegate>

@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+#import "EaseIMKitManager.h"
+
+//conversationList
 #import "EaseConversationsViewController.h"
+#import "EaseConversationViewModel.h"
+
+//contactList
 #import "EaseContactsViewController.h"
 #import "EaseContactsViewModel.h"

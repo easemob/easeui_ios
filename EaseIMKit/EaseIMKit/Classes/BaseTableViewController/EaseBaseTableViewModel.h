@@ -24,6 +24,8 @@ typedef enum {
 @property (nonatomic) BOOL canRefresh;
 @property (nonatomic) CGFloat cellHeight;
 @property (nonatomic) BOOL cellCanEdit;
+@property (nonatomic, copy) UIColor *cellBgColor; //cell皮肤
+@property (nonatomic, copy) UIColor *viewBgColor; //页面皮肤
 @end
 
 NS_ASSUME_NONNULL_END

@@ -52,4 +52,8 @@
 
 @synthesize defaultAvatar;
 
+@synthesize itemId;
+
+@synthesize showName;
+
 @end

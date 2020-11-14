@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.source_files = 'EaseIMKit/**/*.{h,m}'
   
   s.ios.resource_bundle = { 'EaseIMKitIcon' => 'EaseIMKit/resources/SharedImgs/ConversationListImgs/*.png' }
- 
+  
   s.dependency 'Hyphenate', '~> 3.7.2'
   s.dependency 'Masonry'
   s.dependency 'MJRefresh'

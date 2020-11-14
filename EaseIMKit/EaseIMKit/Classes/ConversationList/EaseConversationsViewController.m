@@ -10,16 +10,20 @@
 #import "EaseConversationModelUtil.h"
 #import "UIViewController+Search.h"
 #import "EaseConversationExtController.h"
-#import "PellTableViewSelect.h"
 #import "EMNotificationViewController.h"
 #import "EMDateHelper.h"
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
+#import "EaseConversationViewModel.h"
+#import "EaseConversationVcDelegate.h"
 
-@interface EaseConversationsViewController ()<EMChatManagerDelegate, EMGroupManagerDelegate, EMSearchControllerDelegate, EaseConversationsDelegate,EMContactManagerDelegate,EMNotificationsDelegate>
+@interface EaseConversationsViewController ()<EMContactManagerDelegate, EMChatManagerDelegate, EMGroupManagerDelegate, EMSearchControllerDelegate, EaseConversationsDelegate,EMNotificationsDelegate>
 {
-    EaseConversationCellOptions *_options;
-    BOOL _isReloadViewWithOption; //重新刷新会话列表
+    EaseConversationViewModel *_viewModel;
+    BOOL _isReloadViewWithModel; //重新刷新会话列表
 }
+
+@property (nonatomic, assign) id<EaseConversationVCDelegate> conversationVCDelegate;
+
 @property (nonatomic) BOOL isViewAppear;
 @property (nonatomic) BOOL isNeedReload;
 @property (nonatomic) BOOL isNeedReloadSorted;
@@ -39,14 +43,20 @@
 
 @implementation EaseConversationsViewController
 
-- (instancetype)initWithOptions:(EaseConversationCellOptions *)options {
- if (self = [super init]) {
-     _options = options;
-     _isReloadViewWithOption = NO;
+- (instancetype)init{
+    EaseConversationViewModel *viewModel = [[EaseConversationViewModel alloc]init];
+    if (self = [super initWithModel:viewModel]) {
+     _viewModel = viewModel;
+     _isReloadViewWithModel = NO;
      _isNeedsSystemNoti = YES;
     }
     
     return self;
+}
+
+- (void)addDelegate:(id<EaseConversationVCDelegate>)aDelegate
+{
+    _conversationVCDelegate = aDelegate;
 }
 
 - (void)viewDidLoad {
@@ -56,11 +66,10 @@
     self.isAddBlankView = NO;
     [self _setupSubviews];
     [[EMNotificationHelper shared] addDelegate:self];
+    [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
 //    [self didNotificationsUnreadCountUpdate:[EMNotificationHelper shared].unreadCount];
-    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
     [[EaseConversationModelUtil shared] addDelegate:self];
-    [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
     [self _loadAllConversationsFromDBWithIsShowHud:YES];
     
     //本地通话记录
@@ -73,9 +82,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationControllerBack) name:SYSTEM_NOTIF_DETAIL object:nil];
 }
 
-- (void)reloadViewWithOption:(EaseConversationCellOptions*)options{
-    _options = options;
-    _isReloadViewWithOption = YES;
+- (void)resetViewModel:(EaseConversationViewModel *)viewModel{
+    _viewModel = viewModel;
+    _isReloadViewWithModel = YES;
     [self.tableView reloadData];
 }
 
@@ -113,7 +122,7 @@
     [EMNotificationHelper shared].isCheckUnreadCount = YES;
     [[EMNotificationHelper shared] removeDelegate:self];
     [EMNotificationHelper destoryShared];
-    [[EMClient sharedClient].chatManager removeDelegate:self];
+    [[EMClient sharedClient].contactManager removeDelegate:self];
     [[EMClient sharedClient].groupManager removeDelegate:self];
     [[EaseConversationModelUtil shared] removeDelegate:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -123,7 +132,7 @@
 
 - (void)_setupSubviews
 {
-    self.view.backgroundColor = _options.convesationsListBgColor;
+    self.view.backgroundColor = _viewModel.viewBgColor;
     
     if (self.isNeedsSearchModule) {
         [self enableSearchController];
@@ -136,7 +145,7 @@
         [self _setupSearchResultController];
     }
     
-    self.blankPerchView = _options.blankPerchView;
+    self.blankPerchView = _viewModel.blankPerchView;
     [self.view addSubview:self.blankPerchView];
     [self.blankPerchView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.centerY.equalTo(self.view);
@@ -186,14 +195,14 @@
     self.resultController.tableView.rowHeight = 60;
     [self.resultController setCellForRowAtIndexPathCompletion:^UITableViewCell *(UITableView *tableView, NSIndexPath *indexPath) {
         EaseConversationCell *cell = (EaseConversationCell *)[tableView dequeueReusableCellWithIdentifier:@"EaseConversationCell"];
-        if (cell == nil || self->_isReloadViewWithOption == YES) {
-            self->_isReloadViewWithOption = NO;
-            cell = [[EaseConversationCell alloc] initWithConversationCellOptions:self->_options];
+        if (cell == nil || self->_isReloadViewWithModel == YES) {
+            self->_isReloadViewWithModel = NO;
+            cell = [[EaseConversationCell alloc] initWithConversationViewModel:self->_viewModel];
         }
         
         NSInteger row = indexPath.row;
-        EaseConversationModel* model = [weakself.resultController.dataArray objectAtIndex:row];
-        cell.model = model;
+        id<EaseConversationItemModelDelegate> model = [weakself.resultController.dataArray objectAtIndex:row];
+        cell.conversationItemModel = model;
         return cell;
     }];
     [self.resultController setCanEditRowAtIndexPath:^BOOL(UITableView *tableView, NSIndexPath *indexPath) {
@@ -205,24 +214,24 @@
         }
         
         NSInteger row = indexPath.row;
-        EaseConversationModel *model = (EaseConversationModel*)[weakself.resultController.dataArray objectAtIndex:row];
-        [[EMClient sharedClient].chatManager deleteConversation:model.conversationId isDeleteMessages:YES completion:nil];
+        id<EaseConversationItemModelDelegate>model = (id<EaseConversationItemModelDelegate>)[weakself.resultController.dataArray objectAtIndex:row];
+        [[EMClient sharedClient].chatManager deleteConversation:model.itemId isDeleteMessages:YES completion:nil];
         [weakself.resultController.dataArray removeObjectAtIndex:row];
         [weakself.resultController.tableView reloadData];
     }];
     [self.resultController setDidSelectRowAtIndexPathCompletion:^(UITableView *tableView, NSIndexPath *indexPath) {
-        if (weakself.conversationVCDelegate && [weakself.conversationVCDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
-            [weakself.conversationVCDelegate tableView:tableView dataArray:weakself.resultController.dataArray  didSelectRowAtIndexPath:indexPath];
+        NSInteger row = indexPath.row;
+        id<EaseConversationItemModelDelegate> model = [weakself.resultController.dataArray objectAtIndex:row];
+        if (weakself.easeTableViewDelegate && [weakself.easeTableViewDelegate respondsToSelector:@selector(easeTableView:didSelectItem:)]) {
+            [weakself.easeTableViewDelegate easeTableView:tableView didSelectItem:model];
             return;
         }
-        NSInteger row = indexPath.row;
-        EaseConversationModel* model = [weakself.resultController.dataArray objectAtIndex:row];
         weakself.resultController.searchBar.text = @"";
         [weakself.resultController.searchBar resignFirstResponder];
         weakself.resultController.searchBar.showsCancelButton = NO;
         [weakself searchBarCancelButtonAction:nil];
         [weakself.resultNavigationController dismissViewControllerAnimated:NO completion:nil];
-        if (![model.conversationId isEqualToString:EMSYSTEMNOTIFICATIONID]) {
+        if (![model.itemId isEqualToString:EMSYSTEMNOTIFICATIONID]) {
             [[NSNotificationCenter defaultCenter] postNotificationName:CHAT_PUSHVIEWCONTROLLER object:model];
         } else {
             EMNotificationViewController *controller = [[EMNotificationViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -232,6 +241,14 @@
 }
 
 #pragma mark - Table view data source
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:heightForItem:)]) {
+        return [self.easeTableViewDelegate easeTableView:tableView heightForItem:self.dataAry[indexPath.row]];
+    }
+    
+    return 74;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -248,21 +265,21 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EaseConversationCell *cell = (EaseConversationCell *)[tableView dequeueReusableCellWithIdentifier:@"EaseConversationCell"];
-    if (cell == nil || _isReloadViewWithOption == YES) {
-        _isReloadViewWithOption = NO;
-        cell = [[EaseConversationCell alloc] initWithConversationCellOptions:_options];
+    if (cell == nil || _isReloadViewWithModel == YES) {
+        _isReloadViewWithModel = NO;
+        cell = [[EaseConversationCell alloc] initWithConversationViewModel:_viewModel];
     }
     
-    EaseConversationModel* model = [self.dataArray objectAtIndex:indexPath.row];
+    id<EaseConversationItemModelDelegate> model = [self.dataArray objectAtIndex:indexPath.row];
     if (self.conversationVCDelegate && [self.conversationVCDelegate respondsToSelector:@selector(conversationCellForModel:)]) {
         id<EaseConversationCellModelDelegate> cellModel = [self.conversationVCDelegate conversationCellForModel:model];
         if (cellModel) {
             //不去处理用户返回的任何值
-            model.avatarImg = cellModel.avatarImg;
-            model.conversationNickname = cellModel.nickName;
+            model.defaultAvatar = cellModel.avatarImg;
+            model.showName = cellModel.nickName;
         }
     }
-    cell.model = model;
+    cell.conversationItemModel = model;
     [cell setSeparatorInset:UIEdgeInsetsMake(0, cell.avatarView.frame.size.height + 23, 0, 1)];
 
     if (model.isStick) {
@@ -278,15 +295,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.conversationVCDelegate && [self.conversationVCDelegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
-        [self.conversationVCDelegate tableView:tableView dataArray:self.dataArray didSelectRowAtIndexPath:indexPath];
+    NSInteger row = indexPath.row;
+    id<EaseConversationItemModelDelegate> model = [self.dataArray objectAtIndex:row];
+    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:didSelectItem:)]) {
+        [self.easeTableViewDelegate easeTableView:tableView didSelectItem:model];
         return;
     }
     __weak typeof(self) weakself = self;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSInteger row = indexPath.row;
-    EaseConversationModel* model = [self.dataArray objectAtIndex:row];
-    if (![model.conversationId isEqualToString:EMSYSTEMNOTIFICATIONID]) {
+    if (![model.itemId isEqualToString:EMSYSTEMNOTIFICATIONID]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:CHAT_PUSHVIEWCONTROLLER object:model];
     } else {
         EMNotificationViewController *controller = [[EMNotificationViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -294,15 +311,9 @@
     }
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-
 - (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(tvos)
 {
-    EaseConversationModel* model = [self.dataArray objectAtIndex:indexPath.row];
+    id<EaseConversationItemModelDelegate> model = [self.dataArray objectAtIndex:indexPath.row];
     
     __weak typeof(self) weakself = self;
     UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"删除" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
@@ -349,7 +360,7 @@
 - (void)messagesDidRecall:(NSArray *)aMessages {
     [self _loadAllConversationsFromDBWithIsShowHud:NO];
 }
-
+/*
 - (void)conversationListDidUpdate:(NSArray *)aConversationList
 {
     if (!self.isViewAppear) {
@@ -357,16 +368,17 @@
     } else {
         [self _loadAllConversationsFromDBWithIsShowHud:NO];
     }
-}
+}*/
 
 - (void)messagesDidReceive:(NSArray *)aMessages
 {
     if (self.isViewAppear) {
         if (!self.isNeedReload) {
             self.isNeedReload = YES;
+            NSMutableArray<EMConversation *> *conversationList = [[NSMutableArray alloc]initWithCapacity:16];
             for (EMMessage *msg in aMessages) {
+                EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:msg.conversationId type:EMConversationTypeGroupChat createIfNotExist:YES];
                 if(msg.body.type == EMMessageBodyTypeText) {
-                    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:msg.conversationId type:EMConversationTypeGroupChat createIfNotExist:YES];
                     //通话邀请
                     if ([((EMTextMessageBody *)msg.body).text isEqualToString:EMCOMMUNICATE_CALLINVITE]) {
                         [conversation deleteMessageWithId:msg.messageId error:nil];
@@ -378,7 +390,10 @@
                         [EaseConversationExtController groupChatAtOperate:conversation];
                     }
                 }
+                [conversationList addObject:conversation];
             }
+            NSArray *models = [EaseConversationModelUtil modelsFromEMConversations:conversationList];
+            [self.dataArray addObjectsFromArray:models];
             [self _reSortedConversationModelsAndReloadView];
         }
     } else {
@@ -432,7 +447,7 @@
 
 #pragma mark - EMConversationsDelegate
 
-- (void)didConversationUnreadCountToZero:(EaseConversationModel *)aConversation
+- (void)didConversationUnreadCountToZero:(id<EaseConversationItemModelDelegate>)aConversation
 {
     NSInteger index = [self.dataArray indexOfObject:aConversation];
     [self.tableView beginUpdates];
@@ -484,12 +499,12 @@
 }
 
 //加好友，加群 成功通知
-- (void)notificationMsg:(NSString *)conversationId aUserName:(NSString *)aUserName conversationType:(EMConversationType)aType
+- (void)notificationMsg:(NSString *)itemId aUserName:(NSString *)aUserName conversationType:(EMConversationType)aType
 {
     EMConversationType conversationType = aType;
-    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:conversationId type:conversationType createIfNotExist:YES];
+    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:itemId type:conversationType createIfNotExist:YES];
     EMTextMessageBody *body;
-    NSString *to = conversationId;
+    NSString *to = itemId;
     EMMessage *message;
     if (conversationType == EMChatTypeChat) {
         body = [[EMTextMessageBody alloc] initWithText:[NSString stringWithFormat:@"你与%@已经成为好友，开始聊天吧",aUserName]];
@@ -520,10 +535,10 @@
     }
     
     NSString *groupId = group.groupId;
-    for (EaseConversationModel* model in self.dataArray) {
-        EaseConversationModel *conversationModel = (EaseConversationModel *)model;
-        if ([conversationModel.conversationId isEqualToString:groupId]) {
-            conversationModel.conversationNickname = group.groupName;
+    for (id<EaseConversationItemModelDelegate> model in self.dataArray) {
+        id<EaseConversationItemModelDelegate>conversationModel = (id<EaseConversationItemModelDelegate>)model;
+        if ([conversationModel.itemId isEqualToString:groupId]) {
+            conversationModel.showName = group.groupName;
             [self.tableView reloadData];
         }
     }
@@ -566,12 +581,12 @@
 - (void)_deleteConversation:(NSIndexPath *)indexPath
 {
     NSInteger row = indexPath.row;
-    EaseConversationModel* model = [self.dataArray objectAtIndex:row];
-    [[EMClient sharedClient].chatManager deleteConversation:model.conversationId
+    id<EaseConversationItemModelDelegate> model = [self.dataArray objectAtIndex:row];
+    [[EMClient sharedClient].chatManager deleteConversation:model.itemId
                                            isDeleteMessages:YES
                                                  completion:nil];
     //更新系统通知存在状态
-    if ([model.conversationId isEqualToString:EMSYSTEMNOTIFICATIONID]) {
+    if ([model.itemId isEqualToString:EMSYSTEMNOTIFICATIONID]) {
         [EMDemoOptions sharedOptions].isVisibleOnConversationList = NO;
         [EMDemoOptions.sharedOptions archive];
     }
@@ -583,7 +598,7 @@
 //置顶
 - (void)_stickConversation:(NSIndexPath *)indexPath
 {
-    EaseConversationModel* model = [self.dataArray objectAtIndex:indexPath.row];
+    id<EaseConversationItemModelDelegate> model = [self.dataArray objectAtIndex:indexPath.row];
     [EaseConversationExtController stickConversation:model];
     [self _reSortedConversationModelsAndReloadView];
 }
@@ -591,7 +606,7 @@
 //取消置顶
 - (void)_cancelStickConversation:(NSIndexPath *)indexPath
 {
-    EaseConversationModel* model = [self.dataArray objectAtIndex:indexPath.row];
+    id<EaseConversationItemModelDelegate> model = [self.dataArray objectAtIndex:indexPath.row];
     [EaseConversationExtController cancelStickConversation:model];
     [self _reSortedConversationModelsAndReloadView];
 }
@@ -604,7 +619,7 @@
     NSMutableArray *tempModelArray = [[NSMutableArray alloc]init];
     NSMutableArray *stickArray = [[NSMutableArray alloc]init];
     [tempModelArray addObjectsFromArray:modelArray];
-    EaseConversationModel* model = nil;
+    id<EaseConversationItemModelDelegate> model = nil;
     
     for (int i = 0; i < [modelArray count]; i++) {
         model = modelArray[i];
@@ -615,7 +630,7 @@
     }
     NSLog(@"\nbefore:%@",stickArray);
     //排序置顶会话列表
-    stickArray = [[stickArray sortedArrayUsingComparator:^(EaseConversationModel* obj1, EaseConversationModel* obj2) {
+    stickArray = [[stickArray sortedArrayUsingComparator:^(id<EaseConversationItemModelDelegate> obj1, id<EaseConversationItemModelDelegate> obj2) {
         if([self getConversationStickTime:obj1] > [self getConversationStickTime:obj2]) {
             return(NSComparisonResult)NSOrderedAscending;
         } else {
@@ -628,7 +643,7 @@
 }
 
 //置顶时间
-- (long)getConversationStickTime:(EaseConversationModel*)conversationModel
+- (long)getConversationStickTime:(id<EaseConversationItemModelDelegate>)conversationModel
 {
     return [(NSNumber *)[conversationModel.ext objectForKey:CONVERSATION_STICK] longValue];
 }
@@ -641,7 +656,7 @@
     if (self.conversationVCDelegate && [self.conversationVCDelegate respondsToSelector:@selector(sortConversationsList:)]) {
         conversationModels = [[self.conversationVCDelegate sortConversationsList:self.dataArray] mutableCopy];
     } else {
-        NSArray *sorted = [self.dataArray sortedArrayUsingComparator:^(EaseConversationModel* obj1, EaseConversationModel* obj2) {
+        NSArray *sorted = [self.dataArray sortedArrayUsingComparator:^(id<EaseConversationItemModelDelegate> obj1, id<EaseConversationItemModelDelegate> obj2) {
             if(obj1.timestamp > obj2.timestamp) {
                 return(NSComparisonResult)NSOrderedAscending;
             } else {
@@ -649,11 +664,11 @@
             }
         }];
         
-        for (EaseConversationModel* model in sorted) {
-            if (![model.conversationId isEqualToString:EMSYSTEMNOTIFICATIONID]) {
-                EaseConversationModel *conversationModel = (EaseConversationModel*)model;
+        for (id<EaseConversationItemModelDelegate> model in sorted) {
+            if (![model.itemId isEqualToString:EMSYSTEMNOTIFICATIONID]) {
+                id<EaseConversationItemModelDelegate>conversationModel = (id<EaseConversationItemModelDelegate>)model;
                 if (![EaseConversationModelUtil getConversationWithConversationModel:conversationModel].latestMessage) {
-                    [EMClient.sharedClient.chatManager deleteConversation:conversationModel.conversationId
+                    [EMClient.sharedClient.chatManager deleteConversation:conversationModel.itemId
                                                          isDeleteMessages:NO
                                                                completion:nil];
                     continue;
@@ -693,6 +708,10 @@
         }];
         
         NSArray *models = [EaseConversationModelUtil modelsFromEMConversations:sorted];
+        if (weakself.conversationVCDelegate && [weakself.conversationVCDelegate respondsToSelector:@selector(sortConversationsList:)]) {
+            models = [[weakself.conversationVCDelegate sortConversationsList:models] mutableCopy];
+        }
+        
         NSMutableArray *finalDataArray = [weakself _stickSortedConversationModels:models];//置顶重排序
         
         if ([weakself.dataArray count] > 0)
@@ -706,10 +725,14 @@
             
             [weakself addBlankPerchView];
             [weakself endRefresh];
-            [weakself.tableView reloadData];
             weakself.isNeedReload = NO;
         });
     });
+}
+
+- (void)refreshTabView
+{
+    [self _loadAllConversationsFromDBWithIsShowHud:NO];
 }
 
 //更新系统通知会话
@@ -717,19 +740,30 @@
 {
     EMNotificationModel* notificationModel = [EMNotificationHelper.shared.notificationList objectAtIndex:0];
     NSString *notificationStr = nil;
-    if (notificationModel.type == EMNotificationModelTypeContact) {
+    NSString *conversationId = nil;
+    if (notificationModel.type == ContanctsRequestDidReceive) {
+        conversationId = notificationModel.sender;
         notificationStr = [NSString stringWithFormat:@"好友申请来自：%@",notificationModel.sender];
     }
-    if (notificationModel.type == EMNotificationModelTypeGroupJoin) {
+    if (notificationModel.type == GroupInvitationDidReceive) {
+        conversationId = notificationModel.groupId;
+        notificationStr = [NSString stringWithFormat:@"加群邀请来自：%@",notificationModel.sender];
+    }
+    if (notificationModel.type == JoinGroupRequestDidReceive) {
+        conversationId = notificationModel.groupId;
         notificationStr = [NSString stringWithFormat:@"加群申请来自：%@",notificationModel.sender];
     }
-    if (notificationModel.type == EMNotificationModelTypeGroupInvite) {
-        notificationStr = [NSString stringWithFormat:@"加群邀请来自：%@",notificationModel.sender];
+    if (self.conversationVCDelegate && [self.conversationVCDelegate respondsToSelector:@selector(requestDidReceiveShowMessage:requestUser:reason:)]) {
+        notificationStr = [self.conversationVCDelegate requestDidReceiveShowMessage:notificationModel.sender requestUser:notificationModel.sender reason:notificationModel.type];
     }
     EMTextMessageBody *body = [[EMTextMessageBody alloc]initWithText:notificationStr];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:EMSYSTEMNOTIFICATIONID from:EMSYSTEMNOTIFICATIONID to:EMClient.sharedClient.currentUsername body:body ext:nil];
     message.timestamp = [self getLatestNotificTimestamp:notificationModel.time];
     EMConversation *notiConversation = [[EMClient sharedClient].chatManager getConversation:message.conversationId type:-1 createIfNotExist:YES];
+    if (self.conversationVCDelegate && [self.conversationVCDelegate respondsToSelector:@selector(requestDidReceiveConversationExt:requestUser:reason:)]) {
+        NSDictionary *ext = [self.conversationVCDelegate requestDidReceiveConversationExt:conversationId requestUser:notificationModel.sender reason:notificationModel.type];
+        [notiConversation setExt:ext];
+    }
     [notiConversation insertMessage:message error:nil];
 }
 

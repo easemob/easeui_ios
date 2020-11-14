@@ -1,22 +1,18 @@
 //
-//  EaseConversationCellOptions.m
+//  EaseConversationViewModel.m
 //  EaseIMKit
 //
-//  Created by 杜洁鹏 on 2020/10/29.
+//  Created by 娜塔莎 on 2020/11/12.
 //
 
-#import "EaseConversationCellOptions.h"
-#import "Masonry.h"
+#import "EaseConversationViewModel.h"
 
-@implementation EaseConversationCellOptions
+@implementation EaseConversationViewModel
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _convesationsListBgColor = [UIColor whiteColor];
-        _conversationCellBgColor = [UIColor whiteColor];
-        _avatarStyle = EMAvatarStyleCorner;
         _avatarSize = CGSizeMake(40, 40);
         _wordSizeForCellTitle = 18.0;
         _wordSizeForCellDetail = 16.0;
@@ -54,49 +50,59 @@
 
 #pragma mark - Setter
 
-- (void)setConvesationsListBgColor:(UIColor *)convesationsListBgColor
-{
-    if (convesationsListBgColor) {
-        _convesationsListBgColor = convesationsListBgColor;
-    }
-}
-
-- (void)setConversationCellBgColor:(UIColor *)conversationCellBgColor
+// super
+- (void)setCellBgColor:(UIColor *)conversationCellBgColor
 {
     if (conversationCellBgColor) {
-        _conversationCellBgColor = conversationCellBgColor;
+        self.cellBgColor = conversationCellBgColor;
     }
 }
 
-- (void)setAvatarStyle:(EMAvatarStyle)avatarStyle
+- (void)setAvatarType:(EaseAvatarStyle)avatarType
 {
-    if (avatarStyle >= 0 && avatarStyle <= 2) {
-        _avatarStyle = avatarStyle;
+    if (avatarType >= 0 && avatarType <= 2) {
+        self.avatarType = avatarType;
     }
 }
+
+- (void)setCellHeight:(CGFloat)cellHeight
+{
+    if (cellHeight && cellHeight > 0) {
+        self.cellHeight = cellHeight;
+    }
+}
+
+- (void)setViewBgColor:(UIColor *)viewBgColor
+{
+    if (viewBgColor) {
+        self.viewBgColor = viewBgColor;
+    }
+}
+
+//self
 
 - (void)setAvatarSize:(CGSize)avatarSize
 {
-    
+    _avatarSize = avatarSize;
 }
 
 - (void)setWordSizeForCellTitle:(CGFloat)wordSizeForCellTitle
 {
-    if (wordSizeForCellTitle) {
+    if (wordSizeForCellTitle && wordSizeForCellTitle > 0) {
         _wordSizeForCellTitle = wordSizeForCellTitle;
     }
 }
 
 - (void)setWordSizeForCellDetail:(CGFloat)wordSizeForCellDetail
 {
-    if (wordSizeForCellDetail) {
+    if (wordSizeForCellDetail && wordSizeForCellDetail > 0) {
         _wordSizeForCellDetail = wordSizeForCellDetail;
     }
 }
 
 - (void)setWordSizeForCellTimestamp:(CGFloat)wordSizeForCellTimestamp
 {
-    if (wordSizeForCellTimestamp) {
+    if (wordSizeForCellTimestamp && wordSizeForCellTimestamp > 0) {
         _wordSizeForCellTimestamp = wordSizeForCellTimestamp;
     }
 }

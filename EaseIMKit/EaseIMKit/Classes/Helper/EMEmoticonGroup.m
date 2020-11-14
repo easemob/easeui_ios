@@ -7,7 +7,7 @@
 //
 
 #import "EMEmoticonGroup.h"
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 
 EMEmoticonGroup *gGifGroup = nil;
 

@@ -10,7 +10,7 @@
 
 #import "EMNotificationHelper.h"
 #import "EMNotificationCell.h"
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 
 @interface EMNotificationViewController ()<EMNotificationsDelegate, EMNotificationCellDelegate>
 
@@ -112,7 +112,7 @@
         }
     };
     
-    if (aModel.type == EMNotificationModelTypeContact) {
+    if (aModel.type == ContanctsRequestDidReceive) {
         [[EMClient sharedClient].contactManager approveFriendRequestFromUser:aModel.sender completion:^(NSString *aUsername, EMError *aError) {
             if (!aError) {
                 NSString *msg = [NSString stringWithFormat:@"您已同意 %@ 的好友请求",aModel.sender];
@@ -120,7 +120,7 @@
             }
             block(aError);
         }];
-    } else if (aModel.type == EMNotificationModelTypeGroupInvite) {
+    } else if (aModel.type == GroupInvitationDidReceive) {
         [[EMClient sharedClient].groupManager acceptInvitationFromGroup:aModel.groupId inviter:aModel.sender completion:^(EMGroup *aGroup, EMError *aError) {
             block(aError);
             if (!aError) {
@@ -129,7 +129,7 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_ADD_SOCIAL_CONTACT object:@{CONVERSATION_ID:aModel.groupId,CONVERSATION_OBJECT:EMClient.sharedClient.currentUsername}];
             }
         }];
-    } else if (aModel.type == EMNotificationModelTypeGroupJoin) {
+    } else if (aModel.type == JoinGroupRequestDidReceive) {
         [[EMClient sharedClient].groupManager approveJoinGroupRequest:aModel.groupId sender:aModel.sender completion:^(EMGroup *aGroup, EMError *aError) {
             block(aError);
         }];
@@ -152,7 +152,7 @@
         [weakself.tableView reloadData];
     };
     
-    if (aModel.type == EMNotificationModelTypeContact) {
+    if (aModel.type == ContanctsRequestDidReceive) {
         [[EMClient sharedClient].contactManager declineFriendRequestFromUser:aModel.sender completion:^(NSString *aUsername, EMError *aError) {
             if (!aError) {
                 NSString *msg = [NSString stringWithFormat:@"您已拒绝 %@ 的好友请求",aModel.sender];
@@ -160,12 +160,12 @@
             }
             block(aError);
         }];
-    } else if (aModel.type == EMNotificationModelTypeGroupInvite) {
+    } else if (aModel.type == GroupInvitationDidReceive) {
         [[EMClient sharedClient].groupManager declineGroupInvitation:aModel.groupId inviter:aModel.sender reason:nil completion:^(EMError *aError) {
             block(aError);
 
         }];
-    } else if (aModel.type == EMNotificationModelTypeGroupJoin) {
+    } else if (aModel.type == JoinGroupRequestDidReceive) {
         [[EMClient sharedClient].groupManager declineJoinGroupRequest:aModel.groupId sender:aModel.sender reason:nil completion:^(EMGroup *aGroup, EMError *aError) {
             block(aError);
            

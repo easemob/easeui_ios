@@ -7,7 +7,7 @@
 //
 
 #import "EMSearchViewController.h"
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 
 @interface EMSearchViewController ()
 

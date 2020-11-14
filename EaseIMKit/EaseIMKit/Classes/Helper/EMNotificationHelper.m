@@ -18,7 +18,6 @@ static NSString *kNotifications_Time = @"time";
 static NSString *kNotifications_Status = @"status";
 static NSString *kNotifications_Type = @"type";
 static NSString *kNotifications_IsRead = @"isRead";
-static NSString *kNotifications_StickTime = @"stickTime";
 
 @implementation EMNotificationModel
 
@@ -43,7 +42,6 @@ static NSString *kNotifications_StickTime = @"stickTime";
         self.status = [aDecoder decodeIntegerForKey:kNotifications_Status];
         self.type = [aDecoder decodeIntegerForKey:kNotifications_Type];
         self.isRead = [aDecoder decodeBoolForKey:kNotifications_IsRead];
-        self.stickTime = [aDecoder decodeObjectForKey:kNotifications_StickTime];
     }
     return self;
 }
@@ -58,7 +56,6 @@ static NSString *kNotifications_StickTime = @"stickTime";
     [aCoder encodeInteger:self.status forKey:kNotifications_Status];
     [aCoder encodeInteger:self.type forKey:kNotifications_Type];
     [aCoder encodeBool:self.isRead forKey:kNotifications_IsRead];
-    [aCoder encodeObject:self.stickTime forKey:kNotifications_StickTime];
 }
 
 @end
@@ -182,7 +179,7 @@ static EMNotificationHelper *shared = nil;
     return [multicastDelegates getDelegates];
 }
 
-- (void)notificationsUnreadCountUpdate:(NSInteger)count
+- (void)notificationsUnreadCountUpdate:(int)count
 {
     for (EMMulticastDelegateNode *node in [self getDelegateNodes]) {
         self.notificateDelegate = (id<EMNotificationsDelegate>)node.delegate;
@@ -237,9 +234,9 @@ static EMNotificationHelper *shared = nil;
     
     aModel.time = time;
     if ([aModel.message length] == 0) {
-        if (aModel.type == EMNotificationModelTypeContact) {
+        if (aModel.type == ContanctsRequestDidReceive) {
             aModel.message = @"申请添加您为好友";
-        } else if (aModel.type == EMNotificationModelTypeGroupInvite) {
+        } else if (aModel.type == GroupInvitationDidReceive) {
             EMGroup *group = [EMClient.sharedClient.groupManager getGroupSpecificationFromServerWithId:aModel.groupId error:nil];
             aModel.message = [NSString stringWithFormat:@"邀请您加入群组\"%@\"，是否同意加入？", group.groupName];
         }
@@ -265,7 +262,7 @@ static EMNotificationHelper *shared = nil;
 {
     if (aEvent == EMMultiDevicesEventContactAccept || aEvent == EMMultiDevicesEventContactDecline) {
         for (EMNotificationModel *model in self.notificationList) {
-            if (model.type == EMNotificationModelTypeContact && [model.sender isEqualToString:aTarget]) {
+            if (model.type == ContanctsRequestDidReceive && [model.sender isEqualToString:aTarget]) {
                 if (!model.isRead && self.unreadCount > 0) {
                     model.isRead = YES;
                     --_unreadCount;
@@ -289,9 +286,9 @@ static EMNotificationHelper *shared = nil;
                                      ext:(id)aExt
 {
     if (aEvent == EMMultiDevicesEventGroupInviteDecline || aEvent == EMMultiDevicesEventGroupInviteAccept || aEvent == EMMultiDevicesEventGroupApplyAccept || aEvent == EMMultiDevicesEventGroupApplyDecline) {
-        EMNotificationModelType type = EMNotificationModelTypeGroupInvite;
+        EaseIMKitCallBackReason type = GroupInvitationDidReceive;
         if (aEvent == EMMultiDevicesEventGroupApplyAccept || aEvent == EMMultiDevicesEventGroupApplyDecline) {
-            type = EMNotificationModelTypeGroupJoin;
+            type = JoinGroupRequestDidReceive;
         }
         
         EMNotificationModelStatus status = EMNotificationModelStatusAgreed;
@@ -300,7 +297,7 @@ static EMNotificationHelper *shared = nil;
         }
         
         for (EMNotificationModel *model in self.notificationList) {
-            if (model.type == EMNotificationModelTypeGroupJoin && [model.groupId isEqualToString:aGroupId]) {
+            if (model.type == JoinGroupRequestDidReceive && [model.groupId isEqualToString:aGroupId]) {
                 if (!model.isRead && self.unreadCount > 0) {
                     model.isRead = YES;
                     --_unreadCount;
@@ -337,7 +334,7 @@ static EMNotificationHelper *shared = nil;
     EMNotificationModel *model = [[EMNotificationModel alloc] init];
     model.sender = aUsername;
     model.message = aMessage;
-    model.type = EMNotificationModelTypeContact;
+    model.type = ContanctsRequestDidReceive;
     [self insertModel:model];
 }
 
@@ -354,7 +351,7 @@ static EMNotificationHelper *shared = nil;
     EMNotificationModel *model = [[EMNotificationModel alloc] init];
     model.sender = aInviter;
     model.groupId = aGroupId;
-    model.type = EMNotificationModelTypeGroupInvite;
+    model.type = GroupInvitationDidReceive;
     model.message = aMessage;
     [[EMNotificationHelper shared] insertModel:model];
 }
@@ -370,7 +367,7 @@ static EMNotificationHelper *shared = nil;
     EMNotificationModel *model = [[EMNotificationModel alloc] init];
     model.sender = aUsername;
     model.groupId = aGroup.groupId;
-    model.type = EMNotificationModelTypeGroupJoin;
+    model.type = JoinGroupRequestDidReceive;
     model.message = [NSString stringWithFormat:@"\"%@\"申请加入群组\"%@\",是否同意该申请？",aUsername, aGroup.groupName];
     [self insertModel:model];
 }

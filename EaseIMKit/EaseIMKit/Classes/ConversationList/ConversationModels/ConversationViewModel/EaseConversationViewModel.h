@@ -1,20 +1,13 @@
 //
-//  EaseConversationCellOptions.h
+//  EaseConversationViewModel.h
 //  EaseIMKit
 //
-//  Created by 杜洁鹏 on 2020/10/29.
+//  Created by 娜塔莎 on 2020/11/12.
 //
 
 #import <Foundation/Foundation.h>
-
-/*!
- *  头像风格
- */
-typedef enum {
-    EMAvatarStyleCorner = 0, //圆角
-    EMAvatarStyleRectangular,  //矩形
-    EMAvatarStyleCircular,  //圆形
-} EMAvatarStyle;
+#import "EaseBaseTableViewModel.h"
+#import "Masonry.h"
 
 /*!
  *  未读数view位置
@@ -26,12 +19,8 @@ typedef enum {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EaseConversationCellOptions : NSObject
+@interface EaseConversationViewModel : EaseBaseTableViewModel
 
-@property (nonatomic, copy) UIColor *convesationsListBgColor; //会话列表页面皮肤
-@property (nonatomic, copy) UIColor *conversationCellBgColor; //会话列表项cell皮肤
-
-@property (nonatomic) EMAvatarStyle avatarStyle; //头像风格
 @property (nonatomic) CGSize avatarSize; //头像尺寸
 
 @property (nonatomic) CGFloat wordSizeForCellTitle; //会话列表cell标题字号

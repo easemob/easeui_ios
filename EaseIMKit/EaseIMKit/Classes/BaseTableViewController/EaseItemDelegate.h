@@ -14,8 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @required
 @property (nonatomic, copy, readonly) NSString *itemId;
 @property (nonatomic, copy, readonly) NSString *avatarURL; // 显示头像的url
-@property (nonatomic, copy, readonly) UIImage *defaultAvatar; // 默认头像显示
-@property (nonatomic, copy, readonly) NSString *showName; // 显示头像的昵称
+@property (nonatomic, copy) UIImage *defaultAvatar; // 默认头像显示
+@property (nonatomic, copy) NSString *showName; // 显示头像的昵称
 
 
 @end

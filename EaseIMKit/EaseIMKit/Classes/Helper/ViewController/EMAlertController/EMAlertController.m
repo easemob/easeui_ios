@@ -7,7 +7,7 @@
 //
 
 #import "EMAlertController.h"
-#import "EMHeaders.h"
+#import "EaseHeaders.h"
 
 @interface EMAlertController()
 
