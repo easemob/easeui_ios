@@ -9,15 +9,14 @@ Pod::Spec.new do |s|
   s.summary = 'easemob im sdk UIKit'
   s.homepage = 'https://github.com/dujiepeng/EaseIMKit'
   s.author = { 'easemob' => 'dev@easemob.com' }
-  s.source = { :git => 'https://github.com/dujiepeng/EaseIMKit.git', :tag => s.version.to_s }
-
+  s.source = { :git => 'https://github.com/dujiepeng/EaseIMKit.git',
+               :tag => s.version.to_s,
+               :submodules => true
+  }
   s.description = 'easemob sdk ui kit'
-
   s.requires_arc = true
-
   s.source_files = 'EaseIMKit/**/*.{h,m}'
-  
-  s.ios.resource_bundle = { 'EaseIMKitIcon' => 'EaseIMKit/resources/SharedImgs/ConversationListImgs/*.png' }
+  s.resources = 'EaseIMKit/**/**/*.{png,jpg,jpeg}'
   
   s.dependency 'Hyphenate', '~> 3.7.2'
   s.dependency 'Masonry'
