@@ -9,9 +9,7 @@
 #import "EaseConversationCell.h"
 #import "EaseHeaders.h"
 #import "EMDateHelper.h"
-#import "EaseConversationModelUtil.h"
-#import "EaseConversationExtController.h"
-#import "IconResourceManage.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface EaseConversationCell()<UIGestureRecognizerDelegate>
 
@@ -120,117 +118,21 @@
     return YES;
 }
 
-#pragma mark - setter
-
-- (NSAttributedString *)_getDetailWithModel:(id<EaseConversationItemModelDelegate>)conversationItemModel
+- (void)setModel:(id<EaseConversationItemDelegate>)model
 {
-    NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:@""];
+    _model = model;
+    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL] placeholderImage:_model.defaultAvatar];
+    self.nameLabel.text = _model.showName;
+    // TODO:
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_model.showInfo];
+    self.detailLabel.attributedText = attrString;
+    self.timeLabel.text = [EMDateHelper formattedTimeFromTimeInterval:_model.lastestUpdateTime];
     
-    EMMessage *lastMessage = conversationItemModel.latestMessage;
-    if (!lastMessage) {
-        return attributedStr;
-    }
-    
-    NSString *latestMessageTitle = @"";
-    EMMessageBody *messageBody = lastMessage.body;
-    switch (messageBody.type) {
-        case EMMessageBodyTypeText:
-        {
-            NSString *str = [EMEmojiHelper convertEmoji:((EMTextMessageBody *)messageBody).text];
-            if ([str isEqualToString:EMCOMMUNICATE_CALLER_MISSEDCALL]) {
-                str = @"未接听，点击回拨";
-                if ([lastMessage.from isEqualToString:[EMClient sharedClient].currentUsername])
-                    str = @"已取消";
-            }
-            if ([str isEqualToString:EMCOMMUNICATE_CALLED_MISSEDCALL]) {
-                str = @"对方已取消";
-                if ([lastMessage.from isEqualToString:[EMClient sharedClient].currentUsername])
-                    str = @"对方拒绝通话";
-            }
-            latestMessageTitle = str;
-            if (lastMessage.ext && [lastMessage.ext objectForKey:EMCOMMUNICATE_TYPE]) {
-                NSString *communicateStr = @"";
-                if ([[lastMessage.ext objectForKey:EMCOMMUNICATE_TYPE] isEqualToString:EMCOMMUNICATE_TYPE_VIDEO])
-                    communicateStr = @"[视频通话]";
-                if ([[lastMessage.ext objectForKey:EMCOMMUNICATE_TYPE] isEqualToString:EMCOMMUNICATE_TYPE_VOICE])
-                    communicateStr = @"[语音通话]";
-                latestMessageTitle = [NSString stringWithFormat:@"%@ %@", communicateStr, latestMessageTitle];
-            }
-        }
-            break;
-        case EMMessageBodyTypeImage:
-            latestMessageTitle = @"[图片]";
-            break;
-        case EMMessageBodyTypeVoice:
-            latestMessageTitle = @"[音频]";
-            break;
-        case EMMessageBodyTypeLocation:
-            latestMessageTitle = @"[位置]";
-            break;
-        case EMMessageBodyTypeVideo:
-            latestMessageTitle = @"[视频]";
-            break;
-        case EMMessageBodyTypeFile:
-            latestMessageTitle = @"[文件]";
-            break;
-        default:
-            break;
-    }
-
-    /*
-    if (ext && [ext[kConversation_IsRead] isEqualToString:kConversation_AtAll]) {
-        NSString *allMsg = @"[有全体消息]";
-        latestMessageTitle = [NSString stringWithFormat:@"%@ %@", allMsg, latestMessageTitle];
-        attributedStr = [[NSMutableAttributedString alloc] initWithString:latestMessageTitle];
-        [attributedStr setAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:1.0 green:.0 blue:.0 alpha:0.5]} range:NSMakeRange(0, allMsg.length)];
-    } else */
-    EMConversation *conversation = [EaseConversationModelUtil getConversationWithConversationModel:conversationItemModel];
-    
-    if ([EaseConversationExtController isConversationAtMe:conversation]) {
-        NSString *atStr = @"[有人@我]";
-        latestMessageTitle = [NSString stringWithFormat:@"%@ %@", atStr, latestMessageTitle];
-        attributedStr = [[NSMutableAttributedString alloc] initWithString:latestMessageTitle];
-        [attributedStr setAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:255/255.0 green:43/255.0 blue:43/255.0 alpha:1.0]} range:NSMakeRange(0, atStr.length)];
-    } else if ([EaseConversationExtController getChatDraft:conversation] && ![[EaseConversationExtController getChatDraft:conversation] isEqualToString:@""]){
-        NSString *draftStr = @"[草稿]";
-        latestMessageTitle = [NSString stringWithFormat:@"%@ %@", draftStr, [EaseConversationExtController getChatDraft:conversation]];
-        attributedStr = [[NSMutableAttributedString alloc] initWithString:latestMessageTitle];
-        [attributedStr setAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:255/255.0 green:43/255.0 blue:43/255.0 alpha:1.0]} range:NSMakeRange(0, draftStr.length)];
-    } else {
-        attributedStr = [[NSMutableAttributedString alloc] initWithString:latestMessageTitle];
-    }
-    
-    return attributedStr;
-}
-
-- (NSString *)_getTimeWithModel:(id<EaseConversationItemModelDelegate>)conversationItemModel
-{
-    NSString *latestMessageTime = @"";
-    EMMessage *lastMessage = conversationItemModel.latestMessage;
-    if (lastMessage) {
-        double timeInterval = lastMessage.timestamp ;
-        if(timeInterval > 140000000000) {
-            timeInterval = timeInterval / 1000;
-        }
-        NSDateFormatter* formatter = [[NSDateFormatter alloc]init];
-        [formatter setDateFormat:@"yyyy-MM-dd"];
-        latestMessageTime = [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:timeInterval]];
-    }
-    return latestMessageTime;
-}
-- (void)setConversationItemModel:(id<EaseConversationItemModelDelegate>)conversationItemModel
-{
-    _conversationItemModel = conversationItemModel;
-    self.avatarView.image = _conversationItemModel.defaultAvatar;
-    self.nameLabel.text = _conversationItemModel.showName;
-    self.detailLabel.attributedText = [self _getDetailWithModel:_conversationItemModel];
-    self.timeLabel.text = [self _getTimeWithModel:_conversationItemModel];
-    
-    if (_conversationItemModel.unreadMessagesCount == 0) {
+    if (_model.unreadMessagesCount == 0) {
         self.badgeLabel.value = @"";
         self.badgeLabel.hidden = YES;
     } else {
-        self.badgeLabel.value = [NSString stringWithFormat:@" %@ ", _conversationItemModel.unreadMessagesCount > 99 ? (_conversationItemModel.unreadMessagesCount > 199 ? @"..." : @"99+") : @(_conversationItemModel.unreadMessagesCount)];
+        self.badgeLabel.value = [NSString stringWithFormat:@" %@ ", _model.unreadMessagesCount > 99 ? (_model.unreadMessagesCount > 199 ? @"..." : @"99+") : @(_model.unreadMessagesCount)];
         self.badgeLabel.hidden = NO;
     }
 }

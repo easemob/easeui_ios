@@ -11,8 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef enum : NSUInteger {
-    Contact,
-    Custom,
+    EaseContactItemType_Contact,
+    EaseContactItemType_Custom,
 } EaseContactItemType;
 
 

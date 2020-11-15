@@ -10,8 +10,7 @@
 
 #import "EMBadgeLabel.h"
 #import "EaseConversationViewModel.h"
-#import "EaseConversationModelUtil.h"
-#import "EaseConversationItemModelDelegate.h"
+#import "EaseConversationItemDelegate.h"
 
 @interface EaseConversationCell : UITableViewCell
 
@@ -20,7 +19,7 @@
 @property (nonatomic, strong) UILabel *detailLabel;
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) EMBadgeLabel *badgeLabel;
-@property (nonatomic, assign) id<EaseConversationItemModelDelegate> conversationItemModel;
+@property (nonatomic, assign) id<EaseConversationItemDelegate> model;
 
 - (instancetype)initWithConversationViewModel:(EaseConversationViewModel *)viewModel;
 

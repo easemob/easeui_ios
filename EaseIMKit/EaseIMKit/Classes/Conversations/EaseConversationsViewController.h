@@ -9,12 +9,15 @@
 #import <Hyphenate/Hyphenate.h>
 
 #import "EaseBaseTableViewController.h"
-#import "IEaseConversationVcDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EaseConversationsViewController : EaseBaseTableViewController <IEaseConversationVcDelegate>
+@protocol EaseConversationsViewControllerDelegate <EaseTableViewDelegate>
 
+@end
+
+
+@interface EaseConversationsViewController : EaseBaseTableViewController
 @end
 
 NS_ASSUME_NONNULL_END

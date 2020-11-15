@@ -7,9 +7,8 @@
 //
 
 #import "ViewController.h"
-#import "ConversationCellModel.h"
 
-@interface ViewController ()<EaseConversationVCDelegate>
+@interface ViewController ()
 
 @end
 
@@ -18,20 +17,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-}
-
-#pragma mark - EaseConversationVCDelegate
-- (id<EaseConversationCellModelDelegate>)conversationCellForModel:(NSString *)conversationId
-                                                 conversationType:(EMConversationType)aType{
-    /*
-    ConversationCellModel *cellModel = [[ConversationCellModel alloc] init];
-    if (aType == EMConversationTypeChat)
-        cellModel.avatarImg = [UIImage imageNamed:@"defaultAvatar"];
-    if (aType == EMConversationTypeGroupChat)
-        cellModel.avatarImg = [UIImage imageNamed:@"defaultAvatar"];
-    if (aType == EMConversationTypeChatRoom)
-        cellModel.avatarImg = [UIImage imageNamed:@"defaultAvatar"];*/
-    return nil;
 }
 
 @end

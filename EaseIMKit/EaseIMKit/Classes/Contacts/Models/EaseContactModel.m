@@ -6,6 +6,7 @@
 //
 
 #import "EaseContactModel.h"
+#import "UIImage+EaseUI.h"
 
 @implementation EaseContactModel {
     NSString *_showName;
@@ -30,7 +31,7 @@
 }
 
 - (EaseContactItemType)type {
-    return Contact;
+    return EaseContactItemType_Contact;
 }
 
 - (NSString *)firstLetter {
@@ -55,5 +56,7 @@
 @synthesize itemId;
 
 @synthesize showName;
+
+@synthesize avatarURL;
 
 @end

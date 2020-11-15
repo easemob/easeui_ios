@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import "EaseHeaders.h"
-#import "IEaseConversationVcDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,8 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shareEaseIMKit;
 
-//会话列表视图控制器代理
-@property (nonatomic, strong, readonly)id<IEaseConversationVcDelegate>conversationListController;
 
 @end
 

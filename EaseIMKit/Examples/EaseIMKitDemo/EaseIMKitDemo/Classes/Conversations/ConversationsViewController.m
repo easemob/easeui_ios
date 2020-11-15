@@ -9,7 +9,7 @@
 #import "ConversationsViewController.h"
 #import <EaseIMKit.h>
 
-@interface ConversationsViewController ()<EaseConversationVCDelegate>
+@interface ConversationsViewController ()
 
 @end
 
@@ -18,12 +18,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [EaseIMKitManager.shareEaseIMKit.conversationListController addDelegate:self];
-    EaseConversationsViewController *conversationsController = (EaseConversationsViewController *)EaseIMKitManager.shareEaseIMKit.conversationListController;
-    [self addChildViewController:conversationsController];
-    [self.view addSubview:conversationsController.view];
-    [conversationsController.view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).offset(44);
+    EaseConversationViewModel *model = [[EaseConversationViewModel alloc] init];
+    EaseConversationsViewController *easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:model];
+    [self addChildViewController:easeConvsVC];
+    [self.view addSubview:easeConvsVC.view];
+    [easeConvsVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
         make.bottom.equalTo(self.view);

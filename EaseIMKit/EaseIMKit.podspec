@@ -16,7 +16,9 @@ Pod::Spec.new do |s|
   s.description = 'easemob sdk ui kit'
   s.requires_arc = true
   s.source_files = 'EaseIMKit/**/*.{h,m}'
-  s.resources = 'EaseIMKit/**/**/*.{png,jpg,jpeg}'
+  s.resource_bundles = {
+    'EaseIMKit' => ['EaseIMKit/**/**/*.{png,jpg,jpeg}']
+  }
   
   s.dependency 'Hyphenate', '~> 3.7.2'
   s.dependency 'Masonry'

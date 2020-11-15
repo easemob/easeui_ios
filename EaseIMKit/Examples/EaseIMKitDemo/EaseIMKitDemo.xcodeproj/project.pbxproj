@@ -19,7 +19,6 @@
 		90A03A37254A70E100D57B73 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A35254A70E100D57B73 /* Main.storyboard */; };
 		90A03A39254A70E200D57B73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A38254A70E200D57B73 /* Assets.xcassets */; };
 		90A03A3F254A70E200D57B73 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A3E254A70E200D57B73 /* main.m */; };
-		90A0472A254ADF0100CEAF50 /* ConversationCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A04729254ADF0100CEAF50 /* ConversationCellModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,8 +46,6 @@
 		90A03A38254A70E200D57B73 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		90A03A3D254A70E200D57B73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90A03A3E254A70E200D57B73 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		90A04728254ADF0100CEAF50 /* ConversationCellModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConversationCellModel.h; sourceTree = "<group>"; };
-		90A04729254ADF0100CEAF50 /* ConversationCellModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConversationCellModel.m; sourceTree = "<group>"; };
 		BFBBBDBBACBBCAD1DF95BCB9 /* Pods-EaseIMKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKitDemo.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -180,8 +177,6 @@
 		90A04727254ADEF200CEAF50 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				90A04728254ADF0100CEAF50 /* ConversationCellModel.h */,
-				90A04729254ADF0100CEAF50 /* ConversationCellModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -299,7 +294,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				90A0472A254ADF0100CEAF50 /* ConversationCellModel.m in Sources */,
 				90A03A34254A70E100D57B73 /* ViewController.m in Sources */,
 				90A03A2E254A70E100D57B73 /* AppDelegate.m in Sources */,
 				903EAEB025540B89005E6BB1 /* SettingsViewController.m in Sources */,
