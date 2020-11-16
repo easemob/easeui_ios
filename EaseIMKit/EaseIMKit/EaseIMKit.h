@@ -13,6 +13,7 @@
 //conversationList
 #import "EaseConversationsViewController.h"
 #import "EaseConversationViewModel.h"
+#import "EaseConversationCell.h"
 
 //contactList
 #import "EaseContactsViewController.h"

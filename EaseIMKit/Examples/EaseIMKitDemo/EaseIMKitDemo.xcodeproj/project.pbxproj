@@ -158,7 +158,6 @@
 			isa = PBXGroup;
 			children = (
 				903EAE7525540374005E6BB1 /* Classes */,
-				90A04727254ADEF200CEAF50 /* Model */,
 				90A03A2C254A70E100D57B73 /* AppDelegate.h */,
 				90A03A2D254A70E100D57B73 /* AppDelegate.m */,
 				90A03A2F254A70E100D57B73 /* SceneDelegate.h */,
@@ -172,13 +171,6 @@
 				90A03A3E254A70E200D57B73 /* main.m */,
 			);
 			path = EaseIMKitDemo;
-			sourceTree = "<group>";
-		};
-		90A04727254ADEF200CEAF50 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

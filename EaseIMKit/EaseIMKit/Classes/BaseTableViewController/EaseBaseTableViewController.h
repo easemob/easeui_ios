@@ -11,12 +11,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class EaseConversationCell;
 @protocol EaseTableViewDelegate  <NSObject>
 
 @optional
 - (void)easeTableView:(UITableView *)tableView didSelectItem:(id<EaseItemDelegate>)item;
 - (CGFloat)easeTableView:(UITableView *)tableView heightForItem:(id<EaseItemDelegate>)item;
-- (UITableViewCell *)easeTableView:(UITableView *)tableView cellforItem:(id<EaseItemDelegate>)item;
+- (EaseConversationCell *)easeTableView:(UITableView *)tableView cellforItem:(id<EaseItemDelegate>)item;
 - (UITableViewCell *)easeTableView:(UITableView *)tableView didSelectRowAtItem:(id<EaseItemDelegate>)item;
 
 //- (BOOL)easeTableView:(UITableView *)tableView canEditRowAtItem:(id<EaseItemDelegate>)item;

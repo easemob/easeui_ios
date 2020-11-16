@@ -83,12 +83,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    id<EaseConversationModelDelegate> model = self.dataAry[indexPath.row];
+    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:cellforItem:)]) {
+        return [self.easeTableViewDelegate easeTableView:tableView cellforItem:model];
+    }
+    
     EaseConversationCell *cell = (EaseConversationCell *)[tableView dequeueReusableCellWithIdentifier:@"EaseConversationCell"];
     if (!cell) {
         cell = [[EaseConversationCell alloc] initWithConversationViewModel:(EaseConversationViewModel *)_viewModel];
     }
     
-    id<EaseConversationModelDelegate> model = [self.dataAry objectAtIndex:indexPath.row];
+//    id<EaseConversationModelDelegate> model = [self.dataAry objectAtIndex:indexPath.row];
     cell.model = model;
     
     return cell;
