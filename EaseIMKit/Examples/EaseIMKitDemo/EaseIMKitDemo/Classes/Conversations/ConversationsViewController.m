@@ -7,6 +7,7 @@
 //
 
 #import "ConversationsViewController.h"
+#import "ConversationModel.h"
 #import <EaseIMKit.h>
 
 @interface ConversationsViewController () <EaseConversationsViewControllerDelegate>
@@ -53,15 +54,10 @@
     return customAction;
 }
 
-- (EaseConversationCell *)easeTableView:(UITableView *)tableView cellforItem:(id<EaseItemDelegate>)item {
-    EaseConversationCell *cell = [tableView dequeueReusableCellWithIdentifier:@"testcell"];
-    if (!cell) {
-        cell = [[EaseConversationCell alloc] initWithConversationViewModel:_viewMdeol];
-    }
 
-    cell.model = (id<EaseConversationModelDelegate>)item;
-
-    return cell;
+- (NSArray<id<EaseItemDelegate>> *)resetDataAry {
+    ConversationModel *model = [[ConversationModel alloc] init];
+    return @[model];
 }
 
 @end

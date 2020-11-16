@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol EaseTableViewDelegate  <NSObject>
 
 @optional
+- (NSArray<id<EaseItemDelegate>> *)resetDataAry;
 - (void)easeTableView:(UITableView *)tableView didSelectItem:(id<EaseItemDelegate>)item;
 - (CGFloat)easeTableView:(UITableView *)tableView heightForItem:(id<EaseItemDelegate>)item;
 - (EaseConversationCell *)easeTableView:(UITableView *)tableView cellforItem:(id<EaseItemDelegate>)item;
