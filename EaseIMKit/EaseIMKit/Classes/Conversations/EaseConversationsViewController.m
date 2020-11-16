@@ -231,7 +231,7 @@
     [self _loadAllConversationsFromDB];
 }
 
-#pragma mark - getter
+#pragma mark - setter & getter
 - (void)setEaseTableViewDelegate:(id<EaseConversationsViewControllerDelegate>)easeTableViewDelegate {
     _easeTableViewDelegate = easeTableViewDelegate;
 }

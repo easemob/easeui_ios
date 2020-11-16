@@ -74,8 +74,8 @@
     [self.contentView addSubview:_nameLabel];
     [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.contentView.mas_centerY);
-        make.left.equalTo(self.avatarView.mas_right).offset(8);
-        make.right.equalTo(self.timeLabel.mas_left);
+        make.left.equalTo(self.avatarView.mas_right);
+        make.right.lessThanOrEqualTo(self.timeLabel.mas_left);
     }];
     
     bool badgeLongerIsValid = (_conversationCellViewModel.longer >= 20 && _conversationCellViewModel.longer <=  _avatarView.frame.size.width / 2);

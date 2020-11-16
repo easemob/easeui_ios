@@ -57,7 +57,6 @@
     [_conversation setTop:isTop];
 }
 
-
 - (BOOL)isTop {
     return [_conversation isTop];
 }

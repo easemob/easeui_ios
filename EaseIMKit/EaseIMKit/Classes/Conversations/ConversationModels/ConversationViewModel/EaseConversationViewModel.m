@@ -10,11 +10,12 @@
 @implementation EaseConversationViewModel
 @synthesize avatarSize = _avatarSize;
 @synthesize avatarEdgeInsets = _avatarEdgeInsets;
+@synthesize cellHeight = _cellHeight;
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _avatarSize = CGSizeMake(80, 40);
+        _avatarSize = CGSizeMake(40, 40);
         _avatarEdgeInsets = UIEdgeInsetsMake(3, 3, 3, 3);
         _wordSizeForCellTitle = 18.0;
         _wordSizeForCellDetail = 16.0;
@@ -23,9 +24,26 @@
         _unReadCountViewBgColor = [UIColor redColor];
         _longer = 20;
         _blankPerchView = [self defaultBlankPerchView];
+        [self resetCellHeight];
+        
     }
     
     return self;
+}
+
+- (void)setAvatarSize:(CGSize)avatarSize {
+    _avatarSize = avatarSize;
+    [self resetCellHeight];
+}
+
+
+- (void)setAvatarEdgeInsets:(UIEdgeInsets)avatarEdgeInsets {
+    _avatarEdgeInsets = avatarEdgeInsets;
+    [self resetCellHeight];
+}
+
+- (void)resetCellHeight {
+    _cellHeight = _avatarSize.height + _avatarEdgeInsets.top + _avatarEdgeInsets.bottom;
 }
 
 - (UIView *)defaultBlankPerchView

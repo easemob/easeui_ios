@@ -9,7 +9,7 @@
 #import "ConversationsViewController.h"
 #import <EaseIMKit.h>
 
-@interface ConversationsViewController ()
+@interface ConversationsViewController () <EaseConversationsViewControllerDelegate>
 
 @end
 
@@ -19,7 +19,9 @@
     [super viewDidLoad];
     
     EaseConversationViewModel *model = [[EaseConversationViewModel alloc] init];
+    model.avatarEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 30);
     EaseConversationsViewController *easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:model];
+    easeConvsVC.easeTableViewDelegate = self;
     [self addChildViewController:easeConvsVC];
     [self.view addSubview:easeConvsVC.view];
     [easeConvsVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
