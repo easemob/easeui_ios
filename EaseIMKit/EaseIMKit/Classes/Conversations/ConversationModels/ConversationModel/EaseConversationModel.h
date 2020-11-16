@@ -1,15 +1,15 @@
 //
-//  EaseConversationItem.h
+//  EaseConversationModel.h
 //  EaseIMKit
 //
 //  Created by 娜塔莎 on 2020/11/10.
 //
 
-#import "EaseConversationItemDelegate.h"
+#import "EaseConversationModelDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EaseConversationItem : NSObject <EaseConversationItemDelegate>
+@interface EaseConversationModel : NSObject <EaseConversationModelDelegate>
 
 - (instancetype)initWithConversation:(EMConversation *)conversation;
 

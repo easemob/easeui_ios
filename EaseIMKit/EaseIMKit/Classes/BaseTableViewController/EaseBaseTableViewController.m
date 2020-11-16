@@ -102,28 +102,41 @@
     return cell;
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:didSelectRowAtItem:)]) {
+        [self.easeTableViewDelegate easeTableView:tableView didSelectRowAtItem:self.dataAry[indexPath.row]];
+    }
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:canEditRowAtItem:)]) {
-        return [self.easeTableViewDelegate easeTableView:tableView canEditRowAtItem:self.dataAry[indexPath.row]];
+//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+//    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:canEditRowAtItem:)]) {
+//        return [self.easeTableViewDelegate easeTableView:tableView canEditRowAtItem:self.dataAry[indexPath.row]];
+//    }
+//
+//    return _viewModel.cellCanEdit;
+//}
+
+//
+//- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return UITableViewCellEditingStyleDelete | UITableViewCellEditingStyleInsert;
+//}
+//
+//
+//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//
+//}
+
+
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(tvos)
+{
+    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(tableView:trailingSwipeActionsConfigurationForRowAtItem:)]) {
+        return [self.easeTableViewDelegate tableView:tableView trailingSwipeActionsConfigurationForRowAtItem:self.dataAry[indexPath.row]];
     }
     
-    return _viewModel.cellCanEdit;
-}
-
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return UITableViewCellEditingStyleDelete | UITableViewCellEditingStyleInsert;
-}
-
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
+    return nil;
 }
 
 

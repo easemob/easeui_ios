@@ -14,6 +14,12 @@
     UIImage *_defaultAvatar;
 }
 
+@synthesize type;
+@synthesize defaultAvatar;
+@synthesize itemId;
+@synthesize showName;
+@synthesize avatarURL;
+
 - (instancetype)initWithShowName:(NSString *)showName {
     if (self = [super init]) {
         _showName = showName;
@@ -49,14 +55,6 @@
     return _defaultAvatar;
 }
 
-@synthesize type;
 
-@synthesize defaultAvatar;
-
-@synthesize itemId;
-
-@synthesize showName;
-
-@synthesize avatarURL;
 
 @end

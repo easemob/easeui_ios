@@ -8,12 +8,14 @@
 #import "EaseConversationViewModel.h"
 
 @implementation EaseConversationViewModel
-
+@synthesize avatarSize = _avatarSize;
+@synthesize avatarEdgeInsets = _avatarEdgeInsets;
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _avatarSize = CGSizeMake(40, 40);
+        _avatarSize = CGSizeMake(80, 40);
+        _avatarEdgeInsets = UIEdgeInsetsMake(3, 3, 3, 3);
         _wordSizeForCellTitle = 18.0;
         _wordSizeForCellDetail = 16.0;
         _wordSizeForCellTimestamp = 12.0;
@@ -58,17 +60,11 @@
     }
 }
 
-- (void)setAvatarType:(EaseAvatarStyle)avatarType
-{
-    if (avatarType >= 0 && avatarType <= 2) {
-        self.avatarType = avatarType;
-    }
-}
 
 - (void)setCellHeight:(CGFloat)cellHeight
 {
     if (cellHeight && cellHeight > 0) {
-        self.cellHeight = cellHeight;
+        self.cellHeight = cellHeight < 0 ? 0 : cellHeight;
     }
 }
 
@@ -79,12 +75,6 @@
     }
 }
 
-//self
-
-- (void)setAvatarSize:(CGSize)avatarSize
-{
-    _avatarSize = avatarSize;
-}
 
 - (void)setWordSizeForCellTitle:(CGFloat)wordSizeForCellTitle
 {

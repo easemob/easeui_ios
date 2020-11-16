@@ -41,11 +41,14 @@
     
     _avatarView = [[UIImageView alloc] init];
     [self.contentView addSubview:_avatarView];
+    __weak typeof(self) weakSelf = self;
     [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView).offset(14);
-        make.left.equalTo(self.contentView).offset(16);
-        make.bottom.equalTo(self.contentView).offset(-14);
-        make.width.equalTo(self.avatarView.mas_height).multipliedBy(1);
+        make.topMargin.equalTo(self.contentView).offset(weakSelf.conversationCellViewModel.avatarEdgeInsets.top);
+        make.leftMargin.equalTo(self.contentView).offset(weakSelf.conversationCellViewModel.avatarEdgeInsets.left);
+        make.bottomMargin.equalTo(self.contentView).offset(weakSelf.conversationCellViewModel.avatarEdgeInsets.bottom);
+        make.rightMargin.equalTo(self.contentView).offset(weakSelf.conversationCellViewModel.avatarEdgeInsets.right);
+        make.width.offset(weakSelf.conversationCellViewModel.avatarSize.width);
+        make.height.offset(weakSelf.conversationCellViewModel.avatarSize.height);
     }];
     _avatarView.layer.cornerRadius = _avatarView.frame.size.width / 4;
     if (_conversationCellViewModel.avatarType == Rectangular)
@@ -118,7 +121,7 @@
     return YES;
 }
 
-- (void)setModel:(id<EaseConversationItemDelegate>)model
+- (void)setModel:(id<EaseConversationModelDelegate>)model
 {
     _model = model;
     [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL] placeholderImage:_model.defaultAvatar];

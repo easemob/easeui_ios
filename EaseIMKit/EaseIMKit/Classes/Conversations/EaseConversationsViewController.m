@@ -10,8 +10,8 @@
 #import "EaseConversationViewModel.h"
 #import "EaseConversationCell.h"
 
-#import "EaseConversationItemDelegate.h"
-#import "EaseConversationItem.h"
+#import "EaseConversationModelDelegate.h"
+#import "EaseConversationModel.h"
 
 @interface EaseConversationsViewController ()
 <
@@ -26,9 +26,11 @@
 
 @end
 
-@implementation EaseConversationsViewController
+@implementation EaseConversationsViewController {
+    id<EaseConversationsViewControllerDelegate> _easeTableViewDelegate;
+}
 @synthesize viewModel = _viewModel;
-@synthesize easeTableViewDelegate = _easeTableViewDelegate;
+@dynamic easeTableViewDelegate;
 
 - (instancetype)initWithModel:(EaseBaseTableViewModel *)aModel{
     if (self = [super initWithModel:aModel]) {
@@ -69,14 +71,6 @@
 
 #pragma mark - Table view data source
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:heightForItem:)]) {
-        return [self.easeTableViewDelegate easeTableView:tableView heightForItem:self.dataAry[indexPath.row]];
-    }
-    
-    return self.viewModel.cellHeight;
-}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -94,7 +88,7 @@
         cell = [[EaseConversationCell alloc] initWithConversationViewModel:(EaseConversationViewModel *)_viewModel];
     }
     
-    id<EaseConversationItemDelegate> model = [self.dataAry objectAtIndex:indexPath.row];
+    id<EaseConversationModelDelegate> model = [self.dataAry objectAtIndex:indexPath.row];
     cell.model = model;
     
     return cell;
@@ -102,25 +96,9 @@
 
 #pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSInteger row = indexPath.row;
-    id<EaseConversationItemDelegate> model = [self.dataAry objectAtIndex:row];
-    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:didSelectItem:)]) {
-        [self.easeTableViewDelegate easeTableView:tableView didSelectItem:model];
-        return;
-    }
-}
 
 - (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(tvos)
 {
-    id<EaseConversationItemDelegate> model = [self.dataAry objectAtIndex:indexPath.row];
-    
-    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(tableView:trailingSwipeActionsConfigurationForRowAtItem:)]) {
-        return [self.easeTableViewDelegate tableView:tableView trailingSwipeActionsConfigurationForRowAtItem:model];
-    }
-    
     __weak typeof(self) weakself = self;
     UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"删除" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
         [tableView setEditing:NO animated:YES];
@@ -182,23 +160,13 @@
 }
 
 
-#pragma mark - EMConversationsDelegate
-
-- (void)didConversationUnreadCountToZero:(id<EaseConversationItemDelegate>)aConversation
-{
-    NSInteger index = [self.dataAry indexOfObject:aConversation];
-    [self.tableView beginUpdates];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView endUpdates];
-}
-
 #pragma mark - UIMenuController
 
 //删除会话
 - (void)_deleteConversation:(NSIndexPath *)indexPath
 {
     NSInteger row = indexPath.row;
-    id<EaseConversationItemDelegate> model = [self.dataAry objectAtIndex:row];
+    id<EaseConversationModelDelegate> model = [self.dataAry objectAtIndex:row];
     [[EMClient sharedClient].chatManager deleteConversation:model.itemId
                                            isDeleteMessages:YES
                                                  completion:nil];
@@ -214,11 +182,11 @@
     dispatch_async(_loadDataQueue, ^{
         NSArray *conversations = [EMClient.sharedClient.chatManager getAllConversations];
         
-        NSMutableArray<EaseConversationItemDelegate> *convs = [NSMutableArray<EaseConversationItemDelegate> array];
-        NSMutableArray<EaseConversationItemDelegate> *topConvs = [NSMutableArray<EaseConversationItemDelegate> array];
+        NSMutableArray<EaseConversationModelDelegate> *convs = [NSMutableArray<EaseConversationModelDelegate> array];
+        NSMutableArray<EaseConversationModelDelegate> *topConvs = [NSMutableArray<EaseConversationModelDelegate> array];
         
         for (EMConversation *conv in conversations) {
-            EaseConversationItem *item = [[EaseConversationItem alloc] initWithConversation:conv];
+            EaseConversationModel *item = [[EaseConversationModel alloc] initWithConversation:conv];
             if (item.isTop) {
                 [topConvs addObject:item];
             }else {
@@ -227,7 +195,7 @@
         }
         
         NSArray *normalConvList = [convs sortedArrayUsingComparator:
-                                   ^NSComparisonResult(id  <EaseConversationItemDelegate> obj1, id  <EaseConversationItemDelegate> obj2)
+                                   ^NSComparisonResult(id  <EaseConversationModelDelegate> obj1, id  <EaseConversationModelDelegate> obj2)
         {
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;
@@ -237,7 +205,7 @@
         }];
         
         NSArray *topConvList = [topConvs sortedArrayUsingComparator:
-                                ^NSComparisonResult(id  <EaseConversationItemDelegate> obj1, id  <EaseConversationItemDelegate> obj2)
+                                ^NSComparisonResult(id  <EaseConversationModelDelegate> obj1, id  <EaseConversationModelDelegate> obj2)
         {
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;
@@ -250,7 +218,7 @@
         [totals addObjectsFromArray:topConvList];
         [totals addObjectsFromArray:normalConvList];
         
-        weakSelf.dataAry = (NSMutableArray<EaseConversationItemDelegate> *)totals;
+        weakSelf.dataAry = (NSMutableArray<EaseConversationModelDelegate> *)totals;
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf endRefresh];
             [weakSelf updateBlankPerchView];
@@ -263,5 +231,12 @@
     [self _loadAllConversationsFromDB];
 }
 
+#pragma mark - getter
+- (void)setEaseTableViewDelegate:(id<EaseConversationsViewControllerDelegate>)easeTableViewDelegate {
+    _easeTableViewDelegate = easeTableViewDelegate;
+}
 
+- (id<EaseConversationsViewControllerDelegate>)easeTableViewDelegate {
+    return (id<EaseConversationsViewControllerDelegate>)_easeTableViewDelegate;
+}
 @end

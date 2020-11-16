@@ -17,8 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)easeTableView:(UITableView *)tableView didSelectItem:(id<EaseItemDelegate>)item;
 - (CGFloat)easeTableView:(UITableView *)tableView heightForItem:(id<EaseItemDelegate>)item;
 - (UITableViewCell *)easeTableView:(UITableView *)tableView cellforItem:(id<EaseItemDelegate>)item;
-- (BOOL)easeTableView:(UITableView *)tableView canEditRowAtItem:(id<EaseItemDelegate>)item;
-- (nullable NSArray<UITableViewRowAction *> *)easeTableView:(UITableView *)tableView editActionsForRowAtItem:(id<EaseItemDelegate>)item;
+- (UITableViewCell *)easeTableView:(UITableView *)tableView didSelectRowAtItem:(id<EaseItemDelegate>)item;
+
+//- (BOOL)easeTableView:(UITableView *)tableView canEditRowAtItem:(id<EaseItemDelegate>)item;
+//- (nullable NSArray<UITableViewRowAction *> *)easeTableView:(UITableView *)tableView editActionsForRowAtItem:(id<EaseItemDelegate>)item;
 - (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtItem:(id<EaseItemDelegate>)item;
 @end
 

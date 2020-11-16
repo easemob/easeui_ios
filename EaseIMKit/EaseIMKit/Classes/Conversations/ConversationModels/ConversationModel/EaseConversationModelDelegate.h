@@ -1,5 +1,5 @@
 //
-//  EaseConversationItemDelegate.h
+//  EaseConversationModelDelegate.h
 //  EaseIMKit
 //
 //  Created by 娜塔莎 on 2020/11/10.
@@ -12,15 +12,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef enum : NSUInteger {
-    EaseConversationItemType_Conversation,
-    EaseConversationItemType_Custom,
-} EaseConversationItemType;
+    EaseConversationModelType_Conversation,
+    EaseConversationModelType_Custom,
+} EaseConversationModelType;
 
 //会话列表项model模型
-@protocol EaseConversationItemDelegate <EaseItemDelegate>
+@protocol EaseConversationModelDelegate <EaseItemDelegate>
 
 
-@property (nonatomic, readonly) EaseConversationItemType type; //会话聊天类型
+@property (nonatomic, readonly) EaseConversationModelType type; //会话聊天类型
 @property (nonatomic, readonly) int unreadMessagesCount; //对话中未读取的消息数量
 @property (nonatomic, copy, readonly) NSString *showInfo;
 @property (nonatomic, readonly) long long lastestUpdateTime;

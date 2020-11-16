@@ -1,30 +1,30 @@
 //
-//  EaseConversationItem.m
+//  EaseConversationModel.m
 //  EaseIMKit
 //
 //  Created by 娜塔莎 on 2020/11/10.
 //
 
-#import "EaseConversationItem.h"
+#import "EaseConversationModel.h"
 #import "EMDefines.h"
 #import "UIImage+EaseUI.h"
 
 
 #import "EMConversation+EaseUI.h"
 
-@interface EaseConversationItem()
+@interface EaseConversationModel()
 
 {
     EMConversation *_conversation;
     NSString *_showName;
-    EaseConversationItemType _type;
+    EaseConversationModelType _type;
     long long _latestUpdateTime;
     NSString *_showInfo;
 }
 
 @end
 
-@implementation EaseConversationItem
+@implementation EaseConversationModel
 
 @synthesize draft;
 @synthesize defaultAvatar;
@@ -36,7 +36,7 @@
     self = [super init];
     if (self) {
         _conversation = conversation;
-        _type = EaseConversationItemType_Conversation;
+        _type = EaseConversationModelType_Conversation;
         _showInfo = @"";
     }
     
@@ -83,7 +83,7 @@
     return _conversation.unreadMessagesCount;
 }
 
-- (EaseConversationItemType)type {
+- (EaseConversationModelType)type {
     return _type;
 }
 
@@ -145,7 +145,7 @@
 }
 
 - (void)markAllAsRead {
-    
+    [_conversation markAllMessagesAsRead:nil];
 }
 
 
