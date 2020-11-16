@@ -7,10 +7,13 @@
 //
 
 #import "ConversationsViewController.h"
+#import "ConversationModel.h"
 #import <EaseIMKit.h>
 
 @interface ConversationsViewController () <EaseConversationsViewControllerDelegate>
-
+{
+    EaseConversationViewModel *_viewMdeol;
+}
 @end
 
 @implementation ConversationsViewController
@@ -18,9 +21,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    EaseConversationViewModel *model = [[EaseConversationViewModel alloc] init];
-    model.avatarEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 30);
-    EaseConversationsViewController *easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:model];
+    _viewMdeol = [[EaseConversationViewModel alloc] init];
+    _viewMdeol.avatarEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 30);
+    EaseConversationsViewController *easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:_viewMdeol];
     easeConvsVC.easeTableViewDelegate = self;
     [self addChildViewController:easeConvsVC];
     [self.view addSubview:easeConvsVC.view];
@@ -49,6 +52,12 @@
     }];
     customAction.backgroundColor = [UIColor orangeColor];
     return customAction;
+}
+
+
+- (NSArray<id<EaseItemDelegate>> *)resetDataAry {
+    ConversationModel *model = [[ConversationModel alloc] init];
+    return @[model];
 }
 
 @end

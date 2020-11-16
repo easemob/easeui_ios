@@ -14,8 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shareEaseIMKit;
 
-- (void)addDelegate:(xxx):xx;
-
 @end
 
 NS_ASSUME_NONNULL_END

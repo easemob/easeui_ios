@@ -83,12 +83,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    id<EaseConversationModelDelegate> model = self.dataAry[indexPath.row];
+    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:cellforItem:)]) {
+        return [self.easeTableViewDelegate easeTableView:tableView cellforItem:model];
+    }
+    
     EaseConversationCell *cell = (EaseConversationCell *)[tableView dequeueReusableCellWithIdentifier:@"EaseConversationCell"];
     if (!cell) {
         cell = [[EaseConversationCell alloc] initWithConversationViewModel:(EaseConversationViewModel *)_viewModel];
     }
     
-    id<EaseConversationModelDelegate> model = [self.dataAry objectAtIndex:indexPath.row];
+//    id<EaseConversationModelDelegate> model = [self.dataAry objectAtIndex:indexPath.row];
     cell.model = model;
     
     return cell;
@@ -180,43 +185,47 @@
 {
     __weak typeof(self) weakSelf = self;
     dispatch_async(_loadDataQueue, ^{
-        NSArray *conversations = [EMClient.sharedClient.chatManager getAllConversations];
-        
-        NSMutableArray<EaseConversationModelDelegate> *convs = [NSMutableArray<EaseConversationModelDelegate> array];
-        NSMutableArray<EaseConversationModelDelegate> *topConvs = [NSMutableArray<EaseConversationModelDelegate> array];
-        
-        for (EMConversation *conv in conversations) {
-            EaseConversationModel *item = [[EaseConversationModel alloc] initWithConversation:conv];
-            if (item.isTop) {
-                [topConvs addObject:item];
-            }else {
-                [convs addObject:item];
+        NSMutableArray<id<EaseItemDelegate>> *totals = [NSMutableArray<id<EaseItemDelegate>> array];
+        if (weakSelf.easeTableViewDelegate && [weakSelf.easeTableViewDelegate respondsToSelector:@selector(resetDataAry)]) {
+            totals = [[weakSelf.easeTableViewDelegate resetDataAry] mutableCopy];
+        }else {
+            NSArray *conversations = [EMClient.sharedClient.chatManager getAllConversations];
+            
+            NSMutableArray<EaseConversationModelDelegate> *convs = [NSMutableArray<EaseConversationModelDelegate> array];
+            NSMutableArray<EaseConversationModelDelegate> *topConvs = [NSMutableArray<EaseConversationModelDelegate> array];
+            
+            for (EMConversation *conv in conversations) {
+                EaseConversationModel *item = [[EaseConversationModel alloc] initWithConversation:conv];
+                if (item.isTop) {
+                    [topConvs addObject:item];
+                }else {
+                    [convs addObject:item];
+                }
             }
+            
+            NSArray *normalConvList = [convs sortedArrayUsingComparator:
+                                       ^NSComparisonResult(id  <EaseConversationModelDelegate> obj1, id  <EaseConversationModelDelegate> obj2)
+            {
+                if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
+                    return(NSComparisonResult)NSOrderedAscending;
+                }else {
+                    return(NSComparisonResult)NSOrderedDescending;
+                }
+            }];
+            
+            NSArray *topConvList = [topConvs sortedArrayUsingComparator:
+                                    ^NSComparisonResult(id  <EaseConversationModelDelegate> obj1, id  <EaseConversationModelDelegate> obj2)
+            {
+                if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
+                    return(NSComparisonResult)NSOrderedAscending;
+                }else {
+                    return(NSComparisonResult)NSOrderedDescending;
+                }
+            }];
+            
+            [totals addObjectsFromArray:topConvList];
+            [totals addObjectsFromArray:normalConvList];
         }
-        
-        NSArray *normalConvList = [convs sortedArrayUsingComparator:
-                                   ^NSComparisonResult(id  <EaseConversationModelDelegate> obj1, id  <EaseConversationModelDelegate> obj2)
-        {
-            if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
-                return(NSComparisonResult)NSOrderedAscending;
-            }else {
-                return(NSComparisonResult)NSOrderedDescending;
-            }
-        }];
-        
-        NSArray *topConvList = [topConvs sortedArrayUsingComparator:
-                                ^NSComparisonResult(id  <EaseConversationModelDelegate> obj1, id  <EaseConversationModelDelegate> obj2)
-        {
-            if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
-                return(NSComparisonResult)NSOrderedAscending;
-            }else {
-                return(NSComparisonResult)NSOrderedDescending;
-            }
-        }];
-        
-        NSMutableArray *totals = [NSMutableArray array];
-        [totals addObjectsFromArray:topConvList];
-        [totals addObjectsFromArray:normalConvList];
         
         weakSelf.dataAry = (NSMutableArray<EaseConversationModelDelegate> *)totals;
         dispatch_async(dispatch_get_main_queue(), ^{

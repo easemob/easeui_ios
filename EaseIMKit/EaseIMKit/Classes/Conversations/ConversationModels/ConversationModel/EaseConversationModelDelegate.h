@@ -22,12 +22,13 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, readonly) EaseConversationModelType type; //会话聊天类型
 @property (nonatomic, readonly) int unreadMessagesCount; //对话中未读取的消息数量
-@property (nonatomic, copy, readonly) NSString *showInfo;
 @property (nonatomic, readonly) long long lastestUpdateTime;
 @property (nonatomic, readonly) BOOL remindMe;
 @property (nonatomic) BOOL isTop;
+@property (nonatomic, copy, readonly) NSString *showInfo;
 @property (nonatomic, copy) NSString *draft;
 
+@optional
 - (void)markAllAsRead;
 
 @end

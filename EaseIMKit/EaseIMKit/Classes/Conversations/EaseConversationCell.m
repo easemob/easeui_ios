@@ -127,7 +127,7 @@
     [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL] placeholderImage:_model.defaultAvatar];
     self.nameLabel.text = _model.showName;
     // TODO:
-    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_model.showInfo];
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_model.showInfo ?: @""];
     self.detailLabel.attributedText = attrString;
     self.timeLabel.text = [EMDateHelper formattedTimeFromTimeInterval:_model.lastestUpdateTime];
     

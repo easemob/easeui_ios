@@ -19,6 +19,7 @@
 		90A03A37254A70E100D57B73 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A35254A70E100D57B73 /* Main.storyboard */; };
 		90A03A39254A70E200D57B73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A38254A70E200D57B73 /* Assets.xcassets */; };
 		90A03A3F254A70E200D57B73 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A3E254A70E200D57B73 /* main.m */; };
+		90C5C79B256242DF00786824 /* ConversationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C5C79A256242DF00786824 /* ConversationModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,8 @@
 		90A03A38254A70E200D57B73 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		90A03A3D254A70E200D57B73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90A03A3E254A70E200D57B73 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		90C5C799256242DF00786824 /* ConversationModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConversationModel.h; sourceTree = "<group>"; };
+		90C5C79A256242DF00786824 /* ConversationModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConversationModel.m; sourceTree = "<group>"; };
 		BFBBBDBBACBBCAD1DF95BCB9 /* Pods-EaseIMKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKitDemo.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,6 +117,8 @@
 			children = (
 				903EAE7825540390005E6BB1 /* ConversationsViewController.h */,
 				903EAE7925540390005E6BB1 /* ConversationsViewController.m */,
+				90C5C799256242DF00786824 /* ConversationModel.h */,
+				90C5C79A256242DF00786824 /* ConversationModel.m */,
 			);
 			path = Conversations;
 			sourceTree = "<group>";
@@ -158,7 +163,6 @@
 			isa = PBXGroup;
 			children = (
 				903EAE7525540374005E6BB1 /* Classes */,
-				90A04727254ADEF200CEAF50 /* Model */,
 				90A03A2C254A70E100D57B73 /* AppDelegate.h */,
 				90A03A2D254A70E100D57B73 /* AppDelegate.m */,
 				90A03A2F254A70E100D57B73 /* SceneDelegate.h */,
@@ -172,13 +176,6 @@
 				90A03A3E254A70E200D57B73 /* main.m */,
 			);
 			path = EaseIMKitDemo;
-			sourceTree = "<group>";
-		};
-		90A04727254ADEF200CEAF50 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -300,6 +297,7 @@
 				903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */,
 				903EAEB525540B9F005E6BB1 /* LoginViewController.m in Sources */,
 				903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */,
+				90C5C79B256242DF00786824 /* ConversationModel.m in Sources */,
 				9024F61B255A7F9300BBE66D /* NormalItem.m in Sources */,
 				90A03A3F254A70E200D57B73 /* main.m in Sources */,
 				90A03A31254A70E100D57B73 /* SceneDelegate.m in Sources */,
