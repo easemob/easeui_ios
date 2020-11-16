@@ -20,12 +20,15 @@ typedef enum {
 
 
 @interface EaseBaseTableViewModel : NSObject
-@property (nonatomic) EaseAvatarStyle avatarType;
+
 @property (nonatomic) BOOL canRefresh;
 @property (nonatomic) CGFloat cellHeight;
-@property (nonatomic) BOOL cellCanEdit;
 @property (nonatomic, copy) UIColor *cellBgColor; //cell皮肤
 @property (nonatomic, copy) UIColor *viewBgColor; //页面皮肤
+
+@property (nonatomic) EaseAvatarStyle avatarType;
+@property (nonatomic) CGSize avatarSize;
+@property (nonatomic) UIEdgeInsets avatarEdgeInsets;
 @end
 
 NS_ASSUME_NONNULL_END

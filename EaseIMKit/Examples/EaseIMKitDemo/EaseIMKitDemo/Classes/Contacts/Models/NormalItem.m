@@ -10,12 +10,15 @@
 
 @implementation NormalItem
 
+@synthesize itemId;
 @synthesize firstLetter;
 @synthesize type;
 
 - (EaseContactItemType)type{
-    return Custom;
+    return EaseContactItemType_Custom;
 }
+
+
 
 
 @end

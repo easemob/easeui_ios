@@ -11,8 +11,6 @@
 static EaseIMKitManager *easeIMKit = nil;
 @implementation EaseIMKitManager
 
-@synthesize conversationListController = _conversationListController;
-
 + (instancetype)shareEaseIMKit
 {
     static dispatch_once_t onceToken;
@@ -20,15 +18,6 @@ static EaseIMKitManager *easeIMKit = nil;
         easeIMKit = [[EaseIMKitManager alloc] init];
     });
     return easeIMKit;
-}
-
-- (id<IEaseConversationVcDelegate>)conversationListController
-{
-    if (!_conversationListController) {
-        _conversationListController = [[EaseConversationsViewController alloc]init];
-    }
-    
-    return _conversationListController;
 }
 
 @end

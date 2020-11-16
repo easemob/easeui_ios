@@ -6,12 +6,19 @@
 //
 
 #import "EaseContactModel.h"
+#import "UIImage+EaseUI.h"
 
 @implementation EaseContactModel {
     NSString *_showName;
     NSString *_firstLetter;
     UIImage *_defaultAvatar;
 }
+
+@synthesize type;
+@synthesize defaultAvatar;
+@synthesize itemId;
+@synthesize showName;
+@synthesize avatarURL;
 
 - (instancetype)initWithShowName:(NSString *)showName {
     if (self = [super init]) {
@@ -30,7 +37,7 @@
 }
 
 - (EaseContactItemType)type {
-    return Contact;
+    return EaseContactItemType_Contact;
 }
 
 - (NSString *)firstLetter {
@@ -48,12 +55,6 @@
     return _defaultAvatar;
 }
 
-@synthesize type;
 
-@synthesize defaultAvatar;
-
-@synthesize itemId;
-
-@synthesize showName;
 
 @end

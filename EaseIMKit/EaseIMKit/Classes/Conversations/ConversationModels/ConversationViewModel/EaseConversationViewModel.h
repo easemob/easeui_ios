@@ -21,8 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseConversationViewModel : EaseBaseTableViewModel
 
-@property (nonatomic) CGSize avatarSize; //头像尺寸
-
 @property (nonatomic) CGFloat wordSizeForCellTitle; //会话列表cell标题字号
 @property (nonatomic) CGFloat wordSizeForCellDetail; //会话列表cell会话最后信息描述字号
 @property (nonatomic) CGFloat wordSizeForCellTimestamp; //会话列表cell最后会话时间字号

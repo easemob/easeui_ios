@@ -12,11 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol EaseItemDelegate <NSObject>
 
 @required
-@property (nonatomic, copy, readonly) NSString *itemId;
-@property (nonatomic, copy, readonly) NSString *avatarURL; // 显示头像的url
-@property (nonatomic, copy) UIImage *defaultAvatar; // 默认头像显示
-@property (nonatomic, copy) NSString *showName; // 显示头像的昵称
-
+@property (nonatomic, copy, readonly) NSString *itemId; // item id
+@property (nonatomic, copy) NSString *showName;         // 显示昵称
+@property (nonatomic, copy) NSString *avatarURL;        // 显示头像的url
+@property (nonatomic, copy) UIImage *defaultAvatar;     // 默认头像显示
 
 @end
 

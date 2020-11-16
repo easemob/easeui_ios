@@ -18,11 +18,28 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EMDateHelper : NSObject
 
+
+@property (nonatomic, strong) NSDateFormatter *dfYMD;
+@property (nonatomic, strong) NSDateFormatter *dfHM;
+@property (nonatomic, strong) NSDateFormatter *dfYMDHM;
+@property (nonatomic, strong) NSDateFormatter *dfYesterdayHM;
+
+@property (nonatomic, strong) NSDateFormatter *dfBeforeDawnHM;
+@property (nonatomic, strong) NSDateFormatter *dfAAHM;
+@property (nonatomic, strong) NSDateFormatter *dfPPHM;
+@property (nonatomic, strong) NSDateFormatter *dfNightHM;
+
+
++ (instancetype)shareHelper;
+
 + (NSDate *)dateWithTimeIntervalInMilliSecondSince1970:(double)aMilliSecond;
 
 + (NSString *)formattedTimeFromTimeInterval:(long long)aTimeInterval;
 
++ (NSString *)formattedTimeFromTimeInterval:(long long)aTimeInterval forDateFormatter:(NSDateFormatter *)formatter;
+
 + (NSString *)formattedTime:(NSDate *)aDate;
+
 
 @end
 

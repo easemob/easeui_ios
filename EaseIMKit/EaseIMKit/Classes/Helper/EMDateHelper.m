@@ -14,16 +14,6 @@
 
 @interface EMDateHelper()
 
-@property (nonatomic, strong) NSDateFormatter *dfYMD;
-@property (nonatomic, strong) NSDateFormatter *dfHM;
-@property (nonatomic, strong) NSDateFormatter *dfYMDHM;
-@property (nonatomic, strong) NSDateFormatter *dfYesterdayHM;
-
-@property (nonatomic, strong) NSDateFormatter *dfBeforeDawnHM;
-@property (nonatomic, strong) NSDateFormatter *dfAAHM;
-@property (nonatomic, strong) NSDateFormatter *dfPPHM;
-@property (nonatomic, strong) NSDateFormatter *dfNightHM;
-
 @end
 
 
@@ -148,14 +138,19 @@ static EMDateHelper *shared = nil;
 + (NSString *)formattedTimeFromTimeInterval:(long long)aTimeInterval
 {
     NSDate *date = [EMDateHelper dateWithTimeIntervalInMilliSecondSince1970:aTimeInterval];
-    return [EMDateHelper formattedTime:date];
+    return [EMDateHelper formattedTime:date forDateFormatter:[EMDateHelper shareHelper].dfYMD];
 }
 
-+ (NSString *)formattedTime:(NSDate *)aDate
++ (NSString *)formattedTimeFromTimeInterval:(long long)aTimeInterval forDateFormatter:(NSDateFormatter *)formatter {
+    NSDate *date = [EMDateHelper dateWithTimeIntervalInMilliSecondSince1970:aTimeInterval];
+    return [EMDateHelper formattedTime:date forDateFormatter:formatter];
+}
+
++ (NSString *)formattedTime:(NSDate *)aDate forDateFormatter:(NSDateFormatter *)formatter
 {
     EMDateHelper *helper = [EMDateHelper shareHelper];
     
-    NSString *dateNow = [helper.dfYMD stringFromDate:[NSDate date]];
+    NSString *dateNow = [formatter stringFromDate:[NSDate date]];
     NSDateComponents *components = [[NSDateComponents alloc] init];
     [components setDay:[[dateNow substringWithRange:NSMakeRange(8, 2)] intValue]];
     [components setMonth:[[dateNow substringWithRange:NSMakeRange(5, 2)] intValue]];
