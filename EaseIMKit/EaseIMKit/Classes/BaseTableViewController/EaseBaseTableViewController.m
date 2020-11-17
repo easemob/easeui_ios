@@ -90,7 +90,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:cellforItem:)]) {
-        return [self.easeTableViewDelegate easeTableView:tableView cellforItem:self.dataAry[indexPath.row]];
+        return (UITableViewCell*)[self.easeTableViewDelegate easeTableView:tableView cellforItem:self.dataAry[indexPath.row]];
     }
     
     static NSString *cellId = @"baseCell";

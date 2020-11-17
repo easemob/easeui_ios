@@ -24,15 +24,6 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 //appkey
 #define DEF_APPKEY @"easemob-demo#easeim"
 
-#define RTC_BUTTON_WIDTH 65
-#define RTC_BUTTON_HEIGHT 90
-#define RTC_BUTTON_PADDING ([UIScreen mainScreen].bounds.size.width - RTC_BUTTON_WIDTH * 3) / 4
-
-//会话
-#define CONVERSATION_STICK @"stick"
-#define CONVERSATION_ID @"conversationId"
-#define CONVERSATION_OBJECT @"conversationObject"
-
 #define EMSYSTEMNOTIFICATIONID @"emsystemnotificationid"
 
 //账号状态
@@ -74,9 +65,6 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 //消息撤回
 #define MSG_EXT_RECALL @"em_recall"
 
-//进入系统通知页
-#define SYSTEM_NOTIF_DETAIL @"system_notif_detail"
-
 //新通知
 #define MSG_EXT_NEWNOTI @"em_noti"
 
@@ -91,20 +79,6 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 #define MSG_EXT_CALLOP @"em_conference_op"
 #define MSG_EXT_CALLID @"em_conference_id"
 #define MSG_EXT_CALLPSWD @"em_conference_password"
-
-//@
-//群组消息ext的字段，用于存放被@的环信id数组
-#define MSG_EXT_AT @"em_at_list"
-//群组消息ext字典中，kGroupMessageAtList字段的值，用于@所有人
-#define MSG_EXT_ATALL @"all"
-
-//Typing
-#define MSG_TYPING_BEGIN @"TypingBegin"
-#define MSG_TYPING_END @"TypingEnd"
-
-#define kHaveUnreadAtMessage    @"kHaveAtMessage"
-#define kAtYouMessage           1
-#define kAtAllMessage           2
 
 //实时音视频
 #define CALL_CHATTER @"chatter"
