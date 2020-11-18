@@ -72,9 +72,10 @@ SystemSoundID soundID = 1007;
     if ([aMessage.from isEqualToString:EMClient.sharedClient.currentUsername]) {
         return;
     }
+    /*
     EMDemoOptions *options = [EMDemoOptions sharedOptions];
     if (!options.isReceiveNewMsgNotice)
-        return;;
+        return;;*/
     // 小于最小间隔时间
     NSTimeInterval timeInterval = [[NSDate date]
                                    timeIntervalSinceDate:self.lastPlaySoundDate];

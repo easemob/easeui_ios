@@ -23,5 +23,4 @@
 #import "EMAlertController.h"
 #import "EMAlertView.h"
 
-#import "EMDemoOptions.h"
 #import "EMEmojiHelper.h"

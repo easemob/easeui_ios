@@ -22,7 +22,8 @@
 @property (nonatomic, strong) UIView *emotionBgView;
 @property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, strong) UIScrollView *bottomScrollView;
-@property (nonatomic, strong) UIButton *sendButton;
+@property (nonatomic, strong) UIButton *extBtn;
+@property (nonatomic, strong) UIButton *deleteBtn;
 
 @end
 
@@ -63,11 +64,13 @@
         make.height.mas_equalTo(self.bottomHeight);
     }];
     
-    self.sendButton = [[UIButton alloc] init];
-    [self.sendButton setImage:[UIImage imageNamed:@"deleteEmoticon"] forState:UIControlStateNormal];
-    //self.sendButton.backgroundColor = kColor_Blue;
-    //[self.sendButton setTitle:@"发送" forState:UIControlStateNormal];
-    [self.sendButton addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
+    self.extBtn = [[UIButton alloc] init];
+    [self.extBtn setImage:[UIImage imageNamed:@"deleteEmoticon"] forState:UIControlStateNormal];
+    
+    self.deleteBtn = [[UIButton alloc]init];
+    self.deleteBtn.backgroundColor = [UIColor whiteColor];
+    [self.deleteBtn setImage:[UIImage imageNamed:@"deleteEmoticon"] forState:UIControlStateNormal];
+    [self.deleteBtn addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
      
     self.bottomScrollView = [[UIScrollView alloc] init];
     self.bottomScrollView.scrollEnabled = NO;
@@ -182,8 +185,8 @@
     self.selectedButton = aButton;
     
     if (tag == 0) {
-        [self.bottomView addSubview:self.sendButton];
-        [self.sendButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.bottomView addSubview:self.extBtn];
+        [self.extBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.bottomView);
             make.right.equalTo(self.bottomView);
             make.height.mas_equalTo(self.bottomHeight);
@@ -191,12 +194,20 @@
         }];
         [self.bottomScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self);
-            make.right.equalTo(self.sendButton.mas_left);
+            make.right.equalTo(self.extBtn.mas_left);
             make.bottom.equalTo(self);
             make.height.mas_equalTo(self.bottomHeight);
         }];
+        [self addSubview:self.deleteBtn];
+        [self.deleteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.extBtn.mas_top).offset(-8);
+            make.right.equalTo(self.extBtn.mas_right).offset(-16);
+            make.height.mas_equalTo(self.bottomHeight);
+            make.width.mas_equalTo(self.bottomHeight);
+        }];
     } else {
-        [self.sendButton removeFromSuperview];
+        [self.extBtn removeFromSuperview];
+        [self.deleteBtn removeFromSuperview];
         [self.bottomScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self);
         }];

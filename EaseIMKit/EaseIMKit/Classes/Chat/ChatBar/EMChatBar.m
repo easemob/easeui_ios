@@ -9,7 +9,9 @@
 #import "EMChatBar.h"
 
 #define ktextViewMinHeight 40
-#define ktextViewMaxHeight 120
+#define ktextViewMaxHeight 80
+#define kiconwidth 30
+#define kModuleMargin 5
 
 @interface EMChatBar()<UITextViewDelegate>
 
@@ -65,18 +67,39 @@
     }];
     
     self.audioButton = [[UIButton alloc] init];
-    [_audioButton setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"audio-unSelected" ofType:@"png"]] forState:UIControlStateNormal];
-    [_audioButton setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"character" ofType:@"png"]] forState:UIControlStateSelected];
+    [_audioButton setImage:[UIImage imageNamed:@"audio-unSelected"] forState:UIControlStateNormal];
+    [_audioButton setImage:[UIImage imageNamed:@"character"] forState:UIControlStateSelected];
     [_audioButton addTarget:self action:@selector(audioButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.audioButton];
     [_audioButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(10);
-        make.left.equalTo(self).offset(2);
-        make.width.height.equalTo(@30);
+        make.left.equalTo(self).offset(kModuleMargin);
+        make.width.height.equalTo(@kiconwidth);
+    }];
+    
+    self.ConversationToolBarBtn = [[UIButton alloc] init];
+    [_ConversationToolBarBtn setImage:[UIImage imageNamed:@"more-unselected"] forState:UIControlStateNormal];
+    [_ConversationToolBarBtn setImage:[UIImage imageNamed:@"more-selected"] forState:UIControlStateSelected];
+    [_ConversationToolBarBtn addTarget:self action:@selector(moreButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_ConversationToolBarBtn];
+    [_ConversationToolBarBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self).offset(10);
+        make.right.equalTo(self).offset(-kModuleMargin);
+        make.width.height.equalTo(@kiconwidth);
+    }];
+    
+    self.emojiButton = [[UIButton alloc] init];
+    [_emojiButton setImage:[UIImage imageNamed:@"face"] forState:UIControlStateNormal];
+    [_emojiButton setImage:[UIImage imageNamed:@"character"] forState:UIControlStateSelected];
+    [_emojiButton addTarget:self action:@selector(emoticonButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_emojiButton];
+    [_emojiButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self).offset(10);
+        make.right.equalTo(self.ConversationToolBarBtn.mas_left).offset(-kModuleMargin);
+        make.width.height.equalTo(@kiconwidth);
     }];
     
     self.textView = [[EMTextView alloc] init];
-    
     self.textView.delegate = self;
     [self.textView setTextColor:[UIColor blackColor]];
     self.textView.font = [UIFont systemFontOfSize:16];
@@ -93,47 +116,28 @@
     [self addSubview:self.textView];
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(5);
-        make.left.equalTo(self.audioButton.mas_right).offset(2);
-        make.right.equalTo(self).offset(-65);
         make.height.mas_equalTo(ktextViewMinHeight);
+        if (_viewModel.chatBarStyle == EMChatBarStyleAll) {
+            make.left.equalTo(self.audioButton.mas_right).offset(kModuleMargin);
+            make.right.equalTo(self.emojiButton.mas_left).offset(-kModuleMargin);
+        }
+        if (_viewModel.chatBarStyle == EMChatBarStyleLackAudio) {
+            make.left.equalTo(self).offset(kModuleMargin);
+            make.right.equalTo(self.emojiButton.mas_left).offset(-kModuleMargin);
+        }
+        if (_viewModel.chatBarStyle == EMChatBarStyleLackEmoji) {
+            make.left.equalTo(self.audioButton.mas_right).offset(kModuleMargin);
+            make.right.equalTo(self.ConversationToolBarBtn.mas_left).offset(-kModuleMargin);
+        }
+        if (_viewModel.chatBarStyle == EMChatBarStyleOnlyExtension) {
+            make.left.equalTo(self).offset(kModuleMargin);
+            make.right.equalTo(self.ConversationToolBarBtn.mas_left).offset(-kModuleMargin);
+        }
+        if (_viewModel.chatBarStyle == EMChatBarStyleText) {
+            make.left.equalTo(self).offset(kModuleMargin);
+            make.right.equalTo(self).offset(-kModuleMargin);
+        }
     }];
-    
-    self.emojiButton = [[UIButton alloc] init];
-    [_emojiButton setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"face" ofType:@"png"]] forState:UIControlStateNormal];
-    [_emojiButton setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"face" ofType:@"png"]] forState:UIControlStateSelected];
-    [_emojiButton addTarget:self action:@selector(emoticonButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_emojiButton];
-    [_emojiButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(10);
-        make.left.equalTo(self.textView.mas_right).offset(2);
-        make.width.height.equalTo(@30);
-    }];
-    
-    self.ConversationToolBarBtn = [[UIButton alloc] init];
-    [_ConversationToolBarBtn setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"more-unselected" ofType:@"png"]] forState:UIControlStateNormal];
-    [_ConversationToolBarBtn setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"more-selected" ofType:@"png"]] forState:UIControlStateSelected];
-    [_ConversationToolBarBtn addTarget:self action:@selector(moreButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_ConversationToolBarBtn];
-    [_ConversationToolBarBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(10);
-        make.left.equalTo(_emojiButton.mas_right).offset(2);
-        make.width.height.equalTo(@30);
-    }];
-    
-    self.sendBtn = [[UIButton alloc]init];
-    self.sendBtn.tag = 0;
-    [self.sendBtn setTitle:@"发送" forState:UIControlStateNormal];
-    self.sendBtn.titleLabel.font = [UIFont systemFontOfSize:16];
-    [self.sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.sendBtn.layer.cornerRadius = 3;
-    [self addSubview:self.sendBtn];
-    [self.sendBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(10);
-        make.left.equalTo(_emojiButton.mas_right).offset(6);
-        make.right.equalTo(self).offset(-10);
-        make.height.mas_equalTo(@30);
-    }];
-    self.sendBtn.hidden = YES;
     
     self.bottomLine = [[UIView alloc] init];
     _bottomLine.backgroundColor = kColor_Gray;
@@ -145,29 +149,7 @@
         make.height.equalTo(@1);
         make.bottom.equalTo(self).offset(-EMVIEWBOTTOMMARGIN);
     }];
-    self.currentMoreView.backgroundColor = [UIColor colorWithRed:248/255.0 green:248/255.0 blue:248/255.0 alpha:1.0];
-
-}
-
-- (void)textChangedExt
-{
-    if (self.textView.text.length > 0 && ![self.textView.text isEqualToString:@""]) {
-        self.ConversationToolBarBtn.hidden = YES;
-        self.sendBtn.hidden = NO;
-        self.sendBtn.backgroundColor = [UIColor colorWithRed:4/255.0 green:174/255.0 blue:240/255.0 alpha:1.0];
-        self.sendBtn.tag = 1;
-        [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self).offset(-90);
-        }];
-    } else {
-        self.sendBtn.backgroundColor = [UIColor lightGrayColor];
-        self.sendBtn.tag = 0;
-        self.sendBtn.hidden = YES;
-        self.ConversationToolBarBtn.hidden = NO;
-        [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self).offset(-65);
-        }];
-    }
+    self.currentMoreView.backgroundColor = kColor_ExtFunctionView;
 }
 
 #pragma mark - UITextViewDelegate
@@ -191,7 +173,10 @@
 {
     NSLog(@"\n%@   %@",text,self.textView.text);
     if ([text isEqualToString:@"\n"]) {
-        [textView resignFirstResponder];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarSendMsgAction:)]) {
+            [self.delegate chatBarSendMsgAction:self.textView.text];
+        }
+        //[textView resignFirstResponder];
         return NO;
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(inputView:shouldChangeTextInRange:replacementText:)]) {
@@ -203,7 +188,6 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    [self textChangedExt];
     [self _updatetextViewHeight];
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(inputViewDidChange:)]) {
@@ -268,12 +252,6 @@
 - (void)clearInputViewText
 {
     self.textView.text = @"";
-    self.sendBtn.hidden = YES;
-    self.ConversationToolBarBtn.hidden = NO;
-    [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self).offset(-65);
-    }];
-    [self textChangedExt];
     [self _updatetextViewHeight];
 }
 
@@ -281,7 +259,6 @@
 {
     if ([aText length] > 0) {
         self.textView.text = [NSString stringWithFormat:@"%@%@", self.textView.text, aText];
-        [self textChangedExt];
         [self _updatetextViewHeight];
     }
 }
@@ -310,11 +287,10 @@
 
 #pragma mark - Action
 
-- (void)_buttonAction:(UIButton *)aButton
+- (BOOL)_buttonAction:(UIButton *)aButton
 {
+    BOOL isEditing = NO;
     [self.textView resignFirstResponder];
-    
-    aButton.selected = !aButton.selected;
     if (self.currentMoreView) {
         [self.currentMoreView removeFromSuperview];
         self.currentMoreView = nil;
@@ -325,19 +301,26 @@
         self.selectedButton.selected = NO;
         self.selectedButton = nil;
         self.selectedButton = aButton;
+        [aButton setSelected:!aButton.isSelected];
     } else {
         self.selectedButton = nil;
+        if (aButton.isSelected) {
+            [self.textView becomeFirstResponder];
+            isEditing = YES;
+        }
     }
-    
     if (aButton.selected) {
         self.selectedButton = aButton;
     }
+    return isEditing;
 }
 
 //语音
 - (void)audioButtonAction:(UIButton *)aButton
 {
-    [self _buttonAction:aButton];
+    if([self _buttonAction:aButton]) {
+        return;
+    }
     if (aButton.selected) {
         if (self.recordAudioView) {
             self.currentMoreView = self.recordAudioView;
@@ -359,7 +342,9 @@
 //表情
 - (void)emoticonButtonAction:(UIButton *)aButton
 {
-    [self _buttonAction:aButton];
+    if([self _buttonAction:aButton]) {
+        return;
+    }
     if (aButton.selected) {
         if (self.moreEmoticonView) {
             self.currentMoreView = self.moreEmoticonView;
@@ -378,10 +363,13 @@
         }
     }
 }
+
 //更多
 - (void)moreButtonAction:(UIButton *)aButton
 {
-    [self _buttonAction:aButton];
+    if([self _buttonAction:aButton]) {
+        return;
+    }
     if (aButton.selected){
         if(self.moreFunctionView) {
             self.currentMoreView = self.moreFunctionView;

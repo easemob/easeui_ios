@@ -20,8 +20,8 @@
         //_msgTimeItemBgColor = kColor_LightGray;
         _msgTimeItemBgColor = [UIColor purpleColor];
         _msgTimeItemFontColor = [UIColor grayColor];
-        _receiveBubbleBgPicture = [UIImage imageNamed:@"msg_bg_send"];
-        _sendBubbleBgPicture = [UIImage imageNamed:@"msg_bg_recv"];
+        _receiveBubbleBgPicture = [UIImage imageNamed:@"msg_bg_recv"];
+        _sendBubbleBgPicture = [UIImage imageNamed:@"msg_bg_send"];
         _contentFontSize = 18.f;
         _chatBarStyle = EMChatBarStyleAll;
     }
@@ -74,6 +74,13 @@
 {
     if (contentFontSize > 0) {
         _contentFontSize = contentFontSize;
+    }
+}
+
+- (void)setChatBarStyle:(EMChatBarStyle)chatBarStyle
+{
+    if (chatBarStyle >= 1 && chatBarStyle <= 5) {
+        _chatBarStyle = chatBarStyle;
     }
 }
 

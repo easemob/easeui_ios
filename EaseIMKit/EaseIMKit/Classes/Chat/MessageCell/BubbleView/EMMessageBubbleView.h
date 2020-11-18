@@ -11,6 +11,7 @@
 #import "EMMessageModel.h"
 #import "EaseHeaders.h"
 #import "EMViewModel.h"
+#import "UIImage+EaseUI.h"
 
 @interface EMMessageBubbleView : UIImageView
 

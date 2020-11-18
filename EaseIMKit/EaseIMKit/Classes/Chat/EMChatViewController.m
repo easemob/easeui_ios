@@ -80,7 +80,6 @@
     //草稿
     if (![[self.currentConversation draft] isEqualToString:@""]) {
         self.chatBar.textView.text = [self.currentConversation draft];
-        [self.chatBar textChangedExt];
         [self.currentConversation setDraft:@""];
     }
 }
@@ -126,7 +125,6 @@
         make.right.equalTo(self.view);
         make.bottom.equalTo(self.view);
     }];
-    [self.chatBar.sendBtn addTarget:self action:@selector(_sendText) forControlEvents:UIControlEventTouchUpInside];
     //会话工具栏
     [self _setupChatBarMoreViews];
     
@@ -222,6 +220,14 @@
 }
 
 #pragma mark - EMChatBarDelegate
+
+- (void)chatBarSendMsgAction:(NSString *)text
+{
+    if ((text.length > 0 && ![text isEqualToString:@""])) {
+        [self sendTextAction:text ext:nil];
+        [self.chatBar clearInputViewText];
+    }
+}
 
 - (void)chatBarDidShowMoreViewAction
 {
@@ -330,11 +336,9 @@
             [weakself.currentConversation markMessageAsReadWithId:msg.messageId error:nil];
             [msgArray addObject:msg];
         }
-        
         NSArray *formated = [weakself formatMessages:msgArray];
-        [weakself.dataArray addObjectsFromArray:formated];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself.dataArray addObjectsFromArray:formated];
             [weakself refreshTableView];
         });
     });
@@ -493,13 +497,6 @@
 
 #pragma mark - Send Message
 
-- (void)_sendText
-{
-    if(self.chatBar.sendBtn.tag == 1){
-        [self sendTextAction:self.chatBar.textView.text ext:nil];
-    }
-}
-
 - (void)sendTextAction:(NSString *)aText
                     ext:(NSDictionary *)aExt
 {
@@ -569,8 +566,8 @@
     if(self.currentConversation.unreadMessagesCount > 0){
         [self sendDidReadReceipt];
     }
-    
-    if ([EMDemoOptions sharedOptions].isPriorityGetMsgFromServer) {
+    //抛出选择
+    if (NO) {
         [EMClient.sharedClient.chatManager asyncFetchHistoryMessagesFromServer:self.currentConversation.conversationId conversationType:self.currentConversation.type startMessageId:self.moreMsgId pageSize:50 completion:^(EMCursorResult *aResult, EMError *aError) {
             block(aResult.list, aError);
          }];

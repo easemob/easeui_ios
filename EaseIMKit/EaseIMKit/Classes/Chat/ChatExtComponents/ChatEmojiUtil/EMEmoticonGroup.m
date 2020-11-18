@@ -186,17 +186,31 @@ EMEmoticonGroup *gGifGroup = nil;
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+    if ([self.emotionGroup.dataArray count] < 20) {
+        return 1;
+    }
+    if ([self.emotionGroup.dataArray count] % 20 == 0) {
+        return [self.emotionGroup.dataArray count] / 20;
+    }
+    return [self.emotionGroup.dataArray count] / 20 + 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self.emotionGroup.dataArray count];
+    if ([self.emotionGroup.dataArray count] < 20) {
+        return [self.emotionGroup.dataArray count];
+    }
+    return 20;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     EMEmoticonCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"EMEmoticonCell" forIndexPath:indexPath];
-    cell.model = self.emotionGroup.dataArray[indexPath.row];
+    long count = indexPath.section * 20 + indexPath.row;
+    if (count >= [self.emotionGroup.dataArray count]) {
+        cell.model = [[EMEmoticonModel alloc]initWithType:EMEmotionTypeEmoji];
+        return cell;
+    }
+    cell.model = self.emotionGroup.dataArray[indexPath.section * 20 + indexPath.row];
     return cell;
 }
 

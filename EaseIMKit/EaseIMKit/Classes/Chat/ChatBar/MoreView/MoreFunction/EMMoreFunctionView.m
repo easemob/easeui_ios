@@ -64,13 +64,34 @@
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 150.f) collectionViewLayout:layout];
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.collectionView.dataSource = self;
+    self.collectionView.showsVerticalScrollIndicator = NO;
+    self.collectionView.showsHorizontalScrollIndicator = NO;
+    self.collectionView.alwaysBounceHorizontal = YES;
+    self.collectionView.pagingEnabled = YES;
     [self addSubview:self.collectionView];
     
     [self.collectionView registerClass:[SessionToolbarCell class] forCellWithReuseIdentifier:@"cell"];
 }
 
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    if ([_toolbarImgArray count] < 8) {
+        return 1;
+    }
+    if ([_toolbarImgArray count] % 8 == 0) {
+        return [_toolbarImgArray count] / 8;
+    }
+    return [_toolbarImgArray count] / 8 + 1;
+}
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [_toolbarImgArray count];
+    if ([_toolbarImgArray count] < 8) {
+        return [_toolbarImgArray count];
+    }
+    if ((section+1) * 8 <= [_toolbarImgArray count]) {
+        return 8;
+    }
+    return ([_toolbarImgArray count] - section * 8);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -126,7 +147,6 @@
 - (void)_setupToolbar {
     NSInteger count = 17;
     CGFloat width = [UIScreen mainScreen].bounds.size.width / count;
-    NSLog(@"\n    ===== width:    %f",width);
     self.toolBtn = [[UIButton alloc]init];
     self.toolBtn.layer.cornerRadius = 8;
     self.toolBtn.layer.masksToBounds = YES;

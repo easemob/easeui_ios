@@ -10,6 +10,10 @@
 
 typedef NS_ENUM(NSInteger, EMChatBarStyle) {
     EMChatBarStyleAll = 1,
+    EMChatBarStyleLackAudio,
+    EMChatBarStyleLackEmoji,
+    EMChatBarStyleOnlyExtension,
+    EMChatBarStyleText,
 };
 
 NS_ASSUME_NONNULL_BEGIN
@@ -23,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIImage *receiveBubbleBgPicture; //所接收信息的气泡
 @property (nonatomic, strong) UIImage *sendBubbleBgPicture; //所发送信息的气泡
 @property (nonatomic) float contentFontSize; //消息字体大小
-@property (nonatomic) EMChatBarStyle chatBarStyle;
+@property (nonatomic) EMChatBarStyle chatBarStyle; //输入区类型：(全部功能，缺少语音，缺少表情，只有扩展，纯文本)
 
 @end
 

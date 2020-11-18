@@ -17,7 +17,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    EMChatViewController *chatController = [EMChatControllerProducter getChatControllerInstance:@"nats" conversationType:EMConversationTypeChat chatViewModel:[[EMViewModel alloc]init]];
+    EMViewModel *viewModel = [[EMViewModel alloc]init];
+    //viewModel.chatBarStyle = EMChatBarStyleLackEmoji;
+    EMChatViewController *chatController = [EMChatControllerProducter getChatControllerInstance:@"nats" conversationType:EMConversationTypeChat chatViewModel:viewModel];
     [self addChildViewController:chatController];
     [self.view addSubview:chatController.view];
     [chatController.view mas_makeConstraints:^(MASConstraintMaker *make) {

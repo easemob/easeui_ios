@@ -23,8 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) EMTextView *textView;
 
-@property (nonatomic, strong) UIButton *sendBtn;
-
 @property (nonatomic, strong) EMChatBarRecordAudioView *recordAudioView;
 @property (nonatomic, strong) EMChatBarEmoticonView *moreEmoticonView;
 @property (nonatomic, strong) EMMoreFunctionView *moreFunctionView;
@@ -39,8 +37,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)clearMoreViewAndSelectedButton;
 
-- (void)textChangedExt;
-
 @end
 
 
@@ -53,6 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)inputViewDidChange:(EMTextView *)aInputView;
 
 - (void)chatBarDidShowMoreViewAction;
+
+- (void)chatBarSendMsgAction:(NSString *)text;
 
 @end
 
