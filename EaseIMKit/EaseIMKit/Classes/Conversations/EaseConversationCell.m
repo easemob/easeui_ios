@@ -11,7 +11,7 @@
 #import "EMDateHelper.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
-@interface EaseConversationCell()<UIGestureRecognizerDelegate>
+@interface EaseConversationCell()
 
 @property (nonatomic, strong) EaseConversationViewModel *conversationCellViewModel;
 
@@ -113,22 +113,13 @@
     self.selectionStyle = UITableViewCellSelectionStyleGray;
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    if([NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"]) {
-        return NO;
-    }
-    return YES;
-}
-
 - (void)setModel:(id<EaseConversationModelDelegate>)model
 {
     _model = model;
     [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL] placeholderImage:_model.defaultAvatar];
     self.nameLabel.text = _model.showName;
     // TODO:
-    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_model.showInfo ?: @""];
-    self.detailLabel.attributedText = attrString;
+    self.detailLabel.attributedText = _model.showInfo;
     self.timeLabel.text = [EMDateHelper formattedTimeFromTimeInterval:_model.lastestUpdateTime];
     
     if (_model.unreadMessagesCount == 0) {

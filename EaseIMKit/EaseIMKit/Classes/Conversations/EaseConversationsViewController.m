@@ -9,9 +9,9 @@
 #import "EaseHeaders.h"
 #import "EaseConversationViewModel.h"
 #import "EaseConversationCell.h"
-
 #import "EaseConversationModelDelegate.h"
 #import "EaseConversationModel.h"
+#import "EMConversation+EaseUI.h"
 
 @interface EaseConversationsViewController ()
 <
@@ -38,6 +38,7 @@
         [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
         [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
         [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
+        [self _setupSubviews];
     }
     
     return self;
@@ -55,6 +56,17 @@
 - (void)dealloc
 {
     NSLog(@"conversaitons vc dealloc");
+}
+
+- (void)_setupSubviews
+{
+    self.view.backgroundColor = _viewModel.viewBgColor;
+    EaseConversationViewModel *conversationModel = nil;
+    if ([_viewModel isMemberOfClass:[EaseConversationViewModel class]]) {
+        conversationModel = (EaseConversationViewModel *)_viewModel;
+    }
+    self.blankPerchView = conversationModel.blankPerchView;
+    [self.view addSubview:self.blankPerchView];
 }
 
 //空白占位视图
@@ -93,7 +105,6 @@
         cell = [[EaseConversationCell alloc] initWithConversationViewModel:(EaseConversationViewModel *)_viewModel];
     }
     
-//    id<EaseConversationModelDelegate> model = [self.dataAry objectAtIndex:indexPath.row];
     cell.model = model;
     
     return cell;
@@ -101,9 +112,16 @@
 
 #pragma mark - Table view delegate
 
-
 - (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(tvos)
 {
+    id<EaseConversationModelDelegate> model = [self.dataAry objectAtIndex:indexPath.row];
+    
+    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(tableView:trailingSwipeActionsConfigurationForRowAtItem:)]) {
+        UISwipeActionsConfiguration *customSwipActions = [self.easeTableViewDelegate tableView:tableView trailingSwipeActionsConfigurationForRowAtItem:model];
+        customSwipActions.performsFirstActionWithFullSwipe = NO;
+        return customSwipActions;
+    }
+    
     __weak typeof(self) weakself = self;
     UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"删除" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
         [tableView setEditing:NO animated:YES];
@@ -113,34 +131,27 @@
     
     UIContextualAction *stickConversationAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"置顶" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
         [tableView setEditing:NO animated:YES];
-//        [weakself _stickConversation:indexPath];
+        EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.itemId type:model.type createIfNotExist:YES];
+        [conversation setTop:YES];
     }];
     stickConversationAction.backgroundColor = [UIColor colorWithRed: 203 / 255.0 green: 125 / 255.0 blue: 50 / 255.0 alpha:1.0];
     
     UIContextualAction *cancelStickConversationAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"取消置顶" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
         [tableView setEditing:NO animated:YES];
-//        [weakself _cancelStickConversation:indexPath];
+        EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.itemId type:model.type createIfNotExist:YES];
+        [conversation setTop:NO];
     }];
     cancelStickConversationAction.backgroundColor = [UIColor colorWithRed: 203 / 255.0 green: 125 / 255.0 blue: 50 / 255.0 alpha:1.0];
-    
-    UIContextualAction *customContextualAction = nil;
-//    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(sideslipCustomAction:dataArray:trailingSwipeActionsConfigurationForRowAtIndexPath:)]) {
-//        customContextualAction = [self.easeTableViewDelegate sideslipCustomAction:tableView dataArray:self.dataAry trailingSwipeActionsConfigurationForRowAtIndexPath:indexPath];
-//    }
-    
+
     NSMutableArray<UIContextualAction *> *sideslipArray = [[NSMutableArray alloc]init];
     [sideslipArray addObject:deleteAction];
-//    if(model.isStick) {
-//        [sideslipArray addObject:cancelStickConversationAction];
-//    } else {
-//        [sideslipArray addObject:stickConversationAction];
-//    }
-//    if (customContextualAction) {
-//        [sideslipArray addObject:customContextualAction];
-//    }
-    
+    if(model.isTop) {
+        [sideslipArray addObject:cancelStickConversationAction];
+    } else {
+        [sideslipArray addObject:stickConversationAction];
+    }
     UISwipeActionsConfiguration *actions = [UISwipeActionsConfiguration configurationWithActions:sideslipArray];
-    actions.performsFirstActionWithFullSwipe = YES;
+    actions.performsFirstActionWithFullSwipe = NO;
     return actions;
 }
 
@@ -155,29 +166,23 @@
     [self _loadAllConversationsFromDB];
 }
 
-#pragma mark - EMGroupManagerDelegate
-
-- (void)didLeaveGroup:(EMGroup *)aGroup
-               reason:(EMGroupLeaveReason)aReason
-{
-    // 这个逻辑不对，删除会话和被移除群组是两个事儿。
-//    [[EMClient sharedClient].chatManager deleteConversation:aGroup.groupId isDeleteMessages:NO completion:nil];
-}
-
-
 #pragma mark - UIMenuController
 
 //删除会话
 - (void)_deleteConversation:(NSIndexPath *)indexPath
 {
+    __weak typeof(self) weakSelf = self;
     NSInteger row = indexPath.row;
     id<EaseConversationModelDelegate> model = [self.dataAry objectAtIndex:row];
     [[EMClient sharedClient].chatManager deleteConversation:model.itemId
                                            isDeleteMessages:YES
-                                                 completion:nil];
-    [self.dataAry removeObjectAtIndex:row];
-    [self.tableView reloadData];
-    [self updateBlankPerchView];
+                                                 completion:^(NSString *aConversationId, EMError *aError) {
+        if (!aError) {
+            [weakSelf.dataAry removeObjectAtIndex:row];
+            [weakSelf.tableView reloadData];
+            [weakSelf updateBlankPerchView];
+        }
+    }];
 }
 
 

@@ -20,7 +20,15 @@
     // Override point for customization after application launch.
     EMOptions *options = [EMOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
     [EMClient.sharedClient initializeSDKWithOptions:options];
-    [[EMClient sharedClient] loginWithUsername:@"du001" password:@"1" completion:nil];
+    [[EMClient sharedClient] logout:NO completion:^(EMError *aError) {
+        if (!aError) {
+            [[EMClient sharedClient] loginWithUsername:@"chong" password:@"1" completion:^(NSString *aUsername, EMError *aError) {
+                if (!aError) {
+                    NSLog(@"chong");
+                }
+            }];
+        }
+    }];
     return YES;
 }
 

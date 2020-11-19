@@ -9,6 +9,10 @@
 #ifndef EMColorDefine_h
 #define EMColorDefine_h
 
+#define kColor_chatViewBg [UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]
+
+#define kColor_ExtFunctionView [UIColor colorWithRed:248/255.0 green:248/255.0 blue:248/255.0 alpha:1.0]
+
 #define kColor_textViewGray [UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]
 
 #define kColor_LightGray [UIColor colorWithRed:245 / 255.0 green:245 / 255.0 blue:245 / 255.0 alpha:1.0]

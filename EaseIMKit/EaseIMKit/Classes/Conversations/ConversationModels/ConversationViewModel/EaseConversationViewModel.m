@@ -48,7 +48,7 @@
 
 - (UIView *)defaultBlankPerchView
 {
-    UIView *blankPerchView = [[UIView alloc]init];
+    UIView *blankPerchView = [[UIView alloc]initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - 115) / 2, ([UIScreen mainScreen].bounds.size.height - 115) / 2, 115, 115)];
     UIImageView *blankImgView = [[UIImageView alloc]init];
     blankImgView.image = [UIImage imageNamed:@"blankConversation"];
     [blankPerchView addSubview:blankImgView];

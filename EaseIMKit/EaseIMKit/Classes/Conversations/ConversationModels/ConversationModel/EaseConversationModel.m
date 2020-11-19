@@ -17,9 +17,8 @@
 {
     EMConversation *_conversation;
     NSString *_showName;
-    EaseConversationModelType _type;
     long long _latestUpdateTime;
-    NSString *_showInfo;
+    NSMutableAttributedString *_showInfo;
 }
 
 @end
@@ -36,8 +35,7 @@
     self = [super init];
     if (self) {
         _conversation = conversation;
-        _type = EaseConversationModelType_Conversation;
-        _showInfo = @"";
+        _showInfo = [[NSMutableAttributedString alloc] initWithString:@""];
     }
     
     return self;
@@ -51,6 +49,11 @@
 - (NSString*)itemId
 {
     return _conversation.conversationId;
+}
+
+- (EMConversationType)type
+{
+    return _conversation.type;
 }
 
 - (void)setIsTop:(BOOL)isTop {
@@ -82,11 +85,7 @@
     return _conversation.unreadMessagesCount;
 }
 
-- (EaseConversationModelType)type {
-    return _type;
-}
-
-- (NSString *)showInfo {
+- (NSAttributedString *)showInfo {
     
     if (_latestUpdateTime == _conversation.latestMessage.timestamp) {
         return _showInfo;
@@ -94,41 +93,42 @@
     
     EMMessage *msg = _conversation.latestMessage;
     _latestUpdateTime = msg.timestamp;
+    NSString *msgStr = nil;
     switch (msg.body.type) {
         case EMMessageBodyTypeText:
         {
             EMTextMessageBody *body = (EMTextMessageBody *)msg.body;
-            _showInfo = body.text;
+            msgStr = body.text;
         }
             break;
         case EMMessageBodyTypeLocation:
         {
-            _showInfo = @"[位置]";
+            msgStr = @"[位置]";
         }
             break;
         case EMMessageBodyTypeCustom:
         {
-            _showInfo = @"[自定义消息]";
+            msgStr = @"[自定义消息]";
         }
             break;
         case EMMessageBodyTypeImage:
         {
-            _showInfo = @"[图片]";
+            msgStr = @"[图片]";
         }
             break;
         case EMMessageBodyTypeFile:
         {
-            _showInfo = @"[文件]";
+            msgStr = @"[文件]";
         }
             break;
         case EMMessageBodyTypeVoice:
         {
-            _showInfo = @"[音频]";
+            msgStr = @"[音频]";
         }
             break;
         case EMMessageBodyTypeVideo:
         {
-            _showInfo = @"[视频]";
+            msgStr = @"[视频]";
         }
             break;
             
@@ -136,6 +136,17 @@
             break;
     }
     
+    _showInfo = [[NSMutableAttributedString alloc] initWithString:msgStr];
+    if ([_conversation draft] && ![[_conversation draft] isEqualToString:@""]) {
+        msgStr = [NSString stringWithFormat:@"%@ %@", @"[草稿]", [_conversation draft]];
+        _showInfo = [[NSMutableAttributedString alloc] initWithString:msgStr];
+        [_showInfo setAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:255/255.0 green:43/255.0 blue:43/255.0 alpha:1.0]} range:NSMakeRange(0, msgStr.length)];
+    }
+    if ([_conversation remindMe]) {
+        msgStr = [NSString stringWithFormat:@"%@ %@", @"[有人@我]", msgStr];
+        _showInfo = [[NSMutableAttributedString alloc] initWithString:msgStr];
+        [_showInfo setAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:255/255.0 green:43/255.0 blue:43/255.0 alpha:1.0]} range:NSMakeRange(0, msgStr.length)];
+    }
     return _showInfo;
 }
 

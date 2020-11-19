@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '11.0'
 
-
+  
   s.license = 'MIT'
   s.summary = 'easemob im sdk UIKit'
   s.homepage = 'https://github.com/dujiepeng/EaseIMKit'
@@ -13,9 +13,12 @@ Pod::Spec.new do |s|
                :tag => s.version.to_s,
                :submodules => true
   }
+  
+  s.vendored_libraries ='EaseIMKit/Classes/Chat/ChatBar/MoreView/VoiceConvert/libopencore-amrnb.a','EaseIMKit/Classes/Chat/ChatBar/MoreView/VoiceConvert/libopencore-amrwb.a'
+  
   s.description = 'easemob sdk ui kit'
   s.requires_arc = true
-  s.source_files = 'EaseIMKit/**/*.{h,m}'
+  s.source_files = 'EaseIMKit/**/*.{h,m,mm}'
   s.resource_bundles = {
     'EaseIMKit' => ['EaseIMKit/**/**/*.{png,jpg,jpeg}']
   }

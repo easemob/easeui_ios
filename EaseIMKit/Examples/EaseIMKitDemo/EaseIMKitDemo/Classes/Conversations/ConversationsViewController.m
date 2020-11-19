@@ -9,6 +9,7 @@
 #import "ConversationsViewController.h"
 #import "ConversationModel.h"
 #import <EaseIMKit.h>
+#import "EaseChatViewController.h"
 
 @interface ConversationsViewController () <EaseConversationsViewControllerDelegate>
 {
@@ -37,14 +38,6 @@
    
 #pragma mark - EaseConversationVCDelegate
 
-- (NSString *)requestDidReceiveShowMessage:(NSString *)conversationId requestUser:(NSString *)requestUser reason:(EaseIMKitCallBackReason)reason
-{
-    if (reason == ContanctsRequestDidReceive) {
-        return @"空洞洞";
-    }
-    return nil;
-}
-
 - (UIContextualAction *)sideslipCustomAction:(UITableView *)tableView dataArray:(NSMutableArray *)dataArray trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UIContextualAction *customAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"自定义" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
@@ -54,10 +47,17 @@
     return customAction;
 }
 
-
+/*
 - (NSArray<id<EaseItemDelegate>> *)resetDataAry {
     ConversationModel *model = [[ConversationModel alloc] init];
     return @[model];
+}
+*/
+
+- (void)easeTableView:(UITableView *)tableView didSelectRowAtItem:(id<EaseItemDelegate>)item
+{
+    EaseChatViewController *chatController = [[EaseChatViewController alloc]init];
+    [self.navigationController pushViewController:chatController animated:NO];
 }
 
 @end
