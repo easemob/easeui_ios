@@ -301,7 +301,7 @@
         self.selectedButton.selected = NO;
         self.selectedButton = nil;
         self.selectedButton = aButton;
-        [aButton setSelected:!aButton.isSelected];
+        [aButton setSelected:!aButton.selected];
     } else {
         self.selectedButton = nil;
         if (aButton.isSelected) {
@@ -378,7 +378,7 @@
                 make.left.equalTo(self);
                 make.right.equalTo(self);
                 make.bottom.equalTo(self).offset(-EMVIEWBOTTOMMARGIN);
-                make.height.mas_equalTo(@150);
+                make.height.mas_equalTo(@200);
             }];
             [self _remakeButtonsViewConstraints];
             if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarDidShowMoreViewAction)]) {

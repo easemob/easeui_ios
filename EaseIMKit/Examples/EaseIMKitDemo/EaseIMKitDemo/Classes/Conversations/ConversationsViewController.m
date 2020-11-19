@@ -57,7 +57,8 @@
 - (void)easeTableView:(UITableView *)tableView didSelectRowAtItem:(id<EaseItemDelegate>)item
 {
     EaseChatViewController *chatController = [[EaseChatViewController alloc]init];
-    [self.navigationController pushViewController:chatController animated:NO];
+    chatController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:chatController animated:YES];
 }
 
 @end

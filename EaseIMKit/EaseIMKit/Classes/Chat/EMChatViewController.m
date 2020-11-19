@@ -155,7 +155,18 @@
     self.chatBar.moreEmoticonView = moreEmoticonView;
     
     //更多
-    EMMoreFunctionView *moreFunction = [[EMMoreFunctionView alloc]initWithConversation:self.currentConversation];
+    NSMutableArray<UIImage*> *toolbarImgArray = nil;
+    NSMutableArray<NSString*> *toolbarDescArray = nil;
+    BOOL isCustomExtFuncItems = NO;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarExtFunctionItemDescArray)]) {
+        toolbarDescArray = [self.delegate chatBarExtFunctionItemDescArray];
+        isCustomExtFuncItems = YES;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarExtFunctionItemImgArray)]) {
+        toolbarImgArray = [self.delegate chatBarExtFunctionItemImgArray];
+        isCustomExtFuncItems = YES;
+    }
+    EMMoreFunctionView *moreFunction = [[EMMoreFunctionView alloc]initWithConversation:_currentConversation itemDescArray:toolbarDescArray itemImgArray:toolbarImgArray isCustom:isCustomExtFuncItems];
     moreFunction.delegate = self;
     self.chatBar.moreFunctionView = moreFunction;
 }
@@ -240,9 +251,16 @@
 
 #pragma mark - EMMoreFunctionViewDelegate
 
-- (void)chatBarMoreFunctionAction:(NSInteger)componentType
+//默认实现
+- (void)chatBarMoreFunctionAction:(NSInteger)componentTag itemDesc:(NSString*)itemDesc extType:(ExtType)extType
 {
-    [self chatToolBarComponentAction:componentType];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarExtFuncActionItem:itemDesc:extType:)]) {
+        [self.delegate chatBarExtFuncActionItem:componentTag itemDesc:itemDesc extType:extType];
+    }
+    return;
+    
+    //default
+    //[self chatToolBarComponentAction:componentTag];
 }
 
 #pragma mark - EMChatBarRecordAudioViewDelegate
@@ -290,6 +308,27 @@
 - (void)messageCellDidLongPress:(EMMessageCell *)aCell
 {
     self.menuIndexPath = [self.tableView indexPathForCell:aCell];
+    CGRect rectInTableView = [self.tableView rectForRowAtIndexPath:[self.tableView indexPathForCell:aCell]];
+    CGRect rect = [self.tableView convertRect:rectInTableView toView:[self.tableView superview]];
+    NSMutableArray<UIImage*> *longPressImgArray = nil;
+    NSMutableArray<NSString*> *longPressDescArray = nil;
+    BOOL isCustomExtFuncItems = NO;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(longPressItemDescArray)]) {
+        longPressDescArray = [self.delegate longPressItemDescArray];
+        isCustomExtFuncItems = YES;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(longPressItemImgArray)]) {
+        longPressImgArray = [self.delegate longPressItemImgArray];
+        isCustomExtFuncItems = YES;
+    }
+    EMMoreFunctionView *longPressView = [[EMMoreFunctionView alloc]initWithMessageCell:aCell itemDescArray:longPressDescArray itemImgArray:longPressImgArray isCustom:isCustomExtFuncItems];
+    [self.view addSubview:longPressView];
+    [longPressView mas_makeConstraints:^(MASConstraintMaker *make) {
+        //make.bottom.mas_equalTo(rect.origin.y);
+        make.width.equalTo(@350);
+        make.height.equalTo(@130);
+        make.center.equalTo(self.view);
+    }];
 }
 
 - (void)messageCellDidResend:(EMMessageModel *)aModel
@@ -566,14 +605,16 @@
     if(self.currentConversation.unreadMessagesCount > 0){
         [self sendDidReadReceipt];
     }
-    //抛出选择
-    if (NO) {
-        [EMClient.sharedClient.chatManager asyncFetchHistoryMessagesFromServer:self.currentConversation.conversationId conversationType:self.currentConversation.type startMessageId:self.moreMsgId pageSize:50 completion:^(EMCursorResult *aResult, EMError *aError) {
-            block(aResult.list, aError);
-         }];
-    } else {
-        [self.currentConversation loadMessagesStartFromId:self.moreMsgId count:50 searchDirection:EMMessageSearchDirectionUp completion:block];
+    //是否从服务器拉取历史消息
+    if (self.delegate && [self.delegate respondsToSelector:@selector(isFetchHistoryMessagesFromServer)]) {
+        if ([self.delegate isFetchHistoryMessagesFromServer]) {
+            [EMClient.sharedClient.chatManager asyncFetchHistoryMessagesFromServer:self.currentConversation.conversationId conversationType:self.currentConversation.type startMessageId:self.moreMsgId pageSize:50 completion:^(EMCursorResult *aResult, EMError *aError) {
+                block(aResult.list, aError);
+                return;
+             }];
+        }
     }
+    [self.currentConversation loadMessagesStartFromId:self.moreMsgId count:50 searchDirection:EMMessageSearchDirectionUp completion:block];
 }
 
 #pragma mark - Action

@@ -12,7 +12,57 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+//聊天控制器回调
+@protocol EMChatViewControlDelegate <NSObject>
+
+@required
+/**
+ * 输入扩展区内容
+ *
+ * CONTENT         扩展区 ITEM 描述
+ */
+- (NSMutableArray<NSString*>*)chatBarExtFunctionItemDescArray;
+/**
+ * 输入扩展区图标
+ *
+ * CONTENT         扩展区 ITEM 图标
+ */
+- (NSMutableArray<UIImage*>*)chatBarExtFunctionItemImgArray;
+
+/**
+ * 长按扩展区内容
+ *
+ * CONTENT         长按扩展区 ITEM 描述
+ */
+- (NSMutableArray<NSString*>*)longPressItemDescArray;
+/**
+ * 长按扩展区图标
+ *
+ * CONTENT         长按扩展区 ITEM 图标
+ */
+- (NSMutableArray<UIImage*>*)longPressItemImgArray;
+
+/**
+ * 点击项
+ *
+ * @param   itemTag   点击项标签从0开始
+ * @param   itemDesc   点击项描述
+ */
+- (void)chatBarExtFuncActionItem:(NSInteger)itemTag itemDesc:(NSString*)itemDesc extType:(ExtType)extType;
+
+/**
+ * 是否从服务器获取历史消息
+ *
+ * YES      从服务器取
+ * NO        从DB取
+ */
+- (BOOL)isFetchHistoryMessagesFromServer;
+
+@end
+
 @interface EMChatViewController : UIViewController <UIDocumentInteractionControllerDelegate>
+
+@property (nonatomic, weak) id<EMChatViewControlDelegate> delegate;
 
 @property (nonatomic, strong) EMConversation *currentConversation;
 @property (nonatomic, strong) UITableView *tableView;
