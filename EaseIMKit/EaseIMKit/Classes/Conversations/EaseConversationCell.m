@@ -7,13 +7,13 @@
 //
 
 #import "EaseConversationCell.h"
-#import "EaseHeaders.h"
 #import "EMDateHelper.h"
+
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @interface EaseConversationCell()
 
-@property (nonatomic, strong) EaseConversationViewModel *conversationCellViewModel;
+@property (nonatomic, strong) EaseConversationViewModel *viewModel;
 
 @end
 
@@ -21,125 +21,162 @@
 
 - (instancetype)initWithConversationViewModel:(EaseConversationViewModel*)viewModel
 {
-    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EMConversationCell"];
-    if (self){
-        self.selectionStyle = UITableViewCellSelectionStyleDefault;
-        self.selectedBackgroundView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width, self.contentView.frame.size.height)];
-        self.selectedBackgroundView.backgroundColor = [UIColor colorWithRed:233/255.0 green:233/255.0 blue:233/255.0 alpha:1.0];
-        self.backgroundColor = viewModel.cellBgColor;
-        _conversationCellViewModel = viewModel;
-        [self _setupSubview];
+
+    if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EMConversationCell"]){
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        _viewModel = viewModel;
+        [self _addSubViews];
+        [self _setupSubViewsConstraints];
+        [self _setupViewsProperty];
     }
     return self;
 }
 
 #pragma mark - private layout subviews
 
-- (void)_setupSubview
-{
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
+- (void)_addSubViews {
+    _avatarView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    _nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    _timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    _detailLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    _badgeLabel = [[EaseBadgeView alloc] initWithFrame:CGRectZero];
     
-    _avatarView = [[UIImageView alloc] init];
-    [self.contentView addSubview:_avatarView];
-    __weak typeof(self) weakSelf = self;
-    [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.topMargin.equalTo(self.contentView).offset(weakSelf.conversationCellViewModel.avatarEdgeInsets.top);
-        make.leftMargin.equalTo(self.contentView).offset(weakSelf.conversationCellViewModel.avatarEdgeInsets.left);
-        make.bottomMargin.equalTo(self.contentView).offset(weakSelf.conversationCellViewModel.avatarEdgeInsets.bottom);
-        make.rightMargin.equalTo(self.contentView).offset(weakSelf.conversationCellViewModel.avatarEdgeInsets.right);
-        make.width.offset(weakSelf.conversationCellViewModel.avatarSize.width);
-        make.height.offset(weakSelf.conversationCellViewModel.avatarSize.height);
-    }];
-    _avatarView.layer.cornerRadius = _avatarView.frame.size.width / 4;
-    if (_conversationCellViewModel.avatarType == Rectangular)
-        _avatarView.layer.cornerRadius = 0;
-    if (_conversationCellViewModel.avatarType == Circular)
-        _avatarView.layer.cornerRadius = _avatarView.frame.size.width / 2;
-    
-    _timeLabel = [[UILabel alloc] init];
-    _timeLabel.font = [UIFont systemFontOfSize:_conversationCellViewModel.wordSizeForCellTimestamp];
-    _timeLabel.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1.0];
-    _timeLabel.backgroundColor = [UIColor clearColor];
-    [_timeLabel setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
-    [self.contentView addSubview:_timeLabel];
-    [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.avatarView);
-        make.right.equalTo(self.contentView).offset(-15);
-    }];
-    
-    _nameLabel = [[UILabel alloc] init];
+    _avatarView.backgroundColor = [UIColor clearColor];
     _nameLabel.backgroundColor = [UIColor clearColor];
-    _nameLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1.0];
-    _nameLabel.font = [UIFont systemFontOfSize:_conversationCellViewModel.wordSizeForCellTitle];
-    [self.contentView addSubview:_nameLabel];
-    [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.contentView.mas_centerY);
-        make.left.equalTo(self.avatarView.mas_right);
-        make.right.lessThanOrEqualTo(self.timeLabel.mas_left);
-    }];
+    _timeLabel.backgroundColor = [UIColor clearColor];
+    _detailLabel.backgroundColor = [UIColor clearColor];
+    _badgeLabel.backgroundColor = [UIColor clearColor];
     
-    bool badgeLongerIsValid = (_conversationCellViewModel.longer >= 20 && _conversationCellViewModel.longer <=  _avatarView.frame.size.width / 2);
-    _badgeLabel = [[EMBadgeLabel alloc] init];
-    _badgeLabel.clipsToBounds = YES;
-    _badgeLabel.layer.cornerRadius = badgeLongerIsValid ? _conversationCellViewModel.longer / 2 : 10;
+    _nameLabel.lineBreakMode = NSLineBreakByCharWrapping;
+    _detailLabel.lineBreakMode = NSLineBreakByCharWrapping;
+
+    [self.contentView addSubview:_avatarView];
+    [self.contentView addSubview:_nameLabel];
+    [self.contentView addSubview:_timeLabel];
+    [self.contentView addSubview:_detailLabel];
     [self.contentView addSubview:_badgeLabel];
-    [_badgeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_centerY).offset(3);
-        make.right.equalTo(self.contentView).offset(-15);
-        make.height.equalTo(badgeLongerIsValid ? @(_conversationCellViewModel.longer) : @20);
-        make.width.greaterThanOrEqualTo(badgeLongerIsValid ? @(_conversationCellViewModel.longer) : @20);
-    }];
-    if (_conversationCellViewModel.unReadCountPosition == EMTopRightCornerForAvatar) {
-        //未读数在头像右上角
-        [_badgeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(_avatarView.mas_top);
-            make.centerY.equalTo(_avatarView.mas_right);
-        }];
+    
+}
+
+- (void)_setupViewsProperty {
+    
+    self.contentView.backgroundColor = _viewModel.cellBgColor;
+    
+    if (_viewModel.avatarType != Rectangular) {
+        _avatarView.clipsToBounds = YES;
+        if (_viewModel.avatarType == RoundedCorner) {
+            _avatarView.layer.cornerRadius = _viewModel.avatarSize.width / 6;
+        }
+        else if(Circular) {
+            _avatarView.layer.cornerRadius = _viewModel.avatarSize.width / 2;
+        }
+        
+    }else {
+        _avatarView.clipsToBounds = NO;
     }
     
-    _detailLabel = [[UILabel alloc] init];
-    _detailLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    _detailLabel.backgroundColor = [UIColor clearColor];
-    _detailLabel.font = [UIFont systemFontOfSize:_conversationCellViewModel.wordSizeForCellDetail];
-    _detailLabel.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1.0];
-    [self.contentView addSubview:_detailLabel];
-    [_detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_centerY).offset(3);
-        make.left.equalTo(self.nameLabel);
-        make.right.equalTo(self.badgeLabel.mas_left).offset(-5);
-        make.bottom.equalTo(self.contentView).offset(-8);
+    _nameLabel.font = _viewModel.nameLabelFont;
+    _nameLabel.textColor = _viewModel.nameLabelColor;
+    
+    _detailLabel.font = _viewModel.detailLabelFont;
+    _detailLabel.textColor = _viewModel.detailLabelColor;
+    
+    _timeLabel.font = _viewModel.timeLabelFont;
+    _timeLabel.textColor = _viewModel.timeLabelColor;
+    
+    [_timeLabel setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+    
+    
+    _badgeLabel.font = _viewModel.badgeLabelFont;
+    _badgeLabel.backgroundColor = _viewModel.badgeLabelBgColor;
+    _badgeLabel.badgeColor = _viewModel.badgeLabelTitleColor;
+    _badgeLabel.maxNum = _viewModel.badgeMaxNum;
+}
+
+- (void)_setupSubViewsConstraints
+{
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [_avatarView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf.contentView.mas_top).offset(weakSelf.viewModel.avatarEdgeInsets.top);
+        make.bottom.equalTo(weakSelf.contentView.mas_bottom).offset(-weakSelf.viewModel.avatarEdgeInsets.bottom);
+        make.left.equalTo(weakSelf.contentView.mas_left).offset(weakSelf.viewModel.avatarEdgeInsets.left);
+        make.width.offset(weakSelf.viewModel.avatarSize.width);
+        make.height.offset(weakSelf.viewModel.avatarSize.height).priority(750);
+    }];
+    
+    [_nameLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf.contentView.mas_top).offset(weakSelf.viewModel.nameLabelEdgeInsets.top);
+        make.bottom.equalTo(weakSelf.avatarView.mas_centerY);
+        make.left.equalTo(weakSelf.avatarView.mas_right).offset(weakSelf.viewModel.avatarEdgeInsets.right + weakSelf.viewModel.nameLabelEdgeInsets.left);
+    }];
+    
+    [_detailLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf.nameLabel.mas_bottom).offset(weakSelf.viewModel.nameLabelEdgeInsets.bottom + weakSelf.viewModel.detailLabelEdgeInsets.top);
+        make.left.equalTo(weakSelf.avatarView.mas_right).offset(weakSelf.viewModel.avatarEdgeInsets.right + weakSelf.viewModel.detailLabelEdgeInsets.left);
+        make.bottom.lessThanOrEqualTo(weakSelf.contentView.mas_bottom).offset(weakSelf.viewModel.detailLabelEdgeInsets.bottom);
+    }];
+    
+    [_timeLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf.contentView.mas_top).offset(weakSelf.viewModel.timeLabelEdgeInsets.top);
+        make.right.equalTo(weakSelf.contentView.mas_right).offset(-weakSelf.viewModel.timeLabelEdgeInsets.right);
+        make.left.greaterThanOrEqualTo(weakSelf.nameLabel.mas_right).offset(weakSelf.viewModel.nameLabelEdgeInsets.right + weakSelf.viewModel.timeLabelEdgeInsets.left);
     }];
 
-    self.selectionStyle = UITableViewCellSelectionStyleGray;
+  
+    if (_viewModel.badgeLabelPosition == EMAvatarTopRight) {
+        [_badgeLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.height.offset(_viewModel.badgeLabelHeight);
+            make.width.mas_greaterThanOrEqualTo(weakSelf.viewModel.badgeLabelHeight).priority(1000);
+            make.centerY.equalTo(weakSelf.avatarView.mas_top).offset(weakSelf.viewModel.badgeLabelCenterVector.dy);
+            make.centerX.equalTo(weakSelf.avatarView.mas_right).offset(weakSelf.viewModel.badgeLabelCenterVector.dx);
+        }];
+        
+        [_detailLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(weakSelf.contentView.mas_right).offset(-weakSelf.viewModel.detailLabelEdgeInsets.right);
+        }];
+    }else {
+        [_badgeLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.height.offset(_viewModel.badgeLabelHeight);
+            make.width.mas_greaterThanOrEqualTo(weakSelf.viewModel.badgeLabelHeight).priority(1000);
+            make.centerY.equalTo(weakSelf.detailLabel.mas_centerY).offset(weakSelf.viewModel.badgeLabelCenterVector.dy);
+            make.right.equalTo(weakSelf.contentView.mas_right).offset(weakSelf.viewModel.badgeLabelCenterVector.dx);
+            make.left.greaterThanOrEqualTo(weakSelf.detailLabel.mas_right).offset(weakSelf.viewModel.detailLabelEdgeInsets.right);
+        }];
+    }
 }
 
 - (void)setModel:(id<EaseConversationModelDelegate>)model
 {
     _model = model;
-    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL] placeholderImage:_model.defaultAvatar];
-    self.nameLabel.text = _model.showName;
-    // TODO:
-    self.detailLabel.attributedText = _model.showInfo;
-    self.timeLabel.text = [EMDateHelper formattedTimeFromTimeInterval:_model.lastestUpdateTime];
+    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL]
+                       placeholderImage:_model.defaultAvatar];
     
-    if (_model.unreadMessagesCount == 0) {
-        self.badgeLabel.value = @"";
-        self.badgeLabel.hidden = YES;
-    } else {
-        self.badgeLabel.value = [NSString stringWithFormat:@" %@ ", _model.unreadMessagesCount > 99 ? (_model.unreadMessagesCount > 199 ? @"..." : @"99+") : @(_model.unreadMessagesCount)];
-        self.badgeLabel.hidden = NO;
-    }
+    self.nameLabel.text = _model.showName;
+    
+    self.detailLabel.attributedText = _model.showInfo;
+    self.timeLabel.text = [NSString stringWithFormat:@"%lld ",_model.lastestUpdateTime]; //@"09:26";//[EMDateHelper formattedTimeFromTimeInterval:_model.lastestUpdateTime];
+    self.badgeLabel.badge = _model.unreadMessagesCount;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
-    {
-        [super setSelected:selected animated:animated];
-        self.badgeLabel.backgroundColor = _conversationCellViewModel.unReadCountViewBgColor;
-    }
+{
+    [super setSelected:selected animated:animated];
+    self.badgeLabel.backgroundColor = _viewModel.badgeLabelBgColor;
+}
+
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
-    {
-        [super setHighlighted:highlighted animated:animated];
-        self.badgeLabel.backgroundColor = _conversationCellViewModel.unReadCountViewBgColor;
-    }
+{
+    [super setHighlighted:highlighted animated:animated];
+    self.badgeLabel.backgroundColor = _viewModel.badgeLabelBgColor;
+}
+
+- (void)resetViewModel:(EaseConversationViewModel *)aViewModel {
+    _viewModel = aViewModel;
+    [self _addSubViews];
+    [self _setupSubViewsConstraints];
+    [self _setupViewsProperty];
+}
 
 @end

@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol EaseContactsTableViewDelegate <EaseTableViewDelegate>
+@protocol EaseContactsTableViewDelegate <EaseBaseViewControllerDelegate>
 
 @end
 

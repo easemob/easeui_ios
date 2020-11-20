@@ -9,7 +9,7 @@
 #import "UITableView+Refresh.h"
 #import <Masonry/Masonry.h>
 
-@interface EaseBaseTableViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface EaseBaseTableViewController ()
 {
     
 }
@@ -19,7 +19,7 @@
 
 - (instancetype)initWithModel:(EaseBaseTableViewModel *)aModel {
     if(self = [super init]) {
-        self.viewModel = aModel;
+        _viewModel = aModel;
     }
     return self;
 }
@@ -34,6 +34,7 @@
     }];
     
     [self resetViewModel:self.viewModel];
+    [self _setupSubViews];
 }
 
 
@@ -46,11 +47,17 @@
         [self.tableView disableRefresh];
         [self refreshTabView];
     }
+    
+    [self.tableView setSeparatorInset:_viewModel.cellSeparatorInset];
+    [self.tableView setSeparatorInset:_viewModel.cellSeparatorInset];
 }
 
 
 - (void)_setupSubViews {
     // 配置基本ui属性
+    if (_viewModel.bgView) {
+        self.tableView.backgroundView = _viewModel.bgView;
+    }
 }
 
 #pragma mark - actions
@@ -79,6 +86,7 @@
 
 #pragma mark - table view delegate & datasource
 
+/*
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 2;
 }
@@ -88,10 +96,6 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:cellforItem:)]) {
-        return (UITableViewCell*)[self.easeTableViewDelegate easeTableView:tableView cellforItem:self.dataAry[indexPath.row]];
-    }
     
     static NSString *cellId = @"baseCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
@@ -104,62 +108,25 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:didSelectRowAtItem:)]) {
-        [self.easeTableViewDelegate easeTableView:tableView didSelectRowAtItem:self.dataAry[indexPath.row]];
-    }
 }
-
-//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-//    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:canEditRowAtItem:)]) {
-//        return [self.easeTableViewDelegate easeTableView:tableView canEditRowAtItem:self.dataAry[indexPath.row]];
-//    }
-//
-//    return _viewModel.cellCanEdit;
-//}
-
-//
-//- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return UITableViewCellEditingStyleDelete | UITableViewCellEditingStyleInsert;
-//}
-//
-//
-//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//
-//}
 
 
 - (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(tvos)
 {
-    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(tableView:trailingSwipeActionsConfigurationForRowAtItem:)]) {
-        return [self.easeTableViewDelegate tableView:tableView trailingSwipeActionsConfigurationForRowAtItem:self.dataAry[indexPath.row]];
-    }
-    
     return nil;
 }
 
-
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:heightForItem:)]) {
-        return [self.easeTableViewDelegate easeTableView:tableView heightForItem:self.dataAry[indexPath.row]];
-    }
-    
     return self.viewModel.cellHeight;
 }
-
-
+ */
 
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero];
         _tableView.tableFooterView = [UIView new];
-        _tableView.delegate = self;
-        _tableView.dataSource = self;
         _tableView.rowHeight = UITableViewAutomaticDimension;
-        _tableView.estimatedRowHeight = 60;
         [_tableView enableRefresh:@"下拉刷新" color:UIColor.redColor];
         [_tableView.refreshControl addTarget:self action:@selector(refreshTabView) forControlEvents:UIControlEventValueChanged];
     }
@@ -167,12 +134,5 @@
     return _tableView;
 }
 
-- (NSMutableArray<EaseItemDelegate> *)dataAry {
-    if (!_dataAry) {
-        _dataAry = [[NSMutableArray<EaseItemDelegate> alloc] init];;
-    }
-    
-    return _dataAry;;
-}
 
 @end

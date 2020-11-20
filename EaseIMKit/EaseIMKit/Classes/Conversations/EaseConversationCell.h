@@ -8,19 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
-#import "EMBadgeLabel.h"
 #import "EaseConversationViewModel.h"
 #import "EaseConversationModelDelegate.h"
+#import "EaseBadgeView.h"
 
 @interface EaseConversationCell : UITableViewCell
 
-@property (nonatomic, strong) UIImageView *avatarView;
-@property (nonatomic, strong) UILabel *nameLabel;
-@property (nonatomic, strong) UILabel *detailLabel;
-@property (nonatomic, strong) UILabel *timeLabel;
-@property (nonatomic, strong) EMBadgeLabel *badgeLabel;
+@property (nonatomic, strong, readonly) UIImageView *avatarView;
+@property (nonatomic, strong, readonly) UILabel *nameLabel;
+@property (nonatomic, strong, readonly) UILabel *detailLabel;
+@property (nonatomic, strong, readonly) UILabel *timeLabel;
+@property (nonatomic, strong, readonly) EaseBadgeView *badgeLabel;
 @property (nonatomic, assign) id<EaseConversationModelDelegate> model;
 
 - (instancetype)initWithConversationViewModel:(EaseConversationViewModel *)viewModel;
+- (void)resetViewModel:(EaseConversationViewModel *)aViewModel;
+
 
 @end

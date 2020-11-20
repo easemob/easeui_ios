@@ -23,7 +23,7 @@
 //    model.canRefresh = YES;
     EaseContactsViewController *contactsVC = [[EaseContactsViewController alloc] initWithViewModel:model];
     contactsVC.normalItems = [self titleItem];
-    contactsVC.easeTableViewDelegate = self;
+//    contactsVC.dele = self;
     
     [self.view addSubview:contactsVC.view];
 //    contactsVC.view.frame = CGRectMake(50, 200, 300, 400);

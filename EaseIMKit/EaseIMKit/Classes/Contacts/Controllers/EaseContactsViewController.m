@@ -40,9 +40,6 @@
     [self refreshTabView];
 }
 
-- (void)resetViewModel:(EaseContactsViewModel *)viewModel {
-    [super resetViewModel:viewModel];
-}
 
 - (void)refreshTabView {
     __block typeof(self) weakSelf = self;

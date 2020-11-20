@@ -11,10 +11,7 @@
 - (instancetype)init {
     if( self = [super init]) {
         _canRefresh = YES;
-        _avatarType = Corner;
-        _cellHeight = 60;
-        _cellBgColor = [UIColor whiteColor];
-        _viewBgColor = [UIColor whiteColor];
+//        _cellHeight = 60;
     }
     
     return self;
