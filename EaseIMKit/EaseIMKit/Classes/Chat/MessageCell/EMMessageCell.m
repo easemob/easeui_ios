@@ -97,7 +97,7 @@
 - (void)_setupViewsWithType:(EMMessageType)aType
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.backgroundColor = kColor_LightGray;
+    self.backgroundColor = [UIColor clearColor];
     
     _avatarView = [[UIImageView alloc] init];
     _avatarView.contentMode = UIViewContentModeScaleAspectFit;
@@ -108,26 +108,28 @@
         _avatarView.image = [UIImage imageNamed:@"defaultAvatar"];
         [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
-            make.right.equalTo(self.contentView).offset(-10);
-            make.width.height.equalTo(@40);
+            make.right.equalTo(self.contentView).offset(-componentSpacing);
+            make.width.height.equalTo(@avatarLonger);
         }];
     } else {
         _avatarView.image = [UIImage imageNamed:@"defaultAvatar"];
         [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
-            make.left.equalTo(self.contentView).offset(10);
-            make.width.height.equalTo(@40);
+            make.left.equalTo(self.contentView).offset(componentSpacing);
+            make.width.height.equalTo(@avatarLonger);
         }];
         
         _nameLabel = [[UILabel alloc] init];
         _nameLabel.font = [UIFont systemFontOfSize:13];
         _nameLabel.textColor = [UIColor grayColor];
-        [self.contentView addSubview:_nameLabel];
-        [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.avatarView);
-            make.left.equalTo(self.avatarView.mas_right).offset(8);
-            make.right.equalTo(self.contentView).offset(-10);
-        }];
+        if (_model.emModel.chatType != EMChatTypeChat) {
+            [self.contentView addSubview:_nameLabel];
+            [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(self.avatarView);
+                make.left.equalTo(self.avatarView.mas_right).offset(8);
+                make.right.equalTo(self.contentView).offset(-componentSpacing);
+            }];
+        }
     }
     
     _bubbleView = [self _getBubbleViewWithType:aType];
@@ -139,13 +141,17 @@
             make.top.equalTo(self.avatarView);
             make.bottom.equalTo(self.contentView).offset(-15);
             make.left.greaterThanOrEqualTo(self.contentView).offset(70);
-            make.right.equalTo(self.avatarView.mas_left).offset(-10);
+            make.right.equalTo(self.avatarView.mas_left).offset(-componentSpacing);
         }];
     } else {
         [_bubbleView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.nameLabel.mas_bottom).offset(3);
+            if (_model.emModel.chatType != EMChatTypeChat) {
+                make.top.equalTo(self.nameLabel.mas_bottom).offset(3);
+            } else {
+                make.top.equalTo(self.avatarView);
+            }
             make.bottom.equalTo(self.contentView).offset(-15);
-            make.left.equalTo(self.avatarView.mas_right).offset(10);
+            make.left.equalTo(self.avatarView.mas_right).offset(componentSpacing);
             make.right.lessThanOrEqualTo(self.contentView).offset(-70);
         }];
     }
@@ -156,7 +162,7 @@
         [_statusView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self.bubbleView.mas_centerY);
             make.right.equalTo(self.bubbleView.mas_left).offset(-5);
-            make.height.equalTo(@20);
+            make.height.equalTo(@(componentSpacing * 2));
         }];
         __weak typeof(self) weakself = self;
         [_statusView setResendCompletion:^{
@@ -286,6 +292,10 @@
 - (void)bubbleViewLongPressAction:(UILongPressGestureRecognizer *)aLongPress
 {
     if (aLongPress.state == UIGestureRecognizerStateBegan) {
+        if (self.model.type == EMMessageTypeText) {
+            EMMsgTextBubbleView *textBubbleView = (EMMsgTextBubbleView*)self.bubbleView;
+            textBubbleView.textLabel.backgroundColor = [UIColor colorWithRed:156/255.0 green:206/255.0 blue:243/255.0 alpha:1.0];
+        }
         if (self.delegate && [self.delegate respondsToSelector:@selector(messageCellDidLongPress:)]) {
             [self.delegate messageCellDidLongPress:self];
         }

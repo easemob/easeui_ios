@@ -8,9 +8,11 @@
 
 #import "HorizontalLayout.h"
 
-#define edgeDis  [UIScreen mainScreen].bounds.size.width / 17;
-
 @interface HorizontalLayout()
+{
+    CGFloat _xOffset;
+    CGFloat _yOffset;
+}
 
 @property (nonatomic,strong) NSMutableArray *attrs;
 @property (nonatomic,strong) NSMutableDictionary *pageDict;
@@ -20,9 +22,11 @@
 @implementation HorizontalLayout
 
 #pragma mark - life cycle
-- (instancetype)init {
+- (instancetype)initWithOffset:(CGFloat)xOffset yOffset:(CGFloat)yOffset{
     if (self = [super init]) {
         self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        _xOffset = xOffset;
+        _yOffset = yOffset;
     }
     return self;
 }
@@ -90,8 +94,8 @@
     NSInteger xIndex = index % self.rowCount;
     NSInteger yIndex = (index - page * allCount)/self.rowCount;
     // 获取x y方向偏移距离
-    CGFloat xOffset = xIndex * (itemW + lineDis) + edgeDis;//x方向偏移量
-    CGFloat yOffset = yIndex * (itemH + itemDis) + 8;//y方向偏移量
+    CGFloat xOffset = xIndex * (itemW) + _xOffset*(xIndex+1);//x方向偏移量
+    CGFloat yOffset = yIndex * (itemH) + _yOffset*(yIndex+1);//y方向偏移量
     // 获取每个item占了几页
     NSInteger sectionPage = (itemCount % allCount == 0) ? itemCount/allCount : (itemCount/allCount + 1);
     // 保存每个section的page数量

@@ -11,10 +11,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EaseIMKitManager : NSObject
+@protocol EaseIMKitManagerDelegate <NSObject>
 
-+ (instancetype)shareEaseIMKit;
-
+@optional
 
 /**
  * 是否需要系统通知：好友/群 申请等   默认需要
@@ -46,6 +45,14 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   reason   请求原因
  */
 - (NSDictionary *)requestDidReceiveConversationExt:(NSString *)conversationId requestUser:(NSString *)requestUser reason:(EaseIMKitCallBackReason)reason;
+
+@end
+
+@interface EaseIMKitManager : NSObject
+
++ (instancetype)shareEaseIMKit;
+
+@property (nonatomic, weak) id<EaseIMKitManagerDelegate> delegate;
 
 @end
 

@@ -31,8 +31,10 @@
 @interface EMChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EMMessageCellDelegate, EMChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate,EMMoreFunctionViewDelegate>
 {
     EMViewModel *_viewModel;
+    EMMessageCell *_currentLongPressCell;
 }
 @property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
+@property (nonatomic, strong) EMMoreFunctionView *longPressView;
 @end
 
 @implementation EMChatViewController
@@ -94,6 +96,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [self.longPressView removeFromSuperview];
     [[EMAudioPlayerUtil sharedHelper] stopPlayer];
     if (self.currentConversation.type == EMChatTypeChatRoom) {
         [[EMClient sharedClient].roomManager leaveChatroom:self.currentConversation.conversationId completion:nil];
@@ -115,7 +118,7 @@
 
 - (void)_setupChatSubviews
 {
-    self.view.backgroundColor = _viewModel.chatViewBgColor;
+    self.view.backgroundColor = kColor_chatViewBg;
     
     self.chatBar = [[EMChatBar alloc] initWithViewModel:_viewModel];
     self.chatBar.delegate = self;
@@ -128,14 +131,18 @@
     //会话工具栏
     [self _setupChatBarMoreViews];
     
-    self.tableView.backgroundColor = kColor_LightGray;
-    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.backgroundColor = _viewModel.chatViewBgColor;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 130;
     [self.view addSubview:self.tableView];
     [self.tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view);
+        /*if (self.currentConversation.type == EMConversationTypeGroupChat && _viewModel.chatViewHeight > 0) {
+            make.height.equalTo(@(_viewModel.chatViewHeight));
+        } else {
+            make.top.equalTo(self.view);
+        }*/
+        make.height.equalTo(@(_viewModel.chatViewHeight));
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
         make.bottom.equalTo(self.chatBar.mas_top);
@@ -228,6 +235,8 @@
 {
     [self.view endEditing:YES];
     [self.chatBar clearMoreViewAndSelectedButton];
+    [self.longPressView removeFromSuperview];
+    [self resetCellLongPressStatus:_currentLongPressCell];
 }
 
 #pragma mark - EMChatBarDelegate
@@ -251,16 +260,28 @@
 
 #pragma mark - EMMoreFunctionViewDelegate
 
-//默认实现
-- (void)chatBarMoreFunctionAction:(NSInteger)componentTag itemDesc:(NSString*)itemDesc extType:(ExtType)extType
+- (void)chatBarMoreFunctionAction:(NSInteger)componentTag itemDesc:(NSString *)itemDesc extType:(ExtType)extType
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarExtFuncActionItem:itemDesc:extType:)]) {
-        [self.delegate chatBarExtFuncActionItem:componentTag itemDesc:itemDesc extType:extType];
+    [self resetCellLongPressStatus:_currentLongPressCell];
+    [self.longPressView removeFromSuperview];
+    //输入功能区
+    if (extType == ExtTypeChatBar) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(extChatBarFuncActionItem:itemDesc:)]) {
+            [self.delegate extChatBarFuncActionItem:componentTag itemDesc:itemDesc];
+            return;
+        }
+        //default
+        //[self chatToolBarComponentAction:componentTag];
     }
-    return;
-    
-    //default
-    //[self chatToolBarComponentAction:componentTag];
+    //消息长按功能区
+    if (extType == ExtTypeLongPress) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(extLongPressFuncActionItem:itemDesc:)]) {
+            [self.delegate extLongPressFuncActionItem:componentTag itemDesc:itemDesc];
+            return;
+        }
+        //default
+        [self executeAction:componentTag];
+    }
 }
 
 #pragma mark - EMChatBarRecordAudioViewDelegate
@@ -304,33 +325,71 @@
     eventStrategy.chatController = self;
     [eventStrategy messageCellEventOperation:aCell];
 }
-
+//消息长按事件
 - (void)messageCellDidLongPress:(EMMessageCell *)aCell
 {
-    self.menuIndexPath = [self.tableView indexPathForCell:aCell];
-    CGRect rectInTableView = [self.tableView rectForRowAtIndexPath:[self.tableView indexPathForCell:aCell]];
-    CGRect rect = [self.tableView convertRect:rectInTableView toView:[self.tableView superview]];
+    _currentLongPressCell = aCell;
+    self.longPressIndexPath = [self.tableView indexPathForCell:aCell];
     NSMutableArray<UIImage*> *longPressImgArray = nil;
     NSMutableArray<NSString*> *longPressDescArray = nil;
     BOOL isCustomExtFuncItems = NO;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(longPressItemDescArray)]) {
-        longPressDescArray = [self.delegate longPressItemDescArray];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(longPressExtItemDescArray)]) {
+        longPressDescArray = [self.delegate longPressExtItemDescArray];
         isCustomExtFuncItems = YES;
     }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(longPressItemImgArray)]) {
-        longPressImgArray = [self.delegate longPressItemImgArray];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(longPressExtItemImgArray)]) {
+        longPressImgArray = [self.delegate longPressExtItemImgArray];
         isCustomExtFuncItems = YES;
     }
-    EMMoreFunctionView *longPressView = [[EMMoreFunctionView alloc]initWithMessageCell:aCell itemDescArray:longPressDescArray itemImgArray:longPressImgArray isCustom:isCustomExtFuncItems];
-    [self.view addSubview:longPressView];
-    [longPressView mas_makeConstraints:^(MASConstraintMaker *make) {
-        //make.bottom.mas_equalTo(rect.origin.y);
-        make.width.equalTo(@350);
-        make.height.equalTo(@130);
-        make.center.equalTo(self.view);
-    }];
+    self.longPressView = [[EMMoreFunctionView alloc]initWithMessageCell:aCell itemDescArray:longPressDescArray itemImgArray:longPressImgArray isCustom:isCustomExtFuncItems];
+    self.longPressView.delegate = self;
+    CGSize longPressViewsize = [self.longPressView getExtViewSize];
+    self.longPressView.layer.cornerRadius = 8;
+    UIWindow *win = [[[UIApplication sharedApplication] windows] firstObject];
+    [win addSubview:self.longPressView];
+    CGRect rect = [aCell convertRect:aCell.bounds toView:nil];
+    CGFloat maxWidth = self.view.frame.size.width;
+    CGFloat maxHeight = self.tableView.frame.size.height;
+    CGFloat xOffset = 0;
+    if (aCell.model.direction == EMMessageDirectionSend) {
+        xOffset = (maxWidth - avatarLonger - 2*componentSpacing - aCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
+        if ((xOffset + longPressViewsize.width) > (maxWidth - componentSpacing)) {
+            xOffset = maxWidth - componentSpacing - longPressViewsize.width;
+        }
+    }
+    if (aCell.model.direction == EMMessageDirectionReceive) {
+        xOffset = (avatarLonger + 2*componentSpacing + aCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
+        if (xOffset < componentSpacing) {
+            xOffset = componentSpacing;
+        }
+    }
+    CGFloat yOffset = rect.origin.y - longPressViewsize.height + componentSpacing;
+    //顶部界线
+    CGFloat topBoundary = _viewModel.chatViewHeight > 0 ? ([UIScreen mainScreen].bounds.size.height - _viewModel.chatViewHeight - self.chatBar.frame.size.height) : [self bangScreenSize];
+    if (yOffset < topBoundary) {
+        yOffset = topBoundary;
+        if ((yOffset + longPressViewsize.height) > rect.origin.y) {
+            yOffset = rect.origin.y + rect.size.height - componentSpacing;
+        }
+        if (aCell.bubbleView.frame.size.height > (maxHeight - longPressViewsize.height - componentSpacing*2)) {
+            yOffset = maxHeight / 2;
+        }
+    }
+    self.longPressView.frame = CGRectMake(xOffset, yOffset, longPressViewsize.width, longPressViewsize.height);
 }
-
+//刘海屏刘海高度
+- (CGFloat)bangScreenSize {
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        return 0;
+    }
+    CGSize size = [UIScreen mainScreen].bounds.size;
+    NSInteger notchValue = size.width / size.height * 100;
+    if (216 == notchValue || 46 == notchValue) {
+        return 34;
+    }
+    return 0;
+}
+    
 - (void)messageCellDidResend:(EMMessageModel *)aModel
 {
     if (aModel.emModel.status != EMMessageStatusFailed && aModel.emModel.status != EMMessageStatusPending) {
@@ -521,6 +580,8 @@
     if (aTap.state == UIGestureRecognizerStateEnded) {
         [self.view endEditing:YES];
         [self.chatBar clearMoreViewAndSelectedButton];
+        [self.longPressView removeFromSuperview];
+        [self resetCellLongPressStatus:_currentLongPressCell];
     }
 }
 
@@ -674,6 +735,7 @@
         _tableView.dataSource = self;
         _tableView.rowHeight = UITableViewAutomaticDimension;
         _tableView.estimatedRowHeight = 60;
+        _tableView.backgroundColor = [UIColor systemPinkColor];
         [_tableView enableRefresh:@"下拉刷新" color:UIColor.redColor];
         [_tableView.refreshControl addTarget:self action:@selector(tableViewDidTriggerHeaderRefresh) forControlEvents:UIControlEventValueChanged];
     }

@@ -26,16 +26,24 @@
 - (CGFloat)cellLonger
 {
     if (_type == ExtTypeChatBar) {
-        return 55;
+        return 60;
     }
     return 30;
+}
+- (CGFloat)xOffset
+{
+    return (self.collectionViewSize.width - self.cellLonger * self.rowCount) / (self.rowCount + 1);
+}
+- (CGFloat)yOffset
+{
+    return (self.collectionViewSize.height - (self.cellLonger + 13) * self.columCount) / (self.columCount + 1);
 }
 - (CGSize)collectionViewSize
 {
     if (_type == ExtTypeChatBar) {
         return CGSizeMake([UIScreen mainScreen].bounds.size.width, 200);
     }
-    return CGSizeMake(self.rowCount * 55 , self.columCount * 55);
+    return CGSizeMake(self.rowCount * 50 , self.columCount * 50);
 }
 - (NSInteger)rowCount
 {
@@ -70,7 +78,7 @@
 @end
 
 @implementation EMMoreFunctionView
-
+//输入扩展功能区
 - (instancetype)initWithConversation:(EMConversation *)conversation itemDescArray:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom
 {
     self = [super init];
@@ -107,7 +115,7 @@
     
     return self;
 }
-
+//长按事件
 - (instancetype)initWithMessageCell:(EMMessageCell *)messageCell itemDescArray:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom
 {
     self = [super init];
@@ -119,10 +127,10 @@
             _toolbarImgArray = itemImgArray;
         } else {
             _toolbarImgArray = [[NSMutableArray<UIImage*> alloc]init];
-            [_toolbarImgArray addObject:[UIImage imageNamed:@"photo-album"]];
-            [_toolbarImgArray addObject:[UIImage imageNamed:@"camera"]];
-            [_toolbarImgArray addObject:[UIImage imageNamed:@"video_conf"]];
-            [_toolbarImgArray addObject:[UIImage imageNamed:@"location"]];
+            [_toolbarImgArray addObject:[UIImage imageNamed:@"copy"]];
+            [_toolbarImgArray addObject:[UIImage imageNamed:@"copy"]];
+            [_toolbarImgArray addObject:[UIImage imageNamed:@"delete"]];
+            [_toolbarImgArray addObject:[UIImage imageNamed:@"recall"]];
             [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
             [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
             [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
@@ -132,7 +140,7 @@
             [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
             [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
             [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
-            _toolbarDescArray = [NSMutableArray arrayWithArray:@[@"相册",@"相机",@"音视频",@"位置",@"文件"]];
+            //_toolbarDescArray = [NSMutableArray arrayWithArray:@[@"复制",@"转发",@"删除",@"撤回",@"文件",@"文件",@"文件",@"文件",@"文件",@"文件",@"文件",@"文件",@"文件",@"文件",@"文件"]];
         }
         _itemImgCount = [_toolbarImgArray count];;
         _itemDescCount = [_toolbarDescArray count];
@@ -143,24 +151,25 @@
     return self;
 }
 
+- (CGSize)getExtViewSize
+{
+    return _model.collectionViewSize;
+}
+
 - (void)_setupUI {
     //抛出
     //self.backgroundColor = [UIColor colorWithRed:248/255.0 green:248/255.0 blue:248/255.0 alpha:1.0];
     self.backgroundColor = [UIColor systemGrayColor];
     
-    HorizontalLayout *layout = [[HorizontalLayout alloc] init];
+    HorizontalLayout *layout = [[HorizontalLayout alloc] initWithOffset:_model.xOffset yOffset:_model.yOffset];
     layout.itemSize = CGSizeMake(_model.cellLonger, _model.cellLonger + 13.f);
     layout.rowCount = _model.rowCount;
     layout.columCount = _model.columCount;
-    layout.sectionInset = UIEdgeInsetsMake(10, 0, 0, 0);
-    layout.minimumLineSpacing = [UIScreen mainScreen].bounds.size.width / 17;
-    layout.minimumInteritemSpacing = 10;
-    
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, _model.collectionViewSize.width, _model.collectionViewSize.height) collectionViewLayout:layout];
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.collectionView.dataSource = self;
     self.collectionView.showsVerticalScrollIndicator = NO;
-    self.collectionView.showsHorizontalScrollIndicator = YES;
+    self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.alwaysBounceHorizontal = YES;
     self.collectionView.pagingEnabled = YES;
     [self addSubview:self.collectionView];
@@ -202,11 +211,8 @@
 - (void)toolbarCellDidSelected:(NSInteger)tag itemDesc:(NSString*)itemDesc
 {
     //custom
-    if (_isCustom) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarMoreFunctionAction:itemDesc:extType:)]) {
-            [self.delegate chatBarMoreFunctionAction:tag itemDesc:itemDesc extType:_model.type];
-        }
-        return;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarMoreFunctionAction:itemDesc:extType:)]) {
+        [self.delegate chatBarMoreFunctionAction:tag itemDesc:itemDesc extType:_model.type];
     }
     /*
     //default
@@ -260,7 +266,7 @@
     }];
     
     self.toolLabel = [[UILabel alloc]init];
-    self.toolLabel.textColor = [UIColor colorWithRed:163/255.0 green:163/255.0 blue:163/255.0 alpha:1.0];
+    self.toolLabel.textColor = [UIColor whiteColor];
     
     [self.toolLabel setFont:[UIFont systemFontOfSize:10.0]];
     self.toolLabel.textAlignment = NSTextAlignmentCenter;

@@ -9,78 +9,61 @@
 #import "EMChatViewController+EMMsgLongPressIncident.h"
 #import "EMMsgTranspondViewController.h"
 #import <objc/runtime.h>
+#import "EMMsgTextBubbleView.h"
 
-static const void *menuIndexPathKey = &menuIndexPathKey;
-static const void *deleteMenuItemKey = &deleteMenuItemKey;
-static const void *copyMenuItemKey = &copyMenuItemKey;
-static const void *recallMenuItemKey = &recallMenuItemKey;
-static const void *transpondMenuItemKey = &transpondMenuItemKey;
+typedef NS_ENUM(NSInteger, EaseLongPressExecute) {
+    EaseLongPressExecuteCopy = 0,
+    EaseLongPressExecuteForward,
+    EaseLongPressExecuteDelete,
+    EaseLongPressExecuteRecall,
+};
+
+static const void *longPressIndexPathKey = &longPressIndexPathKey;
 
 @implementation EMChatViewController (EMMsgLongPressIncident)
 
-@dynamic menuIndexPath;
-@dynamic deleteMenuItem;
-@dynamic copyMenuItem;
-@dynamic recallMenuItem;
-@dynamic transpondMenuItem;
+@dynamic longPressIndexPath;
 
-- (NSMutableArray *)showMenuViewController:(EMMessageCell *)aCell
-                          model:(EMMessageModel *)aModel
+- (void)executeAction:(NSInteger)tag
 {
-    [self _setAction];
-    NSMutableArray *items = [[NSMutableArray alloc] init];
-    if (aModel.type == EMMessageTypeText) {
-        [items addObject:self.copyMenuItem];
-        [items addObject:self.transpondMenuItem];
-    } else if (aModel.type == EMMessageTypeLocation || aModel.type == EMMessageTypeImage || aModel.type == EMMessageTypeVideo) {
-        [items addObject:self.transpondMenuItem];
-    }
-
-    [items addObject:self.deleteMenuItem];
-    
-    if (aModel.emModel.direction == EMMessageDirectionSend) {
-        [items addObject:self.recallMenuItem];
-    }
-
-    return items;
+    if (tag == EaseLongPressExecuteCopy)
+        [self deleteLongPressAction];
+    if (tag == EaseLongPressExecuteForward)
+        [self forwardLongPressAction];
+    if (tag == EaseLongPressExecuteDelete)
+        [self deleteLongPressAction];
+    if (tag == EaseLongPressExecuteRecall)
+        [self recallLongPressAction];
 }
 
-- (void)_setAction
+- (void)resetCellLongPressStatus:(EMMessageCell *)aCell
 {
-    if (self.recallMenuItem == nil) {
-        self.recallMenuItem = [[UIMenuItem alloc]initWithTitle:@"撤回" action:@selector(recallMenuItemAction:)];
-    }
-    if (self.transpondMenuItem == nil) {
-        self.transpondMenuItem = [[UIMenuItem alloc]initWithTitle:@"转发" action:@selector(transpondMenuItemAction:)];
-    }
-    if (self.copyMenuItem == nil) {
-        self.copyMenuItem = [[UIMenuItem alloc]initWithTitle:@"复制" action:@selector(copyMenuItemAction:)];
-    }
-    if (self.deleteMenuItem == nil) {
-        self.deleteMenuItem = [[UIMenuItem alloc]initWithTitle:@"删除" action:@selector(deleteMenuItemAction:)];
+    if (aCell.model.type == EMMessageTypeText) {
+        EMMsgTextBubbleView *textBubbleView = (EMMsgTextBubbleView*)aCell.bubbleView;
+        textBubbleView.textLabel.backgroundColor = [UIColor clearColor];
     }
 }
 
-- (void)deleteMenuItemAction:(UIMenuItem *)aItem
+- (void)deleteLongPressAction
 {
-    if (self.menuIndexPath == nil || self.menuIndexPath.row < 0) {
+    if (self.longPressIndexPath == nil || self.longPressIndexPath.row < 0) {
         return;
     }
     
-    EMMessageModel *model = [self.dataArray objectAtIndex:self.menuIndexPath.row];
+    EMMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
     [self.currentConversation deleteMessageWithId:model.emModel.messageId error:nil];
     
-    NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:self.menuIndexPath.row];
-    NSMutableArray *indexPaths = [NSMutableArray arrayWithObjects:self.menuIndexPath, nil];
-    if (self.menuIndexPath.row - 1 >= 0) {
+    NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:self.longPressIndexPath.row];
+    NSMutableArray *indexPaths = [NSMutableArray arrayWithObjects:self.longPressIndexPath, nil];
+    if (self.longPressIndexPath.row - 1 >= 0) {
         id nextMessage = nil;
-        id prevMessage = [self.dataArray objectAtIndex:(self.menuIndexPath.row - 1)];
-        if (self.menuIndexPath.row + 1 < [self.dataArray count]) {
-            nextMessage = [self.dataArray objectAtIndex:(self.menuIndexPath.row + 1)];
+        id prevMessage = [self.dataArray objectAtIndex:(self.longPressIndexPath.row - 1)];
+        if (self.longPressIndexPath.row + 1 < [self.dataArray count]) {
+            nextMessage = [self.dataArray objectAtIndex:(self.longPressIndexPath.row + 1)];
         }
         if ((!nextMessage || [nextMessage isKindOfClass:[NSString class]]) && [prevMessage isKindOfClass:[NSString class]]) {
-            [indexs addIndex:self.menuIndexPath.row - 1];
-            [indexPaths addObject:[NSIndexPath indexPathForRow:(self.menuIndexPath.row - 1) inSection:0]];
+            [indexs addIndex:self.longPressIndexPath.row - 1];
+            [indexPaths addObject:[NSIndexPath indexPathForRow:(self.longPressIndexPath.row - 1) inSection:0]];
         }
     }
     
@@ -93,30 +76,30 @@ static const void *transpondMenuItemKey = &transpondMenuItemKey;
         self.msgTimelTag = -1;
     }
     
-    self.menuIndexPath = nil;
+    self.longPressIndexPath = nil;
 }
 
-- (void)copyMenuItemAction:(UIMenuItem *)aItem
+- (void)copyLongPressAction
 {
-    if (self.menuIndexPath == nil || self.menuIndexPath.row < 0) {
+    if (self.longPressIndexPath == nil || self.longPressIndexPath.row < 0) {
         return;
     }
     
-    EMMessageModel *model = [self.dataArray objectAtIndex:self.menuIndexPath.row];
+    EMMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
     EMTextMessageBody *body = (EMTextMessageBody *)model.emModel.body;
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = body.text;
     
-    self.menuIndexPath = nil;
+    self.longPressIndexPath = nil;
 }
 
-- (void)transpondMenuItemAction:(UIMenuItem *)aItem
+- (void)forwardLongPressAction
 {
-    if (self.menuIndexPath == nil || self.menuIndexPath.row < 0) {
+    if (self.longPressIndexPath == nil || self.longPressIndexPath.row < 0) {
         return;
     }
     
-    EMMessageModel *model = [self.dataArray objectAtIndex:self.menuIndexPath.row];
+    EMMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
     EMMsgTranspondViewController *controller = [[EMMsgTranspondViewController alloc] initWithModel:model];
     [self.navigationController pushViewController:controller animated:NO];
     
@@ -125,18 +108,18 @@ static const void *transpondMenuItemKey = &transpondMenuItemKey;
         [weakself _transpondMsg:aModel toUser:aUsername];
     }];
     
-    self.menuIndexPath = [[NSIndexPath alloc]initWithIndex:-1];;
+    self.longPressIndexPath = [[NSIndexPath alloc]initWithIndex:-1];;
 }
 
-- (void)recallMenuItemAction:(UIMenuItem *)aItem
+- (void)recallLongPressAction
 {
-    if (self.menuIndexPath == nil || self.menuIndexPath.row < 0) {
+    if (self.longPressIndexPath == nil || self.longPressIndexPath.row < 0) {
         return;
     }
     
-    NSIndexPath *indexPath = self.menuIndexPath;
+    NSIndexPath *indexPath = self.longPressIndexPath;
     __weak typeof(self) weakself = self;
-    EMMessageModel *model = [self.dataArray objectAtIndex:self.menuIndexPath.row];
+    EMMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
     [[EMClient sharedClient].chatManager recallMessageWithMessageId:model.emModel.messageId completion:^(EMError *aError) {
         if (aError) {
             [EMAlertController showErrorAlert:aError.errorDescription];
@@ -157,7 +140,7 @@ static const void *transpondMenuItemKey = &transpondMenuItemKey;
         }
     }];
     
-    self.menuIndexPath = nil;
+    self.longPressIndexPath = nil;
 }
 
 #pragma mark - Transpond Message
@@ -261,54 +244,13 @@ static const void *transpondMenuItemKey = &transpondMenuItemKey;
 
 #pragma mark - getter & setter
 
-- (NSIndexPath *)menuIndexPath
+- (NSIndexPath *)longPressIndexPath
 {
-    return objc_getAssociatedObject(self, menuIndexPathKey);
+    return objc_getAssociatedObject(self, longPressIndexPathKey);
 }
-
-- (void)setMenuIndexPath:(NSIndexPath *)menuIndexPath
+- (void)setLongPressIndexPath:(NSIndexPath *)longPressIndexPath
 {
-    objc_setAssociatedObject(self, menuIndexPathKey, menuIndexPath, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (UIMenuItem *)deleteMenuItem
-{
-    return objc_getAssociatedObject(self, deleteMenuItemKey);
-}
-
-- (void)setDeleteMenuItem:(UIMenuItem *)deleteMenuItem
-{
-    objc_setAssociatedObject(self, deleteMenuItemKey, deleteMenuItem, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (UIMenuItem *)copyMenuItem
-{
-    return objc_getAssociatedObject(self, copyMenuItemKey);
-}
-
-- (void)setCopyMenuItem:(UIMenuItem *)copyMenuItem
-{
-    objc_setAssociatedObject(self, copyMenuItemKey, copyMenuItem, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (UIMenuItem *)recallMenuItem
-{
-    return objc_getAssociatedObject(self, recallMenuItemKey);
-}
-
-- (void)setRecallMenuItem:(UIMenuItem *)recallMenuItem
-{
-    objc_setAssociatedObject(self, recallMenuItemKey, recallMenuItem, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (UIMenuItem *)transpondMenuItem
-{
-    return objc_getAssociatedObject(self, transpondMenuItemKey);
-}
-
-- (void)setTranspondMenuItem:(UIMenuItem *)transpondMenuItem
-{
-    objc_setAssociatedObject(self, transpondMenuItemKey, transpondMenuItem, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, longPressIndexPathKey, longPressIndexPath, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

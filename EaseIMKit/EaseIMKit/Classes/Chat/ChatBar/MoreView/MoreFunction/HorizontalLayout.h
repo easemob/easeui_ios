@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 每列item数量*/
 @property (nonatomic,assign) NSInteger columCount;
 
+- (instancetype)initWithOffset:(CGFloat)xOffset yOffset:(CGFloat)yOffset;
 
 @end
 

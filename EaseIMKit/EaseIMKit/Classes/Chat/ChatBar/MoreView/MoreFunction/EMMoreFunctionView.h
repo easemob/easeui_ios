@@ -13,11 +13,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, ExtType) {
-    ExtTypeChatBar = 1,
-    ExtTypeLongPress,
+    ExtTypeChatBar = 1, // 输入组件更多功能区
+    ExtTypeLongPress, //长按更多功能扩展区
 };
 @interface EMExtModel : NSObject
 @property (nonatomic, assign) CGFloat cellLonger;
+@property (nonatomic, assign) CGFloat xOffset;
+@property (nonatomic, assign) CGFloat yOffset;
 @property (nonatomic, assign) NSInteger itemCount;
 @property (nonatomic, assign) NSInteger rowCount;
 @property (nonatomic, assign) NSInteger columCount;
@@ -33,6 +35,8 @@ typedef NS_ENUM(NSInteger, ExtType) {
 - (instancetype)initWithConversation:(EMConversation *)conversation itemDescArray:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom;
 //消息长按ext
 - (instancetype)initWithMessageCell:(EMMessageCell *)messageCell itemDescArray:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom;
+//视图尺寸
+- (CGSize)getExtViewSize;
 @end
 
 @protocol EMMoreFunctionViewDelegate <NSObject>

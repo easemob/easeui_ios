@@ -14,7 +14,9 @@
 {
     self = [super init];
     if (self) {
-        _chatViewBgColor = kColor_chatViewBg;
+        _chatViewHeight = 500;
+        //_chatViewBgColor = kColor_chatViewBg;
+        _chatViewBgColor = [UIColor systemPinkColor];
         //_chatBarBgColor = [UIColor whiteColor];
         _chatBarBgColor = [UIColor orangeColor];
         //_msgTimeItemBgColor = kColor_LightGray;
@@ -26,6 +28,13 @@
         _chatBarStyle = EMChatBarStyleAll;
     }
     return self;
+}
+
+- (void)setChatViewHeight:(CGFloat)chatViewHeight
+{
+    if (chatViewHeight > 0) {
+        _chatViewHeight = chatViewHeight;
+    }
 }
 
 - (void)setChatViewBgColor:(UIColor *)chatViewBgColor

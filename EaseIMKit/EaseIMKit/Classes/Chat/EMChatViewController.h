@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 //聊天控制器回调
 @protocol EMChatViewControlDelegate <NSObject>
 
-@required
+@optional
 /**
  * 输入扩展区内容
  *
@@ -34,21 +34,30 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * CONTENT         长按扩展区 ITEM 描述
  */
-- (NSMutableArray<NSString*>*)longPressItemDescArray;
+- (NSMutableArray<NSString*>*)longPressExtItemDescArray;
 /**
  * 长按扩展区图标
  *
  * CONTENT         长按扩展区 ITEM 图标
  */
-- (NSMutableArray<UIImage*>*)longPressItemImgArray;
+- (NSMutableArray<UIImage*>*)longPressExtItemImgArray;
 
 /**
- * 点击项
+ * 消息长按功能区点击 item
  *
- * @param   itemTag   点击项标签从0开始
+ * @param   itemTag     点击项标签从0开始
  * @param   itemDesc   点击项描述
  */
-- (void)chatBarExtFuncActionItem:(NSInteger)itemTag itemDesc:(NSString*)itemDesc extType:(ExtType)extType;
+
+- (void)extLongPressFuncActionItem:(NSInteger)itemTag itemDesc:(NSString*)itemDesc;
+
+/**
+ * 输入组件更多功能区点击项 item
+ *
+ * @param   itemTag     点击项标签从0开始
+ * @param   itemDesc   点击项描述
+ */
+- (void)extChatBarFuncActionItem:(NSInteger)itemTag itemDesc:(NSString*)itemDesc;
 
 /**
  * 是否从服务器获取历史消息

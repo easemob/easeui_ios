@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EMViewModel : NSObject
 
+@property (nonatomic, assign) CGFloat chatViewHeight; //聊天区域高度：仅群聊可设置
 @property (nonatomic, strong) UIColor *chatViewBgColor; //聊天页背景色
 @property (nonatomic, strong) UIColor *chatBarBgColor; //输入区背景色
 @property (nonatomic, strong) UIColor *msgTimeItemBgColor; //时间线背景色
