@@ -59,23 +59,23 @@
 
 - (void)messageCellEventOperation:(EMMessageCell *)aCell
 {
-    NSLog(@"readack : %d",aCell.model.emModel.isReadAcked);
-    if (!aCell.model.emModel.isReadAcked) {
-        [[EMClient sharedClient].chatManager sendMessageReadAck:aCell.model.emModel.messageId toUser:aCell.model.emModel.conversationId completion:nil];
+    NSLog(@"readack : %d",aCell.model.message.isReadAcked);
+    if (!aCell.model.message.isReadAcked) {
+        [[EMClient sharedClient].chatManager sendMessageReadAck:aCell.model.message.messageId toUser:aCell.model.message.conversationId completion:nil];
     }
-    NSLog(@"conversationid : %@",aCell.model.emModel.conversationId);
-    NSLog(@"msgid : %@",aCell.model.emModel.messageId);
-    NSLog(@"msgext : %@",aCell.model.emModel.ext);
+    NSLog(@"conversationid : %@",aCell.model.message.conversationId);
+    NSLog(@"msgid : %@",aCell.model.message.messageId);
+    NSLog(@"msgext : %@",aCell.model.message.ext);
     NSString *callType = nil;
-    NSDictionary *dic = aCell.model.emModel.ext;
+    NSDictionary *dic = aCell.model.message.ext;
     if ([[dic objectForKey:EMCOMMUNICATE_TYPE] isEqualToString:EMCOMMUNICATE_TYPE_VOICE])
         callType = EMCOMMUNICATE_TYPE_VOICE;
     if ([[dic objectForKey:EMCOMMUNICATE_TYPE] isEqualToString:EMCOMMUNICATE_TYPE_VIDEO])
         callType = EMCOMMUNICATE_TYPE_VIDEO;
     if ([callType isEqualToString:EMCOMMUNICATE_TYPE_VOICE])
-        [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:aCell.model.emModel.conversationId, CALL_TYPE:@(EMCallTypeVoice)}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:aCell.model.message.conversationId, CALL_TYPE:@(EMCallTypeVoice)}];
     if ([callType isEqualToString:EMCOMMUNICATE_TYPE_VIDEO])
-        [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:aCell.model.emModel.conversationId,   CALL_TYPE:@(EMCallTypeVideo)}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:aCell.model.message.conversationId,   CALL_TYPE:@(EMCallTypeVideo)}];
 }
 
 @end
@@ -90,14 +90,14 @@
     __weak typeof(self.chatController) weakself = self.chatController;
     void (^downloadThumbBlock)(EMMessageModel *aModel) = ^(EMMessageModel *aModel) {
         [weakself showHint:@"获取缩略图..."];
-        [[EMClient sharedClient].chatManager downloadMessageThumbnail:aModel.emModel progress:nil completion:^(EMMessage *message, EMError *error) {
+        [[EMClient sharedClient].chatManager downloadMessageThumbnail:aModel.message progress:nil completion:^(EMMessage *message, EMError *error) {
             if (!error) {
                 [weakself.tableView reloadData];
             }
         }];
     };
     
-    EMImageMessageBody *body = (EMImageMessageBody*)aCell.model.emModel.body;
+    EMImageMessageBody *body = (EMImageMessageBody*)aCell.model.message.body;
     BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
     if (body.thumbnailDownloadStatus == EMDownloadStatusFailed) {
         if (!isCustomDownload) {
@@ -126,7 +126,7 @@
     }
     
     [self.chatController showHudInView:self.chatController.view hint:@"下载原图..."];
-    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.emModel progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
             [EMAlertController showErrorAlert:@"下载原图失败"];
@@ -156,7 +156,7 @@
 
 - (void)messageCellEventOperation:(EMMessageCell *)aCell
 {
-    EMLocationMessageBody *body = (EMLocationMessageBody *)aCell.model.emModel.body;
+    EMLocationMessageBody *body = (EMLocationMessageBody *)aCell.model.message.body;
     EMLocationViewController *controller = [[EMLocationViewController alloc] initWithLocation:CLLocationCoordinate2DMake(body.latitude, body.longitude)];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
     [self.chatController.navigationController presentViewController:navController animated:YES completion:nil];
@@ -178,7 +178,7 @@
         return;
     }
     
-    EMVoiceMessageBody *body = (EMVoiceMessageBody*)aCell.model.emModel.body;
+    EMVoiceMessageBody *body = (EMVoiceMessageBody*)aCell.model.message.body;
     if (body.downloadStatus == EMDownloadStatusDownloading) {
         [EMAlertController showInfoAlert:@"正在下载语音,稍后点击"];
         return;
@@ -194,13 +194,13 @@
             }
         }
         
-        if (!aModel.emModel.isReadAcked) {
-            [[EMClient sharedClient].chatManager sendMessageReadAck:aModel.emModel.messageId toUser:aModel.emModel.conversationId completion:nil];
+        if (!aModel.message.isReadAcked) {
+            [[EMClient sharedClient].chatManager sendMessageReadAck:aModel.message.messageId toUser:aModel.message.conversationId completion:nil];
         }
         
         aModel.isPlaying = YES;
-        if (!aModel.emModel.isRead) {
-            aModel.emModel.isRead = YES;
+        if (!aModel.message.isRead) {
+            aModel.message.isRead = YES;
         }
         [weakself.tableView reloadData];
         
@@ -220,7 +220,7 @@
     }
     
     [self.chatController showHudInView:self.chatController.view hint:@"下载语音..."];
-    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.emModel progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
             [EMAlertController showErrorAlert:@"下载语音失败"];
@@ -239,13 +239,13 @@
 
 - (void)messageCellEventOperation:(EMMessageCell *)aCell
 {
-    EMVideoMessageBody *body = (EMVideoMessageBody*)aCell.model.emModel.body;
+    EMVideoMessageBody *body = (EMVideoMessageBody*)aCell.model.message.body;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
     if (body.thumbnailDownloadStatus == EMDownloadStatusFailed || ![fileManager fileExistsAtPath:body.thumbnailLocalPath]) {
         [self.chatController showHint:@"下载缩略图"];
         if (!isCustomDownload) {
-            [[EMClient sharedClient].chatManager downloadMessageThumbnail:aCell.model.emModel progress:nil completion:nil];
+            [[EMClient sharedClient].chatManager downloadMessageThumbnail:aCell.model.message progress:nil completion:nil];
         }
     }
     
@@ -276,7 +276,7 @@
         return;
     }
     [self.chatController showHudInView:self.chatController.view hint:@"下载视频..."];
-    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.emModel progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
             [EMAlertController showErrorAlert:@"下载视频失败"];
@@ -299,7 +299,7 @@
 
 - (void)messageCellEventOperation:(EMMessageCell *)aCell
 {
-    EMFileMessageBody *body = (EMFileMessageBody *)aCell.model.emModel.body;
+    EMFileMessageBody *body = (EMFileMessageBody *)aCell.model.message.body;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     if (body.downloadStatus == EMDownloadStatusDownloading) {
@@ -321,7 +321,7 @@
         return;
     }
     
-    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.emModel progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
             [EMAlertController showErrorAlert:@"下载文件失败"];
@@ -343,7 +343,7 @@
 
 - (void)messageCellEventOperation:(EMMessageCell *)aCell
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:CALL_SELECTCONFERENCECELL object:aCell.model.emModel];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CALL_SELECTCONFERENCECELL object:aCell.model.message];
 }
 
 @end

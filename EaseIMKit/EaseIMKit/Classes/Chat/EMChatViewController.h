@@ -16,6 +16,23 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol EMChatViewControlDelegate <NSObject>
 
 @optional
+
+/* cell 回调 */
+/**
+ * 消息点击事件
+ *
+ * messageModel        当前点击的消息数据模型model
+ */
+- (void)didSelectItem:(EMMessageModel*)messageModel;
+
+/**
+ * 自定义cell
+ */
+- (UITableViewCell *)cellForItem:(UITableView *)tableView messageModel:(EMMessageModel *)messageModel;
+
+
+/*输入区回调*/
+
 /**
  * 输入扩展区内容
  *
@@ -28,6 +45,13 @@ NS_ASSUME_NONNULL_BEGIN
  * CONTENT         扩展区 ITEM 图标
  */
 - (NSMutableArray<UIImage*>*)chatBarExtFunctionItemImgArray;
+/**
+ * 输入区键盘输入变化回调
+ */
+- (void)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+
+
+/* 消息长按回调 */
 
 /**
  * 长按扩展区内容
@@ -41,6 +65,15 @@ NS_ASSUME_NONNULL_BEGIN
  * CONTENT         长按扩展区 ITEM 图标
  */
 - (NSMutableArray<UIImage*>*)longPressExtItemImgArray;
+/**
+ * 长按扩展区需要隐藏的 ITEM 列表
+ *
+ * @param   itemList       当前长按扩展区列表（仅事件名称）
+ */
+- (NSArray<NSString*>*)hideItem:(NSArray<NSString*>*)itemList;
+
+
+/* 消息长按功能区和输入扩展功能区点击事件回调 */
 
 /**
  * 消息长按功能区点击 item
@@ -48,7 +81,6 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   itemTag     点击项标签从0开始
  * @param   itemDesc   点击项描述
  */
-
 - (void)extLongPressFuncActionItem:(NSInteger)itemTag itemDesc:(NSString*)itemDesc;
 
 /**
@@ -67,7 +99,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL)isFetchHistoryMessagesFromServer;
 
+/**
+ * 自定义数据模型 model
+ */
+- (EMMessageModel *)customMsgModel:(EMMessage*)message;
+
 @end
+
 
 @interface EMChatViewController : UIViewController <UIDocumentInteractionControllerDelegate>
 
@@ -83,6 +121,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 //实例化聊天控制器
 - (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EMViewModel *)viewModel;
+//重置聊天控制器
+- (void)resetChatVCWithViewModel:(EMViewModel *)viewModel;
+
 //发送文本消息
 - (void)sendTextAction:(NSString *)aText ext:(NSDictionary * __nullable)aExt;
 //发送消息体

@@ -46,16 +46,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTabView) name:CONVERSATIONLIST_UPDATE object:nil];
 }
 
 - (void)resetViewModel:(EaseConversationViewModel *)viewModel{
     [super resetViewModel:viewModel];
 }
 
-
 - (void)dealloc
 {
-    NSLog(@"conversaitons vc dealloc");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)_setupSubviews

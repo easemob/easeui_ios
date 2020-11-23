@@ -105,7 +105,7 @@
 {
     EMMessageType type = model.type;
     if (type == EMMessageTypeImage) {
-        EMImageMessageBody *body = (EMImageMessageBody *)model.emModel.body;
+        EMImageMessageBody *body = (EMImageMessageBody *)model.message.body;
         NSString *imgPath = body.thumbnailLocalPath;
         if ([imgPath length] == 0 && model.direction == EMMessageDirectionSend) {
             imgPath = body.localPath;

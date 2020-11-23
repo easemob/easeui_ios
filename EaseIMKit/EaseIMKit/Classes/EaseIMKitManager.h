@@ -46,13 +46,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSDictionary *)requestDidReceiveConversationExt:(NSString *)conversationId requestUser:(NSString *)requestUser reason:(EaseIMKitCallBackReason)reason;
 
+- (void)conversationsUnreadCountUpdate:(NSInteger)unreadCount;//会话未读总数
+
 @end
 
 @interface EaseIMKitManager : NSObject
 
 + (instancetype)shareEaseIMKit;
++ (void)destoryShared;
 
-@property (nonatomic, weak) id<EaseIMKitManagerDelegate> delegate;
+- (void)addDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
+- (void)removeDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
 
 @end
 

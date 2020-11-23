@@ -2,7 +2,7 @@
 //  EMChatViewController.m
 //  EaseIM
 //
-//  Created by XieYajie on 2019/1/18.
+//  Update by zhangchong on 2020/2.
 //  Copyright © 2019 XieYajie. All rights reserved.
 //
 
@@ -32,6 +32,7 @@
 {
     EMViewModel *_viewModel;
     EMMessageCell *_currentLongPressCell;
+    BOOL _isReloadViewWithModel; //重新刷新会话页面
 }
 @property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
 @property (nonatomic, strong) EMMoreFunctionView *longPressView;
@@ -46,11 +47,21 @@
         _currentConversation = [EMClient.sharedClient.chatManager getConversation:conversationId type:conType createIfNotExist:NO];
         _msgQueue = dispatch_queue_create("emmessage.com", NULL);
         _viewModel = viewModel;
+        _isReloadViewWithModel = NO;
         if (!_viewModel) {
             _viewModel = [[EMViewModel alloc]init];
         }
     }
     return self;
+}
+
+- (void)resetChatVCWithViewModel:(EMViewModel *)viewModel
+{
+    _viewModel = viewModel;
+    _isReloadViewWithModel = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self refreshTableView];
+    });
 }
 
 - (void)viewDidLoad {
@@ -70,6 +81,7 @@
     [self tableViewDidTriggerHeaderRefresh];
     [self.currentConversation markAllMessagesAsRead:nil];
     //抛出消息全部已读回调
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -89,7 +101,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -196,7 +207,7 @@
     if ([obj isKindOfClass:[EMMessageModel class]]) {
         EMMessageModel *model = (EMMessageModel *)obj;
         if (model.type == EMMessageTypeExtRecall) {
-            if ([model.emModel.from isEqualToString:EMClient.sharedClient.currentUsername]) {
+            if ([model.message.from isEqualToString:EMClient.sharedClient.currentUsername]) {
                 cellString = @"您撤回一条消息";
             } else {
                 cellString = @"对方撤回一条消息";
@@ -204,7 +215,7 @@
         }
             
         if (model.type == EMMessageTypeExtNewFriend || model.type == EMMessageTypeExtAddGroup)
-            cellString = ((EMTextMessageBody *)(model.emModel.body)).text;
+            cellString = ((EMTextMessageBody *)(model.message.body)).text;
     }
     
     if ([cellString length] > 0) {
@@ -218,10 +229,14 @@
     }
     
     EMMessageModel *model = (EMMessageModel *)obj;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(cellForItem:messageModel:)]) {
+        return [self.delegate cellForItem:tableView messageModel:model];
+    }
     NSString *identifier = [EMMessageCell cellIdentifierWithDirection:model.direction type:model.type];
     EMMessageCell *cell = (EMMessageCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
     // Configure the cell...
-    if (cell == nil) {
+    if (cell == nil || _isReloadViewWithModel == YES) {
+        _isReloadViewWithModel = NO;
         cell = [[EMMessageCell alloc] initWithDirection:model.direction type:model.type viewModel:_viewModel];
         cell.delegate = self;
     }
@@ -240,6 +255,15 @@
 }
 
 #pragma mark - EMChatBarDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
+        [self.delegate textView:textView shouldChangeTextInRange:range replacementText:text];
+        return YES;
+    }
+    return NO;
+}
 
 - (void)chatBarSendMsgAction:(NSString *)text
 {
@@ -284,6 +308,18 @@
     }
 }
 
+//隐藏某些item
+- (NSArray<NSString*>*)hideItem:(NSArray<NSString*>*)itemList extType:(ExtType)extType
+{
+    //消息长按功能区
+    if (extType == ExtTypeLongPress) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(hideItem:)]) {
+            return [self.delegate hideItem:itemList];
+        }
+    }
+    return [[NSArray<NSString*> alloc]init];
+}
+
 #pragma mark - EMChatBarRecordAudioViewDelegate
 
 - (void)chatBarRecordAudioViewStopRecord:(NSString *)aPath
@@ -320,15 +356,18 @@
 
 - (void)messageCellDidSelected:(EMMessageCell *)aCell
 {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectItem:)]) {
+        [self.delegate didSelectItem:aCell.model];
+        return;
+    }
     //消息事件策略分类
     EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgCell:aCell];
     eventStrategy.chatController = self;
     [eventStrategy messageCellEventOperation:aCell];
 }
 //消息长按事件
-- (void)messageCellDidLongPress:(EMMessageCell *)aCell
+- (void)messageCellDidLongPress:(UITableViewCell *)aCell
 {
-    _currentLongPressCell = aCell;
     self.longPressIndexPath = [self.tableView indexPathForCell:aCell];
     NSMutableArray<UIImage*> *longPressImgArray = nil;
     NSMutableArray<NSString*> *longPressDescArray = nil;
@@ -341,7 +380,7 @@
         longPressImgArray = [self.delegate longPressExtItemImgArray];
         isCustomExtFuncItems = YES;
     }
-    self.longPressView = [[EMMoreFunctionView alloc]initWithMessageCell:aCell itemDescArray:longPressDescArray itemImgArray:longPressImgArray isCustom:isCustomExtFuncItems];
+    self.longPressView = [[EMMoreFunctionView alloc]initWithData:longPressDescArray itemImgArray:longPressImgArray isCustom:isCustomExtFuncItems];
     self.longPressView.delegate = self;
     CGSize longPressViewsize = [self.longPressView getExtViewSize];
     self.longPressView.layer.cornerRadius = 8;
@@ -351,28 +390,41 @@
     CGFloat maxWidth = self.view.frame.size.width;
     CGFloat maxHeight = self.tableView.frame.size.height;
     CGFloat xOffset = 0;
-    if (aCell.model.direction == EMMessageDirectionSend) {
-        xOffset = (maxWidth - avatarLonger - 2*componentSpacing - aCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
-        if ((xOffset + longPressViewsize.width) > (maxWidth - componentSpacing)) {
-            xOffset = maxWidth - componentSpacing - longPressViewsize.width;
+    if ([aCell isKindOfClass:[EMMessageCell class]]) {
+        _currentLongPressCell = (EMMessageCell*)aCell;
+        if (_currentLongPressCell.model.direction == EMMessageDirectionSend) {
+            xOffset = (maxWidth - _viewModel.avatarLength - 2*componentSpacing - _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
+            if ((xOffset + longPressViewsize.width) > (maxWidth - componentSpacing)) {
+                xOffset = maxWidth - componentSpacing - longPressViewsize.width;
+            }
         }
-    }
-    if (aCell.model.direction == EMMessageDirectionReceive) {
-        xOffset = (avatarLonger + 2*componentSpacing + aCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
-        if (xOffset < componentSpacing) {
-            xOffset = componentSpacing;
+        if (_currentLongPressCell.model.direction == EMMessageDirectionReceive) {
+            xOffset = (_viewModel.avatarLength + 2*componentSpacing + _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
+            if (xOffset < componentSpacing) {
+                xOffset = componentSpacing;
+            }
         }
+    } else {
+        xOffset = maxWidth / 2 - longPressViewsize.width / 2;
     }
-    CGFloat yOffset = rect.origin.y - longPressViewsize.height + componentSpacing;
+    
+    CGFloat yOffset = rect.origin.y - longPressViewsize.height - 2;
     //顶部界线
     CGFloat topBoundary = _viewModel.chatViewHeight > 0 ? ([UIScreen mainScreen].bounds.size.height - _viewModel.chatViewHeight - self.chatBar.frame.size.height) : [self bangScreenSize];
     if (yOffset < topBoundary) {
         yOffset = topBoundary;
         if ((yOffset + longPressViewsize.height) > rect.origin.y) {
-            yOffset = rect.origin.y + rect.size.height - componentSpacing;
+            yOffset = rect.origin.y + rect.size.height + 2;
         }
-        if (aCell.bubbleView.frame.size.height > (maxHeight - longPressViewsize.height - componentSpacing*2)) {
-            yOffset = maxHeight / 2;
+        if ([aCell isKindOfClass:[EMMessageCell class]]) {
+            EMMessageCell *cell = (EMMessageCell *)aCell;
+            if (cell.bubbleView.frame.size.height > (maxHeight - longPressViewsize.height - 4)) {
+                yOffset = maxHeight / 2;
+            }
+        } else {
+            if (aCell.frame.size.height > (maxHeight - longPressViewsize.height - 4)) {
+                yOffset = maxHeight / 2;
+            }
         }
     }
     self.longPressView.frame = CGRectMake(xOffset, yOffset, longPressViewsize.width, longPressViewsize.height);
@@ -392,12 +444,12 @@
     
 - (void)messageCellDidResend:(EMMessageModel *)aModel
 {
-    if (aModel.emModel.status != EMMessageStatusFailed && aModel.emModel.status != EMMessageStatusPending) {
+    if (aModel.message.status != EMMessageStatusFailed && aModel.message.status != EMMessageStatusPending) {
         return;
     }
     
     __weak typeof(self) weakself = self;
-    [[[EMClient sharedClient] chatManager] resendMessage:aModel.emModel progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[[EMClient sharedClient] chatManager] resendMessage:aModel.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself.tableView reloadData];
     }];
     
@@ -448,7 +500,7 @@
         [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([obj isKindOfClass:[EMMessageModel class]]) {
                 EMMessageModel *model = (EMMessageModel *)obj;
-                if ([model.emModel.messageId isEqualToString:msg.messageId]) {
+                if ([model.message.messageId isEqualToString:msg.messageId]) {
                     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:@"对方撤回一条消息"];
                     NSString *to = [[EMClient sharedClient] currentUsername];
                     NSString *from = self.currentConversation.conversationId;
@@ -503,7 +555,7 @@
         [self.dataArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if ([obj isKindOfClass:[EMMessageModel class]]) {
                 EMMessageModel *model = (EMMessageModel *)obj;
-                if ([model.emModel.messageId isEqualToString:aMessage.messageId]) {
+                if ([model.message.messageId isEqualToString:aMessage.messageId]) {
                     reloadModel = model;
                     index = idx;
                     *stop = YES;
@@ -629,9 +681,16 @@
             [formated addObject:timeStr];
             self.msgTimelTag = msg.timestamp;
         }
-        
-        EMMessageModel *model = [[EMMessageModel alloc] initWithEMMessage:msg];
-
+        EMMessageModel *model = nil;
+        //自定义 model
+        if (self.delegate && [self.delegate respondsToSelector:@selector(customMsgModel:)]) {
+            model = [self.delegate customMsgModel:msg];
+        } else {
+            model = [[EMMessageModel alloc] initWithEMMessage:msg];
+        }
+        if (!model) {
+            model = [[EMMessageModel alloc]init];
+        }
         [formated addObject:model];
     }
     

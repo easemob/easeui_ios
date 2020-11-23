@@ -6,18 +6,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "EaseCommonEnum.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-/*!
- *  头像风格
- */
-typedef enum {
-    Corner = 0,     //圆角
-    Rectangular,    //矩形
-    Circular,       //圆形
-} EaseAvatarStyle;
-
 
 @interface EaseBaseTableViewModel : NSObject
 

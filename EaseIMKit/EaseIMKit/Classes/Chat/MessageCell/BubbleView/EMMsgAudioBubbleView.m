@@ -99,7 +99,7 @@
 {
     EMMessageType type = model.type;
     if (type == EMMessageTypeVoice) {
-        EMVoiceMessageBody *body = (EMVoiceMessageBody *)model.emModel.body;
+        EMVoiceMessageBody *body = (EMVoiceMessageBody *)model.message.body;
         self.textLabel.text = [NSString stringWithFormat:@"%d\"",(int)body.duration];
         if (model.isPlaying) {
             [self.imgView startAnimating];

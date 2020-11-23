@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, ExtType) {
 //输入区ext
 - (instancetype)initWithConversation:(EMConversation *)conversation itemDescArray:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom;
 //消息长按ext
-- (instancetype)initWithMessageCell:(EMMessageCell *)messageCell itemDescArray:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom;
+- (instancetype)initWithData:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom;
 //视图尺寸
 - (CGSize)getExtViewSize;
 @end
@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, ExtType) {
 @optional
 - (void)chatBarMoreFunctionReadReceipt;//群组阅读回执
 - (void)chatBarMoreFunctionAction:(NSInteger)componentTag itemDesc:(NSString*)itemDesc extType:(ExtType)extType;
+- (NSArray<NSString*>*)hideItem:(NSArray<NSString*>*)itemList extType:(ExtType)extType;//可选隐藏某些弹出项
 @end
 
 

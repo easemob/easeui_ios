@@ -35,7 +35,7 @@
 {
     EMMessageType type = model.type;
     if (type == EMMessageTypeExtGif) {
-        NSString *name = [(EMTextMessageBody *)model.emModel.body text];
+        NSString *name = [(EMTextMessageBody *)model.message.body text];
         EMEmoticonGroup *group = [EMEmoticonGroup getGifGroup];
         for (EMEmoticonModel *model in group.dataArray) {
             if ([model.name isEqualToString:name]) {

@@ -44,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+
 - (BOOL)inputView:(EMTextView *)aInputView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 
 - (void)inputViewDidChange:(EMTextView *)aInputView;

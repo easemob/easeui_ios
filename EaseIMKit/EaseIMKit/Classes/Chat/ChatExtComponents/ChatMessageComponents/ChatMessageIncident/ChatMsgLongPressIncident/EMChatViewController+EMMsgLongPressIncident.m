@@ -51,7 +51,7 @@ static const void *longPressIndexPathKey = &longPressIndexPathKey;
     }
     
     EMMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
-    [self.currentConversation deleteMessageWithId:model.emModel.messageId error:nil];
+    [self.currentConversation deleteMessageWithId:model.message.messageId error:nil];
     
     NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:self.longPressIndexPath.row];
     NSMutableArray *indexPaths = [NSMutableArray arrayWithObjects:self.longPressIndexPath, nil];
@@ -86,7 +86,7 @@ static const void *longPressIndexPathKey = &longPressIndexPathKey;
     }
     
     EMMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
-    EMTextMessageBody *body = (EMTextMessageBody *)model.emModel.body;
+    EMTextMessageBody *body = (EMTextMessageBody *)model.message.body;
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = body.text;
     
@@ -120,7 +120,7 @@ static const void *longPressIndexPathKey = &longPressIndexPathKey;
     NSIndexPath *indexPath = self.longPressIndexPath;
     __weak typeof(self) weakself = self;
     EMMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
-    [[EMClient sharedClient].chatManager recallMessageWithMessageId:model.emModel.messageId completion:^(EMError *aError) {
+    [[EMClient sharedClient].chatManager recallMessageWithMessageId:model.message.messageId completion:^(EMError *aError) {
         if (aError) {
             [EMAlertController showErrorAlert:aError.errorDescription];
         } else {
@@ -130,8 +130,8 @@ static const void *longPressIndexPathKey = &longPressIndexPathKey;
             EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:@{MSG_EXT_RECALL:@(YES)}];
             message.chatType = (EMChatType)self.currentConversation.type;
             message.isRead = YES;
-            message.timestamp = model.emModel.timestamp;
-            message.localTime = model.emModel.localTime;
+            message.timestamp = model.message.timestamp;
+            message.localTime = model.message.localTime;
             [weakself.currentConversation insertMessage:message error:nil];
             
             EMMessageModel *model = [[EMMessageModel alloc] initWithEMMessage:message];
@@ -233,13 +233,13 @@ static const void *longPressIndexPathKey = &longPressIndexPathKey;
 - (void)_transpondMsg:(EMMessageModel *)aModel
                toUser:(NSString *)aUsername
 {
-    EMMessageBodyType type = aModel.emModel.body.type;
+    EMMessageBodyType type = aModel.message.body.type;
     if (type == EMMessageBodyTypeText || type == EMMessageBodyTypeLocation)
-        [self _forwardMsgWithBody:aModel.emModel.body to:aUsername ext:aModel.emModel.ext completion:nil];
+        [self _forwardMsgWithBody:aModel.message.body to:aUsername ext:aModel.message.ext completion:nil];
     if (type == EMMessageBodyTypeImage)
-        [self _forwardImageMsg:aModel.emModel toUser:aUsername];
+        [self _forwardImageMsg:aModel.message toUser:aUsername];
     if (type == EMMessageBodyTypeVideo)
-        [self _forwardVideoMsg:aModel.emModel toUser:aUsername];
+        [self _forwardVideoMsg:aModel.message toUser:aUsername];
 }
 
 #pragma mark - getter & setter

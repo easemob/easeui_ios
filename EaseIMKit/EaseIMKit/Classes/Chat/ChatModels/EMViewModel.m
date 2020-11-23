@@ -26,6 +26,9 @@
         _sendBubbleBgPicture = [UIImage imageNamed:@"msg_bg_send"];
         _contentFontSize = 18.f;
         _chatBarStyle = EMChatBarStyleAll;
+        _avatarStyle = Circular;
+        _avatarCornerRadius = 0;
+        _avatarLength = 40;
     }
     return self;
 }
@@ -79,7 +82,7 @@
     }
 }
 
-- (void)setContentFontSize:(float)contentFontSize
+- (void)setContentFontSize:(CGFloat)contentFontSize
 {
     if (contentFontSize > 0) {
         _contentFontSize = contentFontSize;
@@ -90,6 +93,27 @@
 {
     if (chatBarStyle >= 1 && chatBarStyle <= 5) {
         _chatBarStyle = chatBarStyle;
+    }
+}
+
+- (void)setAvatarStyle:(EaseAvatarStyle)avatarStyle
+{
+    if (avatarStyle >= 1 && avatarStyle <= 3) {
+        _avatarStyle = avatarStyle;
+    }
+}
+
+- (void)setAvatarCornerRadius:(CGFloat)avatarCornerRadius
+{
+    if (avatarCornerRadius > 0) {
+        _avatarCornerRadius = avatarCornerRadius;
+    }
+}
+
+- (void)setAvatarLength:(CGFloat)avatarLength
+{
+    if (avatarLength > 0) {
+        _avatarLength = avatarLength;
     }
 }
 

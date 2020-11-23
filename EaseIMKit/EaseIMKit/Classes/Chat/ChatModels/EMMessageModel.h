@@ -31,13 +31,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *readReceiptCount;
 
-@property (nonatomic, strong) EMMessage *emModel;
+@property (nonatomic, strong) EMMessage *message;
 
 @property (nonatomic) EMMessageDirection direction;
 
 @property (nonatomic) EMMessageType type;
-
-//@property (nonatomic) BOOL isReadReceipt;
 
 @property (nonatomic) BOOL isPlaying;
 

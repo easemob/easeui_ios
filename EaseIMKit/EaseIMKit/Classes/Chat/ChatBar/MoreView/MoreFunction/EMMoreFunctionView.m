@@ -72,7 +72,6 @@
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) EMConversation *conversation;
-@property (nonatomic, strong) EMMessageCell *messageCell;
 @property (nonatomic, strong) EMExtModel *model;
 
 @end
@@ -116,12 +115,11 @@
     return self;
 }
 //长按事件
-- (instancetype)initWithMessageCell:(EMMessageCell *)messageCell itemDescArray:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom
+- (instancetype)initWithData:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom
 {
     self = [super init];
     if(self){
         _isCustom = isCustom;
-        _messageCell = messageCell;
         if (_isCustom) {
             _toolbarDescArray = itemDescArray;
             _toolbarImgArray = itemImgArray;
@@ -136,11 +134,17 @@
             [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
             [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
             [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
-            [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
-            [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
-            [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
-            [_toolbarImgArray addObject:[UIImage imageNamed:@"icloudFile"]];
-            //_toolbarDescArray = [NSMutableArray arrayWithArray:@[@"复制",@"转发",@"删除",@"撤回",@"文件",@"文件",@"文件",@"文件",@"文件",@"文件",@"文件",@"文件",@"文件",@"文件",@"文件"]];
+            _toolbarDescArray = [NSMutableArray arrayWithArray:@[@"复制",@"转发",@"删除",@"撤回",@"文件",@"文件",@"文件",@"文件"]];
+        }
+        if (self.delegate && [self.delegate respondsToSelector:@selector(hideItem:extType:)]) {
+            NSArray<NSString*>* hideItems = [self.delegate hideItem:_toolbarDescArray extType:ExtTypeLongPress];
+            for (NSString *item in hideItems) {
+                NSInteger index = [_toolbarDescArray indexOfObject:item];
+                if (index > -1) {
+                    [_toolbarDescArray removeObject:item];
+                    [_toolbarImgArray removeObjectAtIndex:index];
+                }
+            }
         }
         _itemImgCount = [_toolbarImgArray count];;
         _itemDescCount = [_toolbarDescArray count];
