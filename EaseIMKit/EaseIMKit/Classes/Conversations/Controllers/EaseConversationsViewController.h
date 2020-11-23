@@ -8,7 +8,6 @@
 #import <UIKit/UIKit.h>
 #import <Hyphenate/Hyphenate.h>
 #import "EaseBaseTableViewController.h"
-#import "EaseConversationModelDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,11 +26,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)easeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 
+- (id<EaseUserDelegate>)easeUserDelegateAtConversationId:(NSString *)conversationId
+                                        conversationType:(EMConversationType)type;
+
 @end
 
 
 @interface EaseConversationsViewController : EaseBaseTableViewController
-@property (nonatomic, strong) NSMutableArray <EaseConversationModelDelegate> * dataAry;
+@property (nonatomic, strong) NSMutableArray *dataAry;
 @property (nonatomic) id <EaseConversationsViewControllerDelegate> delegate;
 @end
 

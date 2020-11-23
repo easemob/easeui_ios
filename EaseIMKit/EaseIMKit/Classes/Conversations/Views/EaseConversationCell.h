@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "EaseConversationViewModel.h"
-#import "EaseConversationModelDelegate.h"
+#import "EaseConversationModel.h"
 #import "EaseBadgeView.h"
 
 @interface EaseConversationCell : UITableViewCell
@@ -19,9 +19,10 @@
 @property (nonatomic, strong, readonly) UILabel *detailLabel;
 @property (nonatomic, strong, readonly) UILabel *timeLabel;
 @property (nonatomic, strong, readonly) EaseBadgeView *badgeLabel;
-@property (nonatomic, assign) id<EaseConversationModelDelegate> model;
+@property (nonatomic, assign) EaseConversationModel *model;
 
-- (instancetype)initWithConversationViewModel:(EaseConversationViewModel *)viewModel;
++ (EaseConversationCell *)tableView:(UITableView *)tableView cellViewModel:(EaseConversationViewModel *)viewModel;
+
 - (void)resetViewModel:(EaseConversationViewModel *)aViewModel;
 
 

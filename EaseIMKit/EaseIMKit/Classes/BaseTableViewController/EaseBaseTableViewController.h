@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "EaseBaseTableViewModel.h"
-#import "EaseItemDelegate.h"
+#import "EaseUserDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 主动刷新
 - (void)beginRefresh;
-// 刷新时执行
+// 下拉刷新时执行
 - (void)refreshTabView;
 // 关闭刷新
 - (void)endRefresh;
