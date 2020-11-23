@@ -19,10 +19,21 @@
 
 @implementation EaseConversationCell
 
-- (instancetype)initWithConversationViewModel:(EaseConversationViewModel*)viewModel
++ (EaseConversationCell *)tableView:(UITableView *)tableView cellViewModel:(EaseConversationViewModel *)viewModel {
+    static NSString *cellId = @"EMConversationCell";
+    EaseConversationCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (!cell) {
+        cell = [[EaseConversationCell alloc] initWithConversationsViewModel:viewModel identifier: cellId];
+    }
+    
+    return cell;
+}
+
+- (instancetype)initWithConversationsViewModel:(EaseConversationViewModel*)viewModel
+                                   identifier:(NSString *)identifier
 {
 
-    if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EMConversationCell"]){
+    if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier]){
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         _viewModel = viewModel;
         [self _addSubViews];
@@ -40,15 +51,7 @@
     _timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _detailLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _badgeLabel = [[EaseBadgeView alloc] initWithFrame:CGRectZero];
-    
-    _avatarView.backgroundColor = [UIColor clearColor];
-    _nameLabel.backgroundColor = [UIColor clearColor];
-    _timeLabel.backgroundColor = [UIColor clearColor];
-    _detailLabel.backgroundColor = [UIColor clearColor];
-    _badgeLabel.backgroundColor = [UIColor clearColor];
-    
-    _nameLabel.lineBreakMode = NSLineBreakByCharWrapping;
-    _detailLabel.lineBreakMode = NSLineBreakByCharWrapping;
+
 
     [self.contentView addSubview:_avatarView];
     [self.contentView addSubview:_nameLabel];
@@ -75,15 +78,21 @@
         _avatarView.clipsToBounds = NO;
     }
     
+    _avatarView.backgroundColor = [UIColor clearColor];
+    
     _nameLabel.font = _viewModel.nameLabelFont;
     _nameLabel.textColor = _viewModel.nameLabelColor;
+    _nameLabel.lineBreakMode = NSLineBreakByCharWrapping;
+    _nameLabel.backgroundColor = [UIColor clearColor];
     
     _detailLabel.font = _viewModel.detailLabelFont;
     _detailLabel.textColor = _viewModel.detailLabelColor;
+    _detailLabel.lineBreakMode = NSLineBreakByCharWrapping;
+    _detailLabel.backgroundColor = [UIColor clearColor];
     
     _timeLabel.font = _viewModel.timeLabelFont;
     _timeLabel.textColor = _viewModel.timeLabelColor;
-    
+    _timeLabel.backgroundColor = [UIColor clearColor];
     [_timeLabel setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
     
     
@@ -147,7 +156,7 @@
     }
 }
 
-- (void)setModel:(id<EaseConversationModelDelegate>)model
+- (void)setModel:(EaseConversationModel *)model
 {
     _model = model;
     [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL]

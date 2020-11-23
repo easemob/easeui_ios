@@ -16,11 +16,14 @@
 @interface EaseContactsViewController () <EMContactManagerDelegate,UITableViewDelegate,UITableViewDataSource>
 {
     EaseContactsViewModel *_viewModel;
+    UIView *_sectionView;
+    UILabel *_sectionTitleLabel;
 }
 
 
 @property (nonatomic, strong) NSMutableArray *letterTitles;
 @property (nonatomic, strong) NSMutableArray *contactLists;
+
 
 @end
 
@@ -44,6 +47,12 @@
 
 
 - (void)refreshTabView {
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(refreshTabView)]) {
+        [self.delegate refreshTabView];
+        return;
+    }
+    
     __block typeof(self) weakSelf = self;
     [EMClient.sharedClient.contactManager getContactsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
         if (!aError) {
@@ -71,19 +80,12 @@
         return [self.delegate easeTableView:tableView cellForRowAtContact: easeContactModel];
     }
     
-    
     else {
         EaseContactLetterModel *model = self.contactLists[indexPath.section];
         easeContactModel = model.contacts[indexPath.row];
     }
     
-    static NSString *cellId = @"ContactCell";
-    EaseContactCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!cell) {
-        cell = [[EaseContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-    }
-    
-    
+    EaseContactCell *cell = [EaseContactCell tableView:tableView cellViewModel:_viewModel];
     cell.model = easeContactModel;
     
     return cell;
@@ -91,8 +93,20 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
-
-    return index;
+    
+    int letterIndex = -1;
+    for (int i = 0 ; i < self.contactLists.count; i++) {
+        EaseContactLetterModel *letterModel = self.contactLists[i];
+        if ([letterModel.contactLetter isEqualToString:title]) {
+            letterIndex = i;
+            UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+            [generator prepare];
+            [generator impactOccurred];
+            break;
+        }
+    }
+    
+    return letterIndex;
 }
 
 - (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView {
@@ -100,20 +114,28 @@
     return self.letterTitles;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-
-    if (section == 0 && self.customHeaderItems) {
-        return nil;
-    }
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
+    UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, _viewModel.sectionTitleLabelHeight + _viewModel.sectionTitleEdgeInsets.bottom + _viewModel.sectionTitleEdgeInsets.top)];
+    sectionView.backgroundColor = _viewModel.sectionTitleBgColor;
+    UILabel* sectionTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(_viewModel.sectionTitleEdgeInsets.left, _viewModel.sectionTitleEdgeInsets.top, self.tableView.bounds.size.width - _viewModel.sectionTitleEdgeInsets.left - _viewModel.sectionTitleEdgeInsets.right, _viewModel.sectionTitleLabelHeight)];
+    sectionTitleLabel.font = _viewModel.sectionTitleFont;
+    sectionTitleLabel.textColor = _viewModel.sectionTitleColor;
+    sectionTitleLabel.textAlignment = NSTextAlignmentLeft;
+    [sectionView addSubview:sectionTitleLabel];
+
     EaseContactLetterModel *model = self.contactLists[section];
-    
-    return model.contactLetter;
+    sectionTitleLabel.text = model.contactLetter;
+    return sectionView;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
-    
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section {
+    if (self.customHeaderItems.count > 0 && section == 0) {
+        return 0;;
+    }
+    return _viewModel.sectionTitleLabelHeight + _viewModel.sectionTitleEdgeInsets.bottom + _viewModel.sectionTitleEdgeInsets.top;
 }
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 
@@ -181,9 +203,19 @@
     
     self.letterTitles = letters;
     self.contactLists = contactLists;
+    [self _updateBackView];
+}
+
+- (void)_updateBackView {
+    if (self.contactLists.count == 0) {
+        [self.tableView.backgroundView setHidden:NO];
+    }else {
+        [self.tableView.backgroundView setHidden:YES];
+    }
 }
 
 #pragma mark - getter
+
 - (NSMutableArray *)letterTitles {
     if (!_letterTitles) {
         _letterTitles = [NSMutableArray array];
@@ -199,6 +231,7 @@
     
     return _contactLists;
 }
+
 
 @end
 

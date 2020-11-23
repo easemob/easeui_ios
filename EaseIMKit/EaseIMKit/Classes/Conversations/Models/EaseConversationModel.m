@@ -25,10 +25,6 @@
 
 @implementation EaseConversationModel
 
-@synthesize draft;
-@synthesize defaultAvatar;
-@synthesize avatarURL;
-@synthesize lastestUpdateTime;
 
 - (instancetype)initWithConversation:(EMConversation *)conversation
 {
@@ -40,11 +36,6 @@
     
     return self;
 }
-
-- (UIImage *)defaultAvatar {
-    return [UIImage imageNamed:@"defaultAvatar"];
-}
-
 
 - (NSString*)itemId
 {
@@ -64,14 +55,6 @@
     return [_conversation isTop];
 }
 
-- (void)setShowName:(NSString *)showName {
-    [_conversation setShowName:showName];
-}
-
-- (NSString *)showName
-{
-    return [_conversation showName];
-}
 
 - (void)setDraft:(NSString *)draft {
     [_conversation setDraft:draft];
@@ -160,6 +143,40 @@
 
 - (long long)lastestUpdateTime {
     return _conversation.latestUpdateTime;
+}
+
+- (UIImage *)defaultAvatar {
+    if (_userDelegate && [_userDelegate respondsToSelector:@selector(defaultAvatar)]) {
+        return _userDelegate.defaultAvatar;
+    }
+    
+    return [UIImage imageNamed:@"defaultAvatar"];
+}
+
+- (NSString *)avatarURL {
+    if (_userDelegate && [_userDelegate respondsToSelector:@selector(avatarURL)]) {
+        return _userDelegate.avatarURL ?: @"";
+    }
+    
+    return nil;
+}
+
+- (NSString *)showName {
+    if (_userDelegate && [_userDelegate respondsToSelector:@selector(showName)]) {
+        return _userDelegate.showName;
+    }
+    
+    if (self.type == EMConversationTypeGroupChat) {
+        NSString *str = [EMGroup groupWithId:_conversation.conversationId].groupName;
+        return str.length != 0 ? str : _conversation.showName;
+    }
+    
+    if (self.type == EMConversationTypeChatRoom) {
+        NSString *str = [EMChatroom chatroomWithId:_conversation.conversationId].subject;
+        return str.length != 0 ? str : _conversation.showName;
+    }
+    
+    return _conversation.showName;
 }
 
 @end
