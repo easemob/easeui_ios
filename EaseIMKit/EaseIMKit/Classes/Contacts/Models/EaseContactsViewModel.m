@@ -10,7 +10,7 @@
 @implementation EaseContactsViewModel
 - (instancetype)init {
     if (self = [super init]) {
-        _letterIndex = YES;
+        
     }
     return self;
 }

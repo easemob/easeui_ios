@@ -18,6 +18,10 @@
     return EaseContactItemType_Custom;
 }
 
+- (UIImage *)defaultAvatar {
+    return [UIImage imageNamed:@"defaultAvatar.png"];
+}
+
 
 
 

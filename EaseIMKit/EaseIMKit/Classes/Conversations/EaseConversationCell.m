@@ -156,7 +156,7 @@
     self.nameLabel.text = _model.showName;
     
     self.detailLabel.attributedText = _model.showInfo;
-    self.timeLabel.text = [NSString stringWithFormat:@"%lld ",_model.lastestUpdateTime]; //@"09:26";//[EMDateHelper formattedTimeFromTimeInterval:_model.lastestUpdateTime];
+    self.timeLabel.text = @"09:26"; //[EMDateHelper formattedTimeFromTimeInterval:_model.lastestUpdateTime];
     self.badgeLabel.badge = _model.unreadMessagesCount;
 }
 

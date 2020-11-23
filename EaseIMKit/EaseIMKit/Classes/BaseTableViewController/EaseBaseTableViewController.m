@@ -49,7 +49,7 @@
     }
     
     [self.tableView setSeparatorInset:_viewModel.cellSeparatorInset];
-    [self.tableView setSeparatorInset:_viewModel.cellSeparatorInset];
+    [self.tableView setSeparatorColor:_viewModel.cellSeparatorColor];
 }
 
 

@@ -13,13 +13,20 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol EaseConversationsViewControllerDelegate <EaseBaseViewControllerDelegate>
+
 @optional
-- (void)easeTableView:(UITableView *)tableView didSelectItem:(__kindof id<EaseConversationModelDelegate>)item;
-- (CGFloat)easeTableView:(UITableView *)tableView heightForItem:(id<EaseConversationModelDelegate>)item;
-- (__kindof EaseConversationCell *)easeTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
-- (NSArray<UIContextualAction *> *)tableView:(UITableView *)tableView
-       trailingSwipeActionsForRowAtIndexPath:(NSIndexPath *)indexPath
-                                     actions:(NSArray<UIContextualAction *> *)actions;
+- (NSInteger)easeNumberOfSectionsInTableView:(UITableView *)tableView;
+
+- (UITableViewCell *)easeTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
+
+- (NSInteger)easeTableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
+
+- (NSArray<UIContextualAction *> *)easeTableView:(UITableView *)tableView
+           trailingSwipeActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+                                         actions:(NSArray<UIContextualAction *> *)actions;
+
+- (void)easeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+
 @end
 
 

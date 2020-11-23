@@ -28,9 +28,8 @@
 
 @end
 
-@implementation EaseConversationsViewController {
-    id<EaseConversationsViewControllerDelegate> _delegate;
-}
+@implementation EaseConversationsViewController
+
 @synthesize viewModel = _viewModel;
 
 - (instancetype)initWithModel:(EaseConversationViewModel *)aModel{
@@ -49,7 +48,6 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-
 }
 
 - (void)dealloc
@@ -62,25 +60,36 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
+        return [self.delegate easeNumberOfSectionsInTableView:tableView];
+    }
+    
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:numberOfRowsInSection:)]) {
+        return [self.delegate easeTableView:tableView numberOfRowsInSection:section];
+    }
+    
     return [self.dataAry count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id<EaseConversationModelDelegate> model = self.dataAry[indexPath.row];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:cellForRowAtIndexPath:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:cellForRowAtIndexPath:)]) {
         return [self.delegate easeTableView:tableView cellForRowAtIndexPath:indexPath];
     }
+    
     
     EaseConversationCell *cell = (EaseConversationCell *)[tableView dequeueReusableCellWithIdentifier:@"EaseConversationCell"];
     if (!cell) {
         cell = [[EaseConversationCell alloc] initWithConversationViewModel:(EaseConversationViewModel *)_viewModel];
     }
+    
+    EaseConversationModel *model = self.dataAry[indexPath.row];
     
     cell.model = model;
     if (model.isTop) {
@@ -120,8 +129,8 @@
     }];
     
     NSArray *swipeActions = @[deleteAction, topAction];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:trailingSwipeActionsForRowAtIndexPath:actions:)]) {
-        swipeActions = [self.delegate tableView:tableView trailingSwipeActionsForRowAtIndexPath:indexPath actions:swipeActions];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:trailingSwipeActionsForRowAtIndexPath:actions:)]) {
+        swipeActions = [self.delegate easeTableView:tableView trailingSwipeActionsForRowAtIndexPath:indexPath actions:swipeActions];
     }
 
     UISwipeActionsConfiguration *actions = [UISwipeActionsConfiguration configurationWithActions:swipeActions];
@@ -129,6 +138,11 @@
     return actions;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+        return [self.delegate easeTableView:tableView didSelectRowAtIndexPath:indexPath];
+    }
+}
 
 
 #pragma mark - EMChatManagerDelegate

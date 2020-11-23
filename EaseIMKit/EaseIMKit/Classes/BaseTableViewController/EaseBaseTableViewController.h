@@ -18,7 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface EaseBaseTableViewController : UIViewController
+
 @property (nonatomic, strong) UITableView *tableView;
+
 @property (nonatomic, strong) __kindof EaseBaseTableViewModel *viewModel;
 
 - (instancetype)initWithModel:(__kindof EaseBaseTableViewModel *)aModel;
