@@ -15,6 +15,8 @@
 
 @interface EaseConversationsViewController ()
 <
+    UITableViewDelegate,
+    UITableViewDataSource,
     EMContactManagerDelegate,
     EMChatManagerDelegate,
     EMGroupManagerDelegate
@@ -26,19 +28,17 @@
 
 @end
 
-@implementation EaseConversationsViewController {
-    id<EaseConversationsViewControllerDelegate> _easeTableViewDelegate;
-}
-@synthesize viewModel = _viewModel;
-@dynamic easeTableViewDelegate;
+@implementation EaseConversationsViewController
 
-- (instancetype)initWithModel:(EaseBaseTableViewModel *)aModel{
+@synthesize viewModel = _viewModel;
+
+- (instancetype)initWithModel:(EaseConversationViewModel *)aModel{
     if (self = [super initWithModel:aModel]) {
+        _viewModel = aModel;
         _loadDataQueue = dispatch_queue_create("com.easemob.easeui.conversations.queue", 0);
         [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
         [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
         [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
-        [self _setupSubviews];
     }
     
     return self;
@@ -46,66 +46,57 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
 }
-
-- (void)resetViewModel:(EaseConversationViewModel *)viewModel{
-    [super resetViewModel:viewModel];
-}
-
 
 - (void)dealloc
 {
     NSLog(@"conversaitons vc dealloc");
 }
 
-- (void)_setupSubviews
-{
-    self.view.backgroundColor = _viewModel.viewBgColor;
-    EaseConversationViewModel *conversationModel = nil;
-    if ([_viewModel isMemberOfClass:[EaseConversationViewModel class]]) {
-        conversationModel = (EaseConversationViewModel *)_viewModel;
-    }
-    self.blankPerchView = conversationModel.blankPerchView;
-    [self.view addSubview:self.blankPerchView];
-}
-
-//空白占位视图
-- (void)updateBlankPerchView
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.dataAry count] == 0) {
-            self.blankPerchView.hidden = NO;
-        } else if ([self.dataAry count] > 0) {
-            self.blankPerchView.hidden = YES;
-        }
-    });
-}
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
+        return [self.delegate easeNumberOfSectionsInTableView:tableView];
+    }
+    
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:numberOfRowsInSection:)]) {
+        return [self.delegate easeTableView:tableView numberOfRowsInSection:section];
+    }
+    
     return [self.dataAry count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id<EaseConversationModelDelegate> model = self.dataAry[indexPath.row];
-    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(easeTableView:cellforItem:)]) {
-        return [self.easeTableViewDelegate easeTableView:tableView cellforItem:model];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:cellForRowAtIndexPath:)]) {
+        return [self.delegate easeTableView:tableView cellForRowAtIndexPath:indexPath];
     }
+    
     
     EaseConversationCell *cell = (EaseConversationCell *)[tableView dequeueReusableCellWithIdentifier:@"EaseConversationCell"];
     if (!cell) {
         cell = [[EaseConversationCell alloc] initWithConversationViewModel:(EaseConversationViewModel *)_viewModel];
     }
     
+    EaseConversationModel *model = self.dataAry[indexPath.row];
+    
     cell.model = model;
+    if (model.isTop) {
+        cell.backgroundColor = UIColor.redColor;
+    }else {
+        cell.backgroundColor = _viewModel.cellBgColor;
+    }
     
     return cell;
 }
@@ -116,44 +107,43 @@
 {
     id<EaseConversationModelDelegate> model = [self.dataAry objectAtIndex:indexPath.row];
     
-    if (self.easeTableViewDelegate && [self.easeTableViewDelegate respondsToSelector:@selector(tableView:trailingSwipeActionsConfigurationForRowAtItem:)]) {
-        UISwipeActionsConfiguration *customSwipActions = [self.easeTableViewDelegate tableView:tableView trailingSwipeActionsConfigurationForRowAtItem:model];
-        customSwipActions.performsFirstActionWithFullSwipe = NO;
-        return customSwipActions;
-    }
-    
     __weak typeof(self) weakself = self;
-    UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"删除" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
-        [tableView setEditing:NO animated:YES];
+    
+    UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive
+                                                                               title:@"删除"
+                                                                             handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL))
+    {
         [weakself _deleteConversation:indexPath];
+        [weakself refreshTabView];
     }];
-    deleteAction.backgroundColor = [UIColor colorWithRed: 253 / 255.0 green: 81 / 255.0 blue: 84 / 255.0 alpha:1.0];
     
-    UIContextualAction *stickConversationAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"置顶" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
-        [tableView setEditing:NO animated:YES];
-        EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.itemId type:model.type createIfNotExist:YES];
-        [conversation setTop:YES];
+    UIContextualAction *topAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal
+                                                                            title:!model.isTop ? @"置顶" : @"取消置顶"
+                                                                          handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL))
+    {
+        EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.itemId
+                                                                                     type:model.type
+                                                                         createIfNotExist:YES];
+        [conversation setTop:!model.isTop];
+        [weakself refreshTabView];
     }];
-    stickConversationAction.backgroundColor = [UIColor colorWithRed: 203 / 255.0 green: 125 / 255.0 blue: 50 / 255.0 alpha:1.0];
     
-    UIContextualAction *cancelStickConversationAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"取消置顶" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
-        [tableView setEditing:NO animated:YES];
-        EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.itemId type:model.type createIfNotExist:YES];
-        [conversation setTop:NO];
-    }];
-    cancelStickConversationAction.backgroundColor = [UIColor colorWithRed: 203 / 255.0 green: 125 / 255.0 blue: 50 / 255.0 alpha:1.0];
-
-    NSMutableArray<UIContextualAction *> *sideslipArray = [[NSMutableArray alloc]init];
-    [sideslipArray addObject:deleteAction];
-    if(model.isTop) {
-        [sideslipArray addObject:cancelStickConversationAction];
-    } else {
-        [sideslipArray addObject:stickConversationAction];
+    NSArray *swipeActions = @[deleteAction, topAction];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:trailingSwipeActionsForRowAtIndexPath:actions:)]) {
+        swipeActions = [self.delegate easeTableView:tableView trailingSwipeActionsForRowAtIndexPath:indexPath actions:swipeActions];
     }
-    UISwipeActionsConfiguration *actions = [UISwipeActionsConfiguration configurationWithActions:sideslipArray];
+
+    UISwipeActionsConfiguration *actions = [UISwipeActionsConfiguration configurationWithActions:swipeActions];
     actions.performsFirstActionWithFullSwipe = NO;
     return actions;
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+        return [self.delegate easeTableView:tableView didSelectRowAtIndexPath:indexPath];
+    }
+}
+
 
 #pragma mark - EMChatManagerDelegate
 
@@ -180,62 +170,56 @@
         if (!aError) {
             [weakSelf.dataAry removeObjectAtIndex:row];
             [weakSelf.tableView reloadData];
-            [weakSelf updateBlankPerchView];
         }
     }];
 }
-
 
 - (void)_loadAllConversationsFromDB
 {
     __weak typeof(self) weakSelf = self;
     dispatch_async(_loadDataQueue, ^{
         NSMutableArray<id<EaseItemDelegate>> *totals = [NSMutableArray<id<EaseItemDelegate>> array];
-        if (weakSelf.easeTableViewDelegate && [weakSelf.easeTableViewDelegate respondsToSelector:@selector(resetDataAry)]) {
-            totals = [[weakSelf.easeTableViewDelegate resetDataAry] mutableCopy];
-        }else {
-            NSArray *conversations = [EMClient.sharedClient.chatManager getAllConversations];
-            
-            NSMutableArray<EaseConversationModelDelegate> *convs = [NSMutableArray<EaseConversationModelDelegate> array];
-            NSMutableArray<EaseConversationModelDelegate> *topConvs = [NSMutableArray<EaseConversationModelDelegate> array];
-            
-            for (EMConversation *conv in conversations) {
-                EaseConversationModel *item = [[EaseConversationModel alloc] initWithConversation:conv];
-                if (item.isTop) {
-                    [topConvs addObject:item];
-                }else {
-                    [convs addObject:item];
-                }
+        
+        NSArray *conversations = [EMClient.sharedClient.chatManager getAllConversations];
+        
+        NSMutableArray<EaseConversationModelDelegate> *convs = [NSMutableArray<EaseConversationModelDelegate> array];
+        NSMutableArray<EaseConversationModelDelegate> *topConvs = [NSMutableArray<EaseConversationModelDelegate> array];
+        
+        for (EMConversation *conv in conversations) {
+            EaseConversationModel *item = [[EaseConversationModel alloc] initWithConversation:conv];
+            if (item.isTop) {
+                [topConvs addObject:item];
+            }else {
+                [convs addObject:item];
             }
-            
-            NSArray *normalConvList = [convs sortedArrayUsingComparator:
-                                       ^NSComparisonResult(id  <EaseConversationModelDelegate> obj1, id  <EaseConversationModelDelegate> obj2)
-            {
-                if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
-                    return(NSComparisonResult)NSOrderedAscending;
-                }else {
-                    return(NSComparisonResult)NSOrderedDescending;
-                }
-            }];
-            
-            NSArray *topConvList = [topConvs sortedArrayUsingComparator:
-                                    ^NSComparisonResult(id  <EaseConversationModelDelegate> obj1, id  <EaseConversationModelDelegate> obj2)
-            {
-                if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
-                    return(NSComparisonResult)NSOrderedAscending;
-                }else {
-                    return(NSComparisonResult)NSOrderedDescending;
-                }
-            }];
-            
-            [totals addObjectsFromArray:topConvList];
-            [totals addObjectsFromArray:normalConvList];
         }
+        
+        NSArray *normalConvList = [convs sortedArrayUsingComparator:
+                                   ^NSComparisonResult(id  <EaseConversationModelDelegate> obj1, id  <EaseConversationModelDelegate> obj2)
+        {
+            if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
+                return(NSComparisonResult)NSOrderedAscending;
+            }else {
+                return(NSComparisonResult)NSOrderedDescending;
+            }
+        }];
+        
+        NSArray *topConvList = [topConvs sortedArrayUsingComparator:
+                                ^NSComparisonResult(id  <EaseConversationModelDelegate> obj1, id  <EaseConversationModelDelegate> obj2)
+        {
+            if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
+                return(NSComparisonResult)NSOrderedAscending;
+            }else {
+                return(NSComparisonResult)NSOrderedDescending;
+            }
+        }];
+        
+        [totals addObjectsFromArray:topConvList];
+        [totals addObjectsFromArray:normalConvList];
         
         weakSelf.dataAry = (NSMutableArray<EaseConversationModelDelegate> *)totals;
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf endRefresh];
-            [weakSelf updateBlankPerchView];
         });
     });
 }
@@ -245,12 +229,4 @@
     [self _loadAllConversationsFromDB];
 }
 
-#pragma mark - setter & getter
-- (void)setEaseTableViewDelegate:(id<EaseConversationsViewControllerDelegate>)easeTableViewDelegate {
-    _easeTableViewDelegate = easeTableViewDelegate;
-}
-
-- (id<EaseConversationsViewControllerDelegate>)easeTableViewDelegate {
-    return (id<EaseConversationsViewControllerDelegate>)_easeTableViewDelegate;
-}
 @end

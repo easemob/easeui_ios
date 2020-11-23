@@ -9,26 +9,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/*!
- *  头像风格
- */
-typedef enum {
-    Corner = 0,     //圆角
-    Rectangular,    //矩形
-    Circular,       //圆形
-} EaseAvatarStyle;
-
-
 @interface EaseBaseTableViewModel : NSObject
 
+// 是否可下拉刷新
 @property (nonatomic) BOOL canRefresh;
-@property (nonatomic) CGFloat cellHeight;
-@property (nonatomic, copy) UIColor *cellBgColor; //cell皮肤
-@property (nonatomic, copy) UIColor *viewBgColor; //页面皮肤
 
-@property (nonatomic) EaseAvatarStyle avatarType;
-@property (nonatomic) CGSize avatarSize;
-@property (nonatomic) UIEdgeInsets avatarEdgeInsets;
+// tableView 背景图
+@property (nonatomic, strong) UIView *bgView;
+
+// UITableViewCell 背景色
+@property (nonatomic, strong) UIColor *cellBgColor;
+
+// UITableViewCell 下划线位置
+@property (nonatomic) UIEdgeInsets cellSeparatorInset;
+
+// UITableViewCell 下划线颜色
+@property (nonatomic, strong) UIColor *cellSeparatorColor;
 @end
 
 NS_ASSUME_NONNULL_END

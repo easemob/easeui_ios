@@ -13,7 +13,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Masonry/Masonry.h>
 
-@interface EaseContactsViewController () <EMContactManagerDelegate>
+@interface EaseContactsViewController () <EMContactManagerDelegate,UITableViewDelegate,UITableViewDataSource>
 {
     EaseContactsViewModel *_viewModel;
 }
@@ -29,20 +29,19 @@
 
 - (instancetype)initWithViewModel:(EaseContactsViewModel *)model {
     if (self = [super initWithModel:model]) {
-        
+        _viewModel = model;
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     [EMClient.sharedClient.contactManager addDelegate:self delegateQueue:nil];
     [self refreshTabView];
 }
 
-- (void)resetViewModel:(EaseContactsViewModel *)viewModel {
-    [super resetViewModel:viewModel];
-}
 
 - (void)refreshTabView {
     __block typeof(self) weakSelf = self;
@@ -64,24 +63,24 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    id<EaseContactDelegate> easeContactModel;
+
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:cellForRowAtContact:)]) {
+        return [self.delegate easeTableView:tableView cellForRowAtContact: easeContactModel];
+    }
+    
+    
+    else {
+        EaseContactLetterModel *model = self.contactLists[indexPath.section];
+        easeContactModel = model.contacts[indexPath.row];
+    }
+    
     static NSString *cellId = @"ContactCell";
     EaseContactCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
         cell = [[EaseContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-    }
-    
-    id<EaseContactDelegate> easeContactModel;
-    if (!_viewModel.letterIndex) {
-        if (indexPath.section == 0) {
-            easeContactModel = self.normalItems[indexPath.row];
-        }else {
-            easeContactModel = self.contacts[indexPath.row];
-        }
-    }
-    
-    else {
-        NSArray *letterAry = self.contactLists[indexPath.section];
-        easeContactModel = letterAry[indexPath.row];
     }
     
     
@@ -92,98 +91,93 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
-    if (!_viewModel.letterIndex) {
-        return 0;
-    }
+
     return index;
 }
 
 - (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    if (!_viewModel.letterIndex) {
-        return nil;
-    }
-    
+
     return self.letterTitles;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (!_viewModel.letterIndex) {
+
+    if (section == 0 && self.customHeaderItems) {
         return nil;
     }
     
-    if (section == 0 && self.normalItems) {
-        return nil;
-    }
+    EaseContactLetterModel *model = self.contactLists[section];
     
-    return self.letterTitles[section];
+    return model.contactLetter;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (!_viewModel.letterIndex) {
-        return 2;
-    }
-    
+
     return self.contactLists.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (!_viewModel.letterIndex) {
-        if (section == 0) {
-            return self.normalItems.count;
-        } else if (section == 1){
-            return self.contacts.count;
-        } else {
-            return 0;
-        }
-    }
-    
-    NSArray *contacts = (NSArray *)self.contactLists[section];
-    return contacts.count;
+    EaseContactLetterModel *model = self.contactLists[section];
+    return model.contacts.count;
 }
-
-
-- (id<EaseContactDelegate>)modelWithIndexPath:(NSIndexPath *)indexPath {
-    if (!_viewModel.letterIndex) {
-        return (id<EaseContactDelegate>)self.contacts[indexPath.row];
-    }
-    NSArray *letterAry = self.contactLists[indexPath.section];
-    return (id<EaseContactDelegate>)letterAry[indexPath.row];
-}
-
-
 
 - (void)sortContact:(NSArray<EaseContactDelegate> *)contacts {
     
     NSArray *ret = [contacts sortedArrayUsingComparator:^NSComparisonResult(id <EaseContactDelegate> obj1, id<EaseContactDelegate> obj2) {
         return [obj1.showName compare:obj2.showName options:NSLiteralSearch];
     }];
-    
-    if (!_viewModel.letterIndex) {
-        self.contacts = (NSArray<EaseContactDelegate> *)ret;
-    }
 
-    NSMutableArray *letters = [NSMutableArray array];
+    UILocalizedIndexedCollation *indexCollation = [UILocalizedIndexedCollation currentCollation];
+    NSMutableArray *letters = [[indexCollation sectionTitles] mutableCopy];
     NSMutableArray *contactLists = [NSMutableArray array];
     
-    if (self.normalItems) {
-        [letters addObject:@"☆"];
-        [contactLists addObject:self.normalItems];
+    for (NSString *letter in letters) {
+        EaseContactLetterModel *letterModel = [[EaseContactLetterModel alloc] init];
+        letterModel.contactLetter = letter;
+        [contactLists addObject:letterModel];
     }
-    
     
     for (EaseContactModel *model in ret) {
         if ([letters containsObject:model.firstLetter]) {
             NSUInteger index = [letters indexOfObject:model.firstLetter];
-            NSMutableArray *array = [contactLists[index] mutableCopy];
+            EaseContactLetterModel *letterModel = contactLists[index];
+            NSMutableArray *array = [letterModel.contacts mutableCopy];
+            if (!array) {
+                array = [NSMutableArray array];
+            }
             [array addObject:model];
-            contactLists[index] = array;
+            letterModel.contacts = array;
         }else {
-            NSMutableArray *ary = [NSMutableArray array];
-            [ary addObject:model];
-            [letters addObject:model.firstLetter];
-            [contactLists addObject:ary];
+            EaseContactLetterModel *letterModel = contactLists.lastObject;
+            NSMutableArray *array = [letterModel.contacts mutableCopy];
+            if (!array) {
+                array = [NSMutableArray array];
+            }
+            [array addObject:model];
+            letterModel.contacts = array;
         }
     }
+    
+    if (self.customHeaderItems) {
+        [letters insertObject:@"☆" atIndex:0];
+        EaseContactLetterModel *model = [[EaseContactLetterModel alloc] init];
+        model.contactLetter = @"☆";
+        model.contacts = self.customHeaderItems;
+        [contactLists insertObject:model atIndex:0];
+    }
+    
+    NSMutableArray *needRemove = [NSMutableArray array];
+    for (EaseContactLetterModel *model in contactLists) {
+        if (model.contacts.count == 0) {
+            [needRemove addObject:model];
+        }
+    }
+    
+    [contactLists removeObjectsInArray:needRemove];
     
     self.letterTitles = letters;
     self.contactLists = contactLists;
@@ -205,5 +199,13 @@
     
     return _contactLists;
 }
+
+@end
+
+@interface EaseContactLetterModel()
+
+@end
+
+@implementation EaseContactLetterModel
 
 @end

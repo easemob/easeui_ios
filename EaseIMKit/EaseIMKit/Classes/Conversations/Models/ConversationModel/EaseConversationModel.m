@@ -158,5 +158,8 @@
     [_conversation markAllMessagesAsRead:nil];
 }
 
+- (long long)lastestUpdateTime {
+    return _conversation.latestUpdateTime;
+}
 
 @end

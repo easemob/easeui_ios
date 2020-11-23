@@ -10,7 +10,7 @@
 #import <EaseIMKit.h>
 #import "NormalItem.h"
 
-@interface ContactsViewController () <EaseContactsTableViewDelegate>
+@interface ContactsViewController () <EaseContactsViewControllerDelegate>
 
 @end
 
@@ -19,11 +19,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     EaseContactsViewModel *model = [[EaseContactsViewModel alloc] init];
-//    model.letterIndex = NO;
-//    model.canRefresh = YES;
+    model.canRefresh = YES;
     EaseContactsViewController *contactsVC = [[EaseContactsViewController alloc] initWithViewModel:model];
-    contactsVC.normalItems = [self titleItem];
-    contactsVC.easeTableViewDelegate = self;
+    contactsVC.customHeaderItems = [self titleItem];
+//    contactsVC.dele = self;
     
     [self.view addSubview:contactsVC.view];
 //    contactsVC.view.frame = CGRectMake(50, 200, 300, 400);

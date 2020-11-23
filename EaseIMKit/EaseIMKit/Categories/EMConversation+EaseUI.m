@@ -11,10 +11,16 @@
 #define EMConversationShowName @"EMConversation_ShowName"
 #define EMConversationRemindMe @"EMConversation_RemindMe"
 #define EMConversationDraft @"EMConversation_Draft"
+#define EMConversationLatestUpdateTime @"EMConversationLatestUpdateTime"
 
 @implementation EMConversation (EaseUI)
 
 - (void)setTop:(BOOL)isTop {
+    if (isTop) {
+        self.latestUpdateTime = [[NSDate new] timeIntervalSince1970] * 1000;
+    }else {
+        self.latestUpdateTime = 0;
+    }
     NSMutableDictionary *dictionary = [self mutableExt];
     [dictionary setObject:@(isTop) forKey:EMConversationTop];
     [self setExt:dictionary];
@@ -35,6 +41,7 @@
 }
 
 - (void)setDraft:(NSString *)aDraft {
+    self.latestUpdateTime = [[NSDate new] timeIntervalSince1970];
     NSMutableDictionary *dictionary = [self mutableExt];
     [dictionary setObject:aDraft forKey:EMConversationDraft];
     [self setExt:dictionary];
@@ -83,5 +90,16 @@
     return mutableExt;
 }
 
+- (void)setLatestUpdateTime:(long long)latestUpdateTime {
+    NSMutableDictionary *dict = [self mutableExt];
+    [dict setObject:@(latestUpdateTime) forKey:EMConversationLatestUpdateTime];
+    [self setExt:dict];
+}
+
+- (long long)latestUpdateTime {
+    NSMutableDictionary *dict = [self mutableExt];
+    long long latestUpdateTime = [dict[EMConversationLatestUpdateTime] longLongValue];
+    return latestUpdateTime > self.latestMessage.timestamp ? latestUpdateTime : self.latestMessage.timestamp;
+}
 
 @end
