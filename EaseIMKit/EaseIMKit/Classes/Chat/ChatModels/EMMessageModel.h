@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "EaseHeaders.h"
+#import "EaseUserDataProtocol.h"
 
 typedef NS_ENUM(NSInteger, EMMessageType) {
     EMMessageTypeText = 1,
@@ -28,6 +29,8 @@ typedef NS_ENUM(NSInteger, EMMessageType) {
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EMMessageModel : NSObject
+
+@property (nonatomic) id<EaseUserData> userDataDelegate;
 
 @property (nonatomic, strong) NSString *readReceiptCount;
 

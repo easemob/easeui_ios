@@ -9,6 +9,7 @@
 #import "EMChatBar.h"
 #import "EaseHeaders.h"
 #import "EMViewModel.h"
+#import "EaseUserDataProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,6 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 /* cell 回调 */
+
+/**
+ * 返回用户资料
+ *
+ * message        当前消息
+ */
+- (id<EaseUserData>)userData:(EMMessage*)message;
 /**
  * 消息点击事件
  *
@@ -98,12 +106,6 @@ NS_ASSUME_NONNULL_BEGIN
  * NO        从DB取
  */
 - (BOOL)isFetchHistoryMessagesFromServer;
-
-/**
- * 自定义数据模型 model
- */
-- (EMMessageModel *)customMsgModel:(EMMessage*)message;
-
 @end
 
 

@@ -682,14 +682,13 @@
             self.msgTimelTag = msg.timestamp;
         }
         EMMessageModel *model = nil;
-        //自定义 model
-        if (self.delegate && [self.delegate respondsToSelector:@selector(customMsgModel:)]) {
-            model = [self.delegate customMsgModel:msg];
-        } else {
-            model = [[EMMessageModel alloc] initWithEMMessage:msg];
-        }
+        model = [[EMMessageModel alloc] initWithEMMessage:msg];
         if (!model) {
             model = [[EMMessageModel alloc]init];
+        }
+        if (self.delegat && [self.delegate respondsToSelector:@selector(userData:)]) {
+            id<EaseUserData> userData = [self.delegate userData:msg];
+            model.userDataDelegate = userData;
         }
         [formated addObject:model];
     }

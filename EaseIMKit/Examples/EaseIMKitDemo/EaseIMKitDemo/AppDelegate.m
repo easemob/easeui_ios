@@ -9,6 +9,9 @@
 #import "AppDelegate.h"
 #import <Hyphenate/Hyphenate.h>
 
+#define kDefaultName @"du001"
+#define kDefaultPassword @"1"
+
 @interface AppDelegate ()
 
 @end
@@ -19,15 +22,19 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     EMOptions *options = [EMOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
+    options.enableConsoleLog = YES;
     [EMClient.sharedClient initializeSDKWithOptions:options];
-    [[EMClient sharedClient] logout:NO completion:^(EMError *aError) {
-        if (!aError) {
-            [[EMClient sharedClient] loginWithUsername:@"chong" password:@"1" completion:^(NSString *aUsername, EMError *aError) {
-                if (!aError) {
-                    NSLog(@"chong");
-                }
-            }];
-        }
+    
+    if (EMClient.sharedClient.isLoggedIn && ![EMClient.sharedClient.currentUsername isEqualToString:kDefaultName]) {
+        [EMClient.sharedClient logout:YES];
+    }
+    
+    
+    [[EMClient sharedClient] loginWithUsername:kDefaultName
+                                      password:kDefaultPassword
+                                    completion:^(NSString *aUsername, EMError *aError)
+    {
+        
     }];
     return YES;
 }

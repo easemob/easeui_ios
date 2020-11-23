@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "EaseCommonEnum.h"
+#import "EaseEnums.h"
 
 /*!
  *  输入区类型

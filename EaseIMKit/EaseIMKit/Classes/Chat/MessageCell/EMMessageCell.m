@@ -103,7 +103,7 @@
     _avatarView.contentMode = UIViewContentModeScaleAspectFit;
     _avatarView.backgroundColor = [UIColor clearColor];
     _avatarView.userInteractionEnabled = YES;
-    if (_viewModel.avatarStyle == Corner) {
+    if (_viewModel.avatarStyle == RoundedCorner) {
         _avatarView.layer.cornerRadius = _viewModel.avatarCornerRadius;
     }
     if (_viewModel.avatarStyle == Circular) {
@@ -111,14 +111,12 @@
     }
     [self.contentView addSubview:_avatarView];
     if (self.direction == EMMessageDirectionSend) {
-        _avatarView.image = [UIImage imageNamed:@"defaultAvatar"];
         [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
             make.right.equalTo(self.contentView).offset(-componentSpacing);
             make.width.height.equalTo(@(_viewModel.avatarLength));
         }];
     } else {
-        _avatarView.image = [UIImage imageNamed:@"defaultAvatar"];
         [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
             make.left.equalTo(self.contentView).offset(componentSpacing);
@@ -261,10 +259,19 @@
     if (model.direction == EMMessageDirectionSend) {
         [self.statusView setSenderStatus:model.message.status isReadAcked:model.message.isReadAcked];
     } else {
-        self.nameLabel.text = model.message.from;
+        if (model.userDataDelegate.Nickname && [model.userDataDelegate.Nickname length] != 0) {
+            self.nameLabel.text = model.userDataDelegate.Nickname;
+        } else {
+            self.nameLabel.text = model.message.from;
+        }
         if (model.type == EMMessageBodyTypeVoice) {
             self.statusView.hidden = model.message.isReadAcked;
         }
+    }
+    if (model.userDataDelegate.avatarImg) {
+        _avatarView.image = model.userDataDelegate.avatarImg;
+    } else {
+        _avatarView.image = [UIImage imageNamed:@"defaultAvatar"];
     }
     if (model.message.isNeedGroupAck) {
         self.readReceiptBtn.hidden = NO;

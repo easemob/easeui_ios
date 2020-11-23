@@ -24,3 +24,6 @@
 #import "EMAlertView.h"
 
 #import "EMEmojiHelper.h"
+
+#import "UIColor+EaseUI.h"
+

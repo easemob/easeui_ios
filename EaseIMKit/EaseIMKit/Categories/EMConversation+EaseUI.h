@@ -22,6 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)remindMe;
 
+- (void)setLatestUpdateTime:(long long)latestUpdateTime;
+
+- (long long)latestUpdateTime;
 @end
 
 NS_ASSUME_NONNULL_END

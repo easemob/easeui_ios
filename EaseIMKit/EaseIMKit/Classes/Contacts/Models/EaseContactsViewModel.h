@@ -13,7 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseContactsViewModel : EaseBaseTableViewModel
 
-@property (nonatomic) BOOL letterIndex;
 
 @end
 

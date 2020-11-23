@@ -23,9 +23,12 @@
     [super viewDidLoad];
     
     _viewMdeol = [[EaseConversationViewModel alloc] init];
-    _viewMdeol.avatarEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 30);
+    _viewMdeol.canRefresh = NO;
+    _viewMdeol.avatarType = Circular;
+    _viewMdeol.badgeLabelPosition = EMAvatarTopRight;
+    
     EaseConversationsViewController *easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:_viewMdeol];
-    easeConvsVC.easeTableViewDelegate = self;
+    easeConvsVC.delegate = self;
     [self addChildViewController:easeConvsVC];
     [self.view addSubview:easeConvsVC.view];
     [easeConvsVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -37,22 +40,6 @@
 }
    
 #pragma mark - EaseConversationVCDelegate
-
-- (UIContextualAction *)sideslipCustomAction:(UITableView *)tableView dataArray:(NSMutableArray *)dataArray trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UIContextualAction *customAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"自定义" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
-        NSLog(@"customAction");
-    }];
-    customAction.backgroundColor = [UIColor orangeColor];
-    return customAction;
-}
-
-/*
-- (NSArray<id<EaseItemDelegate>> *)resetDataAry {
-    ConversationModel *model = [[ConversationModel alloc] init];
-    return @[model];
-}
-*/
 
 - (void)easeTableView:(UITableView *)tableView didSelectRowAtItem:(id<EaseItemDelegate>)item
 {
