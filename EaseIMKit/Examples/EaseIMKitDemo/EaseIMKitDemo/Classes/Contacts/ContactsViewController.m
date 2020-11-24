@@ -11,7 +11,9 @@
 #import <EaseIMKit.h>
 
 @interface ContactsViewController () <EaseContactsViewControllerDelegate>
-
+{
+    EaseContactsViewController *_contactsVC;
+}
 @end
 
 @implementation ContactsViewController
@@ -25,24 +27,43 @@
     model.sectionTitleFont = [UIFont systemFontOfSize:40];
     model.sectionTitleLabelHeight = 50;
     model.sectionTitleEdgeInsets= UIEdgeInsetsMake(0, 0, 0, 0);
-    EaseContactsViewController *contactsVC = [[EaseContactsViewController alloc] initWithViewModel:model];
-    contactsVC.customHeaderItems = [self items];
-    contactsVC.delegate = self;
-    [self.view addSubview:contactsVC.view];
-    contactsVC.view.frame = self.view.bounds;
-    [self addChildViewController:contactsVC];
+    _contactsVC = [[EaseContactsViewController alloc] initWithViewModel:model];
+    _contactsVC.customHeaderItems = [self items];
+    _contactsVC.delegate = self;
+    [self.view addSubview:_contactsVC.view];
+    _contactsVC.view.frame = self.view.bounds;
+    [self addChildViewController:_contactsVC];
 }
 
-
-- (NSArray<EaseContactDelegate> *)items {
+- (NSArray<EaseUserDelegate> *)items {
     ContactModel *newFriends = [[ContactModel alloc] init];
-    newFriends.showName = @"新的好友";
-    newFriends.defaultAvatar = [UIImage imageNamed:@"newFriends.png"];
+    newFriends.nickname = @"新的好友";
+    newFriends.avatar = [UIImage imageNamed:@"newFriends.png"];
     ContactModel *groups = [[ContactModel alloc] init];
-    groups.showName = @"群组";
-    groups.defaultAvatar = [UIImage imageNamed:@"groups.png"];
+    groups.nickname = @"群组";
+    groups.avatar = [UIImage imageNamed:@"groups.png"];
     
-    return (NSArray<EaseContactDelegate> *)@[newFriends, groups];
+    return (NSArray<EaseUserDelegate> *)@[newFriends, groups];
+}
+
+- (void)willBeginRefresh {
+    [EMClient.sharedClient.contactManager getContactsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
+        if (!aError) {
+            NSMutableArray<EaseUserDelegate> *contacts = [NSMutableArray<EaseUserDelegate> array];
+            for (NSString *username in aList) {
+                ContactModel *model = [[ContactModel alloc] init];
+                model.huanXinId = username;
+                [contacts addObject:model];
+            }
+            
+            [self->_contactsVC setContacts:contacts];
+        }
+        [self->_contactsVC endRefresh];
+    }];
+}
+
+- (void)easeTableView:(UITableView *)tableView didSelectRowAtContactModel:(EaseContactModel *)contact {
+    NSLog(@"contact -- %@", contact.easeId);
 }
 
 @end

@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "EaseHeaders.h"
-#import "EaseIMKitCallBackReason.h"
+#import "EaseEnums.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

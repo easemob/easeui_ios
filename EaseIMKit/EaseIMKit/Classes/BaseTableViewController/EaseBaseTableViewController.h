@@ -26,9 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithModel:(__kindof EaseBaseTableViewModel *)aModel;
 
 // 主动刷新
-- (void)beginRefresh;
-// 下拉刷新时执行
-- (void)refreshTabView;
+- (void)refreshTable;
+
 // 关闭刷新
 - (void)endRefresh;
 

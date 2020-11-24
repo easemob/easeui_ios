@@ -18,7 +18,7 @@
 //contactList
 #import "EaseContactsViewController.h"
 #import "EaseContactsViewModel.h"
-#import "EaseContactCellModel.h"
+#import "EaseContactModel.h"
 
 //conversation
 #import "EMChatControllerProducter.h"

@@ -11,6 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DemoUserModel : NSObject <EaseUserDelegate>
+- (instancetype)initWithEaseId:(NSString *)easeId;
+@property (nonatomic, strong) NSString *nickName;
+- (NSString *)easeId;
 - (NSString *)showName;
 @end
 
