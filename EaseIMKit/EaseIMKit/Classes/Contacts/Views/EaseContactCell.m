@@ -6,48 +6,92 @@
 //
 
 #import "EaseContactCell.h"
+#import "EaseContactsViewModel.h"
 #import <Masonry/Masonry.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
 
 @interface EaseContactCell ()
-@property (nonatomic, strong) UIImageView *avatarImageView;
-@property (nonatomic, strong) UILabel *showNameLabel;
+@property (nonatomic, strong) EaseContactsViewModel *viewModel;
 @end
 
 @implementation EaseContactCell
 
++ (EaseContactCell *)tableView:(UITableView *)tableView cellViewModel:(EaseContactsViewModel *)viewModel {
+    static NSString *cellId = @"EMContactCell";
+    EaseContactCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (!cell) {
+        cell = [[EaseContactCell alloc] initWithContactsViewModel:viewModel identifier: cellId];
+    }
+    
+    return cell;
+}
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        [self.contentView addSubview:self.avatarImageView];
-        [self.contentView addSubview:self.showNameLabel];
-        [self _setupSubViews];
+- (instancetype)initWithContactsViewModel:(EaseContactsViewModel*)viewModel
+                                   identifier:(NSString *)identifier
+{
+    if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier]){
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        _viewModel = viewModel;
+        [self _addSubViews];
+        [self _setupSubViewsConstraints];
+        [self _setupViewsProperty];
     }
     
     return self;
 }
 
-
-- (void)_setupSubViews {
-    [self.avatarImageView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.contentView.mas_left).offset(5);
-        make.top.equalTo(self.contentView.mas_top).offset(5);
-        make.centerY.equalTo(self.contentView.mas_centerY);
-        make.width.equalTo(self.avatarImageView.mas_height);
-    }];
+- (void)_addSubViews {
+    _avatarView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    _nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     
-    [self.showNameLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.avatarImageView.mas_right).offset(5);
-        make.top.equalTo(self.avatarImageView.mas_top);
-        make.bottom.equalTo(self.avatarImageView.mas_bottom);
-        make.right.equalTo(self.contentView.mas_right).offset(-5);
-    }];
+    [self.contentView addSubview:_avatarView];
+    [self.contentView addSubview:_nameLabel];
 }
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
+- (void)_setupViewsProperty {
+    
+    self.contentView.backgroundColor = _viewModel.cellBgColor;
+    
+    if (_viewModel.avatarType != Rectangular) {
+        _avatarView.clipsToBounds = YES;
+        if (_viewModel.avatarType == RoundedCorner) {
+            _avatarView.layer.cornerRadius = _viewModel.avatarSize.width / 6;
+        }
+        else if(Circular) {
+            _avatarView.layer.cornerRadius = _viewModel.avatarSize.width / 2;
+        }
+        
+    }else {
+        _avatarView.clipsToBounds = NO;
+    }
+
+    _avatarView.backgroundColor = [UIColor clearColor];
+    
+    _nameLabel.font = _viewModel.nameLabelFont;
+    _nameLabel.textColor = _viewModel.nameLabelColor;
+    _nameLabel.lineBreakMode = NSLineBreakByCharWrapping;
+    _nameLabel.backgroundColor = [UIColor clearColor];
+    
+}
+
+- (void)_setupSubViewsConstraints {
+    __weak typeof(self) weakSelf = self;
+    
+    [_avatarView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf.contentView.mas_top).offset(weakSelf.viewModel.avatarEdgeInsets.top);
+        make.bottom.equalTo(weakSelf.contentView.mas_bottom).offset(-weakSelf.viewModel.avatarEdgeInsets.bottom);
+        make.left.equalTo(weakSelf.contentView.mas_left).offset(weakSelf.viewModel.avatarEdgeInsets.left);
+        make.width.offset(weakSelf.viewModel.avatarSize.width);
+        make.height.offset(weakSelf.viewModel.avatarSize.height).priority(750);
+    }];
+    
+    [_nameLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf.contentView.mas_top).offset(weakSelf.viewModel.nameLabelEdgeInsets.top);
+        make.bottom.equalTo(weakSelf.contentView.mas_bottom).offset(-weakSelf.viewModel.nameLabelEdgeInsets.bottom);
+        make.left.equalTo(weakSelf.avatarView.mas_right).offset(weakSelf.viewModel.avatarEdgeInsets.right + weakSelf.viewModel.nameLabelEdgeInsets.left);
+        make.right.equalTo(weakSelf.contentView.mas_right).offset(-weakSelf.viewModel.nameLabelEdgeInsets.right);
+    }];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -59,26 +103,11 @@
 
 - (void)setModel:(id<EaseContactDelegate>)model {
     _model = model;
-    self.showNameLabel.text = _model.showName;
-    [self.avatarImageView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL] placeholderImage:_model.defaultAvatar];
+    self.nameLabel.text = _model.showName;
+    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL]
+                       placeholderImage:_model.defaultAvatar];
 }
 
 
-#pragma mark - getter
-- (UIImageView *)avatarImageView {
-    if (!_avatarImageView) {
-        _avatarImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    }
-    return _avatarImageView;
-}
-
-- (UILabel *)showNameLabel {
-    if (!_showNameLabel) {
-        _showNameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _showNameLabel.textAlignment = MASAttributeRight;
-    }
-    
-    return _showNameLabel;;
-}
 
 @end

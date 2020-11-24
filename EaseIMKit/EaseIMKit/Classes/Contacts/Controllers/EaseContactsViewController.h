@@ -14,7 +14,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol EaseContactsViewControllerDelegate <EaseBaseViewControllerDelegate>
-
+@optional
+- (void)refreshTabView;
 @optional
 
 - (UITableViewCell *)easeTableView:(UITableView *)tableView cellForRowAtContact:(id <EaseContactDelegate>) contact;
@@ -29,8 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseContactsViewController : EaseBaseTableViewController
 @property (nonatomic, strong) NSArray<EaseContactDelegate> *customHeaderItems;
-@property (nonatomic, strong) NSArray<EaseContactDelegate> *customFooterItems;
 @property (nonatomic, strong) NSArray<EaseContactDelegate> *contacts;
+@property (nonatomic, strong) NSArray<EaseContactDelegate> *customFooterItems;
 @property (nonatomic) id<EaseContactsViewControllerDelegate> delegate;
 
 

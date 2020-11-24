@@ -16,7 +16,6 @@
 
 @synthesize type;
 @synthesize defaultAvatar;
-@synthesize itemId;
 @synthesize showName;
 @synthesize avatarURL;
 

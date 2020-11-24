@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EaseItemDelegate.h"
+#import "EaseUserDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +16,7 @@ typedef enum : NSUInteger {
 } EaseContactItemType;
 
 
-@protocol EaseContactDelegate <EaseItemDelegate>
+@protocol EaseContactDelegate <EaseUserDelegate>
 
 @property (nonatomic, copy, readonly) NSString *firstLetter; // 首字母
 @property (nonatomic, assign) EaseContactItemType type;

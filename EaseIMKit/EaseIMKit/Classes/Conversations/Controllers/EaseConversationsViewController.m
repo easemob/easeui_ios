@@ -9,7 +9,6 @@
 #import "EaseHeaders.h"
 #import "EaseConversationViewModel.h"
 #import "EaseConversationCell.h"
-#import "EaseConversationModelDelegate.h"
 #import "EaseConversationModel.h"
 #import "EMConversation+EaseUI.h"
 
@@ -61,7 +60,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeNumberOfSectionsInTableView:)]) {
         return [self.delegate easeNumberOfSectionsInTableView:tableView];
     }
     
@@ -71,7 +70,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:numberOfRowsInSection:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:numberOfRowsInSection:)]) {
         return [self.delegate easeTableView:tableView numberOfRowsInSection:section];
     }
     
@@ -80,15 +79,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:cellForRowAtIndexPath:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:cellForRowAtIndexPath:)]) {
         return [self.delegate easeTableView:tableView cellForRowAtIndexPath:indexPath];
     }
     
-    
-    EaseConversationCell *cell = (EaseConversationCell *)[tableView dequeueReusableCellWithIdentifier:@"EaseConversationCell"];
-    if (!cell) {
-        cell = [[EaseConversationCell alloc] initWithConversationViewModel:(EaseConversationViewModel *)_viewModel];
-    }
+    EaseConversationCell *cell = [EaseConversationCell tableView:tableView cellViewModel:_viewModel];
     
     EaseConversationModel *model = self.dataAry[indexPath.row];
     
@@ -106,7 +101,7 @@
 
 - (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(tvos)
 {
-    id<EaseConversationModelDelegate> model = [self.dataAry objectAtIndex:indexPath.row];
+    EaseConversationModel *model = [self.dataAry objectAtIndex:indexPath.row];
     
     __weak typeof(self) weakself = self;
     
@@ -164,13 +159,14 @@
 {
     __weak typeof(self) weakSelf = self;
     NSInteger row = indexPath.row;
-    id<EaseConversationModelDelegate> model = [self.dataAry objectAtIndex:row];
+    EaseConversationModel *model = [self.dataAry objectAtIndex:row];
     [[EMClient sharedClient].chatManager deleteConversation:model.itemId
                                            isDeleteMessages:YES
                                                  completion:^(NSString *aConversationId, EMError *aError) {
         if (!aError) {
             [weakSelf.dataAry removeObjectAtIndex:row];
             [weakSelf.tableView reloadData];
+            [weakSelf _updateBackView];
         }
     }];
 }
@@ -179,15 +175,19 @@
 {
     __weak typeof(self) weakSelf = self;
     dispatch_async(_loadDataQueue, ^{
-        NSMutableArray<id<EaseItemDelegate>> *totals = [NSMutableArray<id<EaseItemDelegate>> array];
+        NSMutableArray<id<EaseUserDelegate>> *totals = [NSMutableArray<id<EaseUserDelegate>> array];
         
         NSArray *conversations = [EMClient.sharedClient.chatManager getAllConversations];
         
-        NSMutableArray<EaseConversationModelDelegate> *convs = [NSMutableArray<EaseConversationModelDelegate> array];
-        NSMutableArray<EaseConversationModelDelegate> *topConvs = [NSMutableArray<EaseConversationModelDelegate> array];
+        NSMutableArray *convs = [NSMutableArray array];
+        NSMutableArray *topConvs = [NSMutableArray array];
         
         for (EMConversation *conv in conversations) {
             EaseConversationModel *item = [[EaseConversationModel alloc] initWithConversation:conv];
+            if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(easeUserDelegateAtConversationId:conversationType:)]) {
+                item.userDelegate = [weakSelf.delegate easeUserDelegateAtConversationId:conv.conversationId conversationType:conv.type];
+            }
+            
             if (item.isTop) {
                 [topConvs addObject:item];
             }else {
@@ -196,7 +196,7 @@
         }
         
         NSArray *normalConvList = [convs sortedArrayUsingComparator:
-                                   ^NSComparisonResult(id  <EaseConversationModelDelegate> obj1, id  <EaseConversationModelDelegate> obj2)
+                                   ^NSComparisonResult(EaseConversationModel *obj1, EaseConversationModel *obj2)
         {
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;
@@ -206,7 +206,7 @@
         }];
         
         NSArray *topConvList = [topConvs sortedArrayUsingComparator:
-                                ^NSComparisonResult(id  <EaseConversationModelDelegate> obj1, id  <EaseConversationModelDelegate> obj2)
+                                ^NSComparisonResult(EaseConversationModel *obj1, EaseConversationModel *obj2)
         {
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;
@@ -218,9 +218,10 @@
         [totals addObjectsFromArray:topConvList];
         [totals addObjectsFromArray:normalConvList];
         
-        weakSelf.dataAry = (NSMutableArray<EaseConversationModelDelegate> *)totals;
+        weakSelf.dataAry = (NSMutableArray *)totals;
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf endRefresh];
+            [weakSelf _updateBackView];
         });
     });
 }
@@ -228,6 +229,14 @@
 - (void)refreshTabView
 {
     [self _loadAllConversationsFromDB];
+}
+
+- (void)_updateBackView {
+    if (self.dataAry.count == 0) {
+        [self.tableView.backgroundView setHidden:NO];
+    }else {
+        [self.tableView.backgroundView setHidden:YES];
+    }
 }
 
 @end

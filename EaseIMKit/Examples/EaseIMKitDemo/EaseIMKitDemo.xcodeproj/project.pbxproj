@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3C7B87922563CCD40074F990 /* EaseChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C7B87912563CCD40074F990 /* EaseChatViewController.m */; };
 		6821891C4265850E39A38FB0 /* Pods_EaseIMKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 388F9279879A5BC867FA00EF /* Pods_EaseIMKitDemo.framework */; };
-		9024F61B255A7F9300BBE66D /* NormalItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9024F61A255A7F9300BBE66D /* NormalItem.m */; };
 		903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7925540390005E6BB1 /* ConversationsViewController.m */; };
 		903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7E2554039B005E6BB1 /* ContactsViewController.m */; };
 		903EAEB025540B89005E6BB1 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAEAF25540B89005E6BB1 /* SettingsViewController.m */; };
@@ -20,7 +19,7 @@
 		90A03A37254A70E100D57B73 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A35254A70E100D57B73 /* Main.storyboard */; };
 		90A03A39254A70E200D57B73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A38254A70E200D57B73 /* Assets.xcassets */; };
 		90A03A3F254A70E200D57B73 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A3E254A70E200D57B73 /* main.m */; };
-		90C5C79B256242DF00786824 /* ConversationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C5C79A256242DF00786824 /* ConversationModel.m */; };
+		90A18676256B9EE500074CD3 /* DemoUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A18675256B9EE500074CD3 /* DemoUserModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,8 +28,6 @@
 		3C7B87902563CCD40074F990 /* EaseChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EaseChatViewController.h; sourceTree = "<group>"; };
 		3C7B87912563CCD40074F990 /* EaseChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EaseChatViewController.m; sourceTree = "<group>"; };
 		6F3E72642FD7C6CC7CBA7ACD /* Pods-EaseIMKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKitDemo.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		9024F619255A7F9300BBE66D /* NormalItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NormalItem.h; sourceTree = "<group>"; };
-		9024F61A255A7F9300BBE66D /* NormalItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NormalItem.m; sourceTree = "<group>"; };
 		903EAE7825540390005E6BB1 /* ConversationsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConversationsViewController.h; sourceTree = "<group>"; };
 		903EAE7925540390005E6BB1 /* ConversationsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConversationsViewController.m; sourceTree = "<group>"; };
 		903EAE7D2554039B005E6BB1 /* ContactsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
@@ -50,8 +47,8 @@
 		90A03A38254A70E200D57B73 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		90A03A3D254A70E200D57B73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90A03A3E254A70E200D57B73 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		90C5C799256242DF00786824 /* ConversationModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConversationModel.h; sourceTree = "<group>"; };
-		90C5C79A256242DF00786824 /* ConversationModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConversationModel.m; sourceTree = "<group>"; };
+		90A18674256B9EE500074CD3 /* DemoUserModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoUserModel.h; sourceTree = "<group>"; };
+		90A18675256B9EE500074CD3 /* DemoUserModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoUserModel.m; sourceTree = "<group>"; };
 		BFBBBDBBACBBCAD1DF95BCB9 /* Pods-EaseIMKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKitDemo.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -97,8 +94,6 @@
 		9024F618255A7F7800BBE66D /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				9024F619255A7F9300BBE66D /* NormalItem.h */,
-				9024F61A255A7F9300BBE66D /* NormalItem.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -111,6 +106,8 @@
 				903EAEAB25540ACA005E6BB1 /* LoginViewController */,
 				903EAE7625540374005E6BB1 /* Contacts */,
 				903EAE7725540374005E6BB1 /* Conversations */,
+				90A18674256B9EE500074CD3 /* DemoUserModel.h */,
+				90A18675256B9EE500074CD3 /* DemoUserModel.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -130,8 +127,6 @@
 			children = (
 				903EAE7825540390005E6BB1 /* ConversationsViewController.h */,
 				903EAE7925540390005E6BB1 /* ConversationsViewController.m */,
-				90C5C799256242DF00786824 /* ConversationModel.h */,
-				90C5C79A256242DF00786824 /* ConversationModel.m */,
 			);
 			path = Conversations;
 			sourceTree = "<group>";
@@ -311,10 +306,9 @@
 				903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */,
 				903EAEB525540B9F005E6BB1 /* LoginViewController.m in Sources */,
 				903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */,
-				90C5C79B256242DF00786824 /* ConversationModel.m in Sources */,
-				9024F61B255A7F9300BBE66D /* NormalItem.m in Sources */,
 				90A03A3F254A70E200D57B73 /* main.m in Sources */,
 				90A03A31254A70E100D57B73 /* SceneDelegate.m in Sources */,
+				90A18676256B9EE500074CD3 /* DemoUserModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

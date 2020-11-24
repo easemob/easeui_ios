@@ -60,6 +60,43 @@
     _cellSeparatorInset = UIEdgeInsetsMake(1, 77, 0, 0);
     _cellSeparatorColor = [UIColor colorWithHexString:@"#F3F3F3"];
     
+    _bgView = [self defaultBgView];
+}
+
+- (UIView *)defaultBgView {
+    UIView *defaultBgView = [[UIView alloc] initWithFrame:CGRectZero];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectZero];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableViewBgImg"]];
+    UILabel *txtLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    txtLabel.font = [UIFont systemFontOfSize:14];
+    txtLabel.textColor = [UIColor colorWithHexString:@"#999999"];
+    [view addSubview:imageView];
+    [view addSubview:txtLabel];
+    [defaultBgView addSubview:view];
+
+    txtLabel.text = @"暂无聊天消息";
+    [imageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(view);
+        make.top.equalTo(view);
+        make.width.mas_equalTo(138);
+        make.height.mas_equalTo(106);
+    }];
+    
+    [txtLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(view.mas_centerX);
+        make.top.equalTo(imageView.mas_bottom).offset(19);
+        make.height.mas_equalTo(20);
+    }];
+    
+    [view mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(defaultBgView);
+        make.top.equalTo(imageView);
+        make.left.equalTo(imageView);
+        make.right.equalTo(imageView);
+        make.bottom.equalTo(txtLabel.mas_bottom);
+    }];
+    
+    return defaultBgView;
 }
 
 @end
