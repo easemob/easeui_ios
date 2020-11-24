@@ -33,6 +33,7 @@
     EMViewModel *_viewModel;
     EMMessageCell *_currentLongPressCell;
     BOOL _isReloadViewWithModel; //重新刷新会话页面
+    NSInteger _currentUnreadCount;
 }
 @property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
 @property (nonatomic, strong) EMMoreFunctionView *longPressView;
@@ -48,6 +49,7 @@
         _msgQueue = dispatch_queue_create("emmessage.com", NULL);
         _viewModel = viewModel;
         _isReloadViewWithModel = NO;
+        _currentUnreadCount = [self currentUnreadCount];
         if (!_viewModel) {
             _viewModel = [[EMViewModel alloc]init];
         }
@@ -173,18 +175,7 @@
     self.chatBar.moreEmoticonView = moreEmoticonView;
     
     //更多
-    NSMutableArray<UIImage*> *toolbarImgArray = nil;
-    NSMutableArray<NSString*> *toolbarDescArray = nil;
-    BOOL isCustomExtFuncItems = NO;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarExtFunctionItemDescArray)]) {
-        toolbarDescArray = [self.delegate chatBarExtFunctionItemDescArray];
-        isCustomExtFuncItems = YES;
-    }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarExtFunctionItemImgArray)]) {
-        toolbarImgArray = [self.delegate chatBarExtFunctionItemImgArray];
-        isCustomExtFuncItems = YES;
-    }
-    EMMoreFunctionView *moreFunction = [[EMMoreFunctionView alloc]initWithConversation:_currentConversation itemDescArray:toolbarDescArray itemImgArray:toolbarImgArray isCustom:isCustomExtFuncItems];
+    EMMoreFunctionView *moreFunction = [[EMMoreFunctionView alloc]initInputViewWithConversation:_currentConversation];
     moreFunction.delegate = self;
     self.chatBar.moreFunctionView = moreFunction;
 }
@@ -284,6 +275,7 @@
 
 #pragma mark - EMMoreFunctionViewDelegate
 
+//扩展区点击事件
 - (void)chatBarMoreFunctionAction:(NSInteger)componentTag itemDesc:(NSString *)itemDesc extType:(ExtType)extType
 {
     [self resetCellLongPressStatus:_currentLongPressCell];
@@ -291,7 +283,7 @@
     //输入功能区
     if (extType == ExtTypeChatBar) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(extChatBarFuncActionItem:itemDesc:)]) {
-            [self.delegate extChatBarFuncActionItem:componentTag itemDesc:itemDesc];
+            BOOL isNeedsDefaultFunc = [self.delegate extChatBarFuncActionItem:componentTag itemDesc:itemDesc];
             return;
         }
         //default
@@ -299,17 +291,19 @@
     }
     //消息长按功能区
     if (extType == ExtTypeLongPress) {
+        BOOL isNeedsDefaultFunc = NO;
         if (self.delegate && [self.delegate respondsToSelector:@selector(extLongPressFuncActionItem:itemDesc:)]) {
-            [self.delegate extLongPressFuncActionItem:componentTag itemDesc:itemDesc];
-            return;
+            isNeedsDefaultFunc = [self.delegate extLongPressFuncActionItem:componentTag itemDesc:itemDesc];
         }
         //default
-        [self executeAction:componentTag];
+        if (isNeedsDefaultFunc) {
+            [self executeAction:componentTag];
+        }
     }
 }
 
 //隐藏某些item
-- (NSArray<NSString*>*)hideItem:(NSArray<NSString*>*)itemList extType:(ExtType)extType
+- (NSArray<NSString*>*)hideItem:(NSMutableArray<NSString*>*)itemList extType:(ExtType)extType
 {
     //消息长按功能区
     if (extType == ExtTypeLongPress) {
@@ -318,6 +312,39 @@
         }
     }
     return [[NSArray<NSString*> alloc]init];
+}
+
+//输入扩展区内容
+-(NSMutableArray<NSString*>*)chatBarExtFunctionItemDescArray:(NSMutableArray<NSString*>*)defaultItems
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarExtFunctionItemDescArray:)]) {
+        return [self.delegate chatBarExtFunctionItemDescArray:defaultItems];
+    }
+    return nil;
+}
+//输入扩展区图标
+- (NSMutableArray<UIImage*>*)chatBarExtFunctionItemImgArray:(NSMutableArray<UIImage*>*)defaultImgs
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarExtFunctionItemImgArray:)]) {
+        return [self.delegate chatBarExtFunctionItemImgArray:defaultImgs];
+    }
+    return nil;
+}
+//长按扩展区内容
+- (NSMutableArray<NSString*>*)longPressExtItemDescArray:(NSMutableArray<NSString*>*)defaultItems
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(longPressExtItemDescArray:)]) {
+        return [self.delegate longPressExtItemDescArray:defaultItems];
+    }
+    return nil;
+}
+//长按扩展区图标
+- (NSMutableArray<UIImage*>*)longPressExtItemImgArray:(NSMutableArray<UIImage*>*)defaultImgs
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(longPressExtItemImgArray:)]) {
+        return [self.delegate longPressExtItemImgArray:defaultImgs];
+    }
+    return nil;
 }
 
 #pragma mark - EMChatBarRecordAudioViewDelegate
@@ -356,10 +383,11 @@
 
 - (void)messageCellDidSelected:(EMMessageCell *)aCell
 {
+    BOOL isCustom = NO;
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectItem:)]) {
-        [self.delegate didSelectItem:aCell.model];
-        return;
+        isCustom = [self.delegate didSelectItem:aCell.model];
     }
+    if (isCustom) return;
     //消息事件策略分类
     EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgCell:aCell];
     eventStrategy.chatController = self;
@@ -369,18 +397,7 @@
 - (void)messageCellDidLongPress:(UITableViewCell *)aCell
 {
     self.longPressIndexPath = [self.tableView indexPathForCell:aCell];
-    NSMutableArray<UIImage*> *longPressImgArray = nil;
-    NSMutableArray<NSString*> *longPressDescArray = nil;
-    BOOL isCustomExtFuncItems = NO;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(longPressExtItemDescArray)]) {
-        longPressDescArray = [self.delegate longPressExtItemDescArray];
-        isCustomExtFuncItems = YES;
-    }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(longPressExtItemImgArray)]) {
-        longPressImgArray = [self.delegate longPressExtItemImgArray];
-        isCustomExtFuncItems = YES;
-    }
-    self.longPressView = [[EMMoreFunctionView alloc]initWithData:longPressDescArray itemImgArray:longPressImgArray isCustom:isCustomExtFuncItems];
+    self.longPressView = [[EMMoreFunctionView alloc]initLongPressView];
     self.longPressView.delegate = self;
     CGSize longPressViewsize = [self.longPressView getExtViewSize];
     self.longPressView.layer.cornerRadius = 8;
@@ -393,13 +410,13 @@
     if ([aCell isKindOfClass:[EMMessageCell class]]) {
         _currentLongPressCell = (EMMessageCell*)aCell;
         if (_currentLongPressCell.model.direction == EMMessageDirectionSend) {
-            xOffset = (maxWidth - _viewModel.avatarLength - 2*componentSpacing - _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
+            xOffset = (maxWidth - avatarLonger - 2*componentSpacing - _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
             if ((xOffset + longPressViewsize.width) > (maxWidth - componentSpacing)) {
                 xOffset = maxWidth - componentSpacing - longPressViewsize.width;
             }
         }
         if (_currentLongPressCell.model.direction == EMMessageDirectionReceive) {
-            xOffset = (_viewModel.avatarLength + 2*componentSpacing + _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
+            xOffset = (avatarLonger + 2*componentSpacing + _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
             if (xOffset < componentSpacing) {
                 xOffset = componentSpacing;
             }
@@ -480,8 +497,13 @@
         NSMutableArray *msgArray = [[NSMutableArray alloc] init];
         for (int i = 0; i < [aMessages count]; i++) {
             EMMessage *msg = aMessages[i];
-            if (![msg.conversationId isEqualToString:conId])
+            if (![msg.conversationId isEqualToString:conId]) {
+                if (self.delegate && [self.delegate respondsToSelector:@selector(currentConversationsUnreadCount:)]) {
+                    self->_currentUnreadCount += 1;
+                    [self.delegate currentConversationsUnreadCount:self->_currentUnreadCount];
+                }
                 continue;
+            }
             [weakself returnReadReceipt:msg];
             [weakself.currentConversation markMessageAsReadWithId:msg.messageId error:nil];
             [msgArray addObject:msg];
@@ -773,6 +795,17 @@
 }
 
 #pragma mark - Public
+
+- (NSInteger)currentUnreadCount
+{
+    NSInteger unreadCount = 0;
+    NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
+    for (EMConversation *conversation in conversationList) {
+        unreadCount += conversation.unreadMessagesCount;
+    }
+    unreadCount -= self.currentConversation.unreadMessagesCount;
+    return unreadCount;
+}
 
 - (void)returnReadReceipt:(EMMessage *)msg{}
 

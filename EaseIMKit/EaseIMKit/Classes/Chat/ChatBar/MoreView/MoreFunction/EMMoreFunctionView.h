@@ -32,9 +32,10 @@ typedef NS_ENUM(NSInteger, ExtType) {
 @interface EMMoreFunctionView : UIView
 @property (nonatomic, weak) id<EMMoreFunctionViewDelegate> delegate;
 //输入区ext
-- (instancetype)initWithConversation:(EMConversation *)conversation itemDescArray:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom;
+- (instancetype)initInputViewWithConversation:(EMConversation *)conversation;
 //消息长按ext
-- (instancetype)initWithData:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom;
+- (instancetype)initLongPressView;
+
 //视图尺寸
 - (CGSize)getExtViewSize;
 @end
@@ -42,8 +43,18 @@ typedef NS_ENUM(NSInteger, ExtType) {
 @protocol EMMoreFunctionViewDelegate <NSObject>
 @optional
 - (void)chatBarMoreFunctionReadReceipt;//群组阅读回执
+//点击事件 item
 - (void)chatBarMoreFunctionAction:(NSInteger)componentTag itemDesc:(NSString*)itemDesc extType:(ExtType)extType;
-- (NSArray<NSString*>*)hideItem:(NSArray<NSString*>*)itemList extType:(ExtType)extType;//可选隐藏某些弹出项
+//可选隐藏某些弹出项
+- (NSArray<NSString*>*)hideItem:(NSMutableArray<NSString*>*)itemList extType:(ExtType)extType;
+//输入扩展区内容
+-(NSMutableArray<NSString*>*)chatBarExtFunctionItemDescArray:(NSMutableArray<NSString*>*)defaultItems;
+//输入扩展区图标
+- (NSMutableArray<UIImage*>*)chatBarExtFunctionItemImgArray:(NSMutableArray<UIImage*>*)defaultImgs;
+//长按扩展区内容
+- (NSMutableArray<NSString*>*)longPressExtItemDescArray:(NSMutableArray<NSString*>*)defaultItems;
+//长按扩展区图标
+- (NSMutableArray<UIImage*>*)longPressExtItemImgArray:(NSMutableArray<UIImage*>*)defaultImgs;
 @end
 
 

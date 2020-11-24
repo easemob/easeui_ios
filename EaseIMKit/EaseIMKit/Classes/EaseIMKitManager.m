@@ -13,6 +13,7 @@ static dispatch_once_t onceToken;
 static EaseIMKitManager *easeIMKit = nil;
 @interface EaseIMKitManager ()<EMMultiDevicesDelegate, EMContactManagerDelegate, EMGroupManagerDelegate>
 @property (nonatomic, strong) EMMulticastDelegate<EaseIMKitManagerDelegate> *delegates;
+@property (nonatomic, strong) NSString *currentConversationId;
 @end
 
 @implementation EaseIMKitManager
@@ -261,14 +262,13 @@ static EaseIMKitManager *easeIMKit = nil;
     }
 }
 
+#pragma mark - 系统通知
+
 //是否需要系统通知
 - (BOOL)isNeedsSystemNoti
 {
-    EMMulticastDelegateEnumerator *multicastDelegates = [self.delegates delegateEnumerator];
-    for (EMMulticastDelegateNode *node in [multicastDelegates getDelegates]) {
-        id<EaseIMKitManagerDelegate> delegate = (id<EaseIMKitManagerDelegate>)node.delegate;
-        if ([delegate respondsToSelector:@selector(isNeedsSystemNotification)])
-            return [delegate isNeedsSystemNotification];
+    if (self.systemNotiDelegate && [self.systemNotiDelegate respondsToSelector:@selector(isNeedsSystemNotification)]) {
+        return [self.systemNotiDelegate isNeedsSystemNotification];
     }
     return YES;
 }
@@ -276,11 +276,8 @@ static EaseIMKitManager *easeIMKit = nil;
 //收到请求返回展示信息
 - (NSString*)requestDidReceiveShowMessage:(NSString *)conversationId requestUser:(NSString *)requestUser reason:(EaseIMKitCallBackReason)reason
 {
-    EMMulticastDelegateEnumerator *multicastDelegates = [self.delegates delegateEnumerator];
-    for (EMMulticastDelegateNode *node in [multicastDelegates getDelegates]) {
-        id<EaseIMKitManagerDelegate> delegate = (id<EaseIMKitManagerDelegate>)node.delegate;
-        if ([delegate respondsToSelector:@selector(requestDidReceiveShowMessage:requestUser:reason:)])
-            return [delegate requestDidReceiveShowMessage:conversationId requestUser:requestUser reason:reason];
+    if (self.systemNotiDelegate && [self.systemNotiDelegate respondsToSelector:@selector(requestDidReceiveShowMessage:requestUser:reason:)]) {
+        return [self.systemNotiDelegate requestDidReceiveShowMessage:conversationId requestUser:requestUser reason:reason];
     }
     return @"";
 }
@@ -288,11 +285,8 @@ static EaseIMKitManager *easeIMKit = nil;
 //收到请求返回扩展信息
 - (NSDictionary *)requestDidReceiveConversationExt:(NSString *)conversationId requestUser:(NSString *)requestUser reason:(EaseIMKitCallBackReason)reason
 {
-    EMMulticastDelegateEnumerator *multicastDelegates = [self.delegates delegateEnumerator];
-    for (EMMulticastDelegateNode *node in [multicastDelegates getDelegates]) {
-        id<EaseIMKitManagerDelegate> delegate = (id<EaseIMKitManagerDelegate>)node.delegate;
-        if ([delegate respondsToSelector:@selector(requestDidReceiveConversationExt:requestUser:reason:)])
-            return [delegate requestDidReceiveConversationExt:conversationId requestUser:requestUser reason:reason];
+    if (self.systemNotiDelegate && [self.systemNotiDelegate respondsToSelector:@selector(requestDidReceiveConversationExt:requestUser:reason:)]) {
+        return [self.systemNotiDelegate requestDidReceiveConversationExt:conversationId requestUser:requestUser reason:reason];
     }
     return [[NSDictionary alloc]init];
 }
