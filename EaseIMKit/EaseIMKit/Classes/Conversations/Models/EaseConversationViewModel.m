@@ -7,7 +7,7 @@
 
 #import "EaseConversationViewModel.h"
 #import "EaseHelper.h"
-#import "EaseHeaders.h"
+#import "UIColor+EaseUI.h"
 
 @implementation EaseConversationViewModel
 @synthesize bgView = _bgView;

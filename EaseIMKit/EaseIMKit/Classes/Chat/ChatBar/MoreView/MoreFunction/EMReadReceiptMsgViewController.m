@@ -84,7 +84,7 @@
         }
     };
     
-    [[EMClient sharedClient].chatManager asyncFetchGroupMessageAcksFromServer:_msgCell.model.emModel.messageId groupId:self.groupId startGroupAckId:nil pageSize:100 completion:^(EMCursorResult *aResult, EMError *error, int totalCount) {
+    [[EMClient sharedClient].chatManager asyncFetchGroupMessageAcksFromServer:_msgCell.model.message.messageId groupId:self.groupId startGroupAckId:nil pageSize:100 completion:^(EMCursorResult *aResult, EMError *error, int totalCount) {
         block(aResult.list,error,totalCount);
     }];
 }
@@ -178,7 +178,7 @@
     [msgLable setFont:[UIFont fontWithName:@"Helvetica-Bold" size:18]];
     msgLable.textColor = [UIColor blackColor];
     msgLable.numberOfLines = 0;
-    EMTextMessageBody *body = (EMTextMessageBody *)_msgCell.model.emModel.body;
+    EMTextMessageBody *body = (EMTextMessageBody *)_msgCell.model.message.body;
     msgLable.text = [EMEmojiHelper convertEmoji:body.text];
     [msgView addSubview:msgLable];
     [msgLable mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -192,8 +192,8 @@
     personInfoLable.font = [UIFont systemFontOfSize:14];
     personInfoLable.textColor = [UIColor grayColor];
     personInfoLable.numberOfLines = 0;
-    NSString *name = _msgCell.model.emModel.from;
-    NSString *time = [EMDateHelper formattedTimeFromTimeInterval:_msgCell.model.emModel.localTime];
+    NSString *name = _msgCell.model.message.from;
+    NSString *time = [EMDateHelper formattedTimeFromTimeInterval:_msgCell.model.message.localTime];
     NSString *personInfo = [NSString stringWithFormat:@"%@  %@",name,time];
     personInfoLable.text = personInfo;
     [msgView addSubview:personInfoLable];

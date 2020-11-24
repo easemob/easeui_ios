@@ -15,23 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EMChatViewController (EMMsgLongPressIncident)
 
 //长按操作栏
-@property (strong, nonatomic) NSIndexPath *__nullable menuIndexPath;
+@property (strong, nonatomic) NSIndexPath *__nullable longPressIndexPath;
 
-@property (nonatomic, strong) UIMenuItem *deleteMenuItem;
-@property (nonatomic, strong) UIMenuItem *copyMenuItem;
-@property (nonatomic, strong) UIMenuItem *recallMenuItem;
-@property (nonatomic, strong) UIMenuItem *transpondMenuItem;
+- (void)executeAction:(NSInteger)tag;
 
-- (NSMutableArray *)showMenuViewController:(EMMessageCell *)aCell
-                                     model:(EMMessageModel *)aModel;
-
-- (void)deleteMenuItemAction:(UIMenuItem *)aItem;
-
-- (void)copyMenuItemAction:(UIMenuItem *)aItem;
-
-- (void)transpondMenuItemAction:(UIMenuItem *)aItem;
-
-- (void)recallMenuItemAction:(UIMenuItem *)aItem;
+- (void)resetCellLongPressStatus:(EMMessageCell *)aCell;
 
 @end
 

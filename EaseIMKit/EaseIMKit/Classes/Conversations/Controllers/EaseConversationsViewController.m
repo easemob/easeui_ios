@@ -47,11 +47,12 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTabView) name:CONVERSATIONLIST_UPDATE object:nil];
 }
 
 - (void)dealloc
 {
-    NSLog(@"conversaitons vc dealloc");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 

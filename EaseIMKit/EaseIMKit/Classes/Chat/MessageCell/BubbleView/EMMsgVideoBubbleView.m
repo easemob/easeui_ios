@@ -58,7 +58,7 @@
 {
     EMMessageType type = model.type;
     if (type == EMMessageTypeVideo) {
-        EMVideoMessageBody *body = (EMVideoMessageBody *)model.emModel.body;
+        EMVideoMessageBody *body = (EMVideoMessageBody *)model.message.body;
         NSString *imgPath = body.thumbnailLocalPath;
         if ([imgPath length] == 0 && model.direction == EMMessageDirectionSend) {
             imgPath = body.localPath;
