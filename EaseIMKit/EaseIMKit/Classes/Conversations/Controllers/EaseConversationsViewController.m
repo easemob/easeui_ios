@@ -62,27 +62,21 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(easeNumberOfSectionsInTableView:)]) {
-        return [self.delegate easeNumberOfSectionsInTableView:tableView];
-    }
-    
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:numberOfRowsInSection:)]) {
-        return [self.delegate easeTableView:tableView numberOfRowsInSection:section];
-    }
-    
     return [self.dataAry count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:cellForRowAtIndexPath:)]) {
-        return [self.delegate easeTableView:tableView cellForRowAtIndexPath:indexPath];
+        UITableViewCell *cell = [self.delegate easeTableView:tableView cellForRowAtIndexPath:indexPath];
+        if (cell) {
+            return cell;
+        }
     }
     
     EaseConversationCell *cell = [EaseConversationCell tableView:tableView cellViewModel:_viewModel];

@@ -56,7 +56,7 @@
 {
     
     DemoUserModel *model = [[DemoUserModel alloc] initWithEaseId:conversationId];
-    model.nickName =  @"我是昵称";
+//    model.nickName =  @"我是昵称";
     return model;
 }
 

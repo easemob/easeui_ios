@@ -74,7 +74,10 @@
     
     EaseContactModel *model = [self cellModelFromIndex:indexPath];
     if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:cellForRowAtContactModel:)]) {
-        return [self.delegate easeTableView:tableView cellForRowAtContactModel: model];
+        UITableViewCell *cell = [self.delegate easeTableView:tableView cellForRowAtContactModel: model];
+        if (cell) {
+            return cell;
+        }
     }
     
     EaseContactCell *cell = [EaseContactCell tableView:tableView cellViewModel:_viewModel];

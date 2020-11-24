@@ -21,7 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     EaseContactsViewModel *model = [[EaseContactsViewModel alloc] init];
-    model.avatarType = RoundedCorner;
+    model.avatarType = Rectangular;
     model.sectionTitleColor = UIColor.redColor;
     model.sectionTitleBgColor = UIColor.clearColor;
     model.sectionTitleFont = [UIFont systemFontOfSize:40];
