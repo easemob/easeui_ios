@@ -117,7 +117,7 @@
                                                                             title:!model.isTop ? @"置顶" : @"取消置顶"
                                                                           handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL))
     {
-        EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.itemId
+        EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.easeId
                                                                                      type:model.type
                                                                          createIfNotExist:YES];
         [conversation setTop:!model.isTop];
@@ -160,7 +160,7 @@
     __weak typeof(self) weakSelf = self;
     NSInteger row = indexPath.row;
     EaseConversationModel *model = [self.dataAry objectAtIndex:row];
-    [[EMClient sharedClient].chatManager deleteConversation:model.itemId
+    [[EMClient sharedClient].chatManager deleteConversation:model.easeId
                                            isDeleteMessages:YES
                                                  completion:^(NSString *aConversationId, EMError *aError) {
         if (!aError) {
