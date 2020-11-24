@@ -20,7 +20,7 @@
     UILabel *_sectionTitleLabel;
 }
 
-
+@property (nonatomic, strong) NSArray<EaseUserDelegate> *contacts;
 @property (nonatomic, strong) NSMutableArray *letterTitles;
 @property (nonatomic, strong) NSMutableArray *contactLists;
 

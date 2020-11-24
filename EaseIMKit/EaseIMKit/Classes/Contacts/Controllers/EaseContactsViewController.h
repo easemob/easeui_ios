@@ -32,10 +32,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseContactsViewController : EaseBaseTableViewController
 @property (nonatomic, strong) NSArray<EaseUserDelegate> *customHeaderItems;
-@property (nonatomic, strong) NSArray<EaseUserDelegate> *contacts;
+
 @property (nonatomic) id<EaseContactsViewControllerDelegate> delegate;
 
 - (instancetype)initWithViewModel:(EaseContactsViewModel *)model;
+
+- (void)setContacts:(NSArray<EaseUserDelegate> * _Nonnull)contacts;
 
 @end
 

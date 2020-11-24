@@ -14,16 +14,25 @@
 /*!
  *  头像风格
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, EaseAvatarStyle) {
     RoundedCorner = 0,      //圆角
     Rectangular,            //矩形
     Circular,               //圆形
-} EaseAvatarStyle;
+};
 
 /*!
  *  未读数view位置
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, EMUnReadCountViewPosition) {
     EMCellRight = 0,    //cell右方
     EMAvatarTopRight,   //头像右上角
-} EMUnReadCountViewPosition;
+} ;
+
+
+typedef NS_ENUM(NSInteger, EaseIMKitCallBackReason) {
+    ContanctsRequestDidReceive = 0,     //收到加为联系人请求
+    ContanctsRequestDidAgree = 1,       //联系人请求被同意
+    
+    GroupInvitationDidReceive = 10,     //收到加群邀请
+    JoinGroupRequestDidReceive = 11,    //收到加群申请
+};

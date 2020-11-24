@@ -6,7 +6,6 @@
 //
 
 #import "EaseConversationViewModel.h"
-#import "EaseHelper.h"
 #import "EaseHeaders.h"
 #import "UIImage+EaseUI.h"
 
