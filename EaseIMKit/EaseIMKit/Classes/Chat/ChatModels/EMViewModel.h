@@ -41,11 +41,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) CGFloat contentFontSize; //消息字体大小
 @property (nonatomic) EMChatBarStyle chatBarStyle; //输入区类型：(全部功能，缺少语音，缺少表情，只有扩展，纯文本)
 @property (nonatomic) EaseAvatarStyle avatarStyle; //头像风格
-@property (nonatomic) CGFloat avatarCornerRadius; //头像圆角大小 默认：0 (只有头像类型是圆角才会有效)
-@property (nonatomic) CGFloat avatarLength; //头像边长（默认正方形）
+@property (nonatomic) CGFloat avatarCornerRadius; //头像圆角大小 默认：0 (只有头像类型是圆角生效)
 //仅群聊可设置
 @property (nonatomic, assign) CGFloat chatViewHeight; //聊天区域高度：仅群聊可设置
-@property (nonatomic)  EMArrangementStyle msgArrangementStyle; //聊天区域消息排列方式
+@property (nonatomic) EMArrangementStyle msgArrangementStyle; //聊天区域消息排列方式
 
 @end
 

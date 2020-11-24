@@ -11,9 +11,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol EaseIMKitManagerDelegate <NSObject>
-
+//系统通知接口
+@protocol EaseIMKitSystemNotiDelegate <NSObject>
 @optional
+- (void)conversationsUnreadCountUpdate:(NSInteger)unreadCount;//会话未读总数
 
 /**
  * 是否需要系统通知：好友/群 申请等   默认需要
@@ -45,10 +46,15 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   reason   请求原因
  */
 - (NSDictionary *)requestDidReceiveConversationExt:(NSString *)conversationId requestUser:(NSString *)requestUser reason:(EaseIMKitCallBackReason)reason;
-
-- (void)conversationsUnreadCountUpdate:(NSInteger)unreadCount;//会话未读总数
-
 @end
+
+
+
+@protocol EaseIMKitManagerDelegate <NSObject>
+@optional
+- (void)conversationsUnreadCountUpdate:(NSInteger)unreadCount;//会话未读总数
+@end
+
 
 @interface EaseIMKitManager : NSObject
 
@@ -57,6 +63,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
 - (void)removeDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
+
+@property (nonatomic) id<EaseIMKitSystemNotiDelegate>systemNotiDelegate; //系统通知回调代理
 
 @end
 
