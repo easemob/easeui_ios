@@ -37,11 +37,6 @@
     return self;
 }
 
-- (NSString*)itemId
-{
-    return _conversation.conversationId;
-}
-
 - (EMConversationType)type
 {
     return _conversation.type;
@@ -54,7 +49,6 @@
 - (BOOL)isTop {
     return [_conversation isTop];
 }
-
 
 - (void)setDraft:(NSString *)draft {
     [_conversation setDraft:draft];
@@ -144,6 +138,16 @@
 - (long long)lastestUpdateTime {
     return _conversation.latestUpdateTime;
 }
+
+- (NSString*)easeId
+{
+    if (_userDelegate && [_userDelegate respondsToSelector:@selector(easeId)]) {
+        return _userDelegate.easeId;
+    }
+    
+    return _conversation.conversationId;
+}
+
 
 - (UIImage *)defaultAvatar {
     if (_userDelegate && [_userDelegate respondsToSelector:@selector(defaultAvatar)]) {
