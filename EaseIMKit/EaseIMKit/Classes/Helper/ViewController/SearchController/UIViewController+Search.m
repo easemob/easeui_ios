@@ -8,6 +8,7 @@
 
 #import "UIViewController+Search.h"
 #import <objc/runtime.h>
+#import "UIImage+EaseUI.h"
 #import "Masonry.h"
 
 static const void *SearchButtonKey = &SearchButtonKey;
@@ -68,7 +69,7 @@ static const void *ResultNavigationControllerKey = &ResultNavigationControllerKe
         self.searchButton.titleEdgeInsets = UIEdgeInsetsMake(0, 18, 0, 0);
         [self.searchButton setTitle:@"搜索" forState:UIControlStateNormal];
         [self.searchButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        [self.searchButton setImage:[UIImage imageNamed:@"search_gray"] forState:UIControlStateNormal];
+        [self.searchButton setImage:[UIImage easeUIImageNamed:@"search_gray"] forState:UIControlStateNormal];
         [self.searchButton addTarget:self action:@selector(searchButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:self.searchButton];
         [self.searchButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -84,7 +85,7 @@ static const void *ResultNavigationControllerKey = &ResultNavigationControllerKe
         self.resultController.searchBar.delegate = self;
         
         self.resultNavigationController = [[UINavigationController alloc] initWithRootViewController:self.resultController];
-        [self.resultNavigationController.navigationBar setBackgroundImage:[[UIImage imageNamed:@"navBarBg"] stretchableImageWithLeftCapWidth:10 topCapHeight:10] forBarMetrics:UIBarMetricsDefault];
+        [self.resultNavigationController.navigationBar setBackgroundImage:[[UIImage easeUIImageNamed:@"navBarBg"] stretchableImageWithLeftCapWidth:10 topCapHeight:10] forBarMetrics:UIBarMetricsDefault];
     }
 }
 

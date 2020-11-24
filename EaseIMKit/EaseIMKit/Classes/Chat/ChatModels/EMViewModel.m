@@ -7,6 +7,7 @@
 
 #import "EMViewModel.h"
 #import "EMColorDefine.h"
+#import "UIImage+EaseUI.h"
 
 @implementation EMViewModel
 
@@ -20,8 +21,8 @@
         //_msgTimeItemBgColor = kColor_LightGray;
         _msgTimeItemBgColor = [UIColor purpleColor];
         _msgTimeItemFontColor = [UIColor grayColor];
-        _receiveBubbleBgPicture = [UIImage imageNamed:@"msg_bg_recv"];
-        _sendBubbleBgPicture = [UIImage imageNamed:@"msg_bg_send"];
+        _receiveBubbleBgPicture = [UIImage easeUIImageNamed:@"msg_bg_recv"];
+        _sendBubbleBgPicture = [UIImage easeUIImageNamed:@"msg_bg_send"];
         _contentFontSize = 18.f;
         _chatBarStyle = EMChatBarStyleAll;
     }

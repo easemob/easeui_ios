@@ -8,6 +8,7 @@
 
 #import "EMSearchBar.h"
 #import "EaseHeaders.h"
+#import "UIImage+EaseUI.h"
 
 @interface EMSearchBar()<UITextFieldDelegate>
 
@@ -59,7 +60,7 @@
     
     UIImageView *leftView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 15)];
     leftView.contentMode = UIViewContentModeScaleAspectFit;
-    leftView.image = [UIImage imageNamed:@"search_gray"];
+    leftView.image = [UIImage easeUIImageNamed:@"search_gray"];
     self.textField.leftView = leftView;
     
     

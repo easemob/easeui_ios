@@ -7,6 +7,7 @@
 //
 
 #import "EMChatBarEmoticonView.h"
+#import "UIImage+EaseUI.h"
 #import "EaseHeaders.h"
 #import "EMEmojiHelper.h"
 
@@ -65,11 +66,11 @@
     }];
     
     self.extBtn = [[UIButton alloc] init];
-    [self.extBtn setImage:[UIImage imageNamed:@"deleteEmoticon"] forState:UIControlStateNormal];
+    [self.extBtn setImage:[UIImage easeUIImageNamed:@"deleteEmoticon"] forState:UIControlStateNormal];
     
     self.deleteBtn = [[UIButton alloc]init];
     self.deleteBtn.backgroundColor = [UIColor whiteColor];
-    [self.deleteBtn setImage:[UIImage imageNamed:@"deleteEmoticon"] forState:UIControlStateNormal];
+    [self.deleteBtn setImage:[UIImage easeUIImageNamed:@"deleteEmoticon"] forState:UIControlStateNormal];
     [self.deleteBtn addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
      
     self.bottomScrollView = [[UIScrollView alloc] init];

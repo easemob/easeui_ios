@@ -6,7 +6,7 @@
 //
 
 #import "EaseContactsViewController.h"
-#import "EaseContactModel.h"
+#import "EaseContactCellModel.h"
 #import "EaseContactCell.h"
 #import "UITableView+Refresh.h"
 #import <Hyphenate/Hyphenate.h>
@@ -58,7 +58,7 @@
         if (!aError) {
             NSMutableArray<EaseContactDelegate> *contacts = [NSMutableArray<EaseContactDelegate> array];
             for (NSString *username in aList) {
-                EaseContactModel *model = [[EaseContactModel alloc] initWithShowName:username];
+                EaseContactCellModel *model = [[EaseContactCellModel alloc] initWithShowName:username];
                 [contacts addObject:model];
             }
            [weakSelf sortContact:contacts];
@@ -73,20 +73,20 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    id<EaseContactDelegate> easeContactModel;
+    id<EaseContactDelegate> EaseContactCellModel;
 
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:cellForRowAtContact:)]) {
-        return [self.delegate easeTableView:tableView cellForRowAtContact: easeContactModel];
+        return [self.delegate easeTableView:tableView cellForRowAtContact: EaseContactCellModel];
     }
     
     else {
         EaseContactLetterModel *model = self.contactLists[indexPath.section];
-        easeContactModel = model.contacts[indexPath.row];
+        EaseContactCellModel = model.contacts[indexPath.row];
     }
     
     EaseContactCell *cell = [EaseContactCell tableView:tableView cellViewModel:_viewModel];
-    cell.model = easeContactModel;
+    cell.model = EaseContactCellModel;
     
     return cell;
 }
@@ -163,7 +163,7 @@
         [contactLists addObject:letterModel];
     }
     
-    for (EaseContactModel *model in ret) {
+    for (EaseContactCellModel *model in ret) {
         if ([letters containsObject:model.firstLetter]) {
             NSUInteger index = [letters indexOfObject:model.firstLetter];
             EaseContactLetterModel *letterModel = contactLists[index];

@@ -68,7 +68,7 @@
     if (_viewModel.avatarType != Rectangular) {
         _avatarView.clipsToBounds = YES;
         if (_viewModel.avatarType == RoundedCorner) {
-            _avatarView.layer.cornerRadius = _viewModel.avatarSize.width / 6;
+            _avatarView.layer.cornerRadius = 5;
         }
         else if(Circular) {
             _avatarView.layer.cornerRadius = _viewModel.avatarSize.width / 2;
@@ -156,7 +156,7 @@
     }
 }
 
-- (void)setModel:(EaseConversationModel *)model
+- (void)setModel:(EaseConversationCellModel *)model
 {
     _model = model;
     [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL]

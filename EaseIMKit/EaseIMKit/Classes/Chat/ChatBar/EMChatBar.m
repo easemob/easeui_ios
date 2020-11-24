@@ -7,6 +7,7 @@
 //
 
 #import "EMChatBar.h"
+#import "UIImage+EaseUI.h"
 
 #define ktextViewMinHeight 40
 #define ktextViewMaxHeight 80
@@ -67,8 +68,8 @@
     }];
     
     self.audioButton = [[UIButton alloc] init];
-    [_audioButton setImage:[UIImage imageNamed:@"audio-unSelected"] forState:UIControlStateNormal];
-    [_audioButton setImage:[UIImage imageNamed:@"character"] forState:UIControlStateSelected];
+    [_audioButton setImage:[UIImage easeUIImageNamed:@"audio-unSelected"] forState:UIControlStateNormal];
+    [_audioButton setImage:[UIImage easeUIImageNamed:@"character"] forState:UIControlStateSelected];
     [_audioButton addTarget:self action:@selector(audioButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.audioButton];
     [_audioButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -78,8 +79,8 @@
     }];
     
     self.ConversationToolBarBtn = [[UIButton alloc] init];
-    [_ConversationToolBarBtn setImage:[UIImage imageNamed:@"more-unselected"] forState:UIControlStateNormal];
-    [_ConversationToolBarBtn setImage:[UIImage imageNamed:@"more-selected"] forState:UIControlStateSelected];
+    [_ConversationToolBarBtn setImage:[UIImage easeUIImageNamed:@"more-unselected"] forState:UIControlStateNormal];
+    [_ConversationToolBarBtn setImage:[UIImage easeUIImageNamed:@"more-selected"] forState:UIControlStateSelected];
     [_ConversationToolBarBtn addTarget:self action:@selector(moreButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_ConversationToolBarBtn];
     [_ConversationToolBarBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -89,8 +90,8 @@
     }];
     
     self.emojiButton = [[UIButton alloc] init];
-    [_emojiButton setImage:[UIImage imageNamed:@"face"] forState:UIControlStateNormal];
-    [_emojiButton setImage:[UIImage imageNamed:@"character"] forState:UIControlStateSelected];
+    [_emojiButton setImage:[UIImage easeUIImageNamed:@"face"] forState:UIControlStateNormal];
+    [_emojiButton setImage:[UIImage easeUIImageNamed:@"character"] forState:UIControlStateSelected];
     [_emojiButton addTarget:self action:@selector(emoticonButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_emojiButton];
     [_emojiButton mas_makeConstraints:^(MASConstraintMaker *make) {

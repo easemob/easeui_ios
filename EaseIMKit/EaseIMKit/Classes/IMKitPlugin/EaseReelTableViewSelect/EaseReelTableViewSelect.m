@@ -1,6 +1,7 @@
 
 #import "EaseReelTableViewSelect.h"
 #import "Masonry.h"
+#import "UIImage+EaseUI.h"
 #define  LeftView 10.0f
 #define  TopToView 10.0f
 @interface  EaseReelTableViewSelect()<UITableViewDataSource,UITableViewDelegate>
@@ -125,7 +126,7 @@ UITableView * tableView;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:0 reuseIdentifier:Identifier];
     }
-    cell.imageView.image = [UIImage imageNamed:self.imagesData[indexPath.row]];
+    cell.imageView.image = [UIImage easeUIImageNamed:self.imagesData[indexPath.row]];
     cell.textLabel.text = _selectData[indexPath.row];
     cell.textLabel.font = [UIFont systemFontOfSize:18];
     return cell;

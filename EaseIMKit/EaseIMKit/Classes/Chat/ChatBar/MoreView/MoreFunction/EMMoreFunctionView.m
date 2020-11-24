@@ -8,6 +8,7 @@
 
 #import "EMMoreFunctionView.h"
 #import "HorizontalLayout.h"
+#import "UIImage+EaseUI.h"
 
 @interface EMMoreFunctionView()<UICollectionViewDataSource,SessionToolbarCellDelegate>
 {
@@ -177,7 +178,7 @@
 
 - (void)personalizeToolbar:(NSString *)imgName funcDesc:(NSString *)funcDesc tagStr:(NSString *)tagStr
 {
-    [_toolBtn setImage:[UIImage imageNamed:imgName] forState:UIControlStateNormal];
+    [_toolBtn setImage:[UIImage easeUIImageNamed:imgName] forState:UIControlStateNormal];
     [_toolLabel setText:funcDesc];
     NSDictionary *_tagDescDict = @{@"photo-album":@"0", @"camera":@"1", @"video_conf":@"2", @"location":@"3", @"icloudFile":@"4", @"pin_readReceipt":@"5"};
     _tag = [((NSString*)[_tagDescDict objectForKey:tagStr]) intValue];

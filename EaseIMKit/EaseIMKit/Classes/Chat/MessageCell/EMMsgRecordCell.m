@@ -150,7 +150,7 @@
         }];
         
         playImgView = [[UIImageView alloc] init];
-        playImgView.image = [UIImage imageNamed:@"msg_video_white"];
+        playImgView.image = [UIImage easeUIImageNamed:@"msg_video_white"];
         playImgView.contentMode = UIViewContentModeScaleAspectFill;
         [imgView addSubview:playImgView];
         [playImgView mas_makeConstraints:^(MASConstraintMaker *make) {

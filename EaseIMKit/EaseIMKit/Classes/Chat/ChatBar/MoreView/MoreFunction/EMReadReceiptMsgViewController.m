@@ -40,7 +40,7 @@
     [super viewDidLoad];
     /*
     for (int i=0; i<4; i++) {
-        EMReadReceiptMemberModel *model = [[EMReadReceiptMemberModel alloc]initWithInfo:[UIImage imageNamed:@"defaultAvatar"] nick:[NSString stringWithFormat:@"member %d",i] time:@"12:12"];
+        EMReadReceiptMemberModel *model = [[EMReadReceiptMemberModel alloc]initWithInfo:[UIImage easeUIImageNamed:@"defaultAvatar"] nick:[NSString stringWithFormat:@"member %d",i] time:@"12:12"];
         [self.dataArray  addObject:model];
     }*/
     self.msgTimelTag = -1;
@@ -100,7 +100,7 @@
             timeStr = [EMDateHelper formattedTimeFromTimeInterval:msg.timestamp];
             self.msgTimelTag = msg.timestamp;
         }
-        EMReadReceiptMemberModel *model = [[EMReadReceiptMemberModel alloc]initWithInfo:[UIImage imageNamed:@"defaultAvatar"] nick:msg.from time:timeStr];
+        EMReadReceiptMemberModel *model = [[EMReadReceiptMemberModel alloc]initWithInfo:[UIImage easeUIImageNamed:@"defaultAvatar"] nick:msg.from time:timeStr];
         [formated addObject:model];
     }
     
@@ -111,7 +111,7 @@
 {
     self.closeButton = [[UIButton alloc] init];
     self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -10, 10, 15);
-    [self.closeButton setImage:[UIImage imageNamed:@"back_gary"] forState:UIControlStateNormal];
+    [self.closeButton setImage:[UIImage easeUIImageNamed:@"back_gary"] forState:UIControlStateNormal];
     [self.closeButton addTarget:self action:@selector(closeButtonAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.closeButton];
     [self.closeButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -164,7 +164,7 @@
     }];
     
     UIImageView *img = [[UIImageView alloc]init];
-    img.image = [UIImage imageNamed:@"pin-red"];
+    img.image = [UIImage easeUIImageNamed:@"pin-red"];
     [self.view addSubview:img];
     [img mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(msgView).offset(5);

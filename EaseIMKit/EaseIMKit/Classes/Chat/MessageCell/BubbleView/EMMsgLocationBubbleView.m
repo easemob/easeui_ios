@@ -17,9 +17,9 @@
     self = [super initWithDirection:aDirection type:aType viewModel:viewModel];
     if (self) {
         if (self.direction == EMMessageDirectionSend) {
-            self.iconView.image = [UIImage imageNamed:@"msg_location_white"];
+            self.iconView.image = [UIImage easeUIImageNamed:@"msg_location_white"];
         } else {
-            self.iconView.image = [UIImage imageNamed:@"目标点"];
+            self.iconView.image = [UIImage easeUIImageNamed:@"目标点"];
         }
     }
     

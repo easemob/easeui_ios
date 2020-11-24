@@ -1,5 +1,5 @@
 //
-//  EaseContactModel.h
+//  EaseContactCellModel.h
 //  EaseIMKit
 //
 //  Created by 杜洁鹏 on 2020/11/5.
@@ -10,8 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EaseContactModel : NSObject <EaseContactDelegate>
+@interface EaseContactCellModel : NSObject <EaseContactDelegate>
 - (instancetype)initWithShowName:(NSString *)showName;
+- (void)setDefaultAvatar:(UIImage *)defaultAvatar;
+- (UIImage *)defaultAvatar;
 @end
 
 NS_ASSUME_NONNULL_END

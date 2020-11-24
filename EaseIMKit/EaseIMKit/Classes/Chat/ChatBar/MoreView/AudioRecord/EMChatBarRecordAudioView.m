@@ -8,6 +8,7 @@
 
 #import "EMChatBarRecordAudioView.h"
 #import "EMAudioRecordUtil.h"
+#import "UIImage+EaseUI.h"
 #import "EaseHeaders.h"
 
 @interface EMChatBarRecordAudioView()
@@ -60,7 +61,7 @@
     
     self.recordButton = [[UIButton alloc] init];
     [self.recordButton setBackgroundColor:[UIColor whiteColor]];
-    [self.recordButton setImage:[UIImage imageNamed:@"grayAudioBtn"] forState:UIControlStateNormal];
+    [self.recordButton setImage:[UIImage easeUIImageNamed:@"grayAudioBtn"] forState:UIControlStateNormal];
     self.recordButton.layer.cornerRadius = 40;
     [self.recordButton addTarget:self action:@selector(recordButtonTouchBegin) forControlEvents:UIControlEventTouchDown];
     [self.recordButton addTarget:self action:@selector(recordButtonTouchEnd) forControlEvents:UIControlEventTouchUpInside];
@@ -157,13 +158,13 @@
 
 - (void)_setupImgs
 {
-    self.img_left_3.image = [UIImage imageNamed:@"audioSlide03-white"];
-    self.img_left_2.image = [UIImage imageNamed:@"audioSlide02-white"];
-    self.img_left_1.image = [UIImage imageNamed:@"audioSlide01-white"];
+    self.img_left_3.image = [UIImage easeUIImageNamed:@"audioSlide03-white"];
+    self.img_left_2.image = [UIImage easeUIImageNamed:@"audioSlide02-white"];
+    self.img_left_1.image = [UIImage easeUIImageNamed:@"audioSlide01-white"];
     
-    self.img_right_1.image = [UIImage imageNamed:@"audioSlide01-white"];
-    self.img_right_2.image = [UIImage imageNamed:@"audioSlide02-white"];
-    self.img_right_3.image = [UIImage imageNamed:@"audioSlide03-white"];
+    self.img_right_1.image = [UIImage easeUIImageNamed:@"audioSlide01-white"];
+    self.img_right_2.image = [UIImage easeUIImageNamed:@"audioSlide02-white"];
+    self.img_right_3.image = [UIImage easeUIImageNamed:@"audioSlide03-white"];
 }
 
 - (void)_setupImgViews
@@ -206,16 +207,16 @@
     switch (selected) {
         case 1:
             [self _setupImgs];
-            self.img_left_1.image = [UIImage imageNamed:@"audioSlide01-blue"];
-            self.img_right_1.image = [UIImage imageNamed:@"audioSlide01-blue"];
+            self.img_left_1.image = [UIImage easeUIImageNamed:@"audioSlide01-blue"];
+            self.img_right_1.image = [UIImage easeUIImageNamed:@"audioSlide01-blue"];
             break;
         case 2:
-            self.img_left_2.image = [UIImage imageNamed:@"audioSlide02-blue"];
-            self.img_right_2.image = [UIImage imageNamed:@"audioSlide02-blue"];
+            self.img_left_2.image = [UIImage easeUIImageNamed:@"audioSlide02-blue"];
+            self.img_right_2.image = [UIImage easeUIImageNamed:@"audioSlide02-blue"];
             break;
         case 0:
-            self.img_left_3.image = [UIImage imageNamed:@"audioSlide03-blue"];
-            self.img_right_3.image = [UIImage imageNamed:@"audioSlide03-blue"];
+            self.img_left_3.image = [UIImage easeUIImageNamed:@"audioSlide03-blue"];
+            self.img_right_3.image = [UIImage easeUIImageNamed:@"audioSlide03-blue"];
             break;
         default:
             break;
@@ -304,7 +305,7 @@
     [self _stopRecord];
     
     self.titleLabel.text = @"按住说话";
-    [self.recordButton setImage:[UIImage imageNamed:@"grayAudioBtn"] forState:UIControlStateNormal];
+    [self.recordButton setImage:[UIImage easeUIImageNamed:@"grayAudioBtn"] forState:UIControlStateNormal];
 }
 
 - (void)recordButtonTouchCancelBegin
@@ -312,7 +313,7 @@
     self.titleLabel.hidden = NO;
     self.countView.hidden = YES;
     self.titleLabel.text = @"松手取消";
-    [self.recordButton setImage:[UIImage imageNamed:@"redAudioBtn"] forState:UIControlStateNormal];
+    [self.recordButton setImage:[UIImage easeUIImageNamed:@"redAudioBtn"] forState:UIControlStateNormal];
 }
 
 - (void)recordButtonTouchCancelCancel
@@ -320,13 +321,13 @@
     self.titleLabel.hidden = YES;
     self.countView.hidden = NO;
     self.titleLabel.text = @"松手发送";
-    [self.recordButton setImage:[UIImage imageNamed:@"blueAudioBtn"] forState:UIControlStateNormal];
+    [self.recordButton setImage:[UIImage easeUIImageNamed:@"blueAudioBtn"] forState:UIControlStateNormal];
 }
 
 - (void)recordButtonTouchCancelEnd
 {
     self.titleLabel.text = @"按住说话";
-    [self.recordButton setImage:[UIImage imageNamed:@"grayAudioBtn"] forState:UIControlStateNormal];
+    [self.recordButton setImage:[UIImage easeUIImageNamed:@"grayAudioBtn"] forState:UIControlStateNormal];
     
     [self _cancelRecord];
 }

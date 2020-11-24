@@ -9,7 +9,7 @@
 #import "EMAtGroupMembersViewController.h"
 
 #import "EMRealtimeSearch.h"
-
+#import "UIImage+EaseUI.h"
 #import "EMSearchBar.h"
 #import "EMAvatarNameCell.h"
 
@@ -82,7 +82,7 @@
         name = [self.searchResults objectAtIndex:indexPath.row];
     }
     cell.nameLabel.text = name;
-    cell.avatarView.image = [UIImage imageNamed:@"defaultAvatar"];
+    cell.avatarView.image = [UIImage easeUIImageNamed:@"defaultAvatar"];
     cell.indexPath = indexPath;
     
     return cell;
