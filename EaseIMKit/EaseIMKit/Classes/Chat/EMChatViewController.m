@@ -686,7 +686,7 @@
         if (!model) {
             model = [[EMMessageModel alloc]init];
         }
-        if (self.delegat && [self.delegate respondsToSelector:@selector(userData:)]) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(userData:)]) {
             id<EaseUserData> userData = [self.delegate userData:msg];
             model.userDataDelegate = userData;
         }
