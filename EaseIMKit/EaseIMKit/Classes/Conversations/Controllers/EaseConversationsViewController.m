@@ -47,7 +47,9 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willBeginRefresh) name:CONVERSATIONLIST_UPDATE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshTabView)
+                                                 name:CONVERSATIONLIST_UPDATE object:nil];
 }
 
 - (void)dealloc
@@ -110,7 +112,7 @@
                                                                              handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL))
     {
         [weakself _deleteConversation:indexPath];
-        [weakself willBeginRefresh];
+        [weakself refreshTabView];
     }];
     
     UIContextualAction *topAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal
@@ -121,7 +123,7 @@
                                                                                      type:model.type
                                                                          createIfNotExist:YES];
         [conversation setTop:!model.isTop];
-        [weakself willBeginRefresh];
+        [weakself refreshTabView];
     }];
     
     NSArray *swipeActions = @[deleteAction, topAction];
@@ -226,7 +228,7 @@
     });
 }
 
-- (void)willBeginRefresh
+- (void)refreshTabView
 {
     [self _loadAllConversationsFromDB];
 }
