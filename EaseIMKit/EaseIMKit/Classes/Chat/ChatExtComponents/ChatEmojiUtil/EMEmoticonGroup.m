@@ -8,6 +8,7 @@
 
 #import "EMEmoticonGroup.h"
 #import "EaseHeaders.h"
+#import "UIImage+EaseUI.h"
 
 EMEmoticonGroup *gGifGroup = nil;
 
@@ -65,7 +66,7 @@ EMEmoticonGroup *gGifGroup = nil;
         [models2 addObject:model];
     }
     NSString *tagImgName = [models2[0] imgName];
-    gGifGroup = [[EMEmoticonGroup alloc] initWithType:EMEmotionTypeGif dataArray:models2 icon:[UIImage imageNamed:tagImgName] rowCount:2 colCount:4];
+    gGifGroup = [[EMEmoticonGroup alloc] initWithType:EMEmotionTypeGif dataArray:models2 icon:[UIImage easeUIImageNamed:tagImgName] rowCount:2 colCount:4];
     return gGifGroup;
 }
 
@@ -122,7 +123,7 @@ EMEmoticonGroup *gGifGroup = nil;
     self.label.text = model.name;
     
     if ([model.imgName length] > 0) {
-        self.imgView.image = [UIImage imageNamed:model.imgName];
+        self.imgView.image = [UIImage easeUIImageNamed:model.imgName];
     }
 }
 

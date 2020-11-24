@@ -8,6 +8,8 @@
 
 #import "EMMsgTranspondViewController.h"
 
+#import "UIImage+EaseUI.h"
+
 #import "EMMessageModel.h"
 
 #import "EMAvatarNameCell.h"
@@ -76,13 +78,13 @@
         
         UIButton *checkButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 45, 30)];
         checkButton.tag = 100;
-        [checkButton setImage:[UIImage imageNamed:@"uncheck"] forState:UIControlStateNormal];
-        [checkButton setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateSelected];
+        [checkButton setImage:[UIImage easeUIImageNamed:@"uncheck"] forState:UIControlStateNormal];
+        [checkButton setImage:[UIImage easeUIImageNamed:@"checked"] forState:UIControlStateSelected];
         checkButton.userInteractionEnabled = NO;
         cell.accessoryView = checkButton;
     }
     
-    cell.avatarView.image = [UIImage imageNamed:@"defaultAvatar"];
+    cell.avatarView.image = [UIImage easeUIImageNamed:@"defaultAvatar"];
     cell.nameLabel.text = [self.dataArray objectAtIndex:indexPath.row];
     
     UIButton *checkButton = (UIButton *)cell.accessoryView;

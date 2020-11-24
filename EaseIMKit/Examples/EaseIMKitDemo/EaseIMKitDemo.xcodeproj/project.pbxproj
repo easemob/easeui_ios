@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3C7B87922563CCD40074F990 /* EaseChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C7B87912563CCD40074F990 /* EaseChatViewController.m */; };
 		6821891C4265850E39A38FB0 /* Pods_EaseIMKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 388F9279879A5BC867FA00EF /* Pods_EaseIMKitDemo.framework */; };
+		90146CF1256CB0CC00A8D524 /* ContactModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90146CF0256CB0CC00A8D524 /* ContactModel.m */; };
 		903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7925540390005E6BB1 /* ConversationsViewController.m */; };
 		903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7E2554039B005E6BB1 /* ContactsViewController.m */; };
 		903EAEB025540B89005E6BB1 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAEAF25540B89005E6BB1 /* SettingsViewController.m */; };
@@ -28,6 +29,8 @@
 		3C7B87902563CCD40074F990 /* EaseChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EaseChatViewController.h; sourceTree = "<group>"; };
 		3C7B87912563CCD40074F990 /* EaseChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EaseChatViewController.m; sourceTree = "<group>"; };
 		6F3E72642FD7C6CC7CBA7ACD /* Pods-EaseIMKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKitDemo.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		90146CEF256CB0CC00A8D524 /* ContactModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactModel.h; sourceTree = "<group>"; };
+		90146CF0256CB0CC00A8D524 /* ContactModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactModel.m; sourceTree = "<group>"; };
 		903EAE7825540390005E6BB1 /* ConversationsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConversationsViewController.h; sourceTree = "<group>"; };
 		903EAE7925540390005E6BB1 /* ConversationsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConversationsViewController.m; sourceTree = "<group>"; };
 		903EAE7D2554039B005E6BB1 /* ContactsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
@@ -91,13 +94,6 @@
 			path = ../../Pods;
 			sourceTree = "<group>";
 		};
-		9024F618255A7F7800BBE66D /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		903EAE7525540374005E6BB1 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -115,9 +111,10 @@
 		903EAE7625540374005E6BB1 /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
-				9024F618255A7F7800BBE66D /* Models */,
 				903EAE7D2554039B005E6BB1 /* ContactsViewController.h */,
 				903EAE7E2554039B005E6BB1 /* ContactsViewController.m */,
+				90146CEF256CB0CC00A8D524 /* ContactModel.h */,
+				90146CF0256CB0CC00A8D524 /* ContactModel.m */,
 			);
 			path = Contacts;
 			sourceTree = "<group>";
@@ -309,6 +306,7 @@
 				90A03A3F254A70E200D57B73 /* main.m in Sources */,
 				90A03A31254A70E100D57B73 /* SceneDelegate.m in Sources */,
 				90A18676256B9EE500074CD3 /* DemoUserModel.m in Sources */,
+				90146CF1256CB0CC00A8D524 /* ContactModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,7 @@
 
 #import "EMAlertController.h"
 #import "EaseHeaders.h"
+#import "UIImage+EaseUI.h"
 
 @interface EMAlertController()
 
@@ -125,7 +126,7 @@
             break;
     }
     
-    return [UIImage imageNamed:imageName];
+    return [UIImage easeUIImageNamed:imageName];
 }
 
 + (void)showAlertWithStyle:(EMAlertViewStyle)aStyle

@@ -9,6 +9,7 @@
 #import "EMMessageStatusView.h"
 #import "LoadingCALayer.h"
 #import "OneLoadingAnimationView.h"
+#import "UIImage+EaseUI.h"
 
 @interface EMMessageStatusView()
 
@@ -52,7 +53,7 @@
 {
     if (_failButton == nil) {
         _failButton = [[UIButton alloc] init];
-        [_failButton setImage:[UIImage imageNamed:@"icon叹号"] forState:UIControlStateNormal];
+        [_failButton setImage:[UIImage easeUIImageNamed:@"icon叹号"] forState:UIControlStateNormal];
         [_failButton addTarget:self action:@selector(failButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     

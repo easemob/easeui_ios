@@ -9,7 +9,7 @@
 #import "EaseHeaders.h"
 #import "EaseConversationViewModel.h"
 #import "EaseConversationCell.h"
-#import "EaseConversationModel.h"
+#import "EaseConversationCellModel.h"
 #import "EMConversation+EaseUI.h"
 
 @interface EaseConversationsViewController ()
@@ -85,7 +85,7 @@
     
     EaseConversationCell *cell = [EaseConversationCell tableView:tableView cellViewModel:_viewModel];
     
-    EaseConversationModel *model = self.dataAry[indexPath.row];
+    EaseConversationCellModel *model = self.dataAry[indexPath.row];
     
     cell.model = model;
     if (model.isTop) {
@@ -101,7 +101,7 @@
 
 - (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(tvos)
 {
-    EaseConversationModel *model = [self.dataAry objectAtIndex:indexPath.row];
+    EaseConversationCellModel *model = [self.dataAry objectAtIndex:indexPath.row];
     
     __weak typeof(self) weakself = self;
     
@@ -135,7 +135,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:didSelectRowAtIndexPath:)]) {
         return [self.delegate easeTableView:tableView didSelectRowAtIndexPath:indexPath];
     }
 }
@@ -159,7 +159,7 @@
 {
     __weak typeof(self) weakSelf = self;
     NSInteger row = indexPath.row;
-    EaseConversationModel *model = [self.dataAry objectAtIndex:row];
+    EaseConversationCellModel *model = [self.dataAry objectAtIndex:row];
     [[EMClient sharedClient].chatManager deleteConversation:model.itemId
                                            isDeleteMessages:YES
                                                  completion:^(NSString *aConversationId, EMError *aError) {
@@ -183,7 +183,7 @@
         NSMutableArray *topConvs = [NSMutableArray array];
         
         for (EMConversation *conv in conversations) {
-            EaseConversationModel *item = [[EaseConversationModel alloc] initWithConversation:conv];
+            EaseConversationCellModel *item = [[EaseConversationCellModel alloc] initWithConversation:conv];
             if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(easeUserDelegateAtConversationId:conversationType:)]) {
                 item.userDelegate = [weakSelf.delegate easeUserDelegateAtConversationId:conv.conversationId conversationType:conv.type];
             }
@@ -196,7 +196,7 @@
         }
         
         NSArray *normalConvList = [convs sortedArrayUsingComparator:
-                                   ^NSComparisonResult(EaseConversationModel *obj1, EaseConversationModel *obj2)
+                                   ^NSComparisonResult(EaseConversationCellModel *obj1, EaseConversationCellModel *obj2)
         {
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;
@@ -206,7 +206,7 @@
         }];
         
         NSArray *topConvList = [topConvs sortedArrayUsingComparator:
-                                ^NSComparisonResult(EaseConversationModel *obj1, EaseConversationModel *obj2)
+                                ^NSComparisonResult(EaseConversationCellModel *obj1, EaseConversationCellModel *obj2)
         {
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;

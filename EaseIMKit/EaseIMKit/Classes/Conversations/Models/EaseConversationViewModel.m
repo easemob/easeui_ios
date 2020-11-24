@@ -7,7 +7,8 @@
 
 #import "EaseConversationViewModel.h"
 #import "EaseHelper.h"
-#import "UIColor+EaseUI.h"
+#import "EaseHeaders.h"
+#import "UIImage+EaseUI.h"
 
 @implementation EaseConversationViewModel
 @synthesize bgView = _bgView;
@@ -66,7 +67,7 @@
 - (UIView *)defaultBgView {
     UIView *defaultBgView = [[UIView alloc] initWithFrame:CGRectZero];
     UIView *view = [[UIView alloc] initWithFrame:CGRectZero];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableViewBgImg"]];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage easeUIImageNamed:@"tableViewBgImg"]];
     UILabel *txtLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     txtLabel.font = [UIFont systemFontOfSize:14];
     txtLabel.textColor = [UIColor colorWithHexString:@"#999999"];

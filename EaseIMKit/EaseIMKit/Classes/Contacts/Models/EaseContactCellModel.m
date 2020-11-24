@@ -1,14 +1,14 @@
 //
-//  EaseContactModel.m
+//  EaseContactCellModel.m
 //  EaseIMKit
 //
 //  Created by 杜洁鹏 on 2020/11/5.
 //
 
-#import "EaseContactModel.h"
+#import "EaseContactCellModel.h"
 #import "UIImage+EaseUI.h"
 
-@implementation EaseContactModel {
+@implementation EaseContactCellModel {
     NSString *_showName;
     NSString *_firstLetter;
     UIImage *_defaultAvatar;
@@ -22,7 +22,7 @@
 - (instancetype)initWithShowName:(NSString *)showName {
     if (self = [super init]) {
         _showName = showName;
-        _defaultAvatar = [UIImage imageNamed:@"defaultAvatar.png"];
+        _defaultAvatar = [UIImage easeUIImageNamed:@"defaultAvatar.png"];
     }
     return self;
 }
@@ -54,6 +54,9 @@
     return _defaultAvatar;
 }
 
+- (void)setDefaultAvatar:(UIImage *)defaultAvatar {
+    _defaultAvatar = defaultAvatar;
+}
 
 
 @end

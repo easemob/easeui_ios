@@ -43,7 +43,7 @@
    
 #pragma mark - EaseConversationVCDelegate
 
-- (void)easeTableView:(UITableView *)tableView didSelectRowAtItem:(id<EaseUserDelegate>)item
+- (void)easeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EaseChatViewController *chatController = [[EaseChatViewController alloc]init];
     chatController.hidesBottomBarWhenPushed = YES;

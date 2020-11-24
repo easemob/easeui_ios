@@ -71,7 +71,7 @@
     }];
     
     if (self.direction == EMMessageDirectionSend) {
-        self.iconView.image = [UIImage imageNamed:@"msg_file_white"];
+        self.iconView.image = [UIImage easeUIImageNamed:@"msg_file_white"];
         [self.iconView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self).offset(10);
             make.left.equalTo(self).offset(5);
@@ -88,7 +88,7 @@
         
         self.detailLabel.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     } else {
-        self.iconView.image = [UIImage imageNamed:@"msg_file"];
+        self.iconView.image = [UIImage easeUIImageNamed:@"msg_file"];
         [self.iconView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self).offset(10);
             make.left.equalTo(self).offset(8);

@@ -9,6 +9,7 @@
 #import "EMPickFileViewController.h"
 #import "EMColorDefine.h"
 #import <Masonry/Masonry.h>
+#import "UIImage+EaseUI.h"
 
 @interface EMPickFileViewController ()
 
@@ -31,7 +32,7 @@
 
 - (void)_setupSubviews
 {
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"backleft"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage easeUIImageNamed:@"backleft"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
     [self _setupNavigationBarTitle];
     [self _setupItemBar];
     self.showRefreshHeader = YES;

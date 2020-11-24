@@ -56,7 +56,7 @@
     if (_viewModel.avatarType != Rectangular) {
         _avatarView.clipsToBounds = YES;
         if (_viewModel.avatarType == RoundedCorner) {
-            _avatarView.layer.cornerRadius = _viewModel.avatarSize.width / 6;
+            _avatarView.layer.cornerRadius = 5;
         }
         else if(Circular) {
             _avatarView.layer.cornerRadius = _viewModel.avatarSize.width / 2;
@@ -103,9 +103,21 @@
 
 - (void)setModel:(id<EaseContactDelegate>)model {
     _model = model;
-    self.nameLabel.text = _model.showName;
-    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL]
-                       placeholderImage:_model.defaultAvatar];
+    
+    if ([_model respondsToSelector:@selector(showName)]) {
+        self.nameLabel.text = _model.showName;
+    }
+    
+    UIImage *img = nil;
+    if ([_model respondsToSelector:@selector(defaultAvatar)]) {
+        img = _model.defaultAvatar;
+    }
+    if ([_model respondsToSelector:@selector(avatarURL)]) {
+        [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL]
+                           placeholderImage:img];
+    }else {
+        self.avatarView.image = img;
+    }
 }
 
 

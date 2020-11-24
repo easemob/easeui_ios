@@ -31,7 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EaseContactsViewController : EaseBaseTableViewController
 @property (nonatomic, strong) NSArray<EaseContactDelegate> *customHeaderItems;
 @property (nonatomic, strong) NSArray<EaseContactDelegate> *contacts;
-@property (nonatomic, strong) NSArray<EaseContactDelegate> *customFooterItems;
 @property (nonatomic) id<EaseContactsViewControllerDelegate> delegate;
 
 
