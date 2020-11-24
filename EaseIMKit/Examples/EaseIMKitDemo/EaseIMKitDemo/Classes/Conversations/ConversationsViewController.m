@@ -13,7 +13,6 @@
 
 @interface ConversationsViewController () <EaseConversationsViewControllerDelegate>
 {
-    EaseConversationViewModel *_viewMdeol;
     EaseConversationsViewController *_easeConvsVC;
 }
 @end
@@ -22,14 +21,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    EaseConversationViewModel *viewMdeol = [[EaseConversationViewModel alloc] init];
+    viewMdeol.canRefresh = NO;
+    viewMdeol.avatarType = Circular;
+    viewMdeol.badgeLabelPosition = EMAvatarTopRight;
     
-    _viewMdeol = [[EaseConversationViewModel alloc] init];
-    _viewMdeol.canRefresh = NO;
-    _viewMdeol.avatarType = Circular;
-    _viewMdeol.badgeLabelPosition = EMAvatarTopRight;
-    
-    
-    _easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:_viewMdeol];
+    _easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:viewMdeol];
     _easeConvsVC.delegate = self;
     [self addChildViewController:_easeConvsVC];
     [self.view addSubview:_easeConvsVC.view];
@@ -41,7 +38,7 @@
     }];
 }
    
-#pragma mark - EaseConversationVCDelegate
+#pragma mark - EaseConversationsViewControllerDelegate
 
 - (void)easeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

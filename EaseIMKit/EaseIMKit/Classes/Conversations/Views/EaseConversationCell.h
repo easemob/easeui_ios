@@ -19,7 +19,7 @@
 @property (nonatomic, strong, readonly) UILabel *detailLabel;
 @property (nonatomic, strong, readonly) UILabel *timeLabel;
 @property (nonatomic, strong, readonly) EaseBadgeView *badgeLabel;
-@property (nonatomic, assign) EaseConversationModel *model;
+@property (nonatomic, strong) EaseConversationModel *model;
 
 + (EaseConversationCell *)tableView:(UITableView *)tableView cellViewModel:(EaseConversationViewModel *)viewModel;
 

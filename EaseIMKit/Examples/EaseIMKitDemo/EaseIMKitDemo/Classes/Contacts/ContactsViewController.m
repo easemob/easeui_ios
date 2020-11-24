@@ -22,11 +22,11 @@
     [super viewDidLoad];
     EaseContactsViewModel *model = [[EaseContactsViewModel alloc] init];
     model.avatarType = Rectangular;
-    model.sectionTitleColor = UIColor.redColor;
-    model.sectionTitleBgColor = UIColor.clearColor;
-    model.sectionTitleFont = [UIFont systemFontOfSize:40];
-    model.sectionTitleLabelHeight = 50;
-    model.sectionTitleEdgeInsets= UIEdgeInsetsMake(0, 0, 0, 0);
+//    model.sectionTitleColor = UIColor.blackColor;
+//    model.sectionTitleBgColor = UIColor.clearColor;
+//    model.sectionTitleFont = [UIFont systemFontOfSize:17];
+//    model.sectionTitleLabelHeight = 20;
+    model.sectionTitleEdgeInsets= UIEdgeInsetsMake(5, 5, 5, 5);
     _contactsVC = [[EaseContactsViewController alloc] initWithViewModel:model];
     _contactsVC.customHeaderItems = [self items];
     _contactsVC.delegate = self;
