@@ -47,8 +47,8 @@
             [weakself.dataArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 if ([obj isKindOfClass:[EMMessageModel class]]) {
                     EMMessageModel *model = (EMMessageModel *)obj;
-                    if ([model.emModel.messageId isEqualToString:message.messageId]) {
-                        model.emModel.isReadAcked = YES;
+                    if ([model.message.messageId isEqualToString:message.messageId]) {
+                        model.message.isReadAcked = YES;
                         isReladView = YES;
                         *stop = YES;
                     }

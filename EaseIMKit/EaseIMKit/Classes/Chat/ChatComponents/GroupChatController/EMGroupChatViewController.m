@@ -166,10 +166,10 @@
         }else{
             continue;
         }
-        if([msgModel.emModel.messageId isEqualToString:msgAck.messageId]){
-            msgModel.readReceiptCount = [NSString stringWithFormat:@"阅读回执，已读用户（%d)",msgModel.emModel.groupAckCount];
-            msgModel.emModel.isReadAcked = YES;
-            [[EMClient sharedClient].chatManager sendMessageReadAck:msgModel.emModel.messageId toUser:msgModel.emModel.conversationId completion:nil];
+        if([msgModel.message.messageId isEqualToString:msgAck.messageId]){
+            msgModel.readReceiptCount = [NSString stringWithFormat:@"阅读回执，已读用户（%d)",msgModel.message.groupAckCount];
+            msgModel.message.isReadAcked = YES;
+            [[EMClient sharedClient].chatManager sendMessageReadAck:msgModel.message.messageId toUser:msgModel.message.conversationId completion:nil];
             [self.dataArray setObject:msgModel atIndexedSubscript:i];
             __weak typeof(self) weakself = self;
             dispatch_async(dispatch_get_main_queue(), ^{

@@ -15,7 +15,7 @@
 {
     self = [super init];
     if (self) {
-        _emModel = aMsg;
+        _message = aMsg;
         _direction = aMsg.direction;
         _type = (EMMessageType)aMsg.body.type;
         if (aMsg.body.type == EMMessageBodyTypeText) {

@@ -33,6 +33,9 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 #define NOTIF_ID @"EMNotifId"
 #define NOTIF_NAVICONTROLLER @"EMNaviController"
 
+//会话列表
+#define CONVERSATIONLIST_UPDATE @"ConversationListUpdate"
+
 //聊天
 #define CHAT_PUSHVIEWCONTROLLER @"EMPushChatViewController"
 #define CHAT_CLEANMESSAGES @"EMChatCleanMessages"

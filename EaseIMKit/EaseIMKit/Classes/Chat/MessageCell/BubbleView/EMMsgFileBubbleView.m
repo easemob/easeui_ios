@@ -113,7 +113,7 @@
 {
     EMMessageType type = model.type;
     if (type == EMMessageTypeFile) {
-        EMFileMessageBody *body = (EMFileMessageBody *)model.emModel.body;
+        EMFileMessageBody *body = (EMFileMessageBody *)model.message.body;
         NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:body.displayName];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         paragraphStyle.lineSpacing = 5.0; // 设置行间距

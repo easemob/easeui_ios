@@ -47,11 +47,12 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTabView) name:CONVERSATIONLIST_UPDATE object:nil];
 }
 
 - (void)dealloc
 {
-    NSLog(@"conversaitons vc dealloc");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -134,7 +135,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:didSelectRowAtIndexPath:)]) {
         return [self.delegate easeTableView:tableView didSelectRowAtIndexPath:indexPath];
     }
 }

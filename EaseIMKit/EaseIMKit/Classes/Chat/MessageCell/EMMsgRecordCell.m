@@ -115,7 +115,7 @@
 {
     imgView.model = model;
     if (model.type == EMMessageTypeImage) {
-        EMImageMessageBody *body = (EMImageMessageBody *)model.emModel.body;
+        EMImageMessageBody *body = (EMImageMessageBody *)model.message.body;
         NSString *imgPath = body.thumbnailLocalPath;
         if ([imgPath length] == 0) {
             imgPath = body.localPath;
@@ -128,7 +128,7 @@
         [imgView setTag:tag];
         [imgView addGestureRecognizer:imageTap];
     } else if (model.type == EMMessageTypeVideo) {
-        EMVideoMessageBody *body = (EMVideoMessageBody *)model.emModel.body;
+        EMVideoMessageBody *body = (EMVideoMessageBody *)model.message.body;
         NSString *imgPath = body.thumbnailLocalPath;
         if ([imgPath length] == 0) {
             imgPath = body.localPath;

@@ -97,56 +97,66 @@
 - (void)_setupViewsWithType:(EMMessageType)aType
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.backgroundColor = kColor_LightGray;
+    self.backgroundColor = [UIColor clearColor];
     
     _avatarView = [[UIImageView alloc] init];
     _avatarView.contentMode = UIViewContentModeScaleAspectFit;
     _avatarView.backgroundColor = [UIColor clearColor];
     _avatarView.userInteractionEnabled = YES;
+    if (_viewModel.avatarStyle == RoundedCorner) {
+        _avatarView.layer.cornerRadius = _viewModel.avatarCornerRadius;
+    }
+    if (_viewModel.avatarStyle == Circular) {
+        _avatarView.layer.cornerRadius = _viewModel.avatarLength / 2;
+    }
     [self.contentView addSubview:_avatarView];
     if (self.direction == EMMessageDirectionSend) {
-        _avatarView.image = [UIImage easeUIImageNamed:@"defaultAvatar"];
         [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
-            make.right.equalTo(self.contentView).offset(-10);
-            make.width.height.equalTo(@40);
+            make.right.equalTo(self.contentView).offset(-componentSpacing);
+            make.width.height.equalTo(@(_viewModel.avatarLength));
         }];
     } else {
-        _avatarView.image = [UIImage easeUIImageNamed:@"defaultAvatar"];
         [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
-            make.left.equalTo(self.contentView).offset(10);
-            make.width.height.equalTo(@40);
+            make.left.equalTo(self.contentView).offset(componentSpacing);
+            make.width.height.equalTo(@(_viewModel.avatarLength));
         }];
         
         _nameLabel = [[UILabel alloc] init];
         _nameLabel.font = [UIFont systemFontOfSize:13];
         _nameLabel.textColor = [UIColor grayColor];
-        [self.contentView addSubview:_nameLabel];
-        [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.avatarView);
-            make.left.equalTo(self.avatarView.mas_right).offset(8);
-            make.right.equalTo(self.contentView).offset(-10);
-        }];
+        if (_model.message.chatType != EMChatTypeChat) {
+            [self.contentView addSubview:_nameLabel];
+            [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(self.avatarView);
+                make.left.equalTo(self.avatarView.mas_right).offset(8);
+                make.right.equalTo(self.contentView).offset(-componentSpacing);
+            }];
+        }
     }
     
     _bubbleView = [self _getBubbleViewWithType:aType];
     _bubbleView.userInteractionEnabled = YES;
     _bubbleView.clipsToBounds = YES;
     [self.contentView addSubview:_bubbleView];
-    if (self.direction == EMMessageDirectionSend) {
+    if (self.direction == EMMessageDirectionReceive || (_viewModel.msgArrangementStyle == ArrangementlLeft && _model.message.chatType != EMChatTypeGroupChat)) {
+        [_bubbleView mas_makeConstraints:^(MASConstraintMaker *make) {
+            if (_model.message.chatType != EMChatTypeChat) {
+                make.top.equalTo(self.nameLabel.mas_bottom).offset(3);
+            } else {
+                make.top.equalTo(self.avatarView);
+            }
+            make.bottom.equalTo(self.contentView).offset(-15);
+            make.left.equalTo(self.avatarView.mas_right).offset(componentSpacing);
+            make.right.lessThanOrEqualTo(self.contentView).offset(-70);
+        }];
+    } else {
         [_bubbleView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.avatarView);
             make.bottom.equalTo(self.contentView).offset(-15);
             make.left.greaterThanOrEqualTo(self.contentView).offset(70);
-            make.right.equalTo(self.avatarView.mas_left).offset(-10);
-        }];
-    } else {
-        [_bubbleView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.nameLabel.mas_bottom).offset(3);
-            make.bottom.equalTo(self.contentView).offset(-15);
-            make.left.equalTo(self.avatarView.mas_right).offset(10);
-            make.right.lessThanOrEqualTo(self.contentView).offset(-70);
+            make.right.equalTo(self.avatarView.mas_left).offset(-componentSpacing);
         }];
     }
 
@@ -156,7 +166,7 @@
         [_statusView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self.bubbleView.mas_centerY);
             make.right.equalTo(self.bubbleView.mas_left).offset(-5);
-            make.height.equalTo(@20);
+            make.height.equalTo(@(componentSpacing * 2));
         }];
         __weak typeof(self) weakself = self;
         [_statusView setResendCompletion:^{
@@ -225,7 +235,6 @@
             bubbleView = [[EMMsgExtGifBubbleView alloc] initWithDirection:self.direction type:aType viewModel:_viewModel];
             break;
         case EMMessageTypeCustom:
-            
             break;
         default:
             break;
@@ -248,17 +257,23 @@
     _model = model;
     self.bubbleView.model = model;
     if (model.direction == EMMessageDirectionSend) {
-        [self.statusView setSenderStatus:model.emModel.status isReadAcked:model.emModel.isReadAcked];
+        [self.statusView setSenderStatus:model.message.status isReadAcked:model.message.isReadAcked];
     } else {
-        self.nameLabel.text = model.emModel.from;
-        if (model.type == EMMessageBodyTypeVoice) {
-            self.statusView.hidden = model.emModel.isReadAcked;
+        if (model.userDataDelegate.Nickname && [model.userDataDelegate.Nickname length] != 0) {
+            self.nameLabel.text = model.userDataDelegate.Nickname;
+        } else {
+            self.nameLabel.text = model.message.from;
         }
-        if (model.type == EMMessageTypeCustom) {
-            
+        if (model.type == EMMessageBodyTypeVoice) {
+            self.statusView.hidden = model.message.isReadAcked;
         }
     }
-    if (model.emModel.isNeedGroupAck) {
+    if (model.userDataDelegate.avatarImg) {
+        _avatarView.image = model.userDataDelegate.avatarImg;
+    } else {
+        _avatarView.image = [UIImage imageNamed:@"defaultAvatar"];
+    }
+    if (model.message.isNeedGroupAck) {
         self.readReceiptBtn.hidden = NO;
         [self.readReceiptBtn setTitle:_model.readReceiptCount forState:UIControlStateNormal];
     } else{
@@ -286,6 +301,10 @@
 - (void)bubbleViewLongPressAction:(UILongPressGestureRecognizer *)aLongPress
 {
     if (aLongPress.state == UIGestureRecognizerStateBegan) {
+        if (self.model.type == EMMessageTypeText) {
+            EMMsgTextBubbleView *textBubbleView = (EMMsgTextBubbleView*)self.bubbleView;
+            textBubbleView.textLabel.backgroundColor = [UIColor colorWithRed:156/255.0 green:206/255.0 blue:243/255.0 alpha:1.0];
+        }
         if (self.delegate && [self.delegate respondsToSelector:@selector(messageCellDidLongPress:)]) {
             [self.delegate messageCellDidLongPress:self];
         }

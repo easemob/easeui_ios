@@ -63,7 +63,7 @@
 
 - (void)setModel:(EMMessageModel *)model
 {
-    EMTextMessageBody *body = (EMTextMessageBody *)model.emModel.body;
+    EMTextMessageBody *body = (EMTextMessageBody *)model.message.body;
     self.textLabel.text = [EMEmojiHelper convertEmoji:body.text];
 }
 
