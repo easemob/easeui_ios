@@ -9,7 +9,7 @@
 #import "EaseHeaders.h"
 #import "EaseConversationViewModel.h"
 #import "EaseConversationCell.h"
-#import "EaseConversationCellModel.h"
+#import "EaseConversationModel.h"
 #import "EMConversation+EaseUI.h"
 
 @interface EaseConversationsViewController ()
@@ -47,7 +47,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTabView) name:CONVERSATIONLIST_UPDATE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willBeginRefresh) name:CONVERSATIONLIST_UPDATE object:nil];
 }
 
 - (void)dealloc
@@ -85,7 +85,7 @@
     
     EaseConversationCell *cell = [EaseConversationCell tableView:tableView cellViewModel:_viewModel];
     
-    EaseConversationCellModel *model = self.dataAry[indexPath.row];
+    EaseConversationModel *model = self.dataAry[indexPath.row];
     
     cell.model = model;
     if (model.isTop) {
@@ -101,7 +101,7 @@
 
 - (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(tvos)
 {
-    EaseConversationCellModel *model = [self.dataAry objectAtIndex:indexPath.row];
+    EaseConversationModel *model = [self.dataAry objectAtIndex:indexPath.row];
     
     __weak typeof(self) weakself = self;
     
@@ -110,7 +110,7 @@
                                                                              handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL))
     {
         [weakself _deleteConversation:indexPath];
-        [weakself refreshTabView];
+        [weakself willBeginRefresh];
     }];
     
     UIContextualAction *topAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal
@@ -121,7 +121,7 @@
                                                                                      type:model.type
                                                                          createIfNotExist:YES];
         [conversation setTop:!model.isTop];
-        [weakself refreshTabView];
+        [weakself willBeginRefresh];
     }];
     
     NSArray *swipeActions = @[deleteAction, topAction];
@@ -159,7 +159,7 @@
 {
     __weak typeof(self) weakSelf = self;
     NSInteger row = indexPath.row;
-    EaseConversationCellModel *model = [self.dataAry objectAtIndex:row];
+    EaseConversationModel *model = [self.dataAry objectAtIndex:row];
     [[EMClient sharedClient].chatManager deleteConversation:model.itemId
                                            isDeleteMessages:YES
                                                  completion:^(NSString *aConversationId, EMError *aError) {
@@ -183,7 +183,7 @@
         NSMutableArray *topConvs = [NSMutableArray array];
         
         for (EMConversation *conv in conversations) {
-            EaseConversationCellModel *item = [[EaseConversationCellModel alloc] initWithConversation:conv];
+            EaseConversationModel *item = [[EaseConversationModel alloc] initWithConversation:conv];
             if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(easeUserDelegateAtConversationId:conversationType:)]) {
                 item.userDelegate = [weakSelf.delegate easeUserDelegateAtConversationId:conv.conversationId conversationType:conv.type];
             }
@@ -196,7 +196,7 @@
         }
         
         NSArray *normalConvList = [convs sortedArrayUsingComparator:
-                                   ^NSComparisonResult(EaseConversationCellModel *obj1, EaseConversationCellModel *obj2)
+                                   ^NSComparisonResult(EaseConversationModel *obj1, EaseConversationModel *obj2)
         {
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;
@@ -206,7 +206,7 @@
         }];
         
         NSArray *topConvList = [topConvs sortedArrayUsingComparator:
-                                ^NSComparisonResult(EaseConversationCellModel *obj1, EaseConversationCellModel *obj2)
+                                ^NSComparisonResult(EaseConversationModel *obj1, EaseConversationModel *obj2)
         {
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;
@@ -226,7 +226,7 @@
     });
 }
 
-- (void)refreshTabView
+- (void)willBeginRefresh
 {
     [self _loadAllConversationsFromDB];
 }

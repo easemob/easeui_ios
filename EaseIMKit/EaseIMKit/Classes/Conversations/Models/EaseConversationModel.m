@@ -1,18 +1,18 @@
 //
-//  EaseConversationCellModel.m
+//  EaseConversationModel.m
 //  EaseIMKit
 //
 //  Created by 娜塔莎 on 2020/11/10.
 //
 
-#import "EaseConversationCellModel.h"
+#import "EaseConversationModel.h"
 #import "EMDefines.h"
 #import "UIImage+EaseUI.h"
 
 
 #import "EMConversation+EaseUI.h"
 
-@interface EaseConversationCellModel()
+@interface EaseConversationModel()
 
 {
     EMConversation *_conversation;
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation EaseConversationCellModel
+@implementation EaseConversationModel
 
 
 - (instancetype)initWithConversation:(EMConversation *)conversation
@@ -150,7 +150,7 @@
         return _userDelegate.defaultAvatar;
     }
     
-    return [UIImage easeUIImageNamed:@"defaultAvatar"];
+    return nil;
 }
 
 - (NSString *)avatarURL {

@@ -156,11 +156,25 @@
     }
 }
 
-- (void)setModel:(EaseConversationCellModel *)model
+- (void)setModel:(EaseConversationModel *)model
 {
     _model = model;
-    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL]
-                       placeholderImage:_model.defaultAvatar];
+    
+    UIImage *img = nil;
+    if ([_model respondsToSelector:@selector(defaultAvatar)]) {
+        img = _model.defaultAvatar;
+    }
+    
+    if (_viewModel.defaultAvatarImage && !img) {
+        img = _viewModel.defaultAvatarImage;
+    }
+    
+    if ([_model respondsToSelector:@selector(avatarURL)]) {
+        [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL]
+                           placeholderImage:img];
+    }else {
+        self.avatarView.image = img;
+    }
     
     self.nameLabel.text = _model.showName;
     

@@ -54,7 +54,10 @@
 - (id<EaseUserDelegate>)easeUserDelegateAtConversationId:(NSString *)conversationId
                                         conversationType:(EMConversationType)type
 {
-    return [[DemoUserModel alloc] init];
+    
+    DemoUserModel *model = [[DemoUserModel alloc] initWithEaseId:conversationId];
+    model.nickName =  @"我是昵称";
+    return model;
 }
 
 @end

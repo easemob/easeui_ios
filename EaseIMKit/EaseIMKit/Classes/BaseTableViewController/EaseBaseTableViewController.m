@@ -33,8 +33,8 @@
         make.size.equalTo(self.view);
     }];
     
-    [self resetViewModel:self.viewModel];
     [self _setupSubViews];
+    [self resetViewModel:self.viewModel];
 }
 
 
@@ -42,7 +42,7 @@
     _viewModel = viewModel;
     [self _setupSubViews];
     if (_viewModel.canRefresh) {
-        [self beginRefresh];
+        [self refreshTable];
     }else {
         [self.tableView disableRefresh];
         [self refreshTabView];
@@ -61,7 +61,7 @@
 }
 
 #pragma mark - actions
-- (void)beginRefresh {
+- (void)refreshTable {
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentOffset.y - self.tableView.refreshControl.frame.size.height) animated:NO];
     [self.tableView.refreshControl beginRefreshing];
     [self.tableView.refreshControl sendActionsForControlEvents:UIControlEventValueChanged];

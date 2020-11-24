@@ -1,5 +1,5 @@
 //
-//  EaseConversationCellModel.h
+//  EaseConversationModel.h
 //  EaseIMKit
 //
 //  Created by 娜塔莎 on 2020/11/10.
@@ -9,7 +9,7 @@
 #import <Hyphenate/Hyphenate.h>
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EaseConversationCellModel : NSObject
+@interface EaseConversationModel : NSObject
 
 - (instancetype)initWithConversation:(EMConversation *)conversation;
 

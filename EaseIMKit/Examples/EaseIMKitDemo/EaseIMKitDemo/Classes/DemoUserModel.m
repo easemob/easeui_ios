@@ -9,9 +9,24 @@
 #import "DemoUserModel.h"
 
 @implementation DemoUserModel
+{
+    NSString *_easeId;
+}
+
+- (instancetype)initWithEaseId:(NSString *)easeId {
+    if (self = [super init]) {
+        _easeId = easeId;
+    }
+    
+    return self;
+}
 
 - (NSString *)showName {
-    return @"测试";
+    return _nickName;
+}
+
+- (NSString *)easeId {
+    return _easeId;
 }
 
 @end

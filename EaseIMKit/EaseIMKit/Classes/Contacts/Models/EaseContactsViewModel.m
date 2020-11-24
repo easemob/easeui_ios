@@ -8,6 +8,7 @@
 #import "EaseContactsViewModel.h"
 #import "EaseHelper.h"
 #import "EaseHeaders.h"
+#import "UIImage+EaseUI.h"
 
 @implementation EaseContactsViewModel
 @synthesize bgView = _bgView;
@@ -47,6 +48,8 @@
     _sectionTitleBgColor = [UIColor colorWithHexString:@"#F2F2F2"];
     _sectionTitleLabelHeight = 20;
     _sectionTitleEdgeInsets = UIEdgeInsetsMake(8, 20, 10, 50);
+    
+    _defaultAvatarImage = [UIImage easeUIImageNamed:@"defaultAvatar"];
     
 }
 @end

@@ -9,5 +9,15 @@
 #import "ContactModel.h"
 
 @implementation ContactModel
+- (NSString *)easeId {
+    return _huanXinId;
+}
 
+- (UIImage *)defaultAvatar {
+    return _avatar;
+}
+
+- (NSString *)showName {
+    return _nickname;
+}
 @end

@@ -7,32 +7,33 @@
 
 #import <UIKit/UIKit.h>
 #import "EaseBaseTableViewController.h"
-#import "EaseContactDelegate.h"
+#import "EaseContactModel.h"
+#import "EaseUserDelegate.h"
 #import "EaseContactsViewModel.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol EaseContactsViewControllerDelegate <EaseBaseViewControllerDelegate>
-@optional
-- (void)refreshTabView;
+
 @optional
 
-- (UITableViewCell *)easeTableView:(UITableView *)tableView cellForRowAtContact:(id <EaseContactDelegate>) contact;
+- (void)willBeginRefresh;
+
+- (UITableViewCell *)easeTableView:(UITableView *)tableView cellForRowAtContactModel:(EaseContactModel *) contact;
 
 - (NSArray<UIContextualAction *> *)easeTableView:(UITableView *)tableView
-           trailingSwipeActionsForRowAtContact:(id <EaseContactDelegate>) contact
-                                         actions:(NSArray<UIContextualAction *> *)actions;
+        trailingSwipeActionsForRowAtContactModel:(EaseContactModel *) contact
+                                         actions:(NSArray<UIContextualAction *> * __nullable)actions;
 
-- (void)easeTableView:(UITableView *)tableView didSelectRowAtContact:(id <EaseContactDelegate>) contact;
+- (void)easeTableView:(UITableView *)tableView didSelectRowAtContactModel:(EaseContactModel *) contact;
 
 @end
 
 @interface EaseContactsViewController : EaseBaseTableViewController
-@property (nonatomic, strong) NSArray<EaseContactDelegate> *customHeaderItems;
-@property (nonatomic, strong) NSArray<EaseContactDelegate> *contacts;
+@property (nonatomic, strong) NSArray<EaseUserDelegate> *customHeaderItems;
+@property (nonatomic, strong) NSArray<EaseUserDelegate> *contacts;
 @property (nonatomic) id<EaseContactsViewControllerDelegate> delegate;
-
 
 - (instancetype)initWithViewModel:(EaseContactsViewModel *)model;
 

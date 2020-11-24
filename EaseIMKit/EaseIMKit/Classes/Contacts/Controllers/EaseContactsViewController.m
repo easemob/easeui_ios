@@ -6,7 +6,7 @@
 //
 
 #import "EaseContactsViewController.h"
-#import "EaseContactCellModel.h"
+#import "EaseContactModel.h"
 #import "EaseContactCell.h"
 #import "UITableView+Refresh.h"
 #import <Hyphenate/Hyphenate.h>
@@ -42,23 +42,22 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [EMClient.sharedClient.contactManager addDelegate:self delegateQueue:nil];
-    [self refreshTabView];
 }
 
 
 - (void)refreshTabView {
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(refreshTabView)]) {
-        [self.delegate refreshTabView];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(willBeginRefresh)]) {
+        [self.delegate willBeginRefresh];
         return;
     }
     
     __block typeof(self) weakSelf = self;
     [EMClient.sharedClient.contactManager getContactsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
         if (!aError) {
-            NSMutableArray<EaseContactDelegate> *contacts = [NSMutableArray<EaseContactDelegate> array];
+            NSMutableArray<EaseUserDelegate> *contacts = [NSMutableArray<EaseUserDelegate> array];
             for (NSString *username in aList) {
-                EaseContactCellModel *model = [[EaseContactCellModel alloc] initWithShowName:username];
+                EaseContactModel *model = [[EaseContactModel alloc] initWithEaseId:username];
                 [contacts addObject:model];
             }
            [weakSelf sortContact:contacts];
@@ -73,20 +72,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    id<EaseContactDelegate> EaseContactCellModel;
-
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:cellForRowAtContact:)]) {
-        return [self.delegate easeTableView:tableView cellForRowAtContact: EaseContactCellModel];
-    }
-    
-    else {
-        EaseContactLetterModel *model = self.contactLists[indexPath.section];
-        EaseContactCellModel = model.contacts[indexPath.row];
+    EaseContactModel *model = [self cellModelFromIndex:indexPath];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:cellForRowAtContactModel:)]) {
+        return [self.delegate easeTableView:tableView cellForRowAtContactModel: model];
     }
     
     EaseContactCell *cell = [EaseContactCell tableView:tableView cellViewModel:_viewModel];
-    cell.model = EaseContactCellModel;
+    cell.model = model;
     
     return cell;
 }
@@ -147,9 +139,31 @@
     return model.contacts.count;
 }
 
-- (void)sortContact:(NSArray<EaseContactDelegate> *)contacts {
+
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(tvos)
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:trailingSwipeActionsForRowAtContactModel:actions:)]) {
+        NSArray *swipeActions = [self.delegate easeTableView:tableView trailingSwipeActionsForRowAtContactModel:[self cellModelFromIndex:indexPath] actions:nil];
+        if (swipeActions) {
+            UISwipeActionsConfiguration *actions = [UISwipeActionsConfiguration configurationWithActions:swipeActions];
+            actions.performsFirstActionWithFullSwipe = NO;
+            return actions;
+        }
+    }
     
-    NSArray *ret = [contacts sortedArrayUsingComparator:^NSComparisonResult(id <EaseContactDelegate> obj1, id<EaseContactDelegate> obj2) {
+    return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:didSelectRowAtContactModel:)]) {
+        return [self.delegate easeTableView:tableView didSelectRowAtContactModel:[self cellModelFromIndex:indexPath]];
+    }
+}
+
+
+- (void)sortContact:(NSArray *)contacts {
+    
+    NSArray *ret = [contacts sortedArrayUsingComparator:^NSComparisonResult(EaseContactModel *obj1, EaseContactModel *obj2) {
         return [obj1.showName compare:obj2.showName options:NSLiteralSearch];
     }];
 
@@ -163,7 +177,7 @@
         [contactLists addObject:letterModel];
     }
     
-    for (EaseContactCellModel *model in ret) {
+    for (EaseContactModel *model in ret) {
         if ([letters containsObject:model.firstLetter]) {
             NSUInteger index = [letters indexOfObject:model.firstLetter];
             EaseContactLetterModel *letterModel = contactLists[index];
@@ -212,6 +226,29 @@
     }else {
         [self.tableView.backgroundView setHidden:YES];
     }
+}
+
+- (EaseContactModel *)cellModelFromIndex:(NSIndexPath *)indexPath {
+    EaseContactLetterModel *model = self.contactLists[indexPath.section];
+    EaseContactModel * easeContactModel = model.contacts[indexPath.row];
+    return easeContactModel;
+}
+
+#pragma mark - setter
+- (void)setContacts:(NSArray<EaseUserDelegate> *)contacts {
+    _contacts = contacts;
+    NSMutableArray *cellModelAry = [NSMutableArray array];
+    for (id<EaseUserDelegate> userDelegate in contacts) {
+        EaseContactModel *model = [[EaseContactModel alloc] initWithEaseId:userDelegate.easeId];
+        [cellModelAry addObject:model];
+    }
+    
+    [self sortContact:cellModelAry];
+}
+
+- (void)setCustomHeaderItems:(NSArray<EaseUserDelegate> *)customHeaderItems {
+    _customHeaderItems = customHeaderItems;
+    [self sortContact:_contacts];
 }
 
 #pragma mark - getter
