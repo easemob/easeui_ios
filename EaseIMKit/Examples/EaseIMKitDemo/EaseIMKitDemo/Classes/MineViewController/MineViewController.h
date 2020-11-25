@@ -1,5 +1,5 @@
 //
-//  SettingsViewController.h
+//  MineViewController.h
 //  EaseIMKitDemo
 //
 //  Created by 杜洁鹏 on 2020/11/5.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SettingsViewController : UIViewController
+@interface MineViewController : UITableViewController
 
 @end
 

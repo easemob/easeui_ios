@@ -19,19 +19,9 @@
 
 @implementation ContactsViewController
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-
-    [self.navigationController.navigationBar.subviews enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
-        if ([view isKindOfClass:NSClassFromString(@"_UIBarBackground")]) {
-            [view.subviews firstObject].hidden = YES;
-        }
-    }];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithRed:242.0/255.0 green:242.0/255.0 blue:242.0/255.0 alpha:1];
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     EaseContactsViewModel *model = [[EaseContactsViewModel alloc] init];
     model.avatarType = Rectangular;
     model.sectionTitleEdgeInsets= UIEdgeInsetsMake(5, 15, 5, 5);
