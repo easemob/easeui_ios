@@ -167,6 +167,7 @@
 		90A03A2B254A70E100D57B73 /* EaseIMKitDemo */ = {
 			isa = PBXGroup;
 			children = (
+				90D3AACE256E21BC0002B78B /* Custom */,
 				903EAE7525540374005E6BB1 /* Classes */,
 				90A03A2C254A70E100D57B73 /* AppDelegate.h */,
 				90A03A2D254A70E100D57B73 /* AppDelegate.m */,
@@ -181,6 +182,13 @@
 				90A03A3E254A70E200D57B73 /* main.m */,
 			);
 			path = EaseIMKitDemo;
+			sourceTree = "<group>";
+		};
+		90D3AACE256E21BC0002B78B /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Custom;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

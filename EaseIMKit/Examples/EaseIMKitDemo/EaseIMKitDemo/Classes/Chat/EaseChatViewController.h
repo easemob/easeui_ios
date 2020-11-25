@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseChatViewController : UIViewController
-
+@property (nonatomic, strong) NSString *chatter;
 @end
 
 NS_ASSUME_NONNULL_END

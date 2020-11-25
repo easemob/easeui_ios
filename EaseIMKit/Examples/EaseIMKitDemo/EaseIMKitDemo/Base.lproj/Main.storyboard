@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gXz-sZ-0kI">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gXz-sZ-0kI">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Conversations View Controller-->
+        <!--环信-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ConversationsViewController" sceneMemberID="viewController">
@@ -19,7 +19,11 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="rJL-Y1-yzU"/>
+                    <navigationItem key="navigationItem" title="环信" id="rJL-Y1-yzU">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="oq6-HF-VeJ">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -30,22 +34,24 @@
             <objects>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="gXz-sZ-0kI" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wOL-b6-EpX">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" itemPositioning="fill" id="wOL-b6-EpX">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" red="0.94994920490000001" green="0.94997149709999995" blue="0.94995945690000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="selectedImageTintColor" red="0.0" green="0.56957077980000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="ZOO-3r-fhV" kind="relationship" relationship="viewControllers" id="QcZ-XK-Fbz"/>
                         <segue destination="WJW-JN-s9r" kind="relationship" relationship="viewControllers" id="8xL-05-gfD"/>
-                        <segue destination="UKX-cm-zRT" kind="relationship" relationship="viewControllers" id="kWV-Ys-DRz"/>
+                        <segue destination="b44-9r-8Ga" kind="relationship" relationship="viewControllers" id="kWV-Ys-DRz"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RaK-Pb-2mu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="140.57971014492756" y="87.723214285714278"/>
         </scene>
-        <!--Contacts View Controller-->
+        <!--通讯录-->
         <scene sceneID="Vu6-Fd-FR9">
             <objects>
                 <viewController id="D97-Os-aP2" customClass="ContactsViewController" sceneMemberID="viewController">
@@ -55,13 +61,17 @@
                         <viewLayoutGuide key="safeArea" id="d5n-6o-xAo"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="bvo-HS-Tm7"/>
+                    <navigationItem key="navigationItem" title="通讯录" id="bvo-HS-Tm7">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="gWi-qX-YeA">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w9e-Qc-xrH" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2315.9420289855075" y="87.723214285714278"/>
+            <point key="canvasLocation" x="2406" y="88"/>
         </scene>
-        <!--我-->
+        <!--Settings View Controller-->
         <scene sceneID="kFA-rh-t5W">
             <objects>
                 <viewController id="UKX-cm-zRT" customClass="SettingsViewController" sceneMemberID="viewController">
@@ -71,11 +81,11 @@
                         <viewLayoutGuide key="safeArea" id="7s3-Ll-3Co"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="我" id="Jb9-Wf-LOC"/>
+                    <navigationItem key="navigationItem" id="2uM-pW-IZY"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8un-6X-sLt" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="141" y="964"/>
+            <point key="canvasLocation" x="1050.7246376811595" y="963.61607142857133"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="x7D-SE-itU">
@@ -134,11 +144,12 @@
         <scene sceneID="cIm-6p-ISy">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="WJW-JN-s9r" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="通讯录" id="riN-wH-4m0"/>
+                    <tabBarItem key="tabBarItem" title="通讯录" image="tabbar_contacts" selectedImage="tabbar_selected_contacts" id="riN-wH-4m0"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="2Ai-77-M3K">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.94994920490000001" green="0.94997149709999995" blue="0.94995945690000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -153,11 +164,12 @@
         <scene sceneID="Wgj-hu-bh5">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZOO-3r-fhV" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="会话" id="cZa-5j-kOs"/>
+                    <tabBarItem key="tabBarItem" title="会话" image="tabbar_conversations" selectedImage="tabbar_selected_conversations" id="cZa-5j-kOs"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="FPO-DA-fsx">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.94994920490000001" green="0.94997149709999995" blue="0.94995945690000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -168,8 +180,34 @@
             </objects>
             <point key="canvasLocation" x="1405.7971014492755" y="-678.34821428571422"/>
         </scene>
+        <!--我-->
+        <scene sceneID="Z1S-mK-fbR">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="b44-9r-8Ga" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="我" image="tabbar_mine" selectedImage="tabbar_selected_mine" id="Jb9-Wf-LOC"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="t7a-Ny-tYb">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.94994920490000001" green="0.94997149709999995" blue="0.94995945690000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="UKX-cm-zRT" kind="relationship" relationship="rootViewController" id="glT-dE-vhM"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="z7H-Gv-wLY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="140.57971014492756" y="963.61607142857133"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="tabbar_contacts" width="22" height="24"/>
+        <image name="tabbar_conversations" width="24" height="24"/>
+        <image name="tabbar_mine" width="22" height="24"/>
+        <image name="tabbar_selected_contacts" width="22" height="24"/>
+        <image name="tabbar_selected_conversations" width="22" height="22"/>
+        <image name="tabbar_selected_mine" width="20" height="24"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

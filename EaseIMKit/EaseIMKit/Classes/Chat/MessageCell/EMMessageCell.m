@@ -107,20 +107,20 @@
         _avatarView.layer.cornerRadius = _viewModel.avatarCornerRadius;
     }
     if (_viewModel.avatarStyle == Circular) {
-        _avatarView.layer.cornerRadius = _viewModel.avatarLength / 2;
+        _avatarView.layer.cornerRadius = avatarLonger / 2;
     }
     [self.contentView addSubview:_avatarView];
     if (self.direction == EMMessageDirectionSend) {
         [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
             make.right.equalTo(self.contentView).offset(-componentSpacing);
-            make.width.height.equalTo(@(_viewModel.avatarLength));
+            make.width.height.equalTo(@(avatarLonger));
         }];
     } else {
         [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
             make.left.equalTo(self.contentView).offset(componentSpacing);
-            make.width.height.equalTo(@(_viewModel.avatarLength));
+            make.width.height.equalTo(@(avatarLonger));
         }];
         
         _nameLabel = [[UILabel alloc] init];
@@ -271,7 +271,7 @@
     if (model.userDataDelegate.avatarImg) {
         _avatarView.image = model.userDataDelegate.avatarImg;
     } else {
-        _avatarView.image = [UIImage imageNamed:@"defaultAvatar"];
+        _avatarView.image = [UIImage easeUIImageNamed:@"defaultAvatar"];
     }
     if (model.message.isNeedGroupAck) {
         self.readReceiptBtn.hidden = NO;

@@ -79,33 +79,35 @@
 
 @implementation EMMoreFunctionView
 //输入扩展功能区
-- (instancetype)initWithConversation:(EMConversation *)conversation itemDescArray:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom
+- (instancetype)initInputViewWithConversation:(EMConversation *)conversation
 {
     self = [super init];
     if(self){
-        _isCustom = isCustom;
-        if (_isCustom) {
-            _toolbarDescArray = itemDescArray;
-            _toolbarImgArray = itemImgArray;
-        } else {
-            _conversation = conversation;
-            _toolbarImgArray = [[NSMutableArray<UIImage*> alloc]init];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"photo-album"]];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"camera"]];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"video_conf"]];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"location"]];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"icloudFile"]];
-            _toolbarDescArray = [NSMutableArray arrayWithArray:@[@"相册",@"相机",@"音视频",@"位置",@"文件"]];
-            if (_conversation.type == EMConversationTypeGroupChat) {
-                if ([[EMClient.sharedClient.groupManager getGroupSpecificationFromServerWithId:_conversation.conversationId error:nil].owner isEqualToString:EMClient.sharedClient.currentUsername]) {
-                    [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"pin_readReceipt"]];
-                    [_toolbarDescArray addObject:@"群组回执"];
-                }
+        _conversation = conversation;
+        _toolbarImgArray = [[NSMutableArray<UIImage*> alloc]init];
+        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"photo-album"]];
+        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"camera"]];
+        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"video_conf"]];
+        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"location"]];
+        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"icloudFile"]];
+        _toolbarDescArray = [NSMutableArray arrayWithArray:@[@"相册",@"相机",@"音视频",@"位置",@"文件"]];
+        if (_conversation.type == EMConversationTypeGroupChat) {
+            if ([[EMClient.sharedClient.groupManager getGroupSpecificationFromServerWithId:_conversation.conversationId error:nil].owner isEqualToString:EMClient.sharedClient.currentUsername]) {
+                [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"pin_readReceipt"]];
+                [_toolbarDescArray addObject:@"群组回执"];
             }
-            if (_conversation.type == EMConversationTypeChatRoom) {
-                [_toolbarImgArray removeObjectAtIndex:2];
-                [_toolbarDescArray removeObject:@"音视频"];
-            }
+        }
+        if (_conversation.type == EMConversationTypeChatRoom) {
+            [_toolbarImgArray removeObjectAtIndex:2];
+            [_toolbarDescArray removeObject:@"音视频"];
+        }
+        NSMutableArray<NSString*> *tempDescArray = [self.delegate chatBarExtFunctionItemDescArray:_toolbarDescArray];
+        if (tempDescArray && [tempDescArray count] > 0) {
+            _toolbarDescArray = tempDescArray;
+        }
+        NSMutableArray<UIImage*> *tempImgArray = [self.delegate chatBarExtFunctionItemImgArray:_toolbarImgArray];
+        if (tempImgArray && [tempImgArray count] > 0) {
+            _toolbarImgArray = tempImgArray;
         }
         _itemImgCount = [_toolbarImgArray count];
         _itemDescCount = [_toolbarDescArray count];
@@ -116,27 +118,26 @@
     return self;
 }
 //长按事件
-- (instancetype)initWithData:(NSMutableArray<NSString*>*)itemDescArray itemImgArray:(NSMutableArray<UIImage*>*)itemImgArray isCustom:(BOOL)isCustom
+- (instancetype)initLongPressView
 {
     self = [super init];
     if(self){
-        _isCustom = isCustom;
-        if (_isCustom) {
-            _toolbarDescArray = itemDescArray;
-            _toolbarImgArray = itemImgArray;
-        } else {
-            _toolbarImgArray = [[NSMutableArray<UIImage*> alloc]init];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"copy"]];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"copy"]];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"delete"]];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"recall"]];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"icloudFile"]];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"icloudFile"]];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"icloudFile"]];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"icloudFile"]];
-            [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"icloudFile"]];
-            _toolbarDescArray = [NSMutableArray arrayWithArray:@[@"复制",@"转发",@"删除",@"撤回",@"文件",@"文件",@"文件",@"文件"]];
+        _toolbarImgArray = [[NSMutableArray<UIImage*> alloc]init];
+        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"copy"]];
+        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"copy"]];
+        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"delete"]];
+        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"recall"]];
+        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"icloudFile"]];
+        _toolbarDescArray = [NSMutableArray arrayWithArray:@[@"复制",@"转发",@"删除",@"撤回",@"文件"]];
+        NSMutableArray<NSString*> *tempDescArray = [self.delegate longPressExtItemDescArray:_toolbarDescArray];
+        if (tempDescArray && [tempDescArray count] > 0) {
+            _toolbarDescArray = tempDescArray;
         }
+        NSMutableArray<UIImage*> *tempImgArray = [self.delegate longPressExtItemImgArray:_toolbarImgArray];
+        if (tempImgArray && [tempImgArray count] > 0) {
+            _toolbarImgArray = tempImgArray;
+        }
+        
         if (self.delegate && [self.delegate respondsToSelector:@selector(hideItem:extType:)]) {
             NSArray<NSString*>* hideItems = [self.delegate hideItem:_toolbarDescArray extType:ExtTypeLongPress];
             for (NSString *item in hideItems) {

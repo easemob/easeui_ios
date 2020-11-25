@@ -18,6 +18,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
+/**
+ * 是否从服务器获取历史消息
+ *
+ * YES      从服务器取
+ * NO        从DB取
+ */
+- (BOOL)isFetchHistoryMessagesFromServer;
+
+/**
+ * 当前登录账户未读消息总数
+ */
+- (void)currentConversationsUnreadCount:(NSInteger)unreadCount;
+
+
 /* cell 回调 */
 
 /**
@@ -27,11 +41,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (id<EaseUserData>)userData:(EMMessage*)message;
 /**
- * 消息点击事件
+ * 消息点击事件 （返回是否需要执行默认点击事件）
  *
  * messageModel        当前点击的消息数据模型model
  */
-- (void)didSelectItem:(EMMessageModel*)messageModel;
+- (BOOL)didSelectItem:(EMMessageModel*)messageModel;
 
 /**
  * 自定义cell
@@ -44,19 +58,23 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 输入扩展区内容
  *
- * CONTENT         扩展区 ITEM 描述
+ * @param   defaultItems        默认功能描述（字符串描述定义功能）
  */
-- (NSMutableArray<NSString*>*)chatBarExtFunctionItemDescArray;
+- (NSMutableArray<NSString*>*)chatBarExtFunctionItemDescArray:(NSMutableArray<NSString*>*)defaultItems;
 /**
  * 输入扩展区图标
  *
- * CONTENT         扩展区 ITEM 图标
+ * @param   defaultImgs        默认功能图标
  */
-- (NSMutableArray<UIImage*>*)chatBarExtFunctionItemImgArray;
+- (NSMutableArray<UIImage*>*)chatBarExtFunctionItemImgArray:(NSMutableArray<UIImage*>*)defaultImgs;
 /**
  * 输入区键盘输入变化回调
  */
 - (void)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+/**
+ * 对方输入状态（单聊可用）
+ */
+- (void)isEditing:(BOOL)isEditing;
 
 
 /* 消息长按回调 */
@@ -64,48 +82,43 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 长按扩展区内容
  *
- * CONTENT         长按扩展区 ITEM 描述
+ * @param   defaultItems        默认功能描述（字符串描述定义功能）
  */
-- (NSMutableArray<NSString*>*)longPressExtItemDescArray;
+- (NSMutableArray<NSString*>*)longPressExtItemDescArray:(NSMutableArray<NSString*>*)defaultItems;
 /**
  * 长按扩展区图标
  *
- * CONTENT         长按扩展区 ITEM 图标
+ * @param   defaultImgs        默认功能图标
  */
-- (NSMutableArray<UIImage*>*)longPressExtItemImgArray;
+- (NSMutableArray<UIImage*>*)longPressExtItemImgArray:(NSMutableArray<UIImage*>*)defaultImgs;
 /**
  * 长按扩展区需要隐藏的 ITEM 列表
  *
  * @param   itemList       当前长按扩展区列表（仅事件名称）
  */
-- (NSArray<NSString*>*)hideItem:(NSArray<NSString*>*)itemList;
+- (NSArray<NSString*>*)hideItem:(NSMutableArray<NSString*>*)itemList;
 
 
 /* 消息长按功能区和输入扩展功能区点击事件回调 */
 
 /**
- * 消息长按功能区点击 item
+ * 消息长按功能区点击项 item
+ * （返回是否需要执行默认功能）
  *
  * @param   itemTag     点击项标签从0开始
  * @param   itemDesc   点击项描述
  */
-- (void)extLongPressFuncActionItem:(NSInteger)itemTag itemDesc:(NSString*)itemDesc;
+- (BOOL)extLongPressFuncActionItem:(NSInteger)itemTag itemDesc:(NSString*)itemDesc;
 
 /**
  * 输入组件更多功能区点击项 item
+ * （返回是否需要执行默认功能，第一版不加）
  *
  * @param   itemTag     点击项标签从0开始
  * @param   itemDesc   点击项描述
  */
-- (void)extChatBarFuncActionItem:(NSInteger)itemTag itemDesc:(NSString*)itemDesc;
+- (BOOL)extChatBarFuncActionItem:(NSInteger)itemTag itemDesc:(NSString*)itemDesc;
 
-/**
- * 是否从服务器获取历史消息
- *
- * YES      从服务器取
- * NO        从DB取
- */
-- (BOOL)isFetchHistoryMessagesFromServer;
 @end
 
 

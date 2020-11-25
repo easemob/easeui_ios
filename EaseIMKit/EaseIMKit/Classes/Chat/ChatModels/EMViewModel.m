@@ -29,7 +29,6 @@
         _chatBarStyle = EMChatBarStyleAll;
         _avatarStyle = Circular;
         _avatarCornerRadius = 0;
-        _avatarLength = 40;
     }
     return self;
 }
@@ -108,13 +107,6 @@
 {
     if (avatarCornerRadius > 0) {
         _avatarCornerRadius = avatarCornerRadius;
-    }
-}
-
-- (void)setAvatarLength:(CGFloat)avatarLength
-{
-    if (avatarLength > 0) {
-        _avatarLength = avatarLength;
     }
 }
 

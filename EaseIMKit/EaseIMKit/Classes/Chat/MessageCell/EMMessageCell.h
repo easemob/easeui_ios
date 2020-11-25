@@ -12,7 +12,7 @@
 #import "EMMessageBubbleView.h"
 #import "EMViewModel.h"
 
-
+#define avatarLonger 40
 #define componentSpacing 10
 
 NS_ASSUME_NONNULL_BEGIN

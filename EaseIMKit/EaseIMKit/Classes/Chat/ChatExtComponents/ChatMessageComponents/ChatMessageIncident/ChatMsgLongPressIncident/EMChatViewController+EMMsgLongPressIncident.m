@@ -19,7 +19,6 @@ typedef NS_ENUM(NSInteger, EaseLongPressExecute) {
 };
 
 static const void *longPressIndexPathKey = &longPressIndexPathKey;
-
 @implementation EMChatViewController (EMMsgLongPressIncident)
 
 @dynamic longPressIndexPath;
