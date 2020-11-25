@@ -47,7 +47,7 @@
 {
     self = [super init];
     if (self) {
-        _currentConversation = [EMClient.sharedClient.chatManager getConversation:conversationId type:conType createIfNotExist:NO];
+        _currentConversation = [EMClient.sharedClient.chatManager getConversation:conversationId type:conType createIfNotExist:YES];
         _msgQueue = dispatch_queue_create("emmessage.com", NULL);
         _viewModel = viewModel;
         _isReloadViewWithModel = NO;
@@ -439,14 +439,13 @@
             }
         }
     }
-    //self.longPressView.frame = CGRectMake(xOffset, yOffset, longPressViewsize.width, longPressViewsize.height);
+    self.longPressView.frame = CGRectMake(xOffset, yOffset, longPressViewsize.width, longPressViewsize.height);
     [self.view addSubview:self.longPressView];
-    [self.longPressView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).offset(xOffset);
-        make.left.equalTo(self.view).offset(yOffset);
-        make.width.equalTo(@(longPressViewsize.width));
-        make.height.equalTo(@(longPressViewsize.height));
-    }];
+    /*EMMessageCell *cell = (EMMessageCell *)aCell;
+    CGRect rect =  [cell.bubbleView convertRect:cell.bubbleView.bounds toView:self.tableView];
+    self.longPressView = [[EMMoreFunctionView alloc] initLongPressView];
+    self.longPressView.frame = rect;
+    [self.tableView addSubview:self.longPressView];*/
 }
     
 - (void)messageCellDidResend:(EMMessageModel *)aModel
