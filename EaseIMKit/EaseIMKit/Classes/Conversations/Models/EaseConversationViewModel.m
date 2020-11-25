@@ -30,26 +30,26 @@
 
     _avatarType = Circular;
     _avatarSize = CGSizeMake(48, 48);
-    _avatarEdgeInsets = UIEdgeInsetsMake(11, 20, 13, 0);
+    _avatarEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     
     _nameLabelFont = [UIFont systemFontOfSize:17];
     _nameLabelColor = [UIColor colorWithHexString:@"#333333"];
-    _nameLabelEdgeInsets = UIEdgeInsetsMake(12, 12, 4, 0);
+    _nameLabelEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     
     _detailLabelFont = [UIFont systemFontOfSize:14];
     _detailLabelColor = [UIColor colorWithHexString:@"#A3A3A3"];;
-    _detailLabelEdgeInsets = UIEdgeInsetsMake(0, 12, 18, 18);
+    _detailLabelEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     
     _timeLabelFont = [UIFont systemFontOfSize:12];
     _timeLabelColor = [UIColor colorWithHexString:@"#A3A3A3"];;
-    _timeLabelEdgeInsets = UIEdgeInsetsMake(12, 8, 0, 18);
+    _timeLabelEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     
     _badgeLabelFont = [UIFont systemFontOfSize:12];
     _badgeLabelHeight = 14;
     _badgeLabelBgColor = UIColor.redColor;
     _badgeLabelTitleColor = UIColor.whiteColor;
     _badgeLabelPosition = EMCellRight;
-    _badgeLabelCenterVector = CGVectorMake(-8, 4);
+    _badgeLabelCenterVector = CGVectorMake(0, 0);
     _badgeMaxNum = 99;
     
     _cellBgColor = [UIColor colorWithHexString:@"#FFFFFF"];

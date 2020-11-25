@@ -76,6 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int badgeMaxNum;
 
 
+
 @end
 
 NS_ASSUME_NONNULL_END

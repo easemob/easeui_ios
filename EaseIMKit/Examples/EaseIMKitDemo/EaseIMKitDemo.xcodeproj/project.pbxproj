@@ -12,7 +12,7 @@
 		90146CF1256CB0CC00A8D524 /* ContactModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90146CF0256CB0CC00A8D524 /* ContactModel.m */; };
 		903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7925540390005E6BB1 /* ConversationsViewController.m */; };
 		903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7E2554039B005E6BB1 /* ContactsViewController.m */; };
-		903EAEB025540B89005E6BB1 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAEAF25540B89005E6BB1 /* SettingsViewController.m */; };
+		903EAEB025540B89005E6BB1 /* MineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAEAF25540B89005E6BB1 /* MineViewController.m */; };
 		903EAEB525540B9F005E6BB1 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAEB425540B9F005E6BB1 /* LoginViewController.m */; };
 		90A03A2E254A70E100D57B73 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A2D254A70E100D57B73 /* AppDelegate.m */; };
 		90A03A31254A70E100D57B73 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A30254A70E100D57B73 /* SceneDelegate.m */; };
@@ -35,8 +35,8 @@
 		903EAE7925540390005E6BB1 /* ConversationsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConversationsViewController.m; sourceTree = "<group>"; };
 		903EAE7D2554039B005E6BB1 /* ContactsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
 		903EAE7E2554039B005E6BB1 /* ContactsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
-		903EAEAE25540B89005E6BB1 /* SettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
-		903EAEAF25540B89005E6BB1 /* SettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		903EAEAE25540B89005E6BB1 /* MineViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MineViewController.h; sourceTree = "<group>"; };
+		903EAEAF25540B89005E6BB1 /* MineViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MineViewController.m; sourceTree = "<group>"; };
 		903EAEB325540B9F005E6BB1 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		903EAEB425540B9F005E6BB1 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		90A03A29254A70E100D57B73 /* EaseIMKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EaseIMKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,7 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				3C7B87892563CB8A0074F990 /* Chat */,
-				903EAEAD25540B79005E6BB1 /* SettingsViewController */,
+				903EAEAD25540B79005E6BB1 /* MineViewController */,
 				903EAEAB25540ACA005E6BB1 /* LoginViewController */,
 				903EAE7625540374005E6BB1 /* Contacts */,
 				903EAE7725540374005E6BB1 /* Conversations */,
@@ -137,13 +137,13 @@
 			path = LoginViewController;
 			sourceTree = "<group>";
 		};
-		903EAEAD25540B79005E6BB1 /* SettingsViewController */ = {
+		903EAEAD25540B79005E6BB1 /* MineViewController */ = {
 			isa = PBXGroup;
 			children = (
-				903EAEAE25540B89005E6BB1 /* SettingsViewController.h */,
-				903EAEAF25540B89005E6BB1 /* SettingsViewController.m */,
+				903EAEAE25540B89005E6BB1 /* MineViewController.h */,
+				903EAEAF25540B89005E6BB1 /* MineViewController.m */,
 			);
-			path = SettingsViewController;
+			path = MineViewController;
 			sourceTree = "<group>";
 		};
 		90A03A20254A70E100D57B73 = {
@@ -167,6 +167,7 @@
 		90A03A2B254A70E100D57B73 /* EaseIMKitDemo */ = {
 			isa = PBXGroup;
 			children = (
+				90D3AACE256E21BC0002B78B /* Custom */,
 				903EAE7525540374005E6BB1 /* Classes */,
 				90A03A2C254A70E100D57B73 /* AppDelegate.h */,
 				90A03A2D254A70E100D57B73 /* AppDelegate.m */,
@@ -181,6 +182,13 @@
 				90A03A3E254A70E200D57B73 /* main.m */,
 			);
 			path = EaseIMKitDemo;
+			sourceTree = "<group>";
+		};
+		90D3AACE256E21BC0002B78B /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Custom;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -299,7 +307,7 @@
 				90A03A34254A70E100D57B73 /* ViewController.m in Sources */,
 				3C7B87922563CCD40074F990 /* EaseChatViewController.m in Sources */,
 				90A03A2E254A70E100D57B73 /* AppDelegate.m in Sources */,
-				903EAEB025540B89005E6BB1 /* SettingsViewController.m in Sources */,
+				903EAEB025540B89005E6BB1 /* MineViewController.m in Sources */,
 				903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */,
 				903EAEB525540B9F005E6BB1 /* LoginViewController.m in Sources */,
 				903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */,

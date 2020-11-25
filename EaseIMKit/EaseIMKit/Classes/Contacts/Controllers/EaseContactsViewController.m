@@ -13,7 +13,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Masonry/Masonry.h>
 
-@interface EaseContactsViewController () <EMContactManagerDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface EaseContactsViewController () <EMContactManagerDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     EaseContactsViewModel *_viewModel;
     UIView *_sectionView;
@@ -74,7 +74,10 @@
     
     EaseContactModel *model = [self cellModelFromIndex:indexPath];
     if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:cellForRowAtContactModel:)]) {
-        return [self.delegate easeTableView:tableView cellForRowAtContactModel: model];
+        UITableViewCell *cell = [self.delegate easeTableView:tableView cellForRowAtContactModel: model];
+        if (cell) {
+            return cell;
+        }
     }
     
     EaseContactCell *cell = [EaseContactCell tableView:tableView cellViewModel:_viewModel];
@@ -110,7 +113,9 @@
     
     UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, _viewModel.sectionTitleLabelHeight + _viewModel.sectionTitleEdgeInsets.bottom + _viewModel.sectionTitleEdgeInsets.top)];
     sectionView.backgroundColor = _viewModel.sectionTitleBgColor;
-    UILabel* sectionTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(_viewModel.sectionTitleEdgeInsets.left, _viewModel.sectionTitleEdgeInsets.top, self.tableView.bounds.size.width - _viewModel.sectionTitleEdgeInsets.left - _viewModel.sectionTitleEdgeInsets.right, _viewModel.sectionTitleLabelHeight)];
+    UILabel* sectionTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(
+                                                                           _viewModel.sectionTitleEdgeInsets.left, _viewModel.sectionTitleEdgeInsets.top,
+                                                                           self.tableView.bounds.size.width - _viewModel.sectionTitleEdgeInsets.left - _viewModel.sectionTitleEdgeInsets.right, _viewModel.sectionTitleLabelHeight)];
     sectionTitleLabel.font = _viewModel.sectionTitleFont;
     sectionTitleLabel.textColor = _viewModel.sectionTitleColor;
     sectionTitleLabel.textAlignment = NSTextAlignmentLeft;
@@ -118,6 +123,7 @@
 
     EaseContactLetterModel *model = self.contactLists[section];
     sectionTitleLabel.text = model.contactLetter;
+
     return sectionView;
 }
 

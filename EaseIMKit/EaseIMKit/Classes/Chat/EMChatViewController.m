@@ -45,7 +45,7 @@
 {
     self = [super init];
     if (self) {
-        _currentConversation = [EMClient.sharedClient.chatManager getConversation:conversationId type:conType createIfNotExist:NO];
+        _currentConversation = [EMClient.sharedClient.chatManager getConversation:conversationId type:conType createIfNotExist:YES];
         _msgQueue = dispatch_queue_create("emmessage.com", NULL);
         _viewModel = viewModel;
         _isReloadViewWithModel = NO;
@@ -145,17 +145,9 @@
     [self _setupChatBarMoreViews];
     
     self.tableView.backgroundColor = _viewModel.chatViewBgColor;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 130;
     [self.view addSubview:self.tableView];
     [self.tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        /*if (self.currentConversation.type == EMConversationTypeGroupChat && _viewModel.chatViewHeight > 0) {
-            make.height.equalTo(@(_viewModel.chatViewHeight));
-        } else {
-            make.top.equalTo(self.view);
-        }*/
-        make.height.equalTo(@(_viewModel.chatViewHeight));
+        make.top.equalTo(self.view);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
         make.bottom.equalTo(self.chatBar.mas_top);
@@ -396,55 +388,62 @@
 //消息长按事件
 - (void)messageCellDidLongPress:(UITableViewCell *)aCell
 {
-    self.longPressIndexPath = [self.tableView indexPathForCell:aCell];
-    self.longPressView = [[EMMoreFunctionView alloc]initLongPressView];
-    self.longPressView.delegate = self;
-    CGSize longPressViewsize = [self.longPressView getExtViewSize];
-    self.longPressView.layer.cornerRadius = 8;
-    UIWindow *win = [[[UIApplication sharedApplication] windows] firstObject];
-    [win addSubview:self.longPressView];
-    CGRect rect = [aCell convertRect:aCell.bounds toView:nil];
-    CGFloat maxWidth = self.view.frame.size.width;
-    CGFloat maxHeight = self.tableView.frame.size.height;
-    CGFloat xOffset = 0;
-    if ([aCell isKindOfClass:[EMMessageCell class]]) {
-        _currentLongPressCell = (EMMessageCell*)aCell;
-        if (_currentLongPressCell.model.direction == EMMessageDirectionSend) {
-            xOffset = (maxWidth - avatarLonger - 2*componentSpacing - _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
-            if ((xOffset + longPressViewsize.width) > (maxWidth - componentSpacing)) {
-                xOffset = maxWidth - componentSpacing - longPressViewsize.width;
-            }
-        }
-        if (_currentLongPressCell.model.direction == EMMessageDirectionReceive) {
-            xOffset = (avatarLonger + 2*componentSpacing + _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
-            if (xOffset < componentSpacing) {
-                xOffset = componentSpacing;
-            }
-        }
-    } else {
-        xOffset = maxWidth / 2 - longPressViewsize.width / 2;
-    }
     
-    CGFloat yOffset = rect.origin.y - longPressViewsize.height - 2;
-    //顶部界线
-    CGFloat topBoundary = _viewModel.chatViewHeight > 0 ? ([UIScreen mainScreen].bounds.size.height - _viewModel.chatViewHeight - self.chatBar.frame.size.height) : [self bangScreenSize];
-    if (yOffset < topBoundary) {
-        yOffset = topBoundary;
-        if ((yOffset + longPressViewsize.height) > rect.origin.y) {
-            yOffset = rect.origin.y + rect.size.height + 2;
-        }
-        if ([aCell isKindOfClass:[EMMessageCell class]]) {
-            EMMessageCell *cell = (EMMessageCell *)aCell;
-            if (cell.bubbleView.frame.size.height > (maxHeight - longPressViewsize.height - 4)) {
-                yOffset = maxHeight / 2;
-            }
-        } else {
-            if (aCell.frame.size.height > (maxHeight - longPressViewsize.height - 4)) {
-                yOffset = maxHeight / 2;
-            }
-        }
-    }
-    self.longPressView.frame = CGRectMake(xOffset, yOffset, longPressViewsize.width, longPressViewsize.height);
+    
+//    self.longPressIndexPath = [self.tableView indexPathForCell:aCell];
+//    self.longPressView = [[EMMoreFunctionView alloc]initLongPressView];
+//    self.longPressView.delegate = self;
+//    CGSize longPressViewsize = [self.longPressView getExtViewSize];
+//    self.longPressView.layer.cornerRadius = 8;
+//    UIWindow *win = [[[UIApplication sharedApplication] windows] firstObject];
+//    [win addSubview:self.longPressView];
+//    CGRect rect = [aCell convertRect:aCell.bounds toView:nil];
+//    CGFloat maxWidth = self.view.frame.size.width;
+//    CGFloat maxHeight = self.tableView.frame.size.height;
+//    CGFloat xOffset = 0;
+//    if ([aCell isKindOfClass:[EMMessageCell class]]) {
+//        _currentLongPressCell = (EMMessageCell*)aCell;
+//        if (_currentLongPressCell.model.direction == EMMessageDirectionSend) {
+//            xOffset = (maxWidth - avatarLonger - 2*componentSpacing - _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
+//            if ((xOffset + longPressViewsize.width) > (maxWidth - componentSpacing)) {
+//                xOffset = maxWidth - componentSpacing - longPressViewsize.width;
+//            }
+//        }
+//        if (_currentLongPressCell.model.direction == EMMessageDirectionReceive) {
+//            xOffset = (avatarLonger + 2*componentSpacing + _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
+//            if (xOffset < componentSpacing) {
+//                xOffset = componentSpacing;
+//            }
+//        }
+//    } else {
+//        xOffset = maxWidth / 2 - longPressViewsize.width / 2;
+//    }
+//
+//    CGFloat yOffset = rect.origin.y - longPressViewsize.height - 2;
+//    //顶部界线
+//    CGFloat topBoundary = _viewModel.chatViewHeight > 0 ? ([UIScreen mainScreen].bounds.size.height - _viewModel.chatViewHeight - self.chatBar.frame.size.height) : [self bangScreenSize];
+//    if (yOffset < topBoundary) {
+//        yOffset = topBoundary;
+//        if ((yOffset + longPressViewsize.height) > rect.origin.y) {
+//            yOffset = rect.origin.y + rect.size.height + 2;
+//        }
+//        if ([aCell isKindOfClass:[EMMessageCell class]]) {
+//            EMMessageCell *cell = (EMMessageCell *)aCell;
+//            if (cell.bubbleView.frame.size.height > (maxHeight - longPressViewsize.height - 4)) {
+//                yOffset = maxHeight / 2;
+//            }
+//        } else {
+//            if (aCell.frame.size.height > (maxHeight - longPressViewsize.height - 4)) {
+//                yOffset = maxHeight / 2;
+//            }
+//        }
+//    }
+    
+    EMMessageCell *cell = (EMMessageCell *)aCell;
+    CGRect rect =  [cell.bubbleView convertRect:cell.bubbleView.bounds toView:self.tableView];
+    self.longPressView = [[EMMoreFunctionView alloc] initLongPressView];
+    self.longPressView.frame = rect;
+    [self.tableView addSubview:self.longPressView];
 }
 //刘海屏刘海高度
 - (CGFloat)bangScreenSize {
@@ -618,7 +617,7 @@
     
     if (animationTime > 0) {
         [UIView animateWithDuration:animationTime animations:animation completion:^(BOOL finished) {
-            [self scrollToBottomRow];
+            [self performSelector:@selector(scrollToBottomRow) withObject:nil afterDelay:0.1];
         }];
     } else {
         animation();
@@ -825,7 +824,8 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.rowHeight = UITableViewAutomaticDimension;
-        _tableView.estimatedRowHeight = 60;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.estimatedRowHeight = 130;
         _tableView.backgroundColor = [UIColor systemPinkColor];
         [_tableView enableRefresh:@"下拉刷新" color:UIColor.redColor];
         [_tableView.refreshControl addTarget:self action:@selector(tableViewDidTriggerHeaderRefresh) forControlEvents:UIControlEventValueChanged];

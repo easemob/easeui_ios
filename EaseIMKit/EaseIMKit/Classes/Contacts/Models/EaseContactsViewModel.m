@@ -28,11 +28,11 @@
 
     _avatarType = Circular;
     _avatarSize = CGSizeMake(40, 40);
-    _avatarEdgeInsets = UIEdgeInsetsMake(8, 20, 8, 0);
+    _avatarEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     
     _nameLabelFont = [UIFont systemFontOfSize:17];
     _nameLabelColor = [UIColor colorWithHexString:@"#333333"];
-    _nameLabelEdgeInsets = UIEdgeInsetsMake(16, 12, 16, 10);
+    _nameLabelEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     
     _cellBgColor = [UIColor colorWithHexString:@"#FFFFFF"];
     

@@ -22,7 +22,7 @@
 }
 
 - (NSString *)showName {
-    return _nickName;
+    return _nickName ?: _easeId;
 }
 
 - (NSString *)easeId {

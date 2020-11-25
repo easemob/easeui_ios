@@ -79,18 +79,18 @@
     __weak typeof(self) weakSelf = self;
     
     [_avatarView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.contentView.mas_top).offset(weakSelf.viewModel.avatarEdgeInsets.top);
-        make.bottom.equalTo(weakSelf.contentView.mas_bottom).offset(-weakSelf.viewModel.avatarEdgeInsets.bottom);
-        make.left.equalTo(weakSelf.contentView.mas_left).offset(weakSelf.viewModel.avatarEdgeInsets.left);
+        make.top.equalTo(weakSelf.contentView.mas_top).offset(weakSelf.viewModel.avatarEdgeInsets.top + 8);
+        make.bottom.equalTo(weakSelf.contentView.mas_bottom).offset(-weakSelf.viewModel.avatarEdgeInsets.bottom - 8);
+        make.left.equalTo(weakSelf.contentView.mas_left).offset(weakSelf.viewModel.avatarEdgeInsets.left + 20);
         make.width.offset(weakSelf.viewModel.avatarSize.width);
         make.height.offset(weakSelf.viewModel.avatarSize.height).priority(750);
     }];
     
     [_nameLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.contentView.mas_top).offset(weakSelf.viewModel.nameLabelEdgeInsets.top);
-        make.bottom.equalTo(weakSelf.contentView.mas_bottom).offset(-weakSelf.viewModel.nameLabelEdgeInsets.bottom);
-        make.left.equalTo(weakSelf.avatarView.mas_right).offset(weakSelf.viewModel.avatarEdgeInsets.right + weakSelf.viewModel.nameLabelEdgeInsets.left);
-        make.right.equalTo(weakSelf.contentView.mas_right).offset(-weakSelf.viewModel.nameLabelEdgeInsets.right);
+        make.top.equalTo(weakSelf.contentView.mas_top).offset(weakSelf.viewModel.nameLabelEdgeInsets.top + 16);
+        make.bottom.equalTo(weakSelf.contentView.mas_bottom).offset(-weakSelf.viewModel.nameLabelEdgeInsets.bottom - 16);
+        make.left.equalTo(weakSelf.avatarView.mas_right).offset(weakSelf.viewModel.avatarEdgeInsets.right + weakSelf.viewModel.nameLabelEdgeInsets.left + 12);
+        make.right.equalTo(weakSelf.contentView.mas_right).offset(-weakSelf.viewModel.nameLabelEdgeInsets.right - 10);
     }];
 }
 

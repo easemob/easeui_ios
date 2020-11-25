@@ -14,11 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol EaseConversationsViewControllerDelegate <EaseBaseViewControllerDelegate>
 
 @optional
-- (NSInteger)easeNumberOfSectionsInTableView:(UITableView *)tableView;
 
 - (UITableViewCell *)easeTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
-
-- (NSInteger)easeTableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 
 - (NSArray<UIContextualAction *> *)easeTableView:(UITableView *)tableView
            trailingSwipeActionsForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -30,7 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
                                         conversationType:(EMConversationType)type;
 
 @end
-
 
 @interface EaseConversationsViewController : EaseBaseTableViewController
 @property (nonatomic, strong) NSMutableArray *dataAry;
