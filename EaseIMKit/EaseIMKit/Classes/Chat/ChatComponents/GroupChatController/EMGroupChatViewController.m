@@ -24,9 +24,9 @@
 
 @implementation EMGroupChatViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EMViewModel *)viewModel
+- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel
 {
-    return [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EMViewModel *)viewModel];
+    return [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseViewModel *)viewModel];
 }
 
 - (void)viewDidLoad {
@@ -57,7 +57,7 @@
 #pragma mark - EMMoreFunctionViewDelegate
 
 //群组阅读回执跳转
-- (void)chatBarMoreFunctionReadReceipt
+- (void)groupReadReceiptAction
 {
     self.readReceiptControl = [[EMReadReceiptMsgViewController alloc]init];
     self.readReceiptControl.delegate = self;
@@ -167,7 +167,6 @@
             continue;
         }
         if([msgModel.message.messageId isEqualToString:msgAck.messageId]){
-            msgModel.readReceiptCount = [NSString stringWithFormat:@"阅读回执，已读用户（%d)",msgModel.message.groupAckCount];
             msgModel.message.isReadAcked = YES;
             [[EMClient sharedClient].chatManager sendMessageReadAck:msgModel.message.messageId toUser:msgModel.message.conversationId completion:nil];
             [self.dataArray setObject:msgModel atIndexedSubscript:i];

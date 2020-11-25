@@ -46,7 +46,6 @@
 
 - (void)_setupSubviews
 {
-    [self addPopBackLeftItem];
     if (self.isEditable) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(doneAction)];
     }

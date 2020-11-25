@@ -8,7 +8,7 @@
 
 #import "ConversationsViewController.h"
 #import <EaseIMKit.h>
-#import "EaseChatViewController.h"
+#import "ChatViewController.h"
 #import "DemoUserModel.h"
 
 @interface ConversationsViewController () <EaseConversationsViewControllerDelegate>
@@ -45,7 +45,7 @@
 
 - (void)easeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    EaseChatViewController *chatController = [[EaseChatViewController alloc]init];
+    ChatViewController *chatController = [[ChatViewController alloc]init];
     chatController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:chatController animated:YES];
 }

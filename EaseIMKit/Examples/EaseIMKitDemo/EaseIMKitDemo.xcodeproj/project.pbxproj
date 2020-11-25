@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3C7B87922563CCD40074F990 /* EaseChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C7B87912563CCD40074F990 /* EaseChatViewController.m */; };
+		3C7B87922563CCD40074F990 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C7B87912563CCD40074F990 /* ChatViewController.m */; };
 		6821891C4265850E39A38FB0 /* Pods_EaseIMKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 388F9279879A5BC867FA00EF /* Pods_EaseIMKitDemo.framework */; };
 		90146CF1256CB0CC00A8D524 /* ContactModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90146CF0256CB0CC00A8D524 /* ContactModel.m */; };
 		903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7925540390005E6BB1 /* ConversationsViewController.m */; };
@@ -26,8 +26,8 @@
 /* Begin PBXFileReference section */
 		388F9279879A5BC867FA00EF /* Pods_EaseIMKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EaseIMKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C307C55254FBCDE003696CA /* EaseIMKitDemo-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EaseIMKitDemo-Prefix.pch"; sourceTree = "<group>"; };
-		3C7B87902563CCD40074F990 /* EaseChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EaseChatViewController.h; sourceTree = "<group>"; };
-		3C7B87912563CCD40074F990 /* EaseChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EaseChatViewController.m; sourceTree = "<group>"; };
+		3C7B87902563CCD40074F990 /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
+		3C7B87912563CCD40074F990 /* ChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		6F3E72642FD7C6CC7CBA7ACD /* Pods-EaseIMKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKitDemo.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		90146CEF256CB0CC00A8D524 /* ContactModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactModel.h; sourceTree = "<group>"; };
 		90146CF0256CB0CC00A8D524 /* ContactModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactModel.m; sourceTree = "<group>"; };
@@ -70,8 +70,8 @@
 		3C7B87892563CB8A0074F990 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				3C7B87902563CCD40074F990 /* EaseChatViewController.h */,
-				3C7B87912563CCD40074F990 /* EaseChatViewController.m */,
+				3C7B87902563CCD40074F990 /* ChatViewController.h */,
+				3C7B87912563CCD40074F990 /* ChatViewController.m */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -297,7 +297,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				90A03A34254A70E100D57B73 /* ViewController.m in Sources */,
-				3C7B87922563CCD40074F990 /* EaseChatViewController.m in Sources */,
+				3C7B87922563CCD40074F990 /* ChatViewController.m in Sources */,
 				90A03A2E254A70E100D57B73 /* AppDelegate.m in Sources */,
 				903EAEB025540B89005E6BB1 /* SettingsViewController.m in Sources */,
 				903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */,

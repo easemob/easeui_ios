@@ -1,5 +1,5 @@
 //
-//  EaseChatViewController.h
+//  ChatViewController.h
 //  EaseIMKitDemo
 //
 //  Created by 娜塔莎 on 2020/11/17.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EaseChatViewController : UIViewController
+@interface ChatViewController : UIViewController
 
 @end
 

@@ -28,7 +28,7 @@
 
 @property (nonatomic, strong) UIButton *readReceiptBtn;//阅读回执按钮
 
-@property (nonatomic, strong) EMViewModel *viewModel;
+@property (nonatomic, strong) EaseViewModel *viewModel;
 
 @end
 
@@ -36,7 +36,7 @@
 
 - (instancetype)initWithDirection:(EMMessageDirection)aDirection
                              type:(EMMessageType)aType
-                        viewModel:(EMViewModel*)viewModel
+                        viewModel:(EaseViewModel*)viewModel
 
 {
     NSString *identifier = [EMMessageCell cellIdentifierWithDirection:aDirection type:aType];
@@ -103,6 +103,10 @@
     _avatarView.contentMode = UIViewContentModeScaleAspectFit;
     _avatarView.backgroundColor = [UIColor clearColor];
     _avatarView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarDidSelect:)];
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(avatarLongPressAction:)];
+    [_avatarView addGestureRecognizer:tap];
+    [_avatarView addGestureRecognizer:longPress];
     if (_viewModel.avatarStyle == RoundedCorner) {
         _avatarView.layer.cornerRadius = _viewModel.avatarCornerRadius;
     }
@@ -140,7 +144,7 @@
     _bubbleView.userInteractionEnabled = YES;
     _bubbleView.clipsToBounds = YES;
     [self.contentView addSubview:_bubbleView];
-    if (self.direction == EMMessageDirectionReceive || (_viewModel.msgArrangementStyle == ArrangementlLeft && _model.message.chatType != EMChatTypeGroupChat)) {
+    if (self.direction == EMMessageDirectionReceive || (_viewModel.msgAlignmentStyle == EaseAlignmentlLeft && _model.message.chatType != EMChatTypeGroupChat)) {
         [_bubbleView mas_makeConstraints:^(MASConstraintMaker *make) {
             if (_model.message.chatType != EMChatTypeChat) {
                 make.top.equalTo(self.nameLabel.mas_bottom).offset(3);
@@ -191,7 +195,6 @@
 - (void)setCellIsReadReceipt{
     _readReceiptBtn = [[UIButton alloc]init];
     _readReceiptBtn.layer.cornerRadius = 5;
-    //[_readReceiptBtn setTitle:self.model.readReceiptCount forState:UIControlStateNormal];
     _readReceiptBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
     _readReceiptBtn.backgroundColor = [UIColor lightGrayColor];
     [_readReceiptBtn.titleLabel setTextColor:[UIColor whiteColor]];
@@ -275,7 +278,7 @@
     }
     if (model.message.isNeedGroupAck) {
         self.readReceiptBtn.hidden = NO;
-        [self.readReceiptBtn setTitle:_model.readReceiptCount forState:UIControlStateNormal];
+        [self.readReceiptBtn setTitle:[NSString stringWithFormat:@"阅读回执，已读用户（%d）",_model.message.groupAckCount] forState:UIControlStateNormal];
     } else{
         self.readReceiptBtn.hidden = YES;
     }
@@ -289,6 +292,25 @@
     }
 }
 
+//头像点击
+- (void)avatarDidSelect:(UITapGestureRecognizer *)aTap
+{
+    if (aTap.state == UIGestureRecognizerStateEnded) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(avatarDidSelected:)]) {
+            [self.delegate avatarDidSelected:_model];
+        }
+    }
+}
+//头像长按
+- (void)avatarLongPressAction:(UILongPressGestureRecognizer *)aLongPress
+{
+    if (aLongPress.state == UIGestureRecognizerStateBegan) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(avatarDidLongPress:)]) {
+            [self.delegate avatarDidLongPress:self.model];
+        }
+    }
+}
+//气泡点击
 - (void)bubbleViewTapAction:(UITapGestureRecognizer *)aTap
 {
     if (aTap.state == UIGestureRecognizerStateEnded) {
@@ -297,7 +319,7 @@
         }
     }
 }
-
+//气泡长按
 - (void)bubbleViewLongPressAction:(UILongPressGestureRecognizer *)aLongPress
 {
     if (aLongPress.state == UIGestureRecognizerStateBegan) {
@@ -309,6 +331,7 @@
             [self.delegate messageCellDidLongPress:self];
         }
     }
+    //[aLongPress release];
 }
 
 @end

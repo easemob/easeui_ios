@@ -44,7 +44,6 @@
 
 - (void)_setupSubviews
 {
-    [self addPopBackLeftItemWithTarget:self action:@selector(backAction)];
     self.title = @"群组成员列表";
     self.showRefreshHeader = YES;
     self.view.backgroundColor = [UIColor whiteColor];
@@ -127,15 +126,8 @@
 - (void)_fetchGroupMembersWithIsHeader:(BOOL)aIsHeader
                              isShowHUD:(BOOL)aIsShowHUD
 {
-    if (aIsShowHUD) {
-        [self showHudInView:self.view hint:@"获取群组成员..."];
-    }
-    
     __weak typeof(self) weakself = self;
     void (^errorBlock)(EMError *aError) = ^(EMError *aError) {
-        if (aIsShowHUD) {
-            [weakself hideHud];
-        }
         [weakself tableViewDidFinishTriggerHeader:aIsHeader reload:NO];
         [EMAlertController showErrorAlert:aError.errorDescription];
     };
@@ -145,10 +137,6 @@
             if (aError) {
                 errorBlock(aError);
                 return ;
-            }
-            
-            if (aIsShowHUD) {
-                [weakself hideHud];
             }
             weakself.cursor = aResult.cursor;
             [weakself.dataArray addObjectsFromArray:aResult.list];

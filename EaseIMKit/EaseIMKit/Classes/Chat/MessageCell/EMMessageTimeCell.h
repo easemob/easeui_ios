@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EMViewModel.h"
+#import "EaseViewModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UILabel *timeLabel;
 
-- (instancetype)initWithViewModel:(EMViewModel *)viewModel;
+- (instancetype)initWithViewModel:(EaseViewModel *)viewModel;
 
 @end
 

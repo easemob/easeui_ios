@@ -40,6 +40,10 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 #define CHAT_PUSHVIEWCONTROLLER @"EMPushChatViewController"
 #define CHAT_CLEANMESSAGES @"EMChatCleanMessages"
 
+//编辑状态
+#define MSG_TYPING_BEGIN @"TypingBegin"
+#define MSG_TYPING_END @"TypingEnd"
+
 //通话
 #define EMCOMMMUNICATE_RECORD @"EMCommunicateRecord" //本地通话记录
 #define EMCOMMMUNICATE @"EMCommunicate" //远端通话记录

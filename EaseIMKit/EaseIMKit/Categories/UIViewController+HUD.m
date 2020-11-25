@@ -65,7 +65,7 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
 }
 
 - (void)hideHud{
-    [[self HUD] hideAnimated:YES];
+    [[self HUD] hide:YES];
 }
 
 @end

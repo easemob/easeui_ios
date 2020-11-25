@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EMChatViewController.h"
+#import "EaseChatViewController.h"
 #import "EMMessageCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EMMessageEventStrategy : NSObject
 
-@property (nonatomic, strong) EMChatViewController *chatController;
+@property (nonatomic, strong) EaseChatViewController *chatController;
 
 - (void)messageCellEventOperation:(EMMessageCell *)aCell;
 

@@ -10,7 +10,8 @@
 
 @protocol EaseUserData <NSObject>
 
-@property (nonatomic, strong) UIImage *avatarImg;
-@property (nonatomic, strong) NSString *Nickname;
+@property (nonatomic, strong) UIImage *avatarImg;  //头像
+@property (nonatomic, strong) NSString *Nickname;  //昵称
+@property (nonatomic, strong) NSString *huanxinID; //环信id
 
 @end

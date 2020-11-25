@@ -12,7 +12,7 @@
 
 @implementation EMMessageTimeCell
 
-- (instancetype)initWithViewModel:(EMViewModel *)viewModel
+- (instancetype)initWithViewModel:(EaseViewModel *)viewModel
 {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EMMessageTimeCell"];
     if (self) {

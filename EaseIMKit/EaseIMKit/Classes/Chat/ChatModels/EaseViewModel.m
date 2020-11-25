@@ -1,21 +1,22 @@
 //
-//  EMViewModel.m
+//  EaseViewModel.m
 //  EaseIMKit
 //
 //  Created by 娜塔莎 on 2020/11/17.
 //
 
-#import "EMViewModel.h"
+#import "EaseViewModel.h"
 #import "EMColorDefine.h"
 #import "UIImage+EaseUI.h"
 
-@implementation EMViewModel
+@implementation EaseViewModel
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _chatViewHeight = 500;
+        _defaultLongPressViewIsNeededForCustomCell = YES;
+        _isFetchHistoryMessagesFromServer = NO;
         //_chatViewBgColor = kColor_chatViewBg;
         _chatViewBgColor = [UIColor systemPinkColor];
         //_chatBarBgColor = [UIColor whiteColor];
@@ -26,18 +27,21 @@
         _receiveBubbleBgPicture = [UIImage easeUIImageNamed:@"msg_bg_recv"];
         _sendBubbleBgPicture = [UIImage easeUIImageNamed:@"msg_bg_send"];
         _contentFontSize = 18.f;
-        _chatBarStyle = EMChatBarStyleAll;
-        _avatarStyle = Circular;
+        _inputBarStyle = EaseInputBarStyleAll;
+        _avatarStyle = RoundedCorner;
         _avatarCornerRadius = 0;
     }
     return self;
 }
 
-- (void)setChatViewHeight:(CGFloat)chatViewHeight
+- (void)setDefaultLongPressViewIsNeededForCustomCell:(BOOL)defaultLongPressViewIsNeededForCustomCell
 {
-    if (chatViewHeight > 0) {
-        _chatViewHeight = chatViewHeight;
-    }
+    _defaultLongPressViewIsNeededForCustomCell = defaultLongPressViewIsNeededForCustomCell;
+}
+
+- (void)setIsFetchHistoryMessagesFromServer:(BOOL)isFetchHistoryMessagesFromServer
+{
+    _isFetchHistoryMessagesFromServer = isFetchHistoryMessagesFromServer;
 }
 
 - (void)setChatViewBgColor:(UIColor *)chatViewBgColor
@@ -89,10 +93,10 @@
     }
 }
 
-- (void)setChatBarStyle:(EMChatBarStyle)chatBarStyle
+- (void)setInputBarStyle:(EaseInputBarStyle)inputBarStyle
 {
-    if (chatBarStyle >= 1 && chatBarStyle <= 5) {
-        _chatBarStyle = chatBarStyle;
+    if (inputBarStyle >= 1 && inputBarStyle <= 5) {
+        _inputBarStyle = inputBarStyle;
     }
 }
 

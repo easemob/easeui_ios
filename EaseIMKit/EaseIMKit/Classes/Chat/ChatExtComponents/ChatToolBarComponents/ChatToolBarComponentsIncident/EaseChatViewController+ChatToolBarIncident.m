@@ -1,12 +1,12 @@
 //
-//  EMChatViewController+ChatToolBarIncident.m
+//  EaseChatViewController+ChatToolBarIncident.m
 //  EaseIM
 //
 //  Created by 娜塔莎 on 2020/7/13.
 //  Copyright © 2020 娜塔莎. All rights reserved.
 //
 
-#import "EMChatViewController+ChatToolBarIncident.h"
+#import "EaseChatViewController+ChatToolBarIncident.h"
 #import <objc/runtime.h>
 #import <Photos/Photos.h>
 #import <AVFoundation/AVFoundation.h>
@@ -14,7 +14,7 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "EMLocationViewController.h"
 
-@implementation EMChatViewController (ChatToolBarIncident)
+@implementation EaseChatViewController (ChatToolBarIncident)
 
 - (void)chatToolBarComponentAction:(EMChatToolBarComponentType)toolBarComponentType
 {
@@ -35,7 +35,7 @@
     媒体库
  */
 static const void *imagePickerKey = &imagePickerKey;
-@implementation EMChatViewController (ChatToolBarMeida)
+@implementation EaseChatViewController (ChatToolBarMeida)
 
 @dynamic imagePicker;
 
@@ -43,7 +43,7 @@ static const void *imagePickerKey = &imagePickerKey;
 {
     [self.view endEditing:YES];
     [self setterImagePicker];
-    
+
     if (componentType == EMChatToolBarCamera) {
         #if TARGET_IPHONE_SIMULATOR
             [EMAlertController showErrorAlert:@"模拟器不支持照相机"];
@@ -253,7 +253,7 @@ static const void *imagePickerKey = &imagePickerKey;
     实时音视频
  */
 
-@implementation EMChatViewController (ChatToolBarSealRtc)
+@implementation EaseChatViewController (ChatToolBarSealRtc)
 
 - (void)chatToolBarComponentSealRtcAction
 {
@@ -289,7 +289,7 @@ static const void *imagePickerKey = &imagePickerKey;
     位置消息
  */
 
-@implementation EMChatViewController (ChatToolBarLocation)
+@implementation EaseChatViewController (ChatToolBarLocation)
 
 - (void)chatToolBarLocationAction
 {
@@ -316,7 +316,7 @@ static const void *imagePickerKey = &imagePickerKey;
     选择文件
  */
 
-@implementation EMChatViewController (ChatToolBarFileOpen)
+@implementation EaseChatViewController (ChatToolBarFileOpen)
 
 - (void)chatToolBarFileOpenAction
 {
