@@ -9,6 +9,11 @@
 #ifndef EMColorDefine_h
 #define EMColorDefine_h
 
+#define inputBarBgColor [UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]
+#define inputBarFontColor [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1.0]
+#define longPressBgColor  [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1.0]
+#define longPressFontColor [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1.0]
+
 #define kColor_chatViewBg [UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]
 
 #define kColor_ExtFunctionView [UIColor colorWithRed:248/255.0 green:248/255.0 blue:248/255.0 alpha:1.0]

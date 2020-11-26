@@ -39,7 +39,8 @@
         EMEmoticonGroup *group = [EMEmoticonGroup getGifGroup];
         for (EMEmoticonModel *model in group.dataArray) {
             if ([model.name isEqualToString:name]) {
-                NSString *path = [[NSBundle mainBundle] pathForResource:model.original ofType:@"gif"];
+                NSBundle *resource_bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"/Frameworks/EaseIMKit.framework/EaseIMKit" ofType:@"bundle"]];
+                NSString *path = [resource_bundle pathForResource:model.original ofType:@"gif"];
                 NSData *imageData = [NSData dataWithContentsOfFile:path];
                 self.gifView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:imageData];;
                 break;

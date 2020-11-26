@@ -22,8 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)recallLongPressAction;
 - (void)copyLongPressAction;
 
-- (void)executeAction:(NSInteger)tag;
-
 - (void)resetCellLongPressStatus:(EMMessageCell *)aCell;
 
 @end

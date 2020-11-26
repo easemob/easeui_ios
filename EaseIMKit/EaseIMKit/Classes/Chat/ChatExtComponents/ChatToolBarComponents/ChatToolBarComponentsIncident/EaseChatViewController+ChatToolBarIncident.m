@@ -55,34 +55,31 @@ static const void *imagePickerKey = &imagePickerKey;
         
         return;
     }
-    
+    PHAuthorizationStatus permissions = -1;
+    if (@available(iOS 14, *)) {
+        permissions = PHAuthorizationStatusLimited;
+    }
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            switch (status) {
-                case PHAuthorizationStatusLimited:  //limit权限
-                {
-                    self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                    self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
-                    [self presentViewController:self.imagePicker animated:YES completion:nil];
-                }
-                    break;
-                case PHAuthorizationStatusAuthorized: //已获取权限
-                {
-                    self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                    self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
-                    [self presentViewController:self.imagePicker animated:YES completion:nil];
-                }
-                    break;
-                case PHAuthorizationStatusDenied: //用户已经明确否认了这一照片数据的应用程序访问
-                    [EMAlertController showErrorAlert:@"不允许访问相册"];
-                    break;
-                case PHAuthorizationStatusRestricted://此应用程序没有被授权访问的照片数据。可能是家长控制权限
-                    [EMAlertController showErrorAlert:@"没有授权访问相册"];
-                    break;
-                    
-                default:
-                    [EMAlertController showErrorAlert:@"访问相册失败"];
-                    break;
+            if (status == permissions) {
+                //limit权限
+                self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
+                [self presentViewController:self.imagePicker animated:YES completion:nil];
+            }
+            if (status == PHAuthorizationStatusAuthorized) {
+                //已获取权限
+                self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
+                [self presentViewController:self.imagePicker animated:YES completion:nil];
+            }
+            if (status == PHAuthorizationStatusDenied) {
+                //用户已经明确否认了这一照片数据的应用程序访问
+                [EMAlertController showErrorAlert:@"不允许访问相册"];
+            }
+            if (status == PHAuthorizationStatusRestricted) {
+                //此应用程序没有被授权访问的照片数据。可能是家长控制权限
+                [EMAlertController showErrorAlert:@"没有授权访问相册"];
             }
         });
     }];
@@ -142,10 +139,6 @@ static const void *imagePickerKey = &imagePickerKey;
     }
     
     [picker dismissViewControllerAnimated:YES completion:nil];
-    
-    //TODO: 当弹出call页面时，与imagePicker冲突
-    //    self.isViewDidAppear = YES;
-    //    [[EaseSDKHelper shareHelper] setIsShowingimagePicker:NO];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

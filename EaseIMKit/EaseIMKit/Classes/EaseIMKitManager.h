@@ -52,11 +52,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol EaseIMKitManagerDelegate <NSObject>
 @optional
-- (void)conversationsUnreadCountUpdate:(NSInteger)unreadCount;//会话未读总数
+
+/**
+ * 会话未读总数变化
+ *
+ * @param   unreadCount     当前会话列表的总未读数
+ */
+- (void)conversationsUnreadCountUpdate:(NSInteger)unreadCount;
+
 @end
 
 
 @interface EaseIMKitManager : NSObject
+
+@property (nonatomic) id<EaseIMKitSystemNotiDelegate>systemNotiDelegate; //系统通知回调代理
 
 + (instancetype)shareEaseIMKit;
 + (void)destoryShared;
@@ -64,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
 - (void)removeDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
 
-@property (nonatomic) id<EaseIMKitSystemNotiDelegate>systemNotiDelegate; //系统通知回调代理
+- (void)markAllMessagesAsReadWithConversation:(EMConversation *)conversation;
 
 @end
 
