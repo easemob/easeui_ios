@@ -28,7 +28,7 @@
     if (_type == ExtTypeChatBar) {
         return 60;
     }
-    return 30;
+    return 50;
 }
 - (CGFloat)xOffset
 {
@@ -36,14 +36,14 @@
 }
 - (CGFloat)yOffset
 {
-    return (self.collectionViewSize.height - (self.cellLonger + 13) * self.columCount) / (self.columCount + 1);
+    return (self.collectionViewSize.height - (self.cellLonger + 18) * self.columCount) / (self.columCount + 1);
 }
 - (CGSize)collectionViewSize
 {
     if (_type == ExtTypeChatBar) {
         return CGSizeMake([UIScreen mainScreen].bounds.size.width, 200);
     }
-    return CGSizeMake(self.rowCount * 50 , self.columCount * 50);
+    return CGSizeMake(self.rowCount * 50 , self.columCount * 80);
 }
 - (NSInteger)rowCount
 {
@@ -59,6 +59,27 @@
     }
     return _itemCount > 6 ? 2 : 1;
 }
+- (CGFloat)fontSize
+{
+    if (_type == ExtTypeChatBar) {
+        return 12;
+    }
+    return 12;
+}
+- (UIColor *)fontColor
+{
+    if (_type == ExtTypeChatBar) {
+        return inputBarFontColor;
+    }
+    return longPressFontColor;
+}
+- (UIColor *)bgColor
+{
+    if (_type == ExtTypeChatBar) {
+        return inputBarBgColor;
+    }
+    return longPressBgColor;
+}
 @end
 
 
@@ -68,7 +89,7 @@
 }
 
 @property (nonatomic, strong) UICollectionView *collectionView;
-@property (nonatomic, strong) EaseExtMenuViewModel *menuViewmModel;
+@property (nonatomic, strong) EaseExtMenuViewModel *menuViewModel;
 @property (nonatomic, strong) NSMutableArray<EaseExtMenuModel*> *extMenuModelArray;
 
 @end
@@ -80,7 +101,7 @@
     self = [super init];
     if (self) {
         _extMenuModelArray = extMenuModelArray;
-        _menuViewmModel = menuViewModel;
+        _menuViewModel = menuViewModel;
         _itemCount = [extMenuModelArray count];
         [self _setupUI];
     }
@@ -89,19 +110,17 @@
 
 - (CGSize)getExtViewSize
 {
-    return _menuViewmModel.collectionViewSize;
+    return _menuViewModel.collectionViewSize;
 }
 
 - (void)_setupUI {
-    //抛出
-    //self.backgroundColor = [UIColor colorWithRed:248/255.0 green:248/255.0 blue:248/255.0 alpha:1.0];
-    self.backgroundColor = [UIColor systemGrayColor];
+    self.backgroundColor = _menuViewModel.bgColor;
     
-    HorizontalLayout *layout = [[HorizontalLayout alloc] initWithOffset:_menuViewmModel.xOffset yOffset:_menuViewmModel.yOffset];
-    layout.itemSize = CGSizeMake(_menuViewmModel.cellLonger, _menuViewmModel.cellLonger + 13.f);
-    layout.rowCount = _menuViewmModel.rowCount;
-    layout.columCount = _menuViewmModel.columCount;
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, _menuViewmModel.collectionViewSize.width, _menuViewmModel.collectionViewSize.height) collectionViewLayout:layout];
+    HorizontalLayout *layout = [[HorizontalLayout alloc] initWithOffset:_menuViewModel.xOffset yOffset:_menuViewModel.yOffset];
+    layout.itemSize = CGSizeMake(_menuViewModel.cellLonger, _menuViewModel.cellLonger + 23.f);
+    layout.rowCount = _menuViewModel.rowCount;
+    layout.columCount = _menuViewModel.columCount;
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, _menuViewModel.collectionViewSize.width, _menuViewModel.collectionViewSize.height) collectionViewLayout:layout];
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.collectionView.dataSource = self;
     self.collectionView.showsVerticalScrollIndicator = NO;
@@ -138,7 +157,7 @@
     SessionToolbarCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     NSInteger index = indexPath.section * pageSize + indexPath.row;
     EaseExtMenuModel *extMenuItem = (EaseExtMenuModel *)_extMenuModelArray[index];
-    [cell personalizeToolbar:extMenuItem];
+    [cell personalizeToolbar:extMenuItem menuViewMode:_menuViewModel];
     cell.delegate = self;
     return cell;
 }
@@ -150,6 +169,7 @@
     if (menuItemModel.itemDidSelectedHandle) {
         menuItemModel.itemDidSelectedHandle(menuItemModel.funcDesc);
     }
+    [self removeFromSuperview];
 }
 
 @end
@@ -177,9 +197,7 @@
 
 - (void)_setupToolbar {
     self.toolBtn = [[UIButton alloc]init];
-    self.toolBtn.layer.cornerRadius = 8;
     self.toolBtn.layer.masksToBounds = YES;
-    self.toolBtn.imageEdgeInsets = UIEdgeInsetsMake(2, 10, 2, 10);
     [self.toolBtn addTarget:self action:@selector(cellTapAction) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:self.toolBtn];
     self.toolBtn.backgroundColor = [UIColor whiteColor];
@@ -191,21 +209,20 @@
     }];
     
     self.toolLabel = [[UILabel alloc]init];
-    self.toolLabel.textColor = [UIColor whiteColor];
-    
-    [self.toolLabel setFont:[UIFont systemFontOfSize:10.0]];
     self.toolLabel.textAlignment = NSTextAlignmentCenter;
     [self.contentView addSubview:self.toolLabel];
     [self.toolLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.toolBtn.mas_bottom).offset(3);
         make.width.mas_equalTo(@(_cellLonger));
-        make.height.equalTo(@10);
+        make.height.equalTo(@20);
         make.left.equalTo(self.contentView);
     }];
 }
 
-- (void)personalizeToolbar:(EaseExtMenuModel*)menuItemModel{
+- (void)personalizeToolbar:(EaseExtMenuModel*)menuItemModel menuViewMode:(EaseExtMenuViewModel*)menuViewModel {
     _menuItemModel = menuItemModel;
+    self.toolLabel.textColor = menuViewModel.fontColor;
+    [self.toolLabel setFont:[UIFont systemFontOfSize:menuViewModel.fontSize]];
     [_toolBtn setImage:_menuItemModel.icon forState:UIControlStateNormal];
     [_toolLabel setText:_menuItemModel.funcDesc];
 }

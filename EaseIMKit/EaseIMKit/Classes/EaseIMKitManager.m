@@ -12,9 +12,11 @@
 
 static dispatch_once_t onceToken;
 static EaseIMKitManager *easeIMKit = nil;
-@interface EaseIMKitManager ()<EMMultiDevicesDelegate, EMContactManagerDelegate, EMGroupManagerDelegate>
+@interface EaseIMKitManager ()<EMMultiDevicesDelegate, EMContactManagerDelegate, EMGroupManagerDelegate, EMChatManagerDelegate>
 @property (nonatomic, strong) EMMulticastDelegate<EaseIMKitManagerDelegate> *delegates;
-@property (nonatomic, strong) NSString *currentConversationId;
+@property (nonatomic, strong) NSString *currentConversationId;  //当前会话聊天id
+@property (nonatomic, assign) NSInteger currentUnreadCount; //当前未读总数
+@property (nonatomic, strong) dispatch_queue_t msgQueue;
 @end
 
 @implementation EaseIMKitManager
@@ -26,7 +28,6 @@ static EaseIMKitManager *easeIMKit = nil;
         if (easeIMKit == nil) {
             easeIMKit = [[EaseIMKitManager alloc] init];
         }
-        
     });
     return easeIMKit;
 }
@@ -42,10 +43,14 @@ static EaseIMKitManager *easeIMKit = nil;
     self = [super init];
     if (self) {
         _delegates = (EMMulticastDelegate<EaseIMKitManagerDelegate> *)[[EMMulticastDelegate alloc] init];
+        _currentConversationId = @"";
+        _currentUnreadCount = [self currentUnreadCount];
+        _msgQueue = dispatch_queue_create("easemessage.com", NULL);
     }
     [[EMClient sharedClient] addMultiDevicesDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
     return self;
 }
 
@@ -69,6 +74,28 @@ static EaseIMKitManager *easeIMKit = nil;
     [self.delegates removeDelegate:aDelegate];
 }
 
+#pragma mark - EMChatManageDelegate
+
+//收到消息
+- (void)messagesDidReceive:(NSArray *)aMessages
+{
+    __weak typeof(self) weakself = self;
+    dispatch_async(self.msgQueue, ^{
+        NSInteger unreadCount = 0;
+        NSString *conId = weakself.currentConversationId;
+        for (int i = 0; i < [aMessages count]; i++) {
+            EMMessage *msg = aMessages[i];
+            if (![msg.conversationId isEqualToString:conId]) {
+                ++unreadCount;
+            }
+        }
+        if (unreadCount > 0) {
+            weakself.currentUnreadCount += unreadCount;
+            [weakself coversationsUnreadCountUpdate:weakself.currentUnreadCount];
+        }
+    });
+}
+ 
 #pragma mark - EMContactManagerDelegate
 
 //收到好友请求
@@ -200,6 +227,7 @@ static EaseIMKitManager *easeIMKit = nil;
                                   username:(NSString *)aTarget
                                        ext:(NSString *)aExt
 {
+    __weak typeof(self) weakself = self;
     if (aEvent == EMMultiDevicesEventContactAccept || aEvent == EMMultiDevicesEventContactDecline) {
         EMConversation *systemConversation = [EMClient.sharedClient.chatManager getConversation:EMSYSTEMNOTIFICATIONID type:-1 createIfNotExist:NO];
         [systemConversation loadMessagesStartFromId:nil count:systemConversation.unreadMessagesCount searchDirection:EMMessageSearchDirectionUp completion:^(NSArray *aMessages, EMError *aError) {
@@ -211,7 +239,7 @@ static EaseIMKitManager *easeIMKit = nil;
                 }
             }
             if (hasUnreadMsg) {
-                [self conversationsUnreadCount];
+                [weakself conversationsUnreadCount];
             }
         }];
     }
@@ -221,6 +249,7 @@ static EaseIMKitManager *easeIMKit = nil;
                                  groupId:(NSString *)aGroupId
                                      ext:(id)aExt
 {
+    __weak typeof(self) weakself = self;
     if (aEvent == EMMultiDevicesEventGroupInviteDecline || aEvent == EMMultiDevicesEventGroupInviteAccept || aEvent == EMMultiDevicesEventGroupApplyAccept || aEvent == EMMultiDevicesEventGroupApplyDecline) {
         EMConversation *systemConversation = [EMClient.sharedClient.chatManager getConversation:EMSYSTEMNOTIFICATIONID type:-1 createIfNotExist:NO];
         [systemConversation loadMessagesStartFromId:nil count:systemConversation.unreadMessagesCount searchDirection:EMMessageSearchDirectionUp completion:^(NSArray *aMessages, EMError *aError) {
@@ -232,28 +261,55 @@ static EaseIMKitManager *easeIMKit = nil;
                 }
             }
             if (hasUnreadMsg) {
-                [self conversationsUnreadCount];
+                [weakself conversationsUnreadCount];
             }
         }];
     }
 }
 
-#pragma mark - callback
-//未读总数变化
-- (void)conversationsUnreadCount
+#pragma mark - 未读数变化
+
+//会话所有信息标记已读
+- (void)markAllMessagesAsReadWithConversation:(EMConversation *)conversation
+{
+    if (conversation && conversation.unreadMessagesCount > 0) {
+        [conversation markAllMessagesAsRead:nil];
+        _currentUnreadCount -= conversation.unreadMessagesCount;
+        [self coversationsUnreadCountUpdate:_currentUnreadCount];
+    }
+}
+
+//当前未读总数    (初始化调用)
+- (NSInteger)currentUnreadCount
 {
     NSInteger unreadCount = 0;
     NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
     for (EMConversation *conversation in conversationList) {
         unreadCount += conversation.unreadMessagesCount;
     }
-    [self coversationsUnreadCount:unreadCount];
+    [self coversationsUnreadCountUpdate:unreadCount];
+    return unreadCount;
+}
+
+//未读总数变化    （插一条未读信息到会话）
+- (void)conversationsUnreadCount
+{
+    NSInteger unreadCount = 0;
+    NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
+    for (EMConversation *conversation in conversationList) {
+        if ([conversation.conversationId isEqualToString:_currentConversationId]) {
+            continue;
+        }
+        unreadCount += conversation.unreadMessagesCount;
+    }
+    _currentUnreadCount = unreadCount;
+    [self coversationsUnreadCountUpdate:unreadCount];
 }
 
 #pragma mark - 多播
 
-//未读总数
-- (void)coversationsUnreadCount:(NSInteger)unreadCount
+//未读总数多播
+- (void)coversationsUnreadCountUpdate:(NSInteger)unreadCount
 {
     EMMulticastDelegateEnumerator *multicastDelegates = [self.delegates delegateEnumerator];
     for (EMMulticastDelegateNode *node in [multicastDelegates getDelegates]) {

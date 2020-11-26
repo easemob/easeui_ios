@@ -28,7 +28,7 @@
 #import "EMChatroomViewController.h"
 #import "UITableView+Refresh.h"
 #import "EaseIMKitManager+ExtFunction.h"
-#import "UIViewController+KeyBoardChangedStatus.h"
+#import "UIViewController+ComponentSize.h"
 
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EMMessageCellDelegate, EMChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate>
 {
@@ -83,9 +83,7 @@
 {
     [super viewDidAppear:animated];
     [self tableViewDidTriggerHeaderRefresh];
-    [self.currentConversation markAllMessagesAsRead:nil];
-    //抛出消息全部已读回调
-    
+    [EaseIMKitManager.shareEaseIMKit markAllMessagesAsReadWithConversation:self.currentConversation];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -111,7 +109,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    [self.longPressView removeFromSuperview];
+    [EaseIMKitManager.shareEaseIMKit setConversationId:@""];
+    [self hideLongPressView];
     [[EMAudioPlayerUtil sharedHelper] stopPlayer];
     if (self.currentConversation.type == EMChatTypeChatRoom) {
         [[EMClient sharedClient].roomManager leaveChatroom:self.currentConversation.conversationId completion:nil];
@@ -133,7 +132,7 @@
 
 - (void)_setupChatSubviews
 {
-    self.view.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
+    self.view.backgroundColor = [UIColor clearColor];
     
     self.chatBar = [[EMChatBar alloc] initWithViewModel:_viewModel];
     self.chatBar.delegate = self;
@@ -273,8 +272,7 @@
 {
     [self.view endEditing:YES];
     [self.chatBar clearMoreViewAndSelectedButton];
-    [self.longPressView removeFromSuperview];
-    [self resetCellLongPressStatus:_currentLongPressCell];
+    [self hideLongPressView];
 }
 
 #pragma mark - EMChatBarDelegate
@@ -298,6 +296,7 @@
 
 - (void)chatBarDidShowMoreViewAction
 {
+    [self hideLongPressView];
     [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.chatBar.mas_top);
     }];
@@ -341,6 +340,7 @@
 
 - (void)messageCellDidSelected:(EMMessageCell *)aCell
 {
+    [self hideLongPressView];
     BOOL isCustom = NO;
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectMessageItem:userData:)]) {
         isCustom = [self.delegate didSelectMessageItem:aCell.model.message userData:aCell.model.userDataDelegate];
@@ -354,19 +354,20 @@
 //消息长按事件
 - (void)messageCellDidLongPress:(UITableViewCell *)aCell
 {
+    [self hideLongPressView];
     self.longPressIndexPath = [self.tableView indexPathForCell:aCell];
     __weak typeof(self) weakself = self;
     EaseExtMenuModel *copyExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"copy"] funcDesc:@"复制" handle:^(NSString * _Nonnull itemDesc) {
-        [weakself chatToolBarComponentIncidentAction:EMChatToolBarPhotoAlbum];
+        [weakself copyLongPressAction];
     }];
     EaseExtMenuModel *forwardExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"forward"] funcDesc:@"转发" handle:^(NSString * _Nonnull itemDesc) {
-        [weakself chatToolBarComponentIncidentAction:EMChatToolBarCamera];
+        [weakself forwardLongPressAction];
     }];
     EaseExtMenuModel *deleteExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"delete"] funcDesc:@"删除" handle:^(NSString * _Nonnull itemDesc) {
-        [weakself chatToolBarComponentSealRtcAction];
+        [weakself deleteLongPressAction];
     }];
     EaseExtMenuModel *recallExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"recall"] funcDesc:@"撤回" handle:^(NSString * _Nonnull itemDesc) {
-        [weakself chatToolBarLocationAction];
+        [weakself recallLongPressAction];
     }];
     
     NSMutableArray<EaseExtMenuModel*> *extMenuArray = [[NSMutableArray<EaseExtMenuModel*> alloc]init];
@@ -401,6 +402,7 @@
     
     CGSize longPressViewsize = [self.longPressView getExtViewSize];
     self.longPressView.layer.cornerRadius = 8;
+    CGRect viewRect = [self.view convertRect:self.view.bounds toView:nil];
     CGRect rect = [aCell convertRect:aCell.bounds toView:nil];
     CGFloat maxWidth = self.view.frame.size.width;
     CGFloat maxHeight = self.tableView.frame.size.height;
@@ -408,24 +410,25 @@
     CGFloat yOffset = 0;
     if (!isCustomCell) {
         if (_currentLongPressCell.model.direction == EMMessageDirectionSend) {
-            xOffset = (maxWidth - avatarLonger - 2*componentSpacing - _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
+            xOffset = (maxWidth - avatarLonger - 3*componentSpacing - _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
             if ((xOffset + longPressViewsize.width) > (maxWidth - componentSpacing)) {
                 xOffset = maxWidth - componentSpacing - longPressViewsize.width;
             }
         }
         if (_currentLongPressCell.model.direction == EMMessageDirectionReceive) {
-            xOffset = (avatarLonger + 2*componentSpacing + _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
+            xOffset = (avatarLonger + 3*componentSpacing + _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
             if (xOffset < componentSpacing) {
                 xOffset = componentSpacing;
             }
         }
-        yOffset = rect.origin.y - longPressViewsize.height - 2;
+        yOffset = rect.origin.y - longPressViewsize.height + componentSpacing;
     } else {
         xOffset = maxWidth / 2 - longPressViewsize.width / 2;
-        yOffset = rect.origin.y - longPressViewsize.height + componentSpacing;
+        yOffset = rect.origin.y - longPressViewsize.height - 2;
     }
-    if (yOffset <= 0) {
-        yOffset = 0;
+    CGFloat topBoundary = viewRect.origin.y < [self bangScreenSize] ? [self bangScreenSize] : viewRect.origin.y;
+    if (yOffset <= topBoundary) {
+        yOffset = topBoundary;
         if ((yOffset + longPressViewsize.height) > isCustomCell ? rect.origin.y : (rect.origin.y + componentSpacing)) {
             yOffset = isCustomCell ? (rect.origin.y + rect.size.height + 2) : (rect.origin.y + rect.size.height - componentSpacing);
         }
@@ -440,14 +443,10 @@
         }
     }
     self.longPressView.frame = CGRectMake(xOffset, yOffset, longPressViewsize.width, longPressViewsize.height);
-    [self.view addSubview:self.longPressView];
-    /*EMMessageCell *cell = (EMMessageCell *)aCell;
-    CGRect rect =  [cell.bubbleView convertRect:cell.bubbleView.bounds toView:self.tableView];
-    self.longPressView = [[EMMoreFunctionView alloc] initLongPressView];
-    self.longPressView.frame = rect;
-    [self.tableView addSubview:self.longPressView];*/
+    UIWindow *win = [[[UIApplication sharedApplication] windows] firstObject];
+    [win addSubview:self.longPressView];
 }
-    
+
 - (void)messageCellDidResend:(EMMessageModel *)aModel
 {
     if (aModel.message.status != EMMessageStatusFailed && aModel.message.status != EMMessageStatusPending) {
@@ -465,6 +464,7 @@
 //头像点击
 - (void)avatarDidSelected:(EMMessageModel *)model
 {
+    [self hideLongPressView];
     if (self.delegate && [self.delegate respondsToSelector:@selector(avatarDidSelected:)]) {
         [self.delegate avatarDidSelected:model.userDataDelegate];
     }
@@ -472,6 +472,7 @@
 //头像长按
 - (void)avatarDidLongPress:(EMMessageModel *)model
 {
+    [self hideLongPressView];
     if (self.delegate && [self.delegate respondsToSelector:@selector(avatarDidLongPress:)]) {
         [self.delegate avatarDidLongPress:model.userDataDelegate];
     }
@@ -601,7 +602,6 @@
 
 - (void)keyBoardWillShow:(NSNotification *)note
 {
-    
     // 获取用户信息
     NSDictionary *userInfo = [NSDictionary dictionaryWithDictionary:note.userInfo];
     // 获取键盘高度
@@ -660,8 +660,7 @@
     if (aTap.state == UIGestureRecognizerStateEnded) {
         [self.view endEditing:YES];
         [self.chatBar clearMoreViewAndSelectedButton];
-        [self.longPressView removeFromSuperview];
-        [self resetCellLongPressStatus:_currentLongPressCell];
+        [self hideLongPressView];
     }
 }
 
@@ -763,6 +762,13 @@
 }
 
 #pragma mark - Action
+
+//隐藏长按
+- (void)hideLongPressView
+{
+    [self.longPressView removeFromSuperview];
+    [self resetCellLongPressStatus:_currentLongPressCell];
+}
 
 //自定义cell长按
 - (void)customCellLongPressAction:(UILongPressGestureRecognizer *)aLongPress

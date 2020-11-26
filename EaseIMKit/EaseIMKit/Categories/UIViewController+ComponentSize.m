@@ -1,13 +1,13 @@
 //
-//  UIViewController+KeyBoardChangedStatus.m
+//  UIViewController+ComponentSize.m
 //  EaseIMKit
 //
 //  Created by 娜塔莎 on 2020/11/25.
 //
 
-#import "UIViewController+KeyBoardChangedStatus.h"
+#import "UIViewController+ComponentSize.h"
 
-@implementation UIViewController (KeyBoardChangedStatus)
+@implementation UIViewController (ComponentSize)
 
 - (void)keyBoardWillShow:(NSNotification *)note animations:(void (^)(void))animations completion:(void (^ __nullable)(BOOL finished, CGRect keyBoardBounds))completion
 {
@@ -46,6 +46,19 @@
     } else {
         animations();
     }
+}
+
+//刘海高度
+- (CGFloat)bangScreenSize {
+     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+         return 0;
+     }
+     CGSize size = [UIScreen mainScreen].bounds.size;
+     NSInteger notchValue = size.width / size.height * 100;
+     if (216 == notchValue || 46 == notchValue) {
+         return 34;
+     }
+     return 0;
 }
 
 @end
