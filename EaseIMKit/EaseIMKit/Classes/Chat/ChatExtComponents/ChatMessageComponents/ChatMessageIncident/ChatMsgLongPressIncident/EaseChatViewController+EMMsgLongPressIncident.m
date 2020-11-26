@@ -1,12 +1,12 @@
 //
-//  EMChatViewController+EMMsgLongPressIncident.m
+//  EaseChatViewController+EMMsgLongPressIncident.m
 //  EaseIM
 //
 //  Created by 娜塔莎 on 2020/7/9.
 //  Copyright © 2020 娜塔莎. All rights reserved.
 //
 
-#import "EMChatViewController+EMMsgLongPressIncident.h"
+#import "EaseChatViewController+EMMsgLongPressIncident.h"
 #import "EMMsgTranspondViewController.h"
 #import <objc/runtime.h>
 #import "EMMsgTextBubbleView.h"
@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, EaseLongPressExecute) {
 };
 
 static const void *longPressIndexPathKey = &longPressIndexPathKey;
-@implementation EMChatViewController (EMMsgLongPressIncident)
+@implementation EaseChatViewController (EMMsgLongPressIncident)
 
 @dynamic longPressIndexPath;
 
@@ -30,7 +30,7 @@ static const void *longPressIndexPathKey = &longPressIndexPathKey;
     if (tag == EaseLongPressExecuteForward)
         [self forwardLongPressAction];
     if (tag == EaseLongPressExecuteDelete)
-        [self deleteLongPressAction];
+        [self copyLongPressAction];
     if (tag == EaseLongPressExecuteRecall)
         [self recallLongPressAction];
 }

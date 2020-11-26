@@ -7,14 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EMChatViewController.h"
-#import "EMViewModel.h"
+#import "EaseChatViewController.h"
+#import "EaseViewModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EMGroupChatViewController : EMChatViewController
+@interface EMGroupChatViewController : EaseChatViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EMViewModel *)viewModel;
+- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel;
+//群组阅读回执
+- (void)groupReadReceiptAction;
 
 @end
 

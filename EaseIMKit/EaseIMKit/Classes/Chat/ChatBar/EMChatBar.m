@@ -32,13 +32,13 @@
 
 @property (nonatomic, strong) UIView *bottomLine;//下划线
 
-@property (nonatomic, strong) EMViewModel *viewModel;
+@property (nonatomic, strong) EaseViewModel *viewModel;
 
 @end
 
 @implementation EMChatBar
 
-- (instancetype)initWithViewModel:(EMViewModel *)viewModel
+- (instancetype)initWithViewModel:(EaseViewModel *)viewModel
 {
     self = [super init];
     if (self) {
@@ -118,23 +118,23 @@
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(5);
         make.height.mas_equalTo(ktextViewMinHeight);
-        if (_viewModel.chatBarStyle == EMChatBarStyleAll) {
+        if (_viewModel.inputBarStyle == EaseInputBarStyleAll) {
             make.left.equalTo(self.audioButton.mas_right).offset(kModuleMargin);
             make.right.equalTo(self.emojiButton.mas_left).offset(-kModuleMargin);
         }
-        if (_viewModel.chatBarStyle == EMChatBarStyleLackAudio) {
+        if (_viewModel.inputBarStyle == EaseInputBarStyleNoAudio) {
             make.left.equalTo(self).offset(kModuleMargin);
             make.right.equalTo(self.emojiButton.mas_left).offset(-kModuleMargin);
         }
-        if (_viewModel.chatBarStyle == EMChatBarStyleLackEmoji) {
+        if (_viewModel.inputBarStyle == EaseInputBarStyleNoEmoji) {
             make.left.equalTo(self.audioButton.mas_right).offset(kModuleMargin);
             make.right.equalTo(self.ConversationToolBarBtn.mas_left).offset(-kModuleMargin);
         }
-        if (_viewModel.chatBarStyle == EMChatBarStyleOnlyExtension) {
+        if (_viewModel.inputBarStyle == EaseInputBarStyleNoAudioAndEmoji) {
             make.left.equalTo(self).offset(kModuleMargin);
             make.right.equalTo(self.ConversationToolBarBtn.mas_left).offset(-kModuleMargin);
         }
-        if (_viewModel.chatBarStyle == EMChatBarStyleText) {
+        if (_viewModel.inputBarStyle == EaseInputBarStyleOnlyText) {
             make.left.equalTo(self).offset(kModuleMargin);
             make.right.equalTo(self).offset(-kModuleMargin);
         }

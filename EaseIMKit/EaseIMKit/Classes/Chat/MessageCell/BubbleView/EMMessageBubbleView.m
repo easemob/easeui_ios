@@ -12,7 +12,7 @@
 
 - (instancetype)initWithDirection:(EMMessageDirection)aDirection
                              type:(EMMessageType)aType
-                        viewModel:(EMViewModel *)viewModel
+                        viewModel:(EaseViewModel *)viewModel
 {
     self = [super init];
     if (self) {

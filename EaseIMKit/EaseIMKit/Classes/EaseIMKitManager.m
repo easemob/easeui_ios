@@ -7,6 +7,7 @@
 
 #import "EaseIMKitManager.h"
 #import "EaseConversationsViewController.h"
+#import "EaseIMKitManager+ExtFunction.h"
 #import "EMMulticastDelegate.h"
 
 static dispatch_once_t onceToken;
@@ -289,6 +290,15 @@ static EaseIMKitManager *easeIMKit = nil;
         return [self.systemNotiDelegate requestDidReceiveConversationExt:conversationId requestUser:requestUser reason:reason];
     }
     return [[NSDictionary alloc]init];
+}
+
+@end
+
+@implementation EaseIMKitManager (currentUnreadCount)
+
+- (void)setConversationId:(NSString *)conversationId
+{
+    _currentConversationId = conversationId;
 }
 
 @end

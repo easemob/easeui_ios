@@ -10,7 +10,7 @@
 
 #import "EMMessageModel.h"
 #import "EMMessageBubbleView.h"
-#import "EMViewModel.h"
+#import "EaseViewModel.h"
 
 #define avatarLonger 40
 #define componentSpacing 10
@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithDirection:(EMMessageDirection)aDirection
                              type:(EMMessageType)aType
-                        viewModel:(EMViewModel*)viewModel;
+                        viewModel:(EaseViewModel*)viewModel;
 
 @end
 
@@ -42,12 +42,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 - (void)messageCellDidSelected:(EMMessageCell *)aCell;
-
-- (void)messageCellDidLongPress:(EMMessageCell *)aCell;
-
+- (void)messageCellDidLongPress:(UITableViewCell *)aCell;
 - (void)messageCellDidResend:(EMMessageModel *)aModel;
-
 - (void)messageReadReceiptDetil:(EMMessageCell *)aCell;
+
+- (void)avatarDidSelected:(EMMessageModel *)model;
+- (void)avatarDidLongPress:(EMMessageModel *)model;
 
 @end
 

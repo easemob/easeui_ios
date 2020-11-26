@@ -32,15 +32,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) id<EaseUserData> userDataDelegate;
 
-@property (nonatomic, strong) NSString *readReceiptCount;
-
 @property (nonatomic, strong) EMMessage *message;
 
 @property (nonatomic) EMMessageDirection direction;
 
 @property (nonatomic) EMMessageType type;
 
-@property (nonatomic) BOOL isPlaying;
+@property (nonatomic) BOOL isPlaying;//去掉
 
 - (instancetype)initWithEMMessage:(EMMessage *)aMsg;
 

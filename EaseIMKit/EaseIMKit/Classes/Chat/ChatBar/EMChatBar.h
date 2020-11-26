@@ -12,7 +12,7 @@
 #import "EMChatBarEmoticonView.h"
 #import "EMChatBarRecordAudioView.h"
 #import "EMMoreFunctionView.h"
-#import "EMViewModel.h"
+#import "EaseViewModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) EMChatBarEmoticonView *moreEmoticonView;
 @property (nonatomic, strong) EMMoreFunctionView *moreFunctionView;
 
-- (instancetype)initWithViewModel:(EMViewModel *)viewModel;
+- (instancetype)initWithViewModel:(EaseViewModel *)viewModel;
 
 - (void)clearInputViewText;
 

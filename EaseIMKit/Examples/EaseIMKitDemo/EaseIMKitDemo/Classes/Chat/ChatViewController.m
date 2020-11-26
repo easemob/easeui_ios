@@ -1,27 +1,27 @@
 //
-//  EaseChatViewController.m
+//  ChatViewController.m
 //  EaseIMKitDemo
 //
 //  Created by 娜塔莎 on 2020/11/17.
 //  Copyright © 2020 djp. All rights reserved.
 //
 
-#import "EaseChatViewController.h"
+#import "ChatViewController.h"
 #import <EaseIMKit.h>
 
-@interface EaseChatViewController ()
+@interface ChatViewController ()
 
 @end
 
-@implementation EaseChatViewController
+@implementation ChatViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    EMViewModel *viewModel = [[EMViewModel alloc]init];
+    EaseViewModel *viewModel = [[EaseViewModel alloc]init];
     //viewModel.chatBarStyle = EMChatBarStyleLackEmoji;
-    EMChatViewController *chatController = [EMChatControllerProducter getChatControllerInstance:self.chatter
-                                                                               conversationType:EMConversationTypeChat chatViewModel:viewModel];
+    EaseChatViewController *chatController = [EaseChatControllerProducter getChatControllerInstance:@"nats" conversationType:EMConversationTypeChat chatViewModel:viewModel];
     [self addChildViewController:chatController];
+    //self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:chatController.view];
     [chatController.view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.equalTo(self.view);

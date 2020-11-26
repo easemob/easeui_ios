@@ -71,8 +71,7 @@
 
 - (void)easeTableView:(UITableView *)tableView didSelectRowAtContactModel:(EaseContactModel *)contact {
 //    NSLog(@"contact -- %@", contact.easeId);
-    EaseChatViewController *chatView = [[EaseChatViewController alloc] init];
-    chatView.chatter = contact.easeId;
+    EaseChatViewController *chatView = [[EaseChatViewController alloc] initWithCoversationid:contact.easeId conversationType:EMConversationTypeChat chatViewModel:[[EaseViewModel alloc]init]];
     chatView.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:chatView animated:YES];
 }

@@ -12,7 +12,7 @@
 #import "HorizontalLayout.h"
 #import "UIImage+EaseUI.h"
 
-@implementation EMExtModel
+@implementation EaseExtMenuViewModel
 - (instancetype)initWithType:(ExtType)type itemCount:(NSInteger)itemCount
 {
     self = [super init];
@@ -64,102 +64,32 @@
 
 @interface EMMoreFunctionView()<UICollectionViewDataSource,SessionToolbarCellDelegate>
 {
-    NSMutableArray<UIImage*> *_toolbarImgArray;
-    NSMutableArray<NSString*> *_toolbarDescArray;
-    BOOL _isCustom;
-    NSInteger _itemImgCount;
-    NSInteger _itemDescCount;
+    NSInteger _itemCount;
 }
 
 @property (nonatomic, strong) UICollectionView *collectionView;
-@property (nonatomic, strong) EMConversation *conversation;
-@property (nonatomic, strong) EMExtModel *model;
+@property (nonatomic, strong) EaseExtMenuViewModel *menuViewmModel;
+@property (nonatomic, strong) NSMutableArray<EaseExtMenuModel*> *extMenuModelArray;
 
 @end
 
 @implementation EMMoreFunctionView
-//输入扩展功能区
-- (instancetype)initInputViewWithConversation:(EMConversation *)conversation
+
+- (instancetype)initWithextMenuModelArray:(NSMutableArray<EaseExtMenuModel*>*)extMenuModelArray menuViewModel:(EaseExtMenuViewModel*)menuViewModel
 {
     self = [super init];
-    if(self){
-        _conversation = conversation;
-        _toolbarImgArray = [[NSMutableArray<UIImage*> alloc]init];
-        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"photo-album"]];
-        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"camera"]];
-        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"video_conf"]];
-        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"location"]];
-        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"icloudFile"]];
-        _toolbarDescArray = [NSMutableArray arrayWithArray:@[@"相册",@"相机",@"音视频",@"位置",@"文件"]];
-        if (_conversation.type == EMConversationTypeGroupChat) {
-            if ([[EMClient.sharedClient.groupManager getGroupSpecificationFromServerWithId:_conversation.conversationId error:nil].owner isEqualToString:EMClient.sharedClient.currentUsername]) {
-                [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"pin_readReceipt"]];
-                [_toolbarDescArray addObject:@"群组回执"];
-            }
-        }
-        if (_conversation.type == EMConversationTypeChatRoom) {
-            [_toolbarImgArray removeObjectAtIndex:2];
-            [_toolbarDescArray removeObject:@"音视频"];
-        }
-        NSMutableArray<NSString*> *tempDescArray = [self.delegate chatBarExtFunctionItemDescArray:_toolbarDescArray];
-        if (tempDescArray && [tempDescArray count] > 0) {
-            _toolbarDescArray = tempDescArray;
-        }
-        NSMutableArray<UIImage*> *tempImgArray = [self.delegate chatBarExtFunctionItemImgArray:_toolbarImgArray];
-        if (tempImgArray && [tempImgArray count] > 0) {
-            _toolbarImgArray = tempImgArray;
-        }
-        _itemImgCount = [_toolbarImgArray count];
-        _itemDescCount = [_toolbarDescArray count];
-        _model = [[EMExtModel alloc]initWithType:ExtTypeChatBar itemCount:_itemImgCount];
+    if (self) {
+        _extMenuModelArray = extMenuModelArray;
+        _menuViewmModel = menuViewModel;
+        _itemCount = [extMenuModelArray count];
         [self _setupUI];
     }
-    
-    return self;
-}
-//长按事件
-- (instancetype)initLongPressView
-{
-    self = [super init];
-    if(self){
-        _toolbarImgArray = [[NSMutableArray<UIImage*> alloc]init];
-        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"copy"]];
-        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"copy"]];
-        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"delete"]];
-        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"recall"]];
-        [_toolbarImgArray addObject:[UIImage easeUIImageNamed:@"icloudFile"]];
-        _toolbarDescArray = [NSMutableArray arrayWithArray:@[@"复制",@"转发",@"删除",@"撤回",@"文件"]];
-        NSMutableArray<NSString*> *tempDescArray = [self.delegate longPressExtItemDescArray:_toolbarDescArray];
-        if (tempDescArray && [tempDescArray count] > 0) {
-            _toolbarDescArray = tempDescArray;
-        }
-        NSMutableArray<UIImage*> *tempImgArray = [self.delegate longPressExtItemImgArray:_toolbarImgArray];
-        if (tempImgArray && [tempImgArray count] > 0) {
-            _toolbarImgArray = tempImgArray;
-        }
-        
-        if (self.delegate && [self.delegate respondsToSelector:@selector(hideItem:extType:)]) {
-            NSArray<NSString*>* hideItems = [self.delegate hideItem:_toolbarDescArray extType:ExtTypeLongPress];
-            for (NSString *item in hideItems) {
-                NSInteger index = [_toolbarDescArray indexOfObject:item];
-                if (index > -1) {
-                    [_toolbarDescArray removeObject:item];
-                    [_toolbarImgArray removeObjectAtIndex:index];
-                }
-            }
-        }
-        _itemImgCount = [_toolbarImgArray count];;
-        _itemDescCount = [_toolbarDescArray count];
-        _model = [[EMExtModel alloc]initWithType:ExtTypeLongPress itemCount:_itemImgCount];
-        [self _setupUI];
-    }
-    
     return self;
 }
 
 - (CGSize)getExtViewSize
 {
-    return _model.collectionViewSize;
+    return _menuViewmModel.collectionViewSize;
 }
 
 - (void)_setupUI {
@@ -167,11 +97,11 @@
     //self.backgroundColor = [UIColor colorWithRed:248/255.0 green:248/255.0 blue:248/255.0 alpha:1.0];
     self.backgroundColor = [UIColor systemGrayColor];
     
-    HorizontalLayout *layout = [[HorizontalLayout alloc] initWithOffset:_model.xOffset yOffset:_model.yOffset];
-    layout.itemSize = CGSizeMake(_model.cellLonger, _model.cellLonger + 13.f);
-    layout.rowCount = _model.rowCount;
-    layout.columCount = _model.columCount;
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, _model.collectionViewSize.width, _model.collectionViewSize.height) collectionViewLayout:layout];
+    HorizontalLayout *layout = [[HorizontalLayout alloc] initWithOffset:_menuViewmModel.xOffset yOffset:_menuViewmModel.yOffset];
+    layout.itemSize = CGSizeMake(_menuViewmModel.cellLonger, _menuViewmModel.cellLonger + 13.f);
+    layout.rowCount = _menuViewmModel.rowCount;
+    layout.columCount = _menuViewmModel.columCount;
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, _menuViewmModel.collectionViewSize.width, _menuViewmModel.collectionViewSize.height) collectionViewLayout:layout];
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.collectionView.dataSource = self;
     self.collectionView.showsVerticalScrollIndicator = NO;
@@ -185,51 +115,41 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    if (_itemImgCount < pageSize) {
+    if (_itemCount < pageSize) {
         return 1;
     }
-    if (_itemImgCount % pageSize == 0) {
-        return _itemImgCount / pageSize;
+    if (_itemCount % pageSize == 0) {
+        return _itemCount / pageSize;
     }
-    return _itemImgCount / pageSize + 1;
+    return _itemCount / pageSize + 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (_itemImgCount < pageSize) {
-        return _itemImgCount;
+    if (_itemCount < pageSize) {
+        return _itemCount;
     }
-    if ((section+1) * pageSize <= _itemImgCount) {
+    if ((section+1) * pageSize <= _itemCount) {
         return pageSize;
     }
-    return (_itemImgCount - section * pageSize);
+    return (_itemCount - section * pageSize);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SessionToolbarCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     NSInteger index = indexPath.section * pageSize + indexPath.row;
-    [cell personalizeToolbar:_toolbarImgArray[index] funcDesc:(index < _itemDescCount) ? _toolbarDescArray[index] : @"" tag:index];
+    EaseExtMenuModel *extMenuItem = (EaseExtMenuModel *)_extMenuModelArray[index];
+    [cell personalizeToolbar:extMenuItem];
     cell.delegate = self;
     return cell;
 }
 
 #pragma mark - SessionToolbarCellDelegate
 
-- (void)toolbarCellDidSelected:(NSInteger)tag itemDesc:(NSString*)itemDesc
+- (void)toolbarCellDidSelected:(EaseExtMenuModel*)menuItemModel
 {
-    //custom
-    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarMoreFunctionAction:itemDesc:extType:)]) {
-        [self.delegate chatBarMoreFunctionAction:tag itemDesc:itemDesc extType:_model.type];
+    if (menuItemModel.itemDidSelectedHandle) {
+        menuItemModel.itemDidSelectedHandle(menuItemModel.funcDesc);
     }
-    /*
-    //default
-    if (tag == 5) {
-        //群组回执
-        if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarMoreFunctionReadReceipt)])
-            [self.delegate chatBarMoreFunctionReadReceipt];
-        return;
-    }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarMoreFunctionAction:)])
-        [self.delegate chatBarMoreFunctionAction:tag];*/
 }
 
 @end
@@ -237,11 +157,11 @@
 
 @interface SessionToolbarCell()
 {
-    NSInteger _tag;
     CGFloat _cellLonger;
 }
 @property (nonatomic, strong) UIButton *toolBtn;
 @property (nonatomic, strong) UILabel *toolLabel;
+@property (nonatomic, strong) EaseExtMenuModel *menuItemModel;
 @end
 
 @implementation SessionToolbarCell
@@ -250,7 +170,6 @@
     if (self = [super initWithFrame:frame]) {
         _cellLonger = frame.size.width;
         [self _setupToolbar];
-        _tag = -1;
         self.backgroundColor = [UIColor clearColor];
     }
     return self;
@@ -285,19 +204,18 @@
     }];
 }
 
-- (void)personalizeToolbar:(UIImage*)itemImg funcDesc:(NSString *)funcDesc tag:(NSInteger)tag
-{
-    [_toolBtn setImage:itemImg forState:UIControlStateNormal];
-    [_toolLabel setText:funcDesc];
-    _tag = tag;
+- (void)personalizeToolbar:(EaseExtMenuModel*)menuItemModel{
+    _menuItemModel = menuItemModel;
+    [_toolBtn setImage:_menuItemModel.icon forState:UIControlStateNormal];
+    [_toolLabel setText:_menuItemModel.funcDesc];
 }
 
 #pragma mark - Action
 
 - (void)cellTapAction
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(toolbarCellDidSelected:itemDesc:)]) {
-        [self.delegate toolbarCellDidSelected:_tag itemDesc:_toolLabel.text];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(toolbarCellDidSelected:)]) {
+        [self.delegate toolbarCellDidSelected:_menuItemModel];
     }
 }
 

@@ -1,5 +1,5 @@
 //
-//  EaseChatViewController.h
+//  ChatViewController.h
 //  EaseIMKitDemo
 //
 //  Created by 娜塔莎 on 2020/11/17.
@@ -10,8 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EaseChatViewController : UIViewController
-@property (nonatomic, strong) NSString *chatter;
+
+@interface ChatViewController : UIViewController
 @end
 
 NS_ASSUME_NONNULL_END

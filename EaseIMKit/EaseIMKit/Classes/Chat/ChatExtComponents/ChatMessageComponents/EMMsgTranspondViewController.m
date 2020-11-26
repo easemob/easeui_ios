@@ -46,7 +46,6 @@
 
 - (void)_setupSubviews
 {
-    [self addPopBackLeftItem];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"转发" style:UIBarButtonItemStylePlain target:self action:@selector(doneAction)];
     self.title = @"转发消息";
     

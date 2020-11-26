@@ -10,14 +10,16 @@
 #import "EMMessageModel.h"
 
 @interface EMSingleChatViewController () <EMChatBarDelegate>
-
+//Typing
+@property (nonatomic) BOOL isTyping;
+@property (nonatomic) BOOL enableTyping;
 @end
 
 @implementation EMSingleChatViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EMViewModel *)viewModel
+- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel
 {
-    return [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EMViewModel *)viewModel];
+    return [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseViewModel *)viewModel];
 }
 
 - (void)viewDidLoad
@@ -62,6 +64,72 @@
             });
         }
     });
+}
+//收到 CMD 消息
+- (void)cmdMessagesDidReceive:(NSArray *)aCmdMessages
+{
+    __weak typeof(self) weakself = self;
+    dispatch_async(self.msgQueue, ^{
+        NSString *conId = weakself.currentConversation.conversationId;
+        for (EMMessage *message in aCmdMessages) {
+            
+            if (![conId isEqualToString:message.conversationId]) {
+                continue;
+            }
+            
+            EMCmdMessageBody *body = (EMCmdMessageBody *)message.body;
+            BOOL sessionObjectisEditing = NO;
+            if ([body.action isEqualToString:MSG_TYPING_BEGIN]) {
+                sessionObjectisEditing = YES;
+            }
+            if (self.delegate && [self.delegate respondsToSelector:@selector(isEditing:)]) {
+                [self.delegate isEditing:sessionObjectisEditing];
+            }
+        }
+    });
+}
+
+#pragma mark - EMChatBarDelegate
+
+- (void)inputViewDidChange:(EMTextView *)aInputView
+{
+    if (self.enableTyping) {
+        if (!self.isTyping) {
+            self.isTyping = YES;
+            [self _sendBeginTyping];
+        }
+    }
+}
+
+//正在输入状态
+- (void)_sendBeginTyping
+{
+    NSString *from = [[EMClient sharedClient] currentUsername];
+    NSString *to = self.currentConversation.conversationId;
+    EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:MSG_TYPING_BEGIN];
+    body.isDeliverOnlineOnly = YES;
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:nil];
+    message.chatType = (EMChatType)self.currentConversation.type;
+    [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:nil];
+}
+
+- (void)_sendEndTyping
+{
+    self.isTyping = NO;
+    NSString *from = [[EMClient sharedClient] currentUsername];
+    NSString *to = self.currentConversation.conversationId;
+    EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:MSG_TYPING_END];
+    body.isDeliverOnlineOnly = YES;
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:nil];
+    message.chatType = (EMChatType)self.currentConversation.type;
+    [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:nil];
+}
+
+- (void)keyBoardWillHide:(NSNotification *)note
+{
+    [self keyBoardWillHide:note];
+    if (self.enableTyping)
+        [self _sendEndTyping];
 }
 
 #pragma mark - Action

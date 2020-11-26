@@ -17,14 +17,12 @@
 #import "EMColorDefine.h"
 
 #import "NSObject+Alert.h"
-#import "UIViewController+Util.h"
-#import "UIViewController+HUD.h"
 
 #import "EMAlertController.h"
 #import "EMAlertView.h"
 
 #import "EMEmojiHelper.h"
-
+#import "UIViewController+HUD.h"
 #import "UIColor+EaseUI.h"
 
 #define UIColorFromRGB(rgbValue)  UIColorFromRGBA(rgbValue, 1.0)

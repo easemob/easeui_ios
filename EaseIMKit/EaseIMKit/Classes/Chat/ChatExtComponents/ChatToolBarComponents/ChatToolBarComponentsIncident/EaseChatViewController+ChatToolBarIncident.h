@@ -1,12 +1,12 @@
 //
-//  EMChatViewController+ChatToolBarIncident.h
+//  EaseChatViewController+ChatToolBarIncident.h
 //  EaseIM
 //
 //  Created by 娜塔莎 on 2020/7/13.
 //  Copyright © 2020 娜塔莎. All rights reserved.
 //
 
-#import "EMChatViewController.h"
+#import "EaseChatViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,14 +18,14 @@ typedef NS_ENUM(NSInteger, EMChatToolBarComponentType) {
     EMChatToolBarFileOpen,
 };
 
-@interface EMChatViewController (ChatToolBarIncident)
+@interface EaseChatViewController (ChatToolBarIncident)
 
 - (void)chatToolBarComponentAction:(EMChatToolBarComponentType)toolBarComponentType;
 
 @end
 
 
-@interface EMChatViewController (ChatToolBarMeida) <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface EaseChatViewController (ChatToolBarMeida) <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
 
@@ -34,17 +34,17 @@ typedef NS_ENUM(NSInteger, EMChatToolBarComponentType) {
 - (void)chatToolBarComponentIncidentAction:(EMChatToolBarComponentType)componentType;
 @end
 
-@interface EMChatViewController (ChatToolBarSealRtc)
+@interface EaseChatViewController (ChatToolBarSealRtc)
 
 - (void)chatToolBarComponentSealRtcAction;
 @end
 
-@interface EMChatViewController (ChatToolBarLocation)
+@interface EaseChatViewController (ChatToolBarLocation)
 
 - (void)chatToolBarLocationAction;
 @end
 
-@interface EMChatViewController (ChatToolBarFileOpen) <UIDocumentPickerDelegate>
+@interface EaseChatViewController (ChatToolBarFileOpen) <UIDocumentPickerDelegate>
 
 - (void)chatToolBarFileOpenAction;
 @end
