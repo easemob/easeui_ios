@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
       'EaseIMKit/libs/VoiceConvert/libopencore-amrwb.a'
     ]
     
-  s.static_framework = false
+#  s.static_framework = false
   s.libraries = 'stdc++'
   s.dependency 'Hyphenate', '~> 3.7.2'
   s.dependency 'Masonry'
