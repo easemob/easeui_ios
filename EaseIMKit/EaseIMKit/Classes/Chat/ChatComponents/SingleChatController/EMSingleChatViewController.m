@@ -10,25 +10,23 @@
 #import "EaseMessageModel.h"
 
 @interface EMSingleChatViewController () <EMChatBarDelegate>
-//Typing
-@property (nonatomic) BOOL isTyping;
-@property (nonatomic) BOOL enableTyping;
-@property (nonatomic, strong) dispatch_queue_t msgQueue;
-@property (nonatomic, strong) NSTimer *sendTypingTimer;
-@property (nonatomic, assign) NSInteger sendTypingCountDownNum;
-
+{
+    long long _previousChangedTimeStamp;
+}
 @property (nonatomic, strong) NSTimer *receiveTypingTimer;
 @property (nonatomic, assign) NSInteger receiveTypingCountDownNum;
+@property (nonatomic, strong) dispatch_queue_t msgQueue;
+@property (nonatomic, strong) NSDate *currentData;
 @end
 
 @implementation EMSingleChatViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel
+- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel
 {
-    self = [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseViewModel *)viewModel];
+    self = [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseChatViewModel *)viewModel];
     if (self) {
-        _sendTypingCountDownNum = 0;
         _receiveTypingCountDownNum = 0;
+        _previousChangedTimeStamp = 0;
         _msgQueue = dispatch_queue_create("singlemessage.com", NULL);
     }
     return self;
@@ -46,7 +44,6 @@
 
 - (void)dealloc
 {
-    [self stopSendTypingTimer];
     [self stopReceiveTypingTimer];
 }
 
@@ -86,39 +83,34 @@
 //收到 CMD 消息
 - (void)cmdMessagesDidReceive:(NSArray *)aCmdMessages
 {
-    __weak typeof(self) weakself = self;
-    dispatch_async(self.msgQueue, ^{
-        NSString *conId = weakself.currentConversation.conversationId;
-        for (EMMessage *message in aCmdMessages) {
-            
-            if (![conId isEqualToString:message.conversationId]) {
-                continue;
-            }
-            
-            EMCmdMessageBody *body = (EMCmdMessageBody *)message.body;
-            if ([body.action isEqualToString:MSG_TYPING_BEGIN]) {
-                [weakself startReceiveTypingTimer];
-                if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(isEditing:)]) {
-                    [weakself.delegate isEditing:YES];
-                }
-            }
+    NSString *conId = self.currentConversation.conversationId;
+    for (EMMessage *message in aCmdMessages) {
+        if (![conId isEqualToString:message.conversationId]) {
+            continue;
         }
-    });
+        EMCmdMessageBody *body = (EMCmdMessageBody *)message.body;
+        if ([body.action isEqualToString:MSG_TYPING_BEGIN]) {
+            [self startReceiveTypingTimer];
+        }
+    }
 }
 
 #pragma mark - EMChatBarDelegate
 
 - (void)inputViewDidChange:(EaseTextView *)aInputView
 {
-    if (self.enableTyping) {
-        if (!self.isTyping) {
-            self.isTyping = YES;
-            if (_sendTypingCountDownNum <= 0) {
-                [self _sendBeginTyping];
-                [self startSendTypingTimer];
-            }
-        }
+    long long currentTimestamp = [self getCurrentTimestamp];
+    if ((currentTimestamp - _previousChangedTimeStamp) > 5) {
+        [self _sendBeginTyping];
+        _previousChangedTimeStamp = currentTimestamp;
     }
+}
+
+- (long long)getCurrentTimestamp
+{
+    self.currentData = [NSDate new];
+    NSTimeInterval timeInterval = [self.currentData timeIntervalSince1970];
+    return [[NSNumber numberWithDouble:timeInterval] longLongValue];
 }
 
 //正在输入状态
@@ -158,23 +150,6 @@
 
 #pragma - mark Timer
 
-//发送己方正在输入状态计时
-- (void)startSendCountDown
-{
-    --_sendTypingCountDownNum;
-}
-- (void)startSendTypingTimer {
-    _sendTypingCountDownNum = 5;
-    [self stopSendTypingTimer];
-    _sendTypingTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(startSendCountDown) userInfo:nil repeats:NO];
-    [_sendTypingTimer fire];
-}
-- (void)stopSendTypingTimer {
-    if (_sendTypingTimer) {
-        [_sendTypingTimer invalidate];
-        _sendTypingTimer = nil;
-    }
-}
 //接收对方正在输入状态计时
 - (void)startReceiveCountDown
 {
@@ -186,15 +161,20 @@
     }
 }
 - (void)startReceiveTypingTimer {
+    if (_receiveTypingCountDownNum <= 0) {
+        [self stopReceiveTypingTimer];
+        _receiveTypingTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(startReceiveCountDown) userInfo:nil repeats:YES];
+        [_receiveTypingTimer fire];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(isEditing:)]) {
+            [self.delegate isEditing:YES];
+        }
+    }
     _receiveTypingCountDownNum = 10;
-    [self stopReceiveTypingTimer];
-    _sendTypingTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(startReceiveCountDown) userInfo:nil repeats:NO];
-    [_sendTypingTimer fire];
 }
 - (void)stopReceiveTypingTimer {
-    if (_sendTypingTimer) {
-        [_sendTypingTimer invalidate];
-        _sendTypingTimer = nil;
+    if (_receiveTypingTimer) {
+        [_receiveTypingTimer invalidate];
+        _receiveTypingTimer = nil;
     }
 }
 

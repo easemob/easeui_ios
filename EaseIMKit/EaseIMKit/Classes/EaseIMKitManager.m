@@ -44,7 +44,6 @@ static EaseIMKitManager *easeIMKit = nil;
     if (self) {
         _delegates = (EMMulticastDelegate<EaseIMKitManagerDelegate> *)[[EMMulticastDelegate alloc] init];
         _currentConversationId = @"";
-        _currentUnreadCount = [self currentUnreadCount];
         _msgQueue = dispatch_queue_create("easemessage.com", NULL);
     }
     [[EMClient sharedClient] addMultiDevicesDelegate:self delegateQueue:nil];
@@ -205,7 +204,6 @@ static EaseIMKitManager *easeIMKit = nil;
     }
     message.chatType = (EMChatType)conversation.type;
     message.isRead = YES;
-    message.timestamp = [self getLatestMsgTimestamp];
     [conversation insertMessage:message error:nil];
     //刷新会话列表
     [[NSNotificationCenter defaultCenter] postNotificationName:CONVERSATIONLIST_UPDATE object:nil];
@@ -214,8 +212,6 @@ static EaseIMKitManager *easeIMKit = nil;
 //最新消息时间
 - (long long)getLatestMsgTimestamp
 {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSDate *notiTime = [NSDate date];
     NSTimeInterval notiTimeInterval = [notiTime timeIntervalSince1970];
     return [[NSNumber numberWithDouble:notiTimeInterval] longLongValue];
@@ -277,18 +273,6 @@ static EaseIMKitManager *easeIMKit = nil;
         _currentUnreadCount -= conversation.unreadMessagesCount;
         [self coversationsUnreadCountUpdate:_currentUnreadCount];
     }
-}
-
-//当前未读总数    (初始化调用)
-- (NSInteger)currentUnreadCount
-{
-    NSInteger unreadCount = 0;
-    NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
-    for (EMConversation *conversation in conversationList) {
-        unreadCount += conversation.unreadMessagesCount;
-    }
-    [self coversationsUnreadCountUpdate:unreadCount];
-    return unreadCount;
 }
 
 //未读总数变化    （插一条未读信息到会话）

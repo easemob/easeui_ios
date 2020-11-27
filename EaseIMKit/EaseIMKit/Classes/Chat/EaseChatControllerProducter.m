@@ -13,16 +13,16 @@
 
 @implementation EaseChatControllerProducter
 
-+ (EaseChatViewController *)getChatControllerInstance:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel
++ (EaseChatViewController *)getChatControllerInstance:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel
 {
     if (conType == EMConversationTypeChat)
-        return [[EMSingleChatViewController alloc]initWithCoversationid:conversationId conversationType:conType  chatViewModel:(EaseViewModel *)viewModel];
+        return [[EMSingleChatViewController alloc]initWithCoversationid:conversationId conversationType:conType  chatViewModel:(EaseChatViewModel *)viewModel];
     if (conType == EMConversationTypeGroupChat)
-        return [[EMGroupChatViewController alloc]initWithCoversationid:conversationId conversationType:conType  chatViewModel:(EaseViewModel *)viewModel];
+        return [[EMGroupChatViewController alloc]initWithCoversationid:conversationId conversationType:conType  chatViewModel:(EaseChatViewModel *)viewModel];
     if (conType == EMConversationTypeChatRoom)
-        return [[EMChatroomViewController alloc]initWithCoversationid:conversationId conversationType:conType  chatViewModel:(EaseViewModel *)viewModel];
+        return [[EMChatroomViewController alloc]initWithCoversationid:conversationId conversationType:conType  chatViewModel:(EaseChatViewModel *)viewModel];
     
-    return [[EaseChatViewController alloc]initWithCoversationid:conversationId conversationType:conType  chatViewModel:(EaseViewModel *)viewModel];
+    return [[EaseChatViewController alloc]initWithCoversationid:conversationId conversationType:conType  chatViewModel:(EaseChatViewModel *)viewModel];
 }
 
 @end

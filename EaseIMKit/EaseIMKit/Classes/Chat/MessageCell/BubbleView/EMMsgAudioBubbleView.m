@@ -13,7 +13,7 @@
 
 @interface EMMsgAudioBubbleView()
 {
-    EaseViewModel *_viewModel;
+    EaseChatViewModel *_viewModel;
 }
 @property (nonatomic) float maxWidth;
 @end
@@ -22,7 +22,7 @@
 
 - (instancetype)initWithDirection:(EMMessageDirection)aDirection
                              type:(EMMessageType)aType
-                            viewModel:(EaseViewModel *)viewModel
+                            viewModel:(EaseChatViewModel *)viewModel
 {
     self = [super initWithDirection:aDirection type:aType viewModel:viewModel];
     if (self) {

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "EaseChatViewController.h"
-#import "EaseViewModel.h"
+#import "EaseChatViewModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   viewModel                聊天控制器视图渲染数据模型
  *
  */
-+ (EaseChatViewController *)getChatControllerInstance:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel;
++ (EaseChatViewController *)getChatControllerInstance:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel;
 
 @end
 

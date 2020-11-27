@@ -12,7 +12,7 @@
 
 - (instancetype)initWithDirection:(EMMessageDirection)aDirection
                              type:(EMMessageType)aType
-                        viewModel:(EaseViewModel *)viewModel
+                        viewModel:(EaseChatViewModel *)viewModel
 {
     self = [super init];
     if (self) {

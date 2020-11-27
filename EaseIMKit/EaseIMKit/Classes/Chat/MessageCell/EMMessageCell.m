@@ -28,7 +28,7 @@
 
 @property (nonatomic, strong) UIButton *readReceiptBtn;//阅读回执按钮
 
-@property (nonatomic, strong) EaseViewModel *viewModel;
+@property (nonatomic, strong) EaseChatViewModel *viewModel;
 
 @end
 
@@ -36,7 +36,7 @@
 
 - (instancetype)initWithDirection:(EMMessageDirection)aDirection
                              type:(EMMessageType)aType
-                        viewModel:(EaseViewModel*)viewModel
+                        viewModel:(EaseChatViewModel*)viewModel
 
 {
     NSString *identifier = [EMMessageCell cellIdentifierWithDirection:aDirection type:aType];

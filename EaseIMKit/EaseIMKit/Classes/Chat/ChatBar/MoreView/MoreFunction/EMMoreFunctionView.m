@@ -169,7 +169,9 @@
     if (menuItemModel.itemDidSelectedHandle) {
         menuItemModel.itemDidSelectedHandle(menuItemModel.funcDesc, YES);
     }
-    [self removeFromSuperview];
+    if (_menuViewModel.type != ExtTypeChatBar) {
+        [self removeFromSuperview];
+    }
 }
 
 @end

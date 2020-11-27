@@ -32,7 +32,7 @@
 
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EMMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate>
 {
-    EaseViewModel *_viewModel;
+    EaseChatViewModel *_viewModel;
     EMMessageCell *_currentLongPressCell;
     UITableViewCell *_currentLongPressCustomCell;
     BOOL _isReloadViewWithModel; //重新刷新会话页面
@@ -45,7 +45,7 @@
 
 @implementation EaseChatViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel
+- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel
 {
     self = [super init];
     if (self) {
@@ -55,13 +55,13 @@
         _isReloadViewWithModel = NO;
         [EaseIMKitManager.shareEaseIMKit setConversationId:_currentConversation.conversationId];
         if (!_viewModel) {
-            _viewModel = [[EaseViewModel alloc]init];
+            _viewModel = [[EaseChatViewModel alloc]init];
         }
     }
     return self;
 }
 
-- (void)resetChatVCWithViewModel:(EaseViewModel *)viewModel
+- (void)resetChatVCWithViewModel:(EaseChatViewModel *)viewModel
 {
     _viewModel = viewModel;
     _isReloadViewWithModel = YES;

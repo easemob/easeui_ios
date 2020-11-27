@@ -10,7 +10,7 @@
 
 #import "EaseMessageModel.h"
 #import "EMMessageBubbleView.h"
-#import "EaseViewModel.h"
+#import "EaseChatViewModel.h"
 
 #define avatarLonger 40
 #define componentSpacing 10
@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithDirection:(EMMessageDirection)aDirection
                              type:(EMMessageType)aType
-                        viewModel:(EaseViewModel*)viewModel;
+                        viewModel:(EaseChatViewModel*)viewModel;
 
 @end
 

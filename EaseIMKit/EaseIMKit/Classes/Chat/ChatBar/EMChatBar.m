@@ -32,13 +32,13 @@
 
 @property (nonatomic, strong) UIView *bottomLine;//下划线
 
-@property (nonatomic, strong) EaseViewModel *viewModel;
+@property (nonatomic, strong) EaseChatViewModel *viewModel;
 
 @end
 
 @implementation EMChatBar
 
-- (instancetype)initWithViewModel:(EaseViewModel *)viewModel
+- (instancetype)initWithViewModel:(EaseChatViewModel *)viewModel
 {
     self = [super init];
     if (self) {

@@ -17,7 +17,7 @@
 
 - (instancetype)initWithConversationId:(NSString *)conversationId conversationType:(EMConversationType)conType {
     if (self = [super init]) {
-        EaseViewModel *viewModel = [[EaseViewModel alloc]init];
+        EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
         _chatController = [EaseChatControllerProducter getChatControllerInstance:conversationId conversationType:EMConversationTypeChat chatViewModel:viewModel];
     }
     return self;

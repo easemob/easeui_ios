@@ -8,7 +8,7 @@
 
 #import "EMChatBar.h"
 #import "EaseHeaders.h"
-#import "EaseViewModel.h"
+#import "EaseChatViewModel.h"
 #import "EaseChatViewControllerProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -23,9 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSTimeInterval msgTimelTag;   //消息时间格式化
 
 //实例化聊天控制器
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel;
+- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel;
 //重置聊天控制器
-- (void)resetChatVCWithViewModel:(EaseViewModel *)viewModel;
+- (void)resetChatVCWithViewModel:(EaseChatViewModel *)viewModel;
 
 //发送文本消息
 - (void)sendTextAction:(NSString *)aText ext:(NSDictionary * __nullable)aExt;

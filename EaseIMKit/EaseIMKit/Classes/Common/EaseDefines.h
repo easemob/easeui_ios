@@ -29,7 +29,6 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 //账号状态
 #define ACCOUNT_LOGIN_CHANGED @"loginStateChange"
 
-#define NOTIF_PUSHVIEWCONTROLLER @"EMPushNotificationViewController"
 #define NOTIF_ID @"EMNotifId"
 #define NOTIF_NAVICONTROLLER @"EMNaviController"
 

@@ -1,15 +1,15 @@
 //
-//  EaseViewModel.m
+//  EaseChatViewModel.m
 //  EaseIMKit
 //
 //  Created by 娜塔莎 on 2020/11/17.
 //
 
-#import "EaseViewModel.h"
+#import "EaseChatViewModel.h"
 #import "EaseColorDefine.h"
 #import "UIImage+EaseUI.h"
 
-@implementation EaseViewModel
+@implementation EaseChatViewModel
 
 - (instancetype)init
 {
