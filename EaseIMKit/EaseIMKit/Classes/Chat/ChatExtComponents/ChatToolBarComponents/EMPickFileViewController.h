@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EMRefreshViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EMPickFileViewController : EMRefreshViewController
+@interface EMPickFileViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end
 

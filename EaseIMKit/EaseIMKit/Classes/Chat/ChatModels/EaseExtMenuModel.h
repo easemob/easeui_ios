@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseExtMenuModel : NSObject
 
-typedef void(^menuItemDidSelectedHandle)(NSString* itemDesc);
+typedef void(^menuItemDidSelectedHandle)(NSString* itemDesc, BOOL isExecuted);
 
 - (instancetype)initWithData:(UIImage *)icon funcDesc:(NSString *)funcDesc handle:(menuItemDidSelectedHandle)menuItemHandle;
 

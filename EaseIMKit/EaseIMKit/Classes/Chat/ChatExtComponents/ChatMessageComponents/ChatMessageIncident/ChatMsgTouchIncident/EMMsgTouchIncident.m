@@ -11,10 +11,8 @@
 
 #import "EMMessageTimeCell.h"
 #import "EMLocationViewController.h"
-#import "EMMsgTranspondViewController.h"
-#import "EMAtGroupMembersViewController.h"
 #import "EMImageBrowser.h"
-#import "EMDateHelper.h"
+#import "EaseDateHelper.h"
 #import "EMAudioPlayerUtil.h"
 #import "EMMsgRecordCell.h"
 #import "EaseHeaders.h"
@@ -88,7 +86,7 @@
 - (void)messageCellEventOperation:(EMMessageCell *)aCell
 {
     __weak typeof(self.chatController) weakself = self.chatController;
-    void (^downloadThumbBlock)(EMMessageModel *aModel) = ^(EMMessageModel *aModel) {
+    void (^downloadThumbBlock)(EaseMessageModel *aModel) = ^(EaseMessageModel *aModel) {
         [weakself showHint:@"获取缩略图..."];
         [[EMClient sharedClient].chatManager downloadMessageThumbnail:aModel.message progress:nil completion:^(EMMessage *message, EMError *error) {
             if (!error) {
@@ -129,7 +127,7 @@
     [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
-            [EMAlertController showErrorAlert:@"下载原图失败"];
+            [EaseAlertController showErrorAlert:@"下载原图失败"];
         } else {
             if (message.direction == EMMessageDirectionReceive && !message.isReadAcked) {
                 [[EMClient sharedClient].chatManager sendMessageReadAck:message.messageId toUser:message.conversationId completion:nil];
@@ -140,7 +138,7 @@
             if (image) {
                 [[EMImageBrowser sharedBrowser] showImages:@[image] fromController:weakself];
             } else {
-                [EMAlertController showErrorAlert:@"获取原图失败"];
+                [EaseAlertController showErrorAlert:@"获取原图失败"];
             }
         }
     }];
@@ -180,15 +178,15 @@
     
     EMVoiceMessageBody *body = (EMVoiceMessageBody*)aCell.model.message.body;
     if (body.downloadStatus == EMDownloadStatusDownloading) {
-        [EMAlertController showInfoAlert:@"正在下载语音,稍后点击"];
+        [EaseAlertController showInfoAlert:@"正在下载语音,稍后点击"];
         return;
     }
     
     __weak typeof(self.chatController) weakself = self.chatController;
-    void (^playBlock)(EMMessageModel *aModel) = ^(EMMessageModel *aModel) {
+    void (^playBlock)(EaseMessageModel *aModel) = ^(EaseMessageModel *aModel) {
         id model = [EMAudioPlayerUtil sharedHelper].model;
-        if (model && [model isKindOfClass:[EMMessageModel class]]) {
-            EMMessageModel *oldModel = (EMMessageModel *)model;
+        if (model && [model isKindOfClass:[EaseMessageModel class]]) {
+            EaseMessageModel *oldModel = (EaseMessageModel *)model;
             if (oldModel.isPlaying) {
                 oldModel.isPlaying = NO;
             }
@@ -223,7 +221,7 @@
     [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
-            [EMAlertController showErrorAlert:@"下载语音失败"];
+            [EaseAlertController showErrorAlert:@"下载语音失败"];
         } else {
             playBlock(aCell.model);
         }
@@ -250,7 +248,7 @@
     }
     
     if (body.downloadStatus == EMDownloadStatusDownloading) {
-        [EMAlertController showInfoAlert:@"正在下载视频,稍后点击"];
+        [EaseAlertController showInfoAlert:@"正在下载视频,稍后点击"];
         return;
     }
     
@@ -279,7 +277,7 @@
     [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
-            [EMAlertController showErrorAlert:@"下载视频失败"];
+            [EaseAlertController showErrorAlert:@"下载视频失败"];
         } else {
             if (!message.isReadAcked) {
                 [[EMClient sharedClient].chatManager sendMessageReadAck:message.messageId toUser:message.conversationId completion:nil];
@@ -303,7 +301,7 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     if (body.downloadStatus == EMDownloadStatusDownloading) {
-        [EMAlertController showInfoAlert:@"正在下载文件,稍后点击"];
+        [EaseAlertController showInfoAlert:@"正在下载文件,稍后点击"];
         return;
     }
     __weak typeof(self.chatController) weakself = self.chatController;
@@ -324,7 +322,7 @@
     [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
-            [EMAlertController showErrorAlert:@"下载文件失败"];
+            [EaseAlertController showErrorAlert:@"下载文件失败"];
         } else {
             if (!message.isReadAcked) {
                 [[EMClient sharedClient].chatManager sendMessageReadAck:message.messageId toUser:message.conversationId completion:nil];

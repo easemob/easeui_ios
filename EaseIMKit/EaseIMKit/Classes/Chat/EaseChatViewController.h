@@ -20,10 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) EMConversation *currentConversation;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
-@property (nonatomic, strong) dispatch_queue_t msgQueue;
-@property (nonatomic, strong) EMChatBar *chatBar;
 @property (nonatomic) NSTimeInterval msgTimelTag;   //消息时间格式化
-@property (nonatomic, strong) UIAlertController *alertController;
 
 //实例化聊天控制器
 - (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel;

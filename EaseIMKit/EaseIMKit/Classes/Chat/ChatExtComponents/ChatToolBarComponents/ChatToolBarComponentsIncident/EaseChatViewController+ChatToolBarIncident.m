@@ -46,7 +46,7 @@ static const void *imagePickerKey = &imagePickerKey;
 
     if (componentType == EMChatToolBarCamera) {
         #if TARGET_IPHONE_SIMULATOR
-            [EMAlertController showErrorAlert:@"模拟器不支持照相机"];
+            [EaseAlertController showErrorAlert:@"模拟器不支持照相机"];
         #elif TARGET_OS_IPHONE
             self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
             self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
@@ -75,11 +75,11 @@ static const void *imagePickerKey = &imagePickerKey;
             }
             if (status == PHAuthorizationStatusDenied) {
                 //用户已经明确否认了这一照片数据的应用程序访问
-                [EMAlertController showErrorAlert:@"不允许访问相册"];
+                [EaseAlertController showErrorAlert:@"不允许访问相册"];
             }
             if (status == PHAuthorizationStatusRestricted) {
                 //此应用程序没有被授权访问的照片数据。可能是家长控制权限
-                [EMAlertController showErrorAlert:@"没有授权访问相册"];
+                [EaseAlertController showErrorAlert:@"没有授权访问相册"];
             }
         });
     }];
@@ -118,7 +118,7 @@ static const void *imagePickerKey = &imagePickerKey;
                             if (data != nil) {
                                 [self _sendImageDataAction:data];
                             } else {
-                                [EMAlertController showErrorAlert:@"图片太大，请选择其他图片"];
+                                [EaseAlertController showErrorAlert:@"图片太大，请选择其他图片"];
                             }
                         }];
                     }
@@ -254,25 +254,22 @@ static const void *imagePickerKey = &imagePickerKey;
     
     __weak typeof(self) weakself = self;
     if (self.currentConversation.type == EMConversationTypeChat) {
-        [self.alertController addAction:[UIAlertAction actionWithTitle:@"视频通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakself.chatBar clearMoreViewAndSelectedButton];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"视频通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:weakself.currentConversation.conversationId, CALL_TYPE:@(EMCallTypeVideo)}];
         }]];
-        [self.alertController addAction:[UIAlertAction actionWithTitle:@"语音通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakself.chatBar clearMoreViewAndSelectedButton];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"语音通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:weakself.currentConversation.conversationId, CALL_TYPE:@(EMCallTypeVoice)}];
         }]];
-        [self.alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         }]];
-        for (UIAlertAction *alertAction in self.alertController.actions)
+        for (UIAlertAction *alertAction in alertController.actions)
             [alertAction setValue:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1.0] forKey:@"_titleTextColor"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"didAlert" object:@{@"alert":self.alertController}];
-        [self presentViewController:self.alertController animated:YES completion:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"didAlert" object:@{@"alert":alertController}];
+        [self presentViewController:alertController animated:YES completion:nil];
         return;
     }
-    [weakself.chatBar clearMoreViewAndSelectedButton];
     //群聊/聊天室 多人会议
-    //[[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKECONFERENCE object:@{CALL_TYPE:@(EMConferenceTypeCommunication), CALL_MODEL:weakself.currentConversation, NOTIF_NAVICONTROLLER:self.navigationController}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKECONFERENCE object:@{CALL_TYPE:@(EMConferenceTypeCommunication), CALL_MODEL:weakself.currentConversation, NOTIF_NAVICONTROLLER:self.navigationController}];
 }
 
 @end

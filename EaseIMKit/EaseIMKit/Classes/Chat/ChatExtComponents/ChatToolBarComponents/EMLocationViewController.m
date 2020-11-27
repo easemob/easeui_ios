@@ -156,7 +156,7 @@
 {
     [self hideHud];
     if (error.code == 0) {
-        EMAlertView *alertView = [[EMAlertView alloc]initWithTitle:nil message:[error.userInfo objectForKey:NSLocalizedRecoverySuggestionErrorKey]];
+        EaseAlertView *alertView = [[EaseAlertView alloc]initWithTitle:nil message:[error.userInfo objectForKey:NSLocalizedRecoverySuggestionErrorKey]];
         [alertView show];
     }
 }

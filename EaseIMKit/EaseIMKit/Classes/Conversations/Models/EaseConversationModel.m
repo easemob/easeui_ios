@@ -6,7 +6,7 @@
 //
 
 #import "EaseConversationModel.h"
-#import "EMDefines.h"
+#import "EaseDefines.h"
 #import "UIImage+EaseUI.h"
 
 

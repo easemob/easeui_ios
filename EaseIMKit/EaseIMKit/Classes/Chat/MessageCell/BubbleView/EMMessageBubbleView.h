@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "EMMessageModel.h"
+#import "EaseMessageModel.h"
 #import "EaseHeaders.h"
 #import "EaseViewModel.h"
 #import "UIImage+EaseUI.h"
@@ -19,7 +19,7 @@
 
 @property (nonatomic, readonly) EMMessageType type;
 
-@property (nonatomic, strong) EMMessageModel *model;
+@property (nonatomic, strong) EaseMessageModel *model;
 
 @property (nonatomic, strong) EaseViewModel *viewModel;
 

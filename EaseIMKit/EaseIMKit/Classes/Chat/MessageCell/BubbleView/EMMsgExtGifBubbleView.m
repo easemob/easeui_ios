@@ -8,7 +8,7 @@
 
 #import "EMMsgExtGifBubbleView.h"
 
-#import "EMEmoticonGroup.h"
+#import "EaseEmoticonGroup.h"
 
 @implementation EMMsgExtGifBubbleView
 
@@ -31,13 +31,13 @@
 
 #pragma mark - Setter
 
-- (void)setModel:(EMMessageModel *)model
+- (void)setModel:(EaseMessageModel *)model
 {
     EMMessageType type = model.type;
     if (type == EMMessageTypeExtGif) {
         NSString *name = [(EMTextMessageBody *)model.message.body text];
-        EMEmoticonGroup *group = [EMEmoticonGroup getGifGroup];
-        for (EMEmoticonModel *model in group.dataArray) {
+        EaseEmoticonGroup *group = [EaseEmoticonGroup getGifGroup];
+        for (EaseEmoticonModel *model in group.dataArray) {
             if ([model.name isEqualToString:name]) {
                 NSBundle *resource_bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"/Frameworks/EaseIMKit.framework/EaseIMKit" ofType:@"bundle"]];
                 NSString *path = [resource_bundle pathForResource:model.original ofType:@"gif"];
