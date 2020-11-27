@@ -10,6 +10,7 @@
 #import "EMMsgTranspondViewController.h"
 #import <objc/runtime.h>
 #import "EMMsgTextBubbleView.h"
+#import "OneLoadingAnimationView.h"
 
 typedef NS_ENUM(NSInteger, EaseLongPressExecute) {
     EaseLongPressExecuteCopy = 0,
@@ -19,21 +20,10 @@ typedef NS_ENUM(NSInteger, EaseLongPressExecute) {
 };
 
 static const void *longPressIndexPathKey = &longPressIndexPathKey;
+static const void *recallViewKey = &recallViewKey;
 @implementation EaseChatViewController (EMMsgLongPressIncident)
 
 @dynamic longPressIndexPath;
-
-- (void)executeAction:(NSInteger)tag
-{
-    if (tag == EaseLongPressExecuteCopy)
-        [self deleteLongPressAction];
-    if (tag == EaseLongPressExecuteForward)
-        [self forwardLongPressAction];
-    if (tag == EaseLongPressExecuteDelete)
-        [self copyLongPressAction];
-    if (tag == EaseLongPressExecuteRecall)
-        [self recallLongPressAction];
-}
 
 - (void)resetCellLongPressStatus:(EMMessageCell *)aCell
 {
@@ -48,34 +38,41 @@ static const void *longPressIndexPathKey = &longPressIndexPathKey;
     if (self.longPressIndexPath == nil || self.longPressIndexPath.row < 0) {
         return;
     }
-    
-    EMMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
-    [self.currentConversation deleteMessageWithId:model.message.messageId error:nil];
-    
-    NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:self.longPressIndexPath.row];
-    NSMutableArray *indexPaths = [NSMutableArray arrayWithObjects:self.longPressIndexPath, nil];
-    if (self.longPressIndexPath.row - 1 >= 0) {
-        id nextMessage = nil;
-        id prevMessage = [self.dataArray objectAtIndex:(self.longPressIndexPath.row - 1)];
-        if (self.longPressIndexPath.row + 1 < [self.dataArray count]) {
-            nextMessage = [self.dataArray objectAtIndex:(self.longPressIndexPath.row + 1)];
+    __weak typeof(self) weakself = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"确认删除？" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *clearAction = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        EMMessageModel *model = [weakself.dataArray objectAtIndex:weakself.longPressIndexPath.row];
+        [weakself.currentConversation deleteMessageWithId:model.message.messageId error:nil];
+        NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:weakself.longPressIndexPath.row];
+        NSMutableArray *indexPaths = [NSMutableArray arrayWithObjects:weakself.longPressIndexPath, nil];
+        if (self.longPressIndexPath.row - 1 >= 0) {
+            id nextMessage = nil;
+            id prevMessage = [weakself.dataArray objectAtIndex:(weakself.longPressIndexPath.row - 1)];
+            if (weakself.longPressIndexPath.row + 1 < [weakself.dataArray count]) {
+                nextMessage = [weakself.dataArray objectAtIndex:(weakself.longPressIndexPath.row + 1)];
+            }
+            if ((!nextMessage || [nextMessage isKindOfClass:[NSString class]]) && [prevMessage isKindOfClass:[NSString class]]) {
+                [indexs addIndex:weakself.longPressIndexPath.row - 1];
+                [indexPaths addObject:[NSIndexPath indexPathForRow:(weakself.longPressIndexPath.row - 1) inSection:0]];
+            }
         }
-        if ((!nextMessage || [nextMessage isKindOfClass:[NSString class]]) && [prevMessage isKindOfClass:[NSString class]]) {
-            [indexs addIndex:self.longPressIndexPath.row - 1];
-            [indexPaths addObject:[NSIndexPath indexPathForRow:(self.longPressIndexPath.row - 1) inSection:0]];
+        [weakself.dataArray removeObjectsAtIndexes:indexs];
+        [weakself.tableView beginUpdates];
+        [weakself.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+        [weakself.tableView endUpdates];
+        if ([weakself.dataArray count] == 0) {
+            weakself.msgTimelTag = -1;
         }
-    }
-    
-    [self.dataArray removeObjectsAtIndexes:indexs];
-    [self.tableView beginUpdates];
-    [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView endUpdates];
-    
-    if ([self.dataArray count] == 0) {
-        self.msgTimelTag = -1;
-    }
-    
-    self.longPressIndexPath = nil;
+        weakself.longPressIndexPath = nil;
+    }];
+    [clearAction setValue:[UIColor colorWithRed:245/255.0 green:52/255.0 blue:41/255.0 alpha:1.0] forKey:@"_titleTextColor"];
+    [alertController addAction:clearAction];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style: UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [cancelAction  setValue:[UIColor blackColor] forKey:@"_titleTextColor"];
+    [alertController addAction:cancelAction];
+    alertController.modalPresentationStyle = 0;
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)copyLongPressAction
@@ -90,6 +87,7 @@ static const void *longPressIndexPathKey = &longPressIndexPathKey;
     pasteboard.string = body.text;
     
     self.longPressIndexPath = nil;
+    [self showHint:@"已复制"];
 }
 
 - (void)forwardLongPressAction
@@ -115,11 +113,12 @@ static const void *longPressIndexPathKey = &longPressIndexPathKey;
     if (self.longPressIndexPath == nil || self.longPressIndexPath.row < 0) {
         return;
     }
-    
+    [self showHudInView:self.view hint:@"正在撤回消息"];
     NSIndexPath *indexPath = self.longPressIndexPath;
     __weak typeof(self) weakself = self;
     EMMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
     [[EMClient sharedClient].chatManager recallMessageWithMessageId:model.message.messageId completion:^(EMError *aError) {
+        [weakself hideHud];
         if (aError) {
             [EMAlertController showErrorAlert:aError.errorDescription];
         } else {
@@ -251,5 +250,4 @@ static const void *longPressIndexPathKey = &longPressIndexPathKey;
 {
     objc_setAssociatedObject(self, longPressIndexPathKey, longPressIndexPath, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
-
 @end

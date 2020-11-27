@@ -66,7 +66,7 @@
     }];
     
     self.extBtn = [[UIButton alloc] init];
-    [self.extBtn setImage:[UIImage easeUIImageNamed:@"deleteEmoticon"] forState:UIControlStateNormal];
+    [self.extBtn setImage:[UIImage easeUIImageNamed:@"EmojiExt"] forState:UIControlStateNormal];
     
     self.deleteBtn = [[UIButton alloc]init];
     self.deleteBtn.backgroundColor = [UIColor whiteColor];

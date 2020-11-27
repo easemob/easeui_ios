@@ -26,6 +26,9 @@ typedef NS_ENUM(NSInteger, ExtType) {
 @property (nonatomic, assign) NSInteger rowCount;
 @property (nonatomic, assign) NSInteger columCount;
 @property (nonatomic, assign) CGSize collectionViewSize;
+@property (nonatomic, assign) CGFloat fontSize;
+@property (nonatomic, strong) UIColor *bgColor;
+@property (nonatomic, strong) UIColor *fontColor;
 @property (nonatomic, assign) ExtType type;
 - (instancetype)initWithType:(ExtType)type itemCount:(NSInteger)itemCount;
 @end
@@ -45,7 +48,7 @@ typedef NS_ENUM(NSInteger, ExtType) {
 
 @interface SessionToolbarCell : UICollectionViewCell
 @property (nonatomic, weak) id<SessionToolbarCellDelegate> delegate;
-- (void)personalizeToolbar:(EaseExtMenuModel*)menuItemModel;//个性化工具栏功能描述
+- (void)personalizeToolbar:(EaseExtMenuModel*)menuItemModel menuViewMode:(EaseExtMenuViewModel*)menuViewModel;//个性化工具栏功能描述
 @end
 
 NS_ASSUME_NONNULL_END

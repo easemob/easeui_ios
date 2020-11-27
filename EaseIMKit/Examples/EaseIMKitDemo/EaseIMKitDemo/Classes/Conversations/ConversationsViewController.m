@@ -50,7 +50,8 @@
 
 - (void)easeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ChatViewController *chatController = [[ChatViewController alloc]init];
+    EaseConversationCell *cell = (EaseConversationCell*)[tableView cellForRowAtIndexPath:indexPath];
+    ChatViewController *chatController = [[ChatViewController alloc]initWithConversationId:cell.model.easeId conversationType:cell.model.type];
     chatController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:chatController animated:YES];
 }
@@ -59,9 +60,7 @@
 - (id<EaseUserDelegate>)easeUserDelegateAtConversationId:(NSString *)conversationId
                                         conversationType:(EMConversationType)type
 {
-    
     DemoUserModel *model = [[DemoUserModel alloc] initWithEaseId:conversationId];
-//    model.nickName =  @"我是昵称";
     return model;
 }
 

@@ -10,22 +10,27 @@
 #import <EaseIMKit.h>
 
 @interface ChatViewController ()
-
+@property (nonatomic, strong)EaseChatViewController *chatController;
 @end
 
 @implementation ChatViewController
 
+- (instancetype)initWithConversationId:(NSString *)conversationId conversationType:(EMConversationType)conType {
+    if (self = [super init]) {
+        EaseViewModel *viewModel = [[EaseViewModel alloc]init];
+        _chatController = [EaseChatControllerProducter getChatControllerInstance:conversationId conversationType:EMConversationTypeChat chatViewModel:viewModel];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    EaseViewModel *viewModel = [[EaseViewModel alloc]init];
-    //viewModel.chatBarStyle = EMChatBarStyleLackEmoji;
-    EaseChatViewController *chatController = [EaseChatControllerProducter getChatControllerInstance:@"nats" conversationType:EMConversationTypeChat chatViewModel:viewModel];
-    [self addChildViewController:chatController];
-    //self.view.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:chatController.view];
-    [chatController.view mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self addChildViewController:_chatController];
+    [self.view addSubview:_chatController.view];
+    [_chatController.view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.equalTo(self.view);
     }];
+    
 }
 
 

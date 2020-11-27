@@ -17,12 +17,9 @@
     if (self) {
         _defaultLongPressViewIsNeededForCustomCell = YES;
         _isFetchHistoryMessagesFromServer = NO;
-        //_chatViewBgColor = kColor_chatViewBg;
-        _chatViewBgColor = [UIColor systemPinkColor];
-        //_chatBarBgColor = [UIColor whiteColor];
-        _chatBarBgColor = [UIColor orangeColor];
-        //_msgTimeItemBgColor = kColor_LightGray;
-        _msgTimeItemBgColor = [UIColor purpleColor];
+        _chatViewBgColor = kColor_chatViewBg;
+        _chatBarBgColor = [UIColor whiteColor];
+        _msgTimeItemBgColor = kColor_LightGray;
         _msgTimeItemFontColor = [UIColor grayColor];
         _receiveBubbleBgPicture = [UIImage easeUIImageNamed:@"msg_bg_recv"];
         _sendBubbleBgPicture = [UIImage easeUIImageNamed:@"msg_bg_send"];

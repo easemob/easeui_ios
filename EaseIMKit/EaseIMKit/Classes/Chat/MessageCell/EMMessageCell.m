@@ -117,13 +117,13 @@
     if (self.direction == EMMessageDirectionSend) {
         [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
-            make.right.equalTo(self.contentView).offset(-componentSpacing);
+            make.right.equalTo(self.contentView).offset(-2*componentSpacing);
             make.width.height.equalTo(@(avatarLonger));
         }];
     } else {
         [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
-            make.left.equalTo(self.contentView).offset(componentSpacing);
+            make.left.equalTo(self.contentView).offset(2*componentSpacing);
             make.width.height.equalTo(@(avatarLonger));
         }];
         

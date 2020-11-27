@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.source_files = 'EaseIMKit/**/*.{h,m,mm}'
   s.resource_bundles = {
-    'EaseIMKit' => ['EaseIMKit/**/**/*.{png,jpg,jpeg}']
+    'EaseIMKit' => ['EaseIMKit/**/**/*.{png,jpg,jpeg,gif}']
   }
   
   s.dependency 'Hyphenate', '~> 3.7.2'
