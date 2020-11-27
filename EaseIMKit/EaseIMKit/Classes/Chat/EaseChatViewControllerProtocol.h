@@ -26,24 +26,31 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<EaseUserData>)userData:(NSString*)huanxinID;
 
 /**
- * 头像点击事件 （返回是否需要执行默认点击事件）
+ * 头像点击事件 （返回是否需要执行默认点击事件） 默认 YES
  *
  * @param   userData        当前点击的头像所指向的用户资料
  */
-
 - (BOOL)avatarDidSelected:(id<EaseUserData>)userData;
+
 /**
- * 头像长按事件 （返回是否需要执行默认长按事件）
+ * 头像长按事件 （返回是否需要执行默认长按事件） 默认 YES
  *
  * @param   userData        当前长按的头像所指向的用户资料
  */
-
 - (BOOL)avatarDidLongPress:(id<EaseUserData>)userData;
+
+/**
+ * 群通知回执详情 （返回是否需要默认回执详情页）默认 YES
+ *
+ * @param   message        当前去通知消息
+ * @param   groupId        当前消息所属群ID
+ */
+- (BOOL)groupMessageReadReceiptDetail:(EMMessage*)message groupId:(NSString*)groupId;
 
 /**
  * 自定义cell
  */
-- (UITableViewCell *)cellForItem:(UITableView *)tableView messageModel:(EMMessageModel *)messageModel;
+- (UITableViewCell *)cellForItem:(UITableView *)tableView messageModel:(EaseMessageModel *)messageModel;
 /**
  * 当前所长按的 自定义cell 的扩展区数据模型组
  *
@@ -75,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
 /* 消息事件回调 */
 
 /**
- * 消息点击事件 （返回是否需要执行默认点击事件）
+ * 消息点击事件 （返回是否需要执行默认点击事件） 默认 YES
  *
  * @param   message          当前点击的消息
  * @param   userData        当前点击的消息携带的用户资料

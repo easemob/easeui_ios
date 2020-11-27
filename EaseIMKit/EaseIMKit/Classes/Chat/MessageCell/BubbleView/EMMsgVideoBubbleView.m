@@ -54,7 +54,7 @@
 
 #pragma mark - Setter
 
-- (void)setModel:(EMMessageModel *)model
+- (void)setModel:(EaseMessageModel *)model
 {
     EMMessageType type = model.type;
     if (type == EMMessageTypeVideo) {

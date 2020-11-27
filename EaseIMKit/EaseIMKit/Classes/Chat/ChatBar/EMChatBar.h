@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-#import "EMTextView.h"
-#import "EMChatBarEmoticonView.h"
+#import "EaseTextView.h"
+#import "EaseChatBarEmoticonView.h"
 #import "EMChatBarRecordAudioView.h"
 #import "EMMoreFunctionView.h"
 #import "EaseViewModel.h"
@@ -21,10 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id<EMChatBarDelegate> delegate;
 
-@property (nonatomic, strong) EMTextView *textView;
+@property (nonatomic, strong) EaseTextView *textView;
 
 @property (nonatomic, strong) EMChatBarRecordAudioView *recordAudioView;
-@property (nonatomic, strong) EMChatBarEmoticonView *moreEmoticonView;
+@property (nonatomic, strong) EaseChatBarEmoticonView *moreEmoticonView;
 @property (nonatomic, strong) EMMoreFunctionView *moreFunctionView;
 
 - (instancetype)initWithViewModel:(EaseViewModel *)viewModel;
@@ -46,9 +46,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 
-- (BOOL)inputView:(EMTextView *)aInputView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+- (BOOL)inputView:(EaseTextView *)aInputView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 
-- (void)inputViewDidChange:(EMTextView *)aInputView;
+- (void)inputViewDidChange:(EaseTextView *)aInputView;
 
 - (void)chatBarDidShowMoreViewAction;
 

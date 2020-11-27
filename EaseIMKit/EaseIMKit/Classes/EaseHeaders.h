@@ -13,15 +13,15 @@
 #import <Masonry/Masonry.h>
 
 #import "EaseEnums.h"
-#import "EMDefines.h"
-#import "EMColorDefine.h"
+#import "EaseDefines.h"
+#import "EaseColorDefine.h"
 
 #import "NSObject+Alert.h"
 
-#import "EMAlertController.h"
-#import "EMAlertView.h"
+#import "EaseAlertController.h"
+#import "EaseAlertView.h"
 
-#import "EMEmojiHelper.h"
+#import "EaseEmojiHelper.h"
 #import "UIViewController+HUD.h"
 #import "UIColor+EaseUI.h"
 

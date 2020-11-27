@@ -7,10 +7,8 @@
 //
 
 #import "EaseChatViewController+EMMsgLongPressIncident.h"
-#import "EMMsgTranspondViewController.h"
 #import <objc/runtime.h>
 #import "EMMsgTextBubbleView.h"
-#import "OneLoadingAnimationView.h"
 
 typedef NS_ENUM(NSInteger, EaseLongPressExecute) {
     EaseLongPressExecuteCopy = 0,
@@ -41,7 +39,7 @@ static const void *recallViewKey = &recallViewKey;
     __weak typeof(self) weakself = self;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"确认删除？" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *clearAction = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        EMMessageModel *model = [weakself.dataArray objectAtIndex:weakself.longPressIndexPath.row];
+        EaseMessageModel *model = [weakself.dataArray objectAtIndex:weakself.longPressIndexPath.row];
         [weakself.currentConversation deleteMessageWithId:model.message.messageId error:nil];
         NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:weakself.longPressIndexPath.row];
         NSMutableArray *indexPaths = [NSMutableArray arrayWithObjects:weakself.longPressIndexPath, nil];
@@ -81,31 +79,13 @@ static const void *recallViewKey = &recallViewKey;
         return;
     }
     
-    EMMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
+    EaseMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
     EMTextMessageBody *body = (EMTextMessageBody *)model.message.body;
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = body.text;
     
     self.longPressIndexPath = nil;
     [self showHint:@"已复制"];
-}
-
-- (void)forwardLongPressAction
-{
-    if (self.longPressIndexPath == nil || self.longPressIndexPath.row < 0) {
-        return;
-    }
-    
-    EMMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
-    EMMsgTranspondViewController *controller = [[EMMsgTranspondViewController alloc] initWithModel:model];
-    [self.navigationController pushViewController:controller animated:NO];
-    
-    __weak typeof(self) weakself = self;
-    [controller setDoneCompletion:^(EMMessageModel * _Nonnull aModel, NSString * _Nonnull aUsername) {
-        [weakself _transpondMsg:aModel toUser:aUsername];
-    }];
-    
-    self.longPressIndexPath = [[NSIndexPath alloc]initWithIndex:-1];;
 }
 
 - (void)recallLongPressAction
@@ -116,11 +96,11 @@ static const void *recallViewKey = &recallViewKey;
     [self showHudInView:self.view hint:@"正在撤回消息"];
     NSIndexPath *indexPath = self.longPressIndexPath;
     __weak typeof(self) weakself = self;
-    EMMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
+    EaseMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
     [[EMClient sharedClient].chatManager recallMessageWithMessageId:model.message.messageId completion:^(EMError *aError) {
         [weakself hideHud];
         if (aError) {
-            [EMAlertController showErrorAlert:aError.errorDescription];
+            [EaseAlertController showErrorAlert:aError.errorDescription];
         } else {
             EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:@"您撤回一条消息"];
             NSString *from = [[EMClient sharedClient] currentUsername];
@@ -132,7 +112,7 @@ static const void *recallViewKey = &recallViewKey;
             message.localTime = model.message.localTime;
             [weakself.currentConversation insertMessage:message error:nil];
             
-            EMMessageModel *model = [[EMMessageModel alloc] initWithEMMessage:message];
+            EaseMessageModel *model = [[EaseMessageModel alloc] initWithEMMessage:message];
             [weakself.dataArray replaceObjectAtIndex:indexPath.row withObject:model];
             [weakself.tableView reloadData];
         }
@@ -156,12 +136,12 @@ static const void *recallViewKey = &recallViewKey;
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
         if (error) {
             [weakself.currentConversation deleteMessageWithId:message.messageId error:nil];
-            [EMAlertController showErrorAlert:@"转发消息失败"];
+            [EaseAlertController showErrorAlert:@"转发消息失败"];
         } else {
             if (aCompletionBlock) {
                 aCompletionBlock(message);
             }
-            [EMAlertController showSuccessAlert:@"转发消息成功"];
+            [EaseAlertController showSuccessAlert:@"转发消息成功"];
             if ([aTo isEqualToString:weakself.currentConversation.conversationId]) {
                 [weakself returnReadReceipt:message];
                 [weakself.currentConversation markMessageAsReadWithId:message.messageId error:nil];
@@ -185,7 +165,7 @@ static const void *recallViewKey = &recallViewKey;
         newBody = [[EMImageMessageBody alloc]initWithLocalPath:imgBody.localPath displayName:imgBody.displayName];
     } else {
         if (imgBody.downloadStatus != EMDownloadStatusSuccessed) {
-            [EMAlertController showErrorAlert:@"请先下载原图"];
+            [EaseAlertController showErrorAlert:@"请先下载原图"];
             return;
         }
         
@@ -218,7 +198,7 @@ static const void *recallViewKey = &recallViewKey;
     if (![[NSFileManager defaultManager] fileExistsAtPath:oldBody.localPath]) {
         [[EMClient sharedClient].chatManager downloadMessageAttachment:aMsg progress:nil completion:^(EMMessage *message, EMError *error) {
             if (error) {
-                [EMAlertController showErrorAlert:@"转发消息失败"];
+                [EaseAlertController showErrorAlert:@"转发消息失败"];
             } else {
                 block(aMsg);
             }
@@ -228,7 +208,7 @@ static const void *recallViewKey = &recallViewKey;
     }
 }
 
-- (void)_transpondMsg:(EMMessageModel *)aModel
+- (void)_transpondMsg:(EaseMessageModel *)aModel
                toUser:(NSString *)aUsername
 {
     EMMessageBodyType type = aModel.message.body.type;

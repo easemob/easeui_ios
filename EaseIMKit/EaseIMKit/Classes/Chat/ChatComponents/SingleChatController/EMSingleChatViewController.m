@@ -7,19 +7,24 @@
 //
 
 #import "EMSingleChatViewController.h"
-#import "EMMessageModel.h"
+#import "EaseMessageModel.h"
 
 @interface EMSingleChatViewController () <EMChatBarDelegate>
 //Typing
 @property (nonatomic) BOOL isTyping;
 @property (nonatomic) BOOL enableTyping;
+@property (nonatomic, strong) dispatch_queue_t msgQueue;
 @end
 
 @implementation EMSingleChatViewController
 
 - (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel
 {
-    return [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseViewModel *)viewModel];
+    self = [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseViewModel *)viewModel];
+    if (self) {
+        _msgQueue = dispatch_queue_create("singlemessage.com", NULL);
+    }
+    return self;
 }
 
 - (void)viewDidLoad
@@ -47,8 +52,8 @@
             }
             
             [weakself.dataArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                if ([obj isKindOfClass:[EMMessageModel class]]) {
-                    EMMessageModel *model = (EMMessageModel *)obj;
+                if ([obj isKindOfClass:[EaseMessageModel class]]) {
+                    EaseMessageModel *model = (EaseMessageModel *)obj;
                     if ([model.message.messageId isEqualToString:message.messageId]) {
                         model.message.isReadAcked = YES;
                         isReladView = YES;
@@ -91,7 +96,7 @@
 
 #pragma mark - EMChatBarDelegate
 
-- (void)inputViewDidChange:(EMTextView *)aInputView
+- (void)inputViewDidChange:(EaseTextView *)aInputView
 {
     if (self.enableTyping) {
         if (!self.isTyping) {

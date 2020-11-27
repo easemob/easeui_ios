@@ -39,7 +39,7 @@
     [[EMClient sharedClient].roomManager joinChatroom:self.currentConversation.conversationId completion:^(EMChatroom *aChatroom, EMError *aError) {
         [weakself hideHud];
         if (aError) {
-            [EMAlertController showErrorAlert:@"加入聊天室失败"];
+            [EaseAlertController showErrorAlert:@"加入聊天室失败"];
         } else {
             [weakself tableViewDidTriggerHeaderRefresh];
         }

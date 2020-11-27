@@ -6,7 +6,7 @@
 //
 
 #import "EaseViewModel.h"
-#import "EMColorDefine.h"
+#import "EaseColorDefine.h"
 #import "UIImage+EaseUI.h"
 
 @implementation EaseViewModel

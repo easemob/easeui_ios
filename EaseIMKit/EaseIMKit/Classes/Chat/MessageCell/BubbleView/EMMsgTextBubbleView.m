@@ -61,10 +61,10 @@
 
 #pragma mark - Setter
 
-- (void)setModel:(EMMessageModel *)model
+- (void)setModel:(EaseMessageModel *)model
 {
     EMTextMessageBody *body = (EMTextMessageBody *)model.message.body;
-    self.textLabel.text = [EMEmojiHelper convertEmoji:body.text];
+    self.textLabel.text = [EaseEmojiHelper convertEmoji:body.text];
 }
 
 @end

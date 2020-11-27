@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EMMessageModel.h"
+#import "EaseMessageModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id<EMMsgRecordCellDelegate> delegate;
 
-@property (nonatomic, strong) NSArray<EMMessageModel *> *models;
+@property (nonatomic, strong) NSArray<EaseMessageModel *> *models;
 
 @end
 
@@ -27,9 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
-- (void)imageViewDidTouch:(EMMessageModel *)aModel;
+- (void)imageViewDidTouch:(EaseMessageModel *)aModel;
 
-- (void)videoViewDidTouch:(EMMessageModel *)aModel;
+- (void)videoViewDidTouch:(EaseMessageModel *)aModel;
 
 @end
 

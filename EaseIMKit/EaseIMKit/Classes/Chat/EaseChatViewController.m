@@ -13,8 +13,8 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "EaseChatViewController.h"
 #import "EMImageBrowser.h"
-#import "EMDateHelper.h"
-#import "EMMessageModel.h"
+#import "EaseDateHelper.h"
+#import "EaseMessageModel.h"
 #import "EMMessageCell.h"
 #import "EMAudioPlayerUtil.h"
 #import "EMMessageTimeCell.h"
@@ -30,7 +30,7 @@
 #import "EaseIMKitManager+ExtFunction.h"
 #import "UIViewController+ComponentSize.h"
 
-@interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EMMessageCellDelegate, EMChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate>
+@interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EMMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate>
 {
     EaseViewModel *_viewModel;
     EMMessageCell *_currentLongPressCell;
@@ -39,6 +39,8 @@
 }
 @property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
 @property (nonatomic, strong) EMMoreFunctionView *longPressView;
+@property (nonatomic, strong) EMChatBar *chatBar;
+@property (nonatomic, strong) dispatch_queue_t msgQueue;
 @end
 
 @implementation EaseChatViewController
@@ -92,6 +94,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMakeCall) name:CALL_MAKE1V1 object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMakeCall) name:CALL_MAKECONFERENCE object:nil];
 
     //草稿
     if (![[self.currentConversation draft] isEqualToString:@""]) {
@@ -163,28 +167,28 @@
     recordView.delegate = self;
     self.chatBar.recordAudioView = recordView;
     //表情
-    EMChatBarEmoticonView *moreEmoticonView = [[EMChatBarEmoticonView alloc] init];
+    EaseChatBarEmoticonView *moreEmoticonView = [[EaseChatBarEmoticonView alloc] init];
     moreEmoticonView.delegate = self;
     self.chatBar.moreEmoticonView = moreEmoticonView;
     
     //更多
     __weak typeof(self) weakself = self;
-    EaseExtMenuModel *photoAlbumExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"photo-album"] funcDesc:@"相册" handle:^(NSString * _Nonnull itemDesc) {
+    EaseExtMenuModel *photoAlbumExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"photo-album"] funcDesc:@"相册" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself chatToolBarComponentIncidentAction:EMChatToolBarPhotoAlbum];
     }];
-    EaseExtMenuModel *cameraExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"camera"] funcDesc:@"相机" handle:^(NSString * _Nonnull itemDesc) {
+    EaseExtMenuModel *cameraExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"camera"] funcDesc:@"相机" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself chatToolBarComponentIncidentAction:EMChatToolBarCamera];
     }];
-    EaseExtMenuModel *sealRtcExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"video_conf"] funcDesc:@"音视频" handle:^(NSString * _Nonnull itemDesc) {
+    EaseExtMenuModel *sealRtcExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"video_conf"] funcDesc:@"音视频" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself chatToolBarComponentSealRtcAction];
     }];
-    EaseExtMenuModel *locationExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"icloudFile"] funcDesc:@"位置" handle:^(NSString * _Nonnull itemDesc) {
+    EaseExtMenuModel *locationExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"location"] funcDesc:@"位置" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself chatToolBarLocationAction];
     }];
-    EaseExtMenuModel *fileExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"icloudFile"] funcDesc:@"文件" handle:^(NSString * _Nonnull itemDesc) {
+    EaseExtMenuModel *fileExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"icloudFile"] funcDesc:@"文件" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself chatToolBarFileOpenAction];
     }];
-    EaseExtMenuModel *groupReadReceiptExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"pin_readReceipt"] funcDesc:@"群组回执" handle:^(NSString * _Nonnull itemDesc) {
+    EaseExtMenuModel *groupReadReceiptExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"pin_readReceipt"] funcDesc:@"群组回执" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         if (self->_currentConversation.type == EMConversationTypeGroupChat) {
             EMGroupChatViewController *groupController = (EMGroupChatViewController*)weakself;
             [groupController groupReadReceiptAction];
@@ -221,8 +225,8 @@
     NSString *cellString = nil;
     if ([obj isKindOfClass:[NSString class]])
         cellString = (NSString *)obj;
-    if ([obj isKindOfClass:[EMMessageModel class]]) {
-        EMMessageModel *model = (EMMessageModel *)obj;
+    if ([obj isKindOfClass:[EaseMessageModel class]]) {
+        EaseMessageModel *model = (EaseMessageModel *)obj;
         if (model.type == EMMessageTypeExtRecall) {
             if ([model.message.from isEqualToString:EMClient.sharedClient.currentUsername]) {
                 cellString = @"您撤回一条消息";
@@ -244,7 +248,7 @@
         return cell;
     }
     
-    EMMessageModel *model = (EMMessageModel *)obj;
+    EaseMessageModel *model = (EaseMessageModel *)obj;
     if (self.delegate && [self.delegate respondsToSelector:@selector(cellForItem:messageModel:)]) {
         UITableViewCell *customCell = [self.delegate cellForItem:tableView messageModel:model];
         if (_viewModel.defaultLongPressViewIsNeededForCustomCell) {
@@ -318,14 +322,14 @@
     [self sendMessageWithBody:body ext:nil isUpload:YES];
 }
 
-#pragma mark - EMChatBarEmoticonViewDelegate
+#pragma mark - EaseChatBarEmoticonViewDelegate
 
 - (void)didSelectedTextDetele
 {
     [self.chatBar deleteTailText];
 }
 
-- (void)didSelectedEmoticonModel:(EMEmoticonModel *)aModel
+- (void)didSelectedEmoticonModel:(EaseEmoticonModel *)aModel
 {
     if (aModel.type == EMEmotionTypeEmoji)
         [self.chatBar inputViewAppendText:aModel.name];
@@ -341,11 +345,11 @@
 - (void)messageCellDidSelected:(EMMessageCell *)aCell
 {
     [self hideLongPressView];
-    BOOL isCustom = NO;
+    BOOL isCustom = YES;
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectMessageItem:userData:)]) {
         isCustom = [self.delegate didSelectMessageItem:aCell.model.message userData:aCell.model.userDataDelegate];
     }
-    if (isCustom) return;
+    if (!isCustom) return;
     //消息事件策略分类
     EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgCell:aCell];
     eventStrategy.chatController = self;
@@ -357,16 +361,13 @@
     [self hideLongPressView];
     self.longPressIndexPath = [self.tableView indexPathForCell:aCell];
     __weak typeof(self) weakself = self;
-    EaseExtMenuModel *copyExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"copy"] funcDesc:@"复制" handle:^(NSString * _Nonnull itemDesc) {
+    EaseExtMenuModel *copyExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"copy"] funcDesc:@"复制" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself copyLongPressAction];
     }];
-    EaseExtMenuModel *forwardExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"forward"] funcDesc:@"转发" handle:^(NSString * _Nonnull itemDesc) {
-        [weakself forwardLongPressAction];
-    }];
-    EaseExtMenuModel *deleteExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"delete"] funcDesc:@"删除" handle:^(NSString * _Nonnull itemDesc) {
+    EaseExtMenuModel *deleteExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"delete"] funcDesc:@"删除" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself deleteLongPressAction];
     }];
-    EaseExtMenuModel *recallExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"recall"] funcDesc:@"撤回" handle:^(NSString * _Nonnull itemDesc) {
+    EaseExtMenuModel *recallExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"recall"] funcDesc:@"撤回" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself recallLongPressAction];
     }];
     
@@ -377,16 +378,12 @@
         if (_currentLongPressCell.model.type == EMMessageTypeText) {
             [extMenuArray addObject:copyExtModel];
         }
-        if (_currentLongPressCell.model.type == EMMessageTypeText || _currentLongPressCell.model.type == EMMessageTypeLocation || _currentLongPressCell.model.type == EMMessageTypeImage || _currentLongPressCell.model.type == EMMessageTypeVideo) {
-            [extMenuArray addObject:forwardExtModel];
-        }
         if (_currentLongPressCell.model.direction == EMMessageDirectionSend) {
             [extMenuArray addObject:recallExtModel];
         }
     } else {
         isCustomCell = YES;
         [extMenuArray addObject:copyExtModel];
-        [extMenuArray addObject:forwardExtModel];
         [extMenuArray addObject:recallExtModel];
     }
     [extMenuArray addObject:deleteExtModel];
@@ -447,7 +444,7 @@
     [win addSubview:self.longPressView];
 }
 
-- (void)messageCellDidResend:(EMMessageModel *)aModel
+- (void)messageCellDidResend:(EaseMessageModel *)aModel
 {
     if (aModel.message.status != EMMessageStatusFailed && aModel.message.status != EMMessageStatusPending) {
         return;
@@ -462,7 +459,7 @@
 }
 
 //头像点击
-- (void)avatarDidSelected:(EMMessageModel *)model
+- (void)avatarDidSelected:(EaseMessageModel *)model
 {
     [self hideLongPressView];
     if (self.delegate && [self.delegate respondsToSelector:@selector(avatarDidSelected:)]) {
@@ -470,7 +467,7 @@
     }
 }
 //头像长按
-- (void)avatarDidLongPress:(EMMessageModel *)model
+- (void)avatarDidLongPress:(EaseMessageModel *)model
 {
     [self hideLongPressView];
     if (self.delegate && [self.delegate respondsToSelector:@selector(avatarDidLongPress:)]) {
@@ -521,8 +518,8 @@
     [aMessages enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         EMMessage *msg = (EMMessage *)obj;
         [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj isKindOfClass:[EMMessageModel class]]) {
-                EMMessageModel *model = (EMMessageModel *)obj;
+            if ([obj isKindOfClass:[EaseMessageModel class]]) {
+                EaseMessageModel *model = (EaseMessageModel *)obj;
                 if ([model.message.messageId isEqualToString:msg.messageId]) {
                     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:@"对方撤回一条消息"];
                     NSString *to = [[EMClient sharedClient] currentUsername];
@@ -534,7 +531,7 @@
                     message.localTime = msg.localTime;
                     message.timestamp = msg.timestamp;
                     [self.currentConversation insertMessage:message error:nil];
-                    EMMessageModel *replaceModel = [[EMMessageModel alloc]initWithEMMessage:message];
+                    EaseMessageModel *replaceModel = [[EaseMessageModel alloc]initWithEMMessage:message];
                     [self.dataArray replaceObjectAtIndex:idx withObject:replaceModel];
                 }
             }
@@ -574,10 +571,10 @@
         }
         
         __block NSUInteger index = NSNotFound;
-        __block EMMessageModel *reloadModel = nil;
+        __block EaseMessageModel *reloadModel = nil;
         [self.dataArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj isKindOfClass:[EMMessageModel class]]) {
-                EMMessageModel *model = (EMMessageModel *)obj;
+            if ([obj isKindOfClass:[EaseMessageModel class]]) {
+                EaseMessageModel *model = (EaseMessageModel *)obj;
                 if ([model.message.messageId isEqualToString:aMessage.messageId]) {
                     reloadModel = model;
                     index = idx;
@@ -704,14 +701,14 @@
         
         CGFloat interval = (self.msgTimelTag - msg.timestamp) / 1000;
         if (self.msgTimelTag < 0 || interval > 60 || interval < -60) {
-            NSString *timeStr = [EMDateHelper formattedTimeFromTimeInterval:msg.timestamp];
+            NSString *timeStr = [EaseDateHelper formattedTimeFromTimeInterval:msg.timestamp];
             [formated addObject:timeStr];
             self.msgTimelTag = msg.timestamp;
         }
-        EMMessageModel *model = nil;
-        model = [[EMMessageModel alloc] initWithEMMessage:msg];
+        EaseMessageModel *model = nil;
+        model = [[EaseMessageModel alloc] initWithEMMessage:msg];
         if (!model) {
-            model = [[EMMessageModel alloc]init];
+            model = [[EaseMessageModel alloc]init];
         }
         if (self.delegate && [self.delegate respondsToSelector:@selector(userData:)]) {
             id<EaseUserData> userData = [self.delegate userData:msg.from];
@@ -762,6 +759,11 @@
 }
 
 #pragma mark - Action
+
+- (void)handleMakeCall
+{
+    [self.chatBar clearMoreViewAndSelectedButton];
+}
 
 //隐藏长按
 - (void)hideLongPressView
