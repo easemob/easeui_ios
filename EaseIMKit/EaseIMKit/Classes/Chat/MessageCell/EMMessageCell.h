@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "EMMessageModel.h"
+#import "EaseMessageModel.h"
 #import "EMMessageBubbleView.h"
 #import "EaseViewModel.h"
 
@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) EMMessageDirection direction;
 
-@property (nonatomic, strong) EMMessageModel *model;
+@property (nonatomic, strong) EaseMessageModel *model;
 
 + (NSString *)cellIdentifierWithDirection:(EMMessageDirection)aDirection
                                      type:(EMMessageType)aType;
@@ -43,11 +43,11 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 - (void)messageCellDidSelected:(EMMessageCell *)aCell;
 - (void)messageCellDidLongPress:(UITableViewCell *)aCell;
-- (void)messageCellDidResend:(EMMessageModel *)aModel;
+- (void)messageCellDidResend:(EaseMessageModel *)aModel;
 - (void)messageReadReceiptDetil:(EMMessageCell *)aCell;
 
-- (void)avatarDidSelected:(EMMessageModel *)model;
-- (void)avatarDidLongPress:(EMMessageModel *)model;
+- (void)avatarDidSelected:(EaseMessageModel *)model;
+- (void)avatarDidLongPress:(EaseMessageModel *)model;
 
 @end
 

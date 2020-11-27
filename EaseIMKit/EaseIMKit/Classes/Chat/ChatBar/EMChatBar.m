@@ -100,7 +100,7 @@
         make.width.height.equalTo(@kiconwidth);
     }];
     
-    self.textView = [[EMTextView alloc] init];
+    self.textView = [[EaseTextView alloc] init];
     self.textView.delegate = self;
     [self.textView setTextColor:[UIColor blackColor]];
     self.textView.font = [UIFont systemFontOfSize:16];

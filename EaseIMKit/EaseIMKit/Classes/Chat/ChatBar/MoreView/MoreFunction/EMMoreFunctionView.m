@@ -167,7 +167,7 @@
 - (void)toolbarCellDidSelected:(EaseExtMenuModel*)menuItemModel
 {
     if (menuItemModel.itemDidSelectedHandle) {
-        menuItemModel.itemDidSelectedHandle(menuItemModel.funcDesc);
+        menuItemModel.itemDidSelectedHandle(menuItemModel.funcDesc, YES);
     }
     [self removeFromSuperview];
 }

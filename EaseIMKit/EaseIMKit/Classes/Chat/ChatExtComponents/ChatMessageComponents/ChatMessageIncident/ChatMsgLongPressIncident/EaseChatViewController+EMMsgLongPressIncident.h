@@ -7,7 +7,7 @@
 //
 
 #import "EaseChatViewController.h"
-#import "EMMessageModel.h"
+#import "EaseMessageModel.h"
 #import "EMMessageCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,7 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSIndexPath *__nullable longPressIndexPath;
 
 - (void)deleteLongPressAction;
-- (void)forwardLongPressAction;
 - (void)recallLongPressAction;
 - (void)copyLongPressAction;
 

@@ -255,7 +255,7 @@
 
 #pragma mark - Setter
 
-- (void)setModel:(EMMessageModel *)model
+- (void)setModel:(EaseMessageModel *)model
 {
     _model = model;
     self.bubbleView.model = model;

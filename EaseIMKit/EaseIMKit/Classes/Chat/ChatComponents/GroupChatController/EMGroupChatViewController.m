@@ -8,8 +8,7 @@
 
 #import "EMGroupChatViewController.h"
 #import "EMReadReceiptMsgViewController.h"
-#import "EMAtGroupMembersViewController.h"
-#import "EMMessageModel.h"
+#import "EaseMessageModel.h"
 #import "EMConversation+EaseUI.h"
 
 @interface EMGroupChatViewController () <EMReadReceiptMsgDelegate,EMGroupManagerDelegate>
@@ -83,7 +82,7 @@
             //是群主才可以发送阅读回执信息
             [self sendTextAction:str ext:@{MSG_EXT_READ_RECEIPT:@"receipt"}];
         } else {
-            [EMAlertController showErrorAlert:@"获取群组失败"];
+            [EaseAlertController showErrorAlert:@"获取群组失败"];
         }
     }];
 }
@@ -93,6 +92,13 @@
 //阅读回执详情
 - (void)messageReadReceiptDetil:(EMMessageCell *)aCell
 {
+    BOOL isNeedsDefaultImpl = YES;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(groupMessageReadReceiptDetail:groupId:)]) {
+        isNeedsDefaultImpl = [self.delegate groupMessageReadReceiptDetail:aCell.model.message groupId:self.currentConversation.conversationId];
+    }
+    if (!isNeedsDefaultImpl) {
+        return;
+    }
     self.readReceiptControl = [[EMReadReceiptMsgViewController alloc] initWithMessageCell:aCell groupId:self.currentConversation.conversationId];
     self.readReceiptControl.modalPresentationStyle = 0;
     [self presentViewController:self.readReceiptControl animated:NO completion:nil];
@@ -100,34 +106,7 @@
 
 #pragma mark - EMChatBarDelegate
 
-//@群成员
-- (void)_willInputAt:(EMTextView *)aInputView
-{
-    do {
-        if (self.currentConversation.type != EMConversationTypeGroupChat) {
-            break;
-        }
-        NSString *text = aInputView.text;
-        EMGroup *group = [EMGroup groupWithId:self.currentConversation.conversationId];
-        if (!group) {
-            break;
-        }
-        
-        [self.view endEditing:YES];
-        //选择 @ 某群成员
-        EMAtGroupMembersViewController *controller = [[EMAtGroupMembersViewController alloc] initWithGroup:group];
-        [self.navigationController pushViewController:controller animated:NO];
-        [controller setSelectedCompletion:^(NSString * _Nonnull aName) {
-            NSString *newStr = [NSString stringWithFormat:@"%@%@ ", text, aName];
-            aInputView.text = newStr;
-            aInputView.selectedRange = NSMakeRange(newStr.length, 0);
-            [aInputView becomeFirstResponder];
-        }];
-        
-    } while (0);
-}
-
-- (BOOL)inputView:(EMTextView *)aInputView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+- (BOOL)inputView:(EaseTextView *)aInputView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     self.isWillInputAt = NO;
     if ([text isEqualToString:@"\n"]) {
@@ -141,14 +120,13 @@
     return YES;
 }
 
-- (void)inputViewDidChange:(EMTextView *)aInputView
+- (void)inputViewDidChange:(EaseTextView *)aInputView
 {
     //@群成员
     if (self.isWillInputAt && self.currentConversation.type == EMConversationTypeGroupChat) {
         NSString *text = aInputView.text;
         if ([text hasSuffix:@"@"]) {
             self.isWillInputAt = NO;
-            [self _willInputAt:aInputView];
         }
     }
 }
@@ -158,11 +136,11 @@
 //收到群消息已读回执
 - (void)groupMessageDidRead:(EMMessage *)aMessage groupAcks:(NSArray *)aGroupAcks
 {
-    EMMessageModel *msgModel;
+    EaseMessageModel *msgModel;
     EMGroupMessageAck *msgAck = aGroupAcks[0];
     for (int i=0; i<[self.dataArray count]; i++) {
-        if([self.dataArray[i] isKindOfClass:[EMMessageModel class]]){
-            msgModel = (EMMessageModel *)self.dataArray[i];
+        if([self.dataArray[i] isKindOfClass:[EaseMessageModel class]]){
+            msgModel = (EaseMessageModel *)self.dataArray[i];
         }else{
             continue;
         }

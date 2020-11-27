@@ -12,9 +12,9 @@
 #define ktextViewMinHeight 40
 #define ktextViewMaxHeight 120
 #import "EMReadReceiptMsgViewController.h"
-#import "EMTextView.h"
+#import "EaseTextView.h"
 #import "EMMessageCell.h"
-#import "EMDateHelper.h"
+#import "EaseDateHelper.h"
 #import "EMReadReceiptTableViewCell.h"
 #import "EMReadReceiptMemberModel.h"
 
@@ -22,7 +22,7 @@
 
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) EMTextView *textView;
+@property (nonatomic, strong) EaseTextView *textView;
 @property (nonatomic, strong) EMMessageCell *msgCell;
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSString *groupId;
@@ -97,7 +97,7 @@
         EMMessage *msg = aMessages[i];
         CGFloat interval = (self.msgTimelTag - msg.timestamp) / 1000;
         if (self.msgTimelTag < 0 || interval > 60 || interval < -60) {
-            timeStr = [EMDateHelper formattedTimeFromTimeInterval:msg.timestamp];
+            timeStr = [EaseDateHelper formattedTimeFromTimeInterval:msg.timestamp];
             self.msgTimelTag = msg.timestamp;
         }
         EMReadReceiptMemberModel *model = [[EMReadReceiptMemberModel alloc]initWithInfo:[UIImage easeUIImageNamed:@"defaultAvatar"] nick:msg.from time:timeStr];
@@ -137,7 +137,7 @@
         make.centerY.equalTo(self.closeButton.imageView);
     }];
     
-    self.textView = [[EMTextView alloc] init];
+    self.textView = [[EaseTextView alloc] init];
     self.textView.delegate = self;
     self.textView.font = [UIFont systemFontOfSize:16];
     self.textView.returnKeyType = UIReturnKeyDone;
@@ -179,7 +179,7 @@
     msgLable.textColor = [UIColor blackColor];
     msgLable.numberOfLines = 0;
     EMTextMessageBody *body = (EMTextMessageBody *)_msgCell.model.message.body;
-    msgLable.text = [EMEmojiHelper convertEmoji:body.text];
+    msgLable.text = [EaseEmojiHelper convertEmoji:body.text];
     [msgView addSubview:msgLable];
     [msgLable mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(msgView);
@@ -193,7 +193,7 @@
     personInfoLable.textColor = [UIColor grayColor];
     personInfoLable.numberOfLines = 0;
     NSString *name = _msgCell.model.message.from;
-    NSString *time = [EMDateHelper formattedTimeFromTimeInterval:_msgCell.model.message.localTime];
+    NSString *time = [EaseDateHelper formattedTimeFromTimeInterval:_msgCell.model.message.localTime];
     NSString *personInfo = [NSString stringWithFormat:@"%@  %@",name,time];
     personInfoLable.text = personInfo;
     [msgView addSubview:personInfoLable];

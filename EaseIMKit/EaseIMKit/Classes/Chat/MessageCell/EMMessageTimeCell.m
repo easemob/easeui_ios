@@ -7,7 +7,7 @@
 //
 
 #import "EMMessageTimeCell.h"
-#import "EMColorDefine.h"
+#import "EaseColorDefine.h"
 #import "Masonry.h"
 
 @implementation EMMessageTimeCell

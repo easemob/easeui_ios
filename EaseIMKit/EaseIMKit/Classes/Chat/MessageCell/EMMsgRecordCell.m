@@ -9,7 +9,7 @@
 #import "EMMsgRecordCell.h"
 #import "EMMsgImageBubbleView.h"
 #import "EMMsgVideoBubbleView.h"
-#import "EMMessageModel.h"
+#import "EaseMessageModel.h"
 
 @interface EMMsgRecordCell()
 
@@ -104,14 +104,14 @@
 - (void)setModels:(NSArray *)models
 {
     _models = models;
-    EMMessageModel *model;
+    EaseMessageModel *model;
     for (int i = 0; i < [models count]; ++i) {
         model = models[i];
         [self setImageView:(self.imgViewLeft) model:model tag:i];
     }
 }
 
-- (void)setImageView:(EMMsgImageBubbleView *)imgView model:(EMMessageModel *)model tag:(NSInteger)tag
+- (void)setImageView:(EMMsgImageBubbleView *)imgView model:(EaseMessageModel *)model tag:(NSInteger)tag
 {
     imgView.model = model;
     if (model.type == EMMessageTypeImage) {
@@ -176,7 +176,7 @@
     }
 }
 
-- (EMMessageModel *)getMsgModel:(NSInteger)tag
+- (EaseMessageModel *)getMsgModel:(NSInteger)tag
 {
     return self.models[tag];
 }

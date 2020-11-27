@@ -257,7 +257,7 @@
     [[EMAudioRecordUtil sharedHelper] startRecordWithPath:recordPath completion:^(NSError * _Nonnull error) {
         if (error) {
             [weakself recordButtonTouchCancelEnd];
-            [EMAlertController showErrorAlert:error.domain];
+            [EaseAlertController showErrorAlert:error.domain];
         } else {
             [weakself _startTimer];
             weakself.titleLabel.hidden = YES;

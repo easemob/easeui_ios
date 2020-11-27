@@ -7,7 +7,7 @@
 //
 
 #import "EMPickFileViewController.h"
-#import "EMColorDefine.h"
+#import "EaseColorDefine.h"
 #import <Masonry/Masonry.h>
 #import "UIImage+EaseUI.h"
 
@@ -15,12 +15,11 @@
 
 @property (nonatomic, strong) UIButton *recentBtn;//最近
 @property (nonatomic, strong) UIButton *localBtn;//本机
-
 @property (nonatomic, strong) UIView *localMediaView;//本机媒体
-
 @property (nonatomic, strong) UIButton *avBtn;//影音
 @property (nonatomic, strong) UIButton *picBtn;//图片
-
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *dataArray;
 @end
 
 @implementation EMPickFileViewController
@@ -35,12 +34,7 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage easeUIImageNamed:@"backleft"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
     [self _setupNavigationBarTitle];
     [self _setupItemBar];
-    self.showRefreshHeader = YES;
-    
-    self.tableView.backgroundColor = kColor_LightGray;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 130;
+
     [self.tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.picBtn.mas_bottom);
         make.left.equalTo(self.view);
@@ -142,6 +136,29 @@
 - (void)backAction
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (UITableView *)tableView {
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] init];
+        _tableView.tableFooterView = [UIView new];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.backgroundColor = kColor_LightGray;
+        _tableView.estimatedRowHeight = 130;
+        _tableView.rowHeight = UITableViewAutomaticDimension;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    }
+    
+    return _tableView;
+}
+
+- (NSMutableArray *)dataArray {
+    if (!_dataArray) {
+        _dataArray = [[NSMutableArray alloc] init];;
+    }
+    
+    return _dataArray;
 }
 
 @end
