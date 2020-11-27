@@ -14,15 +14,20 @@ Pod::Spec.new do |s|
                :submodules => true
   }
   
-  s.vendored_libraries ='EaseIMKit/Classes/Chat/ChatBar/MoreView/VoiceConvert/libopencore-amrnb.a','EaseIMKit/Classes/Chat/ChatBar/MoreView/VoiceConvert/libopencore-amrwb.a'
-  
   s.description = 'easemob sdk ui kit'
   s.requires_arc = true
   s.source_files = 'EaseIMKit/**/*.{h,m,mm}'
   s.resource_bundles = {
     'EaseIMKit' => ['EaseIMKit/**/**/*.{png,jpg,jpeg,gif}']
   }
-  
+
+  s.vendored_libraries = [
+      'EaseIMKit/libs/VoiceConvert/libopencore-amrnb.a',
+      'EaseIMKit/libs/VoiceConvert/libopencore-amrwb.a'
+    ]
+    
+#  s.static_framework = false
+  s.libraries = 'stdc++'
   s.dependency 'Hyphenate', '~> 3.7.2'
   s.dependency 'Masonry'
   s.dependency 'MJRefresh'
