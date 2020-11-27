@@ -20,10 +20,11 @@ PODS:
     - SDWebImage/Core
 
 DEPENDENCIES:
-  - EaseIMKit (from `./`)
+  - EaseIMKit (from `./EaseIMKit`)
+  - Masonry
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - FLAnimatedImage
     - Hyphenate
     - Masonry
@@ -33,10 +34,10 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   EaseIMKit:
-    :path: "./"
+    :path: "./EaseIMKit"
 
 SPEC CHECKSUMS:
-  EaseIMKit: 167486fb1eef7192887bd15e1920cace2713e89a
+  EaseIMKit: 37284b5ef355d257a404237f3985eb21544b2509
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Hyphenate: a9da397810e08c4b3173a5c8f04868165ec48b9c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
@@ -44,6 +45,6 @@ SPEC CHECKSUMS:
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
   SDWebImage: 783af2c3fa36291a250030c4752ee370a9a51d13
 
-PODFILE CHECKSUM: 7113c9c390459a02611dcabc2c49b1acc55d8bbe
+PODFILE CHECKSUM: 689f0533b3b3ac175c106a6cd40c74e91a0c0dd4
 
 COCOAPODS: 1.10.0.beta.2

@@ -132,9 +132,9 @@
 
 - (void)keyBoardWillHide:(NSNotification *)note
 {
-    [self keyBoardWillHide:note];
-    if (self.enableTyping)
-        [self _sendEndTyping];
+//    [self keyBoardWillHide:note];
+//    if (self.enableTyping)
+//        [self _sendEndTyping];
 }
 
 #pragma mark - Action
