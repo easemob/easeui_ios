@@ -94,9 +94,11 @@
         EaseContactLetterModel *letterModel = self.contactLists[i];
         if ([letterModel.contactLetter isEqualToString:title]) {
             letterIndex = i;
-            UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
-            [generator prepare];
-            [generator impactOccurred];
+            if (@available(iOS 10.0, *)) {
+                UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+                [generator prepare];
+                [generator impactOccurred];
+            }
             break;
         }
     }

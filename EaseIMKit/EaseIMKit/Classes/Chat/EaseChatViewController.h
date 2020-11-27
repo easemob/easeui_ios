@@ -9,13 +9,13 @@
 #import "EMChatBar.h"
 #import "EaseHeaders.h"
 #import "EaseChatViewModel.h"
-#import "EaseChatViewControllerProtocol.h"
+#import "EaseChatViewControllerDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseChatViewController : UIViewController <UIDocumentInteractionControllerDelegate>
 
-@property (nonatomic, weak) id<EaseChatViewControllerProtocol> delegate;
+@property (nonatomic, weak) id<EaseChatViewControllerDelegate> delegate;
 
 @property (nonatomic, strong) EMConversation *currentConversation;
 @property (nonatomic, strong) UITableView *tableView;

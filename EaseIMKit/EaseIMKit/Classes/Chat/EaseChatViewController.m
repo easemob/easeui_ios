@@ -122,6 +122,8 @@
         //草稿
         if (self.chatBar.textView.text.length > 0) {
             [self.currentConversation setDraft:self.chatBar.textView.text];
+            //刷新会话列表
+            [[NSNotificationCenter defaultCenter] postNotificationName:CONVERSATIONLIST_UPDATE object:nil];
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  EaseUserDataProtocol.h
+//  EaseUserDataDelegate.h
 //  EaseIMKit
 //
 //  Created by 娜塔莎 on 2020/11/23.

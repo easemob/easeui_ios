@@ -1,18 +1,18 @@
 //
-//  EaseChatViewControllerProtocol.h
+//  EaseChatViewControllerDelegate.h
 //  EaseIMKit
 //
 //  Created by 娜塔莎 on 2020/11/25.
 //
 
 #import <Foundation/Foundation.h>
-#import "EaseUserDataProtocol.h"
+#import "EaseUserDataDelegate.h"
 #import "EaseExtMenuModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 //聊天控制器回调
-@protocol EaseChatViewControllerProtocol <NSObject>
+@protocol EaseChatViewControllerDelegate <NSObject>
 
 @optional
 

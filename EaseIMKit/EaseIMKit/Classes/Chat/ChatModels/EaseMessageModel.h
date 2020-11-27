@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "EaseHeaders.h"
-#import "EaseUserDataProtocol.h"
+#import "EaseUserDataDelegate.h"
 
 typedef NS_ENUM(NSInteger, EMMessageType) {
     EMMessageTypeText = 1,
