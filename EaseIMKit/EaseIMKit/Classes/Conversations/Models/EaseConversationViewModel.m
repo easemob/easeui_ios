@@ -28,7 +28,7 @@
 
 - (void)_setupPropertyDefault {
 
-    _avatarType = Circular;
+    _avatarType = RoundedCorner;
     _avatarSize = CGSizeMake(48, 48);
     _avatarEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     

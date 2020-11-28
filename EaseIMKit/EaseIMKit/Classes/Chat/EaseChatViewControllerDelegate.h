@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 当前所长按的 自定义cell 的扩展区数据模型组
  *
- * @param   defaultLongPressItems       默认长按扩展区功能数据模型组
+ * @param   defaultLongPressItems       默认长按扩展区功能数据模型组      （默认共有：复制，撤回，删除）
  * @param   customCell                               当前长按的自定义cell
  */
 - (NSMutableArray<EaseExtMenuModel*>*)customCellLongPressExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultLongPressItems customCell:(UITableViewCell*)customCell;
@@ -65,14 +65,14 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 当前会话输入扩展区数据模型组
  *
- * @param   defaultInputBarItems        默认功能数据模型组
+ * @param   defaultInputBarItems        默认功能数据模型组   （默认共有：相册，相机，位置，文件，群组回执）
  * @param   conversationType                 当前会话类型：单聊，群聊，聊天室
  */
 - (NSMutableArray<EaseExtMenuModel*>*)inputBarExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultInputBarItems conversationType:(EMConversationType)conversationType;
 /**
  * 输入区键盘输入变化回调  例：@群成员
  */
-- (void)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 /**
  * 对方输入状态（单聊可用）
  */
@@ -92,7 +92,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 当前所长按消息的扩展区数据模型组
  *
- * @param   defaultLongPressItems       默认长按扩展区功能数据模型组
+ * @param   defaultLongPressItems       默认长按扩展区功能数据模型组  （默认共有：复制，撤回，删除）
  * @param   message                                      当前长按的消息
  */
 - (NSMutableArray<EaseExtMenuModel*>*)messageLongPressExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultLongPressItems message:(EMMessage*)message;

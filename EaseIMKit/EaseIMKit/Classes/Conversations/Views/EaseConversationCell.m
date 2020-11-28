@@ -180,7 +180,7 @@
     }
     
     self.detailLabel.attributedText = _model.showInfo;
-    self.timeLabel.text = @"09:26"; //[EaseDateHelper formattedTimeFromTimeInterval:_model.lastestUpdateTime];
+    self.timeLabel.text = [EaseDateHelper formattedTimeFromTimeInterval:_model.lastestUpdateTime];
     self.badgeLabel.badge = _model.unreadMessagesCount;
 }
 

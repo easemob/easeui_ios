@@ -174,7 +174,7 @@ static EaseIMKitManager *easeIMKit = nil;
     message.timestamp = [self getLatestMsgTimestamp];
     message.isRead = NO;
     message.chatType = chatType;
-    EMConversation *notiConversation = [[EMClient sharedClient].chatManager getConversation:message.conversationId type:-1 createIfNotExist:YES];
+    EMConversation *notiConversation = [[EMClient sharedClient].chatManager getConversation:message.conversationId type:EMConversationTypeChat createIfNotExist:YES];
     NSDictionary *ext = [self requestDidReceiveConversationExt:conversationId requestUser:userName reason:reason];
     [notiConversation setExt:ext];
     [notiConversation insertMessage:message error:nil];
