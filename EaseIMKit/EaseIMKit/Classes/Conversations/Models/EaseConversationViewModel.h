@@ -18,9 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 // 头像样式
 @property (nonatomic) EaseAvatarStyle avatarType;
 
-// 默认头像
-@property (nonatomic, strong) UIImage *defaultAvatarImage;
-
 // 头像尺寸
 @property (nonatomic) CGSize avatarSize;
 

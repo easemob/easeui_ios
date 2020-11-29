@@ -159,23 +159,34 @@ static EaseIMKitManager *easeIMKit = nil;
         return;
     }
     NSString *notificationStr = nil;
+    NSString *notiType = nil;
     if (reason == ContanctsRequestDidReceive) {
         notificationStr = [NSString stringWithFormat:@"好友申请来自：%@",conversationId];
+        notiType = SYSTEM_NOTI_TYPE_CONTANCTSREQUEST;
     }
     if (reason == GroupInvitationDidReceive) {
         notificationStr = [NSString stringWithFormat:@"加群邀请来自：%@",userName];
+        notiType = SYSTEM_NOTI_TYPE_GROUPINVITATION;
     }
     if (reason == JoinGroupRequestDidReceive) {
         notificationStr = [NSString stringWithFormat:@"加群申请来自：%@",userName];
+        notiType = SYSTEM_NOTI_TYPE_JOINGROUPREQUEST;
     }
-    notificationStr = [self requestDidReceiveShowMessage:conversationId requestUser:userName reason:reason];
+    if (self.systemNotiDelegate && [self.systemNotiDelegate respondsToSelector:@selector(requestDidReceiveShowMessage:requestUser:reason:)]) {
+        notificationStr = [self.systemNotiDelegate requestDidReceiveShowMessage:conversationId requestUser:userName reason:reason];
+    }
     EMTextMessageBody *body = [[EMTextMessageBody alloc]initWithText:notificationStr];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:EMSYSTEMNOTIFICATIONID from:EMSYSTEMNOTIFICATIONID to:EMClient.sharedClient.currentUsername body:body ext:nil];
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:EMSYSTEMNOTIFICATIONID from:userName to:EMClient.sharedClient.currentUsername body:body ext:nil];
     message.timestamp = [self getLatestMsgTimestamp];
     message.isRead = NO;
     message.chatType = chatType;
     EMConversation *notiConversation = [[EMClient sharedClient].chatManager getConversation:message.conversationId type:EMConversationTypeChat createIfNotExist:YES];
-    NSDictionary *ext = [self requestDidReceiveConversationExt:conversationId requestUser:userName reason:reason];
+    NSDictionary *ext = nil;
+    if (self.systemNotiDelegate && [self.systemNotiDelegate respondsToSelector:@selector(requestDidReceiveConversationExt:requestUser:reason:)]) {
+        ext = [self.systemNotiDelegate requestDidReceiveConversationExt:conversationId requestUser:userName reason:reason];
+    } else {
+        ext = @{SYSTEM_NOTI_TYPE:notiType};
+    }
     [notiConversation setExt:ext];
     [notiConversation insertMessage:message error:nil];
     [self conversationsUnreadCount];

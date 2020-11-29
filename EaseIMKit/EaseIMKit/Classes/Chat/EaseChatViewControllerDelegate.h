@@ -26,14 +26,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<EaseUserData>)userData:(NSString*)huanxinID;
 
 /**
- * 头像点击事件 （返回是否需要执行默认点击事件） 默认 YES
+ * 头像点击事件 （返回是否需要执行默认点击事件） 默认 NO
  *
  * @param   userData        当前点击的头像所指向的用户资料
  */
 - (BOOL)avatarDidSelected:(id<EaseUserData>)userData;
 
 /**
- * 头像长按事件 （返回是否需要执行默认长按事件） 默认 YES
+ * 头像长按事件 （返回是否需要执行默认长按事件） 默认  NO
  *
  * @param   userData        当前长按的头像所指向的用户资料
  */

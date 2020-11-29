@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) EMConversation *currentConversation;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
 @property (nonatomic) NSTimeInterval msgTimelTag;   //消息时间格式化
 
 //实例化聊天控制器

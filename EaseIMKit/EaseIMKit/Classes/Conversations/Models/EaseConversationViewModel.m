@@ -61,8 +61,6 @@
     _cellSeparatorColor = [UIColor colorWithHexString:@"#F3F3F3"];
     
     _bgView = [self defaultBgView];
-    
-    _defaultAvatarImage = [UIImage easeUIImageNamed:@"defaultAvatar"];
 }
 
 - (UIView *)defaultBgView {

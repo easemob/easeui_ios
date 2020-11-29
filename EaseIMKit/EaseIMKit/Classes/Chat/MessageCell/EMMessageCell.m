@@ -17,6 +17,7 @@
 #import "EMMsgLocationBubbleView.h"
 #import "EMMsgFileBubbleView.h"
 #import "EMMsgExtGifBubbleView.h"
+#import "EMMsgPicMixTextBubbleView.h"
 
 @interface EMMessageCell()
 
@@ -85,7 +86,9 @@
         identifier = [NSString stringWithFormat:@"%@File", identifier];
     } else if (aType == EMMessageTypeExtGif) {
         identifier = [NSString stringWithFormat:@"%@ExtGif", identifier];
-    } else if (aType == EMMessageTypeCustom) {
+    } else if (aType == EMMessageTypePictMixText) {
+        identifier = [NSString stringWithFormat:@"%@PictMixText", identifier];
+    }else if (aType == EMMessageTypeCustom) {
         identifier = [NSString stringWithFormat:@"%@Custom", identifier];
     }
     
@@ -237,6 +240,9 @@
         case EMMessageTypeExtGif:
             bubbleView = [[EMMsgExtGifBubbleView alloc] initWithDirection:self.direction type:aType viewModel:_viewModel];
             break;
+        case EMMessageTypePictMixText:
+            bubbleView = [[EMMsgPicMixTextBubbleView alloc]initWithDirection:self.direction type:aType viewModel:_viewModel];
+            break;
         case EMMessageTypeCustom:
             break;
         default:
@@ -269,6 +275,11 @@
         }
         if (model.type == EMMessageBodyTypeVoice) {
             self.statusView.hidden = model.message.isReadAcked;
+        }
+        if (model.type == EMMessageTypePictMixText) {
+            if ([((EMTextMessageBody *)model.message.body).text isEqualToString:EMCOMMUNICATE_CALLED_MISSEDCALL])
+                self.statusView.hidden = model.message.isReadAcked;
+            else self.statusView.hidden = YES;
         }
     }
     if (model.userDataDelegate.avatarImg) {

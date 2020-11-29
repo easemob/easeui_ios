@@ -172,8 +172,8 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    if ([self.delegate textView:textView shouldChangeTextInRange:range replacementText:text]) {
-        return NO;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldInteractWithURL:inRange:)]) {
+        return [self.delegate textView:textView shouldChangeTextInRange:range replacementText:text];
     }
     if ([text isEqualToString:@"\n"]) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarSendMsgAction:)]) {

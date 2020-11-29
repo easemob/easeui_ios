@@ -63,7 +63,7 @@
 
 - (void)_setupViewsProperty {
     
-    self.contentView.backgroundColor = _viewModel.cellBgColor;
+    self.backgroundColor = _viewModel.cellBgColor;
     
     if (_viewModel.avatarType != Rectangular) {
         _avatarView.clipsToBounds = YES;
@@ -100,6 +100,8 @@
     _badgeLabel.backgroundColor = _viewModel.badgeLabelBgColor;
     _badgeLabel.badgeColor = _viewModel.badgeLabelTitleColor;
     _badgeLabel.maxNum = _viewModel.badgeMaxNum;
+    
+    self.selectionStyle = UITableViewCellSelectionStyleGray;
 }
 
 - (void)_setupSubViewsConstraints
@@ -164,8 +166,8 @@
         img = _model.defaultAvatar;
     }
     
-    if (_viewModel.defaultAvatarImage && !img) {
-        img = _viewModel.defaultAvatarImage;
+    if (model.defaultAvatar && !img) {
+        img = model.defaultAvatar;
     }
     
     if ([_model respondsToSelector:@selector(avatarURL)]) {

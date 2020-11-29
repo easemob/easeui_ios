@@ -37,7 +37,6 @@
     UITableViewCell *_currentLongPressCustomCell;
     BOOL _isReloadViewWithModel; //重新刷新会话页面
 }
-@property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
 @property (nonatomic, strong) EMMoreFunctionView *longPressView;
 @property (nonatomic, strong) EMChatBar *chatBar;
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
@@ -336,11 +335,11 @@
 - (void)messageCellDidSelected:(EMMessageCell *)aCell
 {
     [self hideLongPressView];
-    BOOL isCustom = YES;
+    BOOL isCustom = NO;
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectMessageItem:userData:)]) {
         isCustom = [self.delegate didSelectMessageItem:aCell.model.message userData:aCell.model.userDataDelegate];
     }
-    if (!isCustom) return;
+    if (isCustom) return;
     //消息事件策略分类
     EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgCell:aCell];
     eventStrategy.chatController = self;
@@ -447,8 +446,9 @@
 - (void)avatarDidSelected:(EaseMessageModel *)model
 {
     [self hideLongPressView];
+    BOOL isNeedsDefaultAvatarSelected = YES;
     if (self.delegate && [self.delegate respondsToSelector:@selector(avatarDidSelected:)]) {
-        [self.delegate avatarDidSelected:model.userDataDelegate];
+        isNeedsDefaultAvatarSelected = [self.delegate avatarDidSelected:model.userDataDelegate];
     }
 }
 //头像长按

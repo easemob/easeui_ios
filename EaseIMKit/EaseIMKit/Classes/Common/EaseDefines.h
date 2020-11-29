@@ -70,6 +70,10 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 
 //新通知
 #define MSG_EXT_NEWNOTI @"em_noti"
+#define SYSTEM_NOTI_TYPE @"system_noti_type"
+#define SYSTEM_NOTI_TYPE_CONTANCTSREQUEST @"ContanctsRequest"
+#define SYSTEM_NOTI_TYPE_GROUPINVITATION  @"GroupInvitation"
+#define SYSTEM_NOTI_TYPE_JOINGROUPREQUEST @"JoinGroupRequest"
 
 //加群/好友 成功
 #define NOTIF_ADD_SOCIAL_CONTACT @"EMAddSocialContact"

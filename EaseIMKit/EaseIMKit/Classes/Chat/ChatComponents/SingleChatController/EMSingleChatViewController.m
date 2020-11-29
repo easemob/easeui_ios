@@ -35,9 +35,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    /*
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(insertLocationCallRecord:) name:EMCOMMMUNICATE_RECORD object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(insertLocationCallRecord:) name:EMCOMMMUNICATE_RECORD object:nil];
+    /*
     //单聊主叫方才能发送通话记录信息(远端通话记录)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendCallEndMsg:) name:EMCOMMMUNICATE object:nil];*/
 }
@@ -178,7 +178,6 @@
     }
 }
 
-/*
 //本地通话记录
 - (void)insertLocationCallRecord:(NSNotification*)noti
 {
@@ -190,7 +189,7 @@
         self.moreMsgId = message.messageId;
     [self refreshTableView];
 }
-
+/*
 //通话记录消息
 - (void)sendCallEndMsg:(NSNotification*)noti
 {
@@ -212,6 +211,6 @@
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
         [self.currentConversation deleteMessageWithId:message.messageId error:nil];
     }];
-}
-*/
+}*/
+
 @end

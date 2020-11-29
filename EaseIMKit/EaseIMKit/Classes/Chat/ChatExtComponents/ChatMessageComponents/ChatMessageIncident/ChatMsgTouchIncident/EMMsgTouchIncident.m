@@ -30,7 +30,7 @@
 
 + (EMMessageEventStrategy * _Nonnull)getStratrgyImplWithMsgCell:(EMMessageCell *)aCell
 {
-    if (aCell.model.type == EMMessageTypeCustom)
+    if (aCell.model.type == EMMessageTypePictMixText)
         return [[CommunicateMsgEvent alloc]init];
     if (aCell.model.type == EMMessageTypeImage)
         return [[ImageMsgEvent alloc] init];

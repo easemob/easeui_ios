@@ -8,9 +8,8 @@
 #import "EaseConversationModel.h"
 #import "EaseDefines.h"
 #import "UIImage+EaseUI.h"
-
-
 #import "EMConversation+EaseUI.h"
+#import "EaseEmojiHelper.h"
 
 @interface EaseConversationModel()
 
@@ -75,7 +74,26 @@
         case EMMessageBodyTypeText:
         {
             EMTextMessageBody *body = (EMTextMessageBody *)msg.body;
-            msgStr = body.text;
+            msgStr = [EaseEmojiHelper convertEmoji:body.text];
+            EMMessage *lastMessage = [_conversation latestMessage];
+            if ([msgStr isEqualToString:EMCOMMUNICATE_CALLER_MISSEDCALL]) {
+                msgStr = @"未接听，点击回拨";
+                if ([lastMessage.from isEqualToString:[EMClient sharedClient].currentUsername])
+                    msgStr = @"已取消";
+            }
+            if ([msgStr isEqualToString:EMCOMMUNICATE_CALLED_MISSEDCALL]) {
+                msgStr = @"对方已取消";
+                if ([lastMessage.from isEqualToString:[EMClient sharedClient].currentUsername])
+                    msgStr = @"对方拒绝通话";
+            }
+            if (lastMessage.ext && [lastMessage.ext objectForKey:EMCOMMUNICATE_TYPE]) {
+                NSString *communicateStr = @"";
+                if ([[lastMessage.ext objectForKey:EMCOMMUNICATE_TYPE] isEqualToString:EMCOMMUNICATE_TYPE_VIDEO])
+                    communicateStr = @"[视频通话]";
+                if ([[lastMessage.ext objectForKey:EMCOMMUNICATE_TYPE] isEqualToString:EMCOMMUNICATE_TYPE_VOICE])
+                    communicateStr = @"[语音通话]";
+                msgStr = [NSString stringWithFormat:@"%@ %@", communicateStr, msgStr];
+            }
         }
             break;
         case EMMessageBodyTypeLocation:
@@ -153,7 +171,18 @@
     if (_userDelegate && [_userDelegate respondsToSelector:@selector(defaultAvatar)]) {
         return _userDelegate.defaultAvatar;
     }
-    
+    if (self.type == EMConversationTypeChat) {
+        return [UIImage easeUIImageNamed:@"defaultAvatar"];
+    }
+    if (self.type == EMConversationTypeGroupChat) {
+        return [UIImage easeUIImageNamed:@"groupChat"];
+    }
+    if (self.type == EMConversationTypeChatRoom) {
+        return [UIImage easeUIImageNamed:@"chatRoom"];
+    }
+    if ([self.easeId isEqualToString:EMSYSTEMNOTIFICATIONID]) {
+        return [UIImage easeUIImageNamed:@"systemNoti"];;
+    }
     return nil;
 }
 
@@ -180,6 +209,9 @@
         return str.length != 0 ? str : _conversation.showName;
     }
     
+    if ([self.easeId isEqualToString:EMSYSTEMNOTIFICATIONID]) {
+        return @"系统通知";
+    }
     return _conversation.showName;
 }
 

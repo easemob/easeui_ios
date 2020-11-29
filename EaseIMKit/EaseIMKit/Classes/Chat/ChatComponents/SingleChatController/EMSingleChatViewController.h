@@ -18,9 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*
 - (void)sendCallEndMsg:(NSNotification*)noti;
-
-- (void)insertLocationCallRecord:(NSNotification*)noti;
 */
+ 
 @end
 
 NS_ASSUME_NONNULL_END
