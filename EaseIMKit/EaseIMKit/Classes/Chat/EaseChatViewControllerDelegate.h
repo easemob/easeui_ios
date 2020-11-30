@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EaseUserDataDelegate.h"
+#import "EaseUserDelegate.h"
 #import "EaseExtMenuModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -23,21 +23,21 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @param   huanxinID        环信id
  */
-- (id<EaseUserData>)userData:(NSString*)huanxinID;
+- (id<EaseUserDelegate>)userData:(NSString*)huanxinID;
 
 /**
  * 头像点击事件 （返回是否需要执行默认点击事件） 默认 NO
  *
  * @param   userData        当前点击的头像所指向的用户资料
  */
-- (BOOL)avatarDidSelected:(id<EaseUserData>)userData;
+- (BOOL)avatarDidSelected:(id<EaseUserDelegate>)userData;
 
 /**
  * 头像长按事件 （返回是否需要执行默认长按事件） 默认  NO
  *
  * @param   userData        当前长按的头像所指向的用户资料
  */
-- (BOOL)avatarDidLongPress:(id<EaseUserData>)userData;
+- (BOOL)avatarDidLongPress:(id<EaseUserDelegate>)userData;
 
 /**
  * 群通知回执详情 （返回是否需要默认回执详情页）默认 YES
@@ -73,10 +73,16 @@ NS_ASSUME_NONNULL_BEGIN
  * 输入区键盘输入变化回调  例：@群成员
  */
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+
 /**
- * 对方输入状态（单聊可用）
- */
-- (void)isEditing:(BOOL)isEditing;
+ 对方正在输入
+*/
+- (void)beginTyping;
+
+/**
+ 对方停止
+*/
+- (void)endTyping;
 
 
 /* 消息事件回调 */
@@ -87,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   message          当前点击的消息
  * @param   userData        当前点击的消息携带的用户资料
  */
-- (BOOL)didSelectMessageItem:(EMMessage*)message userData:(id<EaseUserData>)userData;
+- (BOOL)didSelectMessageItem:(EMMessage*)message userData:(id<EaseUserDelegate>)userData;
 
 /**
  * 当前所长按消息的扩展区数据模型组

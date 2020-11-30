@@ -30,7 +30,7 @@
 @implementation EaseContactsViewController
 @synthesize viewModel = _viewModel;
 
-- (instancetype)initWithViewModel:(EaseContactsViewModel *)model {
+- (instancetype)initWithModel:(EaseContactsViewModel *)model {
     if (self = [super initWithModel:model]) {
         _viewModel = model;
     }

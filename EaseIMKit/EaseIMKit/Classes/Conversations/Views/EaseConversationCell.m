@@ -166,8 +166,8 @@
         img = _model.defaultAvatar;
     }
     
-    if (model.defaultAvatar && !img) {
-        img = model.defaultAvatar;
+    if (_viewModel.defaultAvatarImage && !img) {
+        img = _viewModel.defaultAvatarImage;
     }
     
     if ([_model respondsToSelector:@selector(avatarURL)]) {
