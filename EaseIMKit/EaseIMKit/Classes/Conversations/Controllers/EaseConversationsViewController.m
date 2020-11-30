@@ -10,7 +10,6 @@
 #import "EaseConversationViewModel.h"
 #import "EaseConversationCell.h"
 #import "EaseConversationModel.h"
-#import "EMConversation+EaseUI.h"
 
 @interface EaseConversationsViewController ()
 <
@@ -50,6 +49,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshTabView)
                                                  name:CONVERSATIONLIST_UPDATE object:nil];
+    //本地通话记录
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTabView) name:EMCOMMMUNICATE_RECORD object:nil];
 }
 
 - (void)dealloc
@@ -85,9 +86,14 @@
     
     cell.model = model;
     if (model.isTop) {
-        cell.backgroundColor = UIColor.redColor;
-    }else {
-        cell.backgroundColor = _viewModel.cellBgColor;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [cell setSelected:YES animated:YES];
+        });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [cell setSelected:NO animated:YES];
+            cell.backgroundColor = self->_viewModel.cellBgColor;
+        });
     }
     
     return cell;
@@ -131,6 +137,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    EaseConversationModel *model = [self.dataAry objectAtIndex:indexPath.row];
+    if (!model.isTop) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
     if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:didSelectRowAtIndexPath:)]) {
         return [self.delegate easeTableView:tableView didSelectRowAtIndexPath:indexPath];
     }

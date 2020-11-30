@@ -10,18 +10,23 @@
 #import "EaseMessageModel.h"
 
 @interface EMSingleChatViewController () <EMChatBarDelegate>
-//Typing
-@property (nonatomic) BOOL isTyping;
-@property (nonatomic) BOOL enableTyping;
+{
+    long long _previousChangedTimeStamp;
+}
+@property (nonatomic, strong) NSTimer *receiveTypingTimer;
+@property (nonatomic, assign) NSInteger receiveTypingCountDownNum;
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
+@property (nonatomic, strong) NSDate *currentData;
 @end
 
 @implementation EMSingleChatViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel
+- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel
 {
-    self = [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseViewModel *)viewModel];
+    self = [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseChatViewModel *)viewModel];
     if (self) {
+        _receiveTypingCountDownNum = 0;
+        _previousChangedTimeStamp = 0;
         _msgQueue = dispatch_queue_create("singlemessage.com", NULL);
     }
     return self;
@@ -30,11 +35,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    /*
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(insertLocationCallRecord:) name:EMCOMMMUNICATE_RECORD object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(insertLocationCallRecord:) name:EMCOMMMUNICATE_RECORD object:nil];
+    /*
     //单聊主叫方才能发送通话记录信息(远端通话记录)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendCallEndMsg:) name:EMCOMMMUNICATE object:nil];*/
+}
+
+- (void)dealloc
+{
+    [self stopReceiveTypingTimer];
 }
 
 #pragma mark - EMChatManagerDelegate
@@ -73,37 +83,34 @@
 //收到 CMD 消息
 - (void)cmdMessagesDidReceive:(NSArray *)aCmdMessages
 {
-    __weak typeof(self) weakself = self;
-    dispatch_async(self.msgQueue, ^{
-        NSString *conId = weakself.currentConversation.conversationId;
-        for (EMMessage *message in aCmdMessages) {
-            
-            if (![conId isEqualToString:message.conversationId]) {
-                continue;
-            }
-            
-            EMCmdMessageBody *body = (EMCmdMessageBody *)message.body;
-            BOOL sessionObjectisEditing = NO;
-            if ([body.action isEqualToString:MSG_TYPING_BEGIN]) {
-                sessionObjectisEditing = YES;
-            }
-            if (self.delegate && [self.delegate respondsToSelector:@selector(isEditing:)]) {
-                [self.delegate isEditing:sessionObjectisEditing];
-            }
+    NSString *conId = self.currentConversation.conversationId;
+    for (EMMessage *message in aCmdMessages) {
+        if (![conId isEqualToString:message.conversationId]) {
+            continue;
         }
-    });
+        EMCmdMessageBody *body = (EMCmdMessageBody *)message.body;
+        if ([body.action isEqualToString:MSG_TYPING_BEGIN]) {
+            [self startReceiveTypingTimer];
+        }
+    }
 }
 
 #pragma mark - EMChatBarDelegate
 
 - (void)inputViewDidChange:(EaseTextView *)aInputView
 {
-    if (self.enableTyping) {
-        if (!self.isTyping) {
-            self.isTyping = YES;
-            [self _sendBeginTyping];
-        }
+    long long currentTimestamp = [self getCurrentTimestamp];
+    if ((currentTimestamp - _previousChangedTimeStamp) > 5) {
+        [self _sendBeginTyping];
+        _previousChangedTimeStamp = currentTimestamp;
     }
+}
+
+- (long long)getCurrentTimestamp
+{
+    self.currentData = [NSDate new];
+    NSTimeInterval timeInterval = [self.currentData timeIntervalSince1970];
+    return [[NSNumber numberWithDouble:timeInterval] longLongValue];
 }
 
 //正在输入状态
@@ -116,25 +123,6 @@
     EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:nil];
     message.chatType = (EMChatType)self.currentConversation.type;
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:nil];
-}
-
-- (void)_sendEndTyping
-{
-    self.isTyping = NO;
-    NSString *from = [[EMClient sharedClient] currentUsername];
-    NSString *to = self.currentConversation.conversationId;
-    EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:MSG_TYPING_END];
-    body.isDeliverOnlineOnly = YES;
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:nil];
-    message.chatType = (EMChatType)self.currentConversation.type;
-    [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:nil];
-}
-
-- (void)keyBoardWillHide:(NSNotification *)note
-{
-//    [self keyBoardWillHide:note];
-//    if (self.enableTyping)
-//        [self _sendEndTyping];
 }
 
 #pragma mark - Action
@@ -151,17 +139,45 @@
 {
     if (aMessage.direction == EMMessageDirectionSend || aMessage.isReadAcked || aMessage.chatType != EMChatTypeChat)
         return NO;
-    
     EMMessageBody *body = aMessage.body;
     if (!aIsMarkRead && (body.type == EMMessageBodyTypeVideo || body.type == EMMessageBodyTypeVoice || body.type == EMMessageBodyTypeImage))
         return NO;
-    
     if (body.type == EMMessageTypeText && [((EMTextMessageBody *)body).text isEqualToString:EMCOMMUNICATE_CALLED_MISSEDCALL] && aMessage.direction == EMMessageDirectionReceive)
         return NO;
         
     return YES;
 }
-/*
+
+#pragma - mark Timer
+
+//接收对方正在输入状态计时
+- (void)startReceiveCountDown
+{
+    --_receiveTypingCountDownNum;
+    if (_receiveTypingCountDownNum <= 0) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(isEditing:)]) {
+            [self.delegate isEditing:NO];
+        }
+    }
+}
+- (void)startReceiveTypingTimer {
+    if (_receiveTypingCountDownNum <= 0) {
+        [self stopReceiveTypingTimer];
+        _receiveTypingTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(startReceiveCountDown) userInfo:nil repeats:YES];
+        [_receiveTypingTimer fire];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(isEditing:)]) {
+            [self.delegate isEditing:YES];
+        }
+    }
+    _receiveTypingCountDownNum = 10;
+}
+- (void)stopReceiveTypingTimer {
+    if (_receiveTypingTimer) {
+        [_receiveTypingTimer invalidate];
+        _receiveTypingTimer = nil;
+    }
+}
+
 //本地通话记录
 - (void)insertLocationCallRecord:(NSNotification*)noti
 {
@@ -173,7 +189,7 @@
         self.moreMsgId = message.messageId;
     [self refreshTableView];
 }
-
+/*
 //通话记录消息
 - (void)sendCallEndMsg:(NSNotification*)noti
 {
@@ -195,6 +211,6 @@
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
         [self.currentConversation deleteMessageWithId:message.messageId error:nil];
     }];
-}
-*/
+}*/
+
 @end

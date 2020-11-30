@@ -28,7 +28,7 @@
 
 - (void)_setupPropertyDefault {
 
-    _avatarType = Circular;
+    _avatarType = RoundedCorner;
     _avatarSize = CGSizeMake(48, 48);
     _avatarEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     
@@ -61,8 +61,6 @@
     _cellSeparatorColor = [UIColor colorWithHexString:@"#F3F3F3"];
     
     _bgView = [self defaultBgView];
-    
-    _defaultAvatarImage = [UIImage easeUIImageNamed:@"defaultAvatar"];
 }
 
 - (UIView *)defaultBgView {

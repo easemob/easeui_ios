@@ -169,7 +169,9 @@
     if (menuItemModel.itemDidSelectedHandle) {
         menuItemModel.itemDidSelectedHandle(menuItemModel.funcDesc, YES);
     }
-    [self removeFromSuperview];
+    if (_menuViewModel.type != ExtTypeChatBar) {
+        [self removeFromSuperview];
+    }
 }
 
 @end
@@ -204,7 +206,7 @@
     [self.toolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_top);
         make.width.mas_equalTo(@(_cellLonger));
-        make.height.mas_equalTo(@(_cellLonger));
+        make.height.mas_equalTo(@(_cellLonger - 10));
         make.left.equalTo(self.contentView);
     }];
     

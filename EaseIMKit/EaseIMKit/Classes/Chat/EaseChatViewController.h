@@ -8,24 +8,25 @@
 
 #import "EMChatBar.h"
 #import "EaseHeaders.h"
-#import "EaseViewModel.h"
-#import "EaseChatViewControllerProtocol.h"
+#import "EaseChatViewModel.h"
+#import "EaseChatViewControllerDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseChatViewController : UIViewController <UIDocumentInteractionControllerDelegate>
 
-@property (nonatomic, weak) id<EaseChatViewControllerProtocol> delegate;
+@property (nonatomic, weak) id<EaseChatViewControllerDelegate> delegate;
 
 @property (nonatomic, strong) EMConversation *currentConversation;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
 @property (nonatomic) NSTimeInterval msgTimelTag;   //消息时间格式化
 
 //实例化聊天控制器
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel;
+- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel;
 //重置聊天控制器
-- (void)resetChatVCWithViewModel:(EaseViewModel *)viewModel;
+- (void)resetChatVCWithViewModel:(EaseChatViewModel *)viewModel;
 
 //发送文本消息
 - (void)sendTextAction:(NSString *)aText ext:(NSDictionary * __nullable)aExt;

@@ -10,7 +10,7 @@
 
 #import "EaseMessageModel.h"
 #import "EaseHeaders.h"
-#import "EaseViewModel.h"
+#import "EaseChatViewModel.h"
 #import "UIImage+EaseUI.h"
 
 @interface EMMessageBubbleView : UIImageView
@@ -21,11 +21,11 @@
 
 @property (nonatomic, strong) EaseMessageModel *model;
 
-@property (nonatomic, strong) EaseViewModel *viewModel;
+@property (nonatomic, strong) EaseChatViewModel *viewModel;
 
 - (instancetype)initWithDirection:(EMMessageDirection)aDirection
                              type:(EMMessageType)aType
-                        viewModel:(EaseViewModel *)viewModel;
+                        viewModel:(EaseChatViewModel *)viewModel;
 
 - (void)setupBubbleBackgroundImage;
 

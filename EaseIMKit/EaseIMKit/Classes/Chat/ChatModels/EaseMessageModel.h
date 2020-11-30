@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "EaseHeaders.h"
-#import "EaseUserDataProtocol.h"
+#import "EaseUserDataDelegate.h"
 
 typedef NS_ENUM(NSInteger, EMMessageType) {
     EMMessageTypeText = 1,
@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, EMMessageType) {
     EMMessageTypeExtCall,
     EMMessageTypeExtNewFriend,
     EMMessageTypeExtAddGroup,
+    EMMessageTypePictMixText,
     EMMessageTypeCustom,
 };
 
@@ -38,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) EMMessageType type;
 
-@property (nonatomic) BOOL isPlaying;//去掉
+@property (nonatomic) BOOL isPlaying;
 
 - (instancetype)initWithEMMessage:(EMMessage *)aMsg;
 

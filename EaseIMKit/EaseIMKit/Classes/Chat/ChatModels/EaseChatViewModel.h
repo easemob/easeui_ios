@@ -1,5 +1,5 @@
 //
-//  EaseViewModel.h
+//  EaseChatViewModel.h
 //  EaseIMKit
 //
 //  Created by 娜塔莎 on 2020/11/17.
@@ -30,7 +30,7 @@ typedef enum {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EaseViewModel : NSObject
+@interface EaseChatViewModel : NSObject
 
 @property (nonatomic) BOOL defaultLongPressViewIsNeededForCustomCell; //自定义cell是否需要默认'长按'视图
 @property (nonatomic) BOOL isFetchHistoryMessagesFromServer; //是否从服务器获取历史消息

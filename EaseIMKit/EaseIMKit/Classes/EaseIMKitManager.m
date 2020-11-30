@@ -44,7 +44,6 @@ static EaseIMKitManager *easeIMKit = nil;
     if (self) {
         _delegates = (EMMulticastDelegate<EaseIMKitManagerDelegate> *)[[EMMulticastDelegate alloc] init];
         _currentConversationId = @"";
-        _currentUnreadCount = [self currentUnreadCount];
         _msgQueue = dispatch_queue_create("easemessage.com", NULL);
     }
     [[EMClient sharedClient] addMultiDevicesDelegate:self delegateQueue:nil];
@@ -160,23 +159,34 @@ static EaseIMKitManager *easeIMKit = nil;
         return;
     }
     NSString *notificationStr = nil;
+    NSString *notiType = nil;
     if (reason == ContanctsRequestDidReceive) {
         notificationStr = [NSString stringWithFormat:@"好友申请来自：%@",conversationId];
+        notiType = SYSTEM_NOTI_TYPE_CONTANCTSREQUEST;
     }
     if (reason == GroupInvitationDidReceive) {
         notificationStr = [NSString stringWithFormat:@"加群邀请来自：%@",userName];
+        notiType = SYSTEM_NOTI_TYPE_GROUPINVITATION;
     }
     if (reason == JoinGroupRequestDidReceive) {
         notificationStr = [NSString stringWithFormat:@"加群申请来自：%@",userName];
+        notiType = SYSTEM_NOTI_TYPE_JOINGROUPREQUEST;
     }
-    notificationStr = [self requestDidReceiveShowMessage:conversationId requestUser:userName reason:reason];
+    if (self.systemNotiDelegate && [self.systemNotiDelegate respondsToSelector:@selector(requestDidReceiveShowMessage:requestUser:reason:)]) {
+        notificationStr = [self.systemNotiDelegate requestDidReceiveShowMessage:conversationId requestUser:userName reason:reason];
+    }
     EMTextMessageBody *body = [[EMTextMessageBody alloc]initWithText:notificationStr];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:EMSYSTEMNOTIFICATIONID from:EMSYSTEMNOTIFICATIONID to:EMClient.sharedClient.currentUsername body:body ext:nil];
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:EMSYSTEMNOTIFICATIONID from:userName to:EMClient.sharedClient.currentUsername body:body ext:nil];
     message.timestamp = [self getLatestMsgTimestamp];
     message.isRead = NO;
     message.chatType = chatType;
-    EMConversation *notiConversation = [[EMClient sharedClient].chatManager getConversation:message.conversationId type:-1 createIfNotExist:YES];
-    NSDictionary *ext = [self requestDidReceiveConversationExt:conversationId requestUser:userName reason:reason];
+    EMConversation *notiConversation = [[EMClient sharedClient].chatManager getConversation:message.conversationId type:EMConversationTypeChat createIfNotExist:YES];
+    NSDictionary *ext = nil;
+    if (self.systemNotiDelegate && [self.systemNotiDelegate respondsToSelector:@selector(requestDidReceiveConversationExt:requestUser:reason:)]) {
+        ext = [self.systemNotiDelegate requestDidReceiveConversationExt:conversationId requestUser:userName reason:reason];
+    } else {
+        ext = @{SYSTEM_NOTI_TYPE:notiType};
+    }
     [notiConversation setExt:ext];
     [notiConversation insertMessage:message error:nil];
     [self conversationsUnreadCount];
@@ -205,7 +215,6 @@ static EaseIMKitManager *easeIMKit = nil;
     }
     message.chatType = (EMChatType)conversation.type;
     message.isRead = YES;
-    message.timestamp = [self getLatestMsgTimestamp];
     [conversation insertMessage:message error:nil];
     //刷新会话列表
     [[NSNotificationCenter defaultCenter] postNotificationName:CONVERSATIONLIST_UPDATE object:nil];
@@ -214,8 +223,6 @@ static EaseIMKitManager *easeIMKit = nil;
 //最新消息时间
 - (long long)getLatestMsgTimestamp
 {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSDate *notiTime = [NSDate date];
     NSTimeInterval notiTimeInterval = [notiTime timeIntervalSince1970];
     return [[NSNumber numberWithDouble:notiTimeInterval] longLongValue];
@@ -277,18 +284,6 @@ static EaseIMKitManager *easeIMKit = nil;
         _currentUnreadCount -= conversation.unreadMessagesCount;
         [self coversationsUnreadCountUpdate:_currentUnreadCount];
     }
-}
-
-//当前未读总数    (初始化调用)
-- (NSInteger)currentUnreadCount
-{
-    NSInteger unreadCount = 0;
-    NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
-    for (EMConversation *conversation in conversationList) {
-        unreadCount += conversation.unreadMessagesCount;
-    }
-    [self coversationsUnreadCountUpdate:unreadCount];
-    return unreadCount;
 }
 
 //未读总数变化    （插一条未读信息到会话）

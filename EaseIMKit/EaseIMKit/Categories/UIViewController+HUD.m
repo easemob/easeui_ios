@@ -37,8 +37,8 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
 
 - (void)showHint:(NSString *)hint
 {
-    UIView *view = [[UIApplication sharedApplication].delegate window];
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+    UIWindow *win = [[[UIApplication sharedApplication] windows] firstObject];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:win animated:YES];
     hud.userInteractionEnabled = NO;
     // Configure for text only and offset down
     hud.mode = MBProgressHUDModeText;

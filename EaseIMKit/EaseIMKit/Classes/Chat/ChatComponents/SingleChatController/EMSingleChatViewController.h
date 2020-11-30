@@ -8,19 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "EaseChatViewController.h"
-#import "EaseViewModel.h"
+#import "EaseChatViewModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EMSingleChatViewController : EaseChatViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel;
+- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel;
 
 /*
 - (void)sendCallEndMsg:(NSNotification*)noti;
-
-- (void)insertLocationCallRecord:(NSNotification*)noti;
 */
+ 
 @end
 
 NS_ASSUME_NONNULL_END

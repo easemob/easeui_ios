@@ -23,9 +23,9 @@
 
 @implementation EMGroupChatViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseViewModel *)viewModel
+- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel
 {
-    return [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseViewModel *)viewModel];
+    return [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseChatViewModel *)viewModel];
 }
 
 - (void)viewDidLoad {

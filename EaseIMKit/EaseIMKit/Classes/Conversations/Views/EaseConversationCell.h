@@ -25,5 +25,4 @@
 
 - (void)resetViewModel:(EaseConversationViewModel *)aViewModel;
 
-
 @end
