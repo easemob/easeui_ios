@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "EaseHeaders.h"
-#import "EaseUserDataDelegate.h"
+#import "EaseUserDelegate.h"
 
 typedef NS_ENUM(NSInteger, EMMessageType) {
     EMMessageTypeText = 1,
@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseMessageModel : NSObject
 
-@property (nonatomic) id<EaseUserData> userDataDelegate;
+@property (nonatomic) id<EaseUserDelegate> userDataDelegate;
 
 @property (nonatomic, strong) EMMessage *message;
 

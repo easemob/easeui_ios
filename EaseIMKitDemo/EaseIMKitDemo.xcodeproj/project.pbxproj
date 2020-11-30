@@ -15,7 +15,6 @@
 		903EAEB025540B89005E6BB1 /* MineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAEAF25540B89005E6BB1 /* MineViewController.m */; };
 		903EAEB525540B9F005E6BB1 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAEB425540B9F005E6BB1 /* LoginViewController.m */; };
 		90A03A2E254A70E100D57B73 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A2D254A70E100D57B73 /* AppDelegate.m */; };
-		90A03A31254A70E100D57B73 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A30254A70E100D57B73 /* SceneDelegate.m */; };
 		90A03A34254A70E100D57B73 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A33254A70E100D57B73 /* ViewController.m */; };
 		90A03A37254A70E100D57B73 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A35254A70E100D57B73 /* Main.storyboard */; };
 		90A03A39254A70E200D57B73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A38254A70E200D57B73 /* Assets.xcassets */; };
@@ -41,8 +40,6 @@
 		90A03A29254A70E100D57B73 /* EaseIMKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EaseIMKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90A03A2C254A70E100D57B73 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		90A03A2D254A70E100D57B73 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		90A03A2F254A70E100D57B73 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
-		90A03A30254A70E100D57B73 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		90A03A32254A70E100D57B73 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		90A03A33254A70E100D57B73 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		90A03A36254A70E100D57B73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -170,8 +167,6 @@
 				903EAE7525540374005E6BB1 /* Classes */,
 				90A03A2C254A70E100D57B73 /* AppDelegate.h */,
 				90A03A2D254A70E100D57B73 /* AppDelegate.m */,
-				90A03A2F254A70E100D57B73 /* SceneDelegate.h */,
-				90A03A30254A70E100D57B73 /* SceneDelegate.m */,
 				90A03A32254A70E100D57B73 /* ViewController.h */,
 				90A03A33254A70E100D57B73 /* ViewController.m */,
 				90A03A35254A70E100D57B73 /* Main.storyboard */,
@@ -304,7 +299,6 @@
 				903EAEB525540B9F005E6BB1 /* LoginViewController.m in Sources */,
 				903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */,
 				90A03A3F254A70E200D57B73 /* main.m in Sources */,
-				90A03A31254A70E100D57B73 /* SceneDelegate.m in Sources */,
 				90A18676256B9EE500074CD3 /* DemoUserModel.m in Sources */,
 				90146CF1256CB0CC00A8D524 /* ContactModel.m in Sources */,
 			);

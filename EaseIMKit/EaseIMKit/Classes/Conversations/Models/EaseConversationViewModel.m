@@ -14,6 +14,7 @@
 @synthesize cellBgColor = _cellBgColor;
 @synthesize cellSeparatorInset = _cellSeparatorInset;
 @synthesize cellSeparatorColor = _cellSeparatorColor;
+@synthesize canRefresh = _canRefresh;
 
 - (instancetype)init
 {
@@ -28,6 +29,8 @@
 
 - (void)_setupPropertyDefault {
 
+    _canRefresh = NO;
+    
     _avatarType = RoundedCorner;
     _avatarSize = CGSizeMake(48, 48);
     _avatarEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
@@ -61,6 +64,8 @@
     _cellSeparatorColor = [UIColor colorWithHexString:@"#F3F3F3"];
     
     _bgView = [self defaultBgView];
+    
+    _defaultAvatarImage = [UIImage easeUIImageNamed:@"defaultAvatar"];
 }
 
 - (UIView *)defaultBgView {

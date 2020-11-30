@@ -268,8 +268,8 @@
     if (model.direction == EMMessageDirectionSend) {
         [self.statusView setSenderStatus:model.message.status isReadAcked:model.message.isReadAcked];
     } else {
-        if (model.userDataDelegate.Nickname && [model.userDataDelegate.Nickname length] != 0) {
-            self.nameLabel.text = model.userDataDelegate.Nickname;
+        if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(showName)]) {
+            self.nameLabel.text = model.userDataDelegate.showName;
         } else {
             self.nameLabel.text = model.message.from;
         }
@@ -282,8 +282,8 @@
             else self.statusView.hidden = YES;
         }
     }
-    if (model.userDataDelegate.avatarImg) {
-        _avatarView.image = model.userDataDelegate.avatarImg;
+    if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(defaultAvatar)]) {
+        _avatarView.image = model.userDataDelegate.defaultAvatar;
     } else {
         _avatarView.image = [UIImage easeUIImageNamed:@"defaultAvatar"];
     }

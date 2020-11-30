@@ -676,7 +676,7 @@
             model = [[EaseMessageModel alloc]init];
         }
         if (self.delegate && [self.delegate respondsToSelector:@selector(userData:)]) {
-            id<EaseUserData> userData = [self.delegate userData:msg.from];
+            id<EaseUserDelegate> userData = [self.delegate userData:msg.from];
             model.userDataDelegate = userData;
         }
         [formated addObject:model];

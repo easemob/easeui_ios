@@ -9,6 +9,7 @@
 #import <Hyphenate/Hyphenate.h>
 #import "EaseBaseTableViewController.h"
 #import "EMConversation+EaseUI.h"
+#import "EaseConversationViewModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EaseConversationsViewController : EaseBaseTableViewController
 @property (nonatomic, strong) NSMutableArray *dataAry;
 @property (nonatomic) id <EaseConversationsViewControllerDelegate> delegate;
+- (instancetype)initWithModel:(EaseConversationViewModel *)aModel;
 @end
 
 NS_ASSUME_NONNULL_END
