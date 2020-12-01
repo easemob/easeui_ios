@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MWPhotoBrowser/MWPhotoBrowser.h>
+#import "EasePhotoBrowser.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
