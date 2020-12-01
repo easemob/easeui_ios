@@ -1,5 +1,6 @@
 PODS:
   - EaseIMKit (0.0.1):
+    - EMVoiceConvert
     - FLAnimatedImage (~> 1.0)
     - Hyphenate (~> 3.7.2)
     - Masonry
@@ -7,6 +8,7 @@ PODS:
     - MJRefresh
     - SDWebImage (~> 4.0)
     - SDWebImage/GIF
+  - EMVoiceConvert (0.0.6)
   - FLAnimatedImage (1.0.12)
   - Hyphenate (3.7.2)
   - Masonry (1.1.0)
@@ -25,6 +27,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - EMVoiceConvert
     - FLAnimatedImage
     - Hyphenate
     - Masonry
@@ -37,7 +40,8 @@ EXTERNAL SOURCES:
     :path: "./EaseIMKit"
 
 SPEC CHECKSUMS:
-  EaseIMKit: bc35fccdeb508e73455fafe1f236a0960d0d83d1
+  EaseIMKit: 98ebd0b2420139b6ae61c1de02fa69c9a9b470f3
+  EMVoiceConvert: e52b9918199a8f1d1ad3041e71b569a9bc165bb5
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Hyphenate: a9da397810e08c4b3173a5c8f04868165ec48b9c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
@@ -47,4 +51,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: e526f6f75d2397ef72c6cd89b428516513dd52d0
 
-COCOAPODS: 1.10.0.beta.2
+COCOAPODS: 1.10.0

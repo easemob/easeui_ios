@@ -4,7 +4,6 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '11.0'
 
-  
   s.license = 'MIT'
   s.summary = 'easemob im sdk UIKit'
   s.homepage = 'https://github.com/dujiepeng/EaseIMKit'
@@ -14,6 +13,8 @@ Pod::Spec.new do |s|
                :submodules => true
   }
   
+  s.xcconfig     = {'OTHER_LDFLAGS' => '-ObjC'}
+  s.public_header_files = 'EaseIMKit/Public/**/*.h'
   s.description = 'easemob sdk ui kit'
   s.requires_arc = true
   s.source_files = 'EaseIMKit/**/*.{h,m,mm}'
@@ -21,13 +22,6 @@ Pod::Spec.new do |s|
     'EaseIMKit' => ['EaseIMKit/**/**/*.{png,jpg,jpeg,gif}']
   }
 
-  s.vendored_libraries = [
-      'EaseIMKit/libs/VoiceConvert/libopencore-amrnb.a',
-      'EaseIMKit/libs/VoiceConvert/libopencore-amrwb.a'
-    ]
-    
-#  s.static_framework = false
-  s.libraries = 'stdc++'
   s.dependency 'Hyphenate', '~> 3.7.2'
   s.dependency 'Masonry'
   s.dependency 'MJRefresh'
@@ -35,5 +29,7 @@ Pod::Spec.new do |s|
   s.dependency 'SDWebImage', '~> 4.0'
   s.dependency 'SDWebImage/GIF'
   s.dependency 'FLAnimatedImage', '~> 1.0'
+  s.dependency 'EMVoiceConvert'
+  
   
 end
