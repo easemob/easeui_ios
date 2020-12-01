@@ -4,7 +4,6 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '11.0'
 
-  
   s.license = 'MIT'
   s.summary = 'easemob im sdk UIKit'
   s.homepage = 'https://github.com/dujiepeng/EaseIMKit'
@@ -14,13 +13,14 @@ Pod::Spec.new do |s|
                :submodules => true
   }
   
+  s.xcconfig     = {'OTHER_LDFLAGS' => '-ObjC'}
+  s.public_header_files = 'EaseIMKit/Public/**/*.h'
   s.description = 'easemob sdk ui kit'
   s.requires_arc = true
   s.source_files = 'EaseIMKit/**/*.{h,m,mm}'
   s.resource_bundles = {
     'EaseIMKit' => ['EaseIMKit/**/**/*.{png,jpg,jpeg,gif}']
   }
-  
   s.libraries = 'stdc++'
   s.dependency 'Hyphenate', '~> 3.7.2'
   s.dependency 'Masonry'

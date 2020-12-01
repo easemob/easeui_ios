@@ -341,7 +341,7 @@ int EM_DecodeAMRFileToWAVEFile(const char* pchAMRFileName, const char* pchWAVEFi
 	WriteWAVEFileHeader(fpwave, nFrameCount);
 	
 	/* init decoder */
-    destate = Decoder_Interface_init();
+	destate = Decoder_Interface_init();
 	
 	// Read the first frame as a reference frame
 	memset(amrFrame, 0, MAX_AMR_FRAME_SIZE);
