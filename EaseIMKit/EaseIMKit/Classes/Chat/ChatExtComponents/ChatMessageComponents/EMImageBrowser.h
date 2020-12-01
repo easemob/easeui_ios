@@ -6,7 +6,8 @@
 //  Copyright © 2019 XieYajie. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <MWPhotoBrowser/MWPhotoBrowser.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -7,6 +7,9 @@
 //
 
 #import "EMChatroomViewController.h"
+#import "EaseAlertController.h"
+#import "EaseAlertView.h"
+#import "UIViewController+HUD.h"
 
 @interface EMChatroomViewController ()
 

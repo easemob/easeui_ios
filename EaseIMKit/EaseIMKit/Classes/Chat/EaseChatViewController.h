@@ -6,8 +6,8 @@
 //  Update © 2020 zhangchong. All rights reserved.
 //
 
-#import "EMChatBar.h"
-#import "EaseHeaders.h"
+
+
 #import "EaseChatViewModel.h"
 #import "EaseChatViewControllerDelegate.h"
 

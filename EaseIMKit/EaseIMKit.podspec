@@ -14,15 +14,18 @@ Pod::Spec.new do |s|
   }
   
   s.xcconfig     = {'OTHER_LDFLAGS' => '-ObjC'}
-  s.public_header_files = 'EaseIMKit/Public/**/*.h'
+  
   s.description = 'easemob sdk ui kit'
   s.requires_arc = true
-  s.source_files = 'EaseIMKit/**/*.{h,m,mm}'
+  #s.source_files = 'EaseIMKit/**/*.{h,m,mm}'
+  #s.public_header_files = 'EaseIMKit/Public/**/*.h'
   s.resource_bundles = {
     'EaseIMKit' => ['EaseIMKit/**/**/*.{png,jpg,jpeg,gif}']
   }
+  
+#  s.static_framework = false
   s.libraries = 'stdc++'
-  s.dependency 'Hyphenate', '~> 3.7.2'
+  s.dependency 'Hyphenate'
   s.dependency 'Masonry'
   s.dependency 'MJRefresh'
   s.dependency 'MWPhotoBrowser'

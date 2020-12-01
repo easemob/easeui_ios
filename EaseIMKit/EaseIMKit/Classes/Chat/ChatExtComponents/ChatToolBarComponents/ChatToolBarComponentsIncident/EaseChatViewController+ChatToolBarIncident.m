@@ -13,6 +13,9 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "EMLocationViewController.h"
+#import "EaseAlertController.h"
+#import "EaseAlertView.h"
+#import "UIViewController+HUD.h"
 
 @implementation EaseChatViewController (ChatToolBarIncident)
 
@@ -250,26 +253,26 @@ static const void *imagePickerKey = &imagePickerKey;
 
 - (void)chatToolBarComponentSealRtcAction
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    __weak typeof(self) weakself = self;
-    if (self.currentConversation.type == EMConversationTypeChat) {
-        [alertController addAction:[UIAlertAction actionWithTitle:@"视频通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:weakself.currentConversation.conversationId, CALL_TYPE:@(EMCallTypeVideo)}];
-        }]];
-        [alertController addAction:[UIAlertAction actionWithTitle:@"语音通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:weakself.currentConversation.conversationId, CALL_TYPE:@(EMCallTypeVoice)}];
-        }]];
-        [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        }]];
-        for (UIAlertAction *alertAction in alertController.actions)
-            [alertAction setValue:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1.0] forKey:@"_titleTextColor"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"didAlert" object:@{@"alert":alertController}];
-        [self presentViewController:alertController animated:YES completion:nil];
-        return;
-    }
-    //群聊/聊天室 多人会议
-    [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKECONFERENCE object:@{CALL_TYPE:@(EMConferenceTypeCommunication), CALL_MODEL:weakself.currentConversation, NOTIF_NAVICONTROLLER:self.navigationController}];
+//    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+//    
+//    __weak typeof(self) weakself = self;
+//    if (self.currentConversation.type == EMConversationTypeChat) {
+//        [alertController addAction:[UIAlertAction actionWithTitle:@"视频通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//            [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:weakself.currentConversation.conversationId, CALL_TYPE:@(EMCallTypeVideo)}];
+//        }]];
+//        [alertController addAction:[UIAlertAction actionWithTitle:@"语音通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//            [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:weakself.currentConversation.conversationId, CALL_TYPE:@(EMCallTypeVoice)}];
+//        }]];
+//        [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        }]];
+//        for (UIAlertAction *alertAction in alertController.actions)
+//            [alertAction setValue:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1.0] forKey:@"_titleTextColor"];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"didAlert" object:@{@"alert":alertController}];
+//        [self presentViewController:alertController animated:YES completion:nil];
+//        return;
+//    }
+//    //群聊/聊天室 多人会议
+//    [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKECONFERENCE object:@{CALL_TYPE:@(EMConferenceTypeCommunication), CALL_MODEL:weakself.currentConversation, NOTIF_NAVICONTROLLER:self.navigationController}];
 }
 
 @end

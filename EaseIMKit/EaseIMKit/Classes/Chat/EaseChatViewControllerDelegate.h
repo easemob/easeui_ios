@@ -5,8 +5,9 @@
 //  Created by 娜塔莎 on 2020/11/25.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "EaseUserDelegate.h"
+#import "EaseMessageModel.h"
 #import "EaseExtMenuModel.h"
 
 NS_ASSUME_NONNULL_BEGIN

@@ -1,0 +1,24 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '11.0'
+
+workspace 'EaseIMKit.xcworkspace'
+
+target 'EaseIMKitDemo' do
+  platform :ios, '11.0'
+  project '../EaseIMKitDemo/EaseIMKitDemo.xcodeproj'
+  pod 'Masonry'
+  pod 'Hyphenate'
+  pod 'EaseIMKit', :path => './'
+end
+
+
+target 'EaseIMKit' do
+  # Pods for EaseIMKit
+  pod 'Hyphenate'
+  pod 'Masonry'
+  pod 'MWPhotoBrowser'
+  pod 'MBProgressHUD'
+  pod 'FLAnimatedImage'
+  pod 'EMVoiceConvert'
+
+end

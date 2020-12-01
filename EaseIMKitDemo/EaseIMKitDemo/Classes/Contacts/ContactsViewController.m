@@ -7,9 +7,9 @@
 //
 
 #import "ContactsViewController.h"
-#import "EaseChatViewController.h"
 #import "ContactModel.h"
-#import <EaseIMKit.h>
+#import <Masonry/Masonry.h>
+#import <EaseIMKit/EaseIMKit.h>
 
 @interface ContactsViewController () <EaseContactsViewControllerDelegate>
 {

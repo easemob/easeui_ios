@@ -16,8 +16,6 @@
 #import "EaseDefines.h"
 #import "EaseColorDefine.h"
 
-#import "NSObject+Alert.h"
-
 #import "EaseAlertController.h"
 #import "EaseAlertView.h"
 

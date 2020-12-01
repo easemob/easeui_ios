@@ -6,6 +6,7 @@
 //  Copyright © 2019 娜塔莎. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "LoadingCALayer.h"
 static CGFloat const kLineWidth = 2;
 

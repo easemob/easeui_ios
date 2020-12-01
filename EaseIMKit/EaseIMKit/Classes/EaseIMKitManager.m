@@ -9,6 +9,7 @@
 #import "EaseConversationsViewController.h"
 #import "EaseIMKitManager+ExtFunction.h"
 #import "EMMulticastDelegate.h"
+#import "EaseDefines.h"
 
 static dispatch_once_t onceToken;
 static EaseIMKitManager *easeIMKit = nil;

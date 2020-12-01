@@ -15,5 +15,5 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import <Hyphenate/Hyphenate.h>
-    #import <EaseIMKit.h>
+    #import <EaseIMKit/EaseIMKit.h>
 #endif

@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 #import <Hyphenate/Hyphenate.h>
 #import "EaseBaseTableViewController.h"
-#import "EMConversation+EaseUI.h"
+
 #import "EaseConversationViewModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
