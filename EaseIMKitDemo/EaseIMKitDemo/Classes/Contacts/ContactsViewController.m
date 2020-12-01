@@ -25,7 +25,7 @@
     EaseContactsViewModel *model = [[EaseContactsViewModel alloc] init];
     model.avatarType = Rectangular;
     model.sectionTitleEdgeInsets= UIEdgeInsetsMake(5, 15, 5, 5);
-    _contactsVC = [[EaseContactsViewController alloc] initWithViewModel:model];
+    _contactsVC = [[EaseContactsViewController alloc] initWithModel:model];
     _contactsVC.customHeaderItems = [self items];
     _contactsVC.delegate = self;
     [self.view addSubview:_contactsVC.view];
