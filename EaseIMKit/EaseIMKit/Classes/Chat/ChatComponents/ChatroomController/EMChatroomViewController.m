@@ -8,7 +8,7 @@
 
 #import "EMChatroomViewController.h"
 
-@interface EMChatroomViewController () <EMChatroomManagerDelegate>
+@interface EMChatroomViewController ()
 
 @end
 
@@ -22,12 +22,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self _joinChatroom];
-    [[EMClient sharedClient].roomManager addDelegate:self delegateQueue:nil];
-}
-
-- (void)dealloc
-{
-    [[EMClient sharedClient].roomManager removeDelegate:self];
 }
 
 #pragma mark - Private

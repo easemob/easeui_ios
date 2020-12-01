@@ -96,16 +96,16 @@
         [self.textImgBtn mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.equalTo(@10);
         }];
-        [self.textImgBtn setImage:[UIImage imageNamed:@"voice"] forState:UIControlStateNormal];
+        [self.textImgBtn setImage:[UIImage easeUIImageNamed:@"voice"] forState:UIControlStateNormal];
     } else if ([[model.message.ext objectForKey:EMCOMMUNICATE_TYPE] isEqualToString:EMCOMMUNICATE_TYPE_VIDEO]) {
         callType = EMCOMMUNICATE_TYPE_VIDEO;
         [self.textImgBtn mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.equalTo(@35);
         }];
         if (self.direction == EMMessageDirectionSend) {
-            [self.textImgBtn setImage:[UIImage imageNamed:@"video-me"] forState:UIControlStateNormal];
+            [self.textImgBtn setImage:[UIImage easeUIImageNamed:@"video-me"] forState:UIControlStateNormal];
         } else {
-            [self.textImgBtn setImage:[UIImage imageNamed:@"video-opposite"] forState:UIControlStateNormal];
+            [self.textImgBtn setImage:[UIImage easeUIImageNamed:@"video-opposite"] forState:UIControlStateNormal];
         }
     }
 }

@@ -74,7 +74,7 @@
         case EMMessageBodyTypeText:
         {
             EMTextMessageBody *body = (EMTextMessageBody *)msg.body;
-            msgStr = [EaseEmojiHelper convertEmoji:body.text];
+            msgStr = body.text;
             EMMessage *lastMessage = [_conversation latestMessage];
             if ([msgStr isEqualToString:EMCOMMUNICATE_CALLER_MISSEDCALL]) {
                 msgStr = @"未接听，点击回拨";
