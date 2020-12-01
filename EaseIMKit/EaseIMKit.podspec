@@ -20,20 +20,14 @@ Pod::Spec.new do |s|
   s.resource_bundles = {
     'EaseIMKit' => ['EaseIMKit/**/**/*.{png,jpg,jpeg,gif}']
   }
-
-  s.vendored_libraries = [
-      'EaseIMKit/libs/VoiceConvert/libopencore-amrnb.a',
-      'EaseIMKit/libs/VoiceConvert/libopencore-amrwb.a'
-    ]
-    
-#  s.static_framework = false
+  
   s.libraries = 'stdc++'
   s.dependency 'Hyphenate', '~> 3.7.2'
   s.dependency 'Masonry'
   s.dependency 'MJRefresh'
-  s.dependency 'MBProgressHUD', '~> 1.1.0'
-  s.dependency 'SDWebImage', '~> 4.0'
-  s.dependency 'SDWebImage/GIF'
-  s.dependency 'FLAnimatedImage', '~> 1.0'
+  s.dependency 'MWPhotoBrowser'
+  s.dependency 'MBProgressHUD'
+  s.dependency 'FLAnimatedImage'
+  s.dependency 'EMVoiceConvert'
   
 end

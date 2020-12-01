@@ -66,13 +66,13 @@
     }];
     
     self.extBtn = [[UIButton alloc] init];
-    [self.extBtn setImage:[UIImage easeUIImageNamed:@"EmojiExt"] forState:UIControlStateNormal];
+    [self.extBtn setImage:[UIImage easeUIImageNamed:@"emojiadd"] forState:UIControlStateNormal];
     
     self.deleteBtn = [[UIButton alloc]init];
     self.deleteBtn.backgroundColor = [UIColor whiteColor];
     [self.deleteBtn setImage:[UIImage easeUIImageNamed:@"deleteEmoticon"] forState:UIControlStateNormal];
     [self.deleteBtn addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
-     
+    
     self.bottomScrollView = [[UIScrollView alloc] init];
     self.bottomScrollView.scrollEnabled = NO;
     self.bottomScrollView.backgroundColor = kColor_LightGray;

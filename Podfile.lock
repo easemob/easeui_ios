@@ -1,23 +1,26 @@
 PODS:
+  - DACircularProgress (2.3.1)
   - EaseIMKit (0.0.1):
-    - FLAnimatedImage (~> 1.0)
+    - EMVoiceConvert
+    - FLAnimatedImage
     - Hyphenate (~> 3.7.2)
     - Masonry
-    - MBProgressHUD (~> 1.1.0)
+    - MBProgressHUD
     - MJRefresh
-    - SDWebImage (~> 4.0)
-    - SDWebImage/GIF
+    - MWPhotoBrowser
+  - EMVoiceConvert (0.0.6)
   - FLAnimatedImage (1.0.12)
   - Hyphenate (3.7.2)
   - Masonry (1.1.0)
-  - MBProgressHUD (1.1.0)
+  - MBProgressHUD (0.9.2)
   - MJRefresh (3.5.0)
-  - SDWebImage (4.4.8):
-    - SDWebImage/Core (= 4.4.8)
-  - SDWebImage/Core (4.4.8)
-  - SDWebImage/GIF (4.4.8):
-    - FLAnimatedImage (~> 1.0)
-    - SDWebImage/Core
+  - MWPhotoBrowser (2.1.2):
+    - DACircularProgress (~> 2.3)
+    - MBProgressHUD (~> 0.9)
+    - "SDWebImage (!= 3.7.2, ~> 3.7)"
+  - SDWebImage (3.8.3):
+    - SDWebImage/Core (= 3.8.3)
+  - SDWebImage/Core (3.8.3)
 
 DEPENDENCIES:
   - EaseIMKit (from `./EaseIMKit`)
@@ -25,11 +28,14 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - DACircularProgress
+    - EMVoiceConvert
     - FLAnimatedImage
     - Hyphenate
     - Masonry
     - MBProgressHUD
     - MJRefresh
+    - MWPhotoBrowser
     - SDWebImage
 
 EXTERNAL SOURCES:
@@ -37,14 +43,17 @@ EXTERNAL SOURCES:
     :path: "./EaseIMKit"
 
 SPEC CHECKSUMS:
-  EaseIMKit: bc35fccdeb508e73455fafe1f236a0960d0d83d1
+  DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
+  EaseIMKit: 47aeca83e56521652c271077247e22fd4013e3b6
+  EMVoiceConvert: e52b9918199a8f1d1ad3041e71b569a9bc165bb5
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Hyphenate: a9da397810e08c4b3173a5c8f04868165ec48b9c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
-  SDWebImage: 783af2c3fa36291a250030c4752ee370a9a51d13
+  MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
+  SDWebImage: a72e880a8fe0f7fc31efe15aaed443c074d2a80c
 
-PODFILE CHECKSUM: e526f6f75d2397ef72c6cd89b428516513dd52d0
+PODFILE CHECKSUM: 689f0533b3b3ac175c106a6cd40c74e91a0c0dd4
 
-COCOAPODS: 1.10.0.beta.2
+COCOAPODS: 1.10.0

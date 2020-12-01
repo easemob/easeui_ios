@@ -6,7 +6,8 @@
 //  Copyright © 2019 XieYajie. All rights reserved.
 //
 
-#import "FLAnimatedImageView+WebCache.h"
+#import <FLAnimatedImage/FLAnimatedImage.h>
+#import <FLAnimatedImage/FLAnimatedImageView.h>
 #import "EMMessageBubbleView.h"
 
 NS_ASSUME_NONNULL_BEGIN

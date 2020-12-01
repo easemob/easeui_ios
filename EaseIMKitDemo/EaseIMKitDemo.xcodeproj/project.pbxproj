@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		33B105F944C924188FA5197C /* Pods_EaseIMKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC90E4743D11D5E4F31C5E3F /* Pods_EaseIMKitDemo.framework */; };
+		0C89474A89F2E5039DC68F31 /* Pods_EaseIMKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF6B5D0C0206024B2BC1EFE5 /* Pods_EaseIMKitDemo.framework */; };
 		3C7B87922563CCD40074F990 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C7B87912563CCD40074F990 /* ChatViewController.m */; };
 		90146CF1256CB0CC00A8D524 /* ContactModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90146CF0256CB0CC00A8D524 /* ContactModel.m */; };
 		903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7925540390005E6BB1 /* ConversationsViewController.m */; };
@@ -48,8 +48,8 @@
 		90A03A3E254A70E200D57B73 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		90A18674256B9EE500074CD3 /* DemoUserModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoUserModel.h; sourceTree = "<group>"; };
 		90A18675256B9EE500074CD3 /* DemoUserModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoUserModel.m; sourceTree = "<group>"; };
+		AF6B5D0C0206024B2BC1EFE5 /* Pods_EaseIMKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EaseIMKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFBBBDBBACBBCAD1DF95BCB9 /* Pods-EaseIMKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKitDemo.release.xcconfig"; path = "../EaseIMKit/Pods/Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo.release.xcconfig"; sourceTree = "<group>"; };
-		FC90E4743D11D5E4F31C5E3F /* Pods_EaseIMKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EaseIMKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33B105F944C924188FA5197C /* Pods_EaseIMKitDemo.framework in Frameworks */,
+				0C89474A89F2E5039DC68F31 /* Pods_EaseIMKitDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,7 +76,7 @@
 		515DD635275E028E6263F6E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FC90E4743D11D5E4F31C5E3F /* Pods_EaseIMKitDemo.framework */,
+				AF6B5D0C0206024B2BC1EFE5 /* Pods_EaseIMKitDemo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -189,7 +189,7 @@
 				90A03A25254A70E100D57B73 /* Sources */,
 				90A03A26254A70E100D57B73 /* Frameworks */,
 				90A03A27254A70E100D57B73 /* Resources */,
-				633E6E27E82B47254877A813 /* [CP] Embed Pods Frameworks */,
+				1BD7B4535F56C2B5FEC185CE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -245,7 +245,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		633E6E27E82B47254877A813 /* [CP] Embed Pods Frameworks */ = {
+		1BD7B4535F56C2B5FEC185CE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
