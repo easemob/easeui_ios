@@ -10,8 +10,8 @@
 
 #import "EaseConversationViewModel.h"
 #import "EaseConversationModel.h"
-#import "EaseBadgeView.h"
 
+@class EaseBadgeView;
 @interface EaseConversationCell : UITableViewCell
 
 @property (nonatomic, strong, readonly) UIImageView *avatarView;

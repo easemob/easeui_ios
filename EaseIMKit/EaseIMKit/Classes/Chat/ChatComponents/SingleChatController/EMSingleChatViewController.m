@@ -7,6 +7,7 @@
 //
 
 #import "EMSingleChatViewController.h"
+#import "EMChatBar.h"
 #import "EaseMessageModel.h"
 
 #define TypingTimerCountNum 10
@@ -183,7 +184,7 @@
     
 }
 - (void)stopReceiveTypingTimer {
-    _receiveTypingCountDownNum == 0;
+    _receiveTypingCountDownNum = 0;
     if (_receiveTypingTimer) {
         [_receiveTypingTimer invalidate];
         _receiveTypingTimer = nil;

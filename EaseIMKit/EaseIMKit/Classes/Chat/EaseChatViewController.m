@@ -8,8 +8,8 @@
 
 #import <AVKit/AVKit.h>
 #import <Photos/Photos.h>
-#import <AVFoundation/AVFoundation.h>
-#import <AssetsLibrary/AssetsLibrary.h>
+//#import <AVFoundation/AVFoundation.h>
+//#import <AssetsLibrary/AssetsLibrary.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "EaseChatViewController.h"
 #import "EMImageBrowser.h"
@@ -21,7 +21,7 @@
 #import "EMMsgTouchIncident.h"
 #import "EaseChatViewController+EMMsgLongPressIncident.h"
 #import "EaseChatViewController+ChatToolBarIncident.h"
-
+#import "EMChatBar.h"
 #import "EMConversation+EaseUI.h"
 #import "EMSingleChatViewController.h"
 #import "EMGroupChatViewController.h"
@@ -29,6 +29,7 @@
 #import "UITableView+Refresh.h"
 #import "EaseIMKitManager+ExtFunction.h"
 #import "UIViewController+ComponentSize.h"
+#import "EaseHeaders.h"
 
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EMMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate>
 {

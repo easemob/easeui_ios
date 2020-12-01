@@ -6,9 +6,11 @@
 //  Update © 2020 zhangchong. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "EaseConversationCell.h"
 #import "EaseDateHelper.h"
-
+#import "EaseBadgeView.h"
+#import <Masonry/Masonry.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @interface EaseConversationCell()

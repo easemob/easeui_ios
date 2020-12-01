@@ -7,8 +7,7 @@
 //
 
 #import "EMImageBrowser.h"
-//#import <MWPhotoBrowser/MWPhotoBrowser.h>
-#import "MWPhotoBrowser.h"
+
 
 #define IMAGE_MAX_SIZE_5k 5120*2880
 

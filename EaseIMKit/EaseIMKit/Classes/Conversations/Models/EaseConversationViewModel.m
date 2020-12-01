@@ -8,6 +8,7 @@
 #import "EaseConversationViewModel.h"
 #import "EaseHeaders.h"
 #import "UIImage+EaseUI.h"
+#import <Masonry/Masonry.h>
 
 @implementation EaseConversationViewModel
 @synthesize bgView = _bgView;

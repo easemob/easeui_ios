@@ -8,6 +8,8 @@
 
 #import "EMLocationViewController.h"
 #import "EaseHeaders.h"
+#import "EaseAlertController.h"
+#import "EaseAlertView.h"
 
 @interface EMLocationViewController ()<MKMapViewDelegate, CLLocationManagerDelegate>
 

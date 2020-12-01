@@ -20,6 +20,20 @@
                ReferencedContainer = "container:EaseIMKitDemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "90A039EF254A6E7600D57B73"
+               BuildableName = "EaseIMKit.framework"
+               BlueprintName = "EaseIMKit"
+               ReferencedContainer = "container:../EaseIMKit/EaseIMKit.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

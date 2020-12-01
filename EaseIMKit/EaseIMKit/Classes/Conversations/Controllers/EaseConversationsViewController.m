@@ -10,6 +10,7 @@
 #import "EaseConversationViewModel.h"
 #import "EaseConversationCell.h"
 #import "EaseConversationModel.h"
+#import "EMConversation+EaseUI.h"
 
 @interface EaseConversationsViewController ()
 <

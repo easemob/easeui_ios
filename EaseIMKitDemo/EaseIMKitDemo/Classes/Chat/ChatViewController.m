@@ -7,9 +7,8 @@
 //
 
 #import "ChatViewController.h"
-//#import <EaseIMKit.h>
-#import "EaseIMKit.h"
-//#import <EaseIMKit/EaseIMKit.h>
+#import <Masonry/Masonry.h>
+#import <EaseIMKit/EaseIMKit.h>
 
 @interface ChatViewController ()
 @property (nonatomic, strong)EaseChatViewController *chatController;

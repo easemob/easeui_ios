@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import "EaseBaseTableViewModel.h"
-#import "Masonry.h"
 #import "EaseEnums.h"
 
 NS_ASSUME_NONNULL_BEGIN

@@ -7,5 +7,6 @@ target 'EaseIMKitDemo' do
   platform :ios, '11.0'
   project 'EaseIMKitDemo/EaseIMKitDemo.xcodeproj'
   pod 'Masonry'
-  pod 'EaseIMKit',  :path => "./EaseIMKit"
+  pod 'Hyphenate'
+#  pod 'EaseIMKit',  :path => "./EaseIMKit"
 end

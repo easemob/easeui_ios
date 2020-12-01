@@ -6,6 +6,7 @@
 //
 
 #import "EaseUserDelegate.h"
+#import <UIKit/UIKit.h>
 #import <Hyphenate/Hyphenate.h>
 NS_ASSUME_NONNULL_BEGIN
 

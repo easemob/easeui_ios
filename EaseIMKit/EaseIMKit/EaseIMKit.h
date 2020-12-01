@@ -22,3 +22,7 @@
 
 // chat
 #import "EaseChatControllerProducter.h"
+#import "EaseChatViewController.h"
+#import "EaseChatViewModel.h"
+
+#import "EaseExtMenuModel.h"

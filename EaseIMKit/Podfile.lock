@@ -3,12 +3,12 @@ PODS:
   - EaseIMKit (0.0.1):
     - EMVoiceConvert
     - FLAnimatedImage
-    - Hyphenate (~> 3.7.2)
+    - Hyphenate
     - Masonry
     - MBProgressHUD
     - MJRefresh
     - MWPhotoBrowser
-  - EMVoiceConvert (0.0.6)
+  - EMVoiceConvert (0.0.5)
   - FLAnimatedImage (1.0.12)
   - Hyphenate (3.7.2)
   - Masonry (1.1.0)
@@ -23,11 +23,16 @@ PODS:
   - SDWebImage/Core (3.8.3)
 
 DEPENDENCIES:
-  - EaseIMKit (from `./EaseIMKit`)
+  - EaseIMKit (from `./`)
+  - EMVoiceConvert
+  - FLAnimatedImage
+  - Hyphenate
   - Masonry
+  - MBProgressHUD
+  - MWPhotoBrowser
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - DACircularProgress
     - EMVoiceConvert
     - FLAnimatedImage
@@ -40,12 +45,12 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   EaseIMKit:
-    :path: "./EaseIMKit"
+    :path: "./"
 
 SPEC CHECKSUMS:
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
-  EaseIMKit: 47aeca83e56521652c271077247e22fd4013e3b6
-  EMVoiceConvert: e52b9918199a8f1d1ad3041e71b569a9bc165bb5
+  EaseIMKit: 757ff608e574385a77adba2a7b65868ef81e8c39
+  EMVoiceConvert: a07ac093aed9c22c0a7a999833b68a9398dab6ff
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Hyphenate: a9da397810e08c4b3173a5c8f04868165ec48b9c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
@@ -54,6 +59,6 @@ SPEC CHECKSUMS:
   MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
   SDWebImage: a72e880a8fe0f7fc31efe15aaed443c074d2a80c
 
-PODFILE CHECKSUM: 689f0533b3b3ac175c106a6cd40c74e91a0c0dd4
+PODFILE CHECKSUM: 1c9d36fe6de160d73ef365c9c80f24e4c47f63e5
 
 COCOAPODS: 1.10.0

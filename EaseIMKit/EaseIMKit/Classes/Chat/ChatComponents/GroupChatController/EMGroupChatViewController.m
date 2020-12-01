@@ -10,6 +10,10 @@
 #import "EMReadReceiptMsgViewController.h"
 #import "EaseMessageModel.h"
 #import "EMConversation+EaseUI.h"
+#import "EaseAlertController.h"
+#import "EaseAlertView.h"
+#import "EaseTextView.h"
+#import "EMMessageCell.h"
 
 @interface EMGroupChatViewController () <EMReadReceiptMsgDelegate,EMGroupManagerDelegate>
 
