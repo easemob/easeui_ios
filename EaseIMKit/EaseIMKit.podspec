@@ -17,13 +17,13 @@ Pod::Spec.new do |s|
   
   s.description = 'easemob sdk ui kit'
   s.requires_arc = true
-  #s.source_files = 'EaseIMKit/**/*.{h,m,mm}'
-  #s.public_header_files = 'EaseIMKit/Public/**/*.h'
   s.resource_bundles = {
     'EaseIMKit' => ['EaseIMKit/**/*.{png,jpg,jpeg,gif}']
   }
   
+  
 #  s.static_framework = false
+  s.frameworks = 'UIKit'
   s.libraries = 'stdc++'
   s.dependency 'Hyphenate'
   s.dependency 'Masonry'
