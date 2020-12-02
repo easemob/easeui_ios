@@ -1,0 +1,43 @@
+//
+//  EaseGridLayoutRow.h
+//  PSPDFKit
+//
+//  Copyright (c) 2012-2013 Peter Steinberger. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@class EaseGridLayoutSection, EaseGridLayoutItem;
+
+@interface EaseGridLayoutRow : NSObject
+
+@property (nonatomic, unsafe_unretained) EaseGridLayoutSection *section;
+@property (nonatomic, strong, readonly) NSArray *items;
+@property (nonatomic, assign) CGSize rowSize;
+@property (nonatomic, assign) CGRect rowFrame;
+@property (nonatomic, assign) NSInteger index;
+@property (nonatomic, assign) BOOL complete;
+@property (nonatomic, assign) BOOL fixedItemSize;
+
+// @steipete addition for row-fastPath
+@property (nonatomic, assign) NSInteger itemCount;
+
+//- (EaseGridLayoutRow *)copyFromSection:(EaseGridLayoutSection *)section; // ???
+
+// Add new item to items array.
+- (void)addItem:(EaseGridLayoutItem *)item;
+
+// Layout current row (if invalid)
+- (void)layoutRow;
+
+// @steipete: Helper to save code in EaseCollectionViewFlowLayout.
+// Returns the item rects when fixedItemSize is enabled.
+- (NSArray *)itemRects;
+
+//  Set current row frame invalid.
+- (void)invalidate;
+
+// Copy a snapshot of the current row data
+- (EaseGridLayoutRow *)snapshot;
+
+@end

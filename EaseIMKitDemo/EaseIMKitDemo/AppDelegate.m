@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import <Hyphenate/Hyphenate.h>
 
-#define kDefaultName @"chong"
+#define kDefaultName @"du001"
 
 #define kDefaultPassword @"1"
 

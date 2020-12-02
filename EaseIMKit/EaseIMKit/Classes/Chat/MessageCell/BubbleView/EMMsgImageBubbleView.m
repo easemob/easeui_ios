@@ -23,8 +23,6 @@
 {
     self = [super initWithDirection:aDirection type:aType viewModel:viewModel];
     if (self) {
-//        self.layer.borderColor = [UIColor lightGrayColor].CGColor;
-//        self.layer.borderWidth = 1;
         self.layer.cornerRadius = 2;
         self.contentMode = UIViewContentModeScaleAspectFill;
     }

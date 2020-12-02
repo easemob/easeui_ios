@@ -20,17 +20,16 @@ Pod::Spec.new do |s|
   #s.source_files = 'EaseIMKit/**/*.{h,m,mm}'
   #s.public_header_files = 'EaseIMKit/Public/**/*.h'
   s.resource_bundles = {
-    'EaseIMKit' => ['EaseIMKit/**/**/*.{png,jpg,jpeg,gif}']
+    'EaseIMKit' => ['EaseIMKit/**/*.{png,jpg,jpeg,gif}']
   }
   
 #  s.static_framework = false
   s.libraries = 'stdc++'
   s.dependency 'Hyphenate'
   s.dependency 'Masonry'
-  s.dependency 'MJRefresh'
-  #s.dependency 'MWPhotoBrowser'
   s.dependency 'MBProgressHUD'
   s.dependency 'FLAnimatedImage'
   s.dependency 'EMVoiceConvert'
+  s.dependency 'SDWebImage'
   
 end
