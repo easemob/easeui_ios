@@ -6,7 +6,7 @@
 //  Copyright 2010 d3i. All rights reserved.
 //
 
-#import "DACircularProgressView.h"
+#import "EaseCircularProgressView.h"
 #import "EaseCommon.h"
 #import "EaseZoomingScrollView.h"
 #import "EasePhotoBrowser.h"
@@ -20,7 +20,7 @@
     EasePhotoBrowser __weak *_photoBrowser;
 	EaseTapDetectingView *_tapView; // for background taps
 	EaseTapDetectingImageView *_photoImageView;
-	DACircularProgressView *_loadingIndicator;
+	EaseCircularProgressView *_loadingIndicator;
     UIImageView *_loadingError;
     
 }
@@ -51,7 +51,7 @@
 		[self addSubview:_photoImageView];
 		
 		// Loading indicator
-		_loadingIndicator = [[DACircularProgressView alloc] initWithFrame:CGRectMake(140.0f, 30.0f, 40.0f, 40.0f)];
+		_loadingIndicator = [[EaseCircularProgressView alloc] initWithFrame:CGRectMake(140.0f, 30.0f, 40.0f, 40.0f)];
         _loadingIndicator.userInteractionEnabled = NO;
         _loadingIndicator.thicknessRatio = 0.1;
         _loadingIndicator.roundedCorners = NO;
@@ -169,7 +169,7 @@
     if (![_photo respondsToSelector:@selector(emptyImage)] || !_photo.emptyImage) {
         if (!_loadingError) {
             _loadingError = [UIImageView new];
-            _loadingError.image = [UIImage imageForResourcePath:@"EasePhotoBrowser.bundle/ImageError" ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]];
+            _loadingError.image = [UIImage imageForResourcePath:@"ImageError" ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]];
             _loadingError.userInteractionEnabled = NO;
             _loadingError.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin |
             UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;

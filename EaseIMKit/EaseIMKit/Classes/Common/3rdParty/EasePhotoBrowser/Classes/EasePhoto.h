@@ -17,20 +17,15 @@
 @interface EasePhoto : NSObject <EasePhoto>
 
 @property (nonatomic, strong) NSString *caption;
-@property (nonatomic, strong) NSURL *videoURL;
 @property (nonatomic) BOOL emptyImage;
 @property (nonatomic) BOOL isVideo;
 
 + (EasePhoto *)photoWithImage:(UIImage *)image;
-+ (EasePhoto *)photoWithURL:(NSURL *)url;
 + (EasePhoto *)photoWithAsset:(PHAsset *)asset targetSize:(CGSize)targetSize;
-+ (EasePhoto *)videoWithURL:(NSURL *)url; // Initialise video with no poster image
 
 - (id)init;
 - (id)initWithImage:(UIImage *)image;
-- (id)initWithURL:(NSURL *)url;
 - (id)initWithAsset:(PHAsset *)asset targetSize:(CGSize)targetSize;
-- (id)initWithVideoURL:(NSURL *)url;
 
 @end
 

@@ -1,4 +1,6 @@
 # Uncomment the next line to define a global platform for your project
+use_frameworks!
+
 platform :ios, '11.0'
 
 workspace 'EaseIMKit.xcworkspace'
@@ -16,7 +18,6 @@ target 'EaseIMKit' do
   # Pods for EaseIMKit
   pod 'Hyphenate'
   pod 'Masonry'
-  #pod 'MWPhotoBrowser'
   pod 'SDWebImage'
   pod 'MBProgressHUD'
   pod 'FLAnimatedImage'

@@ -112,8 +112,6 @@ static EMImageBrowser *browser = nil;
             } else {
                 photo = [EasePhoto photoWithImage:obj];
             }
-        } else if ([obj isKindOfClass:[NSURL class]]) {
-            photo = [EasePhoto photoWithURL:obj];
         }
         
         if (photo) {
@@ -123,7 +121,6 @@ static EMImageBrowser *browser = nil;
     
     self.photos = photoArray;
     [self.photoBrowser reloadData];
-    
     self.superController = aController;
     self.photoNavigationController.modalPresentationStyle = 0;
     [aController presentViewController:self.photoNavigationController animated:YES completion:nil];
