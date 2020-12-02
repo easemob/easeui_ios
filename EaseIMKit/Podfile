@@ -16,7 +16,8 @@ target 'EaseIMKit' do
   # Pods for EaseIMKit
   pod 'Hyphenate'
   pod 'Masonry'
-  pod 'MWPhotoBrowser'
+  #pod 'MWPhotoBrowser'
+  pod 'SDWebImage'
   pod 'MBProgressHUD'
   pod 'FLAnimatedImage'
   pod 'EMVoiceConvert'

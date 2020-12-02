@@ -3,10 +3,64 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C5DCE4E25766B5200A3F8CB /* EaseTapDetectingImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE1425766B4800A3F8CB /* EaseTapDetectingImageView.h */; };
+		3C5DCE4F25766B5200A3F8CB /* EasePhoto.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE1525766B4800A3F8CB /* EasePhoto.h */; };
+		3C5DCE5025766B5200A3F8CB /* EasePhotoProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE1625766B4800A3F8CB /* EasePhotoProtocol.h */; };
+		3C5DCE5125766B5200A3F8CB /* EaseGridViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE1725766B4800A3F8CB /* EaseGridViewController.h */; };
+		3C5DCE5225766B5200A3F8CB /* EasePhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE1825766B4800A3F8CB /* EasePhotoBrowser.m */; };
+		3C5DCE5325766B5200A3F8CB /* EaseCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE1925766B4800A3F8CB /* EaseCaptionView.m */; };
+		3C5DCE5425766B5200A3F8CB /* EaseTapDetectingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE1A25766B4800A3F8CB /* EaseTapDetectingView.h */; };
+		3C5DCE5525766B5200A3F8CB /* EasePhotoBrowserPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE1B25766B4800A3F8CB /* EasePhotoBrowserPrivate.h */; };
+		3C5DCE5625766B5200A3F8CB /* EaseZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE1C25766B4800A3F8CB /* EaseZoomingScrollView.m */; };
+		3C5DCE5725766B5200A3F8CB /* UIImage+EasePhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE1D25766B4800A3F8CB /* UIImage+EasePhotoBrowser.m */; };
+		3C5DCE5825766B5200A3F8CB /* EaseGridCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE1E25766B4800A3F8CB /* EaseGridCell.h */; };
+		3C5DCE5925766B5200A3F8CB /* EaseTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE1F25766B4800A3F8CB /* EaseTapDetectingImageView.m */; };
+		3C5DCE5B25766B5200A3F8CB /* EaseTapDetectingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE2125766B4800A3F8CB /* EaseTapDetectingView.m */; };
+		3C5DCE5C25766B5200A3F8CB /* EaseCaptionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE2225766B4800A3F8CB /* EaseCaptionView.h */; };
+		3C5DCE5D25766B5200A3F8CB /* EaseGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE2325766B4800A3F8CB /* EaseGridViewController.m */; };
+		3C5DCE5E25766B5200A3F8CB /* EasePhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE2425766B4800A3F8CB /* EasePhotoBrowser.h */; };
+		3C5DCE5F25766B5200A3F8CB /* EaseCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE2525766B4800A3F8CB /* EaseCommon.h */; };
+		3C5DCE6025766B5200A3F8CB /* EaseGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE2625766B4800A3F8CB /* EaseGridCell.m */; };
+		3C5DCE6125766B5200A3F8CB /* UIImage+EasePhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE2725766B4800A3F8CB /* UIImage+EasePhotoBrowser.h */; };
+		3C5DCE6225766B5200A3F8CB /* EaseZoomingScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE2825766B4800A3F8CB /* EaseZoomingScrollView.h */; };
+		3C5DCE6325766B5200A3F8CB /* DACircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE2B25766B4900A3F8CB /* DACircularProgressView.m */; };
+		3C5DCE6425766B5200A3F8CB /* DACircularProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE2C25766B4900A3F8CB /* DACircularProgressView.h */; };
+		3C5DCE6525766B5200A3F8CB /* PSTCollectionViewLayout+Internals.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE2E25766B4900A3F8CB /* PSTCollectionViewLayout+Internals.h */; };
+		3C5DCE6625766B5200A3F8CB /* PSTCollectionViewItemKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE2F25766B4900A3F8CB /* PSTCollectionViewItemKey.h */; };
+		3C5DCE6725766B5200A3F8CB /* PSTGridLayoutSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE3025766B4900A3F8CB /* PSTGridLayoutSection.h */; };
+		3C5DCE6825766B5200A3F8CB /* NSIndexPath+PSTCollectionViewAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE3125766B4900A3F8CB /* NSIndexPath+PSTCollectionViewAdditions.h */; };
+		3C5DCE6925766B5200A3F8CB /* PSTCollectionViewUpdateItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE3225766B4900A3F8CB /* PSTCollectionViewUpdateItem.h */; };
+		3C5DCE6A25766B5200A3F8CB /* PSTCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE3325766B4900A3F8CB /* PSTCollectionViewController.m */; };
+		3C5DCE6B25766B5200A3F8CB /* PSTGridLayoutRow.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE3425766B4900A3F8CB /* PSTGridLayoutRow.h */; };
+		3C5DCE6C25766B5200A3F8CB /* PSTCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE3525766B4900A3F8CB /* PSTCollectionViewFlowLayout.m */; };
+		3C5DCE6D25766B5200A3F8CB /* PSTCollectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE3625766B4900A3F8CB /* PSTCollectionView.h */; };
+		3C5DCE6E25766B5200A3F8CB /* PSTCollectionViewCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE3725766B4A00A3F8CB /* PSTCollectionViewCommon.h */; };
+		3C5DCE6F25766B5200A3F8CB /* PSTCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE3825766B4A00A3F8CB /* PSTCollectionViewCell.m */; };
+		3C5DCE7025766B5200A3F8CB /* PSTCollectionViewLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE3925766B4A00A3F8CB /* PSTCollectionViewLayout.h */; };
+		3C5DCE7125766B5200A3F8CB /* PSTGridLayoutItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE3A25766B4A00A3F8CB /* PSTGridLayoutItem.h */; };
+		3C5DCE7225766B5200A3F8CB /* PSTGridLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE3B25766B4A00A3F8CB /* PSTGridLayoutInfo.m */; };
+		3C5DCE7325766B5200A3F8CB /* PSTCollectionViewData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE3C25766B4A00A3F8CB /* PSTCollectionViewData.m */; };
+		3C5DCE7425766B5200A3F8CB /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE3D25766B4A00A3F8CB /* NSIndexPath+PSTCollectionViewAdditions.m */; };
+		3C5DCE7525766B5200A3F8CB /* PSTCollectionViewUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE3E25766B4A00A3F8CB /* PSTCollectionViewUpdateItem.m */; };
+		3C5DCE7625766B5200A3F8CB /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE3F25766B4A00A3F8CB /* PSTGridLayoutSection.m */; };
+		3C5DCE7725766B5200A3F8CB /* PSTCollectionViewItemKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE4025766B4A00A3F8CB /* PSTCollectionViewItemKey.m */; };
+		3C5DCE7825766B5200A3F8CB /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE4125766B4A00A3F8CB /* PSTCollectionView.m */; };
+		3C5DCE7925766B5200A3F8CB /* PSTCollectionViewFlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE4225766B4B00A3F8CB /* PSTCollectionViewFlowLayout.h */; };
+		3C5DCE7A25766B5200A3F8CB /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE4325766B4B00A3F8CB /* PSTGridLayoutRow.m */; };
+		3C5DCE7B25766B5200A3F8CB /* PSTCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE4425766B4B00A3F8CB /* PSTCollectionViewController.h */; };
+		3C5DCE7C25766B5200A3F8CB /* PSTCollectionViewData.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE4525766B4B00A3F8CB /* PSTCollectionViewData.h */; };
+		3C5DCE7D25766B5200A3F8CB /* PSTGridLayoutInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE4625766B4B00A3F8CB /* PSTGridLayoutInfo.h */; };
+		3C5DCE7E25766B5200A3F8CB /* PSTCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE4725766B4B00A3F8CB /* PSTCollectionViewLayout.m */; };
+		3C5DCE7F25766B5200A3F8CB /* PSTGridLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE4825766B4B00A3F8CB /* PSTGridLayoutItem.m */; };
+		3C5DCE8025766B5200A3F8CB /* PSTCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE4925766B4B00A3F8CB /* PSTCollectionViewCell.h */; };
+		3C5DCE8125766B5200A3F8CB /* SDWebImageDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE4B25766B4B00A3F8CB /* SDWebImageDecoder.m */; };
+		3C5DCE8225766B5200A3F8CB /* SDWebImageDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE4C25766B4B00A3F8CB /* SDWebImageDecoder.h */; };
+		3C5DCE8325766B5200A3F8CB /* EasePhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3C5DCE4D25766B4B00A3F8CB /* EasePhotoBrowser.bundle */; };
+		3C5DCE9225766ECC00A3F8CB /* EasePhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DCE9125766ECB00A3F8CB /* EasePhoto.m */; };
 		90892DDC25764D0900F50368 /* EaseIMKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 90892DDB25764D0900F50368 /* EaseIMKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		908930D9257651B100F50368 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 908930D8257651B100F50368 /* UIKit.framework */; };
 		908933F42576571300F50368 /* EaseHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 908933342576571300F50368 /* EaseHeaders.h */; };
@@ -179,6 +233,60 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3C5DCE1425766B4800A3F8CB /* EaseTapDetectingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseTapDetectingImageView.h; sourceTree = "<group>"; };
+		3C5DCE1525766B4800A3F8CB /* EasePhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasePhoto.h; sourceTree = "<group>"; };
+		3C5DCE1625766B4800A3F8CB /* EasePhotoProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasePhotoProtocol.h; sourceTree = "<group>"; };
+		3C5DCE1725766B4800A3F8CB /* EaseGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseGridViewController.h; sourceTree = "<group>"; };
+		3C5DCE1825766B4800A3F8CB /* EasePhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EasePhotoBrowser.m; sourceTree = "<group>"; };
+		3C5DCE1925766B4800A3F8CB /* EaseCaptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseCaptionView.m; sourceTree = "<group>"; };
+		3C5DCE1A25766B4800A3F8CB /* EaseTapDetectingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseTapDetectingView.h; sourceTree = "<group>"; };
+		3C5DCE1B25766B4800A3F8CB /* EasePhotoBrowserPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasePhotoBrowserPrivate.h; sourceTree = "<group>"; };
+		3C5DCE1C25766B4800A3F8CB /* EaseZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseZoomingScrollView.m; sourceTree = "<group>"; };
+		3C5DCE1D25766B4800A3F8CB /* UIImage+EasePhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+EasePhotoBrowser.m"; sourceTree = "<group>"; };
+		3C5DCE1E25766B4800A3F8CB /* EaseGridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseGridCell.h; sourceTree = "<group>"; };
+		3C5DCE1F25766B4800A3F8CB /* EaseTapDetectingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseTapDetectingImageView.m; sourceTree = "<group>"; };
+		3C5DCE2125766B4800A3F8CB /* EaseTapDetectingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseTapDetectingView.m; sourceTree = "<group>"; };
+		3C5DCE2225766B4800A3F8CB /* EaseCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseCaptionView.h; sourceTree = "<group>"; };
+		3C5DCE2325766B4800A3F8CB /* EaseGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseGridViewController.m; sourceTree = "<group>"; };
+		3C5DCE2425766B4800A3F8CB /* EasePhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasePhotoBrowser.h; sourceTree = "<group>"; };
+		3C5DCE2525766B4800A3F8CB /* EaseCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseCommon.h; sourceTree = "<group>"; };
+		3C5DCE2625766B4800A3F8CB /* EaseGridCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseGridCell.m; sourceTree = "<group>"; };
+		3C5DCE2725766B4800A3F8CB /* UIImage+EasePhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+EasePhotoBrowser.h"; sourceTree = "<group>"; };
+		3C5DCE2825766B4800A3F8CB /* EaseZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseZoomingScrollView.h; sourceTree = "<group>"; };
+		3C5DCE2B25766B4900A3F8CB /* DACircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DACircularProgressView.m; sourceTree = "<group>"; };
+		3C5DCE2C25766B4900A3F8CB /* DACircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DACircularProgressView.h; sourceTree = "<group>"; };
+		3C5DCE2E25766B4900A3F8CB /* PSTCollectionViewLayout+Internals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PSTCollectionViewLayout+Internals.h"; sourceTree = "<group>"; };
+		3C5DCE2F25766B4900A3F8CB /* PSTCollectionViewItemKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewItemKey.h; sourceTree = "<group>"; };
+		3C5DCE3025766B4900A3F8CB /* PSTGridLayoutSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTGridLayoutSection.h; sourceTree = "<group>"; };
+		3C5DCE3125766B4900A3F8CB /* NSIndexPath+PSTCollectionViewAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexPath+PSTCollectionViewAdditions.h"; sourceTree = "<group>"; };
+		3C5DCE3225766B4900A3F8CB /* PSTCollectionViewUpdateItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewUpdateItem.h; sourceTree = "<group>"; };
+		3C5DCE3325766B4900A3F8CB /* PSTCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewController.m; sourceTree = "<group>"; };
+		3C5DCE3425766B4900A3F8CB /* PSTGridLayoutRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTGridLayoutRow.h; sourceTree = "<group>"; };
+		3C5DCE3525766B4900A3F8CB /* PSTCollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewFlowLayout.m; sourceTree = "<group>"; };
+		3C5DCE3625766B4900A3F8CB /* PSTCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionView.h; sourceTree = "<group>"; };
+		3C5DCE3725766B4A00A3F8CB /* PSTCollectionViewCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewCommon.h; sourceTree = "<group>"; };
+		3C5DCE3825766B4A00A3F8CB /* PSTCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewCell.m; sourceTree = "<group>"; };
+		3C5DCE3925766B4A00A3F8CB /* PSTCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewLayout.h; sourceTree = "<group>"; };
+		3C5DCE3A25766B4A00A3F8CB /* PSTGridLayoutItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTGridLayoutItem.h; sourceTree = "<group>"; };
+		3C5DCE3B25766B4A00A3F8CB /* PSTGridLayoutInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTGridLayoutInfo.m; sourceTree = "<group>"; };
+		3C5DCE3C25766B4A00A3F8CB /* PSTCollectionViewData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewData.m; sourceTree = "<group>"; };
+		3C5DCE3D25766B4A00A3F8CB /* NSIndexPath+PSTCollectionViewAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexPath+PSTCollectionViewAdditions.m"; sourceTree = "<group>"; };
+		3C5DCE3E25766B4A00A3F8CB /* PSTCollectionViewUpdateItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewUpdateItem.m; sourceTree = "<group>"; };
+		3C5DCE3F25766B4A00A3F8CB /* PSTGridLayoutSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTGridLayoutSection.m; sourceTree = "<group>"; };
+		3C5DCE4025766B4A00A3F8CB /* PSTCollectionViewItemKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewItemKey.m; sourceTree = "<group>"; };
+		3C5DCE4125766B4A00A3F8CB /* PSTCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionView.m; sourceTree = "<group>"; };
+		3C5DCE4225766B4B00A3F8CB /* PSTCollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewFlowLayout.h; sourceTree = "<group>"; };
+		3C5DCE4325766B4B00A3F8CB /* PSTGridLayoutRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTGridLayoutRow.m; sourceTree = "<group>"; };
+		3C5DCE4425766B4B00A3F8CB /* PSTCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewController.h; sourceTree = "<group>"; };
+		3C5DCE4525766B4B00A3F8CB /* PSTCollectionViewData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewData.h; sourceTree = "<group>"; };
+		3C5DCE4625766B4B00A3F8CB /* PSTGridLayoutInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTGridLayoutInfo.h; sourceTree = "<group>"; };
+		3C5DCE4725766B4B00A3F8CB /* PSTCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewLayout.m; sourceTree = "<group>"; };
+		3C5DCE4825766B4B00A3F8CB /* PSTGridLayoutItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTGridLayoutItem.m; sourceTree = "<group>"; };
+		3C5DCE4925766B4B00A3F8CB /* PSTCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewCell.h; sourceTree = "<group>"; };
+		3C5DCE4B25766B4B00A3F8CB /* SDWebImageDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDWebImageDecoder.m; sourceTree = "<group>"; };
+		3C5DCE4C25766B4B00A3F8CB /* SDWebImageDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImageDecoder.h; sourceTree = "<group>"; };
+		3C5DCE4D25766B4B00A3F8CB /* EasePhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = EasePhotoBrowser.bundle; sourceTree = "<group>"; };
+		3C5DCE9125766ECB00A3F8CB /* EasePhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EasePhoto.m; sourceTree = "<group>"; };
 		4306B009486B885DC8ECB5D3 /* Pods-EaseIMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.release.xcconfig"; sourceTree = "<group>"; };
 		90892DD425764C6900F50368 /* EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90892DDB25764D0900F50368 /* EaseIMKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseIMKit.h; sourceTree = "<group>"; };
@@ -552,6 +660,107 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		3C5DCE1225766B4700A3F8CB /* EasePhotoBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				3C5DCE1325766B4700A3F8CB /* Classes */,
+				3C5DCE2925766B4900A3F8CB /* Libraries */,
+				3C5DCE4D25766B4B00A3F8CB /* EasePhotoBrowser.bundle */,
+			);
+			path = EasePhotoBrowser;
+			sourceTree = "<group>";
+		};
+		3C5DCE1325766B4700A3F8CB /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				3C5DCE2225766B4800A3F8CB /* EaseCaptionView.h */,
+				3C5DCE1925766B4800A3F8CB /* EaseCaptionView.m */,
+				3C5DCE2525766B4800A3F8CB /* EaseCommon.h */,
+				3C5DCE1E25766B4800A3F8CB /* EaseGridCell.h */,
+				3C5DCE2625766B4800A3F8CB /* EaseGridCell.m */,
+				3C5DCE1725766B4800A3F8CB /* EaseGridViewController.h */,
+				3C5DCE2325766B4800A3F8CB /* EaseGridViewController.m */,
+				3C5DCE1525766B4800A3F8CB /* EasePhoto.h */,
+				3C5DCE9125766ECB00A3F8CB /* EasePhoto.m */,
+				3C5DCE2425766B4800A3F8CB /* EasePhotoBrowser.h */,
+				3C5DCE1825766B4800A3F8CB /* EasePhotoBrowser.m */,
+				3C5DCE1B25766B4800A3F8CB /* EasePhotoBrowserPrivate.h */,
+				3C5DCE1625766B4800A3F8CB /* EasePhotoProtocol.h */,
+				3C5DCE1425766B4800A3F8CB /* EaseTapDetectingImageView.h */,
+				3C5DCE1F25766B4800A3F8CB /* EaseTapDetectingImageView.m */,
+				3C5DCE1A25766B4800A3F8CB /* EaseTapDetectingView.h */,
+				3C5DCE2125766B4800A3F8CB /* EaseTapDetectingView.m */,
+				3C5DCE2825766B4800A3F8CB /* EaseZoomingScrollView.h */,
+				3C5DCE1C25766B4800A3F8CB /* EaseZoomingScrollView.m */,
+				3C5DCE2725766B4800A3F8CB /* UIImage+EasePhotoBrowser.h */,
+				3C5DCE1D25766B4800A3F8CB /* UIImage+EasePhotoBrowser.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		3C5DCE2925766B4900A3F8CB /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				3C5DCE2A25766B4900A3F8CB /* DACircularProgress */,
+				3C5DCE2D25766B4900A3F8CB /* PSTCollectionView */,
+				3C5DCE4A25766B4B00A3F8CB /* SDWebImage */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		3C5DCE2A25766B4900A3F8CB /* DACircularProgress */ = {
+			isa = PBXGroup;
+			children = (
+				3C5DCE2B25766B4900A3F8CB /* DACircularProgressView.m */,
+				3C5DCE2C25766B4900A3F8CB /* DACircularProgressView.h */,
+			);
+			path = DACircularProgress;
+			sourceTree = "<group>";
+		};
+		3C5DCE2D25766B4900A3F8CB /* PSTCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				3C5DCE2E25766B4900A3F8CB /* PSTCollectionViewLayout+Internals.h */,
+				3C5DCE2F25766B4900A3F8CB /* PSTCollectionViewItemKey.h */,
+				3C5DCE3025766B4900A3F8CB /* PSTGridLayoutSection.h */,
+				3C5DCE3125766B4900A3F8CB /* NSIndexPath+PSTCollectionViewAdditions.h */,
+				3C5DCE3225766B4900A3F8CB /* PSTCollectionViewUpdateItem.h */,
+				3C5DCE3325766B4900A3F8CB /* PSTCollectionViewController.m */,
+				3C5DCE3425766B4900A3F8CB /* PSTGridLayoutRow.h */,
+				3C5DCE3525766B4900A3F8CB /* PSTCollectionViewFlowLayout.m */,
+				3C5DCE3625766B4900A3F8CB /* PSTCollectionView.h */,
+				3C5DCE3725766B4A00A3F8CB /* PSTCollectionViewCommon.h */,
+				3C5DCE3825766B4A00A3F8CB /* PSTCollectionViewCell.m */,
+				3C5DCE3925766B4A00A3F8CB /* PSTCollectionViewLayout.h */,
+				3C5DCE3A25766B4A00A3F8CB /* PSTGridLayoutItem.h */,
+				3C5DCE3B25766B4A00A3F8CB /* PSTGridLayoutInfo.m */,
+				3C5DCE3C25766B4A00A3F8CB /* PSTCollectionViewData.m */,
+				3C5DCE3D25766B4A00A3F8CB /* NSIndexPath+PSTCollectionViewAdditions.m */,
+				3C5DCE3E25766B4A00A3F8CB /* PSTCollectionViewUpdateItem.m */,
+				3C5DCE3F25766B4A00A3F8CB /* PSTGridLayoutSection.m */,
+				3C5DCE4025766B4A00A3F8CB /* PSTCollectionViewItemKey.m */,
+				3C5DCE4125766B4A00A3F8CB /* PSTCollectionView.m */,
+				3C5DCE4225766B4B00A3F8CB /* PSTCollectionViewFlowLayout.h */,
+				3C5DCE4325766B4B00A3F8CB /* PSTGridLayoutRow.m */,
+				3C5DCE4425766B4B00A3F8CB /* PSTCollectionViewController.h */,
+				3C5DCE4525766B4B00A3F8CB /* PSTCollectionViewData.h */,
+				3C5DCE4625766B4B00A3F8CB /* PSTGridLayoutInfo.h */,
+				3C5DCE4725766B4B00A3F8CB /* PSTCollectionViewLayout.m */,
+				3C5DCE4825766B4B00A3F8CB /* PSTGridLayoutItem.m */,
+				3C5DCE4925766B4B00A3F8CB /* PSTCollectionViewCell.h */,
+			);
+			path = PSTCollectionView;
+			sourceTree = "<group>";
+		};
+		3C5DCE4A25766B4B00A3F8CB /* SDWebImage */ = {
+			isa = PBXGroup;
+			children = (
+				3C5DCE4B25766B4B00A3F8CB /* SDWebImageDecoder.m */,
+				3C5DCE4C25766B4B00A3F8CB /* SDWebImageDecoder.h */,
+			);
+			path = SDWebImage;
+			sourceTree = "<group>";
+		};
 		90892DD325764C6900F50368 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -565,15 +774,15 @@
 		908933332576571300F50368 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				908933342576571300F50368 /* EaseHeaders.h */,
-				908933352576571300F50368 /* Chat */,
-				908933A02576571300F50368 /* EaseIMKitManager.m */,
-				908933A12576571300F50368 /* Contacts */,
 				908933AD2576571300F50368 /* BaseTableViewController */,
-				908933B32576571300F50368 /* EaseEnums.h */,
+				908933352576571300F50368 /* Chat */,
 				908933B42576571300F50368 /* Common */,
+				908933A12576571300F50368 /* Contacts */,
 				908933D52576571300F50368 /* Conversations */,
+				908933B32576571300F50368 /* EaseEnums.h */,
+				908933342576571300F50368 /* EaseHeaders.h */,
 				908933E32576571300F50368 /* EaseIMKitManager.h */,
+				908933A02576571300F50368 /* EaseIMKitManager.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -933,6 +1142,7 @@
 		908933C72576571300F50368 /* 3rdParty */ = {
 			isa = PBXGroup;
 			children = (
+				3C5DCE1225766B4700A3F8CB /* EasePhotoBrowser */,
 				908933C82576571300F50368 /* MulticastDelegate */,
 			);
 			path = 3rdParty;
@@ -1361,23 +1571,30 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C5DCE7C25766B5200A3F8CB /* PSTCollectionViewData.h in Headers */,
 				908934682576571300F50368 /* EaseChineseToPinyin.h in Headers */,
 				9089341F2576571300F50368 /* EMMsgAudioBubbleView.h in Headers */,
 				908934032576571300F50368 /* EMMoreFunctionView.h in Headers */,
 				908934162576571300F50368 /* EMMessageBubbleView.h in Headers */,
 				908934592576571300F50368 /* EaseDefines.h in Headers */,
+				3C5DCE8025766B5200A3F8CB /* PSTCollectionViewCell.h in Headers */,
 				908934862576571300F50368 /* UIViewController+HUD.h in Headers */,
 				908934582576571300F50368 /* EaseEnums.h in Headers */,
 				908934572576571300F50368 /* EaseBaseTableViewModel.h in Headers */,
+				3C5DCE6125766B5200A3F8CB /* UIImage+EasePhotoBrowser.h in Headers */,
 				908934172576571300F50368 /* EMMsgTextBubbleView.h in Headers */,
 				9089345B2576571300F50368 /* EaseColorDefine.h in Headers */,
 				9089341B2576571300F50368 /* EMMsgLocationBubbleView.h in Headers */,
+				3C5DCE5425766B5200A3F8CB /* EaseTapDetectingView.h in Headers */,
 				908934442576571300F50368 /* EaseChatViewController+ChatToolBarIncident.h in Headers */,
 				9089343D2576571300F50368 /* EaseEmotionEscape.h in Headers */,
 				9089347D2576571300F50368 /* EaseIMKitManager.h in Headers */,
 				9089342F2576571300F50368 /* EMSingleChatViewController.h in Headers */,
+				3C5DCE6525766B5200A3F8CB /* PSTCollectionViewLayout+Internals.h in Headers */,
 				908934832576571300F50368 /* UITableView+Refresh.h in Headers */,
+				3C5DCE6425766B5200A3F8CB /* DACircularProgressView.h in Headers */,
 				908934822576571300F50368 /* UIColor+EaseUI.h in Headers */,
+				3C5DCE6D25766B5200A3F8CB /* PSTCollectionView.h in Headers */,
 				9089342B2576571300F50368 /* EMGroupChatViewController.h in Headers */,
 				9089346D2576571300F50368 /* EaseTextFieldViewController.h in Headers */,
 				908934392576571300F50368 /* EMImageBrowser.h in Headers */,
@@ -1388,13 +1605,23 @@
 				908934812576571300F50368 /* UIViewController+ComponentSize.h in Headers */,
 				908934482576571300F50368 /* EMPickFileViewController.h in Headers */,
 				9089344E2576571300F50368 /* EaseContactsViewModel.h in Headers */,
+				3C5DCE6725766B5200A3F8CB /* PSTGridLayoutSection.h in Headers */,
+				3C5DCE5F25766B5200A3F8CB /* EaseCommon.h in Headers */,
+				3C5DCE4F25766B5200A3F8CB /* EasePhoto.h in Headers */,
 				908934402576571300F50368 /* EaseChatBarEmoticonView.h in Headers */,
 				908934672576571300F50368 /* EaseAvatarNameModel.h in Headers */,
+				3C5DCE5C25766B5200A3F8CB /* EaseCaptionView.h in Headers */,
+				3C5DCE4E25766B5200A3F8CB /* EaseTapDetectingImageView.h in Headers */,
 				908933FC2576571300F50368 /* EMChatBar.h in Headers */,
+				3C5DCE6625766B5200A3F8CB /* PSTCollectionViewItemKey.h in Headers */,
+				3C5DCE7925766B5200A3F8CB /* PSTCollectionViewFlowLayout.h in Headers */,
 				90892DDC25764D0900F50368 /* EaseIMKit.h in Headers */,
 				908934252576571300F50368 /* EMMsgFileBubbleView.h in Headers */,
 				908934662576571300F50368 /* EaseAlertView.h in Headers */,
+				3C5DCE8225766B5200A3F8CB /* SDWebImageDecoder.h in Headers */,
 				9089342E2576571300F50368 /* EMChatroomViewController.h in Headers */,
+				3C5DCE5125766B5200A3F8CB /* EaseGridViewController.h in Headers */,
+				3C5DCE7D25766B5200A3F8CB /* PSTGridLayoutInfo.h in Headers */,
 				908934422576571300F50368 /* EaseEmojiHelper.h in Headers */,
 				9089344D2576571300F50368 /* EaseContactModel.h in Headers */,
 				908934762576571300F50368 /* EaseConversationViewModel.h in Headers */,
@@ -1403,10 +1630,13 @@
 				9089347A2576571300F50368 /* EaseBadgeView.h in Headers */,
 				9089346E2576571300F50368 /* EaseAlertController.h in Headers */,
 				9089340C2576571300F50368 /* EMMsgRecordCell.h in Headers */,
+				3C5DCE7B25766B5200A3F8CB /* PSTCollectionViewController.h in Headers */,
 				908933FD2576571300F50368 /* EMReadReceiptMemberModel.h in Headers */,
 				908934342576571300F50368 /* EMMsgTouchIncident.h in Headers */,
 				908934452576571300F50368 /* EMLocationViewController.h in Headers */,
+				3C5DCE5525766B5200A3F8CB /* EasePhotoBrowserPrivate.h in Headers */,
 				9089346B2576571300F50368 /* EaseTextView.h in Headers */,
+				3C5DCE6825766B5200A3F8CB /* NSIndexPath+PSTCollectionViewAdditions.h in Headers */,
 				908934712576571300F50368 /* EaseTextViewController.h in Headers */,
 				908934012576571300F50368 /* HorizontalLayout.h in Headers */,
 				908934052576571300F50368 /* EMReadReceiptTableViewCell.h in Headers */,
@@ -1420,12 +1650,16 @@
 				908933F62576571300F50368 /* EaseExtMenuModel.h in Headers */,
 				908933F52576571300F50368 /* EaseChatControllerProducter.h in Headers */,
 				908933F42576571300F50368 /* EaseHeaders.h in Headers */,
+				3C5DCE7025766B5200A3F8CB /* PSTCollectionViewLayout.h in Headers */,
 				908934802576571300F50368 /* EaseIMKitManager+ExtFunction.h in Headers */,
 				908934322576571300F50368 /* EaseChatViewController.h in Headers */,
 				908934382576571300F50368 /* EMAudioPlayerUtil.h in Headers */,
+				3C5DCE5E25766B5200A3F8CB /* EasePhotoBrowser.h in Headers */,
 				908934492576571300F50368 /* EaseChatViewControllerDelegate.h in Headers */,
 				9089348C2576571300F50368 /* UIImage+EaseUI.h in Headers */,
 				908934512576571300F50368 /* EaseContactCell.h in Headers */,
+				3C5DCE6E25766B5200A3F8CB /* PSTCollectionViewCommon.h in Headers */,
+				3C5DCE5025766B5200A3F8CB /* EasePhotoProtocol.h in Headers */,
 				9089343B2576571300F50368 /* EaseEmoticonGroup.h in Headers */,
 				9089345F2576571300F50368 /* amrFileCodec.h in Headers */,
 				908934362576571300F50368 /* EaseChatViewController+EMMsgLongPressIncident.h in Headers */,
@@ -1434,14 +1668,19 @@
 				908934532576571300F50368 /* EaseUserDelegate.h in Headers */,
 				908934262576571300F50368 /* EMMessageCell.h in Headers */,
 				9089340D2576571300F50368 /* EMMessageTimeCell.h in Headers */,
+				3C5DCE7125766B5200A3F8CB /* PSTGridLayoutItem.h in Headers */,
 				908934102576571300F50368 /* OneLoadingAnimationView.h in Headers */,
 				908934652576571300F50368 /* EaseAvatarNameCell.h in Headers */,
+				3C5DCE6925766B5200A3F8CB /* PSTCollectionViewUpdateItem.h in Headers */,
 				908934792576571300F50368 /* EaseConversationCell.h in Headers */,
 				908934732576571300F50368 /* EaseConversationModel.h in Headers */,
+				3C5DCE6225766B5200A3F8CB /* EaseZoomingScrollView.h in Headers */,
 				9089344F2576571300F50368 /* EaseContactsViewController.h in Headers */,
+				3C5DCE5825766B5200A3F8CB /* EaseGridCell.h in Headers */,
 				9089340F2576571300F50368 /* LoadingCALayer.h in Headers */,
 				9089345A2576571300F50368 /* EaseDateHelper.h in Headers */,
 				908934602576571300F50368 /* wav.h in Headers */,
+				3C5DCE6B25766B5200A3F8CB /* PSTGridLayoutRow.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1458,7 +1697,6 @@
 				90A039ED254A6E7600D57B73 /* Frameworks */,
 				90A039EE254A6E7600D57B73 /* Resources */,
 				90892DD725764C6900F50368 /* Embed Frameworks */,
-				EBDE07E875CBF678A2E7F502 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1507,6 +1745,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C5DCE8325766B5200A3F8CB /* EasePhotoBrowser.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1535,23 +1774,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EBDE07E875CBF678A2E7F502 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1560,30 +1782,40 @@
 			buildActionMask = 2147483647;
 			files = (
 				908934432576571300F50368 /* EaseChatViewController+ChatToolBarIncident.m in Sources */,
+				3C5DCE5625766B5200A3F8CB /* EaseZoomingScrollView.m in Sources */,
 				908934302576571300F50368 /* EMSingleChatViewController.m in Sources */,
+				3C5DCE6325766B5200A3F8CB /* DACircularProgressView.m in Sources */,
 				908934112576571300F50368 /* EMMessageStatusView.m in Sources */,
 				908934852576571300F50368 /* UIImage+EaseUI.m in Sources */,
 				908933F92576571300F50368 /* EaseExtMenuModel.m in Sources */,
 				908934272576571300F50368 /* LoadingCALayer.m in Sources */,
+				3C5DCE8125766B5200A3F8CB /* SDWebImageDecoder.m in Sources */,
 				9089345E2576571300F50368 /* amrFileCodec.mm in Sources */,
 				908934372576571300F50368 /* EaseChatViewController+EMMsgLongPressIncident.m in Sources */,
 				908934332576571300F50368 /* EMImageBrowser.m in Sources */,
 				9089346A2576571300F50368 /* EMMulticastDelegate.m in Sources */,
+				3C5DCE7225766B5200A3F8CB /* PSTGridLayoutInfo.m in Sources */,
 				908934872576571300F50368 /* EMConversation+EaseUI.m in Sources */,
 				9089344C2576571300F50368 /* EaseContactsViewModel.m in Sources */,
+				3C5DCE6025766B5200A3F8CB /* EaseGridCell.m in Sources */,
 				9089342A2576571300F50368 /* EaseChatViewController.m in Sources */,
 				908934752576571300F50368 /* EaseConversationModel.m in Sources */,
 				9089346C2576571300F50368 /* EaseTextViewController.m in Sources */,
 				908934222576571300F50368 /* EMMsgLocationBubbleView.m in Sources */,
+				3C5DCE7E25766B5200A3F8CB /* PSTCollectionViewLayout.m in Sources */,
 				9089346F2576571300F50368 /* EaseAlertController.m in Sources */,
 				9089341A2576571300F50368 /* EMMsgVideoBubbleView.m in Sources */,
 				908934022576571300F50368 /* EMReadReceiptMemberModel.m in Sources */,
+				3C5DCE7F25766B5200A3F8CB /* PSTGridLayoutItem.m in Sources */,
 				9089341E2576571300F50368 /* EMMsgImageBubbleView.m in Sources */,
 				908934352576571300F50368 /* EMMsgTouchIncident.m in Sources */,
+				3C5DCE7825766B5200A3F8CB /* PSTCollectionView.m in Sources */,
+				3C5DCE5D25766B5200A3F8CB /* EaseGridViewController.m in Sources */,
 				908934202576571300F50368 /* EMMsgTextBubbleView.m in Sources */,
 				9089340B2576571300F50368 /* EMChatBar.m in Sources */,
 				908934122576571300F50368 /* EMMessageTimeCell.m in Sources */,
 				908934132576571300F50368 /* EMMsgRecordCell.m in Sources */,
+				3C5DCE5B25766B5200A3F8CB /* EaseTapDetectingView.m in Sources */,
 				908934412576571300F50368 /* EaseEmoticonGroup.m in Sources */,
 				9089347C2576571300F50368 /* EaseBadgeView.m in Sources */,
 				908934702576571300F50368 /* EaseTextView.m in Sources */,
@@ -1595,6 +1827,8 @@
 				908934092576571300F50368 /* EMChatBarRecordAudioView.m in Sources */,
 				908934722576571300F50368 /* EaseTextFieldViewController.m in Sources */,
 				908934632576571300F50368 /* EaseAvatarNameCell.m in Sources */,
+				3C5DCE7325766B5200A3F8CB /* PSTCollectionViewData.m in Sources */,
+				3C5DCE5725766B5200A3F8CB /* UIImage+EasePhotoBrowser.m in Sources */,
 				9089340A2576571300F50368 /* EMAudioRecordUtil.mm in Sources */,
 				9089348B2576571300F50368 /* NSObject+Alert.m in Sources */,
 				9089347F2576571300F50368 /* UIViewController+HUD.m in Sources */,
@@ -1604,6 +1838,7 @@
 				9089341C2576571300F50368 /* EMMsgFileBubbleView.m in Sources */,
 				9089340E2576571300F50368 /* EMMessageCell.m in Sources */,
 				908934892576571300F50368 /* UITableView+Refresh.m in Sources */,
+				3C5DCE6C25766B5200A3F8CB /* PSTCollectionViewFlowLayout.m in Sources */,
 				908934152576571300F50368 /* EMMsgExtGifBubbleView.m in Sources */,
 				9089345D2576571300F50368 /* wav.mm in Sources */,
 				908933FE2576571300F50368 /* EMMoreFunctionView.m in Sources */,
@@ -1611,26 +1846,37 @@
 				908934552576571300F50368 /* EaseBaseTableViewModel.m in Sources */,
 				908934182576571300F50368 /* EMMsgAudioBubbleView.m in Sources */,
 				908934742576571300F50368 /* EaseConversationViewModel.m in Sources */,
+				3C5DCE5925766B5200A3F8CB /* EaseTapDetectingImageView.m in Sources */,
 				908933FB2576571300F50368 /* EaseChatViewModel.m in Sources */,
 				908934522576571300F50368 /* EaseContactCell.m in Sources */,
 				9089345C2576571300F50368 /* EaseChineseToPinyin.m in Sources */,
 				9089342D2576571300F50368 /* EMChatroomViewController.m in Sources */,
+				3C5DCE6F25766B5200A3F8CB /* PSTCollectionViewCell.m in Sources */,
 				908934612576571300F50368 /* EaseDateHelper.m in Sources */,
 				9089347B2576571300F50368 /* EaseConversationCell.m in Sources */,
 				908934212576571300F50368 /* EMMessageBubbleView.m in Sources */,
 				9089348A2576571300F50368 /* UIViewController+ComponentSize.m in Sources */,
 				908934622576571300F50368 /* EaseAlertView.m in Sources */,
 				908934062576571300F50368 /* HorizontalLayout.m in Sources */,
+				3C5DCE7625766B5200A3F8CB /* PSTGridLayoutSection.m in Sources */,
 				908934782576571300F50368 /* EaseConversationsViewController.m in Sources */,
+				3C5DCE5225766B5200A3F8CB /* EasePhotoBrowser.m in Sources */,
+				3C5DCE7A25766B5200A3F8CB /* PSTGridLayoutRow.m in Sources */,
 				9089343C2576571300F50368 /* EaseEmojiHelper.m in Sources */,
 				908934542576571300F50368 /* EaseBaseTableViewController.m in Sources */,
+				3C5DCE7725766B5200A3F8CB /* PSTCollectionViewItemKey.m in Sources */,
 				9089343A2576571300F50368 /* EMAudioPlayerUtil.mm in Sources */,
 				9089343E2576571300F50368 /* EaseEmotionEscape.m in Sources */,
 				9089342C2576571300F50368 /* EMGroupChatViewController.m in Sources */,
+				3C5DCE7425766B5200A3F8CB /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
+				3C5DCE5325766B5200A3F8CB /* EaseCaptionView.m in Sources */,
 				9089344B2576571300F50368 /* EaseContactModel.m in Sources */,
+				3C5DCE7525766B5200A3F8CB /* PSTCollectionViewUpdateItem.m in Sources */,
+				3C5DCE9225766ECC00A3F8CB /* EasePhoto.m in Sources */,
 				908934242576571300F50368 /* EMMsgPicMixTextBubbleView.m in Sources */,
 				908933F72576571300F50368 /* EaseMessageModel.m in Sources */,
 				908933FF2576571300F50368 /* EMReadReceiptMsgViewController.m in Sources */,
+				3C5DCE6A25766B5200A3F8CB /* PSTCollectionViewController.m in Sources */,
 				908934642576571300F50368 /* EaseAvatarNameModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

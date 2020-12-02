@@ -12,11 +12,11 @@
 #define IMAGE_MAX_SIZE_5k 5120*2880
 
 static EMImageBrowser *browser = nil;
-@interface EMImageBrowser()<MWPhotoBrowserDelegate>
+@interface EMImageBrowser()<EasePhotoBrowserDelegate>
 
 @property (nonatomic, strong) NSArray *photos;
 
-@property (strong, nonatomic) MWPhotoBrowser *photoBrowser;
+@property (strong, nonatomic) EasePhotoBrowser *photoBrowser;
 
 @property (nonatomic, strong) UINavigationController *photoNavigationController;
 
@@ -41,7 +41,7 @@ static EMImageBrowser *browser = nil;
 {
     self = [super init];
     if (self) {
-        _photoBrowser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+        _photoBrowser = [[EasePhotoBrowser alloc] initWithDelegate:self];
         _photoBrowser.delegate = self;
         _photoBrowser.displayActionButton = YES;
         _photoBrowser.displayNavArrows = YES;
@@ -59,14 +59,14 @@ static EMImageBrowser *browser = nil;
     return self;
 }
 
-#pragma mark - MWPhotoBrowserDelegate
+#pragma mark - EasePhotoBrowserDelegate
 
-- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(EasePhotoBrowser *)photoBrowser
 {
     return [self.photos count];
 }
 
-- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index
+- (id <EasePhoto>)photoBrowser:(EasePhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index
 {
     if (index < self.photos.count) {
         return [self.photos objectAtIndex:index];
@@ -75,7 +75,7 @@ static EMImageBrowser *browser = nil;
     return nil;
 }
 
-- (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser
+- (void)photoBrowserDidFinishModalPresentation:(EasePhotoBrowser *)photoBrowser
 {
     [self dismissViewController];
 }
@@ -103,17 +103,17 @@ static EMImageBrowser *browser = nil;
     
     NSMutableArray *photoArray = [NSMutableArray array];
     for (id obj in aImageArray) {
-        MWPhoto *photo;
+        EasePhoto *photo;
         if ([obj isKindOfClass:[UIImage class]]) {
             UIImage *img = (UIImage *)obj;
             CGFloat imageSize = img.size.width * img.size.height;
             if (imageSize > IMAGE_MAX_SIZE_5k) {
-                photo = [MWPhoto photoWithImage:[self _scaleImage:img toScale:(IMAGE_MAX_SIZE_5k)/imageSize]];
+                photo = [EasePhoto photoWithImage:[self _scaleImage:img toScale:(IMAGE_MAX_SIZE_5k)/imageSize]];
             } else {
-                photo = [MWPhoto photoWithImage:obj];
+                photo = [EasePhoto photoWithImage:obj];
             }
         } else if ([obj isKindOfClass:[NSURL class]]) {
-            photo = [MWPhoto photoWithURL:obj];
+            photo = [EasePhoto photoWithURL:obj];
         }
         
         if (photo) {

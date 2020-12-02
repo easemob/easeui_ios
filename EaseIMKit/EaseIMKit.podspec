@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   s.dependency 'Hyphenate'
   s.dependency 'Masonry'
   s.dependency 'MJRefresh'
-  s.dependency 'MWPhotoBrowser'
+  #s.dependency 'MWPhotoBrowser'
   s.dependency 'MBProgressHUD'
   s.dependency 'FLAnimatedImage'
   s.dependency 'EMVoiceConvert'
