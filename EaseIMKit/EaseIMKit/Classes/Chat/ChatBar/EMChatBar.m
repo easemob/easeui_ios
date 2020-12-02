@@ -8,10 +8,11 @@
 
 #import "EMChatBar.h"
 #import "UIImage+EaseUI.h"
+#import "EaseDefines.h"
 
-#define ktextViewMinHeight 40
-#define ktextViewMaxHeight 80
-#define kiconwidth 30
+#define kTextViewMinHeight 40
+#define kTextViewMaxHeight 80
+#define kIconwidth 30
 #define kModuleMargin 5
 
 @interface EMChatBar()<UITextViewDelegate>
@@ -24,7 +25,7 @@
 
 @property (nonatomic, strong) UIView *currentMoreView;
 
-@property (nonatomic, strong) UIButton *ConversationToolBarBtn;//更多
+@property (nonatomic, strong) UIButton *conversationToolBarBtn;//更多
 
 @property (nonatomic, strong) UIButton *emojiButton;//表情
 
@@ -43,7 +44,7 @@
     self = [super init];
     if (self) {
         _version = [[[UIDevice currentDevice] systemVersion] floatValue];
-        _previousTextViewContentHeight = ktextViewMinHeight;
+        _previousTextViewContentHeight = kTextViewMinHeight;
         _viewModel = viewModel;
         [self _setupSubviews];
     }
@@ -68,37 +69,43 @@
     }];
     
     self.audioButton = [[UIButton alloc] init];
-    [_audioButton setImage:[UIImage easeUIImageNamed:@"audio-unSelected"] forState:UIControlStateNormal];
-    [_audioButton setImage:[UIImage easeUIImageNamed:@"character"] forState:UIControlStateSelected];
+    [_audioButton setBackgroundImage:[UIImage easeUIImageNamed:@"audio-unSelected"] forState:UIControlStateNormal];
+    [_audioButton setBackgroundImage:[UIImage easeUIImageNamed:@"character"] forState:UIControlStateSelected];
     [_audioButton addTarget:self action:@selector(audioButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.audioButton];
     [_audioButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(10);
         make.left.equalTo(self).offset(kModuleMargin);
-        make.width.height.equalTo(@kiconwidth);
+        make.width.height.mas_equalTo(kIconwidth);
     }];
     
-    self.ConversationToolBarBtn = [[UIButton alloc] init];
-    [_ConversationToolBarBtn setImage:[UIImage easeUIImageNamed:@"more-unselected"] forState:UIControlStateNormal];
-    [_ConversationToolBarBtn setImage:[UIImage easeUIImageNamed:@"more-selected"] forState:UIControlStateSelected];
-    [_ConversationToolBarBtn addTarget:self action:@selector(moreButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_ConversationToolBarBtn];
-    [_ConversationToolBarBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    _audioButton.backgroundColor = UIColor.redColor;
+    
+    self.conversationToolBarBtn = [[UIButton alloc] init];
+    [_conversationToolBarBtn setBackgroundImage:[UIImage easeUIImageNamed:@"more-unselected"] forState:UIControlStateNormal];
+    [_conversationToolBarBtn setBackgroundImage:[UIImage easeUIImageNamed:@"more-selected"] forState:UIControlStateSelected];
+    [_conversationToolBarBtn addTarget:self action:@selector(moreButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_conversationToolBarBtn];
+    [_conversationToolBarBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(10);
         make.right.equalTo(self).offset(-kModuleMargin);
-        make.width.height.equalTo(@kiconwidth);
+        make.width.height.mas_equalTo(kIconwidth);
     }];
     
+    _conversationToolBarBtn.backgroundColor = UIColor.redColor;
+    
     self.emojiButton = [[UIButton alloc] init];
-    [_emojiButton setImage:[UIImage easeUIImageNamed:@"face"] forState:UIControlStateNormal];
-    [_emojiButton setImage:[UIImage easeUIImageNamed:@"character"] forState:UIControlStateSelected];
+    [_emojiButton setBackgroundImage:[UIImage easeUIImageNamed:@"face"] forState:UIControlStateNormal];
+    [_emojiButton setBackgroundImage:[UIImage easeUIImageNamed:@"character"] forState:UIControlStateSelected];
     [_emojiButton addTarget:self action:@selector(emoticonButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_emojiButton];
     [_emojiButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(10);
-        make.right.equalTo(self.ConversationToolBarBtn.mas_left).offset(-kModuleMargin);
-        make.width.height.equalTo(@kiconwidth);
+        make.right.equalTo(self.conversationToolBarBtn.mas_left).offset(-kModuleMargin);
+        make.width.height.equalTo(@kIconwidth);
     }];
+
+    _emojiButton.backgroundColor = UIColor.redColor;
     
     self.textView = [[EaseTextView alloc] init];
     self.textView.delegate = self;
@@ -117,7 +124,7 @@
     [self addSubview:self.textView];
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(5);
-        make.height.mas_equalTo(ktextViewMinHeight);
+        make.height.mas_equalTo(kTextViewMinHeight);
         if (_viewModel.inputBarStyle == EaseInputBarStyleAll) {
             make.left.equalTo(self.audioButton.mas_right).offset(kModuleMargin);
             make.right.equalTo(self.emojiButton.mas_left).offset(-kModuleMargin);
@@ -128,11 +135,11 @@
         }
         if (_viewModel.inputBarStyle == EaseInputBarStyleNoEmoji) {
             make.left.equalTo(self.audioButton.mas_right).offset(kModuleMargin);
-            make.right.equalTo(self.ConversationToolBarBtn.mas_left).offset(-kModuleMargin);
+            make.right.equalTo(self.conversationToolBarBtn.mas_left).offset(-kModuleMargin);
         }
         if (_viewModel.inputBarStyle == EaseInputBarStyleNoAudioAndEmoji) {
             make.left.equalTo(self).offset(kModuleMargin);
-            make.right.equalTo(self.ConversationToolBarBtn.mas_left).offset(-kModuleMargin);
+            make.right.equalTo(self.conversationToolBarBtn.mas_left).offset(-kModuleMargin);
         }
         if (_viewModel.inputBarStyle == EaseInputBarStyleOnlyText) {
             make.left.equalTo(self).offset(kModuleMargin);
@@ -165,7 +172,7 @@
     }
     
     self.emojiButton.selected = NO;
-    self.ConversationToolBarBtn.selected = NO;
+    self.conversationToolBarBtn.selected = NO;
     self.audioButton.selected = NO;
     return YES;
 }
@@ -212,11 +219,11 @@
 - (void)_updatetextViewHeight
 {
     CGFloat height = [self _gettextViewContontHeight];
-    if (height < ktextViewMinHeight) {
-        height = ktextViewMinHeight;
+    if (height < kTextViewMinHeight) {
+        height = kTextViewMinHeight;
     }
-    if (height > ktextViewMaxHeight) {
-        height = ktextViewMaxHeight;
+    if (height > kTextViewMaxHeight) {
+        height = kTextViewMaxHeight;
     }
     
     if (height == self.previousTextViewContentHeight) {

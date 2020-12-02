@@ -45,7 +45,40 @@
 
 @implementation EaseChatViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel
+- (instancetype)initWithConversationId:(NSString *)aConversationId
+                      conversationType:(EMConversationType)aType
+                         chatViewModel:(EaseChatViewModel *)aModel
+{
+    
+    switch (aType) {
+        case EMConversationTypeChat:
+        {
+            self = [[EMSingleChatViewController alloc] initSingleChatViewControllerWithCoversationid:aConversationId
+                                                                                           chatViewModel:aModel];
+        }
+            break;
+        case EMConversationTypeGroupChat:
+        {
+            self = [[EMGroupChatViewController alloc] initGroupChatViewControllerWithCoversationid:aConversationId
+                                                                                           chatViewModel:aModel];
+        }
+            break;
+        case EMConversationTypeChatRoom:
+        {
+            self = [[EMChatroomViewController alloc] initChatRoomViewControllerWithCoversationid:aConversationId
+                                                                                   chatViewModel:aModel];
+        }
+            break;
+        default:
+            break;
+    }
+    return self;
+}
+
+
+- (instancetype)initChatViewControllerWithCoversationid:(NSString *)conversationId
+                                       conversationType:(EMConversationType)conType
+                                          chatViewModel:(EaseChatViewModel *)viewModel
 {
     self = [super init];
     if (self) {
@@ -55,7 +88,7 @@
         _isReloadViewWithModel = NO;
         [EaseIMKitManager.shareEaseIMKit setConversationId:_currentConversation.conversationId];
         if (!_viewModel) {
-            _viewModel = [[EaseChatViewModel alloc]init];
+            _viewModel = [[EaseChatViewModel alloc] init];
         }
     }
     return self;

@@ -9,6 +9,7 @@
 #import "EMSingleChatViewController.h"
 #import "EMChatBar.h"
 #import "EaseMessageModel.h"
+#import "EaseChatViewController+EaseUI.h"
 
 #define TypingTimerCountNum 10
 
@@ -24,9 +25,12 @@
 
 @implementation EMSingleChatViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel
+- (instancetype)initSingleChatViewControllerWithCoversationid:(NSString *)conversationId
+                                                chatViewModel:(EaseChatViewModel *)viewModel
 {
-    self = [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseChatViewModel *)viewModel];
+    self = [super initChatViewControllerWithCoversationid:conversationId
+                       conversationType:EMConversationTypeChat
+                          chatViewModel:(EaseChatViewModel *)viewModel];
     if (self) {
         _receiveTypingCountDownNum = 0;
         _previousChangedTimeStamp = 0;

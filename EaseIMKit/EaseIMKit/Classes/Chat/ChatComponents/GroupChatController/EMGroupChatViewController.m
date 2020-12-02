@@ -14,6 +14,7 @@
 #import "EaseAlertView.h"
 #import "EaseTextView.h"
 #import "EMMessageCell.h"
+#import "EaseChatViewController+EaseUI.h"
 
 @interface EMGroupChatViewController () <EMReadReceiptMsgDelegate,EMGroupManagerDelegate>
 
@@ -27,9 +28,12 @@
 
 @implementation EMGroupChatViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel
+- (instancetype)initGroupChatViewControllerWithCoversationid:(NSString *)conversationId
+                                               chatViewModel:(EaseChatViewModel *)viewModel
 {
-    return [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseChatViewModel *)viewModel];
+    return [super initChatViewControllerWithCoversationid:conversationId
+                       conversationType:EMConversationTypeGroupChat
+                          chatViewModel:(EaseChatViewModel *)viewModel];
 }
 
 - (void)viewDidLoad {
