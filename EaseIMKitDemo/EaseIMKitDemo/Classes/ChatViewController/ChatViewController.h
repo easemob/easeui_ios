@@ -7,13 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <EaseIMKit/EaseIMKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 
 @interface ChatViewController : UIViewController
-
-- (instancetype)initWithConversationId:(NSString *)conversationId conversationType:(EMConversationType)conType;
+@property (nonatomic, strong) NSString *chatter;
+@property (nonatomic) EMConversationType conversationType;
 @end
 
 NS_ASSUME_NONNULL_END

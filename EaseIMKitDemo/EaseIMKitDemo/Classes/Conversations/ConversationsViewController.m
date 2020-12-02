@@ -52,9 +52,11 @@
 - (void)easeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EaseConversationCell *cell = (EaseConversationCell*)[tableView cellForRowAtIndexPath:indexPath];
-    ChatViewController *chatController = [[ChatViewController alloc]initWithConversationId:cell.model.easeId conversationType:cell.model.type];
-    chatController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:chatController animated:YES];
+    ChatViewController *chatVC = [[ChatViewController alloc] init];
+    chatVC.chatter = cell.model.easeId;
+    chatVC.conversationType = EMConversationTypeChat;
+    chatVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:chatVC animated:YES];
 }
 
 

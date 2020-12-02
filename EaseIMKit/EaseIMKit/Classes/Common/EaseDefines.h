@@ -1,5 +1,5 @@
 //
-//  EMDefines.h
+//  EaseDefines.h
 //  ChatDemo-UI3.0
 //
 //  Created by XieYajie on 2019/2/11.

@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shareEaseIMKit;
 + (void)destoryShared;
-
++ (NSString *)EaseIMKitVersion;
 - (void)addDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
 - (void)removeDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
 

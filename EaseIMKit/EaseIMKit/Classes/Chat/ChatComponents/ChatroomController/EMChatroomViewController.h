@@ -14,7 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EMChatroomViewController : EaseChatViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel;
+- (instancetype)initChatRoomViewControllerWithCoversationid:(NSString *)conversationId
+                                              chatViewModel:(EaseChatViewModel *)viewModel;
 
 @end
 

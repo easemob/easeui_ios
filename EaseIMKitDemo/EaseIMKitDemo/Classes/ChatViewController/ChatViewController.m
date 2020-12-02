@@ -11,24 +11,21 @@
 #import <EaseIMKit/EaseIMKit.h>
 
 @interface ChatViewController ()
-@property (nonatomic, strong)EaseChatViewController *chatController;
 @end
 
 @implementation ChatViewController
 
-- (instancetype)initWithConversationId:(NSString *)conversationId conversationType:(EMConversationType)conType {
-    if (self = [super init]) {
-        EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
-        _chatController = [EaseChatControllerProducter getChatControllerInstance:conversationId conversationType:EMConversationTypeChat chatViewModel:viewModel];
-    }
-    return self;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self addChildViewController:_chatController];
-    [self.view addSubview:_chatController.view];
-    [_chatController.view mas_makeConstraints:^(MASConstraintMaker *make) {
+    
+    EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
+    EaseChatViewController *chatController = [[EaseChatViewController alloc] initWithConversationId:self.chatter
+                                                                                   conversationType:self.conversationType
+                                                                                      chatViewModel:viewModel];
+    [self addChildViewController:chatController];
+    [self.view addSubview:chatController.view];
+    [chatController.view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.equalTo(self.view);
     }];
     

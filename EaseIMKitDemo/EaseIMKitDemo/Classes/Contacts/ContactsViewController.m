@@ -7,6 +7,7 @@
 //
 
 #import "ContactsViewController.h"
+#import "ChatViewController.h"
 #import "ContactModel.h"
 #import <Masonry/Masonry.h>
 #import <EaseIMKit/EaseIMKit.h>
@@ -70,10 +71,12 @@
 }
 
 - (void)easeTableView:(UITableView *)tableView didSelectRowAtContactModel:(EaseContactModel *)contact {
-//    NSLog(@"contact -- %@", contact.easeId);
-    EaseChatViewController *chatView = [[EaseChatViewController alloc] initWithCoversationid:contact.easeId conversationType:EMConversationTypeChat chatViewModel:[[EaseChatViewModel alloc]init]];
-    chatView.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:chatView animated:YES];
+
+    ChatViewController *chatVC = [[ChatViewController alloc] init];
+    chatVC.chatter = contact.easeId;
+    chatVC.conversationType = EMConversationTypeChat;
+    chatVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:chatVC animated:YES];
 }
 
 - (void)updateContactViewTableHeader {

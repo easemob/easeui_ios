@@ -10,6 +10,7 @@
 #import "EaseAlertController.h"
 #import "EaseAlertView.h"
 #import "UIViewController+HUD.h"
+#import "EaseChatViewController+EaseUI.h"
 
 @interface EMChatroomViewController ()
 
@@ -17,9 +18,12 @@
 
 @implementation EMChatroomViewController
 
-- (instancetype)initWithCoversationid:(NSString *)conversationId conversationType:(EMConversationType)conType chatViewModel:(EaseChatViewModel *)viewModel
+- (instancetype)initChatRoomViewControllerWithCoversationid:(NSString *)conversationId
+                                              chatViewModel:(EaseChatViewModel *)viewModel
 {
-    return [super initWithCoversationid:conversationId conversationType:conType chatViewModel:(EaseChatViewModel *)viewModel];
+    return [super initChatViewControllerWithCoversationid:conversationId
+                       conversationType:EMConversationTypeChatRoom
+                          chatViewModel:(EaseChatViewModel *)viewModel];
 }
 
 - (void)viewDidLoad {

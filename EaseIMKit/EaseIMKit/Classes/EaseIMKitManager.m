@@ -20,7 +20,13 @@ static EaseIMKitManager *easeIMKit = nil;
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
 @end
 
+#define IMKitVersion @"0.0.5"
+
 @implementation EaseIMKitManager
+
++ (NSString *)EaseIMKitVersion {
+    return IMKitVersion;
+}
 
 + (instancetype)shareEaseIMKit
 {

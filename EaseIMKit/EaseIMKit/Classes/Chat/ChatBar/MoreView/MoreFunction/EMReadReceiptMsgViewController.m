@@ -9,8 +9,8 @@
 #define LRWindowHeight UIScreen.mainScreen.bounds.size.height
 #define kColor_Blue [UIColor colorWithRed:45 / 255.0 green:116 / 255.0 blue:215 / 255.0 alpha:1.0]
 #define LRSafeAreaTopHeight ((LRWindowHeight == 812.0 || LRWindowHeight == 896) ? 64 : 40)
-#define ktextViewMinHeight 40
-#define ktextViewMaxHeight 120
+#define kTextViewMinHeight 40
+#define kTextViewMaxHeight 120
 #import "EMReadReceiptMsgViewController.h"
 #import "EaseTextView.h"
 #import "EMMessageCell.h"
@@ -244,7 +244,7 @@
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(lineBelow.mas_bottom).offset(5);
         make.left.right.equalTo(msgView);
-        make.height.mas_equalTo(ktextViewMinHeight);
+        make.height.mas_equalTo(kTextViewMinHeight);
     }];
     */
     
@@ -274,7 +274,7 @@
         make.top.equalTo(self.view).offset(LRSafeAreaTopHeight + 50);
         make.left.equalTo(self.view).offset(8);
         make.right.equalTo(self.view).offset(-8);
-        make.height.mas_equalTo(ktextViewMinHeight);
+        make.height.mas_equalTo(kTextViewMinHeight);
     }];
     
     UIButton *sendBtn;
