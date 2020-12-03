@@ -9,17 +9,16 @@
 #ifndef EaseDefines_h
 #define EaseDefines_h
 
-#define IS_iPhoneX (\
-{\
-BOOL isPhoneX = NO;\
-if (@available(iOS 11.0, *)) {\
-isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bottom > 0.0;\
-}\
-(isPhoneX);}\
-)
+#define kIsBangsScreen ({\
+    BOOL isBangsScreen = NO; \
+    if (@available(iOS 11.0, *)) { \
+    UIWindow *window = [[UIApplication sharedApplication].windows firstObject]; \
+    isBangsScreen = window.safeAreaInsets.bottom > 0; \
+    } \
+    isBangsScreen; \
+})
 
-#define EMVIEWTOPMARGIN (IS_iPhoneX ? 22.f : 0.f)
-#define EMVIEWBOTTOMMARGIN (IS_iPhoneX ? 34.f : 0.f)
+#define EMVIEWBOTTOMMARGIN (kIsBangsScreen ? 34.f : 0.f)
 
 #define EMSYSTEMNOTIFICATIONID @"emsystemnotificationid"
 

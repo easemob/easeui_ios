@@ -205,6 +205,7 @@
         NSArray *normalConvList = [convs sortedArrayUsingComparator:
                                    ^NSComparisonResult(EaseConversationModel *obj1, EaseConversationModel *obj2)
         {
+            NSLog(@"timestamp:   %lld",obj2.lastestUpdateTime);
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;
             }else {
@@ -218,7 +219,7 @@
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;
             }else {
-                return(NSComparisonResult)NSOrderedDescending;
+                return(NSComparisonResult)NSOrderedDescending; 
             }
         }];
         

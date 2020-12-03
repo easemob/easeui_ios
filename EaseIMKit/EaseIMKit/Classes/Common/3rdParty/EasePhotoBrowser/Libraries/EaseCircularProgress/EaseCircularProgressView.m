@@ -125,7 +125,8 @@
 
 - (void)didMoveToWindow
 {
-    CGFloat windowContentsScale = self.window.screen.scale;
+    UIWindow *window = [[UIApplication sharedApplication].windows firstObject];
+    CGFloat windowContentsScale = window.screen.scale;
     self.circularProgressLayer.contentsScale = windowContentsScale;
 }
 

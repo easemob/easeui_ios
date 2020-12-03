@@ -187,6 +187,7 @@ static EaseIMKitManager *easeIMKit = nil;
     message.timestamp = [self getLatestMsgTimestamp];
     message.isRead = NO;
     message.chatType = chatType;
+    message.direction = EMMessageDirectionReceive;
     EMConversation *notiConversation = [[EMClient sharedClient].chatManager getConversation:message.conversationId type:EMConversationTypeChat createIfNotExist:YES];
     NSDictionary *ext = nil;
     if (self.systemNotiDelegate && [self.systemNotiDelegate respondsToSelector:@selector(requestDidReceiveConversationExt:requestUser:reason:)]) {
@@ -230,9 +231,7 @@ static EaseIMKitManager *easeIMKit = nil;
 //最新消息时间
 - (long long)getLatestMsgTimestamp
 {
-    NSDate *notiTime = [NSDate date];
-    NSTimeInterval notiTimeInterval = [notiTime timeIntervalSince1970];
-    return [[NSNumber numberWithDouble:notiTimeInterval] longLongValue];
+    return [[NSDate new] timeIntervalSince1970] * 1000;
 }
 
 #pragma mark - EMMultiDevicesDelegate
