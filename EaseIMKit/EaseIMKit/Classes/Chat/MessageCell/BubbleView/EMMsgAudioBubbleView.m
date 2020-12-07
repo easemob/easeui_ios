@@ -59,7 +59,7 @@
         make.top.equalTo(self).offset(8);
         make.bottom.equalTo(self).offset(-8);
     }];
-    
+    self.textLabel.textColor = [UIColor blackColor];
     if (self.direction == EMMessageDirectionSend) {
         
         [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -74,7 +74,6 @@
         
         self.imgView.image = [UIImage easeUIImageNamed:@"语音声波send"];
         self.imgView.animationImages = @[[UIImage easeUIImageNamed:@"语音声波-right-2"], [UIImage easeUIImageNamed:@"语音声波-right-1"], [UIImage easeUIImageNamed:@"语音声波send"]];
-        self.textLabel.textColor = [UIColor whiteColor];
     } else {
         
         [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -89,7 +88,6 @@
         
         self.imgView.image = [UIImage easeUIImageNamed:@"语音声波receive"];
         self.imgView.animationImages = @[[UIImage easeUIImageNamed:@"语音声波-left-2"], [UIImage easeUIImageNamed:@"语音声波-left-1"], [UIImage easeUIImageNamed:@"语音声波receive"]];
-        self.textLabel.textColor = [UIColor blackColor];
     }
 }
 

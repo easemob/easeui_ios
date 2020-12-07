@@ -9,6 +9,7 @@
 #import "EaseAlertController.h"
 #import "EaseHeaders.h"
 #import "UIImage+EaseUI.h"
+#import "UIColor+EaseUI.h"
 
 @interface EaseAlertController()
 
@@ -89,16 +90,16 @@
 
 - (UIColor *)_tagColorWithStyle:(EaseAlertViewStyle)aStyle
 {
-    UIColor *color = kColor_Blue;
+    UIColor *color = [UIColor colorWithHexString:@"#2D74D7"];
     switch (aStyle) {
         case EaseAlertViewStyleError:
-            color = [UIColor colorWithRed:204 / 255.0 green:58 / 255.0 blue:35 / 255.0 alpha:1.0];
+            color = [UIColor colorWithHexString:@"#CC3A23"];
             break;
         case EaseAlertViewStyleInfo:
-            color = [UIColor colorWithRed:232 / 255.0 green:192 / 255.0 blue:64 / 255.0 alpha:1.0];
+            color = [UIColor colorWithHexString:@"#E8C040"];
             break;
         case EaseAlertViewStyleSuccess:
-            color = [UIColor colorWithRed:35 / 255.0 green:158 / 255.0 blue:85 / 255.0 alpha:1.0];
+            color = [UIColor colorWithHexString:@"#239E55"];
             break;
             
         default:

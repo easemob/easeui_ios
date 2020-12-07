@@ -23,7 +23,7 @@ static const void *recallViewKey = &recallViewKey;
 
 @dynamic longPressIndexPath;
 
-- (void)resetCellLongPressStatus:(EMMessageCell *)aCell
+- (void)resetCellLongPressStatus:(EaseMessageCell *)aCell
 {
     if (aCell.model.type == EMMessageTypeText) {
         EMMsgTextBubbleView *textBubbleView = (EMMsgTextBubbleView*)aCell.bubbleView;

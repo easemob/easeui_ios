@@ -13,17 +13,18 @@
 #define kTextViewMaxHeight 120
 #import "EMReadReceiptMsgViewController.h"
 #import "EaseTextView.h"
-#import "EMMessageCell.h"
+#import "EaseMessageCell.h"
 #import "EaseDateHelper.h"
 #import "EMReadReceiptTableViewCell.h"
 #import "EMReadReceiptMemberModel.h"
+#import "UIColor+EaseUI.h"
 
 @interface EMReadReceiptMsgViewController ()<UITextViewDelegate>
 
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) EaseTextView *textView;
-@property (nonatomic, strong) EMMessageCell *msgCell;
+@property (nonatomic, strong) EaseMessageCell *msgCell;
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSString *groupId;
 
@@ -55,7 +56,7 @@
     return self;
 }
 
-- (instancetype)initWithMessageCell:(EMMessageCell *)messageCell groupId:(NSString *)groupId {
+- (instancetype)initWithMessageCell:(EaseMessageCell *)messageCell groupId:(NSString *)groupId {
     self = [super init];
     if(self){
         self.msgCell = messageCell;
@@ -164,7 +165,6 @@
     }];
     
     UIImageView *img = [[UIImageView alloc]init];
-    img.image = [UIImage easeUIImageNamed:@"pin-red"];
     [self.view addSubview:img];
     [img mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(msgView).offset(5);
@@ -249,7 +249,7 @@
     */
     
     self.memberTableView.backgroundColor = [UIColor lightTextColor];
-    self.memberTableView.backgroundColor = kColor_LightGray;
+    self.memberTableView.backgroundColor = [UIColor colorWithHexString:@"F2F2F2"];
     self.memberTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [self.memberTableView setSeparatorColor:[UIColor blackColor]];
     [self.memberTableView setSeparatorInset:UIEdgeInsetsMake(129,10,0,10)];

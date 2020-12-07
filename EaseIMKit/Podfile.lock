@@ -6,11 +6,12 @@ PODS:
     - Masonry
     - MBProgressHUD
     - SDWebImage
-  - EMVoiceConvert (0.0.5)
+  - EMVoiceConvert (0.0.6)
   - FLAnimatedImage (1.0.12)
   - Hyphenate (3.7.2)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
+  - MJRefresh (3.5.0)
   - SDWebImage (5.10.0):
     - SDWebImage/Core (= 5.10.0)
   - SDWebImage/Core (5.10.0)
@@ -22,6 +23,7 @@ DEPENDENCIES:
   - Hyphenate
   - Masonry
   - MBProgressHUD
+  - MJRefresh
   - SDWebImage
 
 SPEC REPOS:
@@ -31,6 +33,7 @@ SPEC REPOS:
     - Hyphenate
     - Masonry
     - MBProgressHUD
+    - MJRefresh
     - SDWebImage
 
 EXTERNAL SOURCES:
@@ -39,13 +42,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   EaseIMKit: 003680d69721deefb41ded75709d8d891389e554
-  EMVoiceConvert: a07ac093aed9c22c0a7a999833b68a9398dab6ff
+  EMVoiceConvert: e52b9918199a8f1d1ad3041e71b569a9bc165bb5
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Hyphenate: a9da397810e08c4b3173a5c8f04868165ec48b9c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
   SDWebImage: 9169792e9eec3e45bba2a0c02f74bf8bd922d1ee
 
-PODFILE CHECKSUM: 5b37062ac5c7538c9a712277667c0fa8cd98f3a6
+PODFILE CHECKSUM: bb8c5622283c2be6ac90299dfc6ba9e79e0a6ac9
 
 COCOAPODS: 1.10.0

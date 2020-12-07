@@ -23,6 +23,8 @@
         _placeholderColor = [UIColor lightGrayColor];
         _editing = NO;
         
+        super.scrollEnabled = YES;
+        super.layoutManager.allowsNonContiguousLayout = NO;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startEditing:) name:UITextViewTextDidBeginEditingNotification object:self];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishEditing:) name:UITextViewTextDidEndEditingNotification object:self];
     }
@@ -49,10 +51,8 @@
 
 - (void)setText:(NSString *)string
 {
-    if ([self.text length] == 0) {
-        super.textColor = _contentColor;
-    }
     super.text = string;
+    [super scrollRangeToVisible:NSMakeRange(super.text.length, 1)];
 }
 
 #pragma mark - setting
@@ -84,14 +84,7 @@
 - (void)finishEditing:(NSNotification *)notification
 {
     _editing = NO;
-    
-    if (super.text.length == 0) {
-        super.textColor = _placeholderColor;
-        super.text = _placeholder;
-    }
-    else{
-        super.textColor = _contentColor;
-    }
+    super.textColor = _contentColor;
 }
 
 @end

@@ -6,8 +6,8 @@
 //
 
 #import "EaseChatViewModel.h"
-#import "EaseColorDefine.h"
 #import "UIImage+EaseUI.h"
+#import "UIColor+EaseUI.h"
 
 @implementation EaseChatViewModel
 
@@ -15,12 +15,11 @@
 {
     self = [super init];
     if (self) {
-        _defaultLongPressViewIsNeededForCustomCell = YES;
         _isFetchHistoryMessagesFromServer = NO;
-        _chatViewBgColor = kColor_chatViewBg;
-        _chatBarBgColor = [UIColor whiteColor];
-        _msgTimeItemBgColor = kColor_LightGray;
-        _msgTimeItemFontColor = [UIColor grayColor];
+        _chatViewBgColor = [UIColor colorWithHexString:@"#F2F2F2"];
+        _chatBarBgColor = [UIColor colorWithHexString:@"#F2F2F2"];
+        _msgTimeItemBgColor = [UIColor colorWithHexString:@"#F2F2F2"];
+        _msgTimeItemFontColor = [UIColor colorWithHexString:@"#ADADAD"];
         _receiveBubbleBgPicture = [UIImage easeUIImageNamed:@"msg_bg_recv"];
         _sendBubbleBgPicture = [UIImage easeUIImageNamed:@"msg_bg_send"];
         _contentFontSize = 18.f;
@@ -29,11 +28,6 @@
         _avatarCornerRadius = 0;
     }
     return self;
-}
-
-- (void)setDefaultLongPressViewIsNeededForCustomCell:(BOOL)defaultLongPressViewIsNeededForCustomCell
-{
-    _defaultLongPressViewIsNeededForCustomCell = defaultLongPressViewIsNeededForCustomCell;
 }
 
 - (void)setIsFetchHistoryMessagesFromServer:(BOOL)isFetchHistoryMessagesFromServer

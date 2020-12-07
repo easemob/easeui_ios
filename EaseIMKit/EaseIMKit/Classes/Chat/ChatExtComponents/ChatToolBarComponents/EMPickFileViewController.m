@@ -7,9 +7,9 @@
 //
 
 #import "EMPickFileViewController.h"
-#import "EaseColorDefine.h"
 #import <Masonry/Masonry.h>
 #import "UIImage+EaseUI.h"
+#import "UIColor+EaseUI.h"
 
 @interface EMPickFileViewController ()
 
@@ -144,7 +144,7 @@
         _tableView.tableFooterView = [UIView new];
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.backgroundColor = kColor_LightGray;
+        _tableView.backgroundColor = [UIColor colorWithHexString:@"F2F2F2"];
         _tableView.estimatedRowHeight = 130;
         _tableView.rowHeight = UITableViewAutomaticDimension;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

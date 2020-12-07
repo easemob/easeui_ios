@@ -8,7 +8,7 @@
 
 #import "EaseChatViewController.h"
 #import "EaseMessageModel.h"
-#import "EMMessageCell.h"
+#import "EaseMessageCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)recallLongPressAction;
 - (void)copyLongPressAction;
 
-- (void)resetCellLongPressStatus:(EMMessageCell *)aCell;
+- (void)resetCellLongPressStatus:(EaseMessageCell *)aCell;
 
 @end
 

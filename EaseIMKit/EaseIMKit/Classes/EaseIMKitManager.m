@@ -87,17 +87,8 @@ static EaseIMKitManager *easeIMKit = nil;
 {
     __weak typeof(self) weakself = self;
     dispatch_async(self.msgQueue, ^{
-        NSInteger unreadCount = 0;
-        NSString *conId = weakself.currentConversationId;
         for (int i = 0; i < [aMessages count]; i++) {
-            EMMessage *msg = aMessages[i];
-            if (![msg.conversationId isEqualToString:conId]) {
-                ++unreadCount;
-            }
-        }
-        if (unreadCount > 0) {
-            weakself.currentUnreadCount += unreadCount;
-            [weakself coversationsUnreadCountUpdate:weakself.currentUnreadCount];
+            [weakself conversationsUnreadCount];
         }
     });
 }
@@ -111,7 +102,7 @@ static EaseIMKitManager *easeIMKit = nil;
     if ([aUsername length] == 0) {
         return;
     }
-    [self structureSystemNotification:aUsername userName:aUsername chatType:EMChatTypeChat reason:ContanctsRequestDidReceive];
+    [self structureSystemNotification:aUsername userName:aUsername reason:ContanctsRequestDidReceive];
 }
 
 //收到好友请求被同意/同意
@@ -143,7 +134,7 @@ static EaseIMKitManager *easeIMKit = nil;
     if ([aGroupId length] == 0 || [aInviter length] == 0) {
         return;
     }
-    [self structureSystemNotification:aGroupId userName:aInviter chatType:EMChatTypeGroupChat reason:GroupInvitationDidReceive];
+    [self structureSystemNotification:aGroupId userName:aInviter reason:GroupInvitationDidReceive];
 }
 
 //收到加群申请
@@ -154,13 +145,13 @@ static EaseIMKitManager *easeIMKit = nil;
     if ([aGroup.groupId length] == 0 || [aUsername length] == 0) {
         return;
     }
-    [self structureSystemNotification:aGroup.groupId userName:aUsername chatType:EMChatTypeGroupChat reason:JoinGroupRequestDidReceive];
+    [self structureSystemNotification:aGroup.groupId userName:aUsername reason:JoinGroupRequestDidReceive];
 }
 
 #pragma mark - private
 
 //系统通知构造为会话
-- (void)structureSystemNotification:(NSString *)conversationId userName:(NSString*)userName chatType:(EMChatType)chatType reason:(EaseIMKitCallBackReason)reason
+- (void)structureSystemNotification:(NSString *)conversationId userName:(NSString*)userName reason:(EaseIMKitCallBackReason)reason
 {
     if (![self isNeedsSystemNoti]) {
         return;
@@ -186,7 +177,7 @@ static EaseIMKitManager *easeIMKit = nil;
     EMMessage *message = [[EMMessage alloc] initWithConversationID:EMSYSTEMNOTIFICATIONID from:userName to:EMClient.sharedClient.currentUsername body:body ext:nil];
     message.timestamp = [self getLatestMsgTimestamp];
     message.isRead = NO;
-    message.chatType = chatType;
+    message.chatType = EMChatTypeGroupChat;
     message.direction = EMMessageDirectionReceive;
     EMConversation *notiConversation = [[EMClient sharedClient].chatManager getConversation:message.conversationId type:EMConversationTypeChat createIfNotExist:YES];
     NSDictionary *ext = nil;
@@ -287,12 +278,11 @@ static EaseIMKitManager *easeIMKit = nil;
 {
     if (conversation && conversation.unreadMessagesCount > 0) {
         [conversation markAllMessagesAsRead:nil];
-        _currentUnreadCount -= conversation.unreadMessagesCount;
-        [self coversationsUnreadCountUpdate:_currentUnreadCount];
+        [self conversationsUnreadCount];
     }
 }
 
-//未读总数变化    （插一条未读信息到会话）
+//未读总数变化
 - (void)conversationsUnreadCount
 {
     NSInteger unreadCount = 0;

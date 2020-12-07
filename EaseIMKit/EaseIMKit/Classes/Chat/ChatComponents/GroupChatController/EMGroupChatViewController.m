@@ -13,7 +13,7 @@
 #import "EaseAlertController.h"
 #import "EaseAlertView.h"
 #import "EaseTextView.h"
-#import "EMMessageCell.h"
+#import "EaseMessageCell.h"
 #import "EaseChatViewController+EaseUI.h"
 
 @interface EMGroupChatViewController () <EMReadReceiptMsgDelegate,EMGroupManagerDelegate>
@@ -21,8 +21,6 @@
 @property (nonatomic, strong) EMGroup *group;
 //阅读回执
 @property (nonatomic, strong) EMReadReceiptMsgViewController *readReceiptControl;
-//@
-@property (nonatomic) BOOL isWillInputAt;
 
 @end
 
@@ -84,7 +82,6 @@
         return;
     }
     [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:self.currentConversation.conversationId completion:^(EMGroup *aGroup, EMError *aError) {
-        NSLog(@"\n -------- sendError:   %@",aError);
         if (!aError) {
             self.group = aGroup;
             //是群主才可以发送阅读回执信息
@@ -95,47 +92,13 @@
     }];
 }
 
-#pragma mark - EMMessageCellDelegate
+#pragma mark - EaseMessageCellDelegate
 
 //阅读回执详情
-- (void)messageReadReceiptDetil:(EMMessageCell *)aCell
+- (void)messageReadReceiptDetil:(EaseMessageCell *)aCell
 {
-    BOOL isNeedsDefaultImpl = YES;
     if (self.delegate && [self.delegate respondsToSelector:@selector(groupMessageReadReceiptDetail:groupId:)]) {
-        isNeedsDefaultImpl = [self.delegate groupMessageReadReceiptDetail:aCell.model.message groupId:self.currentConversation.conversationId];
-    }
-    if (!isNeedsDefaultImpl) {
-        return;
-    }
-    self.readReceiptControl = [[EMReadReceiptMsgViewController alloc] initWithMessageCell:aCell groupId:self.currentConversation.conversationId];
-    self.readReceiptControl.modalPresentationStyle = 0;
-    [self presentViewController:self.readReceiptControl animated:NO completion:nil];
-}
-
-#pragma mark - EMChatBarDelegate
-
-- (BOOL)inputView:(EaseTextView *)aInputView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    self.isWillInputAt = NO;
-    if ([text isEqualToString:@"\n"]) {
-        [self sendTextAction:aInputView.text ext:nil];
-        return NO;
-    }
-    if ([text isEqualToString:@"@"]) {
-        self.isWillInputAt = YES;
-    }
-    
-    return YES;
-}
-
-- (void)inputViewDidChange:(EaseTextView *)aInputView
-{
-    //@群成员
-    if (self.isWillInputAt && self.currentConversation.type == EMConversationTypeGroupChat) {
-        NSString *text = aInputView.text;
-        if ([text hasSuffix:@"@"]) {
-            self.isWillInputAt = NO;
-        }
+        [self.delegate groupMessageReadReceiptDetail:aCell.model.message groupId:self.currentConversation.conversationId];
     }
 }
 

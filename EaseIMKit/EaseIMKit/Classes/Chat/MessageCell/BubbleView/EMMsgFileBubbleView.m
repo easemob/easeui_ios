@@ -69,7 +69,7 @@
         make.left.equalTo(self.mas_centerX);
         make.right.equalTo(self.textLabel);
     }];
-    
+    self.textLabel.textColor = [UIColor blackColor];
     if (self.direction == EMMessageDirectionSend) {
         self.iconView.image = [UIImage easeUIImageNamed:@"msg_file_white"];
         [self.iconView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -78,14 +78,11 @@
             make.centerY.equalTo(self);
             make.width.equalTo(@40);
         }];
-        
-        self.textLabel.textColor = [UIColor whiteColor];
         [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self).offset(10);
             make.left.equalTo(self.iconView.mas_right).offset(5);
             make.right.equalTo(self).offset(-15);
         }];
-        
         self.detailLabel.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     } else {
         self.iconView.image = [UIImage easeUIImageNamed:@"msg_file"];
@@ -95,8 +92,6 @@
             make.centerY.equalTo(self);
             make.width.equalTo(@40);
         }];
-        
-        self.textLabel.textColor = [UIColor blackColor];
         [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self).offset(10);
             make.left.equalTo(self.iconView.mas_right).offset(5);

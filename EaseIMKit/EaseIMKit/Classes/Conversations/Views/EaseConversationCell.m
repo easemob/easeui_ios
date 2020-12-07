@@ -72,7 +72,7 @@
         if (_viewModel.avatarType == RoundedCorner) {
             _avatarView.layer.cornerRadius = 5;
         }
-        else if(Circular) {
+        else if(_viewModel.avatarType == Circular) {
             _avatarView.layer.cornerRadius = _viewModel.avatarSize.width / 2;
         }
         

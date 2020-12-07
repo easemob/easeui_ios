@@ -27,26 +27,26 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<EaseUserDelegate>)userData:(NSString*)huanxinID;
 
 /**
- * 头像点击事件 （返回是否需要执行默认点击事件） 默认 NO
+ * 头像点击事件
  *
  * @param   userData        当前点击的头像所指向的用户资料
  */
-- (BOOL)avatarDidSelected:(id<EaseUserDelegate>)userData;
+- (void)avatarDidSelected:(id<EaseUserDelegate>)userData;
 
 /**
- * 头像长按事件 （返回是否需要执行默认长按事件） 默认  NO
+ * 头像长按事件
  *
  * @param   userData        当前长按的头像所指向的用户资料
  */
-- (BOOL)avatarDidLongPress:(id<EaseUserDelegate>)userData;
+- (void)avatarDidLongPress:(id<EaseUserDelegate>)userData;
 
 /**
- * 群通知回执详情 （返回是否需要默认回执详情页）默认 YES
+ * 群通知回执详情
  *
- * @param   message        当前去通知消息
+ * @param   message        当前群通知消息
  * @param   groupId        当前消息所属群ID
  */
-- (BOOL)groupMessageReadReceiptDetail:(EMMessage*)message groupId:(NSString*)groupId;
+- (void)groupMessageReadReceiptDetail:(EMMessage*)message groupId:(NSString*)groupId;
 
 /**
  * 自定义cell
@@ -55,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 当前所长按的 自定义cell 的扩展区数据模型组
  *
- * @param   defaultLongPressItems       默认长按扩展区功能数据模型组      （默认共有：复制，撤回，删除）
+ * @param   defaultLongPressItems       默认长按扩展区功能数据模型组      （默认共有：复制，删除，撤回（发送消息时间距当前时间小于2分钟））
  * @param   customCell                               当前长按的自定义cell
  */
 - (NSMutableArray<EaseExtMenuModel*>*)customCellLongPressExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultLongPressItems customCell:(UITableViewCell*)customCell;
@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 当前会话输入扩展区数据模型组
  *
- * @param   defaultInputBarItems        默认功能数据模型组   （默认共有：相册，相机，位置，文件，群组回执）
+ * @param   defaultInputBarItems        默认功能数据模型组   （默认有序：相册，相机，位置，文件，群组回执）
  * @param   conversationType                 当前会话类型：单聊，群聊，聊天室
  */
 - (NSMutableArray<EaseExtMenuModel*>*)inputBarExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultInputBarItems conversationType:(EMConversationType)conversationType;
@@ -81,7 +81,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)beginTyping;
 
 /**
- 对方停止
+ 对方结束输入
 */
 - (void)endTyping;
 
@@ -99,7 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 当前所长按消息的扩展区数据模型组
  *
- * @param   defaultLongPressItems       默认长按扩展区功能数据模型组  （默认共有：复制，撤回，删除）
+ * @param   defaultLongPressItems       默认长按扩展区功能数据模型组  （默认共有：复制，删除， 撤回）
  * @param   message                                      当前长按的消息
  */
 - (NSMutableArray<EaseExtMenuModel*>*)messageLongPressExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultLongPressItems message:(EMMessage*)message;

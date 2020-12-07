@@ -8,7 +8,7 @@
 
 #import "EMChatBar.h"
 #import "UIImage+EaseUI.h"
-#import "EaseDefines.h"
+#import "UIColor+EaseUI.h"
 
 #define kTextViewMinHeight 32
 #define kTextViewMaxHeight 80
@@ -59,7 +59,8 @@
     self.backgroundColor = _viewModel.chatBarBgColor;
     
     UIView *line = [[UIView alloc] init];
-    line.backgroundColor = kColor_Gray;
+    line.backgroundColor = [UIColor colorWithHexString:@"#000000"];
+    line.alpha = 0.1;
     [self addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self);
@@ -107,14 +108,15 @@
     [self.textView setTextColor:[UIColor blackColor]];
     self.textView.font = [UIFont systemFontOfSize:16];
     self.textView.textAlignment = NSTextAlignmentLeft;
-    self.textView.textContainerInset = UIEdgeInsetsMake(10, 10, 12, 0);
+    
+    self.textView.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 0);
     if (@available(iOS 11.1, *)) {
         self.textView.verticalScrollIndicatorInsets = UIEdgeInsetsMake(12, 20, 2, 0);
     } else {
         // Fallback on earlier versions
     }
     self.textView.returnKeyType = UIReturnKeySend;
-    self.textView.backgroundColor = [UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0];
+    self.textView.backgroundColor = [UIColor whiteColor];
     self.textView.layer.cornerRadius = 16;
     [self addSubview:self.textView];
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -143,7 +145,8 @@
     }];
     
     self.bottomLine = [[UIView alloc] init];
-    _bottomLine.backgroundColor = kColor_Gray;
+    _bottomLine.backgroundColor = [UIColor colorWithHexString:@"#000000"];
+    _bottomLine.alpha = 0.1;
     [self addSubview:self.bottomLine];
     [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.textView.mas_bottom).offset(5);
@@ -152,7 +155,7 @@
         make.height.equalTo(@0.5);
         make.bottom.equalTo(self).offset(-EMVIEWBOTTOMMARGIN);
     }];
-    self.currentMoreView.backgroundColor = kColor_ExtFunctionView;
+    self.currentMoreView.backgroundColor = [UIColor colorWithHexString:@"#f2f2f2"];
 }
 
 #pragma mark - UITextViewDelegate
@@ -174,20 +177,17 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldInteractWithURL:inRange:)]) {
-        return [self.delegate textView:textView shouldChangeTextInRange:range replacementText:text];
-    }
     if ([text isEqualToString:@"\n"]) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarSendMsgAction:)]) {
             [self.delegate chatBarSendMsgAction:self.textView.text];
         }
-        //[textView resignFirstResponder];
         return NO;
     }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(inputView:shouldChangeTextInRange:replacementText:)]) {
-        return [self.delegate inputView:self.textView shouldChangeTextInRange:range replacementText:text];
-    } 
     
+    if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
+        return [self.delegate textView:textView shouldChangeTextInRange:range replacementText:text];
+    }
+
     return YES;
 }
 
@@ -317,13 +317,7 @@
     if (aButton.selected) {
         self.selectedButton = aButton;
     }
-    return isEditing;
-}
-
-//语音
-- (void)audioButtonAction:(UIButton *)aButton
-{
-    if (aButton.isSelected) {
+    if (!self.audioButton.isSelected) {
         [self.audioButton mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(@16);
         }];
@@ -332,6 +326,13 @@
             make.width.mas_equalTo(kIconwidth);
         }];
     }
+    
+    return isEditing;
+}
+
+//语音
+- (void)audioButtonAction:(UIButton *)aButton
+{
     if([self _buttonAction:aButton]) {
         return;
     }

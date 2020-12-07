@@ -11,6 +11,7 @@
 #import "EMMoreFunctionView.h"
 #import "HorizontalLayout.h"
 #import "UIImage+EaseUI.h"
+#import "UIColor+EaseUI.h"
 
 @implementation EaseExtMenuViewModel
 - (instancetype)initWithType:(ExtType)type itemCount:(NSInteger)itemCount
@@ -26,7 +27,7 @@
 - (CGFloat)cellLonger
 {
     if (_type == ExtTypeChatBar) {
-        return 60;
+        return 55;
     }
     return 50;
 }
@@ -69,16 +70,16 @@
 - (UIColor *)fontColor
 {
     if (_type == ExtTypeChatBar) {
-        return inputBarFontColor;
+        return [UIColor colorWithHexString:@"#999999"];
     }
-    return longPressFontColor;
+    return [UIColor colorWithHexString:@"#333333"];
 }
 - (UIColor *)bgColor
 {
     if (_type == ExtTypeChatBar) {
-        return inputBarBgColor;
+        return [UIColor colorWithHexString:@"#F2F2F2"];
     }
-    return longPressBgColor;
+    return [UIColor colorWithHexString:@"#FFFFFF"];
 }
 @end
 
@@ -170,6 +171,9 @@
         menuItemModel.itemDidSelectedHandle(menuItemModel.funcDesc, YES);
     }
     if (_menuViewModel.type != ExtTypeChatBar) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(menuExtItemDidSelected:extType:)]) {
+            [self.delegate menuExtItemDidSelected:menuItemModel extType:self.menuViewModel.type];
+        }
         [self removeFromSuperview];
     }
 }
@@ -206,7 +210,7 @@
     [self.toolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_top);
         make.width.mas_equalTo(@(_cellLonger));
-        make.height.mas_equalTo(@(_cellLonger - 10));
+        make.height.mas_equalTo(@(_cellLonger));
         make.left.equalTo(self.contentView);
     }];
     
@@ -223,6 +227,14 @@
 
 - (void)personalizeToolbar:(EaseExtMenuModel*)menuItemModel menuViewMode:(EaseExtMenuViewModel*)menuViewModel {
     _menuItemModel = menuItemModel;
+    __weak typeof(self) weakself = self;
+    if (menuViewModel.type != ExtTypeChatBar) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself.toolBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.height.mas_equalTo(@(self->_cellLonger - 10));
+            }];
+        });
+    }
     self.toolLabel.textColor = menuViewModel.fontColor;
     [self.toolLabel setFont:[UIFont systemFontOfSize:menuViewModel.fontSize]];
     [_toolBtn setImage:_menuItemModel.icon forState:UIControlStateNormal];

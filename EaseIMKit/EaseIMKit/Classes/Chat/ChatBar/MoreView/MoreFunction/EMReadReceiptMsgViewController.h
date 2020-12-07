@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol EMReadReceiptMsgDelegate;
-@class EMMessageCell;
+@class EaseMessageCell;
 @interface EMReadReceiptMsgViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, weak) id<EMReadReceiptMsgDelegate> delegate;
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) UILabel *countLable;
 
-- (instancetype)initWithMessageCell:(EMMessageCell *)messageCell groupId:(NSString *)groupId;
+- (instancetype)initWithMessageCell:(EaseMessageCell *)messageCell groupId:(NSString *)groupId;
 @end
 
 @protocol EMReadReceiptMsgDelegate <NSObject>

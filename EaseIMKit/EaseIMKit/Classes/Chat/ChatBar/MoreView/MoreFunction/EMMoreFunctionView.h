@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "EaseHeaders.h"
-#import "EMMessageCell.h"
+#import "EaseMessageCell.h"
 #import "EaseExtMenuModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -34,7 +34,13 @@ typedef NS_ENUM(NSInteger, ExtType) {
 @end
 
 
+@protocol EMMoreFunctionViewDelegate <NSObject>
+@optional
+- (void)menuExtItemDidSelected:(EaseExtMenuModel*)menuItemModel extType:(ExtType)extType;
+@end
+
 @interface EMMoreFunctionView : UIView
+@property (nonatomic, weak) id<EMMoreFunctionViewDelegate> delegate;
 - (instancetype)initWithextMenuModelArray:(NSMutableArray<EaseExtMenuModel*>*)extMenuModelArray menuViewModel:(EaseExtMenuViewModel*)menuViewModel;
 //视图尺寸
 - (CGSize)getExtViewSize;
