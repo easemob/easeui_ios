@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) BOOL isTop;
 @property (nonatomic, copy, readonly) NSAttributedString *showInfo;
-@property (nonatomic, copy) NSString *draft;
+//@property (nonatomic, copy) NSString *draft;
 
 @end
 

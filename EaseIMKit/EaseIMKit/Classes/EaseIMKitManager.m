@@ -85,12 +85,7 @@ static EaseIMKitManager *easeIMKit = nil;
 //收到消息
 - (void)messagesDidReceive:(NSArray *)aMessages
 {
-    __weak typeof(self) weakself = self;
-    dispatch_async(self.msgQueue, ^{
-        for (int i = 0; i < [aMessages count]; i++) {
-            [weakself conversationsUnreadCount];
-        }
-    });
+    [self _resetConversationsUnreadCount];
 }
  
 #pragma mark - EMContactManagerDelegate
@@ -171,13 +166,21 @@ static EaseIMKitManager *easeIMKit = nil;
         notiType = SYSTEM_NOTI_TYPE_JOINGROUPREQUEST;
     }
     if (self.systemNotiDelegate && [self.systemNotiDelegate respondsToSelector:@selector(requestDidReceiveShowMessage:requestUser:reason:)]) {
-        notificationStr = [self.systemNotiDelegate requestDidReceiveShowMessage:conversationId requestUser:userName reason:reason];
+        NSString *tempStr = [self.systemNotiDelegate requestDidReceiveShowMessage:conversationId requestUser:userName reason:reason];
+        // 空字符串返回不做操作 / nil：默认操作 / 有自定义值其他长度值使用自定义值
+        if (tempStr) {
+            if ([tempStr isEqualToString:@""]) {
+                return;
+            } else if (tempStr.length > 0) {
+                notificationStr = tempStr;
+            }
+        }
     }
     EMTextMessageBody *body = [[EMTextMessageBody alloc]initWithText:notificationStr];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:EMSYSTEMNOTIFICATIONID from:userName to:EMClient.sharedClient.currentUsername body:body ext:nil];
     message.timestamp = [self getLatestMsgTimestamp];
     message.isRead = NO;
-    message.chatType = EMChatTypeGroupChat;
+    message.chatType = EMChatTypeChat;
     message.direction = EMMessageDirectionReceive;
     EMConversation *notiConversation = [[EMClient sharedClient].chatManager getConversation:message.conversationId type:EMConversationTypeChat createIfNotExist:YES];
     NSDictionary *ext = nil;
@@ -188,7 +191,7 @@ static EaseIMKitManager *easeIMKit = nil;
     }
     [notiConversation setExt:ext];
     [notiConversation insertMessage:message error:nil];
-    [self conversationsUnreadCount];
+    [self _resetConversationsUnreadCount];
     //刷新会话列表
     [[NSNotificationCenter defaultCenter] postNotificationName:CONVERSATIONLIST_UPDATE object:nil];
 }
@@ -243,7 +246,7 @@ static EaseIMKitManager *easeIMKit = nil;
                 }
             }
             if (hasUnreadMsg) {
-                [weakself conversationsUnreadCount];
+                [weakself _resetConversationsUnreadCount];
             }
         }];
     }
@@ -265,7 +268,7 @@ static EaseIMKitManager *easeIMKit = nil;
                 }
             }
             if (hasUnreadMsg) {
-                [weakself conversationsUnreadCount];
+                [weakself _resetConversationsUnreadCount];
             }
         }];
     }
@@ -278,12 +281,12 @@ static EaseIMKitManager *easeIMKit = nil;
 {
     if (conversation && conversation.unreadMessagesCount > 0) {
         [conversation markAllMessagesAsRead:nil];
-        [self conversationsUnreadCount];
+        [self _resetConversationsUnreadCount];
     }
 }
 
 //未读总数变化
-- (void)conversationsUnreadCount
+- (void)_resetConversationsUnreadCount//改名
 {
     NSInteger unreadCount = 0;
     NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];

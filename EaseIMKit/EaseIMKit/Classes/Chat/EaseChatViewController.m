@@ -108,11 +108,12 @@
     // Do any additional setup after loading the view.
     self.msgTimelTag = -1;
     [self _setupChatSubviews];
+    /*
     //草稿
     if (![[self.currentConversation draft] isEqualToString:@""]) {
         self.chatBar.textView.text = [self.currentConversation draft];
         [self.currentConversation setDraft:@""];
-    }
+    }*/
     [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
  
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapTableViewAction:)];
@@ -132,8 +133,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMakeCall) name:CALL_MAKE1V1 object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMakeCall) name:CALL_MAKECONFERENCE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanPopupControllerView) name:CALL_MAKE1V1 object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanPopupControllerView) name:CALL_MAKECONFERENCE object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -152,10 +153,11 @@
         [[EMClient sharedClient].chatManager deleteConversation:self.currentConversation.conversationId isDeleteMessages:YES completion:nil];
         [[EMClient sharedClient].roomManager leaveChatroom:self.currentConversation.conversationId completion:nil];
     } else {
+        /*
         //草稿
         if (self.chatBar.textView.text.length > 0) {
             [self.currentConversation setDraft:self.chatBar.textView.text];
-        }
+        }*/
     }
     //刷新会话列表
     [[NSNotificationCenter defaultCenter] postNotificationName:CONVERSATIONLIST_UPDATE object:nil];
@@ -216,17 +218,11 @@
     EaseExtMenuModel *fileExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"icloudFile"] funcDesc:@"文件" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself chatToolBarFileOpenAction];
     }];
-    EaseExtMenuModel *groupReadReceiptExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"pin_readReceipt"] funcDesc:@"群组回执" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
-        if (weakself.currentConversation.type == EMConversationTypeGroupChat) {
-            EMGroupChatViewController *groupController = (EMGroupChatViewController*)weakself;
-            [groupController groupReadReceiptAction];
-        }
-    }];
-    NSMutableArray<EaseExtMenuModel*> *extMenuArray = [@[photoAlbumExtModel,cameraExtModel,locationExtModel,fileExtModel,groupReadReceiptExtModel] mutableCopy];
+    NSMutableArray<EaseExtMenuModel*> *extMenuArray = [@[photoAlbumExtModel,cameraExtModel,locationExtModel,fileExtModel] mutableCopy];
     if (self.delegate && [self.delegate respondsToSelector:@selector(inputBarExtMenuItemArray:conversationType:)]) {
         extMenuArray = [self.delegate inputBarExtMenuItemArray:extMenuArray conversationType:_currentConversation.type];
     }
-    EMMoreFunctionView *moreFunction = [[EMMoreFunctionView alloc]initWithextMenuModelArray:extMenuArray menuViewModel:[[EaseExtMenuViewModel alloc]initWithType:ExtTypeChatBar itemCount:[extMenuArray count]]];
+    EMMoreFunctionView *moreFunction = [[EMMoreFunctionView alloc]initWithextMenuModelArray:extMenuArray menuViewModel:[[EaseExtMenuViewModel alloc]initWithType:ExtTypeChatBar itemCount:[extMenuArray count] extFuncModel:_viewModel.extFuncModel]];
     self.chatBar.moreFunctionView = moreFunction;
 }
 
@@ -254,8 +250,9 @@
                 cellString = @"对方撤回一条消息";
             }
         }
-        if (model.type == EMMessageTypeExtNewFriend || model.type == EMMessageTypeExtAddGroup)
+        if (model.type == EMMessageTypeExtNewFriend || model.type == EMMessageTypeExtAddGroup) {
             cellString = ((EMTextMessageBody *)(model.message.body)).text;
+        }
     }
     
     if ([cellString length] > 0) {
@@ -271,9 +268,9 @@
     EaseMessageModel *model = (EaseMessageModel *)obj;
     if (self.delegate && [self.delegate respondsToSelector:@selector(cellForItem:messageModel:)]) {
         UITableViewCell *customCell = [self.delegate cellForItem:tableView messageModel:model];
-        UILongPressGestureRecognizer *customCelllongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(customCellLongPressAction:)];
-        [customCell addGestureRecognizer:customCelllongPress];
         if (customCell) {
+            UILongPressGestureRecognizer *customCelllongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(customCellLongPressAction:)];
+            [customCell addGestureRecognizer:customCelllongPress];
             return customCell;
         }
     }
@@ -421,7 +418,7 @@
         return;
     }
 
-    self.longPressView = [[EMMoreFunctionView alloc]initWithextMenuModelArray:extMenuArray menuViewModel:[[EaseExtMenuViewModel alloc]initWithType:isCustomCell ? ExtTypeCustomCellLongPress : ExtTypeLongPress itemCount:[extMenuArray count]]];
+    self.longPressView = [[EMMoreFunctionView alloc]initWithextMenuModelArray:extMenuArray menuViewModel:[[EaseExtMenuViewModel alloc]initWithType:isCustomCell ? ExtTypeCustomCellLongPress : ExtTypeLongPress itemCount:[extMenuArray count] extFuncModel:_viewModel.extFuncModel]];
     self.longPressView.delegate = self;
     
     CGSize longPressViewsize = [self.longPressView getExtViewSize];
@@ -781,11 +778,16 @@
 
 #pragma mark - Action
 
-- (void)handleMakeCall
+- (void)cleanPopupControllerView
 {
     [self.chatBar clearMoreViewAndSelectedButton];
     [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
     [[EMImageBrowser sharedBrowser] dismissViewController];
+    [self stopAudioPlayer];
+}
+
+- (void)stopAudioPlayer
+{
     [[EMAudioPlayerUtil sharedHelper] stopPlayer];
 }
 

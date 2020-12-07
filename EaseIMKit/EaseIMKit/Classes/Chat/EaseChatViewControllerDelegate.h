@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 当前会话输入扩展区数据模型组
  *
- * @param   defaultInputBarItems        默认功能数据模型组   （默认有序：相册，相机，位置，文件，群组回执）
+ * @param   defaultInputBarItems        默认功能数据模型组   （默认有序：相册，相机，位置，文件）
  * @param   conversationType                 当前会话类型：单聊，群聊，聊天室
  */
 - (NSMutableArray<EaseExtMenuModel*>*)inputBarExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultInputBarItems conversationType:(EMConversationType)conversationType;

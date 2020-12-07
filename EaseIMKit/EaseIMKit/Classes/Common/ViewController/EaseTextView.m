@@ -84,7 +84,6 @@
 - (void)finishEditing:(NSNotification *)notification
 {
     _editing = NO;
-    super.textColor = _contentColor;
 }
 
 @end

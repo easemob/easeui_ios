@@ -33,14 +33,18 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)sendTextAction:(NSString *)aText ext:(NSDictionary * __nullable)aExt;
 //发送消息体
 - (void)sendMessageWithBody:(EMMessageBody *)aBody ext:(NSDictionary * __nullable)aExt isUpload:(BOOL)aIsUpload;
-//刷新页面
-- (void)refreshTableView;
 //消息已读回执
 - (void)returnReadReceipt:(EMMessage *)msg;
 //格式化消息
 - (NSArray *)formatMessages:(NSArray<EMMessage *> *)aMessages;
-//获取数据刷新页面
+//刷新页面(刷新页面，未重新从DB获取数据)
+- (void)refreshTableView;
+//获取数据刷新页面(重新从DB获取数据)
 - (void)tableViewDidTriggerHeaderRefresh;
+//清除从聊天页弹出的其他控制器页面(例：发起/接收 音视频通话)
+- (void)cleanPopupControllerView;
+//停止音频播放
+- (void)stopAudioPlayer;
 
 @end
 

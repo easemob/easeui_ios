@@ -169,7 +169,9 @@
 
 - (UIImage *)defaultAvatar {
     if (_userDelegate && [_userDelegate respondsToSelector:@selector(defaultAvatar)]) {
-        return _userDelegate.defaultAvatar;
+        if (_userDelegate.defaultAvatar) {
+            return _userDelegate.defaultAvatar;
+        }
     }
     if (self.type == EMConversationTypeChat) {
         if ([self.easeId isEqualToString:EMSYSTEMNOTIFICATIONID]) {

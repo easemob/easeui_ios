@@ -16,8 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initGroupChatViewControllerWithCoversationid:(NSString *)conversationId
                                                chatViewModel:(EaseChatViewModel *)viewModel;
-//群组阅读回执
-- (void)groupReadReceiptAction;
 
 @end
 
