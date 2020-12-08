@@ -5,22 +5,14 @@ platform :ios, '11.0'
 
 workspace 'EaseIMKit.xcworkspace'
 
-target 'EaseIMWindowTest' do
-  platform :ios, '11.0'
-  project '../../EaseIMWindowTest/EaseIMWindowTest.xcodeproj'
-  pod 'Masonry'
-  pod 'Hyphenate'
-  pod 'EaseIMKit', :path => './'
-end
-
 target 'EaseIM' do
   platform :ios, '11.0'
   project '../../EaseIM/EaseIM/EaseIM.xcodeproj'
   pod 'Masonry'
   pod 'Hyphenate'
   pod 'MJRefresh'
-  #pod 'EaseIMKit'
   pod 'EaseIMKit', :path => './'
+  #pod 'EaseIMKit'
 end
 
 target 'EaseIMKitDemo' do

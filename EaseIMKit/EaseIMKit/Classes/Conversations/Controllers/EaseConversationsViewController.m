@@ -124,6 +124,7 @@
         [conversation setTop:!model.isTop];
         [weakself refreshTabView];
     }];
+    topAction.backgroundColor = [UIColor colorWithHexString:@"CB7D32"];
     
     NSArray *swipeActions = @[deleteAction, topAction];
     if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:trailingSwipeActionsForRowAtIndexPath:actions:)]) {

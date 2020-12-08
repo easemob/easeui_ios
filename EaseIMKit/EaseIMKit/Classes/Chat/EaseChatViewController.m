@@ -251,7 +251,9 @@
             }
         }
         if (model.type == EMMessageTypeExtNewFriend || model.type == EMMessageTypeExtAddGroup) {
-            cellString = ((EMTextMessageBody *)(model.message.body)).text;
+            if ([model.message.body isKindOfClass:[EMTextMessageBody class]]) {
+                cellString = ((EMTextMessageBody *)(model.message.body)).text;
+            }
         }
     }
     
@@ -807,6 +809,15 @@
         //NSIndexPath *newestIndexPath = [self.tableView indexPathForRowAtPoint:longLocation];
         [self messageCellDidLongPress:_currentLongPressCustomCell cgPoint:longLocation];
     }
+}
+
+//发送自定义消息
+- (void)sendCustomMessageModel:(EaseChatCustomMessageModel *)customMsgModel
+{
+    NSMutableDictionary *customMsgContentDict = [[NSMutableDictionary alloc]init];
+    [customMsgContentDict setObject:customMsgModel.msgContentDictionary forKey:customMsgModel.msgKey];
+    EMTextMessageBody *body = [[EMTextMessageBody alloc]initWithText:customMsgModel.msgKey];
+    [self sendMessageWithBody:body ext:[customMsgContentDict copy] isUpload:NO];
 }
 
 //发送消息体
