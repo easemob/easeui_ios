@@ -11,14 +11,19 @@
 #import "EMMoreFunctionView.h"
 #import "HorizontalLayout.h"
 #import "UIImage+EaseUI.h"
+#import "UIColor+EaseUI.h"
 
+@interface EaseExtMenuViewModel ()
+@property (nonatomic, strong) EaseExtFuncModel *extFuncMode;
+@end
 @implementation EaseExtMenuViewModel
-- (instancetype)initWithType:(ExtType)type itemCount:(NSInteger)itemCount
+- (instancetype)initWithType:(ExtType)type itemCount:(NSInteger)itemCount extFuncModel:(EaseExtFuncModel*)extFuncModel
 {
     self = [super init];
     if (self) {
         _type = type;
         _itemCount = itemCount;
+        _extFuncMode = extFuncModel;
         return self;
     }
     return self;
@@ -26,7 +31,7 @@
 - (CGFloat)cellLonger
 {
     if (_type == ExtTypeChatBar) {
-        return 60;
+        return 55;
     }
     return 50;
 }
@@ -41,9 +46,9 @@
 - (CGSize)collectionViewSize
 {
     if (_type == ExtTypeChatBar) {
-        return CGSizeMake([UIScreen mainScreen].bounds.size.width, 200);
+        return _extFuncMode.collectionViewSize;
     }
-    return CGSizeMake(self.rowCount * 50 , self.columCount * 80);
+    return CGSizeMake(self.rowCount * 50 , self.columCount * (self.cellLonger + 20));
 }
 - (NSInteger)rowCount
 {
@@ -62,23 +67,30 @@
 - (CGFloat)fontSize
 {
     if (_type == ExtTypeChatBar) {
-        return 12;
+        return _extFuncMode.fontSize;
     }
     return 12;
 }
 - (UIColor *)fontColor
 {
     if (_type == ExtTypeChatBar) {
-        return inputBarFontColor;
+        return _extFuncMode.fontColor;
     }
-    return longPressFontColor;
+    return [UIColor colorWithHexString:@"#333333"];
 }
 - (UIColor *)bgColor
 {
     if (_type == ExtTypeChatBar) {
-        return inputBarBgColor;
+        return _extFuncMode.viewBgColor;
     }
-    return longPressBgColor;
+    return [UIColor colorWithHexString:@"#FFFFFF"];
+}
+- (UIColor *)iconBgColor
+{
+    if (_type == ExtTypeChatBar) {
+        return _extFuncMode.iconBgColor;
+    }
+    return [UIColor whiteColor];
 }
 @end
 
@@ -170,6 +182,9 @@
         menuItemModel.itemDidSelectedHandle(menuItemModel.funcDesc, YES);
     }
     if (_menuViewModel.type != ExtTypeChatBar) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(menuExtItemDidSelected:extType:)]) {
+            [self.delegate menuExtItemDidSelected:menuItemModel extType:self.menuViewModel.type];
+        }
         [self removeFromSuperview];
     }
 }
@@ -200,13 +215,13 @@
 - (void)_setupToolbar {
     self.toolBtn = [[UIButton alloc]init];
     self.toolBtn.layer.masksToBounds = YES;
+    self.toolBtn.layer.cornerRadius = 8;
     [self.toolBtn addTarget:self action:@selector(cellTapAction) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:self.toolBtn];
-    self.toolBtn.backgroundColor = [UIColor whiteColor];
     [self.toolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_top);
         make.width.mas_equalTo(@(_cellLonger));
-        make.height.mas_equalTo(@(_cellLonger - 10));
+        make.height.mas_equalTo(@(_cellLonger));
         make.left.equalTo(self.contentView);
     }];
     
@@ -216,13 +231,30 @@
     [self.toolLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.toolBtn.mas_bottom).offset(3);
         make.width.mas_equalTo(@(_cellLonger));
-        make.height.equalTo(@20);
         make.left.equalTo(self.contentView);
+        make.bottom.equalTo(self.contentView).offset(-10);
     }];
 }
 
 - (void)personalizeToolbar:(EaseExtMenuModel*)menuItemModel menuViewMode:(EaseExtMenuViewModel*)menuViewModel {
     _menuItemModel = menuItemModel;
+    __weak typeof(self) weakself = self;
+    if (menuViewModel.type != ExtTypeChatBar) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakself.toolBtn.imageEdgeInsets = UIEdgeInsetsMake(10, 0, 0, 0);
+            [weakself.toolBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(weakself.contentView).offset(5);
+                make.height.mas_equalTo(@(self->_cellLonger - 20));
+            }];
+            [weakself.toolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(weakself.toolLabel.mas_bottom);
+            }];
+        });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakself.toolBtn.backgroundColor = menuViewModel.iconBgColor;
+        });
+    }
     self.toolLabel.textColor = menuViewModel.fontColor;
     [self.toolLabel setFont:[UIFont systemFontOfSize:menuViewModel.fontSize]];
     [_toolBtn setImage:_menuItemModel.icon forState:UIControlStateNormal];

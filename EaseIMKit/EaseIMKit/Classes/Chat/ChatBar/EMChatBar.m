@@ -8,12 +8,12 @@
 
 #import "EMChatBar.h"
 #import "UIImage+EaseUI.h"
-#import "EaseDefines.h"
+#import "UIColor+EaseUI.h"
 
-#define kTextViewMinHeight 40
+#define kTextViewMinHeight 32
 #define kTextViewMaxHeight 80
-#define kIconwidth 30
-#define kModuleMargin 5
+#define kIconwidth 22
+#define kModuleMargin 10
 
 @interface EMChatBar()<UITextViewDelegate>
 
@@ -59,13 +59,14 @@
     self.backgroundColor = _viewModel.chatBarBgColor;
     
     UIView *line = [[UIView alloc] init];
-    line.backgroundColor = kColor_Gray;
+    line.backgroundColor = [UIColor colorWithHexString:@"#000000"];
+    line.alpha = 0.1;
     [self addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self);
         make.left.equalTo(self);
         make.right.equalTo(self);
-        make.height.equalTo(@1);
+        make.height.equalTo(@0.5);
     }];
     
     self.audioButton = [[UIButton alloc] init];
@@ -75,11 +76,10 @@
     [self addSubview:self.audioButton];
     [_audioButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(10);
-        make.left.equalTo(self).offset(kModuleMargin);
-        make.width.height.mas_equalTo(kIconwidth);
+        make.left.equalTo(self).offset(16);
+        make.width.mas_equalTo(@16);
+        make.height.mas_equalTo(kIconwidth);
     }];
-    
-    _audioButton.backgroundColor = UIColor.redColor;
     
     self.conversationToolBarBtn = [[UIButton alloc] init];
     [_conversationToolBarBtn setBackgroundImage:[UIImage easeUIImageNamed:@"more-unselected"] forState:UIControlStateNormal];
@@ -88,11 +88,9 @@
     [self addSubview:_conversationToolBarBtn];
     [_conversationToolBarBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(10);
-        make.right.equalTo(self).offset(-kModuleMargin);
+        make.right.equalTo(self).offset(-16);
         make.width.height.mas_equalTo(kIconwidth);
     }];
-    
-    _conversationToolBarBtn.backgroundColor = UIColor.redColor;
     
     self.emojiButton = [[UIButton alloc] init];
     [_emojiButton setBackgroundImage:[UIImage easeUIImageNamed:@"face"] forState:UIControlStateNormal];
@@ -102,25 +100,24 @@
     [_emojiButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(10);
         make.right.equalTo(self.conversationToolBarBtn.mas_left).offset(-kModuleMargin);
-        make.width.height.equalTo(@kIconwidth);
+        make.width.height.mas_equalTo(kIconwidth);
     }];
-
-    _emojiButton.backgroundColor = UIColor.redColor;
     
     self.textView = [[EaseTextView alloc] init];
     self.textView.delegate = self;
     [self.textView setTextColor:[UIColor blackColor]];
     self.textView.font = [UIFont systemFontOfSize:16];
     self.textView.textAlignment = NSTextAlignmentLeft;
-    self.textView.textContainerInset = UIEdgeInsetsMake(10, 10, 12, 0);
+    
+    self.textView.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 0);
     if (@available(iOS 11.1, *)) {
         self.textView.verticalScrollIndicatorInsets = UIEdgeInsetsMake(12, 20, 2, 0);
     } else {
         // Fallback on earlier versions
     }
     self.textView.returnKeyType = UIReturnKeySend;
-    self.textView.backgroundColor = [UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0];
-    self.textView.layer.cornerRadius = 20;
+    self.textView.backgroundColor = [UIColor whiteColor];
+    self.textView.layer.cornerRadius = 16;
     [self addSubview:self.textView];
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(5);
@@ -130,7 +127,7 @@
             make.right.equalTo(self.emojiButton.mas_left).offset(-kModuleMargin);
         }
         if (_viewModel.inputBarStyle == EaseInputBarStyleNoAudio) {
-            make.left.equalTo(self).offset(kModuleMargin);
+            make.left.equalTo(self).offset(16);
             make.right.equalTo(self.emojiButton.mas_left).offset(-kModuleMargin);
         }
         if (_viewModel.inputBarStyle == EaseInputBarStyleNoEmoji) {
@@ -138,26 +135,27 @@
             make.right.equalTo(self.conversationToolBarBtn.mas_left).offset(-kModuleMargin);
         }
         if (_viewModel.inputBarStyle == EaseInputBarStyleNoAudioAndEmoji) {
-            make.left.equalTo(self).offset(kModuleMargin);
+            make.left.equalTo(self).offset(16);
             make.right.equalTo(self.conversationToolBarBtn.mas_left).offset(-kModuleMargin);
         }
         if (_viewModel.inputBarStyle == EaseInputBarStyleOnlyText) {
-            make.left.equalTo(self).offset(kModuleMargin);
-            make.right.equalTo(self).offset(-kModuleMargin);
+            make.left.equalTo(self).offset(16);
+            make.right.equalTo(self).offset(-16);
         }
     }];
     
     self.bottomLine = [[UIView alloc] init];
-    _bottomLine.backgroundColor = kColor_Gray;
+    _bottomLine.backgroundColor = [UIColor colorWithHexString:@"#000000"];
+    _bottomLine.alpha = 0.1;
     [self addSubview:self.bottomLine];
     [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.textView.mas_bottom).offset(5);
         make.left.equalTo(self);
         make.right.equalTo(self);
-        make.height.equalTo(@1);
+        make.height.equalTo(@0.5);
         make.bottom.equalTo(self).offset(-EMVIEWBOTTOMMARGIN);
     }];
-    self.currentMoreView.backgroundColor = kColor_ExtFunctionView;
+    self.currentMoreView.backgroundColor = [UIColor colorWithHexString:@"#f2f2f2"];
 }
 
 #pragma mark - UITextViewDelegate
@@ -179,20 +177,17 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldInteractWithURL:inRange:)]) {
-        return [self.delegate textView:textView shouldChangeTextInRange:range replacementText:text];
-    }
     if ([text isEqualToString:@"\n"]) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarSendMsgAction:)]) {
             [self.delegate chatBarSendMsgAction:self.textView.text];
         }
-        //[textView resignFirstResponder];
         return NO;
     }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(inputView:shouldChangeTextInRange:replacementText:)]) {
-        return [self.delegate inputView:self.textView shouldChangeTextInRange:range replacementText:text];
-    } 
     
+    if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
+        return [self.delegate textView:textView shouldChangeTextInRange:range replacementText:text];
+    }
+
     return YES;
 }
 
@@ -322,6 +317,16 @@
     if (aButton.selected) {
         self.selectedButton = aButton;
     }
+    if (!self.audioButton.isSelected) {
+        [self.audioButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(@16);
+        }];
+    } else {
+        [self.audioButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(kIconwidth);
+        }];
+    }
+    
     return isEditing;
 }
 

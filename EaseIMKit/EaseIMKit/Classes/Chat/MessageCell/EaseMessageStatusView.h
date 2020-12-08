@@ -1,5 +1,5 @@
 //
-//  EMMessageStatusView.h
+//  EaseMessageStatusView.h
 //  ChatDemo-UI3.0
 //
 //  Created by XieYajie on 2019/1/25.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "EaseHeaders.h"
 
-@interface EMMessageStatusView : UIView
+@interface EaseMessageStatusView : UIView
 
 @property (nonatomic, copy) void (^resendCompletion)(void);
 

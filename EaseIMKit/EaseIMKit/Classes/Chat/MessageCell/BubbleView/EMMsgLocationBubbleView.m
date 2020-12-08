@@ -19,7 +19,7 @@
         if (self.direction == EMMessageDirectionSend) {
             self.iconView.image = [UIImage easeUIImageNamed:@"msg_location_white"];
         } else {
-            self.iconView.image = [UIImage easeUIImageNamed:@"目标点"];
+            self.iconView.image = [UIImage easeUIImageNamed:@"locationMsg"];
         }
     }
     

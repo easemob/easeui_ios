@@ -43,17 +43,15 @@
         make.top.equalTo(self.mas_top).offset(10);
         make.bottom.equalTo(self.mas_bottom).offset(-10);
     }];
-    
+    self.textLabel.textColor = [UIColor blackColor];
     if (self.direction == EMMessageDirectionSend) {
-        self.textLabel.textColor = [UIColor whiteColor];
         [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.mas_left).offset(10);
-            make.right.equalTo(self.mas_right).offset(-15);
+            make.right.equalTo(self.mas_right).offset(-10);
         }];
     } else {
-        self.textLabel.textColor = [UIColor blackColor];
         [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.mas_left).offset(15);
+            make.left.equalTo(self.mas_left).offset(10);
             make.right.equalTo(self.mas_right).offset(-10);
         }];
     }

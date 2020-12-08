@@ -50,7 +50,7 @@
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(doneAction)];
     }
     
-    self.view.backgroundColor = kColor_LightGray;
+    self.view.backgroundColor = [UIColor whiteColor];
     UIView *bgView = [[UIView alloc] init];
     bgView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:bgView];

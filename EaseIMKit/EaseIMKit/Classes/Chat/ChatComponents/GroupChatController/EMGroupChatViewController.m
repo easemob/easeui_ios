@@ -7,22 +7,17 @@
 //
 
 #import "EMGroupChatViewController.h"
-#import "EMReadReceiptMsgViewController.h"
 #import "EaseMessageModel.h"
 #import "EMConversation+EaseUI.h"
 #import "EaseAlertController.h"
 #import "EaseAlertView.h"
 #import "EaseTextView.h"
-#import "EMMessageCell.h"
+#import "EaseMessageCell.h"
 #import "EaseChatViewController+EaseUI.h"
 
-@interface EMGroupChatViewController () <EMReadReceiptMsgDelegate,EMGroupManagerDelegate>
+@interface EMGroupChatViewController () <EMGroupManagerDelegate>
 
 @property (nonatomic, strong) EMGroup *group;
-//阅读回执
-@property (nonatomic, strong) EMReadReceiptMsgViewController *readReceiptControl;
-//@
-@property (nonatomic) BOOL isWillInputAt;
 
 @end
 
@@ -48,6 +43,16 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+#pragma mark - EaseMessageCellDelegate
+
+//阅读回执详情
+- (void)messageReadReceiptDetil:(EaseMessageCell *)aCell
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(groupMessageReadReceiptDetail:groupId:)]) {
+        [self.delegate groupMessageReadReceiptDetail:aCell.model.message groupId:self.currentConversation.conversationId];
+    }
+}
+
 #pragma mark - ACtion
 
 - (void)returnReadReceipt:(EMMessage *)msg
@@ -58,84 +63,6 @@
                 NSLog(@"\n ------ error   %@",error.errorDescription);
             }
         }];
-    }
-}
-
-#pragma mark - EMMoreFunctionViewDelegate
-
-//群组阅读回执跳转
-- (void)groupReadReceiptAction
-{
-    self.readReceiptControl = [[EMReadReceiptMsgViewController alloc]init];
-    self.readReceiptControl.delegate = self;
-    self.readReceiptControl.modalPresentationStyle = 0;
-    [self presentViewController:self.readReceiptControl animated:NO completion:nil];
-}
-
-#pragma mark - EMReadReceiptMsgDelegate
-
-//群组阅读回执发送信息
-- (void)sendReadReceiptMsg:(NSString *)msg
-{
-    NSString *str = msg;
-    NSLog(@"\n%@",str);
-    if (self.currentConversation.type != EMConversationTypeGroupChat) {
-        [self sendTextAction:str ext:nil];
-        return;
-    }
-    [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:self.currentConversation.conversationId completion:^(EMGroup *aGroup, EMError *aError) {
-        NSLog(@"\n -------- sendError:   %@",aError);
-        if (!aError) {
-            self.group = aGroup;
-            //是群主才可以发送阅读回执信息
-            [self sendTextAction:str ext:@{MSG_EXT_READ_RECEIPT:@"receipt"}];
-        } else {
-            [EaseAlertController showErrorAlert:@"获取群组失败"];
-        }
-    }];
-}
-
-#pragma mark - EMMessageCellDelegate
-
-//阅读回执详情
-- (void)messageReadReceiptDetil:(EMMessageCell *)aCell
-{
-    BOOL isNeedsDefaultImpl = YES;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(groupMessageReadReceiptDetail:groupId:)]) {
-        isNeedsDefaultImpl = [self.delegate groupMessageReadReceiptDetail:aCell.model.message groupId:self.currentConversation.conversationId];
-    }
-    if (!isNeedsDefaultImpl) {
-        return;
-    }
-    self.readReceiptControl = [[EMReadReceiptMsgViewController alloc] initWithMessageCell:aCell groupId:self.currentConversation.conversationId];
-    self.readReceiptControl.modalPresentationStyle = 0;
-    [self presentViewController:self.readReceiptControl animated:NO completion:nil];
-}
-
-#pragma mark - EMChatBarDelegate
-
-- (BOOL)inputView:(EaseTextView *)aInputView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    self.isWillInputAt = NO;
-    if ([text isEqualToString:@"\n"]) {
-        [self sendTextAction:aInputView.text ext:nil];
-        return NO;
-    }
-    if ([text isEqualToString:@"@"]) {
-        self.isWillInputAt = YES;
-    }
-    
-    return YES;
-}
-
-- (void)inputViewDidChange:(EaseTextView *)aInputView
-{
-    //@群成员
-    if (self.isWillInputAt && self.currentConversation.type == EMConversationTypeGroupChat) {
-        NSString *text = aInputView.text;
-        if ([text hasSuffix:@"@"]) {
-            self.isWillInputAt = NO;
-        }
     }
 }
 

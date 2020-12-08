@@ -26,19 +26,14 @@
 
 - (void)setupBubbleBackgroundImage
 {
+    UIEdgeInsets edge = UIEdgeInsetsMake(8, 8, 8, 8);
     if (self.direction == EMMessageDirectionSend) {
-        self.image = [_viewModel.sendBubbleBgPicture stretchableImageWithLeftCapWidth:15 topCapHeight:15];
+        UIImage *image = [_viewModel.sendBubbleBgPicture resizableImageWithCapInsets:edge resizingMode:UIImageResizingModeStretch];
+        [self setImage:image];
     } else {
-        self.image = [_viewModel.receiveBubbleBgPicture stretchableImageWithLeftCapWidth:15 topCapHeight:15];
+        UIImage *image = [_viewModel.receiveBubbleBgPicture resizableImageWithCapInsets:edge resizingMode:UIImageResizingModeStretch];
+        [self setImage:image];
     }
-    //[self compressQualityImage];
-}
-
-- (void)compressQualityImage
-{
-    CGFloat compressQuality = 1;
-    NSData *data = UIImageJPEGRepresentation(self.image, compressQuality);
-    self.image = [UIImage imageWithData:data];
 }
 
 @end

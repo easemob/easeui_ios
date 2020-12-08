@@ -59,7 +59,7 @@
         make.top.equalTo(self).offset(8);
         make.bottom.equalTo(self).offset(-8);
     }];
-    
+    self.textLabel.textColor = [UIColor blackColor];
     if (self.direction == EMMessageDirectionSend) {
         
         [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -72,9 +72,8 @@
         
         self.textLabel.textAlignment = NSTextAlignmentRight;
         
-        self.imgView.image = [UIImage easeUIImageNamed:@"语音声波send"];
-        self.imgView.animationImages = @[[UIImage easeUIImageNamed:@"语音声波-right-2"], [UIImage easeUIImageNamed:@"语音声波-right-1"], [UIImage easeUIImageNamed:@"语音声波send"]];
-        self.textLabel.textColor = [UIColor whiteColor];
+        self.imgView.image = [UIImage easeUIImageNamed:@"msg_send_audio"];
+        self.imgView.animationImages = @[[UIImage easeUIImageNamed:@"msg_send_audio02"], [UIImage easeUIImageNamed:@"msg_send_audio01"], [UIImage easeUIImageNamed:@"msg_send_audio"]];
     } else {
         
         [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -87,9 +86,8 @@
         
         self.textLabel.textAlignment = NSTextAlignmentLeft;
         
-        self.imgView.image = [UIImage easeUIImageNamed:@"语音声波receive"];
-        self.imgView.animationImages = @[[UIImage easeUIImageNamed:@"语音声波-left-2"], [UIImage easeUIImageNamed:@"语音声波-left-1"], [UIImage easeUIImageNamed:@"语音声波receive"]];
-        self.textLabel.textColor = [UIColor blackColor];
+        self.imgView.image = [UIImage easeUIImageNamed:@"msg_recv_audio"];
+        self.imgView.animationImages = @[[UIImage easeUIImageNamed:@"msg_recv_audio02"], [UIImage easeUIImageNamed:@"msg_recv_audio01"], [UIImage easeUIImageNamed:@"msg_recv_audio"]];
     }
 }
 

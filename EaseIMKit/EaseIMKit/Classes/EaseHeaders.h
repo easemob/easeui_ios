@@ -14,7 +14,6 @@
 
 #import "EaseEnums.h"
 #import "EaseDefines.h"
-#import "EaseColorDefine.h"
 
 #import "EaseAlertController.h"
 #import "EaseAlertView.h"

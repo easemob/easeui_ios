@@ -169,9 +169,14 @@
 
 - (UIImage *)defaultAvatar {
     if (_userDelegate && [_userDelegate respondsToSelector:@selector(defaultAvatar)]) {
-        return _userDelegate.defaultAvatar;
+        if (_userDelegate.defaultAvatar) {
+            return _userDelegate.defaultAvatar;
+        }
     }
     if (self.type == EMConversationTypeChat) {
+        if ([self.easeId isEqualToString:EMSYSTEMNOTIFICATIONID]) {
+            return [UIImage easeUIImageNamed:@"systemNoti"];;
+        }
         return [UIImage easeUIImageNamed:@"defaultAvatar"];
     }
     if (self.type == EMConversationTypeGroupChat) {
@@ -179,9 +184,6 @@
     }
     if (self.type == EMConversationTypeChatRoom) {
         return [UIImage easeUIImageNamed:@"chatRoom"];
-    }
-    if ([self.easeId isEqualToString:EMSYSTEMNOTIFICATIONID]) {
-        return [UIImage easeUIImageNamed:@"systemNoti"];;
     }
     return nil;
 }

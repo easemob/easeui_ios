@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "EaseHeaders.h"
-#import "EMMessageCell.h"
+#import "EaseMessageCell.h"
 #import "EaseExtMenuModel.h"
+#import "EaseExtFuncModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,13 +30,20 @@ typedef NS_ENUM(NSInteger, ExtType) {
 @property (nonatomic, assign) CGFloat fontSize;
 @property (nonatomic, strong) UIColor *bgColor;
 @property (nonatomic, strong) UIColor *fontColor;
+@property (nonatomic, strong) UIColor *iconBgColor;//图标背景色
 @property (nonatomic, assign) ExtType type;
-- (instancetype)initWithType:(ExtType)type itemCount:(NSInteger)itemCount;
+- (instancetype)initWithType:(ExtType)type itemCount:(NSInteger)itemCount extFuncModel:(EaseExtFuncModel*)extFuncModel;
 @end
 
 
+@protocol EMMoreFunctionViewDelegate <NSObject>
+@optional
+- (void)menuExtItemDidSelected:(EaseExtMenuModel*)menuItemModel extType:(ExtType)extType;
+@end
+
 @interface EMMoreFunctionView : UIView
-- (instancetype)initWithextMenuModelArray:(NSMutableArray<EaseExtMenuModel*>*)extMenuModelArray menuViewModel:(EaseExtMenuViewModel*)menuViewModel;
+@property (nonatomic, weak) id<EMMoreFunctionViewDelegate> delegate;
+- (instancetype)initWithextMenuModelArray:(NSMutableArray<EaseExtMenuModel*>*)extMenuModelArray menuViewModel:(EaseExtMenuViewModel*)menuViewModel ;
 //视图尺寸
 - (CGSize)getExtViewSize;
 @end

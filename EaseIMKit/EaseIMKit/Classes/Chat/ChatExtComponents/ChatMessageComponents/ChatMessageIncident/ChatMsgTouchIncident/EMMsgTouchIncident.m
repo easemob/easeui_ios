@@ -19,7 +19,7 @@
 
 @implementation EMMessageEventStrategy
 
-- (void)messageCellEventOperation:(EMMessageCell *)aCell{}
+- (void)messageCellEventOperation:(EaseMessageCell *)aCell{}
 
 @end
 
@@ -28,10 +28,8 @@
 */
 @implementation EMMessageEventStrategyFactory
 
-+ (EMMessageEventStrategy * _Nonnull)getStratrgyImplWithMsgCell:(EMMessageCell *)aCell
++ (EMMessageEventStrategy * _Nonnull)getStratrgyImplWithMsgCell:(EaseMessageCell *)aCell
 {
-    if (aCell.model.type == EMMessageTypePictMixText)
-        return [[CommunicateMsgEvent alloc]init];
     if (aCell.model.type == EMMessageTypeImage)
         return [[ImageMsgEvent alloc] init];
     if (aCell.model.type == EMMessageTypeLocation)
@@ -51,39 +49,11 @@
 @end
 
 /**
-   单聊通话事件
-*/
-@implementation CommunicateMsgEvent
-
-- (void)messageCellEventOperation:(EMMessageCell *)aCell
-{
-    NSLog(@"readack : %d",aCell.model.message.isReadAcked);
-    if (!aCell.model.message.isReadAcked) {
-        [[EMClient sharedClient].chatManager sendMessageReadAck:aCell.model.message.messageId toUser:aCell.model.message.conversationId completion:nil];
-    }
-    NSLog(@"conversationid : %@",aCell.model.message.conversationId);
-    NSLog(@"msgid : %@",aCell.model.message.messageId);
-    NSLog(@"msgext : %@",aCell.model.message.ext);
-    NSString *callType = nil;
-    NSDictionary *dic = aCell.model.message.ext;
-    if ([[dic objectForKey:EMCOMMUNICATE_TYPE] isEqualToString:EMCOMMUNICATE_TYPE_VOICE])
-        callType = EMCOMMUNICATE_TYPE_VOICE;
-    if ([[dic objectForKey:EMCOMMUNICATE_TYPE] isEqualToString:EMCOMMUNICATE_TYPE_VIDEO])
-        callType = EMCOMMUNICATE_TYPE_VIDEO;
-    if ([callType isEqualToString:EMCOMMUNICATE_TYPE_VOICE])
-        [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:aCell.model.message.conversationId, CALL_TYPE:@(EMCallTypeVoice)}];
-    if ([callType isEqualToString:EMCOMMUNICATE_TYPE_VIDEO])
-        [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:aCell.model.message.conversationId,   CALL_TYPE:@(EMCallTypeVideo)}];
-}
-
-@end
-
-/**
     图片事件
  */
 @implementation ImageMsgEvent
 
-- (void)messageCellEventOperation:(EMMessageCell *)aCell
+- (void)messageCellEventOperation:(EaseMessageCell *)aCell
 {
     __weak typeof(self.chatController) weakself = self.chatController;
     void (^downloadThumbBlock)(EaseMessageModel *aModel) = ^(EaseMessageModel *aModel) {
@@ -152,7 +122,7 @@
  */
 @implementation LocationMsgEvent
 
-- (void)messageCellEventOperation:(EMMessageCell *)aCell
+- (void)messageCellEventOperation:(EaseMessageCell *)aCell
 {
     EMLocationMessageBody *body = (EMLocationMessageBody *)aCell.model.message.body;
     EMLocationViewController *controller = [[EMLocationViewController alloc] initWithLocation:CLLocationCoordinate2DMake(body.latitude, body.longitude)];
@@ -167,7 +137,7 @@
  */
 @implementation VoiceMsgEvent
 
-- (void)messageCellEventOperation:(EMMessageCell *)aCell
+- (void)messageCellEventOperation:(EaseMessageCell *)aCell
 {
     if (aCell.model.isPlaying) {
         [[EMAudioPlayerUtil sharedHelper] stopPlayer];
@@ -235,7 +205,7 @@
  */
 @implementation VideoMsgEvent
 
-- (void)messageCellEventOperation:(EMMessageCell *)aCell
+- (void)messageCellEventOperation:(EaseMessageCell *)aCell
 {
     EMVideoMessageBody *body = (EMVideoMessageBody*)aCell.model.message.body;
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -295,7 +265,7 @@
  */
 @implementation FileMsgEvent
 
-- (void)messageCellEventOperation:(EMMessageCell *)aCell
+- (void)messageCellEventOperation:(EaseMessageCell *)aCell
 {
     EMFileMessageBody *body = (EMFileMessageBody *)aCell.model.message.body;
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -339,7 +309,7 @@
  */
 @implementation ConferenceMsgEvent
 
-- (void)messageCellEventOperation:(EMMessageCell *)aCell
+- (void)messageCellEventOperation:(EaseMessageCell *)aCell
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:CALL_SELECTCONFERENCECELL object:aCell.model.message];
 }

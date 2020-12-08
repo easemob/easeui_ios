@@ -1,5 +1,5 @@
 //
-//  EMMessageCell.h
+//  EaseMessageCell.h
 //  ChatDemo-UI3.0
 //
 //  Created by XieYajie on 2019/1/25.
@@ -17,10 +17,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol EMMessageCellDelegate;
-@interface EMMessageCell : UITableViewCell
+@protocol EaseMessageCellDelegate;
+@interface EaseMessageCell : UITableViewCell
 
-@property (nonatomic, weak) id<EMMessageCellDelegate> delegate;
+@property (nonatomic, weak) id<EaseMessageCellDelegate> delegate;
 
 @property (nonatomic, strong, readonly) EMMessageBubbleView *bubbleView;
 
@@ -38,13 +38,13 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-@protocol EMMessageCellDelegate <NSObject>
+@protocol EaseMessageCellDelegate <NSObject>
 
 @optional
-- (void)messageCellDidSelected:(EMMessageCell *)aCell;
-- (void)messageCellDidLongPress:(UITableViewCell *)aCell;
+- (void)messageCellDidSelected:(EaseMessageCell *)aCell;
+- (void)messageCellDidLongPress:(UITableViewCell *)aCell cgPoint:(CGPoint)point;
 - (void)messageCellDidResend:(EaseMessageModel *)aModel;
-- (void)messageReadReceiptDetil:(EMMessageCell *)aCell;
+- (void)messageReadReceiptDetil:(EaseMessageCell *)aCell;
 
 - (void)avatarDidSelected:(EaseMessageModel *)model;
 - (void)avatarDidLongPress:(EaseMessageModel *)model;

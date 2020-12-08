@@ -1,14 +1,14 @@
 //
-//  EMMessageCell.m
+//  EaseMessageCell.m
 //  ChatDemo-UI3.0
 //
 //  Created by XieYajie on 2019/1/25.
 //  Copyright © 2019 XieYajie. All rights reserved.
 //
 
-#import "EMMessageCell.h"
+#import "EaseMessageCell.h"
 
-#import "EMMessageStatusView.h"
+#import "EaseMessageStatusView.h"
 
 #import "EMMsgTextBubbleView.h"
 #import "EMMsgImageBubbleView.h"
@@ -17,15 +17,14 @@
 #import "EMMsgLocationBubbleView.h"
 #import "EMMsgFileBubbleView.h"
 #import "EMMsgExtGifBubbleView.h"
-#import "EMMsgPicMixTextBubbleView.h"
 
-@interface EMMessageCell()
+@interface EaseMessageCell()
 
 @property (nonatomic, strong) UIImageView *avatarView;
 
 @property (nonatomic, strong) UILabel *nameLabel;
 
-@property (nonatomic, strong) EMMessageStatusView *statusView;
+@property (nonatomic, strong) EaseMessageStatusView *statusView;
 
 @property (nonatomic, strong) UIButton *readReceiptBtn;//阅读回执按钮
 
@@ -33,21 +32,21 @@
 
 @end
 
-@implementation EMMessageCell
+@implementation EaseMessageCell
 
 - (instancetype)initWithDirection:(EMMessageDirection)aDirection
                              type:(EMMessageType)aType
                         viewModel:(EaseChatViewModel*)viewModel
 
 {
-    NSString *identifier = [EMMessageCell cellIdentifierWithDirection:aDirection type:aType];
+    NSString *identifier = [EaseMessageCell cellIdentifierWithDirection:aDirection type:aType];
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     if (self) {
         _direction = aDirection;
         _viewModel = viewModel;
         [self _setupViewsWithType:aType];
     }
-    
+    [self.bubbleView setupBubbleBackgroundImage];
     return self;
 }
 
@@ -86,9 +85,7 @@
         identifier = [NSString stringWithFormat:@"%@File", identifier];
     } else if (aType == EMMessageTypeExtGif) {
         identifier = [NSString stringWithFormat:@"%@ExtGif", identifier];
-    } else if (aType == EMMessageTypePictMixText) {
-        identifier = [NSString stringWithFormat:@"%@PictMixText", identifier];
-    }else if (aType == EMMessageTypeCustom) {
+    } else if (aType == EMMessageTypeCustom) {
         identifier = [NSString stringWithFormat:@"%@Custom", identifier];
     }
     
@@ -167,7 +164,7 @@
         }];
     }
 
-    _statusView = [[EMMessageStatusView alloc] init];
+    _statusView = [[EaseMessageStatusView alloc] init];
     [self.contentView addSubview:_statusView];
     if (self.direction == EMMessageDirectionSend) {
         [_statusView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -240,9 +237,6 @@
         case EMMessageTypeExtGif:
             bubbleView = [[EMMsgExtGifBubbleView alloc] initWithDirection:self.direction type:aType viewModel:_viewModel];
             break;
-        case EMMessageTypePictMixText:
-            bubbleView = [[EMMsgPicMixTextBubbleView alloc]initWithDirection:self.direction type:aType viewModel:_viewModel];
-            break;
         case EMMessageTypeCustom:
             break;
         default:
@@ -275,11 +269,6 @@
         }
         if (model.type == EMMessageBodyTypeVoice) {
             self.statusView.hidden = model.message.isReadAcked;
-        }
-        if (model.type == EMMessageTypePictMixText) {
-            if ([((EMTextMessageBody *)model.message.body).text isEqualToString:EMCOMMUNICATE_CALLED_MISSEDCALL])
-                self.statusView.hidden = model.message.isReadAcked;
-            else self.statusView.hidden = YES;
         }
     }
     if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(defaultAvatar)]) {
@@ -338,8 +327,8 @@
             EMMsgTextBubbleView *textBubbleView = (EMMsgTextBubbleView*)self.bubbleView;
             textBubbleView.textLabel.backgroundColor = [UIColor colorWithRed:156/255.0 green:206/255.0 blue:243/255.0 alpha:1.0];
         }
-        if (self.delegate && [self.delegate respondsToSelector:@selector(messageCellDidLongPress:)]) {
-            [self.delegate messageCellDidLongPress:self];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(messageCellDidLongPress:cgPoint:)]) {
+            [self.delegate messageCellDidLongPress:self cgPoint:CGPointZero];
         }
     }
     //[aLongPress release];

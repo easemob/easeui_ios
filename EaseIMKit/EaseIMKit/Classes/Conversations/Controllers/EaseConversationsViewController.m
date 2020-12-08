@@ -50,8 +50,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshTabView)
                                                  name:CONVERSATIONLIST_UPDATE object:nil];
-    //本地通话记录
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTabView) name:EMCOMMMUNICATE_RECORD object:nil];
 }
 
 - (void)dealloc
@@ -126,6 +124,7 @@
         [conversation setTop:!model.isTop];
         [weakself refreshTabView];
     }];
+    topAction.backgroundColor = [UIColor colorWithHexString:@"CB7D32"];
     
     NSArray *swipeActions = @[deleteAction, topAction];
     if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:trailingSwipeActionsForRowAtIndexPath:actions:)]) {
@@ -185,11 +184,20 @@
         NSMutableArray<id<EaseUserDelegate>> *totals = [NSMutableArray<id<EaseUserDelegate>> array];
         
         NSArray *conversations = [EMClient.sharedClient.chatManager getAllConversations];
-        
+
         NSMutableArray *convs = [NSMutableArray array];
         NSMutableArray *topConvs = [NSMutableArray array];
         
         for (EMConversation *conv in conversations) {
+            if (!conv.latestMessage) {
+                [EMClient.sharedClient.chatManager deleteConversation:conv.conversationId
+                                                     isDeleteMessages:NO
+                                                           completion:nil];
+                continue;
+            }
+            if (conv.type == EMConversationTypeChatRoom) {
+                continue;
+            }
             EaseConversationModel *item = [[EaseConversationModel alloc] initWithConversation:conv];
             if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(easeUserDelegateAtConversationId:conversationType:)]) {
                 item.userDelegate = [weakSelf.delegate easeUserDelegateAtConversationId:conv.conversationId conversationType:conv.type];
@@ -218,7 +226,7 @@
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;
             }else {
-                return(NSComparisonResult)NSOrderedDescending;
+                return(NSComparisonResult)NSOrderedDescending; 
             }
         }];
         

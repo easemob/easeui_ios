@@ -1,17 +1,17 @@
 //
-//  EMMessageStatusView.m
+//  EaseMessageStatusView.m
 //  ChatDemo-UI3.0
 //
 //  Created by XieYajie on 2019/1/25.
 //  Copyright © 2019 XieYajie. All rights reserved.
 //
 
-#import "EMMessageStatusView.h"
+#import "EaseMessageStatusView.h"
 #import "LoadingCALayer.h"
 #import "OneLoadingAnimationView.h"
 #import "UIImage+EaseUI.h"
 
-@interface EMMessageStatusView()
+@interface EaseMessageStatusView()
 
 @property (nonatomic, strong) UILabel *label;
 @property (nonatomic, strong) UIButton *failButton;
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation EMMessageStatusView
+@implementation EaseMessageStatusView
 
 - (instancetype)init
 {
@@ -53,7 +53,7 @@
 {
     if (_failButton == nil) {
         _failButton = [[UIButton alloc] init];
-        [_failButton setImage:[UIImage easeUIImageNamed:@"icon叹号"] forState:UIControlStateNormal];
+        [_failButton setImage:[UIImage easeUIImageNamed:@"iconSendFail"] forState:UIControlStateNormal];
         [_failButton addTarget:self action:@selector(failButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     
@@ -77,7 +77,7 @@
         } else {
             _activityView = [[UIActivityIndicatorView alloc]init];
         }
-        _activityView.color = kColor_Blue;
+        _activityView.color = [UIColor colorWithHexString:@"#2D74D7"];
     }
     
     return _activityView;

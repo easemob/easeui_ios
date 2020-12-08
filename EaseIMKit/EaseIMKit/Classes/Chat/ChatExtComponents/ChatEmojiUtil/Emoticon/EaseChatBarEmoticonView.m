@@ -56,7 +56,7 @@
     NSInteger count = [self.groups count];
     
     self.bottomView = [[UIView alloc] init];
-    self.bottomView.backgroundColor = kColor_LightGray;
+    self.bottomView.backgroundColor = [UIColor colorWithHexString:@"#F2F2F2"];;
     [self addSubview:self.bottomView];
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self);
@@ -66,16 +66,16 @@
     }];
     
     self.extBtn = [[UIButton alloc] init];
-    [self.extBtn setImage:[UIImage easeUIImageNamed:@"emojiadd"] forState:UIControlStateNormal];
+    [self.extBtn setBackgroundImage:[UIImage easeUIImageNamed:@"EmojiExt"] forState:UIControlStateNormal];
     
     self.deleteBtn = [[UIButton alloc]init];
     self.deleteBtn.backgroundColor = [UIColor whiteColor];
-    [self.deleteBtn setImage:[UIImage easeUIImageNamed:@"deleteEmoticon"] forState:UIControlStateNormal];
+    [self.deleteBtn setBackgroundImage:[UIImage easeUIImageNamed:@"deleteEmoticon"] forState:UIControlStateNormal];
     [self.deleteBtn addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
     
     self.bottomScrollView = [[UIScrollView alloc] init];
     self.bottomScrollView.scrollEnabled = NO;
-    self.bottomScrollView.backgroundColor = kColor_LightGray;
+    self.bottomScrollView.backgroundColor = [UIColor colorWithHexString:@"#F2F2F2"];;
     self.bottomScrollView.contentSize = CGSizeMake(itemWidth * count, self.bottomHeight);
     [self addSubview:self.bottomScrollView];
     [self.bottomScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -177,7 +177,7 @@
         [oldView removeFromSuperview];
         
         self.selectedButton.selected = NO;
-        self.selectedButton.backgroundColor = kColor_LightGray;
+        self.selectedButton.backgroundColor = [UIColor colorWithHexString:@"#F2F2F2"];;
         self.selectedButton = nil;
     }
     
@@ -188,10 +188,9 @@
     if (tag == 0) {
         [self.bottomView addSubview:self.extBtn];
         [self.extBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.bottomView);
-            make.right.equalTo(self.bottomView);
-            make.height.mas_equalTo(self.bottomHeight);
-            make.width.equalTo(@70);
+            make.top.equalTo(self.bottomView).offset(11);
+            make.right.equalTo(self.bottomView.mas_right).offset(-23);
+            make.width.height.mas_equalTo(@18);
         }];
         [self.bottomScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self);
@@ -201,10 +200,10 @@
         }];
         [self addSubview:self.deleteBtn];
         [self.deleteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(self.extBtn.mas_top).offset(-8);
-            make.right.equalTo(self.extBtn.mas_right).offset(-16);
-            make.height.mas_equalTo(self.bottomHeight);
-            make.width.mas_equalTo(self.bottomHeight);
+            make.bottom.equalTo(self.bottomView.mas_top).offset(-18);
+            make.right.equalTo(self.bottomView.mas_right).offset(-23);
+            make.width.mas_equalTo(@22);
+            make.height.mas_equalTo(@17);
         }];
     } else {
         [self.extBtn removeFromSuperview];
