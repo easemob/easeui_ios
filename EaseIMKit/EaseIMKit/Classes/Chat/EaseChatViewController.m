@@ -811,15 +811,6 @@
     }
 }
 
-//发送自定义消息
-- (void)sendCustomMessageModel:(EaseChatCustomMessageModel *)customMsgModel
-{
-    NSMutableDictionary *customMsgContentDict = [[NSMutableDictionary alloc]init];
-    [customMsgContentDict setObject:customMsgModel.msgContentDictionary forKey:customMsgModel.msgKey];
-    EMTextMessageBody *body = [[EMTextMessageBody alloc]initWithText:customMsgModel.msgKey];
-    [self sendMessageWithBody:body ext:[customMsgContentDict copy] isUpload:NO];
-}
-
 //发送消息体
 - (void)sendMessageWithBody:(EMMessageBody *)aBody
                          ext:(NSDictionary * __nullable)aExt

@@ -216,7 +216,6 @@
     self.toolBtn = [[UIButton alloc]init];
     self.toolBtn.layer.masksToBounds = YES;
     self.toolBtn.layer.cornerRadius = 8;
-    [self.toolBtn addTarget:self action:@selector(cellTapAction) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:self.toolBtn];
     [self.toolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_top);
@@ -234,6 +233,9 @@
         make.left.equalTo(self.contentView);
         make.bottom.equalTo(self.contentView).offset(-10);
     }];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cellTapAction)];
+    [self addGestureRecognizer:tap];
 }
 
 - (void)personalizeToolbar:(EaseExtMenuModel*)menuItemModel menuViewMode:(EaseExtMenuViewModel*)menuViewModel {

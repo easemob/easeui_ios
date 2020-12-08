@@ -64,8 +64,6 @@
 		3C7E72D2257DDF57001C65BE /* msg_bg_send@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C7E72D0257DDF57001C65BE /* msg_bg_send@3x.png */; };
 		3C7E72D5257DDF5C001C65BE /* msg_bg_recv@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C7E72D3257DDF5C001C65BE /* msg_bg_recv@3x.png */; };
 		3C7E72D6257DDF5C001C65BE /* msg_bg_recv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C7E72D4257DDF5C001C65BE /* msg_bg_recv@2x.png */; };
-		3C83D944257F34E600AA2C8D /* EaseChatCustomMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C83D942257F34E500AA2C8D /* EaseChatCustomMessageModel.m */; };
-		3C83D945257F34E600AA2C8D /* EaseChatCustomMessageModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C83D943257F34E600AA2C8D /* EaseChatCustomMessageModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3C9A95492577C5AB00752F28 /* audio-unSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9A95472577C5AA00752F28 /* audio-unSelected@2x.png */; };
 		3C9A954A2577C5AB00752F28 /* audio-unSelected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9A95482577C5AB00752F28 /* audio-unSelected@3x.png */; };
 		3C9A95512577C62800752F28 /* deleteEmoticon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9A954F2577C62700752F28 /* deleteEmoticon@3x.png */; };
@@ -434,8 +432,6 @@
 		3C7E72D0257DDF57001C65BE /* msg_bg_send@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "msg_bg_send@3x.png"; sourceTree = "<group>"; };
 		3C7E72D3257DDF5C001C65BE /* msg_bg_recv@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "msg_bg_recv@3x.png"; sourceTree = "<group>"; };
 		3C7E72D4257DDF5C001C65BE /* msg_bg_recv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "msg_bg_recv@2x.png"; sourceTree = "<group>"; };
-		3C83D942257F34E500AA2C8D /* EaseChatCustomMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseChatCustomMessageModel.m; sourceTree = "<group>"; };
-		3C83D943257F34E600AA2C8D /* EaseChatCustomMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseChatCustomMessageModel.h; sourceTree = "<group>"; };
 		3C9A95472577C5AA00752F28 /* audio-unSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio-unSelected@2x.png"; sourceTree = "<group>"; };
 		3C9A95482577C5AB00752F28 /* audio-unSelected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio-unSelected@3x.png"; sourceTree = "<group>"; };
 		3C9A954F2577C62700752F28 /* deleteEmoticon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "deleteEmoticon@3x.png"; sourceTree = "<group>"; };
@@ -900,8 +896,6 @@
 				9089333B2576571300F50368 /* EaseExtMenuModel.m */,
 				9089333C2576571300F50368 /* EaseMessageModel.h */,
 				908933392576571300F50368 /* EaseMessageModel.m */,
-				3C83D943257F34E600AA2C8D /* EaseChatCustomMessageModel.h */,
-				3C83D942257F34E500AA2C8D /* EaseChatCustomMessageModel.m */,
 			);
 			path = ChatModels;
 			sourceTree = "<group>";
@@ -1689,7 +1683,6 @@
 				908934072576571300F50368 /* EMChatBarRecordAudioView.h in Headers */,
 				9089347E2576571300F50368 /* EMConversation+EaseUI.h in Headers */,
 				908934232576571300F50368 /* EMMsgVideoBubbleView.h in Headers */,
-				3C83D945257F34E600AA2C8D /* EaseChatCustomMessageModel.h in Headers */,
 				908934082576571300F50368 /* EMAudioRecordUtil.h in Headers */,
 				908934692576571300F50368 /* EMMulticastDelegate.h in Headers */,
 				908933F62576571300F50368 /* EaseExtMenuModel.h in Headers */,
@@ -2025,7 +2018,6 @@
 				9089341E2576571300F50368 /* EMMsgImageBubbleView.m in Sources */,
 				908934352576571300F50368 /* EMMsgTouchIncident.m in Sources */,
 				3C5DCE7825766B5200A3F8CB /* EaseCollectionView.m in Sources */,
-				3C83D944257F34E600AA2C8D /* EaseChatCustomMessageModel.m in Sources */,
 				3C5DCE5D25766B5200A3F8CB /* EaseGridViewController.m in Sources */,
 				908934202576571300F50368 /* EMMsgTextBubbleView.m in Sources */,
 				9089340B2576571300F50368 /* EMChatBar.m in Sources */,

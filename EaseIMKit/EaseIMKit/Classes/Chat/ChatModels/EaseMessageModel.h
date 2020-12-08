@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <Hyphenate/Hyphenate.h>
 #import "EaseUserDelegate.h"
-#import "EaseChatCustomMessageModel.h"
 
 typedef NS_ENUM(NSInteger, EMMessageType) {
     EMMessageTypeText = 1,
@@ -33,8 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EaseMessageModel : NSObject
 
 @property (nonatomic) id<EaseUserDelegate> userDataDelegate;
-
-@property (nonatomic, strong) EaseChatCustomMessageModel *customMsgModel; //自定义消息数据模型
 
 @property (nonatomic, strong) EMMessage *message;
 

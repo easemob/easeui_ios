@@ -10,7 +10,6 @@
 
 #import "EaseChatViewModel.h"
 #import "EaseChatViewControllerDelegate.h"
-#import "EaseChatCustomMessageModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,8 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 //重置聊天控制器
 - (void)resetChatVCWithViewModel:(EaseChatViewModel *)viewModel;
 
-//发送自定义消息
-- (void)sendCustomMessageModel:(EaseChatCustomMessageModel *)customMsgModel;
+
 //发送文本消息
 - (void)sendTextAction:(NSString *)aText ext:(NSDictionary * __nullable)aExt;
 //发送消息体
