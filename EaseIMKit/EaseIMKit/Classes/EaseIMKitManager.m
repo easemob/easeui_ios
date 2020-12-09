@@ -20,7 +20,7 @@ static EaseIMKitManager *easeIMKit = nil;
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
 @end
 
-#define IMKitVersion @"0.0.5"
+#define IMKitVersion @"1.0.0"
 
 @implementation EaseIMKitManager
 + (BOOL)initWithEMOptions:(EMOptions *)options {
