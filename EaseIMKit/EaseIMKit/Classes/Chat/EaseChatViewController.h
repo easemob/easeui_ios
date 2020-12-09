@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)refreshTableView;
 //获取数据刷新页面(重新从DB获取数据)
 - (void)tableViewDidTriggerHeaderRefresh;
-//清除从聊天页弹出的其他控制器页面(例：发起/接收 音视频通话)
+//清除从聊天页弹出的其他控制器页面(例：发起/接收 音视频通话时清理 相册弹出页/图片浏览页/输入扩展区收起等)
 - (void)cleanPopupControllerView;
 //停止音频播放
 - (void)stopAudioPlayer;

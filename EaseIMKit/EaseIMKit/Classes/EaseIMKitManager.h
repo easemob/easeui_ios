@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 //系统通知接口
 @protocol EaseIMKitSystemNotiDelegate <NSObject>
 @optional
-- (void)conversationsUnreadCountUpdate:(NSInteger)unreadCount;//会话未读总数
 
 /**
  * 是否需要系统通知：好友/群 申请等   默认需要

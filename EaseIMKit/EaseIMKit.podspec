@@ -7,6 +7,12 @@ Pod::Spec.new do |s|
   s.license = 'MIT'
   s.summary = 'easemob im sdk UIKit'
   s.homepage = 'https://github.com/dujiepeng/EaseIMKit'
+  s.description = <<-DESC
+                    EaseIMKit Supported features:
+                    1. Conversation list
+                    2. Chat page (singleChat,groupChat,chatRoom)
+                    3. Contact list
+                  DESC
   s.author = { 'easemob' => 'dev@easemob.com' }
   s.source = { :git => 'https://github.com/dujiepeng/EaseIMKit.git',
                :tag => s.version.to_s,
@@ -15,7 +21,6 @@ Pod::Spec.new do |s|
   
   s.xcconfig     = {'OTHER_LDFLAGS' => '-ObjC'}
   
-  s.description = 'easemob sdk ui kit'
   s.requires_arc = true
   s.resource_bundles = {
     'EaseIMKit' => ['EaseIMKit/**/*.{png,jpg,jpeg,gif}']
