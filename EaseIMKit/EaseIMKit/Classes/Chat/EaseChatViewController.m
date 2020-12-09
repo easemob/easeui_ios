@@ -86,7 +86,7 @@
         _msgQueue = dispatch_queue_create("emmessage.com", NULL);
         _viewModel = viewModel;
         _isReloadViewWithModel = NO;
-        [EaseIMKitManager.shareEaseIMKit setConversationId:_currentConversation.conversationId];
+        [EaseIMKitManager.shared setConversationId:_currentConversation.conversationId];
         if (!_viewModel) {
             _viewModel = [[EaseChatViewModel alloc] init];
         }
@@ -124,7 +124,7 @@
 {
     [super viewDidAppear:animated];
     [self tableViewDidTriggerHeaderRefresh];
-    [EaseIMKitManager.shareEaseIMKit markAllMessagesAsReadWithConversation:self.currentConversation];
+    [EaseIMKitManager.shared markAllMessagesAsReadWithConversation:self.currentConversation];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -146,7 +146,7 @@
 
 - (void)dealloc
 {
-    [EaseIMKitManager.shareEaseIMKit setConversationId:@""];
+    [EaseIMKitManager.shared setConversationId:@""];
     [self hideLongPressView];
     [[EMAudioPlayerUtil sharedHelper] stopPlayer];
     if (self.currentConversation.type == EMChatTypeChatRoom) {
@@ -782,6 +782,7 @@
 
 - (void)cleanPopupControllerView
 {
+    [self.view endEditing:YES];
     [self.chatBar clearMoreViewAndSelectedButton];
     [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
     [[EMImageBrowser sharedBrowser] dismissViewController];
@@ -809,15 +810,6 @@
         //NSIndexPath *newestIndexPath = [self.tableView indexPathForRowAtPoint:longLocation];
         [self messageCellDidLongPress:_currentLongPressCustomCell cgPoint:longLocation];
     }
-}
-
-//发送自定义消息
-- (void)sendCustomMessageModel:(EaseChatCustomMessageModel *)customMsgModel
-{
-    NSMutableDictionary *customMsgContentDict = [[NSMutableDictionary alloc]init];
-    [customMsgContentDict setObject:customMsgModel.msgContentDictionary forKey:customMsgModel.msgKey];
-    EMTextMessageBody *body = [[EMTextMessageBody alloc]initWithText:customMsgModel.msgKey];
-    [self sendMessageWithBody:body ext:[customMsgContentDict copy] isUpload:NO];
 }
 
 //发送消息体

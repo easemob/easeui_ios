@@ -19,10 +19,6 @@
         _direction = aMsg.direction;
         _type = (EMMessageType)aMsg.body.type;
         if (aMsg.body.type == EMMessageBodyTypeText) {
-            NSString *msgText = ((EMTextMessageBody *)(aMsg.body)).text;
-            if ([aMsg.ext objectForKey:msgText] && [[aMsg.ext objectForKey:msgText] isKindOfClass:[NSDictionary class]]) {
-                _customMsgModel = [[EaseChatCustomMessageModel alloc]initWithCustomMessageInfo:msgText msgContentDictionary:[aMsg.ext objectForKey:msgText]];
-            }
             if ([aMsg.ext objectForKey:MSG_EXT_GIF]) {
                 _type = EMMessageTypeExtGif;
                 return self;

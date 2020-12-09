@@ -131,7 +131,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section {
     if (self.customHeaderItems.count > 0 && section == 0) {
-        return 0;;
+        return 0;
     }
     return _viewModel.sectionTitleLabelHeight + _viewModel.sectionTitleEdgeInsets.bottom + _viewModel.sectionTitleEdgeInsets.top;
 }

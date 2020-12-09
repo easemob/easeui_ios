@@ -11,7 +11,7 @@
 #import "EMMulticastDelegate.h"
 #import "EaseDefines.h"
 
-static dispatch_once_t onceToken;
+bool gInit;
 static EaseIMKitManager *easeIMKit = nil;
 @interface EaseIMKitManager ()<EMMultiDevicesDelegate, EMContactManagerDelegate, EMGroupManagerDelegate, EMChatManagerDelegate>
 @property (nonatomic, strong) EMMulticastDelegate<EaseIMKitManagerDelegate> *delegates;
@@ -23,12 +23,25 @@ static EaseIMKitManager *easeIMKit = nil;
 #define IMKitVersion @"0.0.5"
 
 @implementation EaseIMKitManager
++ (BOOL)initWithEMOptions:(EMOptions *)options {
+    if (!gInit) {
+        [EMClient.sharedClient initializeSDKWithOptions:options];
+        [self shareInstance];
+        gInit = YES;
+    }
+    
+    return gInit;
+}
+
++ (EaseIMKitManager *)shared {
+    return easeIMKit;
+}
 
 + (NSString *)EaseIMKitVersion {
     return IMKitVersion;
 }
 
-+ (instancetype)shareEaseIMKit
++ (EaseIMKitManager *)shareInstance
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -37,12 +50,6 @@ static EaseIMKitManager *easeIMKit = nil;
         }
     });
     return easeIMKit;
-}
-
-+ (void)destoryShared
-{
-    onceToken = 0;
-    easeIMKit = nil;
 }
 
 - (instancetype)init
@@ -286,7 +293,7 @@ static EaseIMKitManager *easeIMKit = nil;
 }
 
 //未读总数变化
-- (void)_resetConversationsUnreadCount//改名
+- (void)_resetConversationsUnreadCount
 {
     NSInteger unreadCount = 0;
     NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];

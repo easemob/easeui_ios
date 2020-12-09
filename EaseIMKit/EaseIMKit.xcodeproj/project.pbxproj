@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		30E0392D3CACAB64CD5AF745 /* Pods_EaseIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0340D90E387533E81E8EA064 /* Pods_EaseIMKit.framework */; };
 		3C59EDAA257E437A0009DF69 /* EaseExtFuncModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C59EDA8257E437A0009DF69 /* EaseExtFuncModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3C59EDAB257E437A0009DF69 /* EaseExtFuncModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C59EDA9257E437A0009DF69 /* EaseExtFuncModel.m */; };
 		3C5DCE4E25766B5200A3F8CB /* EaseTapDetectingImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5DCE1425766B4800A3F8CB /* EaseTapDetectingImageView.h */; };
@@ -64,8 +65,6 @@
 		3C7E72D2257DDF57001C65BE /* msg_bg_send@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C7E72D0257DDF57001C65BE /* msg_bg_send@3x.png */; };
 		3C7E72D5257DDF5C001C65BE /* msg_bg_recv@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C7E72D3257DDF5C001C65BE /* msg_bg_recv@3x.png */; };
 		3C7E72D6257DDF5C001C65BE /* msg_bg_recv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C7E72D4257DDF5C001C65BE /* msg_bg_recv@2x.png */; };
-		3C83D944257F34E600AA2C8D /* EaseChatCustomMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C83D942257F34E500AA2C8D /* EaseChatCustomMessageModel.m */; };
-		3C83D945257F34E600AA2C8D /* EaseChatCustomMessageModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C83D943257F34E600AA2C8D /* EaseChatCustomMessageModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3C9A95492577C5AB00752F28 /* audio-unSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9A95472577C5AA00752F28 /* audio-unSelected@2x.png */; };
 		3C9A954A2577C5AB00752F28 /* audio-unSelected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9A95482577C5AB00752F28 /* audio-unSelected@3x.png */; };
 		3C9A95512577C62800752F28 /* deleteEmoticon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9A954F2577C62700752F28 /* deleteEmoticon@3x.png */; };
@@ -74,7 +73,6 @@
 		3C9A956E2577CBDC00752F28 /* EmojiExt@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9A956C2577CBDC00752F28 /* EmojiExt@3x.png */; };
 		3C9A95EF2578E6CB00752F28 /* back_gary@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9A95ED2578E6CB00752F28 /* back_gary@3x.png */; };
 		3C9A95F02578E6CB00752F28 /* back_gary@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9A95EE2578E6CB00752F28 /* back_gary@2x.png */; };
-		4A6B087AE17F173E2E5B6161 /* Pods_EaseIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFEF519E3AAF88CDE2C27682 /* Pods_EaseIMKit.framework */; };
 		9036F2D925774B4F001F62AA /* character@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 908934932576571A00F50368 /* character@2x.png */; };
 		9036F2DA25774B4F001F62AA /* face@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 908934942576571A00F50368 /* face@2x.png */; };
 		9036F2DB25774B4F001F62AA /* more-unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 908934952576571A00F50368 /* more-unselected@3x.png */; };
@@ -377,6 +375,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0340D90E387533E81E8EA064 /* Pods_EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D73EB9C9E0F1CE2F12318F2 /* Pods-EaseIMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.debug.xcconfig"; sourceTree = "<group>"; };
 		3C59EDA8257E437A0009DF69 /* EaseExtFuncModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EaseExtFuncModel.h; sourceTree = "<group>"; };
 		3C59EDA9257E437A0009DF69 /* EaseExtFuncModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EaseExtFuncModel.m; sourceTree = "<group>"; };
 		3C5DCE1425766B4800A3F8CB /* EaseTapDetectingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseTapDetectingImageView.h; sourceTree = "<group>"; };
@@ -434,8 +434,6 @@
 		3C7E72D0257DDF57001C65BE /* msg_bg_send@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "msg_bg_send@3x.png"; sourceTree = "<group>"; };
 		3C7E72D3257DDF5C001C65BE /* msg_bg_recv@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "msg_bg_recv@3x.png"; sourceTree = "<group>"; };
 		3C7E72D4257DDF5C001C65BE /* msg_bg_recv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "msg_bg_recv@2x.png"; sourceTree = "<group>"; };
-		3C83D942257F34E500AA2C8D /* EaseChatCustomMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseChatCustomMessageModel.m; sourceTree = "<group>"; };
-		3C83D943257F34E600AA2C8D /* EaseChatCustomMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseChatCustomMessageModel.h; sourceTree = "<group>"; };
 		3C9A95472577C5AA00752F28 /* audio-unSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio-unSelected@2x.png"; sourceTree = "<group>"; };
 		3C9A95482577C5AB00752F28 /* audio-unSelected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio-unSelected@3x.png"; sourceTree = "<group>"; };
 		3C9A954F2577C62700752F28 /* deleteEmoticon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "deleteEmoticon@3x.png"; sourceTree = "<group>"; };
@@ -734,9 +732,7 @@
 		908935552576571A00F50368 /* alert_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_info@2x.png"; sourceTree = "<group>"; };
 		90A039F0254A6E7600D57B73 /* EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90A039F4254A6E7600D57B73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B66D2857B4AE55F404774A86 /* Pods-EaseIMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.debug.xcconfig"; sourceTree = "<group>"; };
-		BFEF519E3AAF88CDE2C27682 /* Pods_EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E750E16B3CC5826D4D549E4F /* Pods-EaseIMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.release.xcconfig"; sourceTree = "<group>"; };
+		FB1327691F64F707A4A2A0B6 /* Pods-EaseIMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -744,7 +740,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A6B087AE17F173E2E5B6161 /* Pods_EaseIMKit.framework in Frameworks */,
+				30E0392D3CACAB64CD5AF745 /* Pods_EaseIMKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -754,8 +750,8 @@
 		10014ED42E2ED355F5DF5B04 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				B66D2857B4AE55F404774A86 /* Pods-EaseIMKit.debug.xcconfig */,
-				E750E16B3CC5826D4D549E4F /* Pods-EaseIMKit.release.xcconfig */,
+				1D73EB9C9E0F1CE2F12318F2 /* Pods-EaseIMKit.debug.xcconfig */,
+				FB1327691F64F707A4A2A0B6 /* Pods-EaseIMKit.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -855,7 +851,7 @@
 			children = (
 				908930D8257651B100F50368 /* UIKit.framework */,
 				90892DD425764C6900F50368 /* EaseIMKit.framework */,
-				BFEF519E3AAF88CDE2C27682 /* Pods_EaseIMKit.framework */,
+				0340D90E387533E81E8EA064 /* Pods_EaseIMKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -900,8 +896,6 @@
 				9089333B2576571300F50368 /* EaseExtMenuModel.m */,
 				9089333C2576571300F50368 /* EaseMessageModel.h */,
 				908933392576571300F50368 /* EaseMessageModel.m */,
-				3C83D943257F34E600AA2C8D /* EaseChatCustomMessageModel.h */,
-				3C83D942257F34E500AA2C8D /* EaseChatCustomMessageModel.m */,
 			);
 			path = ChatModels;
 			sourceTree = "<group>";
@@ -1144,10 +1138,10 @@
 		908933A22576571300F50368 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				908933A32576571300F50368 /* EaseContactModel.m */,
-				908933A42576571300F50368 /* EaseContactsViewModel.m */,
 				908933A52576571300F50368 /* EaseContactModel.h */,
+				908933A32576571300F50368 /* EaseContactModel.m */,
 				908933A62576571300F50368 /* EaseContactsViewModel.h */,
+				908933A42576571300F50368 /* EaseContactsViewModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1689,7 +1683,6 @@
 				908934072576571300F50368 /* EMChatBarRecordAudioView.h in Headers */,
 				9089347E2576571300F50368 /* EMConversation+EaseUI.h in Headers */,
 				908934232576571300F50368 /* EMMsgVideoBubbleView.h in Headers */,
-				3C83D945257F34E600AA2C8D /* EaseChatCustomMessageModel.h in Headers */,
 				908934082576571300F50368 /* EMAudioRecordUtil.h in Headers */,
 				908934692576571300F50368 /* EMMulticastDelegate.h in Headers */,
 				908933F62576571300F50368 /* EaseExtMenuModel.h in Headers */,
@@ -1736,7 +1729,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 90A039F8254A6E7600D57B73 /* Build configuration list for PBXNativeTarget "EaseIMKit" */;
 			buildPhases = (
-				547123FB8DBE81355615DCEB /* [CP] Check Pods Manifest.lock */,
+				28A64103CCE12B2AAA267355 /* [CP] Check Pods Manifest.lock */,
 				90A039EB254A6E7600D57B73 /* Headers */,
 				90A039EC254A6E7600D57B73 /* Sources */,
 				90A039ED254A6E7600D57B73 /* Frameworks */,
@@ -1951,7 +1944,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		547123FB8DBE81355615DCEB /* [CP] Check Pods Manifest.lock */ = {
+		28A64103CCE12B2AAA267355 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2025,7 +2018,6 @@
 				9089341E2576571300F50368 /* EMMsgImageBubbleView.m in Sources */,
 				908934352576571300F50368 /* EMMsgTouchIncident.m in Sources */,
 				3C5DCE7825766B5200A3F8CB /* EaseCollectionView.m in Sources */,
-				3C83D944257F34E600AA2C8D /* EaseChatCustomMessageModel.m in Sources */,
 				3C5DCE5D25766B5200A3F8CB /* EaseGridViewController.m in Sources */,
 				908934202576571300F50368 /* EMMsgTextBubbleView.m in Sources */,
 				9089340B2576571300F50368 /* EMChatBar.m in Sources */,
@@ -2216,7 +2208,7 @@
 		};
 		90A039F9254A6E7600D57B73 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B66D2857B4AE55F404774A86 /* Pods-EaseIMKit.debug.xcconfig */;
+			baseConfigurationReference = 1D73EB9C9E0F1CE2F12318F2 /* Pods-EaseIMKit.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -2247,7 +2239,7 @@
 		};
 		90A039FA254A6E7600D57B73 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E750E16B3CC5826D4D549E4F /* Pods-EaseIMKit.release.xcconfig */;
+			baseConfigurationReference = FB1327691F64F707A4A2A0B6 /* Pods-EaseIMKit.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
