@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
 
   s.license = 'MIT'
   s.summary = 'easemob im sdk UIKit'
-  s.homepage = 'https://github.com/dujiepeng/EaseIMKit'
+  s.homepage = 'http://docs-im.easemob.com/im/ios/other/easeimkit'
   s.description = <<-DESC
                     EaseIMKit Supported features:
                     1. Conversation list

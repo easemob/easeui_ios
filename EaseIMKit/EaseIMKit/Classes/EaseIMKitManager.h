@@ -65,9 +65,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EaseIMKitManager : NSObject
 
 @property (nonatomic) id<EaseIMKitSystemNotiDelegate>systemNotiDelegate; //系统通知回调代理
-
-+ (instancetype)shareEaseIMKit;
-+ (void)destoryShared;
++ (BOOL)initWithEMOptions:(EMOptions *)options;
++ (EaseIMKitManager *)shared;
 + (NSString *)EaseIMKitVersion;
 - (void)addDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
 - (void)removeDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
