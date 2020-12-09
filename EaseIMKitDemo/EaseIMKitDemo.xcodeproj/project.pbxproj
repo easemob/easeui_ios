@@ -209,7 +209,6 @@
 				90A03A26254A70E100D57B73 /* Frameworks */,
 				90A03A27254A70E100D57B73 /* Resources */,
 				1275B6DC6EF373309EBE4A48 /* [CP] Embed Pods Frameworks */,
-				916C52D892D8165856512FC7 /* [CP] Copy Pods Resources */,
 				90AEAEE12580EA86004DD181 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -281,23 +280,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		916C52D892D8165856512FC7 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A54318E5974931485425CC27 /* [CP] Check Pods Manifest.lock */ = {

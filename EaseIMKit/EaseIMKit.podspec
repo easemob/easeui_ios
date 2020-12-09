@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'EaseIMKit'
-  s.version = '0.0.1'
+  s.version = '1.0.0'
 
   s.ios.deployment_target = '11.0'
 
@@ -14,20 +14,13 @@ Pod::Spec.new do |s|
                     3. Contact list
                   DESC
   s.author = { 'easemob' => 'dev@easemob.com' }
-  s.source = { :git => 'https://github.com/dujiepeng/EaseIMKit.git',
-               :tag => s.version.to_s,
-               :submodules => true
-  }
+  s.source       = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKit_1.0.0.zip' }
   
   s.xcconfig     = {'OTHER_LDFLAGS' => '-ObjC'}
   
   s.requires_arc = true
-  s.resource_bundles = {
-    'EaseIMKit' => ['EaseIMKit/**/*.{png,jpg,jpeg,gif}']
-  }
   
-  
-#  s.static_framework = false
+  s.static_framework = false
   s.frameworks = 'UIKit'
   s.libraries = 'stdc++'
   s.dependency 'Hyphenate'

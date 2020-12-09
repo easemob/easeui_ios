@@ -1,5 +1,5 @@
 PODS:
-  - EaseIMKit (0.0.1):
+  - EaseIMKit (1.0.0):
     - EMVoiceConvert
     - FLAnimatedImage
     - Hyphenate
@@ -38,7 +38,7 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  EaseIMKit: a643db944cb7c8ba12382612b2e79952692a00a5
+  EaseIMKit: 818d995a77ad2e19bd90f0c33a6ec2292e1cfa64
   EMVoiceConvert: e52b9918199a8f1d1ad3041e71b569a9bc165bb5
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Hyphenate: a9da397810e08c4b3173a5c8f04868165ec48b9c
