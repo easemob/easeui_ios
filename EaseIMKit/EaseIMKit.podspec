@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name = 'EaseIMKit'
-  s.version = '1.0.0'
+  s.version = '1.0.0.1'
 
-  s.ios.deployment_target = '11.0'
+  s.platform     = :ios, '11.0'
 
-  s.license = 'MIT'
+  s.license       = { :type => 'Copyright', :text => 'Hyphenate Inc. 2017' }
   s.summary = 'easemob im sdk UIKit'
   s.homepage = 'http://docs-im.easemob.com/im/ios/other/easeimkit'
   s.description = <<-DESC
@@ -19,8 +19,9 @@ Pod::Spec.new do |s|
   s.xcconfig     = {'OTHER_LDFLAGS' => '-ObjC'}
   
   s.requires_arc = true
+  s.preserve_paths = '*.framework'
+  s.vendored_frameworks = '*.framework'
   
-  s.static_framework = false
   s.frameworks = 'UIKit'
   s.libraries = 'stdc++'
   s.dependency 'Hyphenate'
