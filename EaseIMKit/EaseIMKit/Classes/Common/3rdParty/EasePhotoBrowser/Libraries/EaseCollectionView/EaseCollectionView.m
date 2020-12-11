@@ -2220,13 +2220,13 @@ static void EaseCollectionViewCommonSetup(EaseCollectionView *_self) {
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Runtime Additions to create UICollectionView
 
-@implementation PSUICollectionView_ @end
-@implementation PSUICollectionViewCell_ @end
-@implementation PSUICollectionReusableView_ @end
-@implementation PSUICollectionViewLayout_ @end
-@implementation PSUICollectionViewFlowLayout_ @end
-@implementation PSUICollectionViewLayoutAttributes_ @end
-@implementation PSUICollectionViewController_ @end
+@implementation EaseUICollectionView_ @end
+@implementation EaseUICollectionViewCell_ @end
+@implementation EaseUICollectionReusableView_ @end
+@implementation EaseUICollectionViewLayout_ @end
+@implementation EaseUICollectionViewFlowLayout_ @end
+@implementation EaseUICollectionViewLayoutAttributes_ @end
+@implementation EaseUICollectionViewController_ @end
 
 static BOOL PSTRegisterClass(NSString *UIClassName, Class PSTClass) {
     NSCParameterAssert(UIClassName && PSTClass);
@@ -2261,25 +2261,25 @@ __attribute__((constructor)) static void PSTCreateUICollectionViewClasses(void) 
 
     @autoreleasepool {
         // Change superclass at runtime. This allows seamless switching from PST* to UI* at runtime.
-        PSTRegisterClass(@"UICollectionView", PSUICollectionView_.class);
-        PSTRegisterClass(@"UICollectionViewCell", PSUICollectionViewCell_.class);
-        PSTRegisterClass(@"UICollectionReusableView", PSUICollectionReusableView_.class);
-        PSTRegisterClass(@"UICollectionViewLayout", PSUICollectionViewLayout_.class);
-        PSTRegisterClass(@"UICollectionViewFlowLayout", PSUICollectionViewFlowLayout_.class);
-        PSTRegisterClass(@"UICollectionViewLayoutAttributes", PSUICollectionViewLayoutAttributes_.class);
-        PSTRegisterClass(@"UICollectionViewController", PSUICollectionViewController_.class);
+        PSTRegisterClass(@"UICollectionView", EaseUICollectionView_.class);
+        PSTRegisterClass(@"UICollectionViewCell", EaseUICollectionViewCell_.class);
+        PSTRegisterClass(@"UICollectionReusableView", EaseUICollectionReusableView_.class);
+        PSTRegisterClass(@"UICollectionViewLayout", EaseUICollectionViewLayout_.class);
+        PSTRegisterClass(@"UICollectionViewFlowLayout", EaseUICollectionViewFlowLayout_.class);
+        PSTRegisterClass(@"UICollectionViewLayoutAttributes", EaseUICollectionViewLayoutAttributes_.class);
+        PSTRegisterClass(@"UICollectionViewController", EaseUICollectionViewController_.class);
 
         // add PSUI classes at runtime to make Interface Builder sane
-        // (IB doesn't allow adding the PSUICollectionView_ types but doesn't complain on unknown classes)
+        // (IB doesn't allow adding the EaseUICollectionView_ types but doesn't complain on unknown classes)
         // The class name may already be in use. This may happen if this code is running for the second time (first for an app bundle, then again for a unit test bundle).
         Class c;
-        if ((c = objc_allocateClassPair(PSUICollectionView_.class, "PSUICollectionView", 0))) objc_registerClassPair(c);
-        if ((c = objc_allocateClassPair(PSUICollectionViewCell_.class, "PSUICollectionViewCell", 0))) objc_registerClassPair(c);
-        if ((c = objc_allocateClassPair(PSUICollectionReusableView_.class, "PSUICollectionReusableView", 0))) objc_registerClassPair(c);
-        if ((c = objc_allocateClassPair(PSUICollectionViewLayout_.class, "PSUICollectionViewLayout", 0))) objc_registerClassPair(c);
-        if ((c = objc_allocateClassPair(PSUICollectionViewFlowLayout_.class, "PSUICollectionViewFlowLayout", 0))) objc_registerClassPair(c);
-        if ((c = objc_allocateClassPair(PSUICollectionViewLayoutAttributes_.class, "PSUICollectionViewLayoutAttributes", 0)))objc_registerClassPair(c);
-        if ((c = objc_allocateClassPair(PSUICollectionViewController_.class, "PSUICollectionViewController", 0))) objc_registerClassPair(c);
+        if ((c = objc_allocateClassPair(EaseUICollectionView_.class, "EaseUICollectionView", 0))) objc_registerClassPair(c);
+        if ((c = objc_allocateClassPair(EaseUICollectionViewCell_.class, "EaseUICollectionViewCell", 0))) objc_registerClassPair(c);
+        if ((c = objc_allocateClassPair(EaseUICollectionReusableView_.class, "EaseUICollectionReusableView", 0))) objc_registerClassPair(c);
+        if ((c = objc_allocateClassPair(EaseUICollectionViewLayout_.class, "EaseUICollectionViewLayout", 0))) objc_registerClassPair(c);
+        if ((c = objc_allocateClassPair(EaseUICollectionViewFlowLayout_.class, "EaseUICollectionViewFlowLayout", 0))) objc_registerClassPair(c);
+        if ((c = objc_allocateClassPair(EaseUICollectionViewLayoutAttributes_.class, "EaseUICollectionViewLayoutAttributes", 0)))objc_registerClassPair(c);
+        if ((c = objc_allocateClassPair(EaseUICollectionViewController_.class, "EaseUICollectionViewController", 0))) objc_registerClassPair(c);
     }
 }
 

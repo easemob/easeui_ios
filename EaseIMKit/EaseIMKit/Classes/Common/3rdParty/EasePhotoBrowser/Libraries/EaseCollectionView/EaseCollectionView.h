@@ -114,23 +114,23 @@ typedef NS_ENUM(NSUInteger, PSTCollectionElementCategory) {
 
 @end
 
-// To dynamically switch between EaseCollectionView and UICollectionView, use the PSUICollectionView* classes.
-#define PSUICollectionView PSUICollectionView_
-#define PSUICollectionViewCell PSUICollectionViewCell_
-#define PSUICollectionReusableView PSUICollectionReusableView_
-#define PSUICollectionViewDelegate EaseCollectionViewDelegate
-#define PSUICollectionViewDataSource EaseCollectionViewDataSource
-#define PSUICollectionViewLayout PSUICollectionViewLayout_
-#define PSUICollectionViewFlowLayout PSUICollectionViewFlowLayout_
-#define PSUICollectionViewDelegateFlowLayout EaseCollectionViewDelegateFlowLayout
-#define PSUICollectionViewLayoutAttributes PSUICollectionViewLayoutAttributes_
-#define PSUICollectionViewController PSUICollectionViewController_
+// To dynamically switch between EaseCollectionView and UICollectionView, use the EaseUICollectionView* classes.
+#define EaseUICollectionView EaseUICollectionView_
+#define EaseUICollectionViewCell EaseUICollectionViewCell_
+#define EaseUICollectionReusableView EaseUICollectionReusableView_
+#define EaseUICollectionViewDelegate EaseCollectionViewDelegate
+#define EaseUICollectionViewDataSource EaseCollectionViewDataSource
+#define EaseUICollectionViewLayout EaseUICollectionViewLayout_
+#define EaseUICollectionViewFlowLayout EaseUICollectionViewFlowLayout_
+#define EaseUICollectionViewDelegateFlowLayout EaseCollectionViewDelegateFlowLayout
+#define EaseUICollectionViewLayoutAttributes EaseUICollectionViewLayoutAttributes_
+#define EaseUICollectionViewController EaseUICollectionViewController_
 
-@interface PSUICollectionView_ : EaseCollectionView @end
-@interface PSUICollectionViewCell_ : EaseCollectionViewCell @end
-@interface PSUICollectionReusableView_ : EaseCollectionReusableView @end
-@interface PSUICollectionViewLayout_ : EaseCollectionViewLayout @end
-@interface PSUICollectionViewFlowLayout_ : EaseCollectionViewFlowLayout @end
-@protocol PSUICollectionViewDelegateFlowLayout_ <EaseCollectionViewDelegateFlowLayout> @end
-@interface PSUICollectionViewLayoutAttributes_ : EaseCollectionViewLayoutAttributes @end
-@interface PSUICollectionViewController_ : EaseCollectionViewController <PSUICollectionViewDelegate, PSUICollectionViewDataSource> @end
+@interface EaseUICollectionView_ : EaseCollectionView @end
+@interface EaseUICollectionViewCell_ : EaseCollectionViewCell @end
+@interface EaseUICollectionReusableView_ : EaseCollectionReusableView @end
+@interface EaseUICollectionViewLayout_ : EaseCollectionViewLayout @end
+@interface EaseUICollectionViewFlowLayout_ : EaseCollectionViewFlowLayout @end
+@protocol EaseUICollectionViewDelegateFlowLayout_ <EaseCollectionViewDelegateFlowLayout> @end
+@interface EaseUICollectionViewLayoutAttributes_ : EaseCollectionViewLayoutAttributes @end
+@interface EaseUICollectionViewController_ : EaseCollectionViewController <EaseUICollectionViewDelegate, EaseUICollectionViewDataSource> @end

@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3C7B87922563CCD40074F990 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C7B87912563CCD40074F990 /* ChatViewController.m */; };
-		3C83DA25258089FB00AA2C8D /* EaseIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C83DA24258089FB00AA2C8D /* EaseIMKit.framework */; };
-		3C83DA26258089FB00AA2C8D /* EaseIMKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3C83DA24258089FB00AA2C8D /* EaseIMKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		90146CF1256CB0CC00A8D524 /* ContactModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90146CF0256CB0CC00A8D524 /* ContactModel.m */; };
 		903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7925540390005E6BB1 /* ConversationsViewController.m */; };
 		903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7E2554039B005E6BB1 /* ContactsViewController.m */; };
@@ -27,16 +25,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-
 		90AEAEE12580EA86004DD181 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-
-		90AEAEE02580EA86004DD181 /* EaseIMKit.framework in Embed Frameworks */,
-
+				90AEAEE02580EA86004DD181 /* EaseIMKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -81,9 +76,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A530CF01154133A6BD4DB266 /* Pods_EaseIMKitDemo.framework in Frameworks */,
-
-		90AEAEDF2580EA86004DD181 /* EaseIMKit.framework in Frameworks */,
-
+				90AEAEDF2580EA86004DD181 /* EaseIMKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

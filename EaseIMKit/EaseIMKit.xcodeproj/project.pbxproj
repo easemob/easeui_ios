@@ -326,8 +326,8 @@
 		908934662576571300F50368 /* EaseAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = 908933C42576571300F50368 /* EaseAlertView.h */; };
 		908934672576571300F50368 /* EaseAvatarNameModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 908933C52576571300F50368 /* EaseAvatarNameModel.h */; };
 		908934682576571300F50368 /* EaseChineseToPinyin.h in Headers */ = {isa = PBXBuildFile; fileRef = 908933C62576571300F50368 /* EaseChineseToPinyin.h */; };
-		908934692576571300F50368 /* EMMulticastDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 908933C92576571300F50368 /* EMMulticastDelegate.h */; };
-		9089346A2576571300F50368 /* EMMulticastDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 908933CA2576571300F50368 /* EMMulticastDelegate.m */; };
+		908934692576571300F50368 /* EaseMulticastDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 908933C92576571300F50368 /* EaseMulticastDelegate.h */; };
+		9089346A2576571300F50368 /* EaseMulticastDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 908933CA2576571300F50368 /* EaseMulticastDelegate.m */; };
 		9089346B2576571300F50368 /* EaseTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 908933CC2576571300F50368 /* EaseTextView.h */; };
 		9089346C2576571300F50368 /* EaseTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 908933CD2576571300F50368 /* EaseTextViewController.m */; };
 		9089346D2576571300F50368 /* EaseTextFieldViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 908933CE2576571300F50368 /* EaseTextFieldViewController.h */; };
@@ -559,8 +559,8 @@
 		908933C42576571300F50368 /* EaseAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseAlertView.h; sourceTree = "<group>"; };
 		908933C52576571300F50368 /* EaseAvatarNameModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseAvatarNameModel.h; sourceTree = "<group>"; };
 		908933C62576571300F50368 /* EaseChineseToPinyin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseChineseToPinyin.h; sourceTree = "<group>"; };
-		908933C92576571300F50368 /* EMMulticastDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMMulticastDelegate.h; sourceTree = "<group>"; };
-		908933CA2576571300F50368 /* EMMulticastDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMMulticastDelegate.m; sourceTree = "<group>"; };
+		908933C92576571300F50368 /* EaseMulticastDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseMulticastDelegate.h; sourceTree = "<group>"; };
+		908933CA2576571300F50368 /* EaseMulticastDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseMulticastDelegate.m; sourceTree = "<group>"; };
 		908933CC2576571300F50368 /* EaseTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseTextView.h; sourceTree = "<group>"; };
 		908933CD2576571300F50368 /* EaseTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseTextViewController.m; sourceTree = "<group>"; };
 		908933CE2576571300F50368 /* EaseTextFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseTextFieldViewController.h; sourceTree = "<group>"; };
@@ -1248,8 +1248,8 @@
 		908933C82576571300F50368 /* MulticastDelegate */ = {
 			isa = PBXGroup;
 			children = (
-				908933C92576571300F50368 /* EMMulticastDelegate.h */,
-				908933CA2576571300F50368 /* EMMulticastDelegate.m */,
+				908933C92576571300F50368 /* EaseMulticastDelegate.h */,
+				908933CA2576571300F50368 /* EaseMulticastDelegate.m */,
 			);
 			path = MulticastDelegate;
 			sourceTree = "<group>";
@@ -1705,7 +1705,7 @@
 				9089347E2576571300F50368 /* EMConversation+EaseUI.h in Headers */,
 				908934232576571300F50368 /* EMMsgVideoBubbleView.h in Headers */,
 				908934082576571300F50368 /* EMAudioRecordUtil.h in Headers */,
-				908934692576571300F50368 /* EMMulticastDelegate.h in Headers */,
+				908934692576571300F50368 /* EaseMulticastDelegate.h in Headers */,
 				908933F62576571300F50368 /* EaseExtMenuModel.h in Headers */,
 				908933F42576571300F50368 /* EaseHeaders.h in Headers */,
 				3C5DCE7025766B5200A3F8CB /* EaseCollectionViewLayout.h in Headers */,
@@ -2024,7 +2024,7 @@
 				9089345E2576571300F50368 /* amrFileCodec.mm in Sources */,
 				908934372576571300F50368 /* EaseChatViewController+EMMsgLongPressIncident.m in Sources */,
 				908934332576571300F50368 /* EMImageBrowser.m in Sources */,
-				9089346A2576571300F50368 /* EMMulticastDelegate.m in Sources */,
+				9089346A2576571300F50368 /* EaseMulticastDelegate.m in Sources */,
 				3C5DCE7225766B5200A3F8CB /* EaseGridLayoutInfo.m in Sources */,
 				908934872576571300F50368 /* EMConversation+EaseUI.m in Sources */,
 				9089344C2576571300F50368 /* EaseContactsViewModel.m in Sources */,
