@@ -35,16 +35,20 @@
 @implementation EaseMessageCell
 
 - (instancetype)initWithDirection:(EMMessageDirection)aDirection
-                             type:(EMMessageType)aType
-                        viewModel:(EaseChatViewModel*)viewModel
+                             chatType:(EMChatType)aChatType
+                           messageType:(EMMessageType)aMessageType
+                            viewModel:(EaseChatViewModel*)viewModel
 
 {
-    NSString *identifier = [EaseMessageCell cellIdentifierWithDirection:aDirection type:aType];
+    NSString *identifier = [EaseMessageCell cellIdentifierWithDirection:aDirection type:aMessageType];
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     if (self) {
         _direction = aDirection;
         _viewModel = viewModel;
-        [self _setupViewsWithType:aType];
+        if (_viewModel.msgAlignmentStyle == EaseAlignmentlLeft && aChatType == EMChatTypeGroupChat) {
+            _direction = EMMessageDirectionReceive;
+        }
+        [self _setupViewsWithType:aMessageType chatType:aChatType];
     }
     [self.bubbleView setupBubbleBackgroundImage];
     return self;
@@ -94,7 +98,7 @@
 
 #pragma mark - Subviews
 
-- (void)_setupViewsWithType:(EMMessageType)aType
+- (void)_setupViewsWithType:(EMMessageType)aType chatType:(EMChatType)chatType
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.backgroundColor = [UIColor clearColor];
@@ -114,13 +118,7 @@
         _avatarView.layer.cornerRadius = avatarLonger / 2;
     }
     [self.contentView addSubview:_avatarView];
-    if (self.direction == EMMessageDirectionSend) {
-        [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.contentView).offset(15);
-            make.right.equalTo(self.contentView).offset(-2*componentSpacing);
-            make.width.height.equalTo(@(avatarLonger));
-        }];
-    } else {
+    if (self.direction == EMMessageDirectionReceive) {
         [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
             make.left.equalTo(self.contentView).offset(2*componentSpacing);
@@ -130,7 +128,7 @@
         _nameLabel = [[UILabel alloc] init];
         _nameLabel.font = [UIFont systemFontOfSize:13];
         _nameLabel.textColor = [UIColor grayColor];
-        if (_model.message.chatType != EMChatTypeChat) {
+        if (chatType != EMChatTypeChat) {
             [self.contentView addSubview:_nameLabel];
             [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.avatarView);
@@ -138,15 +136,21 @@
                 make.right.equalTo(self.contentView).offset(-componentSpacing);
             }];
         }
+    } else {
+        [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.contentView).offset(15);
+            make.right.equalTo(self.contentView).offset(-2*componentSpacing);
+            make.width.height.equalTo(@(avatarLonger));
+        }];
     }
-    
+
     _bubbleView = [self _getBubbleViewWithType:aType];
     _bubbleView.userInteractionEnabled = YES;
     _bubbleView.clipsToBounds = YES;
     [self.contentView addSubview:_bubbleView];
-    if (self.direction == EMMessageDirectionReceive || (_viewModel.msgAlignmentStyle == EaseAlignmentlLeft && _model.message.chatType != EMChatTypeGroupChat)) {
+    if (self.direction == EMMessageDirectionReceive) {
         [_bubbleView mas_makeConstraints:^(MASConstraintMaker *make) {
-            if (_model.message.chatType != EMChatTypeChat) {
+            if (chatType != EMChatTypeChat) {
                 make.top.equalTo(self.nameLabel.mas_bottom).offset(3);
             } else {
                 make.top.equalTo(self.avatarView);
@@ -166,10 +170,14 @@
 
     _statusView = [[EaseMessageStatusView alloc] init];
     [self.contentView addSubview:_statusView];
-    if (self.direction == EMMessageDirectionSend) {
+    if (self.direction == EMMessageDirectionSend || (_viewModel.msgAlignmentStyle == EaseAlignmentlLeft && chatType == EMChatTypeGroupChat)) {
         [_statusView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self.bubbleView.mas_centerY);
-            make.right.equalTo(self.bubbleView.mas_left).offset(-5);
+            if (_viewModel.msgAlignmentStyle == EaseAlignmentlLeft && chatType == EMChatTypeGroupChat) {
+                make.left.equalTo(self.bubbleView.mas_right).offset(5);
+            } else {
+                make.right.equalTo(self.bubbleView.mas_left).offset(-5);
+            }
             make.height.equalTo(@(componentSpacing * 2));
         }];
         __weak typeof(self) weakself = self;
@@ -262,13 +270,15 @@
     if (model.direction == EMMessageDirectionSend) {
         [self.statusView setSenderStatus:model.message.status isReadAcked:model.message.isReadAcked];
     } else {
+        if (model.type == EMMessageBodyTypeVoice) {
+            self.statusView.hidden = model.message.isReadAcked;
+        }
+    }
+    if (model.type != EMChatTypeChat) {
         if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(showName)]) {
             self.nameLabel.text = model.userDataDelegate.showName;
         } else {
             self.nameLabel.text = model.message.from;
-        }
-        if (model.type == EMMessageBodyTypeVoice) {
-            self.statusView.hidden = model.message.isReadAcked;
         }
     }
     if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(defaultAvatar)]) {
@@ -279,7 +289,7 @@
     if (model.message.isNeedGroupAck) {
         self.readReceiptBtn.hidden = NO;
         [self.readReceiptBtn setTitle:[NSString stringWithFormat:@"阅读回执，已读用户（%d）",_model.message.groupAckCount] forState:UIControlStateNormal];
-    } else{
+    } else {
         self.readReceiptBtn.hidden = YES;
     }
 }

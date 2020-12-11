@@ -55,7 +55,13 @@ typedef NS_ENUM(NSInteger, ExtType) {
 @end
 
 @interface SessionToolbarCell : UICollectionViewCell
+@property (nonatomic) CGFloat cellLonger;
+@property (nonatomic, strong) UIButton *toolBtn;
+@property (nonatomic, strong) UILabel *toolLabel;
+
 @property (nonatomic, weak) id<SessionToolbarCellDelegate> delegate;
+
+- (void)setupToolbar;
 - (void)personalizeToolbar:(EaseExtMenuModel*)menuItemModel menuViewMode:(EaseExtMenuViewModel*)menuViewModel;//个性化工具栏功能描述
 @end
 
