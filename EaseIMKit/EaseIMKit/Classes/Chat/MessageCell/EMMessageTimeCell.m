@@ -8,23 +8,30 @@
 
 #import "EMMessageTimeCell.h"
 #import "Masonry.h"
+#import "UIColor+EaseUI.h"
 
 @implementation EMMessageTimeCell
 
-- (instancetype)initWithViewModel:(EaseChatViewModel *)viewModel
+- (instancetype)initWithViewModel:(EaseChatViewModel *)viewModel remindType:(EaseWeakRemind)remidType
 {
-    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EMMessageTimeCell"];
+    NSString *identifier = (remidType == EaseWeakRemindMsgTime) ? @"EMMessageTimeCell" : @"EMMessageSystemHint";
+    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.backgroundColor = viewModel.msgTimeItemBgColor;
+        self.backgroundColor = [UIColor clearColor];
         _timeLabel = [[UILabel alloc] init];
+        if (remidType == EaseWeakRemindMsgTime) {
+            _timeLabel.textColor = viewModel.msgTimeItemFontColor;
+            _timeLabel.backgroundColor = viewModel.msgTimeItemBgColor;
+        } else {
+            _timeLabel.textColor = [UIColor colorWithHexString:@"#ADADAD"];;
+            _timeLabel.backgroundColor = [UIColor clearColor];
+        }
         _timeLabel.font = [UIFont systemFontOfSize:14];
-        _timeLabel.textColor = viewModel.msgTimeItemFontColor;
-        _timeLabel.backgroundColor = [UIColor clearColor];
         _timeLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_timeLabel];
         [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.contentView);
+            make.center.equalTo(self.contentView);
             make.height.equalTo(@30);
         }];
     }

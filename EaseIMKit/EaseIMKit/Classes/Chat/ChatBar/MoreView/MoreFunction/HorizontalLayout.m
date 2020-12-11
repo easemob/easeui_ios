@@ -47,6 +47,8 @@
     }
 }
 
+
+
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewLayoutAttributes *attr = [super layoutAttributesForItemAtIndexPath:indexPath].copy;
     [self resetItemLocation:attr];
@@ -61,7 +63,7 @@
     // 将所有section页面数量相加
     NSInteger allPagesCount = 0;
     for (NSString *page in [self.pageDict allKeys]) {
-        allPagesCount += allPagesCount + [self.pageDict[page] integerValue];
+        allPagesCount += [self.pageDict[page] integerValue];
     }
     CGFloat width = allPagesCount * self.collectionView.bounds.size.width;
     CGFloat hegith = self.collectionView.bounds.size.height;
@@ -103,7 +105,7 @@
     // 将所有section页面数量相加
     NSInteger allPagesCount = 0;
     for (NSString *page in [self.pageDict allKeys]) {
-        allPagesCount += allPagesCount + [self.pageDict[page] integerValue];
+        allPagesCount += [self.pageDict[page] integerValue];
     }
     // 获取到的数减去最后一页的页码数
     NSInteger lastIndex = self.pageDict.allKeys.count - 1;

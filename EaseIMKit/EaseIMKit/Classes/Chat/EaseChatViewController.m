@@ -30,6 +30,7 @@
 #import "EaseIMKitManager+ExtFunction.h"
 #import "UIViewController+ComponentSize.h"
 #import "EaseHeaders.h"
+#import "EaseEnums.h"
 
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate>
 {
@@ -239,8 +240,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     id obj = [self.dataArray objectAtIndex:indexPath.row];
     NSString *cellString = nil;
-    if ([obj isKindOfClass:[NSString class]])
+    EaseWeakRemind type = EaseWeakRemindMsgTime;
+    if ([obj isKindOfClass:[NSString class]]) {
         cellString = (NSString *)obj;
+    }
     if ([obj isKindOfClass:[EaseMessageModel class]]) {
         EaseMessageModel *model = (EaseMessageModel *)obj;
         if (model.type == EMMessageTypeExtRecall) {
@@ -249,19 +252,22 @@
             } else {
                 cellString = @"对方撤回一条消息";
             }
+            type = EaseWeakRemindSystemHint;
         }
         if (model.type == EMMessageTypeExtNewFriend || model.type == EMMessageTypeExtAddGroup) {
             if ([model.message.body isKindOfClass:[EMTextMessageBody class]]) {
                 cellString = ((EMTextMessageBody *)(model.message.body)).text;
+                type = EaseWeakRemindSystemHint;
             }
         }
     }
     
     if ([cellString length] > 0) {
-        EMMessageTimeCell *cell = (EMMessageTimeCell *)[tableView dequeueReusableCellWithIdentifier:@"EMMessageTimeCell"];
+        NSString *identifier = (type == EaseWeakRemindMsgTime) ? @"EMMessageTimeCell" : @"EMMessageSystemHint";
+        EMMessageTimeCell *cell = (EMMessageTimeCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
         // Configure the cell...
         if (cell == nil) {
-            cell = [[EMMessageTimeCell alloc] initWithViewModel:_viewModel];
+            cell = [[EMMessageTimeCell alloc] initWithViewModel:_viewModel remindType:type];
         }
         cell.timeLabel.text = cellString;
         return cell;
@@ -281,7 +287,7 @@
     // Configure the cell...
     if (cell == nil || _isReloadViewWithModel == YES) {
         _isReloadViewWithModel = NO;
-        cell = [[EaseMessageCell alloc] initWithDirection:model.direction type:model.type viewModel:_viewModel];
+        cell = [[EaseMessageCell alloc] initWithDirection:model.direction chatType:model.message.chatType messageType:model.type viewModel:_viewModel];
         cell.delegate = self;
     }
     cell.model = model;
@@ -432,16 +438,15 @@
     CGFloat xOffset = 0;
     CGFloat yOffset = 0;
     if (!isCustomCell) {
-        if (_currentLongPressCell.model.direction == EMMessageDirectionSend) {
-            xOffset = (maxWidth - avatarLonger - 3*componentSpacing - _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
-            if ((xOffset + longPressViewsize.width) > (maxWidth - componentSpacing)) {
-                xOffset = maxWidth - componentSpacing - longPressViewsize.width;
-            }
-        }
-        if (_currentLongPressCell.model.direction == EMMessageDirectionReceive) {
+        if (_currentLongPressCell.model.direction == EMMessageDirectionReceive || (_viewModel.msgAlignmentStyle == EaseAlignmentlLeft && _currentLongPressCell.model.message.chatType == EMChatTypeGroupChat)) {
             xOffset = (avatarLonger + 3*componentSpacing + _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
             if (xOffset < 2*componentSpacing) {
                 xOffset = 2*componentSpacing;
+            }
+        } else {
+            xOffset = (maxWidth - avatarLonger - 3*componentSpacing - _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
+            if ((xOffset + longPressViewsize.width) > (maxWidth - componentSpacing)) {
+                xOffset = maxWidth - componentSpacing - longPressViewsize.width;
             }
         }
         yOffset = rect.origin.y - longPressViewsize.height + componentSpacing;
@@ -783,6 +788,7 @@
 - (void)cleanPopupControllerView
 {
     [self.view endEditing:YES];
+    [self hideLongPressView];
     [self.chatBar clearMoreViewAndSelectedButton];
     [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
     [[EMImageBrowser sharedBrowser] dismissViewController];

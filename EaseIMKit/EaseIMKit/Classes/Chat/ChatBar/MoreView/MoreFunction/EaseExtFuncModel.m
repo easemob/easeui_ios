@@ -14,9 +14,8 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-        _iconBgColor = [UIColor orangeColor];
-        //_viewBgColor = [UIColor colorWithHexString:@"#F2F2F2"];
-        _viewBgColor = [UIColor systemPinkColor];
+        _iconBgColor = [UIColor whiteColor];
+        _viewBgColor = [UIColor colorWithHexString:@"#F2F2F2"];
         _fontColor = [UIColor colorWithHexString:@"#999999"];
         _fontSize = 12;
         _collectionViewSize = CGSizeMake([UIScreen mainScreen].bounds.size.width, 200);

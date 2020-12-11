@@ -6,12 +6,12 @@
 //  Copyright © 2019 娜塔莎. All rights reserved.
 //
 
-#define pageSize 8
-
 #import "EMMoreFunctionView.h"
 #import "HorizontalLayout.h"
 #import "UIImage+EaseUI.h"
 #import "UIColor+EaseUI.h"
+#import "EaseCollectionLongPressCell.h"
+#import "EaseCollectionInputBarExtCell.h"
 
 @interface EaseExtMenuViewModel ()
 @property (nonatomic, strong) EaseExtFuncModel *extFuncMode;
@@ -98,6 +98,7 @@
 @interface EMMoreFunctionView()<UICollectionViewDataSource,SessionToolbarCellDelegate>
 {
     NSInteger _itemCount;
+    NSInteger _pageSize;
 }
 
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -112,6 +113,7 @@
 {
     self = [super init];
     if (self) {
+        _pageSize = menuViewModel.rowCount * menuViewModel.columCount;
         _extMenuModelArray = extMenuModelArray;
         _menuViewModel = menuViewModel;
         _itemCount = [extMenuModelArray count];
@@ -141,33 +143,42 @@
     self.collectionView.pagingEnabled = YES;
     [self addSubview:self.collectionView];
     
-    [self.collectionView registerClass:[SessionToolbarCell class] forCellWithReuseIdentifier:@"cell"];
+    if (_menuViewModel.type == ExtTypeChatBar) {
+        [self.collectionView registerClass:[EaseCollectionInputBarExtCell class] forCellWithReuseIdentifier:@"inputBarExtCell"];
+    } else {
+        [self.collectionView registerClass:[EaseCollectionLongPressCell class] forCellWithReuseIdentifier:@"longpressCell"];
+    }
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    if (_itemCount < pageSize) {
+    if (_itemCount < _pageSize) {
         return 1;
     }
-    if (_itemCount % pageSize == 0) {
-        return _itemCount / pageSize;
+    if (_itemCount % _pageSize == 0) {
+        return _itemCount / _pageSize;
     }
-    return _itemCount / pageSize + 1;
+    return _itemCount / _pageSize + 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (_itemCount < pageSize) {
+    if (_itemCount < _pageSize) {
         return _itemCount;
     }
-    if ((section+1) * pageSize <= _itemCount) {
-        return pageSize;
+    if ((section+1) * _pageSize <= _itemCount) {
+        return _pageSize;
     }
-    return (_itemCount - section * pageSize);
+    return (_itemCount - section * _pageSize);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    SessionToolbarCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    NSInteger index = indexPath.section * pageSize + indexPath.row;
+    SessionToolbarCell *cell = nil;
+    if (_menuViewModel.type == ExtTypeChatBar) {
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"inputBarExtCell" forIndexPath:indexPath];
+    } else {
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"longpressCell" forIndexPath:indexPath];
+    }
+    NSInteger index = indexPath.section * _pageSize + indexPath.row;
     EaseExtMenuModel *extMenuItem = (EaseExtMenuModel *)_extMenuModelArray[index];
     [cell personalizeToolbar:extMenuItem menuViewMode:_menuViewModel];
     cell.delegate = self;
@@ -192,75 +203,30 @@
 @end
 
 
-@interface SessionToolbarCell()
-{
-    CGFloat _cellLonger;
-}
-@property (nonatomic, strong) UIButton *toolBtn;
-@property (nonatomic, strong) UILabel *toolLabel;
+@interface SessionToolbarCell ()
 @property (nonatomic, strong) EaseExtMenuModel *menuItemModel;
 @end
-
 @implementation SessionToolbarCell
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _cellLonger = frame.size.width;
-        [self _setupToolbar];
         self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
 
-- (void)_setupToolbar {
-    self.toolBtn = [[UIButton alloc]init];
-    self.toolBtn.layer.masksToBounds = YES;
-    self.toolBtn.layer.cornerRadius = 8;
-    [self.contentView addSubview:self.toolBtn];
-    [self.toolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top);
-        make.width.mas_equalTo(@(_cellLonger));
-        make.height.mas_equalTo(@(_cellLonger));
-        make.left.equalTo(self.contentView);
-    }];
-    
-    self.toolLabel = [[UILabel alloc]init];
-    self.toolLabel.textAlignment = NSTextAlignmentCenter;
-    [self.contentView addSubview:self.toolLabel];
-    [self.toolLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.toolBtn.mas_bottom).offset(3);
-        make.width.mas_equalTo(@(_cellLonger));
-        make.left.equalTo(self.contentView);
-        make.bottom.equalTo(self.contentView).offset(-10);
-    }];
-    
+- (void)setupToolbar {
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cellTapAction)];
     [self addGestureRecognizer:tap];
 }
 
 - (void)personalizeToolbar:(EaseExtMenuModel*)menuItemModel menuViewMode:(EaseExtMenuViewModel*)menuViewModel {
     _menuItemModel = menuItemModel;
-    __weak typeof(self) weakself = self;
-    if (menuViewModel.type != ExtTypeChatBar) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            weakself.toolBtn.imageEdgeInsets = UIEdgeInsetsMake(10, 0, 0, 0);
-            [weakself.toolBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(weakself.contentView).offset(5);
-                make.height.mas_equalTo(@(self->_cellLonger - 20));
-            }];
-            [weakself.toolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(weakself.toolLabel.mas_bottom);
-            }];
-        });
-    } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            weakself.toolBtn.backgroundColor = menuViewModel.iconBgColor;
-        });
-    }
     self.toolLabel.textColor = menuViewModel.fontColor;
     [self.toolLabel setFont:[UIFont systemFontOfSize:menuViewModel.fontSize]];
-    [_toolBtn setImage:_menuItemModel.icon forState:UIControlStateNormal];
-    [_toolLabel setText:_menuItemModel.funcDesc];
+    self.toolBtn.backgroundColor = menuViewModel.iconBgColor;
+    [self.toolLabel setText:_menuItemModel.funcDesc];
+    [self.toolBtn setImage:_menuItemModel.icon forState:UIControlStateNormal];
 }
 
 #pragma mark - Action

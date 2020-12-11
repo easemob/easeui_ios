@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		3C7B87922563CCD40074F990 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C7B87912563CCD40074F990 /* ChatViewController.m */; };
+		3C83DA25258089FB00AA2C8D /* EaseIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C83DA24258089FB00AA2C8D /* EaseIMKit.framework */; };
+		3C83DA26258089FB00AA2C8D /* EaseIMKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3C83DA24258089FB00AA2C8D /* EaseIMKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		90146CF1256CB0CC00A8D524 /* ContactModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90146CF0256CB0CC00A8D524 /* ContactModel.m */; };
-		9036F19125774037001F62AA /* EaseIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9089359E2576596900F50368 /* EaseIMKit.framework */; };
-		9036F19225774037001F62AA /* EaseIMKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9089359E2576596900F50368 /* EaseIMKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7925540390005E6BB1 /* ConversationsViewController.m */; };
 		903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7E2554039B005E6BB1 /* ContactsViewController.m */; };
 		903EAEB025540B89005E6BB1 /* MineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAEAF25540B89005E6BB1 /* MineViewController.m */; };
@@ -25,13 +25,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		9036F19325774037001F62AA /* Embed Frameworks */ = {
+		3C83DA27258089FC00AA2C8D /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9036F19225774037001F62AA /* EaseIMKit.framework in Embed Frameworks */,
+				3C83DA26258089FB00AA2C8D /* EaseIMKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -42,6 +42,7 @@
 		3C307C55254FBCDE003696CA /* EaseIMKitDemo-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EaseIMKitDemo-Prefix.pch"; sourceTree = "<group>"; };
 		3C7B87902563CCD40074F990 /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		3C7B87912563CCD40074F990 /* ChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
+		3C83DA24258089FB00AA2C8D /* EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F3E72642FD7C6CC7CBA7ACD /* Pods-EaseIMKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKitDemo.debug.xcconfig"; path = "../EaseIMKit/EaseIMKit/Pods/Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		90146CEF256CB0CC00A8D524 /* ContactModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactModel.h; sourceTree = "<group>"; };
 		90146CF0256CB0CC00A8D524 /* ContactModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactModel.m; sourceTree = "<group>"; };
@@ -74,8 +75,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9036F19125774037001F62AA /* EaseIMKit.framework in Frameworks */,
 				A530CF01154133A6BD4DB266 /* Pods_EaseIMKitDemo.framework in Frameworks */,
+				3C83DA25258089FB00AA2C8D /* EaseIMKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +95,7 @@
 		515DD635275E028E6263F6E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3C83DA24258089FB00AA2C8D /* EaseIMKit.framework */,
 				9089359E2576596900F50368 /* EaseIMKit.framework */,
 				B50F8963572ABA8071693908 /* Pods_EaseIMKitDemo.framework */,
 			);
@@ -209,8 +211,8 @@
 				90A03A26254A70E100D57B73 /* Frameworks */,
 				90A03A27254A70E100D57B73 /* Resources */,
 				1275B6DC6EF373309EBE4A48 /* [CP] Embed Pods Frameworks */,
-				916C52D892D8165856512FC7 /* [CP] Copy Pods Resources */,
-				9036F19325774037001F62AA /* Embed Frameworks */,
+				33232357EAF8FAA3F2673165 /* [CP] Copy Pods Resources */,
+				3C83DA27258089FC00AA2C8D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -283,7 +285,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		916C52D892D8165856512FC7 /* [CP] Copy Pods Resources */ = {
+		33232357EAF8FAA3F2673165 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (

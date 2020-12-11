@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "EaseChatViewModel.h"
+#import "EaseEnums.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UILabel *timeLabel;
 
-- (instancetype)initWithViewModel:(EaseChatViewModel *)viewModel;
+- (instancetype)initWithViewModel:(EaseChatViewModel *)viewModel remindType:(EaseWeakRemind)remidType;
 
 @end
 
