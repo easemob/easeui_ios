@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 
-@class EMMulticastDelegateEnumerator;
+@class EaseMulticastDelegateEnumerator;
 
 /**
  * This class provides multicast delegate functionality. That is:
@@ -24,7 +24,7 @@
  * All delegate dispatching is done asynchronously (which is a critically important architectural design).
 **/
 
-@interface EMMulticastDelegate : NSObject
+@interface EaseMulticastDelegate : NSObject
 
 - (void)addDelegate:(id)delegate delegateQueue:(dispatch_queue_t)delegateQueue;
 - (void)removeDelegate:(id)delegate delegateQueue:(dispatch_queue_t)delegateQueue;
@@ -38,13 +38,13 @@
 
 - (BOOL)hasDelegateThatRespondsToSelector:(SEL)aSelector;
 
-- (EMMulticastDelegateEnumerator *)delegateEnumerator;
+- (EaseMulticastDelegateEnumerator *)delegateEnumerator;
 
 
 
 @end
 
-@interface EMMulticastDelegateNode : NSObject {
+@interface EaseMulticastDelegateNode : NSObject {
 @private
     
   #if __has_feature(objc_arc_weak)
@@ -75,14 +75,14 @@
 @end
 
 
-@interface EMMulticastDelegateEnumerator : NSObject
+@interface EaseMulticastDelegateEnumerator : NSObject
 
 - (NSUInteger)count;
 - (NSUInteger)countOfClass:(Class)aClass;
 - (NSUInteger)countForSelector:(SEL)aSelector;
 
 - (NSArray *)getDelegates;
-- (__weak id)getNodeDelegateWithNode:(EMMulticastDelegateNode *)node;
+- (__weak id)getNodeDelegateWithNode:(EaseMulticastDelegateNode *)node;
 
 - (BOOL)getNextDelegate:(id *)delPtr delegateQueue:(dispatch_queue_t *)dqPtr;
 - (BOOL)getNextDelegate:(id *)delPtr delegateQueue:(dispatch_queue_t *)dqPtr ofClass:(Class)aClass;

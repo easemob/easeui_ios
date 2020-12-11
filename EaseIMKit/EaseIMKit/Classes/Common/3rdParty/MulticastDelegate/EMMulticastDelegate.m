@@ -1,4 +1,4 @@
-#import "EMMulticastDelegate.h"
+#import "EaseMulticastDelegate.h"
 #import <libkern/OSAtomic.h>
 
 #if __has_feature(objc_arc_weak) && !TARGET_OS_IPHONE
@@ -27,7 +27,7 @@
 
 
 
-@interface EMMulticastDelegate ()
+@interface EaseMulticastDelegate ()
 {
 	NSMutableArray *delegateNodes;
 }
@@ -37,7 +37,7 @@
 @end
 
 
-@interface EMMulticastDelegateEnumerator ()
+@interface EaseMulticastDelegateEnumerator ()
 {
 	NSUInteger numNodes;
 	NSUInteger currentNodeIndex;
@@ -52,7 +52,7 @@
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@implementation EMMulticastDelegate
+@implementation EaseMulticastDelegate
 
 - (id)init
 {
@@ -68,8 +68,8 @@
 	if (delegate == nil) return;
 	if (delegateQueue == NULL) return;
 	@synchronized (delegateNodes) {
-        EMMulticastDelegateNode *node =
-	    [[EMMulticastDelegateNode alloc] initWithDelegate:delegate delegateQueue:delegateQueue];
+        EaseMulticastDelegateNode *node =
+	    [[EaseMulticastDelegateNode alloc] initWithDelegate:delegate delegateQueue:delegateQueue];
         [delegateNodes addObject:node];
     }
 }
@@ -82,7 +82,7 @@
         NSUInteger i;
         for (i = [delegateNodes count]; i > 0; i--)
         {
-            EMMulticastDelegateNode *node = [delegateNodes objectAtIndex:(i-1)];
+            EaseMulticastDelegateNode *node = [delegateNodes objectAtIndex:(i-1)];
             
             id nodeDelegate = node.delegate;
             #if __has_feature(objc_arc_weak) && !TARGET_OS_IPHONE
@@ -123,7 +123,7 @@
 - (void)removeAllDelegates
 {
     @synchronized (delegateNodes) {
-        for (EMMulticastDelegateNode *node in delegateNodes)
+        for (EaseMulticastDelegateNode *node in delegateNodes)
         {
             node.delegate = nil;
             #if __has_feature(objc_arc_weak) && !TARGET_OS_IPHONE
@@ -143,7 +143,7 @@
 {
 	NSUInteger count = 0;
 	@synchronized (delegateNodes) {
-        for (EMMulticastDelegateNode *node in delegateNodes)
+        for (EaseMulticastDelegateNode *node in delegateNodes)
         {
             id nodeDelegate = node.delegate;
             #if __has_feature(objc_arc_weak) && !TARGET_OS_IPHONE
@@ -164,7 +164,7 @@
 {
 	NSUInteger count = 0;
 	@synchronized (delegateNodes) {
-        for (EMMulticastDelegateNode *node in delegateNodes)
+        for (EaseMulticastDelegateNode *node in delegateNodes)
         {
             id nodeDelegate = node.delegate;
             #if __has_feature(objc_arc_weak) && !TARGET_OS_IPHONE
@@ -184,7 +184,7 @@
 - (BOOL)hasDelegateThatRespondsToSelector:(SEL)aSelector
 {
     @synchronized (delegateNodes) {
-        for (EMMulticastDelegateNode *node in delegateNodes)
+        for (EaseMulticastDelegateNode *node in delegateNodes)
         {
             id nodeDelegate = node.delegate;
             #if __has_feature(objc_arc_weak) && !TARGET_OS_IPHONE
@@ -201,15 +201,15 @@
 	return NO;
 }
 
-- (EMMulticastDelegateEnumerator *)delegateEnumerator
+- (EaseMulticastDelegateEnumerator *)delegateEnumerator
 {
-	return [[EMMulticastDelegateEnumerator alloc] initFromDelegateNodes:delegateNodes];
+	return [[EaseMulticastDelegateEnumerator alloc] initFromDelegateNodes:delegateNodes];
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
 {
     @synchronized (delegateNodes) {
-        for (EMMulticastDelegateNode *node in delegateNodes)
+        for (EaseMulticastDelegateNode *node in delegateNodes)
         {
             id nodeDelegate = node.delegate;
             #if __has_feature(objc_arc_weak) && !TARGET_OS_IPHONE
@@ -241,7 +241,7 @@
         @autoreleasepool {
             SEL selector = [origInvocation selector];
             BOOL foundNilDelegate = NO;
-            for (EMMulticastDelegateNode *node in delegateNodes)
+            for (EaseMulticastDelegateNode *node in delegateNodes)
             {
                 id nodeDelegate = node.delegate;
 #if __has_feature(objc_arc_weak) && !TARGET_OS_IPHONE
@@ -276,7 +276,7 @@
                 // This is why we handle it separately (as it requires allocating an indexSet).
                 NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
                 NSUInteger i = 0;
-                for (EMMulticastDelegateNode *node in delegateNodes)
+                for (EaseMulticastDelegateNode *node in delegateNodes)
                 {
                     id nodeDelegate = node.delegate;
 #if __has_feature(objc_arc_weak) && !TARGET_OS_IPHONE
@@ -402,7 +402,7 @@
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@implementation EMMulticastDelegateNode
+@implementation EaseMulticastDelegateNode
 
 @synthesize delegate;       // atomic
 #if __has_feature(objc_arc_weak) && !TARGET_OS_IPHONE
@@ -495,7 +495,7 @@ static BOOL SupportsWeakReferences(id delegate)
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@implementation EMMulticastDelegateEnumerator
+@implementation EaseMulticastDelegateEnumerator
 
 - (id)initFromDelegateNodes:(NSMutableArray *)inDelegateNodes
 {
@@ -514,7 +514,7 @@ static BOOL SupportsWeakReferences(id delegate)
     return delegateNodes;
 }
 
-- (__weak id)getNodeDelegateWithNode:(EMMulticastDelegateNode *)node
+- (__weak id)getNodeDelegateWithNode:(EaseMulticastDelegateNode *)node
 {
     return node.delegate;
 }
@@ -528,7 +528,7 @@ static BOOL SupportsWeakReferences(id delegate)
 {
 	NSUInteger count = 0;
 	@synchronized (delegateNodes) {
-        for (EMMulticastDelegateNode *node in delegateNodes)
+        for (EaseMulticastDelegateNode *node in delegateNodes)
         {
             id nodeDelegate = node.delegate;
             #if __has_feature(objc_arc_weak) && !TARGET_OS_IPHONE
@@ -551,7 +551,7 @@ static BOOL SupportsWeakReferences(id delegate)
 {
 	NSUInteger count = 0;
 	@synchronized (delegateNodes) {
-        for (EMMulticastDelegateNode *node in delegateNodes)
+        for (EaseMulticastDelegateNode *node in delegateNodes)
         {
             id nodeDelegate = node.delegate;
             #if __has_feature(objc_arc_weak) && !TARGET_OS_IPHONE
@@ -572,7 +572,7 @@ static BOOL SupportsWeakReferences(id delegate)
 {
 	while (currentNodeIndex < numNodes)
 	{
-		EMMulticastDelegateNode *node = [delegateNodes objectAtIndex:currentNodeIndex];
+		EaseMulticastDelegateNode *node = [delegateNodes objectAtIndex:currentNodeIndex];
 		currentNodeIndex++;
 		
 		id nodeDelegate = node.delegate; // snapshot atomic property
@@ -597,7 +597,7 @@ static BOOL SupportsWeakReferences(id delegate)
 {
 	while (currentNodeIndex < numNodes)
 	{
-		EMMulticastDelegateNode *node = [delegateNodes objectAtIndex:currentNodeIndex];
+		EaseMulticastDelegateNode *node = [delegateNodes objectAtIndex:currentNodeIndex];
 		currentNodeIndex++;
 		
 		id nodeDelegate = node.delegate; // snapshot atomic property
@@ -622,7 +622,7 @@ static BOOL SupportsWeakReferences(id delegate)
 {
 	while (currentNodeIndex < numNodes)
 	{
-		EMMulticastDelegateNode *node = [delegateNodes objectAtIndex:currentNodeIndex];
+		EaseMulticastDelegateNode *node = [delegateNodes objectAtIndex:currentNodeIndex];
 		currentNodeIndex++;
 		
 		id nodeDelegate = node.delegate; // snapshot atomic property

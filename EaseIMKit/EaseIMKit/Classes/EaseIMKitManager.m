@@ -8,13 +8,13 @@
 #import "EaseIMKitManager.h"
 #import "EaseConversationsViewController.h"
 #import "EaseIMKitManager+ExtFunction.h"
-#import "EMMulticastDelegate.h"
+#import "EaseMulticastDelegate.h"
 #import "EaseDefines.h"
 
 bool gInit;
 static EaseIMKitManager *easeIMKit = nil;
 @interface EaseIMKitManager ()<EMMultiDevicesDelegate, EMContactManagerDelegate, EMGroupManagerDelegate, EMChatManagerDelegate>
-@property (nonatomic, strong) EMMulticastDelegate<EaseIMKitManagerDelegate> *delegates;
+@property (nonatomic, strong) EaseMulticastDelegate<EaseIMKitManagerDelegate> *delegates;
 @property (nonatomic, strong) NSString *currentConversationId;  //当前会话聊天id
 @property (nonatomic, assign) NSInteger currentUnreadCount; //当前未读总数
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
@@ -56,7 +56,7 @@ static EaseIMKitManager *easeIMKit = nil;
 {
     self = [super init];
     if (self) {
-        _delegates = (EMMulticastDelegate<EaseIMKitManagerDelegate> *)[[EMMulticastDelegate alloc] init];
+        _delegates = (EaseMulticastDelegate<EaseIMKitManagerDelegate> *)[[EaseMulticastDelegate alloc] init];
         _currentConversationId = @"";
         _msgQueue = dispatch_queue_create("easemessage.com", NULL);
     }
@@ -312,8 +312,8 @@ static EaseIMKitManager *easeIMKit = nil;
 //未读总数多播
 - (void)coversationsUnreadCountUpdate:(NSInteger)unreadCount
 {
-    EMMulticastDelegateEnumerator *multicastDelegates = [self.delegates delegateEnumerator];
-    for (EMMulticastDelegateNode *node in [multicastDelegates getDelegates]) {
+    EaseMulticastDelegateEnumerator *multicastDelegates = [self.delegates delegateEnumerator];
+    for (EaseMulticastDelegateNode *node in [multicastDelegates getDelegates]) {
         id<EaseIMKitManagerDelegate> delegate = (id<EaseIMKitManagerDelegate>)node.delegate;
         if ([delegate respondsToSelector:@selector(conversationsUnreadCountUpdate:)])
             [delegate conversationsUnreadCountUpdate:unreadCount];

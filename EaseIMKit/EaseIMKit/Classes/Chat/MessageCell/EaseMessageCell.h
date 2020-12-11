@@ -32,8 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
                                      type:(EMMessageType)aType;
 
 - (instancetype)initWithDirection:(EMMessageDirection)aDirection
-                             type:(EMMessageType)aType
-                        viewModel:(EaseChatViewModel*)viewModel;
+                    chatType:(EMChatType)aChatType
+                  messageType:(EMMessageType)aMessageType
+                    viewModel:(EaseChatViewModel*)viewModel;
 
 @end
 
