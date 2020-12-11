@@ -9,9 +9,9 @@
 #import "AppDelegate.h"
 #import <Hyphenate/Hyphenate.h>
 
-#define kDefaultName @"chong"
+#define kDefaultName @"登录id"
 
-#define kDefaultPassword @"1"
+#define kDefaultPassword @"登录密码"
 
 @interface AppDelegate ()
 
@@ -22,8 +22,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    EMOptions *options = [EMOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
+    EMOptions *options = [EMOptions optionsWithAppkey:@"您的APPKEY"];
     options.enableConsoleLog = YES;
+
     [EaseIMKitManager initWithEMOptions:options];
     
     if (EMClient.sharedClient.isLoggedIn && ![EMClient.sharedClient.currentUsername isEqualToString:kDefaultName]) {
@@ -34,9 +35,6 @@
                                       password:kDefaultPassword
                                     completion:^(NSString *aUsername, EMError *aError)
     {
-        if (!aError) {
-            
-        }
     }];
     return YES;
 }

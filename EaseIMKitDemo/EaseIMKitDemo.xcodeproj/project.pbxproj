@@ -21,17 +21,22 @@
 		90A03A39254A70E200D57B73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A38254A70E200D57B73 /* Assets.xcassets */; };
 		90A03A3F254A70E200D57B73 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A3E254A70E200D57B73 /* main.m */; };
 		90A18676256B9EE500074CD3 /* DemoUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A18675256B9EE500074CD3 /* DemoUserModel.m */; };
+		90AEAEDF2580EA86004DD181 /* EaseIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9089359E2576596900F50368 /* EaseIMKit.framework */; };
+		90AEAEE02580EA86004DD181 /* EaseIMKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9089359E2576596900F50368 /* EaseIMKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A530CF01154133A6BD4DB266 /* Pods_EaseIMKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B50F8963572ABA8071693908 /* Pods_EaseIMKitDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		3C83DA27258089FC00AA2C8D /* Embed Frameworks */ = {
+
+		90AEAEE12580EA86004DD181 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				3C83DA26258089FB00AA2C8D /* EaseIMKit.framework in Embed Frameworks */,
+
+		90AEAEE02580EA86004DD181 /* EaseIMKit.framework in Embed Frameworks */,
+
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,7 +81,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A530CF01154133A6BD4DB266 /* Pods_EaseIMKitDemo.framework in Frameworks */,
-				3C83DA25258089FB00AA2C8D /* EaseIMKit.framework in Frameworks */,
+
+		90AEAEDF2580EA86004DD181 /* EaseIMKit.framework in Frameworks */,
+
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,8 +218,9 @@
 				90A03A26254A70E100D57B73 /* Frameworks */,
 				90A03A27254A70E100D57B73 /* Resources */,
 				1275B6DC6EF373309EBE4A48 /* [CP] Embed Pods Frameworks */,
-				33232357EAF8FAA3F2673165 /* [CP] Copy Pods Resources */,
-				3C83DA27258089FC00AA2C8D /* Embed Frameworks */,
+
+				916C52D892D8165856512FC7 /* [CP] Copy Pods Resources */,
+				90AEAEE12580EA86004DD181 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
