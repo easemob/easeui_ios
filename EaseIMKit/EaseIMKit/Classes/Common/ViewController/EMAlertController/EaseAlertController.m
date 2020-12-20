@@ -42,7 +42,7 @@
     self.mainView.layer.shadowOffset = CGSizeMake(2, 5);
     self.mainView.layer.shadowOpacity = 0.5;
     [self addSubview:self.mainView];
-    [self.mainView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.mainView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self).offset(-60);
         make.centerX.equalTo(self);
         make.left.greaterThanOrEqualTo(self).offset(30);
@@ -53,14 +53,14 @@
     bgView.clipsToBounds = YES;
     bgView.layer.cornerRadius = 5.0;
     [self.mainView addSubview:bgView];
-    [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [bgView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.edges.equalTo(self.mainView);
     }];
     
     UIView *line = [[UIView alloc] init];
     line.backgroundColor = [self _tagColorWithStyle:aStyle];
     [bgView addSubview:line];
-    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+    [line Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(bgView);
         make.bottom.equalTo(bgView);
         make.left.equalTo(bgView);
@@ -70,7 +70,7 @@
     UIImageView *tagView = [[UIImageView alloc] init];
     tagView.image = [self _tagImageWithStyle:aStyle];
     [bgView addSubview:tagView];
-    [tagView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [tagView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.centerY.equalTo(bgView);
         make.left.equalTo(bgView).offset(15);
     }];
@@ -80,8 +80,8 @@
     label.font = [UIFont systemFontOfSize:16];
     label.text = aMessage;
     [bgView addSubview:label];
-    [label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(tagView.mas_right).offset(10);
+    [label Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.left.equalTo(tagView.ease_right).offset(10);
         make.right.equalTo(bgView).offset(-15);
         make.top.equalTo(bgView).offset(12);
         make.bottom.equalTo(bgView).offset(-12);
@@ -136,13 +136,13 @@
     EaseAlertController *view = [[EaseAlertController alloc] initWithStyle:aStyle message:aMessage];
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     [keyWindow addSubview:view];
-    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+    [view Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.edges.equalTo(keyWindow);
     }];
     
     [view layoutIfNeeded];
     [view setNeedsUpdateConstraints];
-    [view.mainView mas_updateConstraints:^(MASConstraintMaker *make) {
+    [view.mainView Ease_updateConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(view).offset(50);
     }];
     [UIView animateWithDuration:0.3 animations:^{
@@ -156,7 +156,7 @@
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [view layoutIfNeeded];
         [view setNeedsUpdateConstraints];
-        [view.mainView mas_updateConstraints:^(MASConstraintMaker *make) {
+        [view.mainView Ease_updateConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(view).offset(-60);
         }];
         [UIView animateWithDuration:0.3 animations:^{

@@ -69,7 +69,7 @@
     [self.recordButton addTarget:self action:@selector(recordButtonTouchCancelCancel) forControlEvents:UIControlEventTouchDragInside];
     [self addSubview:self.recordButton];
     [self.recordButton addTarget:self action:@selector(recordButtonTouchCancelEnd) forControlEvents:UIControlEventTouchUpOutside];
-    [self.recordButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.recordButton Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.centerX.equalTo(self);
         make.width.height.equalTo(@80);
         make.bottom.equalTo(self).offset(-25);
@@ -80,10 +80,10 @@
     self.titleLabel.textColor = [UIColor grayColor];
     self.titleLabel.text = @"按住说话";
     [self addSubview:self.titleLabel];
-    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.titleLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self).offset(30);
         make.centerX.equalTo(self);
-        make.bottom.equalTo(self.recordButton.mas_top).offset(-20);
+        make.bottom.equalTo(self.recordButton.ease_top).offset(-20);
         make.height.equalTo(@20);
     }];
     
@@ -96,10 +96,10 @@
 {
     
     [self addSubview:self.countView];
-    [self.countView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.countView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self).offset(30);
         make.centerX.equalTo(self);
-        make.bottom.equalTo(self.recordButton.mas_top).offset(-20);
+        make.bottom.equalTo(self.recordButton.ease_top).offset(-20);
         make.height.equalTo(@20);
     }];
     
@@ -107,10 +107,10 @@
     self.countLabel.font = [UIFont systemFontOfSize:14.0];
     self.countLabel.textAlignment = NSTextAlignmentCenter;
     [self.countView addSubview:self.countLabel];
-    [self.countLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.countLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.centerX.equalTo(self);
         make.height.equalTo(self.countView);
-        make.bottom.lessThanOrEqualTo(self.countView.mas_bottom);
+        make.bottom.lessThanOrEqualTo(self.countView.ease_bottom);
         make.width.equalTo(@50);
     }];
     
@@ -126,30 +126,30 @@
     [self.countView addSubview:_img_right_3];
     
     self.img_left_1.clipsToBounds = YES;
-    [self.img_left_1 mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.img_left_1 Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.centerY.equalTo(self.countLabel);
-        make.right.equalTo(self.countLabel.mas_left).equalTo(@-15);
+        make.right.equalTo(self.countLabel.ease_left).equalTo(@-15);
     }];
-    [self.img_left_2 mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.img_left_2 Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.centerY.equalTo(self.countLabel);
-        make.right.equalTo(self.img_left_1.mas_left).equalTo(@-2);
+        make.right.equalTo(self.img_left_1.ease_left).equalTo(@-2);
     }];
-    [self.img_left_3 mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.img_left_3 Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.centerY.equalTo(self.countLabel);
-        make.right.equalTo(self.img_left_2.mas_left).equalTo(@-2);
+        make.right.equalTo(self.img_left_2.ease_left).equalTo(@-2);
     }];
     
-    [self.img_right_1 mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.img_right_1 Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.centerY.equalTo(self.countLabel);
-        make.right.equalTo(self.countLabel.mas_right).equalTo(@15);
+        make.right.equalTo(self.countLabel.ease_right).equalTo(@15);
     }];
-    [self.img_right_2 mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.img_right_2 Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.centerY.equalTo(self.countLabel);
-        make.left.equalTo(self.img_right_1.mas_right).equalTo(@2);
+        make.left.equalTo(self.img_right_1.ease_right).equalTo(@2);
     }];
-    [self.img_right_3 mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.img_right_3 Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.centerY.equalTo(self.countLabel);
-        make.left.equalTo(self.img_right_2.mas_right).equalTo(@2);
+        make.left.equalTo(self.img_right_2.ease_right).equalTo(@2);
     }];
     
 }

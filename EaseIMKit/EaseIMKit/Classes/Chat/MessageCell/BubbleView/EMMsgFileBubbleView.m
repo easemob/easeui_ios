@@ -50,11 +50,11 @@
     self.detailLabel.font = [UIFont systemFontOfSize:10];
     self.detailLabel.numberOfLines = 0;
     [self addSubview:self.detailLabel];
-    [self.detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.textLabel.mas_bottom).offset(16);
+    [self.detailLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(self.textLabel.ease_bottom).offset(16);
         make.bottom.equalTo(self).offset(-10);
         make.left.equalTo(self.textLabel);
-        make.right.equalTo(self.mas_centerX);
+        make.right.equalTo(self.ease_centerX);
     }];
     
     self.downloadStatusLabel = [[UILabel alloc] init];
@@ -63,38 +63,38 @@
     self.downloadStatusLabel.textAlignment = NSTextAlignmentRight;
     self.downloadStatusLabel.textColor = [UIColor colorWithRed:173/255.0 green:173/255.0 blue:173/255.0 alpha:1.0];
     [self addSubview:self.downloadStatusLabel];
-    [self.downloadStatusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.textLabel.mas_bottom).offset(16);
+    [self.downloadStatusLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(self.textLabel.ease_bottom).offset(16);
         make.bottom.equalTo(self).offset(-10);
-        make.left.equalTo(self.mas_centerX);
+        make.left.equalTo(self.ease_centerX);
         make.right.equalTo(self.textLabel);
     }];
     self.textLabel.textColor = [UIColor blackColor];
     if (self.direction == EMMessageDirectionSend) {
         self.iconView.image = [UIImage easeUIImageNamed:@"msg_file_white"];
-        [self.iconView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.iconView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self).offset(10);
             make.left.equalTo(self).offset(5);
             make.centerY.equalTo(self);
             make.width.equalTo(@40);
         }];
-        [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self).offset(10);
-            make.left.equalTo(self.iconView.mas_right).offset(5);
+            make.left.equalTo(self.iconView.ease_right).offset(5);
             make.right.equalTo(self).offset(-15);
         }];
         self.detailLabel.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     } else {
         self.iconView.image = [UIImage easeUIImageNamed:@"msg_file"];
-        [self.iconView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.iconView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self).offset(10);
             make.left.equalTo(self).offset(8);
             make.centerY.equalTo(self);
             make.width.equalTo(@40);
         }];
-        [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self).offset(10);
-            make.left.equalTo(self.iconView.mas_right).offset(5);
+            make.left.equalTo(self.iconView.ease_right).offset(5);
             make.right.equalTo(self).offset(-10);
         }];
         

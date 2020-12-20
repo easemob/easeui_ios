@@ -25,19 +25,19 @@
     self.toolBtn.layer.cornerRadius = 8;
     self.toolBtn.userInteractionEnabled = NO;
     [self.contentView addSubview:self.toolBtn];
-    [self.toolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top);
-        make.width.mas_equalTo(@(self.cellLonger));
-        make.height.mas_equalTo(@(self.cellLonger));
+    [self.toolBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(self.contentView.ease_top);
+        make.width.Ease_equalTo(@(self.cellLonger));
+        make.height.Ease_equalTo(@(self.cellLonger));
         make.left.equalTo(self.contentView);
     }];
     
     self.toolLabel = [[UILabel alloc]init];
     self.toolLabel.textAlignment = NSTextAlignmentCenter;
     [self.contentView addSubview:self.toolLabel];
-    [self.toolLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.toolBtn.mas_bottom).offset(3);
-        make.width.mas_equalTo(@(self.cellLonger));
+    [self.toolLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(self.toolBtn.ease_bottom).offset(3);
+        make.width.Ease_equalTo(@(self.cellLonger));
         make.left.equalTo(self.contentView);
         make.bottom.equalTo(self.contentView).offset(-10);
     }];

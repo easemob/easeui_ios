@@ -7,7 +7,7 @@
 //
 
 #import "EMMessageTimeCell.h"
-#import "Masonry.h"
+#import "Easeonry.h"
 #import "UIColor+EaseUI.h"
 
 @implementation EMMessageTimeCell
@@ -30,7 +30,7 @@
         _timeLabel.font = [UIFont systemFontOfSize:14];
         _timeLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_timeLabel];
-        [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        [_timeLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.center.equalTo(self.contentView);
             make.height.equalTo(@30);
         }];

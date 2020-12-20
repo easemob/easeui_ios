@@ -148,7 +148,7 @@ static const void *recallViewKey = &recallViewKey;
                 NSArray *formated = [weakself formatMessages:@[message]];
                 [weakself.dataArray addObjectsFromArray:formated];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakself refreshTableView];
+                    [weakself refreshTableView:YES];
                 });
             }
         }

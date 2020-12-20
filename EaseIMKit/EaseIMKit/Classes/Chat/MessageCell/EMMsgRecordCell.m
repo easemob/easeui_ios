@@ -57,9 +57,9 @@
     _imgViewLeft.userInteractionEnabled = YES;
     _imgViewLeft.clipsToBounds = YES;
     [self.contentView addSubview:_imgViewLeft];
-    [_imgViewLeft mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_imgViewLeft Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.left.top.bottom.equalTo(self.contentView);
-        make.width.height.mas_equalTo(_width);
+        make.width.height.Ease_equalTo(_width);
     }];
     
     _imgViewLeft_mid = [[EMMsgImageBubbleView alloc] init];
@@ -68,10 +68,10 @@
     _imgViewLeft_mid.userInteractionEnabled = YES;
     _imgViewLeft_mid.clipsToBounds = YES;
     [self.contentView addSubview:_imgViewLeft_mid];
-    [_imgViewLeft_mid mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_imgViewLeft.mas_right).equalTo(@2);
+    [_imgViewLeft_mid Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.left.equalTo(_imgViewLeft.ease_right).equalTo(@2);
         make.top.bottom.equalTo(self.contentView);
-        make.width.height.mas_equalTo(_width);
+        make.width.height.Ease_equalTo(_width);
     }];
     
     _imgViewRight_mid = [[EMMsgImageBubbleView alloc] init];
@@ -80,10 +80,10 @@
     _imgViewRight_mid.userInteractionEnabled = YES;
     _imgViewRight_mid.clipsToBounds = YES;
     [self.contentView addSubview:_imgViewRight_mid];
-    [_imgViewRight_mid mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_imgViewLeft_mid.mas_right).equalTo(@2);
+    [_imgViewRight_mid Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.left.equalTo(_imgViewLeft_mid.ease_right).equalTo(@2);
         make.top.bottom.equalTo(self.contentView);
-        make.width.height.mas_equalTo(_width);
+        make.width.height.Ease_equalTo(_width);
     }];
     
     _imgViewRight = [[EMMsgImageBubbleView alloc] init];
@@ -92,9 +92,9 @@
     _imgViewRight.userInteractionEnabled = YES;
     _imgViewRight.clipsToBounds = YES;
     [self.contentView addSubview:_imgViewRight];
-    [_imgViewRight mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_imgViewRight Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.right.top.bottom.equalTo(self.contentView);
-        make.width.height.mas_equalTo(_width);
+        make.width.height.Ease_equalTo(_width);
     }];
     
 }
@@ -121,8 +121,8 @@
             imgPath = body.localPath;
         }
         [imgView setThumbnailImageWithLocalPath:imgPath remotePath:body.thumbnailRemotePath thumbImgSize:body.thumbnailSize imgSize:body.size];
-        [imgView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.height.mas_equalTo(_width);
+        [imgView Ease_updateConstraints:^(EaseConstraintMaker *make) {
+            make.width.height.Ease_equalTo(_width);
         }];
         UITapGestureRecognizer *imageTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageDidTouchAction:)];
         [imgView setTag:tag];
@@ -134,8 +134,8 @@
             imgPath = body.localPath;
         }
         [imgView setThumbnailImageWithLocalPath:imgPath remotePath:body.thumbnailRemotePath thumbImgSize:body.thumbnailSize imgSize:body.thumbnailSize];
-        [imgView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.height.mas_equalTo(_width);
+        [imgView Ease_updateConstraints:^(EaseConstraintMaker *make) {
+            make.width.height.Ease_equalTo(_width);
         }];
         UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(videoDidTouchAction:)];
         [imgView setTag:tag];
@@ -145,7 +145,7 @@
         self.shadowView = [[UIView alloc] init];
         self.shadowView.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
         [imgView addSubview:self.shadowView];
-        [self.shadowView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.shadowView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.edges.equalTo(imgView);
         }];
         
@@ -153,7 +153,7 @@
         playImgView.image = [UIImage easeUIImageNamed:@"msg_video_white"];
         playImgView.contentMode = UIViewContentModeScaleAspectFill;
         [imgView addSubview:playImgView];
-        [playImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [playImgView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.center.equalTo(imgView);
             make.width.height.equalTo(@50);
         }];

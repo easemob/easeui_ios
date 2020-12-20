@@ -9,9 +9,9 @@
 #import "EaseContactModel.h"
 #import "EaseContactCell.h"
 #import "UITableView+Refresh.h"
-#import <Hyphenate/Hyphenate.h>
-#import <SDWebImage/UIImageView+WebCache.h>
-#import <Masonry/Masonry.h>
+#import "EaseHeaders.h"
+#import "UIImageView+EaseWebCache.h"
+#import "Easeonry.h"
 
 @interface EaseContactsViewController () <EMContactManagerDelegate, UITableViewDelegate, UITableViewDataSource>
 {

@@ -13,17 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSInteger, EMChatToolBarComponentType) {
     EMChatToolBarPhotoAlbum = 0,
     EMChatToolBarCamera,
-    EMChatToolBarSealRtc,
     EMChatToolBarLocation,
     EMChatToolBarFileOpen,
 };
-
-@interface EaseChatViewController (ChatToolBarIncident)
-
-- (void)chatToolBarComponentAction:(EMChatToolBarComponentType)toolBarComponentType;
-
-@end
-
 
 @interface EaseChatViewController (ChatToolBarMeida) <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
@@ -32,11 +24,6 @@ typedef NS_ENUM(NSInteger, EMChatToolBarComponentType) {
 - (NSString *)getAudioOrVideoPath;
 
 - (void)chatToolBarComponentIncidentAction:(EMChatToolBarComponentType)componentType;
-@end
-
-@interface EaseChatViewController (ChatToolBarSealRtc)
-
-- (void)chatToolBarComponentSealRtcAction;
 @end
 
 @interface EaseChatViewController (ChatToolBarLocation)

@@ -85,7 +85,7 @@
             [self.dataArray setObject:msgModel atIndexedSubscript:i];
             __weak typeof(self) weakself = self;
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakself refreshTableView];
+                [weakself refreshTableView:YES];
             });
             break;
         }
@@ -98,8 +98,7 @@
 - (void)userDidJoinGroup:(EMGroup *)aGroup
                     user:(NSString *)aUsername
 {
-    [self tableViewDidTriggerHeaderRefresh];
-    [self refreshTableView];
+    [self tableViewDidTriggerHeaderRefresh:YES];
 }
 
 @end

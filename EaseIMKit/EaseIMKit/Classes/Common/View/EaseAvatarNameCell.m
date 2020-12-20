@@ -39,11 +39,11 @@
     
     _avatarView = [[UIImageView alloc] init];
     [self.contentView addSubview:_avatarView];
-    [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_avatarView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self.contentView).offset(14);
         make.left.equalTo(self.contentView).offset(16);
         make.bottom.equalTo(self.contentView).offset(-14);
-        make.width.equalTo(self.avatarView.mas_height).multipliedBy(1);
+        make.width.equalTo(self.avatarView.ease_height).multipliedBy(1);
     }];
     
     _detailLabel = [[UILabel alloc] init];
@@ -52,8 +52,8 @@
     _detailLabel.numberOfLines = 1;
     _detailLabel.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1.0];
     [self.contentView addSubview:_detailLabel];
-    [_detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.avatarView.mas_right).offset(15);
+    [_detailLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.left.equalTo(self.avatarView.ease_right).offset(15);
         make.right.equalTo(self.contentView).offset(-15);
         make.bottom.equalTo(self.contentView).offset(-8);
     }];
@@ -64,11 +64,11 @@
     _nameLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1.0];
     _nameLabel.font = [UIFont systemFontOfSize:16];
     [self.contentView addSubview:_nameLabel];
-    [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_nameLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self.contentView).offset(8);
-        make.left.equalTo(self.avatarView.mas_right).offset(15);
+        make.left.equalTo(self.avatarView.ease_right).offset(15);
         make.right.equalTo(self.contentView).offset(-15);
-        make.bottom.equalTo(self.detailLabel.mas_top);
+        make.bottom.equalTo(self.detailLabel.ease_top);
     }];
     
     _timestampLabel = [[UILabel alloc] init];
@@ -78,7 +78,7 @@
     _timestampLabel.font = [UIFont systemFontOfSize:12];
     [_timestampLabel setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
     [self.contentView addSubview:_timestampLabel];
-    [_timestampLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_timestampLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self.avatarView);
         make.right.equalTo(self.contentView).offset(-15);
     }];

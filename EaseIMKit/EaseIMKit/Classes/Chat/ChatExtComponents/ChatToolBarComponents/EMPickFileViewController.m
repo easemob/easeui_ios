@@ -7,7 +7,7 @@
 //
 
 #import "EMPickFileViewController.h"
-#import <Masonry/Masonry.h>
+#import "Easeonry.h"
 #import "UIImage+EaseUI.h"
 #import "UIColor+EaseUI.h"
 
@@ -35,8 +35,8 @@
     [self _setupNavigationBarTitle];
     [self _setupItemBar];
 
-    [self.tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.picBtn.mas_bottom);
+    [self.tableView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(self.picBtn.ease_bottom);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
         make.bottom.equalTo(self.view);
@@ -53,7 +53,7 @@
     self.recentBtn.backgroundColor = [UIColor lightGrayColor];
     self.recentBtn.titleLabel.textColor = [UIColor blackColor];
     [self.localMediaView addSubview:self.recentBtn];
-    [self.recentBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.recentBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.width.equalTo(@50);
         make.height.equalTo(@38);
         make.top.equalTo(self.localMediaView).offset(1);
@@ -66,12 +66,12 @@
     self.localBtn.backgroundColor = [UIColor lightGrayColor];
     self.localBtn.titleLabel.textColor = [UIColor blackColor];
     [self.localMediaView addSubview:self.localBtn];
-    [self.localBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.localBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.width.equalTo(@50);
         make.height.equalTo(@38);
         make.top.equalTo(self.localMediaView).offset(1);
         make.bottom.equalTo(self.localMediaView).offset(-1);
-        make.left.equalTo(self.recentBtn.mas_right).offset(1);
+        make.left.equalTo(self.recentBtn.ease_right).offset(1);
     }];
     
     self.navigationItem.titleView = self.localMediaView;
@@ -89,10 +89,10 @@
     _avBtn.tag = 1;
     [_avBtn addTarget:self action:@selector(cutFileType:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_avBtn];
-    [_avBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_avBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self.view);
         make.left.equalTo(self.view);
-        make.width.mas_equalTo(width);
+        make.width.Ease_equalTo(width);
         make.height.equalTo(@40);
     }];
 
@@ -104,15 +104,15 @@
     _picBtn.tag = 2;
     [_picBtn addTarget:self action:@selector(cutFileType:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.picBtn];
-    [_picBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_picBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self.view);
         make.right.equalTo(self.view);
-        make.width.mas_equalTo(width);
+        make.width.Ease_equalTo(width);
         make.height.equalTo(@40);
     }];
     
-    [self.tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.picBtn.mas_bottom);
+    [self.tableView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(self.picBtn.ease_bottom);
         make.left.right.bottom.equalTo(self.view);
     }];
 }

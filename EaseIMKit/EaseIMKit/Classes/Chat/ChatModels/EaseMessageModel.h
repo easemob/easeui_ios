@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Hyphenate/Hyphenate.h>
+
+#import "EasePublicHeaders.h"
 #import "EaseUserDelegate.h"
 
 typedef NS_ENUM(NSInteger, EMMessageType) {

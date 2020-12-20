@@ -39,20 +39,20 @@
     self.textLabel.font = [UIFont systemFontOfSize:_viewModel.contentFontSize];
     self.textLabel.numberOfLines = 0;
     [self addSubview:self.textLabel];
-    [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.mas_top).offset(10);
-        make.bottom.equalTo(self.mas_bottom).offset(-10);
+    [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(self.ease_top).offset(10);
+        make.bottom.equalTo(self.ease_bottom).offset(-10);
     }];
     self.textLabel.textColor = [UIColor blackColor];
     if (self.direction == EMMessageDirectionSend) {
-        [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.mas_left).offset(10);
-            make.right.equalTo(self.mas_right).offset(-10);
+        [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.left.equalTo(self.ease_left).offset(10);
+            make.right.equalTo(self.ease_right).offset(-10);
         }];
     } else {
-        [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.mas_left).offset(10);
-            make.right.equalTo(self.mas_right).offset(-10);
+        [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.left.equalTo(self.ease_left).offset(10);
+            make.right.equalTo(self.ease_right).offset(-10);
         }];
     }
 }

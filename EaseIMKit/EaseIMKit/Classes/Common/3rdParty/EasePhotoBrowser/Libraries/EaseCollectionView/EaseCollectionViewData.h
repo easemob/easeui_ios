@@ -9,7 +9,7 @@
 
 @class EaseCollectionView, EaseCollectionViewLayout, EaseCollectionViewLayoutAttributes;
 
-// https://github.com/steipete/iOS6-Runtime-Headers/blob/master/UICollectionViewData.h
+// https://github.com/steipete/iOS6-Runtime-Headers/blob/Easeter/UICollectionViewData.h
 @interface EaseCollectionViewData : NSObject
 
 // Designated initializer.

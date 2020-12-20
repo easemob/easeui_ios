@@ -54,7 +54,7 @@
     UIView *bgView = [[UIView alloc] init];
     bgView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:bgView];
-    [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [bgView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self.view).offset(20);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
@@ -73,7 +73,7 @@
         self.textField.placeholder = self.placeholder;
     }
     [self.view addSubview:self.textField];
-    [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.textField Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.center.equalTo(bgView);
         make.top.equalTo(bgView).offset(5);
         make.left.equalTo(bgView).offset(10);

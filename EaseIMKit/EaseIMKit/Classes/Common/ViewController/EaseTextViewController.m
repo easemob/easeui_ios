@@ -54,7 +54,7 @@
     UIView *bgView = [[UIView alloc] init];
     bgView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:bgView];
-    [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [bgView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self.view);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
@@ -75,7 +75,7 @@
     }
     self.textView.editable = self.isEditable;
     [self.view addSubview:self.textView];
-    [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.textView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.center.equalTo(bgView);
         make.top.equalTo(bgView).offset(5);
         make.left.equalTo(bgView).offset(10);

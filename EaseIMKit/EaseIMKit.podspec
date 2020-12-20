@@ -14,9 +14,9 @@ Pod::Spec.new do |s|
                     3. Contact list
                   DESC
   s.author = { 'easemob' => 'dev@easemob.com' }
-  s.source       = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKit_1.0.0.zip' }
+  s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKit_1.0.0.zip' }
   
-  s.xcconfig     = {'OTHER_LDFLAGS' => '-ObjC'}
+  s.xcconfig = {'OTHER_LDFLAGS' => '-ObjC'}
   
   s.requires_arc = true
   s.preserve_paths = '*.framework'
@@ -24,11 +24,7 @@ Pod::Spec.new do |s|
   
   s.frameworks = 'UIKit'
   s.libraries = 'stdc++'
-  s.dependency 'Hyphenate'
-  s.dependency 'Masonry'
-  s.dependency 'MBProgressHUD'
-  s.dependency 'FLAnimatedImage'
   s.dependency 'EMVoiceConvert'
-  s.dependency 'SDWebImage'
-  
+  s.dependency 'Hyphenate'
+
 end

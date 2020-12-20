@@ -38,10 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)returnReadReceipt:(EMMessage *)msg;
 //格式化消息
 - (NSArray *)formatMessages:(NSArray<EMMessage *> *)aMessages;
-//刷新页面(刷新页面，未重新从DB获取数据)
-- (void)refreshTableView;
+//刷新页面(刷新页面，未重新从DB获取数据) param:是否首次加载数据
+- (void)refreshTableView:(BOOL)isSlideLatestMsg;
 //获取数据刷新页面(重新从DB获取数据)
-- (void)tableViewDidTriggerHeaderRefresh;
+- (void)tableViewDidTriggerHeaderRefresh:(BOOL)isSlideLatestMsg;
 //清除从聊天页弹出的其他控制器页面(例：发起/接收 音视频通话时清理 相册弹出页/图片浏览页/输入扩展区收起等)
 - (void)cleanPopupControllerView;
 //停止音频播放

@@ -127,6 +127,7 @@
     EMLocationMessageBody *body = (EMLocationMessageBody *)aCell.model.message.body;
     EMLocationViewController *controller = [[EMLocationViewController alloc] initWithLocation:CLLocationCoordinate2DMake(body.latitude, body.longitude)];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+    navController.modalPresentationStyle = 0;
     [self.chatController.navigationController presentViewController:navController animated:YES completion:nil];
 }
 

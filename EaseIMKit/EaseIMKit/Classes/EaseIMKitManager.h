@@ -6,8 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Hyphenate/Hyphenate.h>
-#import "EaseEnums.h"
+#import "EasePublicHeaders.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

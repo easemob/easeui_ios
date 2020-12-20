@@ -42,7 +42,7 @@
     backView.backgroundColor = [UIColor whiteColor];
     backView.layer.cornerRadius = 15;
     [self addSubview:backView];
-    [backView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [backView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.left.equalTo(self).offset(30);
         make.right.equalTo(self).offset(-30);
         make.height.equalTo(@160);
@@ -56,7 +56,7 @@
     titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [backView addSubview:titleLabel];
-    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [titleLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(backView);
         make.left.right.equalTo(backView);
         make.height.equalTo(@50);
@@ -70,8 +70,8 @@
     messageLabel.textAlignment = NSTextAlignmentCenter;
     messageLabel.numberOfLines = 2;
     [backView addSubview:messageLabel];
-    [messageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(titleLabel.mas_bottom);
+    [messageLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(titleLabel.ease_bottom);
         make.left.equalTo(backView).offset(16);
         make.right.equalTo(backView).offset(-16);
         make.height.equalTo(@45);
@@ -80,8 +80,8 @@
     UIView *line = [[UIView alloc]init];
     line.backgroundColor = [UIColor lightGrayColor];
     [backView addSubview:line];
-    [line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(messageLabel.mas_bottom).offset(8);
+    [line Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(messageLabel.ease_bottom).offset(8);
         make.left.right.equalTo(backView);
         make.height.equalTo(@1);
     }];
@@ -93,8 +93,8 @@
     [confirmBtn.titleLabel setFont:[UIFont systemFontOfSize:16.f]];
     [confirmBtn setTitleColor:[UIColor systemBlueColor] forState:UIControlStateNormal];
     [backView addSubview:confirmBtn];
-    [confirmBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(line.mas_bottom);
+    [confirmBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(line.ease_bottom);
         make.bottom.equalTo(backView);
         make.left.right.equalTo(backView);
     }];

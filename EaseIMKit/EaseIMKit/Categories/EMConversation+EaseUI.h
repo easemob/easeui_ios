@@ -5,7 +5,7 @@
 //  Created by 杜洁鹏 on 2020/11/14.
 //
 
-#import <Hyphenate/Hyphenate.h>
+#import "EaseHeaders.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

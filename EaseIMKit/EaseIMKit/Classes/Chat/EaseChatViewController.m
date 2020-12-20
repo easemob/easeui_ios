@@ -100,7 +100,7 @@
     _viewModel = viewModel;
     _isReloadViewWithModel = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self refreshTableView];
+        [self refreshTableView:YES];
     });
 }
 
@@ -124,7 +124,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self tableViewDidTriggerHeaderRefresh];
+    [self tableViewDidTriggerHeader];
     [EaseIMKitManager.shared markAllMessagesAsReadWithConversation:self.currentConversation];
 }
 
@@ -175,7 +175,7 @@
     self.chatBar = [[EMChatBar alloc] initWithViewModel:_viewModel];
     self.chatBar.delegate = self;
     [self.view addSubview:self.chatBar];
-    [self.chatBar mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.chatBar Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
         make.bottom.equalTo(self.view);
@@ -185,11 +185,11 @@
     
     self.tableView.backgroundColor = _viewModel.chatViewBgColor;
     [self.view addSubview:self.tableView];
-    [self.tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
+    [self.tableView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self.view);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
-        make.bottom.equalTo(self.chatBar.mas_top);
+        make.bottom.equalTo(self.chatBar.ease_top);
     }];
 }
 
@@ -325,8 +325,8 @@
 - (void)chatBarDidShowMoreViewAction
 {
     [self hideLongPressView];
-    [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.chatBar.mas_top);
+    [self.tableView Ease_updateConstraints:^(EaseConstraintMaker *make) {
+        make.bottom.equalTo(self.chatBar.ease_top);
     }];
     
     [self performSelector:@selector(scrollToBottomRow) withObject:nil afterDelay:0.1];
@@ -554,7 +554,7 @@
         NSArray *formated = [weakself formatMessages:msgArray];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakself.dataArray addObjectsFromArray:formated];
-            [weakself refreshTableView];
+            [weakself refreshTableView:YES];
         });
     });
 }
@@ -652,7 +652,7 @@
     
     // 定义好动作
     void (^animation)(void) = ^void(void) {
-        [self.chatBar mas_updateConstraints:^(MASConstraintMaker *make) {
+        [self.chatBar Ease_updateConstraints:^(EaseConstraintMaker *make) {
             make.bottom.equalTo(self.view).offset(-keyBoardHeight);
         }];
     };
@@ -667,7 +667,7 @@
 {
     // 定义好动作
     void (^animation)(void) = ^void(void) {
-        [self.chatBar mas_updateConstraints:^(MASConstraintMaker *make) {
+        [self.chatBar Ease_updateConstraints:^(EaseConstraintMaker *make) {
             make.bottom.equalTo(self.view);
         }];
     };
@@ -745,7 +745,7 @@
     return formated;
 }
 
-- (void)tableViewDidTriggerHeaderRefresh
+- (void)tableViewDidTriggerHeaderRefresh:(BOOL)isSlideLatestMsg
 {
     __weak typeof(self) weakself = self;
     void (^block)(NSArray *aMessages, EMError *aError) = ^(NSArray *aMessages, EMError *aError) {
@@ -760,7 +760,7 @@
                     if (weakself.tableView.isRefreshing) {
                         [weakself.tableView endRefreshing];
                     }
-                    [weakself refreshTableView];
+                    [weakself refreshTableView:YES];
                 });
             });
         } else {
@@ -781,6 +781,11 @@
     } else {
         [self.currentConversation loadMessagesStartFromId:self.moreMsgId count:50 searchDirection:EMMessageSearchDirectionUp completion:block];
     }
+}
+
+- (void)tableViewDidTriggerHeader
+{
+    [self tableViewDidTriggerHeaderRefresh:YES];
 }
 
 #pragma mark - Action
@@ -845,7 +850,7 @@
         self.moreMsgId = message.messageId;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [weakself refreshTableView];
+        [weakself refreshTableView:YES];
     });
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself messageStatusDidChange:message error:error];
@@ -856,12 +861,14 @@
 
 - (void)returnReadReceipt:(EMMessage *)msg{}
 
-- (void)refreshTableView
+- (void)refreshTableView:(BOOL)isSlideLatestMsg
 {
     [self.tableView reloadData];
     [self.tableView setNeedsLayout];
     [self.tableView layoutIfNeeded];
-    [self scrollToBottomRow];
+    if (isSlideLatestMsg) {
+        [self scrollToBottomRow];
+    }
 }
 
 #pragma mark - getter
@@ -877,7 +884,7 @@
         _tableView.estimatedRowHeight = 130;
         _tableView.backgroundColor = [UIColor systemPinkColor];
         [_tableView enableRefresh:@"下拉刷新" color:UIColor.redColor];
-        [_tableView.refreshControl addTarget:self action:@selector(tableViewDidTriggerHeaderRefresh) forControlEvents:UIControlEventValueChanged];
+        [_tableView.refreshControl addTarget:self action:@selector(tableViewDidTriggerHeader) forControlEvents:UIControlEventValueChanged];
     }
     
     return _tableView;

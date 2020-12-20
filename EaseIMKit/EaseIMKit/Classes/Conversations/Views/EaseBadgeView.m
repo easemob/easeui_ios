@@ -6,7 +6,7 @@
 //
 
 #import "EaseBadgeView.h"
-#import <Masonry/Masonry.h>
+#import "Easeonry.h"
 
 @interface EaseBadgeView ()
 @property (nonatomic, strong) UILabel *label;
@@ -34,7 +34,7 @@
     self.clipsToBounds = YES;
     self.layer.cornerRadius = self.frame.size.height / 2;
     
-    [self.label mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.label Ease_updateConstraints:^(EaseConstraintMaker *make) {
         make.center.equalTo(self);
         make.left.greaterThanOrEqualTo(self).offset(6);
         make.right.greaterThanOrEqualTo(self).offset(-6);

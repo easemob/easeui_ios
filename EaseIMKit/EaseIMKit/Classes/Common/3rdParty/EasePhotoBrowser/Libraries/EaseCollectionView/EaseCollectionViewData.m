@@ -28,7 +28,7 @@
  (lldb) p (CGPoint)[[[[[collectionView valueForKey:@"_collectionViewData"] valueForKey:@"_screenPageDict"] allKeys] objectAtIndex:1] point]
  (CGPoint) $12 = (x=15, y=1128)
 
- // https://github.com/steipete/iOS6-Runtime-Headers/blob/master/UICGPointKey.h
+ // https://github.com/steipete/iOS6-Runtime-Headers/blob/Easeter/UICGPointKey.h
 
  NSMutableDictionary *_screenPageDict;
  */
