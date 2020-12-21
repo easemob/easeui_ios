@@ -6,15 +6,15 @@
 //  Copyright © 2019 XieYajie. All rights reserved.
 //
 
-#import <FLAnimatedImage/FLAnimatedImage.h>
-#import <FLAnimatedImage/FLAnimatedImageView.h>
+#import "EaseAnimatedImg.h"
+#import "EaseAnimatedImgView.h"
 #import "EMMessageBubbleView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EMMsgExtGifBubbleView : EMMessageBubbleView
 
-@property (nonatomic, strong) FLAnimatedImageView *gifView;
+@property (nonatomic, strong) EaseAnimatedImgView *gifView;
 
 @end
 

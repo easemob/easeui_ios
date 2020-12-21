@@ -12,23 +12,23 @@
 
 #import "UIViewController+HUD.h"
 
-#import <MBProgressHUD/MBProgressHUD.h>
+#import "EaseProgressHUD.h"
 #import <objc/runtime.h>
 
 static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
 
 @implementation UIViewController (HUD)
 
-- (MBProgressHUD *)HUD{
+- (EaseProgressHUD *)HUD{
     return objc_getAssociatedObject(self, HttpRequestHUDKey);
 }
 
-- (void)setHUD:(MBProgressHUD *)HUD{
+- (void)setHUD:(EaseProgressHUD *)HUD{
     objc_setAssociatedObject(self, HttpRequestHUDKey, HUD, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)showHudInView:(UIView *)view hint:(NSString *)hint{
-    MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:view];
+    EaseProgressHUD *HUD = [[EaseProgressHUD alloc] initWithView:view];
     HUD.label.text = hint;
     [view addSubview:HUD];
     [HUD showAnimated:YES];
@@ -38,10 +38,10 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
 - (void)showHint:(NSString *)hint
 {
     UIWindow *win = [[[UIApplication sharedApplication] windows] firstObject];
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:win animated:YES];
+    EaseProgressHUD *hud = [EaseProgressHUD showHUDAddedTo:win animated:YES];
     hud.userInteractionEnabled = NO;
     // Configure for text only and offset down
-    hud.mode = MBProgressHUDModeText;
+    hud.mode = EaseProgressHUDModeText;
     hud.label.text = hint;
     hud.margin = 10.f;
     CGPoint offset = hud.offset;
@@ -54,10 +54,10 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
 - (void)showHint:(NSString *)hint yOffset:(float)yOffset
 {
     UIView *view = [[UIApplication sharedApplication].delegate window];
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+    EaseProgressHUD *hud = [EaseProgressHUD showHUDAddedTo:view animated:YES];
     hud.userInteractionEnabled = NO;
     // Configure for text only and offset down
-    hud.mode = MBProgressHUDModeText;
+    hud.mode = EaseProgressHUDModeText;
     hud.label.text = hint;
     hud.margin = 10.f;
     CGPoint offset = hud.offset;

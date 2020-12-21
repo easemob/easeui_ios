@@ -87,7 +87,7 @@
     [self.view addSubview:self.mapView];
     
     [self.view addSubview:self.sendLocationBtn];
-    [self.sendLocationBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.sendLocationBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.width.equalTo(@55);
         make.height.equalTo(@25);
         make.top.equalTo(self.view).offset(55);
@@ -98,7 +98,7 @@
     }
     
     [self.view addSubview:self.cancelBtn];
-    [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.cancelBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.width.equalTo(@55);
         make.height.equalTo(@25);
         make.top.equalTo(self.view).offset(55);

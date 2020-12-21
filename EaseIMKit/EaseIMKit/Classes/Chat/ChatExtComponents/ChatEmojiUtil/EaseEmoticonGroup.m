@@ -94,7 +94,7 @@ EaseEmoticonGroup *gGifGroup = nil;
     self.imgView = [[UIImageView alloc] init];
     self.imgView.contentMode = UIViewContentModeScaleAspectFit;
     [self addSubview:self.imgView];
-    [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.imgView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.centerX.equalTo(self);
         make.top.equalTo(self);
     }];
@@ -103,8 +103,8 @@ EaseEmoticonGroup *gGifGroup = nil;
     self.label.textColor = [UIColor grayColor];
     self.label.font = [UIFont systemFontOfSize:14];
     [self addSubview:self.label];
-    [self.label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.imgView.mas_bottom).offset(5);
+    [self.label Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(self.imgView.ease_bottom).offset(5);
         make.centerX.equalTo(self);
         make.bottom.equalTo(self);
         make.height.greaterThanOrEqualTo(@14);
@@ -179,7 +179,7 @@ EaseEmoticonGroup *gGifGroup = nil;
     //    self.collectionView.userInteractionEnabled = YES;
     [self.collectionView registerClass:[EMEmoticonCell class] forCellWithReuseIdentifier:@"EMEmoticonCell"];
     [self addSubview:self.collectionView];
-    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.collectionView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.edges.equalTo(self);
     }];
 }

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MBProgressHUD.h"
+#import "EaseProgressHUD.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "EaseGridViewController.h"
 #import "EaseZoomingScrollView.h"
@@ -35,7 +35,7 @@
 	UIToolbar *_toolbar;
 	NSTimer *_controlVisibilityTimer;
 	UIBarButtonItem *_previousButton, *_nextButton, *_actionButton, *_doneButton;
-    MBProgressHUD *_progressHUD;
+    EaseProgressHUD *_progressHUD;
     
     // Grid
     EaseGridViewController *_gridController;

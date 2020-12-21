@@ -6,7 +6,7 @@
 //  Copyright © 2019 XieYajie. All rights reserved.
 //
 
-#import <SDWebImage/UIImageView+WebCache.h>
+#import "UIImageView+EaseWebCache.h"
 #import "EMMsgImageBubbleView.h"
 #import "EaseHeaders.h"
 
@@ -72,9 +72,9 @@
     __weak typeof(self) weakself = self;
     void (^block)(CGSize aSize) = ^(CGSize aSize) {
         CGSize layoutSize = [weakself _getImageSize:aSize];
-        [weakself mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(layoutSize.width);
-            make.height.mas_equalTo(layoutSize.height);
+        [weakself Ease_updateConstraints:^(EaseConstraintMaker *make) {
+            make.width.Ease_equalTo(layoutSize.width);
+            make.height.Ease_equalTo(layoutSize.height);
         }];
     };
     
@@ -90,7 +90,7 @@
         block(size);
         BOOL isAutoDownloadThumbnail = ([EMClient sharedClient].options.isAutoDownloadThumbnail);
         if (isAutoDownloadThumbnail) {
-            [self sd_setImageWithURL:[NSURL URLWithString:aRemotePath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {}];
+            [self Ease_setImageWithURL:[NSURL URLWithString:aRemotePath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, EaseImageCacheType cacheType, NSURL * _Nullable imageURL) {}];
         } else {
             self.image = [UIImage easeUIImageNamed:@"msg_img_broken"];
         }

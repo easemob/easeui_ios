@@ -22,17 +22,12 @@
 @property (nonatomic) CGFloat previousTextViewContentHeight;
 
 @property (nonatomic, strong) UIButton *selectedButton;
-
 @property (nonatomic, strong) UIView *currentMoreView;
-
 @property (nonatomic, strong) UIButton *conversationToolBarBtn;//更多
-
 @property (nonatomic, strong) UIButton *emojiButton;//表情
-
 @property (nonatomic, strong) UIButton *audioButton;//语音
-
 @property (nonatomic, strong) UIView *bottomLine;//下划线
-
+//@property (nonatomic, strong) UIButton *audioDescBtn;
 @property (nonatomic, strong) EaseChatViewModel *viewModel;
 
 @end
@@ -62,7 +57,7 @@
     line.backgroundColor = [UIColor colorWithHexString:@"#000000"];
     line.alpha = 0.1;
     [self addSubview:line];
-    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+    [line Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self);
         make.left.equalTo(self);
         make.right.equalTo(self);
@@ -74,11 +69,11 @@
     [_audioButton setBackgroundImage:[UIImage easeUIImageNamed:@"character"] forState:UIControlStateSelected];
     [_audioButton addTarget:self action:@selector(audioButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.audioButton];
-    [_audioButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_audioButton Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self).offset(10);
         make.left.equalTo(self).offset(16);
-        make.width.mas_equalTo(@16);
-        make.height.mas_equalTo(kIconwidth);
+        make.width.Ease_equalTo(@16);
+        make.height.Ease_equalTo(kIconwidth);
     }];
     
     self.conversationToolBarBtn = [[UIButton alloc] init];
@@ -86,10 +81,10 @@
     [_conversationToolBarBtn setBackgroundImage:[UIImage easeUIImageNamed:@"more-selected"] forState:UIControlStateSelected];
     [_conversationToolBarBtn addTarget:self action:@selector(moreButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_conversationToolBarBtn];
-    [_conversationToolBarBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_conversationToolBarBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self).offset(10);
         make.right.equalTo(self).offset(-16);
-        make.width.height.mas_equalTo(kIconwidth);
+        make.width.height.Ease_equalTo(kIconwidth);
     }];
     
     self.emojiButton = [[UIButton alloc] init];
@@ -97,10 +92,10 @@
     [_emojiButton setBackgroundImage:[UIImage easeUIImageNamed:@"character"] forState:UIControlStateSelected];
     [_emojiButton addTarget:self action:@selector(emoticonButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_emojiButton];
-    [_emojiButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_emojiButton Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self).offset(10);
-        make.right.equalTo(self.conversationToolBarBtn.mas_left).offset(-kModuleMargin);
-        make.width.height.mas_equalTo(kIconwidth);
+        make.right.equalTo(self.conversationToolBarBtn.ease_left).offset(-kModuleMargin);
+        make.width.height.Ease_equalTo(kIconwidth);
     }];
     
     self.textView = [[EaseTextView alloc] init];
@@ -119,37 +114,56 @@
     self.textView.backgroundColor = [UIColor whiteColor];
     self.textView.layer.cornerRadius = 16;
     [self addSubview:self.textView];
-    [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.textView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self).offset(5);
-        make.height.mas_equalTo(kTextViewMinHeight);
+        make.height.Ease_equalTo(kTextViewMinHeight);
         if (_viewModel.inputBarStyle == EaseInputBarStyleAll) {
-            make.left.equalTo(self.audioButton.mas_right).offset(kModuleMargin);
-            make.right.equalTo(self.emojiButton.mas_left).offset(-kModuleMargin);
+            make.left.equalTo(self.audioButton.ease_right).offset(kModuleMargin);
+            make.right.equalTo(self.emojiButton.ease_left).offset(-kModuleMargin);
         }
         if (_viewModel.inputBarStyle == EaseInputBarStyleNoAudio) {
             make.left.equalTo(self).offset(16);
-            make.right.equalTo(self.emojiButton.mas_left).offset(-kModuleMargin);
+            make.right.equalTo(self.emojiButton.ease_left).offset(-kModuleMargin);
         }
         if (_viewModel.inputBarStyle == EaseInputBarStyleNoEmoji) {
-            make.left.equalTo(self.audioButton.mas_right).offset(kModuleMargin);
-            make.right.equalTo(self.conversationToolBarBtn.mas_left).offset(-kModuleMargin);
+            make.left.equalTo(self.audioButton.ease_right).offset(kModuleMargin);
+            make.right.equalTo(self.conversationToolBarBtn.ease_left).offset(-kModuleMargin);
         }
         if (_viewModel.inputBarStyle == EaseInputBarStyleNoAudioAndEmoji) {
             make.left.equalTo(self).offset(16);
-            make.right.equalTo(self.conversationToolBarBtn.mas_left).offset(-kModuleMargin);
+            make.right.equalTo(self.conversationToolBarBtn.ease_left).offset(-kModuleMargin);
         }
         if (_viewModel.inputBarStyle == EaseInputBarStyleOnlyText) {
             make.left.equalTo(self).offset(16);
             make.right.equalTo(self).offset(-16);
         }
     }];
+    /*
+    self.audioDescBtn = [[UIButton alloc]init];
+    [self.audioDescBtn setBackgroundColor:[UIColor colorWithHexString:@"#E9E9E9"]];
+    [self.audioDescBtn setTitle:@"按住 说话" forState:UIControlStateNormal];
+    [self.audioDescBtn.titleLabel setFont:[UIFont systemFontOfSize:14]];
+    [self.audioDescBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.audioDescBtn.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    self.audioDescBtn.layer.cornerRadius = 16;
+    [self.textView addSubview:self.audioDescBtn];
+    [self.audioDescBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.width.height.equalTo(self.textView);
+        make.center.equalTo(self.textView);
+    }];
+    self.audioDescBtn.hidden = YES;
+    [self.audioDescBtn addTarget:self action:@selector(recordButtonTouchBegin) forControlEvents:UIControlEventTouchDown];
+    [self.audioDescBtn addTarget:self action:@selector(recordButtonTouchEnd) forControlEvents:UIControlEventTouchUpInside];
+    [self.audioDescBtn addTarget:self action:@selector(recordButtonTouchCancelBegin) forControlEvents:UIControlEventTouchDragOutside];
+    [self.audioDescBtn addTarget:self action:@selector(recordButtonTouchCancelCancel) forControlEvents:UIControlEventTouchDragInside];
+    [self.audioDescBtn addTarget:self action:@selector(recordButtonTouchCancelEnd) forControlEvents:UIControlEventTouchUpOutside];*/
     
     self.bottomLine = [[UIView alloc] init];
     _bottomLine.backgroundColor = [UIColor colorWithHexString:@"#000000"];
     _bottomLine.alpha = 0.1;
     [self addSubview:self.bottomLine];
-    [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.textView.mas_bottom).offset(5);
+    [_bottomLine Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(self.textView.ease_bottom).offset(5);
         make.left.equalTo(self);
         make.right.equalTo(self);
         make.height.equalTo(@0.5);
@@ -164,7 +178,7 @@
 {
     if (self.currentMoreView) {
         [self.currentMoreView removeFromSuperview];
-        [self.bottomLine mas_updateConstraints:^(MASConstraintMaker *make) {
+        [self.bottomLine Ease_updateConstraints:^(EaseConstraintMaker *make) {
             make.bottom.equalTo(self).offset(-EMVIEWBOTTOMMARGIN);
         }];
     }
@@ -226,24 +240,24 @@
     }
     
     self.previousTextViewContentHeight = height;
-    [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(height);
+    [self.textView Ease_updateConstraints:^(EaseConstraintMaker *make) {
+        make.height.Ease_equalTo(height);
     }];
 }
 
 - (void)_remakeButtonsViewConstraints
 {
     if (self.currentMoreView) {
-        [self.bottomLine mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.textView.mas_bottom).offset(5);
+        [self.bottomLine Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+            make.top.equalTo(self.textView.ease_bottom).offset(5);
             make.left.equalTo(self);
             make.right.equalTo(self);
             make.height.equalTo(@1);
-            make.bottom.equalTo(self.currentMoreView.mas_top);
+            make.bottom.equalTo(self.currentMoreView.ease_top);
         }];
     } else {
-        [self.bottomLine mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.textView.mas_bottom).offset(5);
+        [self.bottomLine Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+            make.top.equalTo(self.textView.ease_bottom).offset(5);
             make.left.equalTo(self);
             make.right.equalTo(self);
             make.height.equalTo(@1);
@@ -288,6 +302,15 @@
         self.selectedButton.selected = NO;
         self.selectedButton = nil;
     }
+    if (!self.audioButton.isSelected) {
+        [self.audioButton Ease_updateConstraints:^(EaseConstraintMaker *make) {
+            make.width.Ease_equalTo(@16);
+        }];
+    } else {
+        [self.audioButton Ease_updateConstraints:^(EaseConstraintMaker *make) {
+            make.width.Ease_equalTo(kIconwidth);
+        }];
+    }
 }
 
 #pragma mark - Action
@@ -318,12 +341,12 @@
         self.selectedButton = aButton;
     }
     if (!self.audioButton.isSelected) {
-        [self.audioButton mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(@16);
+        [self.audioButton Ease_updateConstraints:^(EaseConstraintMaker *make) {
+            make.width.Ease_equalTo(@16);
         }];
     } else {
-        [self.audioButton mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(kIconwidth);
+        [self.audioButton Ease_updateConstraints:^(EaseConstraintMaker *make) {
+            make.width.Ease_equalTo(kIconwidth);
         }];
     }
     
@@ -336,11 +359,12 @@
     if([self _buttonAction:aButton]) {
         return;
     }
+
     if (aButton.selected) {
         if (self.recordAudioView) {
             self.currentMoreView = self.recordAudioView;
             [self addSubview:self.recordAudioView];
-            [self.recordAudioView mas_makeConstraints:^(MASConstraintMaker *make) {
+            [self.recordAudioView Ease_makeConstraints:^(EaseConstraintMaker *make) {
                 make.left.equalTo(self);
                 make.right.equalTo(self);
                 make.bottom.equalTo(self).offset(-EMVIEWBOTTOMMARGIN);
@@ -364,11 +388,11 @@
         if (self.moreEmoticonView) {
             self.currentMoreView = self.moreEmoticonView;
             [self addSubview:self.moreEmoticonView];
-            [self.moreEmoticonView mas_makeConstraints:^(MASConstraintMaker *make) {
+            [self.moreEmoticonView Ease_makeConstraints:^(EaseConstraintMaker *make) {
                 make.left.equalTo(self);
                 make.right.equalTo(self);
                 make.bottom.equalTo(self).offset(-EMVIEWBOTTOMMARGIN);
-                make.height.mas_equalTo(self.moreEmoticonView.viewHeight);
+                make.height.Ease_equalTo(self.moreEmoticonView.viewHeight);
             }];
             [self _remakeButtonsViewConstraints];
             
@@ -389,11 +413,11 @@
         if(self.moreFunctionView) {
             self.currentMoreView = self.moreFunctionView;
             [self addSubview:self.moreFunctionView];
-            [self.moreFunctionView mas_makeConstraints:^(MASConstraintMaker *make) {
+            [self.moreFunctionView Ease_makeConstraints:^(EaseConstraintMaker *make) {
                 make.left.equalTo(self);
                 make.right.equalTo(self);
                 make.bottom.equalTo(self).offset(-EMVIEWBOTTOMMARGIN);
-                make.height.mas_equalTo(@200);
+                make.height.Ease_equalTo(@200);
             }];
             [self _remakeButtonsViewConstraints];
             if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarDidShowMoreViewAction)]) {

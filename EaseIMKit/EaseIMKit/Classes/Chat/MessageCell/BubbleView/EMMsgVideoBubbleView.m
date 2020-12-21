@@ -38,7 +38,7 @@
     self.shadowView = [[UIView alloc] init];
     self.shadowView.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
     [self addSubview:self.shadowView];
-    [self.shadowView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.shadowView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.edges.equalTo(self);
     }];
     
@@ -46,7 +46,7 @@
     self.playImgView.image = [UIImage easeUIImageNamed:@"msg_video_white"];
     self.playImgView.contentMode = UIViewContentModeScaleAspectFill;
     [self addSubview:self.playImgView];
-    [self.playImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.playImgView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.center.equalTo(self);
         make.width.height.equalTo(@50);
     }];

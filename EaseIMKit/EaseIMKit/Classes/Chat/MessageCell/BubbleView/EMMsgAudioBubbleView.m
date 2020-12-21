@@ -45,7 +45,7 @@
     self.imgView.clipsToBounds = YES;
     self.imgView.animationDuration = 1.0;
     [self addSubview:self.imgView];
-    [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.imgView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.centerY.equalTo(self);
         make.top.equalTo(self).offset(8);
         make.width.height.equalTo(@30);
@@ -55,18 +55,18 @@
     self.textLabel.font = [UIFont systemFontOfSize:14];
     self.textLabel.numberOfLines = 0;
     [self addSubview:self.textLabel];
-    [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self).offset(8);
         make.bottom.equalTo(self).offset(-8);
     }];
     self.textLabel.textColor = [UIColor blackColor];
     if (self.direction == EMMessageDirectionSend) {
         
-        [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.imgView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.right.equalTo(self).offset(-5);
         }];
-        [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.imgView.mas_left).offset(-3);
+        [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.right.equalTo(self.imgView.ease_left).offset(-3);
             make.left.equalTo(self).offset(5);
         }];
         
@@ -76,11 +76,11 @@
         self.imgView.animationImages = @[[UIImage easeUIImageNamed:@"msg_send_audio02"], [UIImage easeUIImageNamed:@"msg_send_audio01"], [UIImage easeUIImageNamed:@"msg_send_audio"]];
     } else {
         
-        [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.imgView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.left.equalTo(self).offset(5);
         }];
-        [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.imgView.mas_right).offset(3);
+        [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.left.equalTo(self.imgView.ease_right).offset(3);
             make.right.equalTo(self).offset(-5);
         }];
         
@@ -111,8 +111,8 @@
         } else if (width < kEMMsgAudioMinWidth) {
             width = kEMMsgAudioMinWidth;
         }
-        [self.textLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(width);
+        [self.textLabel Ease_updateConstraints:^(EaseConstraintMaker *make) {
+            make.width.Ease_equalTo(width);
         }];
     }
 }

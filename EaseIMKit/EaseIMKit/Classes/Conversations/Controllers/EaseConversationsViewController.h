@@ -6,7 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Hyphenate/Hyphenate.h>
+#import "EasePublicHeaders.h"
 #import "EaseBaseTableViewController.h"
 
 #import "EaseConversationViewModel.h"

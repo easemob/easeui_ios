@@ -18,9 +18,9 @@
 {
     self = [super initWithDirection:aDirection type:aType viewModel:viewModel];
     if (self) {
-        self.gifView = [[FLAnimatedImageView alloc] init];
+        self.gifView = [[EaseAnimatedImgView alloc] init];
         [self addSubview:self.gifView];
-        [self.gifView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.gifView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.edges.equalTo(self);
             make.width.height.lessThanOrEqualTo(@100);
         }];
@@ -42,7 +42,7 @@
                 NSBundle *resource_bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"/Frameworks/EaseIMKit.framework" ofType:nil]];
                 NSString *path = [resource_bundle pathForResource:model.original ofType:@"gif"];
                 NSData *imageData = [NSData dataWithContentsOfFile:path];
-                self.gifView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:imageData];;
+                self.gifView.animatedImage = [EaseAnimatedImg animatedImageWithGIFData:imageData];
                 break;
             }
         }

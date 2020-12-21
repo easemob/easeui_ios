@@ -42,7 +42,7 @@
         if (aError) {
             [EaseAlertController showErrorAlert:@"加入聊天室失败"];
         } else {
-            [weakself tableViewDidTriggerHeaderRefresh];
+            [weakself tableViewDidTriggerHeaderRefresh:YES];
         }
     }];
 }

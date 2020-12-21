@@ -7,7 +7,7 @@
 
 #import "EaseUserDelegate.h"
 #import <UIKit/UIKit.h>
-#import <Hyphenate/Hyphenate.h>
+#import "EasePublicHeaders.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseConversationModel : NSObject

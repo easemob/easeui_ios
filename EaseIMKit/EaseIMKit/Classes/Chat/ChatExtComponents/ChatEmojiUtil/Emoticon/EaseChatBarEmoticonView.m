@@ -58,11 +58,11 @@
     self.bottomView = [[UIView alloc] init];
     self.bottomView.backgroundColor = [UIColor colorWithHexString:@"#F2F2F2"];;
     [self addSubview:self.bottomView];
-    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.bottomView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.left.equalTo(self);
         make.right.equalTo(self);
         make.bottom.equalTo(self);
-        make.height.mas_equalTo(self.bottomHeight);
+        make.height.Ease_equalTo(self.bottomHeight);
     }];
     
     self.extBtn = [[UIButton alloc] init];
@@ -78,7 +78,7 @@
     self.bottomScrollView.backgroundColor = [UIColor colorWithHexString:@"#F2F2F2"];;
     self.bottomScrollView.contentSize = CGSizeMake(itemWidth * count, self.bottomHeight);
     [self addSubview:self.bottomScrollView];
-    [self.bottomScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.bottomScrollView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.edges.equalTo(self);
     }];
     
@@ -87,11 +87,11 @@
         button.tag = i;
         [button addTarget:self action:@selector(segmentedButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.bottomScrollView addSubview:button];
-        [button mas_makeConstraints:^(MASConstraintMaker *make) {
+        [button Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self.bottomView);
             make.left.equalTo(self.bottomView).offset(i * itemWidth);
-            make.width.mas_equalTo(itemWidth);
-            make.height.mas_equalTo(self.bottomHeight);
+            make.width.Ease_equalTo(itemWidth);
+            make.height.Ease_equalTo(self.bottomHeight);
         }];
         
         id icon = [self.groups[i] icon];
@@ -112,11 +112,11 @@
     self.emotionBgView = [[UIView alloc] init];
     self.emotionBgView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.emotionBgView];
-    [self.emotionBgView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.emotionBgView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self);
         make.left.equalTo(self);
         make.right.equalTo(self);
-        make.bottom.equalTo(self.bottomView.mas_top);
+        make.bottom.equalTo(self.bottomView.ease_top);
     }];
     
     NSInteger count = [self.groups count];
@@ -187,28 +187,28 @@
     
     if (tag == 0) {
         [self.bottomView addSubview:self.extBtn];
-        [self.extBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.extBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self.bottomView).offset(11);
-            make.right.equalTo(self.bottomView.mas_right).offset(-23);
-            make.width.height.mas_equalTo(@18);
+            make.right.equalTo(self.bottomView.ease_right).offset(-23);
+            make.width.height.Ease_equalTo(@18);
         }];
-        [self.bottomScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        [self.bottomScrollView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
             make.left.equalTo(self);
-            make.right.equalTo(self.extBtn.mas_left);
+            make.right.equalTo(self.extBtn.ease_left);
             make.bottom.equalTo(self);
-            make.height.mas_equalTo(self.bottomHeight);
+            make.height.Ease_equalTo(self.bottomHeight);
         }];
         [self addSubview:self.deleteBtn];
-        [self.deleteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(self.bottomView.mas_top).offset(-18);
-            make.right.equalTo(self.bottomView.mas_right).offset(-23);
-            make.width.mas_equalTo(@22);
-            make.height.mas_equalTo(@17);
+        [self.deleteBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.bottom.equalTo(self.bottomView.ease_top).offset(-18);
+            make.right.equalTo(self.bottomView.ease_right).offset(-23);
+            make.width.Ease_equalTo(@22);
+            make.height.Ease_equalTo(@17);
         }];
     } else {
         [self.extBtn removeFromSuperview];
         [self.deleteBtn removeFromSuperview];
-        [self.bottomScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        [self.bottomScrollView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
             make.edges.equalTo(self);
         }];
     }
@@ -216,7 +216,7 @@
     //TODO:code
     EMEmoticonView *view = self.emotionViews[tag];
     [self.emotionBgView addSubview:view];
-    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+    [view Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.edges.equalTo(self.emotionBgView);
     }];
 }

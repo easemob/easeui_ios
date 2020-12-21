@@ -119,7 +119,7 @@
     }
     [self.contentView addSubview:_avatarView];
     if (self.direction == EMMessageDirectionReceive) {
-        [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [_avatarView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
             make.left.equalTo(self.contentView).offset(2*componentSpacing);
             make.width.height.equalTo(@(avatarLonger));
@@ -130,14 +130,14 @@
         _nameLabel.textColor = [UIColor grayColor];
         if (chatType != EMChatTypeChat) {
             [self.contentView addSubview:_nameLabel];
-            [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            [_nameLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
                 make.top.equalTo(self.avatarView);
-                make.left.equalTo(self.avatarView.mas_right).offset(8);
+                make.left.equalTo(self.avatarView.ease_right).offset(8);
                 make.right.equalTo(self.contentView).offset(-componentSpacing);
             }];
         }
     } else {
-        [_avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [_avatarView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
             make.right.equalTo(self.contentView).offset(-2*componentSpacing);
             make.width.height.equalTo(@(avatarLonger));
@@ -149,34 +149,34 @@
     _bubbleView.clipsToBounds = YES;
     [self.contentView addSubview:_bubbleView];
     if (self.direction == EMMessageDirectionReceive) {
-        [_bubbleView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [_bubbleView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             if (chatType != EMChatTypeChat) {
-                make.top.equalTo(self.nameLabel.mas_bottom).offset(3);
+                make.top.equalTo(self.nameLabel.ease_bottom).offset(3);
             } else {
                 make.top.equalTo(self.avatarView);
             }
             make.bottom.equalTo(self.contentView).offset(-15);
-            make.left.equalTo(self.avatarView.mas_right).offset(componentSpacing);
+            make.left.equalTo(self.avatarView.ease_right).offset(componentSpacing);
             make.right.lessThanOrEqualTo(self.contentView).offset(-70);
         }];
     } else {
-        [_bubbleView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [_bubbleView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self.avatarView);
             make.bottom.equalTo(self.contentView).offset(-15);
             make.left.greaterThanOrEqualTo(self.contentView).offset(70);
-            make.right.equalTo(self.avatarView.mas_left).offset(-componentSpacing);
+            make.right.equalTo(self.avatarView.ease_left).offset(-componentSpacing);
         }];
     }
 
     _statusView = [[EaseMessageStatusView alloc] init];
     [self.contentView addSubview:_statusView];
     if (self.direction == EMMessageDirectionSend || (_viewModel.msgAlignmentStyle == EaseAlignmentlLeft && chatType == EMChatTypeGroupChat)) {
-        [_statusView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(self.bubbleView.mas_centerY);
+        [_statusView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.centerY.equalTo(self.bubbleView.ease_centerY);
             if (_viewModel.msgAlignmentStyle == EaseAlignmentlLeft && chatType == EMChatTypeGroupChat) {
-                make.left.equalTo(self.bubbleView.mas_right).offset(5);
+                make.left.equalTo(self.bubbleView.ease_right).offset(5);
             } else {
-                make.right.equalTo(self.bubbleView.mas_left).offset(-5);
+                make.right.equalTo(self.bubbleView.ease_left).offset(-5);
             }
             make.height.equalTo(@(componentSpacing * 2));
         }];
@@ -190,9 +190,9 @@
         _statusView.backgroundColor = [UIColor redColor];
         _statusView.clipsToBounds = YES;
         _statusView.layer.cornerRadius = 4;
-        [_statusView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [_statusView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.centerY.equalTo(self.bubbleView);
-            make.left.equalTo(self.bubbleView.mas_right).offset(5);
+            make.left.equalTo(self.bubbleView.ease_right).offset(5);
             make.width.height.equalTo(@8);
         }];
     }
@@ -210,9 +210,9 @@
     [_readReceiptBtn addTarget:self action:@selector(readReceiptDetilAction) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:_readReceiptBtn];
     if(self.direction == EMMessageDirectionSend) {
-        [_readReceiptBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.bubbleView.mas_bottom).offset(2);
-            make.right.equalTo(self.bubbleView.mas_right);
+        [_readReceiptBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.top.equalTo(self.bubbleView.ease_bottom).offset(2);
+            make.right.equalTo(self.bubbleView.ease_right);
             make.width.equalTo(@130);
             make.height.equalTo(@15);
         }];

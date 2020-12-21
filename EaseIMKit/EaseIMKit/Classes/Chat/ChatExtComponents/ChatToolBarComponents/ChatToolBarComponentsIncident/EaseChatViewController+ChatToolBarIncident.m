@@ -17,23 +17,6 @@
 #import "EaseAlertView.h"
 #import "UIViewController+HUD.h"
 
-@implementation EaseChatViewController (ChatToolBarIncident)
-
-- (void)chatToolBarComponentAction:(EMChatToolBarComponentType)toolBarComponentType
-{
-    if (toolBarComponentType == EMChatToolBarPhotoAlbum || toolBarComponentType == EMChatToolBarCamera)
-        [self chatToolBarComponentIncidentAction:toolBarComponentType];
-    if (toolBarComponentType == EMChatToolBarSealRtc)
-        [self chatToolBarComponentSealRtcAction];
-    if (toolBarComponentType == EMChatToolBarLocation)
-        [self chatToolBarLocationAction];
-    if (toolBarComponentType == EMChatToolBarFileOpen)
-        [self chatToolBarFileOpenAction];
-}
-
-@end
-
-
 /**
     媒体库
  */
@@ -115,6 +98,7 @@ static const void *imagePickerKey = &imagePickerKey;
         } else {
             if ([[UIDevice currentDevice].systemVersion doubleValue] >= 9.0f) {
                 PHFetchResult *result = [PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil];
+                NSLog(@"count:  %lu",(unsigned long)result.count);
                 [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
                     if (asset) {
                         [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
@@ -243,40 +227,6 @@ static const void *imagePickerKey = &imagePickerKey;
 }
 
 @end
-
-
-/**
-    实时音视频
- */
-
-@implementation EaseChatViewController (ChatToolBarSealRtc)
-
-- (void)chatToolBarComponentSealRtcAction
-{
-//    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-//    
-//    __weak typeof(self) weakself = self;
-//    if (self.currentConversation.type == EMConversationTypeChat) {
-//        [alertController addAction:[UIAlertAction actionWithTitle:@"视频通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//            [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:weakself.currentConversation.conversationId, CALL_TYPE:@(EMCallTypeVideo)}];
-//        }]];
-//        [alertController addAction:[UIAlertAction actionWithTitle:@"语音通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//            [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKE1V1 object:@{CALL_CHATTER:weakself.currentConversation.conversationId, CALL_TYPE:@(EMCallTypeVoice)}];
-//        }]];
-//        [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//        }]];
-//        for (UIAlertAction *alertAction in alertController.actions)
-//            [alertAction setValue:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1.0] forKey:@"_titleTextColor"];
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"didAlert" object:@{@"alert":alertController}];
-//        [self presentViewController:alertController animated:YES completion:nil];
-//        return;
-//    }
-//    //群聊/聊天室 多人会议
-//    [[NSNotificationCenter defaultCenter] postNotificationName:CALL_MAKECONFERENCE object:@{CALL_TYPE:@(EMConferenceTypeCommunication), CALL_MODEL:weakself.currentConversation, NOTIF_NAVICONTROLLER:self.navigationController}];
-}
-
-@end
-
 
 /**
     位置消息

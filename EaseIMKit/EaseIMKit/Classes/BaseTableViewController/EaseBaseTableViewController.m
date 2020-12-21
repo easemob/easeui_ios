@@ -7,7 +7,7 @@
 
 #import "EaseBaseTableViewController.h"
 #import "UITableView+Refresh.h"
-#import <Masonry/Masonry.h>
+#import "Easeonry.h"
 
 @interface EaseBaseTableViewController ()
 {
@@ -29,7 +29,7 @@
     self.view.backgroundColor = UIColor.clearColor;
     self.tableView.backgroundColor = UIColor.clearColor;
     [self.view addSubview:self.tableView];
-    [self.tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
+    [self.tableView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
         make.left.equalTo(self.view);
         make.top.equalTo(self.view);
         make.size.equalTo(self.view);

@@ -94,14 +94,14 @@
         [_failButton removeFromSuperview];
         /*
         [self addSubview:self.activityView];
-        [self.activityView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.activityView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.edges.equalTo(self);
             make.width.equalTo(@20);
         }];
         [self.activityView startAnimating];*/
         
         [self addSubview:self.loadingView];
-        [self.loadingView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.loadingView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.edges.equalTo(self);
             make.width.equalTo(@20);
         }];
@@ -117,7 +117,7 @@
         [_loadingView stopTimer];
         [_loadingView removeFromSuperview];
         [self addSubview:self.failButton];
-        [self.failButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.failButton Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.edges.equalTo(self);
             make.width.equalTo(@20);
         }];
@@ -132,7 +132,7 @@
         [_loadingView removeFromSuperview];
         self.label.text = aIsReadAcked ? @"已读" : nil;
         [self addSubview:self.label];
-        [self.label mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.label Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.edges.equalTo(self);
         }];
     } else {

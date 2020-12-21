@@ -38,7 +38,7 @@
 
 // Fetch the image data from a source and notify when complete.
 // You must load the image asyncronously (and decompress it for better performance).
-// It is recommended that you use SDWebImageDecoder to perform the decompression.
+// It is recommended that you use EaseWebImageDecoder to perform the decompression.
 // See EasePhoto object for an example implementation.
 // When the underlying UIImage is loaded (or failed to load) you should post the following
 // notification:

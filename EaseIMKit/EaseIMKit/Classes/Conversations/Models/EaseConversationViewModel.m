@@ -8,7 +8,7 @@
 #import "EaseConversationViewModel.h"
 #import "EaseHeaders.h"
 #import "UIImage+EaseUI.h"
-#import <Masonry/Masonry.h>
+#import "Easeonry.h"
 
 @implementation EaseConversationViewModel
 @synthesize bgView = _bgView;
@@ -81,25 +81,25 @@
     [defaultBgView addSubview:view];
 
     txtLabel.text = @"暂无聊天消息";
-    [imageView mas_updateConstraints:^(MASConstraintMaker *make) {
+    [imageView Ease_updateConstraints:^(EaseConstraintMaker *make) {
         make.centerX.equalTo(view);
         make.top.equalTo(view);
-        make.width.mas_equalTo(138);
-        make.height.mas_equalTo(106);
+        make.width.Ease_equalTo(138);
+        make.height.Ease_equalTo(106);
     }];
     
-    [txtLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(view.mas_centerX);
-        make.top.equalTo(imageView.mas_bottom).offset(19);
-        make.height.mas_equalTo(20);
+    [txtLabel Ease_updateConstraints:^(EaseConstraintMaker *make) {
+        make.centerX.equalTo(view.ease_centerX);
+        make.top.equalTo(imageView.ease_bottom).offset(19);
+        make.height.Ease_equalTo(20);
     }];
     
-    [view mas_updateConstraints:^(MASConstraintMaker *make) {
+    [view Ease_updateConstraints:^(EaseConstraintMaker *make) {
         make.center.equalTo(defaultBgView);
         make.top.equalTo(imageView);
         make.left.equalTo(imageView);
         make.right.equalTo(imageView);
-        make.bottom.equalTo(txtLabel.mas_bottom);
+        make.bottom.equalTo(txtLabel.ease_bottom);
     }];
     
     return defaultBgView;

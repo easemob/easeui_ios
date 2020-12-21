@@ -10,8 +10,8 @@
 #import "EaseConversationCell.h"
 #import "EaseDateHelper.h"
 #import "EaseBadgeView.h"
-#import <Masonry/Masonry.h>
-#import <SDWebImage/UIImageView+WebCache.h>
+#import "Easeonry.h"
+#import "UIImageView+EaseWebCache.h"
 
 @interface EaseConversationCell()
 
@@ -111,50 +111,50 @@
     
     __weak typeof(self) weakSelf = self;
     
-    [_avatarView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.contentView.mas_top).offset(weakSelf.viewModel.avatarEdgeInsets.top + 11);
-        make.bottom.equalTo(weakSelf.contentView.mas_bottom).offset(-weakSelf.viewModel.avatarEdgeInsets.bottom - 13);
-        make.left.equalTo(weakSelf.contentView.mas_left).offset(weakSelf.viewModel.avatarEdgeInsets.left + 20);
+    [_avatarView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(weakSelf.contentView.ease_top).offset(weakSelf.viewModel.avatarEdgeInsets.top + 11);
+        make.bottom.equalTo(weakSelf.contentView.ease_bottom).offset(-weakSelf.viewModel.avatarEdgeInsets.bottom - 13);
+        make.left.equalTo(weakSelf.contentView.ease_left).offset(weakSelf.viewModel.avatarEdgeInsets.left + 20);
         make.width.offset(weakSelf.viewModel.avatarSize.width);
         make.height.offset(weakSelf.viewModel.avatarSize.height).priority(750);
     }];
     
-    [_nameLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.contentView.mas_top).offset(weakSelf.viewModel.nameLabelEdgeInsets.top + 12);
-        make.left.equalTo(weakSelf.avatarView.mas_right).offset(weakSelf.viewModel.avatarEdgeInsets.right + weakSelf.viewModel.nameLabelEdgeInsets.left + 12);
+    [_nameLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(weakSelf.contentView.ease_top).offset(weakSelf.viewModel.nameLabelEdgeInsets.top + 12);
+        make.left.equalTo(weakSelf.avatarView.ease_right).offset(weakSelf.viewModel.avatarEdgeInsets.right + weakSelf.viewModel.nameLabelEdgeInsets.left + 12);
     }];
     
-    [_detailLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.nameLabel.mas_bottom).offset(weakSelf.viewModel.nameLabelEdgeInsets.bottom + weakSelf.viewModel.detailLabelEdgeInsets.top);
-        make.left.equalTo(weakSelf.avatarView.mas_right).offset(weakSelf.viewModel.avatarEdgeInsets.right + weakSelf.viewModel.detailLabelEdgeInsets.left + 12);
-        make.bottom.equalTo(weakSelf.contentView.mas_bottom).offset(weakSelf.viewModel.detailLabelEdgeInsets.bottom - 18);
+    [_detailLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(weakSelf.nameLabel.ease_bottom).offset(weakSelf.viewModel.nameLabelEdgeInsets.bottom + weakSelf.viewModel.detailLabelEdgeInsets.top);
+        make.left.equalTo(weakSelf.avatarView.ease_right).offset(weakSelf.viewModel.avatarEdgeInsets.right + weakSelf.viewModel.detailLabelEdgeInsets.left + 12);
+        make.bottom.equalTo(weakSelf.contentView.ease_bottom).offset(weakSelf.viewModel.detailLabelEdgeInsets.bottom - 18);
     }];
     
-    [_timeLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.contentView.mas_top).offset(weakSelf.viewModel.timeLabelEdgeInsets.top + 12);
-        make.right.equalTo(weakSelf.contentView.mas_right).offset(-weakSelf.viewModel.timeLabelEdgeInsets.right - 18);
-        make.left.greaterThanOrEqualTo(weakSelf.nameLabel.mas_right).offset(weakSelf.viewModel.nameLabelEdgeInsets.right + weakSelf.viewModel.timeLabelEdgeInsets.left + 8);
+    [_timeLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(weakSelf.contentView.ease_top).offset(weakSelf.viewModel.timeLabelEdgeInsets.top + 12);
+        make.right.equalTo(weakSelf.contentView.ease_right).offset(-weakSelf.viewModel.timeLabelEdgeInsets.right - 18);
+        make.left.greaterThanOrEqualTo(weakSelf.nameLabel.ease_right).offset(weakSelf.viewModel.nameLabelEdgeInsets.right + weakSelf.viewModel.timeLabelEdgeInsets.left + 8);
     }];
 
   
     if (_viewModel.badgeLabelPosition == EMAvatarTopRight) {
-        [_badgeLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        [_badgeLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
             make.height.offset(_viewModel.badgeLabelHeight);
-            make.width.mas_greaterThanOrEqualTo(weakSelf.viewModel.badgeLabelHeight).priority(1000);
-            make.centerY.equalTo(weakSelf.avatarView.mas_top).offset(weakSelf.viewModel.badgeLabelCenterVector.dy + 4);
-            make.centerX.equalTo(weakSelf.avatarView.mas_right).offset(weakSelf.viewModel.badgeLabelCenterVector.dx - 8);
+            make.width.Ease_greaterThanOrEqualTo(weakSelf.viewModel.badgeLabelHeight).priority(1000);
+            make.centerY.equalTo(weakSelf.avatarView.ease_top).offset(weakSelf.viewModel.badgeLabelCenterVector.dy + 4);
+            make.centerX.equalTo(weakSelf.avatarView.ease_right).offset(weakSelf.viewModel.badgeLabelCenterVector.dx - 8);
         }];
         
-        [_detailLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(weakSelf.contentView.mas_right).offset(-weakSelf.viewModel.detailLabelEdgeInsets.right - 18);
+        [_detailLabel Ease_updateConstraints:^(EaseConstraintMaker *make) {
+            make.right.equalTo(weakSelf.contentView.ease_right).offset(-weakSelf.viewModel.detailLabelEdgeInsets.right - 18);
         }];
     }else {
-        [_badgeLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        [_badgeLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
             make.height.offset(_viewModel.badgeLabelHeight);
-            make.width.mas_greaterThanOrEqualTo(weakSelf.viewModel.badgeLabelHeight).priority(1000);
-            make.centerY.equalTo(weakSelf.detailLabel.mas_centerY).offset(weakSelf.viewModel.badgeLabelCenterVector.dy);
-            make.right.equalTo(weakSelf.contentView.mas_right).offset(weakSelf.viewModel.badgeLabelCenterVector.dx - 19);
-            make.left.greaterThanOrEqualTo(weakSelf.detailLabel.mas_right).offset(weakSelf.viewModel.detailLabelEdgeInsets.right + 5);
+            make.width.Ease_greaterThanOrEqualTo(weakSelf.viewModel.badgeLabelHeight).priority(1000);
+            make.centerY.equalTo(weakSelf.detailLabel.ease_centerY).offset(weakSelf.viewModel.badgeLabelCenterVector.dy);
+            make.right.equalTo(weakSelf.contentView.ease_right).offset(weakSelf.viewModel.badgeLabelCenterVector.dx - 19);
+            make.left.greaterThanOrEqualTo(weakSelf.detailLabel.ease_right).offset(weakSelf.viewModel.detailLabelEdgeInsets.right + 5);
         }];
     }
 }
@@ -173,7 +173,7 @@
     }
     
     if ([_model respondsToSelector:@selector(avatarURL)]) {
-        [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.avatarURL]
+        [self.avatarView Ease_setImageWithURL:[NSURL URLWithString:_model.avatarURL]
                            placeholderImage:img];
     }else {
         self.avatarView.image = img;

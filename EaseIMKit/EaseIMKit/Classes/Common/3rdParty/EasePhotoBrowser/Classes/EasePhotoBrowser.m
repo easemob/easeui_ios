@@ -1604,9 +1604,9 @@ static void * EaseVideoPlayerObservation = &EaseVideoPlayerObservation;
 
 #pragma mark - Action Progress
 
-- (MBProgressHUD *)progressHUD {
+- (EaseProgressHUD *)progressHUD {
     if (!_progressHUD) {
-        _progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+        _progressHUD = [[EaseProgressHUD alloc] initWithView:self.view];
         _progressHUD.minSize = CGSizeMake(120, 120);
         _progressHUD.minShowTime = 1;
         [self.view addSubview:_progressHUD];
@@ -1616,7 +1616,7 @@ static void * EaseVideoPlayerObservation = &EaseVideoPlayerObservation;
 
 - (void)showProgressHUDWithMessage:(NSString *)message {
     self.progressHUD.label.text = message;
-    self.progressHUD.mode = MBProgressHUDModeIndeterminate;
+    self.progressHUD.mode = EaseProgressHUDModeIndeterminate;
     [self.progressHUD showAnimated:YES];
     self.navigationController.navigationBar.userInteractionEnabled = NO;
 }
@@ -1630,7 +1630,7 @@ static void * EaseVideoPlayerObservation = &EaseVideoPlayerObservation;
     if (message) {
         if (self.progressHUD.isHidden) [self.progressHUD showAnimated:YES];
         self.progressHUD.label.text = message;
-        self.progressHUD.mode = MBProgressHUDModeCustomView;
+        self.progressHUD.mode = EaseProgressHUDModeCustomView;
         [self.progressHUD hideAnimated:YES afterDelay:1.5];
     } else {
         [self.progressHUD hideAnimated:YES];
