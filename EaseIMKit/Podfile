@@ -9,7 +9,6 @@ target 'EaseIM' do
   platform :ios, '11.0'
   project '../../EaseIM/EaseIM/EaseIM.xcodeproj'
   pod 'Masonry'
-  pod 'MBProgressHUD'
   pod 'MJRefresh'
   pod 'Hyphenate'
   pod 'EaseIMKit', :path => './'
@@ -26,6 +25,8 @@ end
 target 'EaseIMKit' do
   pod 'Hyphenate'
   pod 'EMVoiceConvert'
+  pod 'FLAnimatedImage'
+  pod 'MBProgressHUD'
 end
 
 

@@ -7,13 +7,13 @@
 #import "EaseProgressHUD.h"
 #import <tgmath.h>
 
-#define MBMainThreadAssert() NSAssert([NSThread isMainThread], @"EaseProgressHUD needs to be accessed on the main thread.");
+#define EaseMainThreadAssert() NSAssert([NSThread isMainThread], @"EaseProgressHUD needs to be accessed on the main thread.");
 
-CGFloat const MBProgressMaxOffset = 1000000.f;
+CGFloat const EaseProgressMaxOffset = 1000000.f;
 
-static const CGFloat MBDefaultPadding = 4.f;
-static const CGFloat MBDefaultLabelFontSize = 16.f;
-static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
+static const CGFloat EaseDefaultPadding = 4.f;
+static const CGFloat EaseDefaultLabelFontSize = 16.f;
+static const CGFloat EaseDefaultDetailsLabelFontSize = 12.f;
 
 
 @interface EaseProgressHUD ()
@@ -128,7 +128,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 #pragma mark - Show & hide
 
 - (void)showAnimated:(BOOL)animated {
-    MBMainThreadAssert();
+    EaseMainThreadAssert();
     [self.minShowTimer invalidate];
     self.useAnimation = animated;
     self.finished = NO;
@@ -145,7 +145,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 }
 
 - (void)hideAnimated:(BOOL)animated {
-    MBMainThreadAssert();
+    EaseMainThreadAssert();
     [self.graceTimer invalidate];
     self.useAnimation = animated;
     self.finished = YES;
@@ -301,7 +301,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 - (void)setupViews {
     UIColor *defaultColor = self.contentColor;
 
-    MBBackgroundView *backgroundView = [[MBBackgroundView alloc] initWithFrame:self.bounds];
+    EaseBackgroundView *backgroundView = [[EaseBackgroundView alloc] initWithFrame:self.bounds];
     backgroundView.style = EaseProgressHUDBackgroundStyleSolidColor;
     backgroundView.backgroundColor = [UIColor clearColor];
     backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -309,7 +309,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
     [self addSubview:backgroundView];
     _backgroundView = backgroundView;
 
-    MBBackgroundView *bezelView = [MBBackgroundView new];
+    EaseBackgroundView *bezelView = [EaseBackgroundView new];
     bezelView.translatesAutoresizingMaskIntoConstraints = NO;
     bezelView.layer.cornerRadius = 5.f;
     bezelView.alpha = 0.f;
@@ -320,7 +320,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
     label.adjustsFontSizeToFitWidth = NO;
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = defaultColor;
-    label.font = [UIFont boldSystemFontOfSize:MBDefaultLabelFontSize];
+    label.font = [UIFont boldSystemFontOfSize:EaseDefaultLabelFontSize];
     label.opaque = NO;
     label.backgroundColor = [UIColor clearColor];
     _label = label;
@@ -330,14 +330,14 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
     detailsLabel.textAlignment = NSTextAlignmentCenter;
     detailsLabel.textColor = defaultColor;
     detailsLabel.numberOfLines = 0;
-    detailsLabel.font = [UIFont boldSystemFontOfSize:MBDefaultDetailsLabelFontSize];
+    detailsLabel.font = [UIFont boldSystemFontOfSize:EaseDefaultDetailsLabelFontSize];
     detailsLabel.opaque = NO;
     detailsLabel.backgroundColor = [UIColor clearColor];
     _detailsLabel = detailsLabel;
 
     UIButton *button = [EaseProgressHUDRoundedButton buttonWithType:UIButtonTypeCustom];
     button.titleLabel.textAlignment = NSTextAlignmentCenter;
-    button.titleLabel.font = [UIFont boldSystemFontOfSize:MBDefaultDetailsLabelFontSize];
+    button.titleLabel.font = [UIFont boldSystemFontOfSize:EaseDefaultDetailsLabelFontSize];
     [button setTitleColor:defaultColor forState:UIControlStateNormal];
     _button = button;
 
@@ -364,7 +364,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 - (void)updateIndicators {
     UIView *indicator = self.indicator;
     BOOL isActivityIndicator = [indicator isKindOfClass:[UIActivityIndicatorView class]];
-    BOOL isRoundIndicator = [indicator isKindOfClass:[MBRoundProgressView class]];
+    BOOL isRoundIndicator = [indicator isKindOfClass:[EaseRoundProgressView class]];
 
     EaseProgressHUDMode mode = self.mode;
     if (mode == EaseProgressHUDModeIndeterminate) {
@@ -390,18 +390,18 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
     else if (mode == EaseProgressHUDModeDeterminateHorizontalBar) {
         // Update to bar determinate indicator
         [indicator removeFromSuperview];
-        indicator = [[MBBarProgressView alloc] init];
+        indicator = [[EaseBarProgressView alloc] init];
         [self.bezelView addSubview:indicator];
     }
     else if (mode == EaseProgressHUDModeDeterminate || mode == EaseProgressHUDModeAnnularDeterminate) {
         if (!isRoundIndicator) {
             // Update to determinante indicator
             [indicator removeFromSuperview];
-            indicator = [[MBRoundProgressView alloc] init];
+            indicator = [[EaseRoundProgressView alloc] init];
             [self.bezelView addSubview:indicator];
         }
         if (mode == EaseProgressHUDModeAnnularDeterminate) {
-            [(MBRoundProgressView *)indicator setAnnular:YES];
+            [(EaseRoundProgressView *)indicator setAnnular:YES];
         }
     }
     else if (mode == EaseProgressHUDModeCustomView && self.customView != indicator) {
@@ -450,31 +450,31 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
         if (appearance.color == nil) {
             ((UIActivityIndicatorView *)indicator).color = color;
         }
-    } else if ([indicator isKindOfClass:[MBRoundProgressView class]]) {
-        MBRoundProgressView *appearance = nil;
+    } else if ([indicator isKindOfClass:[EaseRoundProgressView class]]) {
+        EaseRoundProgressView *appearance = nil;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 90000
-        appearance = [MBRoundProgressView appearanceWhenContainedIn:[EaseProgressHUD class], nil];
+        appearance = [EaseRoundProgressView appearanceWhenContainedIn:[EaseProgressHUD class], nil];
 #else
-        appearance = [MBRoundProgressView appearanceWhenContainedInInstancesOfClasses:@[[EaseProgressHUD class]]];
+        appearance = [EaseRoundProgressView appearanceWhenContainedInInstancesOfClasses:@[[EaseProgressHUD class]]];
 #endif
         if (appearance.progressTintColor == nil) {
-            ((MBRoundProgressView *)indicator).progressTintColor = color;
+            ((EaseRoundProgressView *)indicator).progressTintColor = color;
         }
         if (appearance.backgroundTintColor == nil) {
-            ((MBRoundProgressView *)indicator).backgroundTintColor = [color colorWithAlphaComponent:0.1];
+            ((EaseRoundProgressView *)indicator).backgroundTintColor = [color colorWithAlphaComponent:0.1];
         }
-    } else if ([indicator isKindOfClass:[MBBarProgressView class]]) {
-        MBBarProgressView *appearance = nil;
+    } else if ([indicator isKindOfClass:[EaseBarProgressView class]]) {
+        EaseBarProgressView *appearance = nil;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 90000
-        appearance = [MBBarProgressView appearanceWhenContainedIn:[EaseProgressHUD class], nil];
+        appearance = [EaseBarProgressView appearanceWhenContainedIn:[EaseProgressHUD class], nil];
 #else
-        appearance = [MBBarProgressView appearanceWhenContainedInInstancesOfClasses:@[[EaseProgressHUD class]]];
+        appearance = [EaseBarProgressView appearanceWhenContainedInInstancesOfClasses:@[[EaseProgressHUD class]]];
 #endif
         if (appearance.progressColor == nil) {
-            ((MBBarProgressView *)indicator).progressColor = color;
+            ((EaseBarProgressView *)indicator).progressColor = color;
         }
         if (appearance.lineColor == nil) {
-            ((MBBarProgressView *)indicator).lineColor = color;
+            ((EaseBarProgressView *)indicator).lineColor = color;
         }
     } else {
         [indicator setTintColor:color];
@@ -482,7 +482,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 }
 
 - (void)updateBezelMotionEffects {
-    MBBackgroundView *bezelView = self.bezelView;
+    EaseBackgroundView *bezelView = self.bezelView;
     UIMotionEffectGroup *bezelMotionEffects = self.bezelMotionEffects;
 
     if (self.defaultMotionEffectsEnabled && !bezelMotionEffects) {
@@ -619,7 +619,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
         BOOL secondVisible = !secondView.hidden && !CGSizeEqualToSize(secondView.intrinsicContentSize, CGSizeZero);
         // Set if both views are visible or if there's a visible view on top that doesn't have padding
         // added relative to the current view yet
-        padding.constant = (firstVisible && (secondVisible || hasVisibleAncestors)) ? MBDefaultPadding : 0.f;
+        padding.constant = (firstVisible && (secondVisible || hasVisibleAncestors)) ? EaseDefaultPadding : 0.f;
         hasVisibleAncestors |= secondVisible;
     }];
 }
@@ -808,7 +808,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 @end
 
 
-@implementation MBRoundProgressView
+@implementation EaseRoundProgressView
 
 #pragma mark - Lifecycle
 
@@ -915,7 +915,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 @end
 
 
-@implementation MBBarProgressView
+@implementation EaseBarProgressView
 
 #pragma mark - Lifecycle
 
@@ -1044,14 +1044,14 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 @end
 
 
-@interface MBBackgroundView ()
+@interface EaseBackgroundView ()
 
 @property UIVisualEffectView *effectView;
 
 @end
 
 
-@implementation MBBackgroundView
+@implementation EaseBackgroundView
 
 #pragma mark - Lifecycle
 

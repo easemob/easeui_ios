@@ -287,7 +287,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
             // will retain its target until it is invalidated. We use a weak proxy so that the image view will get deallocated
             // independent of the display link's lifetime. Upon image view deallocation, we invalidate the display
             // link which will lead to the deallocation of both the display link and the weak proxy.
-            FLWeakProxy *weakProxy = [FLWeakProxy weakProxyForObject:self];
+            EaseAnimateWeakProxy *weakProxy = [EaseAnimateWeakProxy weakProxyForObject:self];
             self.displayLink = [CADisplayLink displayLinkWithTarget:weakProxy selector:@selector(displayDidRefresh:)];
             
             [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:self.runLoopMode];
@@ -296,7 +296,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
         // Note: The display link's `.frameInterval` value of 1 (default) means getting callbacks at the refresh rate of the display (~60Hz).
         // Setting it to 2 divides the frame rate by 2 and hence calls back at every other display refresh.
         const NSTimeInterval kDisplayRefreshRate = 60.0; // 60Hz
-        self.displayLink.frameInterval = MAX([self frameDelayGreatestCommonDivisor] * kDisplayRefreshRate, 1);
+        self.displayLink.preferredFramesPerSecond = MAX([self frameDelayGreatestCommonDivisor] * kDisplayRefreshRate, 1);
 
         self.displayLink.paused = NO;
     } else {
@@ -364,7 +364,7 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
     // If for some reason a wild call makes it through when we shouldn't be animating, bail.
     // Early return!
     if (!self.shouldAnimate) {
-        FLLog(FLLogLevelWarn, @"Trying to animate image when we shouldn't: %@", self);
+        EaseLog(EaseLogLevelWarn, @"Trying to animate image when we shouldn't: %@", self);
         return;
     }
     
@@ -375,14 +375,14 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
         // If we have a nil image (e.g. waiting for frame), don't update the view nor playhead.
         UIImage *image = [self.animatedImage imageLazilyCachedAtIndex:self.currentFrameIndex];
         if (image) {
-            FLLog(FLLogLevelVerbose, @"Showing frame %lu for animated image: %@", (unsigned long)self.currentFrameIndex, self.animatedImage);
+            EaseLog(EaseLogLevelVerbose, @"Showing frame %lu for animated image: %@", (unsigned long)self.currentFrameIndex, self.animatedImage);
             self.currentFrame = image;
             if (self.needsDisplayWhenImageBecomesAvailable) {
                 [self.layer setNeedsDisplay];
                 self.needsDisplayWhenImageBecomesAvailable = NO;
             }
             
-            self.accumulator += displayLink.duration * displayLink.frameInterval;
+            self.accumulator += displayLink.duration * displayLink.preferredFramesPerSecond;
             
             // While-loop first inspired by & good Karma to: https://github.com/ondalabs/OLImageView/blob/master/OLImageView.m
             while (self.accumulator >= delayTime) {
@@ -406,10 +406,10 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
                 self.needsDisplayWhenImageBecomesAvailable = YES;
             }
         } else {
-            FLLog(FLLogLevelDebug, @"Waiting for frame %lu for animated image: %@", (unsigned long)self.currentFrameIndex, self.animatedImage);
+            EaseLog(EaseLogLevelDebug, @"Waiting for frame %lu for animated image: %@", (unsigned long)self.currentFrameIndex, self.animatedImage);
 #if defined(DEBUG) && DEBUG
             if ([self.debug_delegate respondsToSelector:@selector(debug_animatedImageView:waitingForFrame:duration:)]) {
-                [self.debug_delegate debug_animatedImageView:self waitingForFrame:self.currentFrameIndex duration:(NSTimeInterval)displayLink.duration * displayLink.frameInterval];
+                [self.debug_delegate debug_animatedImageView:self waitingForFrame:self.currentFrameIndex duration:(NSTimeInterval)displayLink.duration * displayLink.preferredFramesPerSecond];
             }
 #endif
         }

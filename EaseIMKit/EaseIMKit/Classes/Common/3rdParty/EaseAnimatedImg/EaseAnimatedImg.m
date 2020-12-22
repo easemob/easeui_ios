@@ -66,7 +66,7 @@ typedef NS_ENUM(NSUInteger, EaseAnimatedImgFrameCacheSize) {
 
 // The weak proxy is used to break retain cycles with delayed actions from memory warnings.
 // We are lying about the actual type here to gain static type checking and eliminate casts.
-// The actual type of the object is `FLWeakProxy`.
+// The actual type of the object is `EaseAnimateWeakProxy`.
 @property (nonatomic, strong, readonly) EaseAnimatedImg *weakProxy;
 
 #if defined(DEBUG) && DEBUG
@@ -166,7 +166,7 @@ static NSHashTable *allAnimatedImagesWeak;
 {
     EaseAnimatedImg *animatedImage = [self initWithAnimatedGIFData:nil];
     if (!animatedImage) {
-        FLLog(FLLogLevelError, @"Use `-initWithAnimatedGIFData:` and supply the animated GIF data as an argument to initialize an object of type `EaseAnimatedImg`.");
+        EaseLog(EaseLogLevelError, @"Use `-initWithAnimatedGIFData:` and supply the animated GIF data as an argument to initialize an object of type `EaseAnimatedImg`.");
     }
     return animatedImage;
 }
@@ -182,7 +182,7 @@ static NSHashTable *allAnimatedImagesWeak;
     // Early return if no data supplied!
     BOOL hasData = ([data length] > 0);
     if (!hasData) {
-        FLLog(FLLogLevelError, @"No animated GIF data supplied.");
+        EaseLog(EaseLogLevelError, @"No animated GIF data supplied.");
         return nil;
     }
     
@@ -205,7 +205,7 @@ static NSHashTable *allAnimatedImagesWeak;
                                                    (__bridge CFDictionaryRef)@{(NSString *)kCGImageSourceShouldCache: @NO});
         // Early return on failure!
         if (!_imageSource) {
-            FLLog(FLLogLevelError, @"Failed to `CGImageSourceCreateWithData` for animated GIF data %@", data);
+            EaseLog(EaseLogLevelError, @"Failed to `CGImageSourceCreateWithData` for animated GIF data %@", data);
             return nil;
         }
         
@@ -213,7 +213,7 @@ static NSHashTable *allAnimatedImagesWeak;
         CFStringRef imageSourceContainerType = CGImageSourceGetType(_imageSource);
         BOOL isGIFData = UTTypeConformsTo(imageSourceContainerType, kUTTypeGIF);
         if (!isGIFData) {
-            FLLog(FLLogLevelError, @"Supplied data is of type %@ and doesn't seem to be GIF data %@", imageSourceContainerType, data);
+            EaseLog(EaseLogLevelError, @"Supplied data is of type %@ and doesn't seem to be GIF data %@", imageSourceContainerType, data);
             return nil;
         }
         
@@ -278,28 +278,28 @@ static NSHashTable *allAnimatedImagesWeak;
                         const NSTimeInterval kDelayTimeIntervalDefault = 0.1;
                         if (!delayTime) {
                             if (i == 0) {
-                                FLLog(FLLogLevelInfo, @"Falling back to default delay time for first frame %@ because none found in GIF properties %@", frameImage, frameProperties);
+                                EaseLog(EaseLogLevelInfo, @"Falling back to default delay time for first frame %@ because none found in GIF properties %@", frameImage, frameProperties);
                                 delayTime = @(kDelayTimeIntervalDefault);
                             } else {
-                                FLLog(FLLogLevelInfo, @"Falling back to preceding delay time for frame %zu %@ because none found in GIF properties %@", i, frameImage, frameProperties);
+                                EaseLog(EaseLogLevelInfo, @"Falling back to preceding delay time for frame %zu %@ because none found in GIF properties %@", i, frameImage, frameProperties);
                                 delayTime = delayTimesForIndexesMutable[@(i - 1)];
                             }
                         }
                         // Support frame delays as low as `kEaseAnimatedImgDelayTimeIntervalMinimum`, with anything below being rounded up to `kDelayTimeIntervalDefault` for legacy compatibility.
                         // To support the minimum even when rounding errors occur, use an epsilon when comparing. We downcast to float because that's what we get for delayTime from ImageIO.
                         if ([delayTime floatValue] < ((float)kEaseAnimatedImgDelayTimeIntervalMinimum - FLT_EPSILON)) {
-                            FLLog(FLLogLevelInfo, @"Rounding frame %zu's `delayTime` from %f up to default %f (minimum supported: %f).", i, [delayTime floatValue], kDelayTimeIntervalDefault, kEaseAnimatedImgDelayTimeIntervalMinimum);
+                            EaseLog(EaseLogLevelInfo, @"Rounding frame %zu's `delayTime` from %f up to default %f (minimum supported: %f).", i, [delayTime floatValue], kDelayTimeIntervalDefault, kEaseAnimatedImgDelayTimeIntervalMinimum);
                             delayTime = @(kDelayTimeIntervalDefault);
                         }
                         delayTimesForIndexesMutable[@(i)] = delayTime;
                     } else {
                         skippedFrameCount++;
-                        FLLog(FLLogLevelInfo, @"Dropping frame %zu because valid `CGImageRef` %@ did result in `nil`-`UIImage`.", i, frameImageRef);
+                        EaseLog(EaseLogLevelInfo, @"Dropping frame %zu because valid `CGImageRef` %@ did result in `nil`-`UIImage`.", i, frameImageRef);
                     }
                     CFRelease(frameImageRef);
                 } else {
                     skippedFrameCount++;
-                    FLLog(FLLogLevelInfo, @"Dropping frame %zu because failed to `CGImageSourceCreateImageAtIndex` with image source %@", i, _imageSource);
+                    EaseLog(EaseLogLevelInfo, @"Dropping frame %zu because failed to `CGImageSourceCreateImageAtIndex` with image source %@", i, self.imageSource);
                 }
             }
         }
@@ -307,11 +307,11 @@ static NSHashTable *allAnimatedImagesWeak;
         _frameCount = imageCount;
         
         if (self.frameCount == 0) {
-            FLLog(FLLogLevelInfo, @"Failed to create any valid frames for GIF with properties %@", imageProperties);
+            EaseLog(EaseLogLevelInfo, @"Failed to create any valid frames for GIF with properties %@", imageProperties);
             return nil;
         } else if (self.frameCount == 1) {
             // Warn when we only have a single frame but return a valid GIF.
-            FLLog(FLLogLevelInfo, @"Created valid GIF but with only a single frame. Image properties: %@", imageProperties);
+            EaseLog(EaseLogLevelInfo, @"Created valid GIF but with only a single frame. Image properties: %@", imageProperties);
         } else {
             // We have multiple frames, rock on!
         }
@@ -341,7 +341,7 @@ static NSHashTable *allAnimatedImagesWeak;
         _allFramesIndexSet = [[NSIndexSet alloc] initWithIndexesInRange:NSMakeRange(0, self.frameCount)];
         
         // See the property declarations for descriptions.
-        _weakProxy = (id)[FLWeakProxy weakProxyForObject:self];
+        _weakProxy = (id)[EaseAnimateWeakProxy weakProxyForObject:self];
         
         // Register this instance in the weak table for memory notifications. The NSHashTable will clean up after itself when we're gone.
         // Note that EaseAnimatedImgs can be created on any thread, so the hash table must be locked.
@@ -381,7 +381,7 @@ static NSHashTable *allAnimatedImagesWeak;
     // Early return if the requested index is beyond bounds.
     // Note: We're comparing an index with a count and need to bail on greater than or equal to.
     if (index >= self.frameCount) {
-        FLLog(FLLogLevelWarn, @"Skipping requested frame %lu beyond bounds (total frame count: %lu) for animated image: %@", (unsigned long)index, (unsigned long)self.frameCount, self);
+        EaseLog(EaseLogLevelWarn, @"Skipping requested frame %lu beyond bounds (total frame count: %lu) for animated image: %@", (unsigned long)index, (unsigned long)self.frameCount, self);
         return nil;
     }
     
@@ -427,7 +427,7 @@ static NSHashTable *allAnimatedImagesWeak;
     NSRange firstRange = NSMakeRange(self.requestedFrameIndex, self.frameCount - self.requestedFrameIndex);
     NSRange secondRange = NSMakeRange(0, self.requestedFrameIndex);
     if (firstRange.length + secondRange.length != self.frameCount) {
-        FLLog(FLLogLevelWarn, @"Two-part frame cache range doesn't equal full range.");
+        EaseLog(EaseLogLevelWarn, @"Two-part frame cache range doesn't equal full range.");
     }
     
     // Add to the requested list before we actually kick them off, so they don't get into the queue twice.
@@ -458,7 +458,7 @@ static NSHashTable *allAnimatedImagesWeak;
                     slowdownDuration = predrawDuration * predrawingSlowdownFactor - predrawDuration;
                     [NSThread sleepForTimeInterval:slowdownDuration];
                 }
-                FLLog(FLLogLevelVerbose, @"Predrew frame %lu in %f ms for animated image: %@", (unsigned long)i, (predrawDuration + slowdownDuration) * 1000, self);
+                EaseLog(EaseLogLevelVerbose, @"Predrew frame %lu in %f ms for animated image: %@", (unsigned long)i, (predrawDuration + slowdownDuration) * 1000, self);
 #endif
                 // The results get returned one by one as soon as they're ready (and not in batch).
                 // The benefits of having the first frames as quick as possible outweigh building up a buffer to cope with potential hiccups when the CPU suddenly gets busy.
@@ -500,7 +500,7 @@ static NSHashTable *allAnimatedImagesWeak;
         imageSize = animatedImage.size;
     } else {
         // Bear trap to capture bad images; we have seen crashers cropping up on iOS 7.
-        FLLog(FLLogLevelError, @"`image` isn't of expected types `UIImage` or `EaseAnimatedImg`: %@", image);
+        EaseLog(EaseLogLevelError, @"`image` isn't of expected types `UIImage` or `EaseAnimatedImg`: %@", image);
     }
     
     return imageSize;
@@ -555,7 +555,7 @@ static NSHashTable *allAnimatedImagesWeak;
         }
         // Double check our math, before we add the poster image index which may increase it by one.
         if ([indexesToCache count] != self.frameCacheSizeCurrent) {
-            FLLog(FLLogLevelWarn, @"Number of frames to cache doesn't equal expected cache size.");
+            EaseLog(EaseLogLevelWarn, @"Number of frames to cache doesn't equal expected cache size.");
         }
         
         [indexesToCache addIndex:self.posterImageFrameIndex];
@@ -595,7 +595,7 @@ static NSHashTable *allAnimatedImagesWeak;
 - (void)growFrameCacheSizeAfterMemoryWarning:(NSNumber *)frameCacheSize
 {
     self.frameCacheSizeMaxInternal = [frameCacheSize unsignedIntegerValue];
-    FLLog(FLLogLevelDebug, @"Grew frame cache size max to %lu after memory warning for animated image: %@", (unsigned long)self.frameCacheSizeMaxInternal, self);
+    EaseLog(EaseLogLevelDebug, @"Grew frame cache size max to %lu after memory warning for animated image: %@", (unsigned long)self.frameCacheSizeMaxInternal, self);
     
     // Schedule resetting the frame cache size max completely after a while.
     const NSTimeInterval kResetDelay = 3.0;
@@ -606,7 +606,7 @@ static NSHashTable *allAnimatedImagesWeak;
 - (void)resetFrameCacheSizeMaxInternal
 {
     self.frameCacheSizeMaxInternal = EaseAnimatedImgFrameCacheSizeNoLimit;
-    FLLog(FLLogLevelDebug, @"Reset frame cache size max (current frame cache size: %lu) for animated image: %@", (unsigned long)self.frameCacheSizeCurrent, self);
+    EaseLog(EaseLogLevelDebug, @"Reset frame cache size max (current frame cache size: %lu) for animated image: %@", (unsigned long)self.frameCacheSizeCurrent, self);
 }
 
 
@@ -621,7 +621,7 @@ static NSHashTable *allAnimatedImagesWeak;
     [NSObject cancelPreviousPerformRequestsWithTarget:self.weakProxy selector:@selector(resetFrameCacheSizeMaxInternal) object:nil];
     
     // Go down to the minimum and by that implicitly immediately purge from the cache if needed to not get jettisoned by the system and start producing frames on-demand.
-    FLLog(FLLogLevelDebug, @"Attempt setting frame cache size max to %lu (previous was %lu) after memory warning #%lu for animated image: %@", (unsigned long)EaseAnimatedImgFrameCacheSizeLowMemory, (unsigned long)self.frameCacheSizeMaxInternal, (unsigned long)self.memoryWarningCount, self);
+    EaseLog(EaseLogLevelDebug, @"Attempt setting frame cache size max to %lu (previous was %lu) after memory warning #%lu for animated image: %@", (unsigned long)EaseAnimatedImgFrameCacheSizeLowMemory, (unsigned long)self.frameCacheSizeMaxInternal, (unsigned long)self.memoryWarningCount, self);
     self.frameCacheSizeMaxInternal = EaseAnimatedImgFrameCacheSizeLowMemory;
     
     // Schedule growing larger again after a while, but cap our attempts to prevent a periodic sawtooth wave (ramps upward and then sharply drops) of memory usage.
@@ -658,7 +658,7 @@ static NSHashTable *allAnimatedImagesWeak;
     CGColorSpaceRef colorSpaceDeviceRGBRef = CGColorSpaceCreateDeviceRGB();
     // Early return on failure!
     if (!colorSpaceDeviceRGBRef) {
-        FLLog(FLLogLevelError, @"Failed to `CGColorSpaceCreateDeviceRGB` for image %@", imageToPredraw);
+        EaseLog(EaseLogLevelError, @"Failed to `CGColorSpaceCreateDeviceRGB` for image %@", imageToPredraw);
         return imageToPredraw;
     }
     
@@ -698,7 +698,7 @@ static NSHashTable *allAnimatedImagesWeak;
     CGColorSpaceRelease(colorSpaceDeviceRGBRef);
     // Early return on failure!
     if (!bitmapContextRef) {
-        FLLog(FLLogLevelError, @"Failed to `CGBitmapContextCreate` with color space %@ and parameters (width: %zu height: %zu bitsPerComponent: %zu bytesPerRow: %zu) for image %@", colorSpaceDeviceRGBRef, width, height, bitsPerComponent, bytesPerRow, imageToPredraw);
+        EaseLog(EaseLogLevelError, @"Failed to `CGBitmapContextCreate` with color space %@ and parameters (width: %zu height: %zu bitsPerComponent: %zu bytesPerRow: %zu) for image %@", colorSpaceDeviceRGBRef, width, height, bitsPerComponent, bytesPerRow, imageToPredraw);
         return imageToPredraw;
     }
     
@@ -711,7 +711,7 @@ static NSHashTable *allAnimatedImagesWeak;
     
     // Early return on failure!
     if (!predrawnImage) {
-        FLLog(FLLogLevelError, @"Failed to `imageWithCGImage:scale:orientation:` with image ref %@ created with color space %@ and bitmap context %@ and properties and properties (scale: %f orientation: %ld) for image %@", predrawnImageRef, colorSpaceDeviceRGBRef, bitmapContextRef, imageToPredraw.scale, (long)imageToPredraw.imageOrientation, imageToPredraw);
+        EaseLog(EaseLogLevelError, @"Failed to `imageWithCGImage:scale:orientation:` with image ref %@ created with color space %@ and bitmap context %@ and properties and properties (scale: %f orientation: %ld) for image %@", predrawnImageRef, colorSpaceDeviceRGBRef, bitmapContextRef, imageToPredraw.scale, (long)imageToPredraw.imageOrientation, imageToPredraw);
         return imageToPredraw;
     }
     
@@ -738,16 +738,16 @@ static NSHashTable *allAnimatedImagesWeak;
 
 @implementation EaseAnimatedImg (Logging)
 
-static void (^_logBlock)(NSString *logString, FLLogLevel logLevel) = nil;
-static FLLogLevel _logLevel;
+static void (^_logBlock)(NSString *logString, EaseLogLevel logLevel) = nil;
+static EaseLogLevel _logLevel;
 
-+ (void)setLogBlock:(void (^)(NSString *logString, FLLogLevel logLevel))logBlock logLevel:(FLLogLevel)logLevel
++ (void)setLogBlock:(void (^)(NSString *logString, EaseLogLevel logLevel))logBlock logLevel:(EaseLogLevel)logLevel
 {
     _logBlock = logBlock;
     _logLevel = logLevel;
 }
 
-+ (void)logStringFromBlock:(NSString *(^)(void))stringBlock withLevel:(FLLogLevel)level
++ (void)logStringFromBlock:(NSString *(^)(void))stringBlock withLevel:(EaseLogLevel)level
 {
     if (level <= _logLevel && _logBlock && stringBlock) {
         _logBlock(stringBlock(), level);
@@ -757,24 +757,24 @@ static FLLogLevel _logLevel;
 @end
 
 
-#pragma mark - FLWeakProxy
+#pragma mark - EaseAnimateWeakProxy
 
-@interface FLWeakProxy ()
+@interface EaseAnimateWeakProxy ()
 
 @property (nonatomic, weak) id target;
 
 @end
 
 
-@implementation FLWeakProxy
+@implementation EaseAnimateWeakProxy
 
 #pragma mark Life Cycle
 
-// This is the designated creation method of an `FLWeakProxy` and
+// This is the designated creation method of an `EaseAnimateWeakProxy` and
 // as a subclass of `NSProxy` it doesn't respond to or need `-init`.
 + (instancetype)weakProxyForObject:(id)targetObject
 {
-    FLWeakProxy *weakProxy = [FLWeakProxy alloc];
+    EaseAnimateWeakProxy *weakProxy = [EaseAnimateWeakProxy alloc];
     weakProxy.target = targetObject;
     return weakProxy;
 }

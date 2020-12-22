@@ -1,8 +1,11 @@
 PODS:
   - EaseIMKit (1.0.0.1):
     - EMVoiceConvert
+    - FLAnimatedImage
     - Hyphenate
+    - MBProgressHUD
   - EMVoiceConvert (0.0.6)
+  - FLAnimatedImage (1.0.12)
   - Hyphenate (3.7.2)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
@@ -11,6 +14,7 @@ PODS:
 DEPENDENCIES:
   - EaseIMKit (from `./`)
   - EMVoiceConvert
+  - FLAnimatedImage
   - Hyphenate
   - Masonry
   - MBProgressHUD
@@ -19,6 +23,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - EMVoiceConvert
+    - FLAnimatedImage
     - Hyphenate
     - Masonry
     - MBProgressHUD
@@ -29,13 +34,14 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  EaseIMKit: ebf1f4e393491108b544ac4d47ce363806f9d4aa
+  EaseIMKit: 15a80a2e5467e3b90045a3a71366498afe53f0f0
   EMVoiceConvert: e52b9918199a8f1d1ad3041e71b569a9bc165bb5
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Hyphenate: a9da397810e08c4b3173a5c8f04868165ec48b9c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
 
-PODFILE CHECKSUM: fd0bb0e110ab333c981d986869706b5ebab610e9
+PODFILE CHECKSUM: fcc225306273f219daef22204a7e10417070b5ed
 
 COCOAPODS: 1.10.0

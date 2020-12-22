@@ -59,25 +59,25 @@ extern const NSTimeInterval kEaseAnimatedImgDelayTimeIntervalMinimum;
 
 @end
 
-typedef NS_ENUM(NSUInteger, FLLogLevel) {
-    FLLogLevelNone = 0,
-    FLLogLevelError,
-    FLLogLevelWarn,
-    FLLogLevelInfo,
-    FLLogLevelDebug,
-    FLLogLevelVerbose
+typedef NS_ENUM(NSUInteger, EaseLogLevel) {
+    EaseLogLevelNone = 0,
+    EaseLogLevelError,
+    EaseLogLevelWarn,
+    EaseLogLevelInfo,
+    EaseLogLevelDebug,
+    EaseLogLevelVerbose
 };
 
 @interface EaseAnimatedImg (Logging)
 
-+ (void)setLogBlock:(void (^)(NSString *logString, FLLogLevel logLevel))logBlock logLevel:(FLLogLevel)logLevel;
-+ (void)logStringFromBlock:(NSString *(^)(void))stringBlock withLevel:(FLLogLevel)level;
++ (void)setLogBlock:(void (^)(NSString *logString, EaseLogLevel logLevel))logBlock logLevel:(EaseLogLevel)logLevel;
++ (void)logStringFromBlock:(NSString *(^)(void))stringBlock withLevel:(EaseLogLevel)level;
 
 @end
 
-#define FLLog(logLevel, format, ...) [EaseAnimatedImg logStringFromBlock:^NSString *{ return [NSString stringWithFormat:(format), ## __VA_ARGS__]; } withLevel:(logLevel)]
+#define EaseLog(logLevel, format, ...) [EaseAnimatedImg logStringFromBlock:^NSString *{ return [NSString stringWithFormat:(format), ## __VA_ARGS__]; } withLevel:(logLevel)]
 
-@interface FLWeakProxy : NSProxy
+@interface EaseAnimateWeakProxy : NSProxy
 
 + (instancetype)weakProxyForObject:(id)targetObject;
 

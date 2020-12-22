@@ -26,5 +26,7 @@ Pod::Spec.new do |s|
   s.libraries = 'stdc++'
   s.dependency 'EMVoiceConvert'
   s.dependency 'Hyphenate'
+  s.dependency 'FLAnimatedImage'
+  s.dependency 'MBProgressHUD'
 
 end
