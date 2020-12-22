@@ -38,7 +38,6 @@
 		903EAEAF25540B89005E6BB1 /* MineViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MineViewController.m; sourceTree = "<group>"; };
 		903EAEB325540B9F005E6BB1 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		903EAEB425540B9F005E6BB1 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		9089359E2576596900F50368 /* EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90A03A29254A70E100D57B73 /* EaseIMKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EaseIMKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90A03A2C254A70E100D57B73 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		90A03A2D254A70E100D57B73 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -79,7 +78,6 @@
 			isa = PBXGroup;
 			children = (
 				3C83DA24258089FB00AA2C8D /* EaseIMKit.framework */,
-				9089359E2576596900F50368 /* EaseIMKit.framework */,
 				B50F8963572ABA8071693908 /* Pods_EaseIMKitDemo.framework */,
 			);
 			name = Frameworks;

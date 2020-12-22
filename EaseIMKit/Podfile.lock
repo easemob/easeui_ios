@@ -4,16 +4,25 @@ PODS:
     - Hyphenate
   - EMVoiceConvert (0.0.6)
   - Hyphenate (3.7.2)
+  - Masonry (1.1.0)
+  - MBProgressHUD (1.2.0)
+  - MJRefresh (3.5.0)
 
 DEPENDENCIES:
   - EaseIMKit (from `./`)
   - EMVoiceConvert
   - Hyphenate
+  - Masonry
+  - MBProgressHUD
+  - MJRefresh
 
 SPEC REPOS:
   trunk:
     - EMVoiceConvert
     - Hyphenate
+    - Masonry
+    - MBProgressHUD
+    - MJRefresh
 
 EXTERNAL SOURCES:
   EaseIMKit:
@@ -23,7 +32,10 @@ SPEC CHECKSUMS:
   EaseIMKit: ebf1f4e393491108b544ac4d47ce363806f9d4aa
   EMVoiceConvert: e52b9918199a8f1d1ad3041e71b569a9bc165bb5
   Hyphenate: a9da397810e08c4b3173a5c8f04868165ec48b9c
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
 
-PODFILE CHECKSUM: a3c71cad368d55d1c101c2c0dde29eabc8e86755
+PODFILE CHECKSUM: fd0bb0e110ab333c981d986869706b5ebab610e9
 
 COCOAPODS: 1.10.0
