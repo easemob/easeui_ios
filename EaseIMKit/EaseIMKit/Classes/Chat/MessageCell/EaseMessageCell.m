@@ -246,6 +246,8 @@
             bubbleView = [[EMMsgExtGifBubbleView alloc] initWithDirection:self.direction type:aType viewModel:_viewModel];
             break;
         case EMMessageTypeCustom:
+            bubbleView = [[EMMessageBubbleView alloc] initWithDirection:self.direction type:aType
+                viewModel:_viewModel];
             break;
         default:
             break;

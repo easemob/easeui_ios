@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OneLoadingAnimationView : UIView
+@interface EaseOneLoadingAnimationView : UIView
 - (void)startAnimation;
 
 - (void)stopTimer;

@@ -6,21 +6,21 @@
 //  Copyright © 2015年 chenms.m2. All rights reserved.
 //
 
-#import "OneLoadingAnimationView.h"
-#import "LoadingCALayer.h"
+#import "EaseOneLoadingAnimationView.h"
+#import "EaseLoadingCALayer.h"
 
 static CGFloat kRadius = 9;
 static CGFloat kLineWidth = 2;
 static CGFloat kStep1Duration = 3.0;
 
-@interface OneLoadingAnimationView ()
+@interface EaseOneLoadingAnimationView ()
 {
     NSTimer *_timer;
 }
-@property (nonatomic) LoadingCALayer *arcToCircleLayer;
+@property (nonatomic) EaseLoadingCALayer *arcToCircleLayer;
 @end
 
-@implementation OneLoadingAnimationView
+@implementation EaseOneLoadingAnimationView
 
 - (instancetype)initWithRadius:(CGFloat)radius
 {
@@ -37,7 +37,7 @@ static CGFloat kStep1Duration = 3.0;
 
 #pragma mark - public
 - (void)startAnimation {
-    //self.arcToCircleLayer = [LoadingCALayer layer];
+    //self.arcToCircleLayer = [EaseLoadingCALayer layer];
     
     [self startTimer];
 }
@@ -48,7 +48,7 @@ static CGFloat kStep1Duration = 3.0;
 }
 
 - (void)doStep {
-    self.arcToCircleLayer = [LoadingCALayer layer];
+    self.arcToCircleLayer = [EaseLoadingCALayer layer];
     self.arcToCircleLayer.contentsScale = [UIScreen mainScreen].scale;
     [self.layer addSublayer:self.arcToCircleLayer];
 

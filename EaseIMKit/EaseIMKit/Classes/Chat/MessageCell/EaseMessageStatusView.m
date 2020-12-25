@@ -7,8 +7,8 @@
 //
 
 #import "EaseMessageStatusView.h"
-#import "LoadingCALayer.h"
-#import "OneLoadingAnimationView.h"
+#import "EaseLoadingCALayer.h"
+#import "EaseOneLoadingAnimationView.h"
 #import "UIImage+EaseUI.h"
 
 @interface EaseMessageStatusView()
@@ -17,7 +17,7 @@
 @property (nonatomic, strong) UIButton *failButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
 
-@property (strong, nonatomic) IBOutlet OneLoadingAnimationView *loadingView;//加载view
+@property (strong, nonatomic) IBOutlet EaseOneLoadingAnimationView *loadingView;//加载view
 
 @property (nonatomic, strong) NSTimer *timer;
 
@@ -63,7 +63,7 @@
 - (UIView *)loadingView
 {
     if (_loadingView == nil) {
-        _loadingView = [[OneLoadingAnimationView alloc]initWithRadius:9.0];
+        _loadingView = [[EaseOneLoadingAnimationView alloc]initWithRadius:9.0];
         //_loadingView.backgroundColor = [UIColor lightGrayColor];
     }
     return _loadingView;

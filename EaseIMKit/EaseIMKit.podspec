@@ -10,23 +10,21 @@ Pod::Spec.new do |s|
   s.description = <<-DESC
                     EaseIMKit Supported features:
                     1. Conversation list
-                    2. Chat page (singleChat,groupChat,chatRoom)
-                    3. Contact list
-                  DESC
-  s.author = { 'easemob' => 'dev@easemob.com' }
-  s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKit_1.0.0.zip' }
-  
+                                        2. Chat page (singleChat,groupChat,chatRoom)
+                                        3. Contact list
+                                                      DESC
+      s.author = { 'easemob' => 'dev@easemob.com' }
+      #s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKit_1.0.0.zip' }
+      s.source = { :git => 'https://github.com/MThrone/easeui_ios.git', :branch => 'dev' }
+
   s.xcconfig = {'OTHER_LDFLAGS' => '-ObjC'}
-  
+
   s.requires_arc = true
   s.preserve_paths = '*.framework'
   s.vendored_frameworks = '*.framework'
-  
+
   s.frameworks = 'UIKit'
   s.libraries = 'stdc++'
-  s.dependency 'EMVoiceConvert'
-  s.dependency 'Hyphenate'
-  s.dependency 'FLAnimatedImage'
-  s.dependency 'MBProgressHUD'
+  pod 'EMVoiceConvert', '~> 0.1.0'
 
 end

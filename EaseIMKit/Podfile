@@ -5,28 +5,19 @@ platform :ios, '11.0'
 
 workspace 'EaseIMKit.xcworkspace'
 
-target 'EaseIM' do
-  platform :ios, '11.0'
-  project '../../EaseIM/EaseIM/EaseIM.xcodeproj'
-  pod 'Masonry'
-  pod 'MJRefresh'
-  pod 'Hyphenate'
-  pod 'EaseIMKit', :path => './'
-end
 
 target 'EaseIMKitDemo' do
   platform :ios, '11.0'
   project '../EaseIMKitDemo/EaseIMKitDemo.xcodeproj'
   #pod 'Masonry'
-  pod 'Hyphenate'
-  pod 'EaseIMKit', :path => './'
+  #pod 'Hyphenate'
+  #pod 'EaseIMKit', :path => './'
 end
 
 target 'EaseIMKit' do
-  pod 'Hyphenate'
-  pod 'EMVoiceConvert'
-  pod 'FLAnimatedImage'
-  pod 'MBProgressHUD'
+  project './EaseIMKit.xcodeproj'
+  #pod 'Hyphenate'
+  pod 'EMVoiceConvert', '~> 0.1.0'
 end
 
 
