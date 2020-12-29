@@ -1,28 +1,20 @@
 PODS:
   - EMVoiceConvert (0.1.0)
-  - Masonry (1.1.0)
-  - MBProgressHUD (1.2.0)
-  - MJRefresh (3.5.0)
+  - Hyphenate (3.7.2)
 
 DEPENDENCIES:
   - EMVoiceConvert (~> 0.1.0)
-  - Masonry
-  - MBProgressHUD
-  - MJRefresh
+  - Hyphenate
 
 SPEC REPOS:
   trunk:
     - EMVoiceConvert
-    - Masonry
-    - MBProgressHUD
-    - MJRefresh
+    - Hyphenate
 
 SPEC CHECKSUMS:
   EMVoiceConvert: 32a0eaada94d93c151a5abd53ee174cd4e63b01f
-  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
-  MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
+  Hyphenate: a9da397810e08c4b3173a5c8f04868165ec48b9c
 
-PODFILE CHECKSUM: 539f5060a5d2cef80a7f6066fabc6e954dfc4860
+PODFILE CHECKSUM: 559e3784ab78d22081d64c9a305d5d27b027e525
 
 COCOAPODS: 1.10.0

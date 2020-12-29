@@ -25,6 +25,7 @@ Pod::Spec.new do |s|
 
   s.frameworks = 'UIKit'
   s.libraries = 'stdc++'
-  pod 'EMVoiceConvert', '~> 0.1.0'
+  s.dependency 'EMVoiceConvert', '~> 0.1.0'
+  s.dependency 'Hyphenate'
 
 end
