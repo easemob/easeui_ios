@@ -1,20 +1,16 @@
 PODS:
   - EMVoiceConvert (0.1.0)
-  - HyphenateLite (3.7.2)
 
 DEPENDENCIES:
   - EMVoiceConvert (~> 0.1.0)
-  - HyphenateLite
 
 SPEC REPOS:
   trunk:
     - EMVoiceConvert
-    - HyphenateLite
 
 SPEC CHECKSUMS:
   EMVoiceConvert: 32a0eaada94d93c151a5abd53ee174cd4e63b01f
-  HyphenateLite: 7ffceb06c7281245037f0dc05f10b0730d85b4df
 
-PODFILE CHECKSUM: f766d281aee34103a3bdbb297397f6ab5ac17056
+PODFILE CHECKSUM: 6e1038d8220b5e32647464c53cedb9b7d38690e0
 
 COCOAPODS: 1.10.0

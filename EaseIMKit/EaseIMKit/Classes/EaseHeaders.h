@@ -20,6 +20,7 @@
 #import <Hyphenate/Hyphenate.h>
 #else
 #import <HyphenateLite/HyphenateLite.h>
+#endif
 
 #import "Easeonry.h"
 #import "EaseEnums.h"

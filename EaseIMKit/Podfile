@@ -16,7 +16,7 @@ end
 
 target 'EaseIMKit' do
   project './EaseIMKit.xcodeproj'
-  pod 'Hyphenate'
+  #pod 'Hyphenate'
   pod 'EMVoiceConvert', '~> 0.1.0'
 end
 

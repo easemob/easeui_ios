@@ -15,6 +15,7 @@
 #import <Hyphenate/Hyphenate.h>
 #else
 #import <HyphenateLite/HyphenateLite.h>
+#endif
 
 
 #import "EaseEnums.h"

@@ -765,7 +765,6 @@
 		3CC07FCA259B3029001AB997 /* EaseImageAssetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C535F07258B027100444BD5 /* EaseImageAssetManager.m */; };
 		3CC07FCB259B3029001AB997 /* NSButton+EaseWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C535EC4258B027100444BD5 /* NSButton+EaseWebCache.m */; };
 		3CC07FCC259B3029001AB997 /* EaseAvatarNameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 908933C22576571300F50368 /* EaseAvatarNameModel.m */; };
-		3CC07FCE259B3029001AB997 /* Pods_EaseIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EDC24A08E75D110D799738A /* Pods_EaseIMKit.framework */; };
 		3CC07FD1259B3029001AB997 /* msg_send_audio02@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C7538B42590925500A39ADB /* msg_send_audio02@3x.png */; };
 		3CC07FD2259B3029001AB997 /* EmojiExt@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C75388F2590925500A39ADB /* EmojiExt@3x.png */; };
 		3CC07FD3259B3029001AB997 /* msg_send_audio@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C7538C52590925500A39ADB /* msg_send_audio@2x.png */; };
@@ -927,6 +926,7 @@
 		3CFC0D0C258B1B3D0065F8A3 /* EaseAnimatedImgView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFC0D08258B1B3C0065F8A3 /* EaseAnimatedImgView.m */; };
 		3CFC0D0D258B1B3D0065F8A3 /* EaseAnimatedImg.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CFC0D09258B1B3D0065F8A3 /* EaseAnimatedImg.h */; };
 		3CFC0D0E258B1B3D0065F8A3 /* EaseAnimatedImg.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFC0D0A258B1B3D0065F8A3 /* EaseAnimatedImg.m */; };
+		5718B66E2EA98BD8D6B00BE1 /* Pods_EaseIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE29DAE59A682A16690E1B0 /* Pods_EaseIMKit.framework */; };
 		9036F59C25776E66001F62AA /* EaseChatViewController+EaseUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 9036F59A25776E66001F62AA /* EaseChatViewController+EaseUI.h */; };
 		90892DDC25764D0900F50368 /* EaseIMKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 90892DDB25764D0900F50368 /* EaseIMKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		908933F42576571300F50368 /* EaseHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 908933342576571300F50368 /* EaseHeaders.h */; };
@@ -1071,11 +1071,22 @@
 		9089348A2576571300F50368 /* UIViewController+ComponentSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 908933F12576571300F50368 /* UIViewController+ComponentSize.m */; };
 		9089348B2576571300F50368 /* NSObject+Alert.m in Sources */ = {isa = PBXBuildFile; fileRef = 908933F22576571300F50368 /* NSObject+Alert.m */; };
 		9089348C2576571300F50368 /* UIImage+EaseUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 908933F32576571300F50368 /* UIImage+EaseUI.h */; };
-		D74CD1F2E4739C417EB080B7 /* Pods_EaseIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EDC24A08E75D110D799738A /* Pods_EaseIMKit.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3CC080B0259B43EB001AB997 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		0EDC24A08E75D110D799738A /* Pods_EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C535E48258B026200444BD5 /* EaseCompositeConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseCompositeConstraint.h; sourceTree = "<group>"; };
 		3C535E49258B026200444BD5 /* NSLayoutConstraint+EaseDebugAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+EaseDebugAdditions.m"; sourceTree = "<group>"; };
 		3C535E4A258B026200444BD5 /* EaseConstraint+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EaseConstraint+Private.h"; sourceTree = "<group>"; };
@@ -1465,8 +1476,6 @@
 		3CFC0D08258B1B3C0065F8A3 /* EaseAnimatedImgView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseAnimatedImgView.m; sourceTree = "<group>"; };
 		3CFC0D09258B1B3D0065F8A3 /* EaseAnimatedImg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseAnimatedImg.h; sourceTree = "<group>"; };
 		3CFC0D0A258B1B3D0065F8A3 /* EaseAnimatedImg.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseAnimatedImg.m; sourceTree = "<group>"; };
-		3E8513F65D2140A05C4C0E05 /* Pods-EaseIMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.release.xcconfig"; sourceTree = "<group>"; };
-		5DAF2825AD0C5F76221216B6 /* Pods-EaseIMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.debug.xcconfig"; sourceTree = "<group>"; };
 		9036F59A25776E66001F62AA /* EaseChatViewController+EaseUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EaseChatViewController+EaseUI.h"; sourceTree = "<group>"; };
 		90892DD425764C6900F50368 /* EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90892DDB25764D0900F50368 /* EaseIMKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseIMKit.h; sourceTree = "<group>"; };
@@ -1615,6 +1624,9 @@
 		908933F32576571300F50368 /* UIImage+EaseUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+EaseUI.h"; sourceTree = "<group>"; };
 		90A039F0254A6E7600D57B73 /* EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90A039F4254A6E7600D57B73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		919CCD1420694F17248CA5EA /* Pods-EaseIMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.debug.xcconfig"; sourceTree = "<group>"; };
+		D6B505DEA30882602077D9ED /* Pods-EaseIMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.release.xcconfig"; sourceTree = "<group>"; };
+		DAE29DAE59A682A16690E1B0 /* Pods_EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1622,7 +1634,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3CC07FCE259B3029001AB997 /* Pods_EaseIMKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1630,7 +1641,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D74CD1F2E4739C417EB080B7 /* Pods_EaseIMKit.framework in Frameworks */,
+				5718B66E2EA98BD8D6B00BE1 /* Pods_EaseIMKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1640,8 +1651,8 @@
 		10014ED42E2ED355F5DF5B04 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5DAF2825AD0C5F76221216B6 /* Pods-EaseIMKit.debug.xcconfig */,
-				3E8513F65D2140A05C4C0E05 /* Pods-EaseIMKit.release.xcconfig */,
+				919CCD1420694F17248CA5EA /* Pods-EaseIMKit.debug.xcconfig */,
+				D6B505DEA30882602077D9ED /* Pods-EaseIMKit.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -2244,7 +2255,7 @@
 			children = (
 				908930D8257651B100F50368 /* UIKit.framework */,
 				90892DD425764C6900F50368 /* EaseIMKit.framework */,
-				0EDC24A08E75D110D799738A /* Pods_EaseIMKit.framework */,
+				DAE29DAE59A682A16690E1B0 /* Pods_EaseIMKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3173,7 +3184,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3CC0806D259B3029001AB997 /* Build configuration list for PBXNativeTarget "EaseIMKitLite" */;
 			buildPhases = (
-				3CC07E53259B3029001AB997 /* [CP] Check Pods Manifest.lock */,
 				3CC07E54259B3029001AB997 /* Headers */,
 				3CC07F1C259B3029001AB997 /* Sources */,
 				3CC07FCD259B3029001AB997 /* Frameworks */,
@@ -3193,12 +3203,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 90A039F8254A6E7600D57B73 /* Build configuration list for PBXNativeTarget "EaseIMKit" */;
 			buildPhases = (
-				EF710EF62FECCFB489EC1689 /* [CP] Check Pods Manifest.lock */,
+				7E2DAF53B1468601D6458679 /* [CP] Check Pods Manifest.lock */,
 				90A039EB254A6E7600D57B73 /* Headers */,
 				90A039EC254A6E7600D57B73 /* Sources */,
 				90A039ED254A6E7600D57B73 /* Frameworks */,
 				9036F13E25773830001F62AA /* ShellScript */,
 				9036F2D525774B45001F62AA /* Resources */,
+				3CC080B0259B43EB001AB997 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3574,28 +3585,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3CC07E53259B3029001AB997 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-EaseIMKit-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		3CC07FCF259B3029001AB997 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3613,24 +3602,7 @@
 			shellPath = /bin/sh;
 			shellScript = "if [ \"${ACTION}\" = \"build\" ]\nthen\nINSTALL_DIR=${SRCROOT}/Products/${PROJECT_NAME}.framework\nDEVICE_DIR=${BUILD_ROOT}/${CONFIGURATION}-iphoneos/${PROJECT_NAME}.framework\nSIMULATOR_DIR=${BUILD_ROOT}/${CONFIGURATION}-iphonesimulator/${PROJECT_NAME}.framework\nif [ -d \"${INSTALL_DIR}\" ]\nthen\nrm -rf \"${INSTALL_DIR}\"\nfi\nmkdir -p \"${INSTALL_DIR}\"\ncp -R \"${DEVICE_DIR}/\" \"${INSTALL_DIR}/\"\n#ditto \"${DEVICE_DIR}/Headers\" \"${INSTALL_DIR}/Headers\"\nlipo -create \"${DEVICE_DIR}/${PROJECT_NAME}\" \"${SIMULATOR_DIR}/${PROJECT_NAME}\" -output \"${INSTALL_DIR}/${PROJECT_NAME}\"\nopen \"${DEVICE_DIR}\"\nopen \"${SRCROOT}/Products\"\nfi\n";
 		};
-		9036F13E25773830001F62AA /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"${ACTION}\" = \"build\" ]\nthen\nINSTALL_DIR=${SRCROOT}/Products/${PROJECT_NAME}.framework\nDEVICE_DIR=${BUILD_ROOT}/${CONFIGURATION}-iphoneos/${PROJECT_NAME}.framework\nSIMULATOR_DIR=${BUILD_ROOT}/${CONFIGURATION}-iphonesimulator/${PROJECT_NAME}.framework\nif [ -d \"${INSTALL_DIR}\" ]\nthen\nrm -rf \"${INSTALL_DIR}\"\nfi\nmkdir -p \"${INSTALL_DIR}\"\ncp -R \"${DEVICE_DIR}/\" \"${INSTALL_DIR}/\"\n#ditto \"${DEVICE_DIR}/Headers\" \"${INSTALL_DIR}/Headers\"\nlipo -create \"${DEVICE_DIR}/${PROJECT_NAME}\" \"${SIMULATOR_DIR}/${PROJECT_NAME}\" -output \"${INSTALL_DIR}/${PROJECT_NAME}\"\nopen \"${DEVICE_DIR}\"\nopen \"${SRCROOT}/Products\"\nfi\n";
-		};
-		EF710EF62FECCFB489EC1689 /* [CP] Check Pods Manifest.lock */ = {
+		7E2DAF53B1468601D6458679 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3651,6 +3623,23 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		9036F13E25773830001F62AA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${ACTION}\" = \"build\" ]\nthen\nINSTALL_DIR=${SRCROOT}/Products/${PROJECT_NAME}.framework\nDEVICE_DIR=${BUILD_ROOT}/${CONFIGURATION}-iphoneos/${PROJECT_NAME}.framework\nSIMULATOR_DIR=${BUILD_ROOT}/${CONFIGURATION}-iphonesimulator/${PROJECT_NAME}.framework\nif [ -d \"${INSTALL_DIR}\" ]\nthen\nrm -rf \"${INSTALL_DIR}\"\nfi\nmkdir -p \"${INSTALL_DIR}\"\ncp -R \"${DEVICE_DIR}/\" \"${INSTALL_DIR}/\"\n#ditto \"${DEVICE_DIR}/Headers\" \"${INSTALL_DIR}/Headers\"\nlipo -create \"${DEVICE_DIR}/${PROJECT_NAME}\" \"${SIMULATOR_DIR}/${PROJECT_NAME}\" -output \"${INSTALL_DIR}/${PROJECT_NAME}\"\nopen \"${DEVICE_DIR}\"\nopen \"${SRCROOT}/Products\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -4026,7 +4015,6 @@
 /* Begin XCBuildConfiguration section */
 		3CC0806E259B3029001AB997 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5DAF2825AD0C5F76221216B6 /* Pods-EaseIMKit.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -4064,7 +4052,6 @@
 		};
 		3CC0806F259B3029001AB997 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3E8513F65D2140A05C4C0E05 /* Pods-EaseIMKit.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -4221,7 +4208,7 @@
 		};
 		90A039F9254A6E7600D57B73 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5DAF2825AD0C5F76221216B6 /* Pods-EaseIMKit.debug.xcconfig */;
+			baseConfigurationReference = 919CCD1420694F17248CA5EA /* Pods-EaseIMKit.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -4229,7 +4216,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -4264,7 +4251,7 @@
 		};
 		90A039FA254A6E7600D57B73 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3E8513F65D2140A05C4C0E05 /* Pods-EaseIMKit.release.xcconfig */;
+			baseConfigurationReference = D6B505DEA30882602077D9ED /* Pods-EaseIMKit.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -4272,7 +4259,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

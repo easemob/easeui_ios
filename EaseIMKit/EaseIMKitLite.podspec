@@ -13,10 +13,14 @@ Pod::Spec.new do |s|
                                         2. Chat page (singleChat,groupChat,chatRoom)
                                         3. Contact list
                                                       DESC
-                        s.author = { 'easemob' => 'dev@easemob.com' }
-                        s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKitLite_3.7.3.zip' }
+            s.author = { 'easemob' => 'dev@easemob.com' }
+            s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKitLite_3.7.3.zip' }
 
-  s.xcconfig = {'OTHER_LDFLAGS' => '-ObjC'}
+  s.xcconfig = {
+    'VALID_ARCHS' => 'arm64, x86_64',
+    'EXCLUDED_ARCHS' => 'armv7, armv7s, i386',
+    'OTHER_LDFLAGS' => '-ObjC'
+  }
 
   s.requires_arc = true
   s.preserve_paths = '*.framework'

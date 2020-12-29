@@ -16,7 +16,11 @@ Pod::Spec.new do |s|
             s.author = { 'easemob' => 'dev@easemob.com' }
             s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKit_3.7.3.zip' }
 
-  s.xcconfig = {'OTHER_LDFLAGS' => '-ObjC'}
+  s.xcconfig = {
+    'VALID_ARCHS' => 'arm64, x86_64',
+    'EXCLUDED_ARCHS' => 'armv7, armv7s, i386',
+    'OTHER_LDFLAGS' => '-ObjC'
+  }
 
   s.requires_arc = true
   s.preserve_paths = '*.framework'
