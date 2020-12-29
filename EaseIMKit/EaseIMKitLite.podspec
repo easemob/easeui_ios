@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name = 'EaseIMKit'
+  s.name = 'EaseIMKitLite'
   s.version = '3.7.3'
 
   s.platform     = :ios, '11.0'
@@ -13,8 +13,8 @@ Pod::Spec.new do |s|
                                         2. Chat page (singleChat,groupChat,chatRoom)
                                         3. Contact list
                                                       DESC
-            s.author = { 'easemob' => 'dev@easemob.com' }
-            s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKit_3.7.3.zip' }
+                        s.author = { 'easemob' => 'dev@easemob.com' }
+                        s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKitLite_3.7.3.zip' }
 
   s.xcconfig = {'OTHER_LDFLAGS' => '-ObjC'}
 
@@ -25,6 +25,6 @@ Pod::Spec.new do |s|
   s.frameworks = 'UIKit'
   s.libraries = 'stdc++'
   s.dependency 'EMVoiceConvert', '~> 0.1.0'
-  s.dependency 'Hyphenate'
+  s.dependency 'HyphenateLite'
 
 end
