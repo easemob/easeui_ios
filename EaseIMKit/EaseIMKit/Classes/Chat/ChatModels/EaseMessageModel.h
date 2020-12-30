@@ -19,14 +19,15 @@ typedef NS_ENUM(NSInteger, EMMessageType) {
     EMMessageTypeVoice,
     EMMessageTypeFile,
     EMMessageTypeCmd,
+    EMMessageTypeCustom,
     EMMessageTypeExtGif,
     EMMessageTypeExtRecall,
     EMMessageTypeExtCall,
     EMMessageTypeExtNewFriend,
     EMMessageTypeExtAddGroup,
     EMMessageTypePictMixText,
-    EMMessageTypeCustom,
 };
+
 
 NS_ASSUME_NONNULL_BEGIN
 

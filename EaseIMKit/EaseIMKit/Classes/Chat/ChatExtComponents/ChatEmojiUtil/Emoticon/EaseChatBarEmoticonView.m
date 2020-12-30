@@ -25,6 +25,7 @@
 @property (nonatomic, strong) UIScrollView *bottomScrollView;
 @property (nonatomic, strong) UIButton *extBtn;
 @property (nonatomic, strong) UIButton *deleteBtn;
+@property (nonatomic, strong) UIButton *sendBtn;
 
 @end
 
@@ -56,7 +57,7 @@
     NSInteger count = [self.groups count];
     
     self.bottomView = [[UIView alloc] init];
-    self.bottomView.backgroundColor = [UIColor colorWithHexString:@"#F2F2F2"];;
+    self.bottomView.backgroundColor = [UIColor whiteColor];;
     [self addSubview:self.bottomView];
     [self.bottomView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.left.equalTo(self);
@@ -65,17 +66,26 @@
         make.height.Ease_equalTo(self.bottomHeight);
     }];
     
+    self.sendBtn = [[UIButton alloc]init];
+    self.sendBtn.layer.cornerRadius = 8;
+    [self.sendBtn setTitle:@"发送" forState:UIControlStateNormal];
+    [self.sendBtn.titleLabel setFont:[UIFont systemFontOfSize:14.f]];
+    [self.sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.sendBtn setTitleColor:[UIColor colorWithHexString:@"#ADADAD"] forState:UIControlStateDisabled];
+    [self.sendBtn addTarget:self action:@selector(sendEmoticonAction) forControlEvents:UIControlEventTouchUpInside];
+    
     self.extBtn = [[UIButton alloc] init];
     [self.extBtn setBackgroundImage:[UIImage easeUIImageNamed:@"EmojiExt"] forState:UIControlStateNormal];
     
     self.deleteBtn = [[UIButton alloc]init];
-    self.deleteBtn.backgroundColor = [UIColor whiteColor];
+    self.deleteBtn.backgroundColor = [UIColor clearColor];
     [self.deleteBtn setBackgroundImage:[UIImage easeUIImageNamed:@"deleteEmoticon"] forState:UIControlStateNormal];
+    [self.deleteBtn setBackgroundImage:[UIImage easeUIImageNamed:@"deleteEmoticonDisable"] forState:UIControlStateDisabled];
     [self.deleteBtn addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
     
     self.bottomScrollView = [[UIScrollView alloc] init];
     self.bottomScrollView.scrollEnabled = NO;
-    self.bottomScrollView.backgroundColor = [UIColor colorWithHexString:@"#F2F2F2"];;
+    self.bottomScrollView.backgroundColor = [UIColor whiteColor];;
     self.bottomScrollView.contentSize = CGSizeMake(itemWidth * count, self.bottomHeight);
     [self addSubview:self.bottomScrollView];
     [self.bottomScrollView Ease_makeConstraints:^(EaseConstraintMaker *make) {
@@ -110,7 +120,7 @@
 - (void)_setupEmotionViews
 {
     self.emotionBgView = [[UIView alloc] init];
-    self.emotionBgView.backgroundColor = [UIColor whiteColor];
+    self.emotionBgView.backgroundColor = [UIColor colorWithHexString:@"#EAEBEC"];
     [self addSubview:self.emotionBgView];
     [self.emotionBgView Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.equalTo(self);
@@ -165,6 +175,13 @@
 
 #pragma mark - Action
 
+- (void)sendEmoticonAction
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didChatBarEmoticonViewSendAction)]) {
+        [self.delegate didChatBarEmoticonViewSendAction];
+    }
+}
+
 - (void)segmentedButtonAction:(UIButton *)aButton
 {
     NSInteger tag = aButton.tag;
@@ -177,19 +194,19 @@
         [oldView removeFromSuperview];
         
         self.selectedButton.selected = NO;
-        self.selectedButton.backgroundColor = [UIColor colorWithHexString:@"#F2F2F2"];;
+        self.selectedButton.backgroundColor = [UIColor whiteColor];
         self.selectedButton = nil;
     }
     
     aButton.selected = YES;
-    aButton.backgroundColor = [UIColor whiteColor];
+    aButton.backgroundColor = [UIColor colorWithHexString:@"#F2F2F2"];
     self.selectedButton = aButton;
     
     if (tag == 0) {
         [self.bottomView addSubview:self.extBtn];
         [self.extBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self.bottomView).offset(11);
-            make.right.equalTo(self.bottomView.ease_right).offset(-23);
+            make.right.equalTo(self.bottomView.ease_right).offset(-22);
             make.width.height.Ease_equalTo(@18);
         }];
         [self.bottomScrollView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
@@ -198,14 +215,22 @@
             make.bottom.equalTo(self);
             make.height.Ease_equalTo(self.bottomHeight);
         }];
+        [self addSubview:self.sendBtn];
+        [self.sendBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.bottom.equalTo(self.bottomView.ease_top).offset(-12);
+            make.right.equalTo(self.bottomView.ease_right).offset(-12);
+            make.width.Ease_equalTo(@40);
+            make.height.Ease_equalTo(@30);
+        }];
         [self addSubview:self.deleteBtn];
         [self.deleteBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
-            make.bottom.equalTo(self.bottomView.ease_top).offset(-18);
-            make.right.equalTo(self.bottomView.ease_right).offset(-23);
-            make.width.Ease_equalTo(@22);
-            make.height.Ease_equalTo(@17);
+            make.bottom.equalTo(self.bottomView.ease_top).offset(-12);
+            make.right.equalTo(self.sendBtn.ease_left).offset(-22);
+            make.width.Ease_equalTo(@28);
+            make.height.Ease_equalTo(@28);
         }];
     } else {
+        [self.sendBtn removeFromSuperview];
         [self.extBtn removeFromSuperview];
         [self.deleteBtn removeFromSuperview];
         [self.bottomScrollView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
@@ -224,7 +249,21 @@
 - (void)deleteAction
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectedTextDetele)]) {
-        [self.delegate didSelectedTextDetele];
+        BOOL isEditing = [self.delegate didSelectedTextDetele];
+        [self textDidChange:isEditing];
+    }
+}
+
+- (void)textDidChange:(BOOL)isEditing
+{
+    if (!isEditing) {
+        self.sendBtn.backgroundColor = [UIColor whiteColor];
+        self.sendBtn.enabled = NO;
+        self.deleteBtn.enabled = NO;
+    } else {
+        [self.sendBtn setBackgroundColor:[UIColor colorWithHexString:@"#04AEF0"]];
+        self.sendBtn.enabled = YES;
+        self.deleteBtn.enabled = YES;
     }
 }
 

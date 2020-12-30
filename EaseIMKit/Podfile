@@ -10,13 +10,14 @@ target 'EaseIMKitDemo' do
   platform :ios, '11.0'
   project '../EaseIMKitDemo/EaseIMKitDemo.xcodeproj'
   #pod 'Masonry'
-  pod 'Hyphenate'
-  pod 'EaseIMKit', :path => './'
+  #pod 'Hyphenate'
+  #pod 'EaseIMKit', :path => './'
 end
 
 target 'EaseIMKit' do
-  pod 'Hyphenate'
-  pod 'EMVoiceConvert'
+  project './EaseIMKit.xcodeproj'
+  #pod 'Hyphenate'
+  pod 'EMVoiceConvert', '~> 0.1.0'
 end
 
 

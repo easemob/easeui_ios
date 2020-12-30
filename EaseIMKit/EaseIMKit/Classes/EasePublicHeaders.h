@@ -10,7 +10,13 @@
 #import <HyphenateLite/HyphenateLite.h>
 #endif */
 
+
+#if ENABLE_CALL == 1
 #import <Hyphenate/Hyphenate.h>
+#else
+#import <HyphenateLite/HyphenateLite.h>
+#endif
+
 
 #import "EaseEnums.h"
 #import "EaseDefines.h"

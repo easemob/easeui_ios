@@ -1,5 +1,5 @@
 //
-//  LoadingCALayer.m
+//  EaseLoadingCALayer.m
 //  EaseIM
 //
 //  Created by 娜塔莎 on 2019/11/19.
@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LoadingCALayer.h"
+#import "EaseLoadingCALayer.h"
 static CGFloat const kLineWidth = 2;
 
-@implementation LoadingCALayer
+@implementation EaseLoadingCALayer
 
 @dynamic progress;
 

@@ -30,11 +30,11 @@
 #import <UIKit/UIKit.h>
 #import <CoreGraphics/CoreGraphics.h>
 
-@class MBBackgroundView;
+@class EaseBackgroundView;
 @protocol EaseProgressHUDDelegate;
 
 
-extern CGFloat const MBProgressMaxOffset;
+extern CGFloat const EaseProgressMaxOffset;
 
 typedef NS_ENUM(NSInteger, EaseProgressHUDMode) {
     /// UIActivityIndicatorView.
@@ -227,9 +227,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) EaseProgressHUDAnimation animationType UI_APPEARANCE_SELECTOR;
 
 /**
- * The bezel offset relative to the center of the view. You can use MBProgressMaxOffset
- * and -MBProgressMaxOffset to move the HUD all the way to the screen edge in each direction.
- * E.g., CGPointMake(0.f, MBProgressMaxOffset) would position the HUD centered on the bottom edge.
+ * The bezel offset relative to the center of the view. You can use EaseProgressMaxOffset
+ * and -EaseProgressMaxOffset to move the HUD all the way to the screen edge in each direction.
+ * E.g., CGPointMake(0.f, EaseProgressMaxOffset) would position the HUD centered on the bottom edge.
  */
 @property (assign, nonatomic) CGPoint offset UI_APPEARANCE_SELECTOR;
 
@@ -277,12 +277,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * The view containing the labels and indicator (or customView).
  */
-@property (strong, nonatomic, readonly) MBBackgroundView *bezelView;
+@property (strong, nonatomic, readonly) EaseBackgroundView *bezelView;
 
 /**
  * View covering the entire HUD area, placed behind bezelView.
  */
-@property (strong, nonatomic, readonly) MBBackgroundView *backgroundView;
+@property (strong, nonatomic, readonly) EaseBackgroundView *backgroundView;
 
 /**
  * The UIView (e.g., a UIImageView) to be shown when the HUD is in EaseProgressHUDModeCustomView.
@@ -324,7 +324,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * A progress view for showing definite progress by filling up a circle (pie chart).
  */
-@interface MBRoundProgressView : UIView
+@interface EaseRoundProgressView : UIView
 
 /**
  * Progress (0.0 to 1.0)
@@ -355,7 +355,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * A flat bar progress view.
  */
-@interface MBBarProgressView : UIView
+@interface EaseBarProgressView : UIView
 
 /**
  * Progress (0.0 to 1.0)
@@ -383,7 +383,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-@interface MBBackgroundView : UIView
+@interface EaseBackgroundView : UIView
 
 /**
  * The background style.

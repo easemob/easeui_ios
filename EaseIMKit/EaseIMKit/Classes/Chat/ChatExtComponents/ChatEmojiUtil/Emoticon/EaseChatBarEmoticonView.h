@@ -16,9 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EaseChatBarEmoticonView : UIView
 
 @property (nonatomic, weak) id<EaseChatBarEmoticonViewDelegate> delegate;
-
 @property (nonatomic, readonly) CGFloat viewHeight;
 
+- (void)textDidChange:(BOOL)isEditing;
 @end
 
 
@@ -28,7 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)didSelectedEmoticonModel:(EaseEmoticonModel *)aModel;
 
-- (void)didSelectedTextDetele;
+- (BOOL)didSelectedTextDetele;
+
+- (void)didChatBarEmoticonViewSendAction;
 
 @end
 

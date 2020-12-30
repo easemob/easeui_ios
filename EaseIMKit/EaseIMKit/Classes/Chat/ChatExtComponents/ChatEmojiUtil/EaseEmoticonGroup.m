@@ -9,6 +9,7 @@
 #import "EaseEmoticonGroup.h"
 #import "EaseHeaders.h"
 #import "UIImage+EaseUI.h"
+#import "HorizontalLayout.h"
 
 EaseEmoticonGroup *gGifGroup = nil;
 
@@ -168,7 +169,12 @@ EaseEmoticonGroup *gGifGroup = nil;
 {
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) collectionViewLayout:flowLayout];
+    HorizontalLayout *layout = [[HorizontalLayout alloc] initWithOffset:([UIScreen mainScreen].bounds.size.width - _itemSize.width * 7)/8 yOffset:(_viewHeight - _itemSize.height * 3)/4];
+    layout.itemSize = CGSizeMake(_itemSize.width, _itemSize.height);
+    layout.rowCount = 7;
+    layout.columCount = 3;
+    layout.itemCountSum = 19;
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) collectionViewLayout:_emotionGroup.type == EMEmotionTypeEmoji ? layout : flowLayout];
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
@@ -187,31 +193,31 @@ EaseEmoticonGroup *gGifGroup = nil;
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    if ([self.emotionGroup.dataArray count] < 20) {
+    if ([self.emotionGroup.dataArray count] < 19) {
         return 1;
     }
-    if ([self.emotionGroup.dataArray count] % 20 == 0) {
-        return [self.emotionGroup.dataArray count] / 20;
+    if ([self.emotionGroup.dataArray count] % 19 == 0) {
+        return [self.emotionGroup.dataArray count] / 19;
     }
-    return [self.emotionGroup.dataArray count] / 20 + 1;
+    return [self.emotionGroup.dataArray count] / 19 + 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if ([self.emotionGroup.dataArray count] < 20) {
+    if ([self.emotionGroup.dataArray count] < 19) {
         return [self.emotionGroup.dataArray count];
     }
-    return 20;
+    return 19;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     EMEmoticonCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"EMEmoticonCell" forIndexPath:indexPath];
-    long count = indexPath.section * 20 + indexPath.row;
+    long count = indexPath.section * 19 + indexPath.row;
     if (count >= [self.emotionGroup.dataArray count]) {
         cell.model = [[EaseEmoticonModel alloc]initWithType:EMEmotionTypeEmoji];
         return cell;
     }
-    cell.model = self.emotionGroup.dataArray[indexPath.section * 20 + indexPath.row];
+    cell.model = self.emotionGroup.dataArray[indexPath.section * 19 + indexPath.row];
     return cell;
 }
 

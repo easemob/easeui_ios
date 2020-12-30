@@ -1,5 +1,5 @@
 //
-//  LoadingCALayer.h
+//  EaseLoadingCALayer.h
 //  EaseIM
 //
 //  Created by 娜塔莎 on 2019/11/19.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LoadingCALayer : CALayer
+@interface EaseLoadingCALayer : CALayer
 
 @property (nonatomic) CGFloat progress;
 

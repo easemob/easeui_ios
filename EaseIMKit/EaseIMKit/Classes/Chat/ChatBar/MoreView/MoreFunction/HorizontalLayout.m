@@ -90,6 +90,9 @@
     NSInteger index = attr.indexPath.item;
     // 获取每页item数量
     NSInteger allCount = self.rowCount * self.columCount;
+    if (self.itemCountSum > 0) {
+        allCount = self.itemCountSum;
+    }
     // 获取item在当前section的页码
     NSInteger page = index / allCount;
     // 获取item x y方向偏移量

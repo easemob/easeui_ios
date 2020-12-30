@@ -208,7 +208,9 @@
 - (void)textViewDidChange:(UITextView *)textView
 {
     [self _updatetextViewHeight];
-    
+    if (self.moreEmoticonView) {
+        [self emoticonChangeWithText];
+    }
     if (self.delegate && [self.delegate respondsToSelector:@selector(inputViewDidChange:)]) {
         [self.delegate inputViewDidChange:self.textView];
     }
@@ -266,11 +268,23 @@
     }
 }
 
+- (void)emoticonChangeWithText
+{
+    if (self.textView.text.length > 0) {
+        [self.moreEmoticonView textDidChange:YES];
+    } else {
+        [self.moreEmoticonView textDidChange:NO];
+    }
+}
+
 #pragma mark - Public
 
 - (void)clearInputViewText
 {
     self.textView.text = @"";
+    if (self.moreEmoticonView) {
+        [self emoticonChangeWithText];
+    }
     [self _updatetextViewHeight];
 }
 
@@ -280,14 +294,21 @@
         self.textView.text = [NSString stringWithFormat:@"%@%@", self.textView.text, aText];
         [self _updatetextViewHeight];
     }
+    if (self.moreEmoticonView) {
+        [self emoticonChangeWithText];
+    }
 }
 
-- (void)deleteTailText
+- (BOOL)deleteTailText
 {
     if ([self.textView.text length] > 0) {
         NSRange range = [self.textView.text rangeOfComposedCharacterSequenceAtIndex:self.textView.text.length-1];
         self.textView.text = [self.textView.text substringToIndex:range.location];
     }
+    if ([self.textView.text length] > 0) {
+        return YES;
+    }
+    return NO;
 }
 
 - (void)clearMoreViewAndSelectedButton
@@ -387,6 +408,7 @@
     if (aButton.selected) {
         if (self.moreEmoticonView) {
             self.currentMoreView = self.moreEmoticonView;
+            [self emoticonChangeWithText];
             [self addSubview:self.moreEmoticonView];
             [self.moreEmoticonView Ease_makeConstraints:^(EaseConstraintMaker *make) {
                 make.left.equalTo(self);

@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)inputViewAppendText:(NSString *)aText;
 
-- (void)deleteTailText;
+- (BOOL)deleteTailText;
 
 - (void)clearMoreViewAndSelectedButton;
 

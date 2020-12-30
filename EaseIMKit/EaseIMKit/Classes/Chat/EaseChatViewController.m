@@ -348,9 +348,9 @@
 
 #pragma mark - EaseChatBarEmoticonViewDelegate
 
-- (void)didSelectedTextDetele
+- (BOOL)didSelectedTextDetele
 {
-    [self.chatBar deleteTailText];
+    return [self.chatBar deleteTailText];
 }
 
 - (void)didSelectedEmoticonModel:(EaseEmoticonModel *)aModel
@@ -363,6 +363,11 @@
         NSDictionary *ext = @{MSG_EXT_GIF:@(YES), MSG_EXT_GIF_ID:aModel.eId};
         [self sendTextAction:aModel.name ext:ext];
     }
+}
+
+- (void)didChatBarEmoticonViewSendAction
+{
+    [self sendTextAction:self.chatBar.textView.text ext:nil];
 }
 
 #pragma mark - EaseMessageCellDelegate

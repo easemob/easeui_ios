@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name = 'EaseIMKit'
+  s.name = 'EaseIMKitLite'
   s.version = '3.7.3'
 
   s.platform     = :ios, '11.0'
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
                                         3. Contact list
                                                       DESC
             s.author = { 'easemob' => 'dev@easemob.com' }
-            s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKit_3.7.3.zip' }
+            s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKitLite_3.7.3.zip' }
 
   s.xcconfig = {
     'VALID_ARCHS' => 'arm64, x86_64',
@@ -29,6 +29,6 @@ Pod::Spec.new do |s|
   s.frameworks = 'UIKit'
   s.libraries = 'stdc++'
   s.dependency 'EMVoiceConvert', '~> 0.1.0'
-  s.dependency 'Hyphenate'
+  s.dependency 'HyphenateLite'
 
 end
