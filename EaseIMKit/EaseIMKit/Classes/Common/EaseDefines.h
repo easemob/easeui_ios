@@ -6,6 +6,7 @@
 //  Copyright © 2019 XieYajie. All rights reserved.
 //
 
+
 #ifndef EaseDefines_h
 #define EaseDefines_h
 

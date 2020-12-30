@@ -1,16 +1,28 @@
 PODS:
   - EMVoiceConvert (0.1.0)
+  - Masonry (1.1.0)
+  - MBProgressHUD (1.2.0)
+  - MJRefresh (3.5.0)
 
 DEPENDENCIES:
   - EMVoiceConvert (~> 0.1.0)
+  - Masonry
+  - MBProgressHUD
+  - MJRefresh
 
 SPEC REPOS:
   trunk:
     - EMVoiceConvert
+    - Masonry
+    - MBProgressHUD
+    - MJRefresh
 
 SPEC CHECKSUMS:
   EMVoiceConvert: 32a0eaada94d93c151a5abd53ee174cd4e63b01f
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
 
-PODFILE CHECKSUM: 6e1038d8220b5e32647464c53cedb9b7d38690e0
+PODFILE CHECKSUM: 5982d55f71718afba73a702befade4a0d88af30a
 
 COCOAPODS: 1.10.0

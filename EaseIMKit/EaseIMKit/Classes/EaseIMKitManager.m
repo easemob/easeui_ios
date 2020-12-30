@@ -13,6 +13,8 @@
 
 bool gInit;
 static EaseIMKitManager *easeIMKit = nil;
+static NSString *g_UIKitVersion = @"3.7.3";
+
 @interface EaseIMKitManager ()<EMMultiDevicesDelegate, EMContactManagerDelegate, EMGroupManagerDelegate, EMChatManagerDelegate>
 @property (nonatomic, strong) EaseMulticastDelegate<EaseIMKitManagerDelegate> *delegates;
 @property (nonatomic, strong) NSString *currentConversationId;  //当前会话聊天id
@@ -76,6 +78,11 @@ static EaseIMKitManager *easeIMKit = nil;
 }
 
 #pragma mark - Public
+
+- (NSString *)version
+{
+    return g_UIKitVersion;
+}
 
 - (void)addDelegate:(id<EaseIMKitManagerDelegate>)aDelegate
 {
