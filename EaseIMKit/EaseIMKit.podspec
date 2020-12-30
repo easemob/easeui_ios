@@ -9,12 +9,13 @@ Pod::Spec.new do |s|
   s.homepage = 'http://docs-im.easemob.com/im/ios/other/easeimkit'
   s.description = <<-DESC
                     EaseIMKit Supported features:
+
                     1. Conversation list
                                         2. Chat page (singleChat,groupChat,chatRoom)
                                         3. Contact list
                                                       DESC
-            s.author = { 'easemob' => 'dev@easemob.com' }
-            s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKit_3.7.3.zip' }
+                        s.author = { 'easemob' => 'dev@easemob.com' }
+                        s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKit_3.7.3.zip' }
 
   s.xcconfig = {
     'VALID_ARCHS' => 'arm64, x86_64',
