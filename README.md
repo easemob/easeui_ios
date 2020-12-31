@@ -5,7 +5,7 @@ EaseIMKit是一个基于环信sdk的UI库，封装了IM功能常用的控件、f
 github上的代码不包含环信sdk，需要依赖环信IM 3.x版本的SDK使用，建议与环信的IM demo一起使用。
 
 ## 关于分支
-当前分支EaseIMKit分支是EaseIMKit UI库的开源分支。开发者使用时，建议使用EaseIMKit的远程依赖。
+当前分支EaseIMKit分支是EaseIMKit UI库的开源分支。
 
 ## 关于cocoapods接入 
 >```
