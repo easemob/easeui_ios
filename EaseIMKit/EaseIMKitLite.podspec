@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'EaseIMKitLite'
-  s.version = '3.7.3'
+  s.version = '3.7.3.1'
 
   s.platform     = :ios, '11.0'
 
@@ -10,15 +10,13 @@ Pod::Spec.new do |s|
   s.description = <<-DESC
                     EaseIMKit Supported features:
                     1. Conversation list
-                                        2. Chat page (singleChat,groupChat,chatRoom)
-                                        3. Contact list
+                    2. Chat page (singleChat,groupChat,chatRoom)
+                    3. Contact list
                                                       DESC
-                        s.author = { 'easemob' => 'dev@easemob.com' }
-                        s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKitLite_3.7.3.zip' }
+  s.author = { 'easemob' => 'dev@easemob.com' }
+  s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKitLite_3.7.3.zip' }
 
   s.xcconfig = {
-    'VALID_ARCHS' => 'arm64, x86_64',
-    'EXCLUDED_ARCHS' => 'armv7, armv7s, i386',
     'OTHER_LDFLAGS' => '-ObjC'
   }
 
