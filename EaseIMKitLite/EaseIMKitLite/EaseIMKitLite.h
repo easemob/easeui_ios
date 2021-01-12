@@ -1,9 +1,8 @@
 //
-//  EaseIMKit.h
-//  EaseIMKit
+//  EaseIMKitLite.h
+//  EaseIMKitLite
 //
-//  Created by 杜洁鹏 on 2020/10/29.
-//  Copyright © 2020 djp. All rights reserved.
+//  Created by 杜洁鹏 on 2021/1/12.
 //
 
 #import <Foundation/Foundation.h>

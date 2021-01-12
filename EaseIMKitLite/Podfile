@@ -3,18 +3,18 @@
 
 platform :ios, '11.0'
 
-workspace 'EaseIMKit.xcworkspace'
+workspace 'EaseIMKitLite.xcworkspace'
 
 target 'EaseIMKitDemo' do
   platform :ios, '11.0'
-  pod 'Hyphenate'
+  pod 'HyphenateLite'
   pod 'Masonry'
   project '../EaseIMKitDemo/EaseIMKitDemo.xcodeproj'
 end
 
-target 'EaseIMKit' do
-  project './EaseIMKit.xcodeproj'
-  pod 'Hyphenate'
+target 'EaseIMKitLite' do
+  project './EaseIMKitLite'
+  pod 'HyphenateLite'
   pod 'EMVoiceConvert', '~> 0.1.0'
 end
 

@@ -7,7 +7,7 @@
 //
 
 #import "ConversationsViewController.h"
-#import <EaseIMKit/EaseIMKit.h>
+#import <EaseIMKitLite/EaseIMKitLite.h>
 #import <Masonry/Masonry.h>
 #import "ChatViewController.h"
 #import "DemoUserModel.h"

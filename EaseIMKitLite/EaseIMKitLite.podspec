@@ -18,6 +18,7 @@ Pod::Spec.new do |s|
 
   s.xcconfig = {
     'OTHER_LDFLAGS' => '-ObjC'
+    'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) LITE=1',
   }
 
   s.requires_arc = true

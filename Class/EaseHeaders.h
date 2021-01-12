@@ -8,16 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-/*
-#if __has_include(<Hyphenate/Hyphenate.h>)
+#if LITE
+#import <HyphenateLite/HyphenateLite.h>
+#else
 #import <Hyphenate/Hyphenate.h>
 #endif
-#if __has_include(<HyphenateLite/HyphenateLite.h>)
-#import <HyphenateLite/HyphenateLite.h>
-#endif */
 
-//#import <Hyphenate/Hyphenate.h>
-#import <HyphenateLite/HyphenateLite.h>
+
 
 #import "Easeonry.h"
 #import "EaseEnums.h"

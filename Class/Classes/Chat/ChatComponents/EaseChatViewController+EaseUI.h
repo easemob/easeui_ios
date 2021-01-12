@@ -6,7 +6,7 @@
 //  Copyright © 2020 djp. All rights reserved.
 //
 
-#import <EaseIMKit/EaseIMKit.h>
+#import "EaseChatViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
