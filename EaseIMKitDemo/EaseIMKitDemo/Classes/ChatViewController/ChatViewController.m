@@ -8,7 +8,7 @@
 
 #import "ChatViewController.h"
 #import <Masonry/Masonry.h>
-#import <EaseIMKit/EaseIMKit.h>
+#import <EaseIMKitLite/EaseIMKitLite.h>
 
 @interface ChatViewController ()
 @end

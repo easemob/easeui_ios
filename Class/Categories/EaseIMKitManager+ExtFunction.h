@@ -5,7 +5,8 @@
 //  Created by 娜塔莎 on 2020/11/24.
 //
 
-#import <EaseIMKit/EaseIMKit.h>
+
+#import "EaseIMKitManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
