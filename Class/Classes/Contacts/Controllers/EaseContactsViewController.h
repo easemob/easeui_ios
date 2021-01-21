@@ -24,7 +24,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray<UIContextualAction *> *)easeTableView:(UITableView *)tableView
         trailingSwipeActionsForRowAtContactModel:(EaseContactModel *) contact
-                                         actions:(NSArray<UIContextualAction *> * __nullable)actions;
+                                         actions:(NSArray<UIContextualAction *> * __nullable)actions API_AVAILABLE(ios(11.0));
+
+- (NSArray<UITableViewRowAction *> *)easeTableView:(UITableView *)tableView
+                   editActionsForRowAtContactModel:(EaseContactModel *) contact
+                                           actions:(NSArray<UITableViewRowAction *> * __nullable)actions;
 
 - (void)easeTableView:(UITableView *)tableView didSelectRowAtContactModel:(EaseContactModel *) contact;
 

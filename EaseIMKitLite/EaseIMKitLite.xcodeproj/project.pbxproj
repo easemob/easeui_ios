@@ -1145,14 +1145,14 @@
 		9071E29725AD9D9A00E17412 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				9071E29925AD9D9A00E17412 /* Chat */,
+				9071E31525AD9D9A00E17412 /* EaseEnums.h */,
+				9071E43125AD9D9A00E17412 /* EaseIMKitManager.h */,
 				9071E30225AD9D9A00E17412 /* EaseIMKitManager.m */,
+				9071E29925AD9D9A00E17412 /* Chat */,
 				9071E30325AD9D9A00E17412 /* Contacts */,
 				9071E30F25AD9D9A00E17412 /* BaseTableViewController */,
-				9071E31525AD9D9A00E17412 /* EaseEnums.h */,
 				9071E31625AD9D9A00E17412 /* Common */,
 				9071E42325AD9D9A00E17412 /* Conversations */,
-				9071E43125AD9D9A00E17412 /* EaseIMKitManager.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1915,8 +1915,8 @@
 			isa = PBXGroup;
 			children = (
 				9071E42D25AD9D9A00E17412 /* EaseConversationCell.h */,
-				9071E42E25AD9D9A00E17412 /* EaseBadgeView.h */,
 				9071E42F25AD9D9A00E17412 /* EaseConversationCell.m */,
+				9071E42E25AD9D9A00E17412 /* EaseBadgeView.h */,
 				9071E43025AD9D9A00E17412 /* EaseBadgeView.m */,
 			);
 			path = Views;
@@ -2985,7 +2985,7 @@
 				);
 				INFOPLIST_FILE = EaseIMKitLite/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3015,7 +3015,7 @@
 				);
 				INFOPLIST_FILE = EaseIMKitLite/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -162,6 +162,22 @@
     return nil;
 }
 
+
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:editActionsForRowAtContactModel:actions:)]) {
+        NSArray *swipeActions = [self.delegate easeTableView:tableView editActionsForRowAtContactModel:[self cellModelFromIndex:indexPath] actions:nil];
+        return swipeActions;
+    }
+    
+    return nil;
+}
+
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:didSelectRowAtContactModel:)]) {
         return [self.delegate easeTableView:tableView didSelectRowAtContactModel:[self cellModelFromIndex:indexPath]];

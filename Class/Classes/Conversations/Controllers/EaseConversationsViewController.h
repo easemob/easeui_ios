@@ -19,9 +19,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UITableViewCell *)easeTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 
+
 - (NSArray<UIContextualAction *> *)easeTableView:(UITableView *)tableView
            trailingSwipeActionsForRowAtIndexPath:(NSIndexPath *)indexPath
-                                         actions:(NSArray<UIContextualAction *> *)actions;
+                                         actions:(NSArray<UIContextualAction *> *)actions  API_AVAILABLE(ios(11.0));
+
+
+- (NSArray<UITableViewRowAction *> *)easeTableView:(UITableView *)tableView
+                      editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+                                           actions:(NSArray<UITableViewRowAction *> *)actions;
 
 - (void)easeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 

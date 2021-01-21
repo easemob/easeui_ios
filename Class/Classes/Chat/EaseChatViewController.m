@@ -119,6 +119,9 @@
  
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapTableViewAction:)];
     [self.tableView addGestureRecognizer:tap];
+    
+    
+    self.view.backgroundColor = UIColor.grayColor;
 }
 
 - (void)viewDidAppear:(BOOL)animated

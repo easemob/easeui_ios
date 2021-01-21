@@ -14,11 +14,11 @@
 
 @interface EaseConversationsViewController ()
 <
-    UITableViewDelegate,
-    UITableViewDataSource,
-    EMContactManagerDelegate,
-    EMChatManagerDelegate,
-    EMGroupManagerDelegate
+UITableViewDelegate,
+UITableViewDataSource,
+EMContactManagerDelegate,
+EMChatManagerDelegate,
+EMGroupManagerDelegate
 >
 {
     dispatch_queue_t _loadDataQueue;
@@ -109,7 +109,7 @@
     UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive
                                                                                title:@"删除"
                                                                              handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL))
-    {
+                                        {
         [weakself _deleteConversation:indexPath];
         [weakself refreshTabView];
     }];
@@ -117,7 +117,7 @@
     UIContextualAction *topAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal
                                                                             title:!model.isTop ? @"置顶" : @"取消置顶"
                                                                           handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL))
-    {
+                                     {
         EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.easeId
                                                                                      type:model.type
                                                                          createIfNotExist:YES];
@@ -130,10 +130,53 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:trailingSwipeActionsForRowAtIndexPath:actions:)]) {
         swipeActions = [self.delegate easeTableView:tableView trailingSwipeActionsForRowAtIndexPath:indexPath actions:swipeActions];
     }
-
+    
+    if (swipeActions == nil) {
+        return nil;
+    }
+    
     UISwipeActionsConfiguration *actions = [UISwipeActionsConfiguration configurationWithActions:swipeActions];
     actions.performsFirstActionWithFullSwipe = NO;
     return actions;
+}
+
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    EaseConversationModel *model = [self.dataAry objectAtIndex:indexPath.row];
+    __weak typeof(self) weakself = self;
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive
+                                                                            title:@"删除"
+                                                                          handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath)
+    {
+        [weakself _deleteConversation:indexPath];
+        [weakself refreshTabView];
+    }];
+    
+    UITableViewRowAction *topAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive
+                                                                            title:!model.isTop ? @"置顶" : @"取消置顶"
+                                                                          handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath)
+    {
+        EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.easeId
+                                                                                     type:model.type
+                                                                         createIfNotExist:YES];
+        [conversation setTop:!model.isTop];
+        [weakself refreshTabView];
+    }];
+    
+    topAction.backgroundColor = [UIColor colorWithHexString:@"CB7D32"];
+    
+    NSArray *swipeActions = @[deleteAction, topAction];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:editActionsForRowAtIndexPath:actions:)]) {
+        swipeActions = [self.delegate easeTableView:tableView editActionsForRowAtIndexPath:indexPath actions:swipeActions];
+    }
+    
+    return swipeActions;
+}
+
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -184,7 +227,7 @@
         NSMutableArray<id<EaseUserDelegate>> *totals = [NSMutableArray<id<EaseUserDelegate>> array];
         
         NSArray *conversations = [EMClient.sharedClient.chatManager getAllConversations];
-
+        
         NSMutableArray *convs = [NSMutableArray array];
         NSMutableArray *topConvs = [NSMutableArray array];
         
@@ -212,7 +255,7 @@
         
         NSArray *normalConvList = [convs sortedArrayUsingComparator:
                                    ^NSComparisonResult(EaseConversationModel *obj1, EaseConversationModel *obj2)
-        {
+                                   {
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;
             }else {
@@ -222,11 +265,11 @@
         
         NSArray *topConvList = [topConvs sortedArrayUsingComparator:
                                 ^NSComparisonResult(EaseConversationModel *obj1, EaseConversationModel *obj2)
-        {
+                                {
             if (obj1.lastestUpdateTime > obj2.lastestUpdateTime) {
                 return(NSComparisonResult)NSOrderedAscending;
             }else {
-                return(NSComparisonResult)NSOrderedDescending; 
+                return(NSComparisonResult)NSOrderedDescending;
             }
         }];
         
