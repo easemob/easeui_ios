@@ -25,10 +25,7 @@
                                                                                       chatViewModel:viewModel];
     [self addChildViewController:chatController];
     [self.view addSubview:chatController.view];
-    [chatController.view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.equalTo(self.view);
-    }];
-    
+    chatController.view.frame = self.view.bounds;
 }
 
 
