@@ -26,6 +26,7 @@
                                                                                    conversationType:self.conversationType
                                                                                       chatViewModel:viewModel];
     _chatController.delegate = self;
+    [_chatController setEditingStatusVisible:YES];
     [self addChildViewController:_chatController];
     [self.view addSubview:_chatController.view];
     _chatController.view.frame = self.view.bounds;

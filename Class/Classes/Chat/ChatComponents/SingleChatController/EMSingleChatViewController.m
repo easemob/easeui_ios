@@ -21,6 +21,7 @@
 @property (nonatomic, assign) NSInteger receiveTypingCountDownNum;
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
 @property (nonatomic, strong) NSDate *currentData;
+@property (nonatomic) BOOL editingStatusVisible;
 @end
 
 @implementation EMSingleChatViewController
@@ -34,6 +35,7 @@
     if (self) {
         _receiveTypingCountDownNum = 0;
         _previousChangedTimeStamp = 0;
+        _editingStatusVisible = NO;
         _msgQueue = dispatch_queue_create("singlemessage.com", NULL);
     }
     return self;
@@ -47,6 +49,11 @@
 - (void)dealloc
 {
     [self stopReceiveTypingTimer];
+}
+
+- (void)setEditingStatusVisible:(BOOL)editingStatusVisible
+{
+    _editingStatusVisible = editingStatusVisible;
 }
 
 #pragma mark - EMChatManagerDelegate
@@ -107,7 +114,7 @@
 {
     if (self.currentConversation.type == EMConversationTypeChat) {
         long long currentTimestamp = [self getCurrentTimestamp];
-        if ((currentTimestamp - _previousChangedTimeStamp) > 5) {
+        if ((currentTimestamp - _previousChangedTimeStamp) > 5 && _editingStatusVisible) {
             [self _sendBeginTyping];
             _previousChangedTimeStamp = currentTimestamp;
         }

@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 //重置聊天控制器
 - (void)resetChatVCWithViewModel:(EaseChatViewModel *)viewModel;
 
+//是否显示输入状态
+- (void)setEditingStatusVisible:(BOOL)editingStatusVisible;
 //发送文本消息
 - (void)sendTextAction:(NSString *)aText ext:(NSDictionary * __nullable)aExt;
 //发送消息体

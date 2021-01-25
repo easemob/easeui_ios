@@ -842,6 +842,10 @@
 
 #pragma mark - Public
 
+//发送输入状态
+- (void)setEditingStatusVisible:(BOOL)editingStatusVisible{}
+
+//已读回执
 - (void)returnReadReceipt:(EMMessage *)msg{}
 
 - (void)refreshTableView:(BOOL)isScrollBottom
