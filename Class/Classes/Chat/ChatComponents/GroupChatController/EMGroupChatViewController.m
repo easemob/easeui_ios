@@ -98,7 +98,6 @@
 - (void)userDidJoinGroup:(EMGroup *)aGroup
                     user:(NSString *)aUsername
 {
-    [self tableViewDidTriggerHeaderRefresh:YES];
 }
 
 @end

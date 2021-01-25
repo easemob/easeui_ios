@@ -1160,14 +1160,14 @@
 		9071E29925AD9D9A00E17412 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				9071E29A25AD9D9A00E17412 /* ChatModels */,
 				9071E2A125AD9D9A00E17412 /* ChatBar */,
-				9071E2B625AD9D9A00E17412 /* MessageCell */,
-				9071E2D425AD9D9A00E17412 /* EaseChatViewController.m */,
 				9071E2D525AD9D9A00E17412 /* ChatComponents */,
-				9071E2E025AD9D9A00E17412 /* EaseChatViewController.h */,
 				9071E2E125AD9D9A00E17412 /* ChatExtComponents */,
+				9071E29A25AD9D9A00E17412 /* ChatModels */,
+				9071E2E025AD9D9A00E17412 /* EaseChatViewController.h */,
+				9071E2D425AD9D9A00E17412 /* EaseChatViewController.m */,
 				9071E30125AD9D9A00E17412 /* EaseChatViewControllerDelegate.h */,
+				9071E2B625AD9D9A00E17412 /* MessageCell */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -2184,21 +2184,21 @@
 		9071E4DD25AD9D9B00E17412 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				9071E4DE25AD9D9B00E17412 /* EMConversation+EaseUI.h */,
-				9071E4DF25AD9D9B00E17412 /* UIViewController+HUD.m */,
 				9071E4E025AD9D9B00E17412 /* EaseIMKitManager+ExtFunction.h */,
-				9071E4E125AD9D9B00E17412 /* UIViewController+ComponentSize.h */,
-				9071E4E225AD9D9B00E17412 /* UIColor+EaseUI.h */,
-				9071E4E325AD9D9B00E17412 /* UITableView+Refresh.h */,
-				9071E4E425AD9D9B00E17412 /* NSObject+Alert.h */,
-				9071E4E525AD9D9B00E17412 /* UIImage+EaseUI.m */,
-				9071E4E625AD9D9B00E17412 /* UIViewController+HUD.h */,
+				9071E4DE25AD9D9B00E17412 /* EMConversation+EaseUI.h */,
 				9071E4E725AD9D9B00E17412 /* EMConversation+EaseUI.m */,
-				9071E4E825AD9D9B00E17412 /* UIColor+EaseUI.m */,
-				9071E4E925AD9D9B00E17412 /* UITableView+Refresh.m */,
-				9071E4EA25AD9D9B00E17412 /* UIViewController+ComponentSize.m */,
+				9071E4E425AD9D9B00E17412 /* NSObject+Alert.h */,
 				9071E4EB25AD9D9B00E17412 /* NSObject+Alert.m */,
+				9071E4E225AD9D9B00E17412 /* UIColor+EaseUI.h */,
+				9071E4E825AD9D9B00E17412 /* UIColor+EaseUI.m */,
 				9071E4EC25AD9D9B00E17412 /* UIImage+EaseUI.h */,
+				9071E4E525AD9D9B00E17412 /* UIImage+EaseUI.m */,
+				9071E4E325AD9D9B00E17412 /* UITableView+Refresh.h */,
+				9071E4E925AD9D9B00E17412 /* UITableView+Refresh.m */,
+				9071E4E125AD9D9B00E17412 /* UIViewController+ComponentSize.h */,
+				9071E4EA25AD9D9B00E17412 /* UIViewController+ComponentSize.m */,
+				9071E4E625AD9D9B00E17412 /* UIViewController+HUD.h */,
+				9071E4DF25AD9D9B00E17412 /* UIViewController+HUD.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";

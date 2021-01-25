@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A87803EC7F8AB8FE6D839C7 /* libPods-EaseIMKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38ADCACB97DFEE9527D45940 /* libPods-EaseIMKit.a */; };
 		9071DB9125AD967200E17412 /* EaseExtMenuModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 9071D93F25AD967100E17412 /* EaseExtMenuModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9071DB9225AD967200E17412 /* EaseMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9071D94025AD967100E17412 /* EaseMessageModel.m */; };
 		9071DB9325AD967200E17412 /* EaseChatViewModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 9071D94125AD967100E17412 /* EaseChatViewModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -538,10 +539,23 @@
 		9071E76625ADA6BA00E17412 /* EaseHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 9071E76525ADA6BA00E17412 /* EaseHeaders.h */; };
 		9071E77125ADA8A400E17412 /* EasePublicHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 9071E77025ADA8A400E17412 /* EasePublicHeaders.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		90892DDC25764D0900F50368 /* EaseIMKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 90892DDB25764D0900F50368 /* EaseIMKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A34E81D13C5AF1CC366AC695 /* libPods-EaseIMKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6E112E26ABAFCC30B64CD2E /* libPods-EaseIMKit.a */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3CF5F49B25BAD866000E357C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		38ADCACB97DFEE9527D45940 /* libPods-EaseIMKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EaseIMKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9071D93F25AD967100E17412 /* EaseExtMenuModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseExtMenuModel.h; sourceTree = "<group>"; };
 		9071D94025AD967100E17412 /* EaseMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseMessageModel.m; sourceTree = "<group>"; };
 		9071D94125AD967100E17412 /* EaseChatViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseChatViewModel.h; sourceTree = "<group>"; };
@@ -1078,8 +1092,6 @@
 		90A039F0254A6E7600D57B73 /* EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90A039F4254A6E7600D57B73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		919CCD1420694F17248CA5EA /* Pods-EaseIMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.debug.xcconfig"; sourceTree = "<group>"; };
-		A6E112E26ABAFCC30B64CD2E /* libPods-EaseIMKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EaseIMKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A973DCBF11F07327687A5E4F /* libPods-EaseIMKitLite.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EaseIMKitLite.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6B505DEA30882602077D9ED /* Pods-EaseIMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1088,7 +1100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A34E81D13C5AF1CC366AC695 /* libPods-EaseIMKit.a in Frameworks */,
+				5A87803EC7F8AB8FE6D839C7 /* libPods-EaseIMKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1120,14 +1132,14 @@
 		9071D93B25AD967100E17412 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				9071D93D25AD967100E17412 /* Chat */,
-				9071D9A625AD967100E17412 /* EaseIMKitManager.m */,
-				9071D9A725AD967100E17412 /* Contacts */,
 				9071D9B325AD967100E17412 /* BaseTableViewController */,
-				9071D9B925AD967100E17412 /* EaseEnums.h */,
+				9071D93D25AD967100E17412 /* Chat */,
 				9071D9BA25AD967100E17412 /* Common */,
+				9071D9A725AD967100E17412 /* Contacts */,
 				9071DAC725AD967100E17412 /* Conversations */,
+				9071D9B925AD967100E17412 /* EaseEnums.h */,
 				9071DAD525AD967100E17412 /* EaseIMKitManager.h */,
+				9071D9A625AD967100E17412 /* EaseIMKitManager.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1135,14 +1147,14 @@
 		9071D93D25AD967100E17412 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				9071D93E25AD967100E17412 /* ChatModels */,
 				9071D94525AD967100E17412 /* ChatBar */,
-				9071D95A25AD967100E17412 /* MessageCell */,
-				9071D97825AD967100E17412 /* EaseChatViewController.m */,
 				9071D97925AD967100E17412 /* ChatComponents */,
-				9071D98425AD967100E17412 /* EaseChatViewController.h */,
 				9071D98525AD967100E17412 /* ChatExtComponents */,
+				9071D93E25AD967100E17412 /* ChatModels */,
+				9071D98425AD967100E17412 /* EaseChatViewController.h */,
+				9071D97825AD967100E17412 /* EaseChatViewController.m */,
 				9071D9A525AD967100E17412 /* EaseChatViewControllerDelegate.h */,
+				9071D95A25AD967100E17412 /* MessageCell */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -2183,8 +2195,7 @@
 			children = (
 				908930D8257651B100F50368 /* UIKit.framework */,
 				90892DD425764C6900F50368 /* EaseIMKit.framework */,
-				A6E112E26ABAFCC30B64CD2E /* libPods-EaseIMKit.a */,
-				A973DCBF11F07327687A5E4F /* libPods-EaseIMKitLite.a */,
+				38ADCACB97DFEE9527D45940 /* libPods-EaseIMKit.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2439,6 +2450,7 @@
 				90A039ED254A6E7600D57B73 /* Frameworks */,
 				9036F13E25773830001F62AA /* ShellScript */,
 				9036F2D525774B45001F62AA /* Resources */,
+				3CF5F49B25BAD866000E357C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2930,7 +2942,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -2987,7 +2999,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -3022,7 +3034,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = EaseIMKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3036,7 +3048,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = NO;
 				VALIDATE_WORKSPACE = NO;
 			};
@@ -3067,7 +3079,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = EaseIMKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3080,7 +3092,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_WORKSPACE = NO;
 			};
 			name = Release;

@@ -9,6 +9,7 @@
 #import "EaseChatViewController+EMMsgLongPressIncident.h"
 #import <objc/runtime.h>
 #import "EMMsgTextBubbleView.h"
+#import "EaseDateHelper.h"
 
 typedef NS_ENUM(NSInteger, EaseLongPressExecute) {
     EaseLongPressExecuteCopy = 0,
@@ -31,7 +32,7 @@ static const void *recallViewKey = &recallViewKey;
     }
 }
 
-- (void)deleteLongPressAction
+- (void)deleteLongPressAction:(void (^)(EMMessage *deleteMsg))aCompletionBlock
 {
     if (self.longPressIndexPath == nil || self.longPressIndexPath.row < 0) {
         return;
@@ -62,10 +63,16 @@ static const void *recallViewKey = &recallViewKey;
             weakself.msgTimelTag = -1;
         }
         weakself.longPressIndexPath = nil;
+        if (aCompletionBlock) {
+            aCompletionBlock(model.message);
+        }
     }];
     [clearAction setValue:[UIColor colorWithRed:245/255.0 green:52/255.0 blue:41/255.0 alpha:1.0] forKey:@"_titleTextColor"];
     [alertController addAction:clearAction];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style: UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        if (aCompletionBlock) {
+            aCompletionBlock(nil);
+        }
     }];
     [cancelAction  setValue:[UIColor blackColor] forKey:@"_titleTextColor"];
     [alertController addAction:cancelAction];
@@ -153,6 +160,39 @@ static const void *recallViewKey = &recallViewKey;
             }
         }
     }];
+}
+
+#pragma mark - Data
+
+- (NSArray *)formatMessages:(NSArray<EMMessage *> *)aMessages
+{
+    NSMutableArray *formated = [[NSMutableArray alloc] init];
+
+    for (int i = 0; i < [aMessages count]; i++) {
+        EMMessage *msg = aMessages[i];
+        if (msg.chatType == EMChatTypeChat && msg.isReadAcked && (msg.body.type == EMMessageBodyTypeText || msg.body.type == EMMessageBodyTypeLocation)) {
+            [[EMClient sharedClient].chatManager sendMessageReadAck:msg.messageId toUser:msg.conversationId completion:nil];
+        }
+        
+        CGFloat interval = (self.msgTimelTag - msg.timestamp) / 1000;
+        if (self.msgTimelTag < 0 || interval > 60 || interval < -60) {
+            NSString *timeStr = [EaseDateHelper formattedTimeFromTimeInterval:msg.timestamp];
+            [formated addObject:timeStr];
+            self.msgTimelTag = msg.timestamp;
+        }
+        EaseMessageModel *model = nil;
+        model = [[EaseMessageModel alloc] initWithEMMessage:msg];
+        if (!model) {
+            model = [[EaseMessageModel alloc]init];
+        }
+        if (self.delegate && [self.delegate respondsToSelector:@selector(userData:)]) {
+            id<EaseUserDelegate> userData = [self.delegate userData:msg.from];
+            model.userDataDelegate = userData;
+        }
+        [formated addObject:model];
+    }
+    
+    return formated;
 }
 
 - (void)_forwardImageMsg:(EMMessage *)aMsg

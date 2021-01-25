@@ -15,7 +15,6 @@
 {
     self = [super init];
     if (self) {
-        _isFetchHistoryMessagesFromServer = NO;
         _chatViewBgColor = [UIColor colorWithHexString:@"#F2F2F2"];
         _chatBarBgColor = [UIColor colorWithHexString:@"#F2F2F2"];
         _extFuncModel = [[EaseExtFuncModel alloc]init];
@@ -30,11 +29,6 @@
         _avatarCornerRadius = 0;
     }
     return self;
-}
-
-- (void)setIsFetchHistoryMessagesFromServer:(BOOL)isFetchHistoryMessagesFromServer
-{
-    _isFetchHistoryMessagesFromServer = isFetchHistoryMessagesFromServer;
 }
 
 - (void)setChatViewBgColor:(UIColor *)chatViewBgColor

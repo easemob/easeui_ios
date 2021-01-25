@@ -33,7 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EaseChatViewModel : NSObject
 
-@property (nonatomic) BOOL isFetchHistoryMessagesFromServer; //是否从服务器获取历史消息
 @property (nonatomic, strong) UIColor *chatViewBgColor; //聊天页背景色
 @property (nonatomic, strong) UIColor *chatBarBgColor; //输入区背景色
 @property (nonatomic, strong) EaseExtFuncModel *extFuncModel; //输入区扩展功能数据模型

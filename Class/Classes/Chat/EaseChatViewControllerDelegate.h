@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @param   huanxinID        环信id
  */
-- (id<EaseUserDelegate>)userData:(NSString*)huanxinID;
+- (id<EaseUserDelegate>)userData:(NSString *)huanxinID;
 
 /**
  * 头像点击事件
@@ -46,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   message        当前群通知消息
  * @param   groupId        当前消息所属群ID
  */
-- (void)groupMessageReadReceiptDetail:(EMMessage*)message groupId:(NSString*)groupId;
+- (void)groupMessageReadReceiptDetail:(EMMessage *)message groupId:(NSString*)groupId;
 
 /**
  * 自定义cell
@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   defaultLongPressItems       默认长按扩展区功能数据模型组      （默认共有：复制，删除，撤回（发送消息时间距当前时间小于2分钟））
  * @param   customCell                               当前长按的自定义cell
  */
-- (NSMutableArray<EaseExtMenuModel*>*)customCellLongPressExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultLongPressItems customCell:(UITableViewCell*)customCell;
+- (NSMutableArray<EaseExtMenuModel *> *)customCellLongPressExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultLongPressItems customCell:(UITableViewCell*)customCell;
 
 
 /*输入区回调*/
@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   defaultInputBarItems        默认功能数据模型组   （默认有序：相册，相机，位置，文件）
  * @param   conversationType                 当前会话类型：单聊，群聊，聊天室
  */
-- (NSMutableArray<EaseExtMenuModel*>*)inputBarExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultInputBarItems conversationType:(EMConversationType)conversationType;
+- (NSMutableArray<EaseExtMenuModel *> *)inputBarExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultInputBarItems conversationType:(EMConversationType)conversationType;
 /**
  * 输入区键盘输入变化回调  例：@群成员
  */
@@ -94,7 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   message          当前点击的消息
  * @param   userData        当前点击的消息携带的用户资料
  */
-- (BOOL)didSelectMessageItem:(EMMessage*)message userData:(id<EaseUserDelegate>)userData;
+- (BOOL)didSelectMessageItem:(EMMessage *)message userData:(id<EaseUserDelegate>)userData;
 
 /**
  * 当前所长按消息的扩展区数据模型组
@@ -102,7 +102,17 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   defaultLongPressItems       默认长按扩展区功能数据模型组  （默认共有：复制，删除， 撤回）
  * @param   message                                      当前长按的消息
  */
-- (NSMutableArray<EaseExtMenuModel*>*)messageLongPressExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultLongPressItems message:(EMMessage*)message;
+- (NSMutableArray<EaseExtMenuModel *> *)messageLongPressExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultLongPressItems message:(EMMessage*)message;
+
+
+/* 页面下拉加载回调 */
+
+/**
+ * 下拉加载更多消息回调 
+ *
+ * @param   firstMessageId          第一条消息 id
+ */
+- (void)loadMoreMessageData:(NSString *)firstMessageId currentMessageList:(NSArray<EMMessage *> *)messageList;
 
 @end
 
