@@ -57,7 +57,8 @@
         return NO;
     }
     BOOL ret = NO;
-    NSArray *msgIds = [self remindMeDic].allKeys;
+    NSMutableArray *msgIdArray = [self remindMeArray];
+    /*
     for (NSString *msgId in msgIds) {
         EMMessage *msg = [self loadMessageWithId:msgId error:nil];
         if (!msg.isRead && msg.body.type == EMMessageBodyTypeText) {
@@ -67,18 +68,39 @@
                 break;
             }
         }
+    }*/
+    if ([msgIdArray count] > 0) {
+        ret = YES;
     }
     
     return ret;
 }
 
-- (NSMutableDictionary *)remindMeDic {
-    NSMutableDictionary *dict = [(NSMutableDictionary *)self.ext[EMConversationRemindMe] mutableCopy];
+- (NSMutableArray *)remindMeArray {
+    NSMutableArray *dict = [(NSMutableArray *)self.ext[EMConversationRemindMe] mutableCopy];
     if (!dict) {
-        dict = [NSMutableDictionary dictionary];
+        dict = [[NSMutableArray alloc]init];
     }
     
     return dict;
+}
+
+- (void)setRemindMe:(NSString *)messageId
+{
+    NSMutableDictionary *dict = [self mutableExt];
+    NSMutableArray *msgIdArray = [self remindMeArray];
+    [msgIdArray addObject:messageId];
+    [dict setObject:msgIdArray forKey:EMConversationRemindMe];
+    [self setExt:dict];
+}
+
+- (void)resetRemindMe
+{
+    NSMutableArray *msgIdArray = [self remindMeArray];
+    [msgIdArray removeAllObjects];
+    NSMutableDictionary *dict = [self mutableExt];
+    [dict setObject:msgIdArray forKey:EMConversationRemindMe];
+    [self setExt:dict];
 }
 
 - (NSMutableDictionary *)mutableExt {

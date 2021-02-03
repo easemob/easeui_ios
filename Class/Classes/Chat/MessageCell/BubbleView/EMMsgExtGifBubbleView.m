@@ -40,6 +40,9 @@
         for (EaseEmoticonModel *model in group.dataArray) {
             if ([model.name isEqualToString:name]) {
                 NSBundle *resource_bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"/Frameworks/EaseIMKit.framework" ofType:nil]];
+                if (!resource_bundle) {
+                    resource_bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"Frameworks/EaseIMKitLite.framework" ofType:nil]];
+                }
                 NSString *path = [resource_bundle pathForResource:model.original ofType:@"gif"];
                 NSData *imageData = [NSData dataWithContentsOfFile:path];
                 self.gifView.animatedImage = [EaseAnimatedImg animatedImageWithGIFData:imageData];

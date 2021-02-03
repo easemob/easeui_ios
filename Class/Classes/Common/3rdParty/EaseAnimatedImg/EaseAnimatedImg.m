@@ -291,7 +291,7 @@ static NSHashTable *allAnimatedImagesWeak;
                             EaseLog(EaseLogLevelInfo, @"Rounding frame %zu's `delayTime` from %f up to default %f (minimum supported: %f).", i, [delayTime floatValue], kDelayTimeIntervalDefault, kEaseAnimatedImgDelayTimeIntervalMinimum);
                             delayTime = @(kDelayTimeIntervalDefault);
                         }
-                        delayTimesForIndexesMutable[@(i)] = delayTime;
+                        delayTimesForIndexesMutable[@(i)] = [NSNumber numberWithDouble:0.28];
                     } else {
                         skippedFrameCount++;
                         EaseLog(EaseLogLevelInfo, @"Dropping frame %zu because valid `CGImageRef` %@ did result in `nil`-`UIImage`.", i, frameImageRef);

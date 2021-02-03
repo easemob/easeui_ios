@@ -155,7 +155,7 @@
     if (aMessage.direction == EMMessageDirectionSend || aMessage.isReadAcked || aMessage.chatType != EMChatTypeChat)
         return NO;
     EMMessageBody *body = aMessage.body;
-    if (!aIsMarkRead && (body.type == EMMessageBodyTypeVideo || body.type == EMMessageBodyTypeVoice || body.type == EMMessageBodyTypeImage))
+    if (!aIsMarkRead && (body.type == EMMessageBodyTypeFile || body.type == EMMessageBodyTypeVoice || body.type == EMMessageBodyTypeImage))
         return NO;
     if (body.type == EMMessageTypeText && [((EMTextMessageBody *)body).text isEqualToString:EMCOMMUNICATE_CALLED_MISSEDCALL] && aMessage.direction == EMMessageDirectionReceive)
         return NO;
@@ -173,6 +173,7 @@
         if (self.delegate && [self.delegate respondsToSelector:@selector(endTyping)]) {
             [self.delegate endTyping];
         }
+        return;
     }
     _receiveTypingCountDownNum--;
 }

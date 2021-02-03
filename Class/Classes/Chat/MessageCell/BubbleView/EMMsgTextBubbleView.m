@@ -43,7 +43,7 @@
         make.top.equalTo(self.ease_top).offset(10);
         make.bottom.equalTo(self.ease_bottom).offset(-10);
     }];
-    self.textLabel.textColor = [UIColor blackColor];
+    self.textLabel.textColor = _viewModel.contentFontColor;
     if (self.direction == EMMessageDirectionSend) {
         [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.left.equalTo(self.ease_left).offset(10);

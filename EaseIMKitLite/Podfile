@@ -13,7 +13,7 @@ target 'EaseIMKitDemo' do
 end
 
 target 'EaseIMKitLite' do
-  project './EaseIMKitLite'
+  project './EaseIMKitLite.xcodeproj'
   pod 'HyphenateLite'
   pod 'EMVoiceConvert', '~> 0.1.0'
 end

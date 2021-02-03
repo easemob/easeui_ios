@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A87803EC7F8AB8FE6D839C7 /* libPods-EaseIMKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38ADCACB97DFEE9527D45940 /* libPods-EaseIMKit.a */; };
+		3C72BD8525CA9C4700756CBD /* Hyphenate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C72BD8425CA9C4700756CBD /* Hyphenate.framework */; };
 		9071DB9125AD967200E17412 /* EaseExtMenuModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 9071D93F25AD967100E17412 /* EaseExtMenuModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9071DB9225AD967200E17412 /* EaseMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9071D94025AD967100E17412 /* EaseMessageModel.m */; };
 		9071DB9325AD967200E17412 /* EaseChatViewModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 9071D94125AD967100E17412 /* EaseChatViewModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -539,10 +539,11 @@
 		9071E76625ADA6BA00E17412 /* EaseHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 9071E76525ADA6BA00E17412 /* EaseHeaders.h */; };
 		9071E77125ADA8A400E17412 /* EasePublicHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 9071E77025ADA8A400E17412 /* EasePublicHeaders.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		90892DDC25764D0900F50368 /* EaseIMKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 90892DDB25764D0900F50368 /* EaseIMKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ADC59D630CDB73B70E1CA940 /* libPods-EaseIMKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B87CDBBC30B8E13449C0A5 /* libPods-EaseIMKit.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		3CF5F49B25BAD866000E357C /* Embed Frameworks */ = {
+		3C91A29325C9784C00103C2E /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -555,7 +556,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		38ADCACB97DFEE9527D45940 /* libPods-EaseIMKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EaseIMKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C55D99A8C5F8CD707C63C60 /* Pods-EaseIMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.debug.xcconfig"; sourceTree = "<group>"; };
+		3192BA6BF08725587E16CDF6 /* Pods-EaseIMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.release.xcconfig"; sourceTree = "<group>"; };
+		3C72BD8425CA9C4700756CBD /* Hyphenate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Hyphenate.framework; sourceTree = "<group>"; };
+		64B87CDBBC30B8E13449C0A5 /* libPods-EaseIMKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EaseIMKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9071D93F25AD967100E17412 /* EaseExtMenuModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseExtMenuModel.h; sourceTree = "<group>"; };
 		9071D94025AD967100E17412 /* EaseMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseMessageModel.m; sourceTree = "<group>"; };
 		9071D94125AD967100E17412 /* EaseChatViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseChatViewModel.h; sourceTree = "<group>"; };
@@ -1086,13 +1090,10 @@
 		9071DB8F25AD967200E17412 /* UIImage+EaseUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+EaseUI.h"; sourceTree = "<group>"; };
 		9071E76525ADA6BA00E17412 /* EaseHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseHeaders.h; sourceTree = "<group>"; };
 		9071E77025ADA8A400E17412 /* EasePublicHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasePublicHeaders.h; sourceTree = "<group>"; };
-		90892DD425764C6900F50368 /* EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90892DDB25764D0900F50368 /* EaseIMKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseIMKit.h; sourceTree = "<group>"; };
 		908930D8257651B100F50368 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		90A039F0254A6E7600D57B73 /* EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90A039F4254A6E7600D57B73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		919CCD1420694F17248CA5EA /* Pods-EaseIMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.debug.xcconfig"; sourceTree = "<group>"; };
-		D6B505DEA30882602077D9ED /* Pods-EaseIMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1100,7 +1101,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A87803EC7F8AB8FE6D839C7 /* libPods-EaseIMKit.a in Frameworks */,
+				3C72BD8525CA9C4700756CBD /* Hyphenate.framework in Frameworks */,
+				ADC59D630CDB73B70E1CA940 /* libPods-EaseIMKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1110,8 +1112,8 @@
 		10014ED42E2ED355F5DF5B04 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				919CCD1420694F17248CA5EA /* Pods-EaseIMKit.debug.xcconfig */,
-				D6B505DEA30882602077D9ED /* Pods-EaseIMKit.release.xcconfig */,
+				1C55D99A8C5F8CD707C63C60 /* Pods-EaseIMKit.debug.xcconfig */,
+				3192BA6BF08725587E16CDF6 /* Pods-EaseIMKit.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1162,12 +1164,12 @@
 		9071D93E25AD967100E17412 /* ChatModels */ = {
 			isa = PBXGroup;
 			children = (
-				9071D93F25AD967100E17412 /* EaseExtMenuModel.h */,
-				9071D94025AD967100E17412 /* EaseMessageModel.m */,
 				9071D94125AD967100E17412 /* EaseChatViewModel.h */,
+				9071D94425AD967100E17412 /* EaseChatViewModel.m */,
+				9071D93F25AD967100E17412 /* EaseExtMenuModel.h */,
 				9071D94225AD967100E17412 /* EaseExtMenuModel.m */,
 				9071D94325AD967100E17412 /* EaseMessageModel.h */,
-				9071D94425AD967100E17412 /* EaseChatViewModel.m */,
+				9071D94025AD967100E17412 /* EaseMessageModel.m */,
 			);
 			path = ChatModels;
 			sourceTree = "<group>";
@@ -1230,19 +1232,19 @@
 		9071D95A25AD967100E17412 /* MessageCell */ = {
 			isa = PBXGroup;
 			children = (
-				9071D95B25AD967100E17412 /* EaseOneLoadingAnimationView.h */,
-				9071D95C25AD967100E17412 /* EMMsgRecordCell.h */,
-				9071D95D25AD967100E17412 /* EMMessageTimeCell.h */,
-				9071D95E25AD967100E17412 /* EaseMessageStatusView.h */,
-				9071D95F25AD967100E17412 /* EaseMessageCell.m */,
-				9071D96025AD967100E17412 /* EaseLoadingCALayer.m */,
-				9071D96125AD967100E17412 /* EMMessageTimeCell.m */,
-				9071D96225AD967100E17412 /* EMMsgRecordCell.m */,
-				9071D96325AD967100E17412 /* EaseOneLoadingAnimationView.m */,
-				9071D96425AD967100E17412 /* EaseMessageStatusView.m */,
 				9071D96525AD967100E17412 /* BubbleView */,
 				9071D97625AD967100E17412 /* EaseLoadingCALayer.h */,
+				9071D96025AD967100E17412 /* EaseLoadingCALayer.m */,
 				9071D97725AD967100E17412 /* EaseMessageCell.h */,
+				9071D95F25AD967100E17412 /* EaseMessageCell.m */,
+				9071D95E25AD967100E17412 /* EaseMessageStatusView.h */,
+				9071D96425AD967100E17412 /* EaseMessageStatusView.m */,
+				9071D95B25AD967100E17412 /* EaseOneLoadingAnimationView.h */,
+				9071D96325AD967100E17412 /* EaseOneLoadingAnimationView.m */,
+				9071D95D25AD967100E17412 /* EMMessageTimeCell.h */,
+				9071D96125AD967100E17412 /* EMMessageTimeCell.m */,
+				9071D95C25AD967100E17412 /* EMMsgRecordCell.h */,
+				9071D96225AD967100E17412 /* EMMsgRecordCell.m */,
 			);
 			path = MessageCell;
 			sourceTree = "<group>";
@@ -1250,22 +1252,22 @@
 		9071D96525AD967100E17412 /* BubbleView */ = {
 			isa = PBXGroup;
 			children = (
-				9071D96625AD967100E17412 /* EMMsgImageBubbleView.h */,
-				9071D96725AD967100E17412 /* EMMsgExtGifBubbleView.m */,
 				9071D96825AD967100E17412 /* EMMessageBubbleView.h */,
-				9071D96925AD967100E17412 /* EMMsgTextBubbleView.h */,
-				9071D96A25AD967100E17412 /* EMMsgAudioBubbleView.m */,
-				9071D96B25AD967100E17412 /* EMMsgVideoBubbleView.m */,
-				9071D96C25AD967100E17412 /* EMMsgLocationBubbleView.h */,
-				9071D96D25AD967100E17412 /* EMMsgFileBubbleView.m */,
-				9071D96E25AD967100E17412 /* EMMsgExtGifBubbleView.h */,
-				9071D96F25AD967100E17412 /* EMMsgImageBubbleView.m */,
-				9071D97025AD967100E17412 /* EMMsgAudioBubbleView.h */,
-				9071D97125AD967100E17412 /* EMMsgTextBubbleView.m */,
 				9071D97225AD967100E17412 /* EMMessageBubbleView.m */,
-				9071D97325AD967100E17412 /* EMMsgLocationBubbleView.m */,
-				9071D97425AD967100E17412 /* EMMsgVideoBubbleView.h */,
+				9071D97025AD967100E17412 /* EMMsgAudioBubbleView.h */,
+				9071D96A25AD967100E17412 /* EMMsgAudioBubbleView.m */,
+				9071D96E25AD967100E17412 /* EMMsgExtGifBubbleView.h */,
+				9071D96725AD967100E17412 /* EMMsgExtGifBubbleView.m */,
 				9071D97525AD967100E17412 /* EMMsgFileBubbleView.h */,
+				9071D96D25AD967100E17412 /* EMMsgFileBubbleView.m */,
+				9071D96625AD967100E17412 /* EMMsgImageBubbleView.h */,
+				9071D96F25AD967100E17412 /* EMMsgImageBubbleView.m */,
+				9071D96C25AD967100E17412 /* EMMsgLocationBubbleView.h */,
+				9071D97325AD967100E17412 /* EMMsgLocationBubbleView.m */,
+				9071D96925AD967100E17412 /* EMMsgTextBubbleView.h */,
+				9071D97125AD967100E17412 /* EMMsgTextBubbleView.m */,
+				9071D97425AD967100E17412 /* EMMsgVideoBubbleView.h */,
+				9071D96B25AD967100E17412 /* EMMsgVideoBubbleView.m */,
 			);
 			path = BubbleView;
 			sourceTree = "<group>";
@@ -1882,9 +1884,9 @@
 			isa = PBXGroup;
 			children = (
 				9071DAC925AD967100E17412 /* EaseConversationModel.h */,
-				9071DACA25AD967100E17412 /* EaseConversationViewModel.m */,
 				9071DACB25AD967100E17412 /* EaseConversationModel.m */,
 				9071DACC25AD967100E17412 /* EaseConversationViewModel.h */,
+				9071DACA25AD967100E17412 /* EaseConversationViewModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2171,21 +2173,21 @@
 		9071DB8025AD967200E17412 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				9071DB8125AD967200E17412 /* EMConversation+EaseUI.h */,
-				9071DB8225AD967200E17412 /* UIViewController+HUD.m */,
 				9071DB8325AD967200E17412 /* EaseIMKitManager+ExtFunction.h */,
-				9071DB8425AD967200E17412 /* UIViewController+ComponentSize.h */,
-				9071DB8525AD967200E17412 /* UIColor+EaseUI.h */,
-				9071DB8625AD967200E17412 /* UITableView+Refresh.h */,
-				9071DB8725AD967200E17412 /* NSObject+Alert.h */,
-				9071DB8825AD967200E17412 /* UIImage+EaseUI.m */,
-				9071DB8925AD967200E17412 /* UIViewController+HUD.h */,
+				9071DB8125AD967200E17412 /* EMConversation+EaseUI.h */,
 				9071DB8A25AD967200E17412 /* EMConversation+EaseUI.m */,
-				9071DB8B25AD967200E17412 /* UIColor+EaseUI.m */,
-				9071DB8C25AD967200E17412 /* UITableView+Refresh.m */,
-				9071DB8D25AD967200E17412 /* UIViewController+ComponentSize.m */,
+				9071DB8725AD967200E17412 /* NSObject+Alert.h */,
 				9071DB8E25AD967200E17412 /* NSObject+Alert.m */,
+				9071DB8525AD967200E17412 /* UIColor+EaseUI.h */,
+				9071DB8B25AD967200E17412 /* UIColor+EaseUI.m */,
 				9071DB8F25AD967200E17412 /* UIImage+EaseUI.h */,
+				9071DB8825AD967200E17412 /* UIImage+EaseUI.m */,
+				9071DB8625AD967200E17412 /* UITableView+Refresh.h */,
+				9071DB8C25AD967200E17412 /* UITableView+Refresh.m */,
+				9071DB8425AD967200E17412 /* UIViewController+ComponentSize.h */,
+				9071DB8D25AD967200E17412 /* UIViewController+ComponentSize.m */,
+				9071DB8925AD967200E17412 /* UIViewController+HUD.h */,
+				9071DB8225AD967200E17412 /* UIViewController+HUD.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -2194,8 +2196,7 @@
 			isa = PBXGroup;
 			children = (
 				908930D8257651B100F50368 /* UIKit.framework */,
-				90892DD425764C6900F50368 /* EaseIMKit.framework */,
-				38ADCACB97DFEE9527D45940 /* libPods-EaseIMKit.a */,
+				64B87CDBBC30B8E13449C0A5 /* libPods-EaseIMKit.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2203,6 +2204,7 @@
 		90A039E6254A6E7600D57B73 = {
 			isa = PBXGroup;
 			children = (
+				3C72BD8425CA9C4700756CBD /* Hyphenate.framework */,
 				90A039F2254A6E7600D57B73 /* EaseIMKit */,
 				90A039F1254A6E7600D57B73 /* Products */,
 				90892DD325764C6900F50368 /* Frameworks */,
@@ -2444,13 +2446,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 90A039F8254A6E7600D57B73 /* Build configuration list for PBXNativeTarget "EaseIMKit" */;
 			buildPhases = (
-				7E2DAF53B1468601D6458679 /* [CP] Check Pods Manifest.lock */,
+				D2A68A11109B4158DCD1E454 /* [CP] Check Pods Manifest.lock */,
 				90A039EB254A6E7600D57B73 /* Headers */,
 				90A039EC254A6E7600D57B73 /* Sources */,
 				90A039ED254A6E7600D57B73 /* Frameworks */,
 				9036F13E25773830001F62AA /* ShellScript */,
 				9036F2D525774B45001F62AA /* Resources */,
-				3CF5F49B25BAD866000E357C /* Embed Frameworks */,
+				3C91A29325C9784C00103C2E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2661,7 +2663,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7E2DAF53B1468601D6458679 /* [CP] Check Pods Manifest.lock */ = {
+		9036F13E25773830001F62AA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${ACTION}\" = \"build\" ]\nthen\nINSTALL_DIR=${SRCROOT}/Products/${PROJECT_NAME}.framework\nDEVICE_DIR=${BUILD_ROOT}/${CONFIGURATION}-iphoneos/${PROJECT_NAME}.framework\nSIMULATOR_DIR=${BUILD_ROOT}/${CONFIGURATION}-iphonesimulator/${PROJECT_NAME}.framework\nif [ -d \"${INSTALL_DIR}\" ]\nthen\nrm -rf \"${INSTALL_DIR}\"\nfi\nmkdir -p \"${INSTALL_DIR}\"\ncp -R \"${DEVICE_DIR}/\" \"${INSTALL_DIR}/\"\n#ditto \"${DEVICE_DIR}/Headers\" \"${INSTALL_DIR}/Headers\"\nlipo -create \"${DEVICE_DIR}/${PROJECT_NAME}\" \"${SIMULATOR_DIR}/${PROJECT_NAME}\" -output \"${INSTALL_DIR}/${PROJECT_NAME}\"\nopen \"${DEVICE_DIR}\"\nopen \"${SRCROOT}/Products\"\nfi\n";
+		};
+		D2A68A11109B4158DCD1E454 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2682,23 +2701,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		9036F13E25773830001F62AA /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"${ACTION}\" = \"build\" ]\nthen\nINSTALL_DIR=${SRCROOT}/Products/${PROJECT_NAME}.framework\nDEVICE_DIR=${BUILD_ROOT}/${CONFIGURATION}-iphoneos/${PROJECT_NAME}.framework\nSIMULATOR_DIR=${BUILD_ROOT}/${CONFIGURATION}-iphonesimulator/${PROJECT_NAME}.framework\nif [ -d \"${INSTALL_DIR}\" ]\nthen\nrm -rf \"${INSTALL_DIR}\"\nfi\nmkdir -p \"${INSTALL_DIR}\"\ncp -R \"${DEVICE_DIR}/\" \"${INSTALL_DIR}/\"\n#ditto \"${DEVICE_DIR}/Headers\" \"${INSTALL_DIR}/Headers\"\nlipo -create \"${DEVICE_DIR}/${PROJECT_NAME}\" \"${SIMULATOR_DIR}/${PROJECT_NAME}\" -output \"${INSTALL_DIR}/${PROJECT_NAME}\"\nopen \"${DEVICE_DIR}\"\nopen \"${SRCROOT}/Products\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -3011,7 +3013,7 @@
 		};
 		90A039F9254A6E7600D57B73 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 919CCD1420694F17248CA5EA /* Pods-EaseIMKit.debug.xcconfig */;
+			baseConfigurationReference = 1C55D99A8C5F8CD707C63C60 /* Pods-EaseIMKit.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_STYLE = Manual;
@@ -3021,6 +3023,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = YES;
+				EXCLUDED_ARCHS = armv7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -3056,7 +3059,7 @@
 		};
 		90A039FA254A6E7600D57B73 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D6B505DEA30882602077D9ED /* Pods-EaseIMKit.release.xcconfig */;
+			baseConfigurationReference = 3192BA6BF08725587E16CDF6 /* Pods-EaseIMKit.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_STYLE = Manual;
@@ -3066,6 +3069,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = YES;
+				EXCLUDED_ARCHS = armv7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

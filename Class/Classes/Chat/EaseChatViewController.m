@@ -122,7 +122,7 @@
     [self.tableView addGestureRecognizer:tap];
     
     
-    self.view.backgroundColor = UIColor.grayColor;
+    //self.view.backgroundColor = UIColor.grayColor;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -146,6 +146,10 @@
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    //群聊@“我”提醒
+    if(self.currentConversation.type == EMConversationTypeGroupChat && [self.currentConversation remindMe]) {
+        [self.currentConversation resetRemindMe];
+    };
 }
 
 - (void)dealloc
@@ -405,6 +409,9 @@
                 NSUInteger index = [weakself.messageList indexOfObject:deleteMsg];
                 if (index != -1) {
                     [weakself.messageList removeObject:deleteMsg];
+                    if ([deleteMsg.messageId isEqualToString:weakself.moreMsgId]) {
+                        weakself.moreMsgId = weakself.messageList[0].messageId;
+                    }
                 }
             }
         }];
@@ -635,6 +642,16 @@
     });
 }
 
+- (void)onConversationRead:(NSString *)from to:(NSString *)to
+{
+    if (self.currentConversation.type == EMConversationTypeChat) {
+        if (self.tableView.isRefreshing) {
+            [self.tableView endRefreshing];
+        }
+        [self refreshTableView:NO];
+    }
+}
+
 #pragma mark - KeyBoard
 
 - (void)keyBoardWillShow:(NSNotification *)note
@@ -744,7 +761,7 @@
 {
     __weak typeof(self) weakself = self;
     if (messages && [messages count]) {
-        _messageList = [messages mutableCopy];
+        [weakself.messageList insertObjects:messages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [messages count])]];
         EMMessage *msg = messages[0];
         weakself.moreMsgId = msg.messageId;
         
@@ -837,6 +854,7 @@
     });
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself messageStatusDidChange:message error:error];
+        [weakself.messageList addObject:message];
     }];
 }
 
