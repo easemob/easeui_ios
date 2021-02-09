@@ -10,7 +10,9 @@
 #import <Masonry/Masonry.h>
 #import <EaseIMKitLite/EaseIMKitLite.h>
 
-@interface ChatViewController ()
+@interface ChatViewController ()<EaseChatViewControllerDelegate>
+@property (nonatomic, strong) EaseChatViewController *chatController;
+@property (nonatomic, strong) NSString *firstMesgId;
 @end
 
 @implementation ChatViewController
@@ -20,13 +22,35 @@
     [super viewDidLoad];
     
     EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
-    EaseChatViewController *chatController = [[EaseChatViewController alloc] initWithConversationId:self.chatter
+    _chatController = [[EaseChatViewController alloc] initWithConversationId:self.chatter
                                                                                    conversationType:self.conversationType
                                                                                       chatViewModel:viewModel];
-    [self addChildViewController:chatController];
-    [self.view addSubview:chatController.view];
-    chatController.view.frame = self.view.bounds;
+    _chatController.delegate = self;
+    [_chatController setEditingStatusVisible:YES];
+    [self addChildViewController:_chatController];
+    [self.view addSubview:_chatController.view];
+    _chatController.view.frame = self.view.bounds;
+    [self loadData:nil];
 }
 
+- (void)loadData:(NSArray<EMMessage *> *)messageList
+{
+    __weak typeof(self) weakself = self;
+        void (^block)(NSArray *aMessages, EMError *aError) = ^(NSArray *aMessages, EMError *aError) {
+            NSMutableArray *msgList = [NSMutableArray arrayWithArray:aMessages];
+            if (messageList && [messageList count] && [msgList count]) {
+                [msgList addObjectsFromArray:messageList];
+            }
+            [weakself.chatController refreshTableViewWithData:[msgList copy] isScrollBottom:YES];
+        };
+    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:self.chatter type:self.conversationType createIfNotExist:NO];
+    [conversation loadMessagesStartFromId:self.firstMesgId count:50 searchDirection:EMMessageSearchDirectionUp completion:block];
+}
+
+- (void)loadMoreMessageData:(NSString *)firstMessageId currentMessageList:(NSArray<EMMessage *> *)messageList
+{
+    self.firstMesgId = firstMessageId;
+    [self loadData:messageList];
+}
 
 @end

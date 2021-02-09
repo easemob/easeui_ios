@@ -18,7 +18,8 @@ UITableViewDelegate,
 UITableViewDataSource,
 EMContactManagerDelegate,
 EMChatManagerDelegate,
-EMGroupManagerDelegate
+EMGroupManagerDelegate,
+EMClientDelegate
 >
 {
     dispatch_queue_t _loadDataQueue;
@@ -35,6 +36,7 @@ EMGroupManagerDelegate
     if (self = [super initWithModel:aModel]) {
         _viewModel = aModel;
         _loadDataQueue = dispatch_queue_create("com.easemob.easeui.conversations.queue", 0);
+        [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
         [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
         [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
         [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
@@ -54,9 +56,21 @@ EMGroupManagerDelegate
 
 - (void)dealloc
 {
+    [[EMClient sharedClient] removeDelegate:self];
+    [[EMClient sharedClient].groupManager removeDelegate:self];
+    [[EMClient sharedClient].contactManager removeDelegate:self];
+    [[EMClient sharedClient].chatManager removeDelegate:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+#pragma mark - EMClientDelegate
+
+- (void)autoLoginDidCompleteWithError:(EMError *)aError
+{
+    if (!aError) {
+        [self _loadAllConversationsFromDB];
+    }
+}
 
 #pragma mark - Table view data source
 
@@ -198,7 +212,29 @@ EMGroupManagerDelegate
 
 - (void)messagesDidReceive:(NSArray *)aMessages
 {
+    if (aMessages && [aMessages count]) {
+        EMMessage *msg = aMessages[0];
+        if(msg.body.type == EMMessageBodyTypeText) {
+            EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:msg.conversationId type:EMConversationTypeGroupChat createIfNotExist:NO];
+            //群聊@“我”提醒
+            NSString *content = [NSString stringWithFormat:@"@%@",EMClient.sharedClient.currentUsername];
+            if(conversation.type == EMConversationTypeGroupChat && [((EMTextMessageBody *)msg.body).text containsString:content]) {
+                [conversation setRemindMe:msg.messageId];
+            };
+        }
+    }
     [self _loadAllConversationsFromDB];
+}
+
+- (void)onConversationRead:(NSString *)from to:(NSString *)to
+{
+    [self _loadAllConversationsFromDB];
+}
+
+//　收到已读回执
+- (void)messagesDidRead:(NSArray *)aMessages
+{
+    [self refreshTable];
 }
 
 #pragma mark - UIMenuController

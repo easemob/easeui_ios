@@ -15,7 +15,6 @@
 {
     self = [super init];
     if (self) {
-        _isFetchHistoryMessagesFromServer = NO;
         _chatViewBgColor = [UIColor colorWithHexString:@"#F2F2F2"];
         _chatBarBgColor = [UIColor colorWithHexString:@"#F2F2F2"];
         _extFuncModel = [[EaseExtFuncModel alloc]init];
@@ -24,17 +23,13 @@
         _receiveBubbleBgPicture = [UIImage easeUIImageNamed:@"msg_bg_recv"];
         _sendBubbleBgPicture = [UIImage easeUIImageNamed:@"msg_bg_send"];
         _bubbleBgEdgeInset = UIEdgeInsetsMake(8, 8, 8, 8);
+        _contentFontColor = [UIColor blackColor];
         _contentFontSize = 18.f;
         _inputBarStyle = EaseInputBarStyleAll;
         _avatarStyle = RoundedCorner;
         _avatarCornerRadius = 0;
     }
     return self;
-}
-
-- (void)setIsFetchHistoryMessagesFromServer:(BOOL)isFetchHistoryMessagesFromServer
-{
-    _isFetchHistoryMessagesFromServer = isFetchHistoryMessagesFromServer;
 }
 
 - (void)setChatViewBgColor:(UIColor *)chatViewBgColor
@@ -89,6 +84,13 @@
 - (void)setBubbleBgEdgeInset:(UIEdgeInsets)bubbleBgEdgeInset
 {
     _bubbleBgEdgeInset = bubbleBgEdgeInset;
+}
+
+- (void)setContentFontColor:(UIColor *)contentFontColor
+{
+    if (contentFontColor) {
+        _contentFontColor = contentFontColor;
+    }
 }
 
 - (void)setContentFontSize:(CGFloat)contentFontSize

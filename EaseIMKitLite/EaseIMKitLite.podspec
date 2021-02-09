@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
   s.name = 'EaseIMKitLite'
-  s.version = '3.7.3.1'
+  s.version = '3.7.4'
 
-  s.platform     = :ios, '11.0'
+  s.platform     = :ios, '10.0'
 
   s.license       = { :type => 'Copyright', :text => 'Hyphenate Inc. 2017' }
   s.summary = 'easemob im sdk UIKit'
@@ -12,9 +12,9 @@ Pod::Spec.new do |s|
                     1. Conversation list
                     2. Chat page (singleChat,groupChat,chatRoom)
                     3. Contact list
-                                                      DESC
+                  DESC
   s.author = { 'easemob' => 'dev@easemob.com' }
-  s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKitLite_3.7.3.zip' }
+  s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKitLite_3.7.4.zip' }
 
   s.xcconfig = {
     'OTHER_LDFLAGS' => '-ObjC'

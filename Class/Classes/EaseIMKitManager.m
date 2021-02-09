@@ -13,7 +13,7 @@
 
 bool gInit;
 static EaseIMKitManager *easeIMKit = nil;
-static NSString *g_UIKitVersion = @"3.7.3";
+static NSString *g_UIKitVersion = @"3.7.4";
 
 @interface EaseIMKitManager ()<EMMultiDevicesDelegate, EMContactManagerDelegate, EMGroupManagerDelegate, EMChatManagerDelegate>
 @property (nonatomic, strong) EaseMulticastDelegate<EaseIMKitManagerDelegate> *delegates;
@@ -22,7 +22,7 @@ static NSString *g_UIKitVersion = @"3.7.3";
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
 @end
 
-#define IMKitVersion @"1.0.0"
+#define IMKitVersion @"3.7.4"
 
 @implementation EaseIMKitManager
 + (BOOL)initWithEMOptions:(EMOptions *)options {

@@ -22,11 +22,11 @@
 #import "EaseChatViewController+EMMsgLongPressIncident.h"
 #import "EaseChatViewController+ChatToolBarIncident.h"
 #import "EMChatBar.h"
+#import "UITableView+Refresh.h"
 #import "EMConversation+EaseUI.h"
 #import "EMSingleChatViewController.h"
 #import "EMGroupChatViewController.h"
 #import "EMChatroomViewController.h"
-#import "UITableView+Refresh.h"
 #import "EaseIMKitManager+ExtFunction.h"
 #import "UIViewController+ComponentSize.h"
 #import "EaseHeaders.h"
@@ -42,6 +42,7 @@
 @property (nonatomic, strong) EMMoreFunctionView *longPressView;
 @property (nonatomic, strong) EMChatBar *chatBar;
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
+@property (nonatomic, strong) NSMutableArray<EMMessage *> *messageList;
 @end
 
 @implementation EaseChatViewController
@@ -121,13 +122,12 @@
     [self.tableView addGestureRecognizer:tap];
     
     
-    self.view.backgroundColor = UIColor.grayColor;
+    //self.view.backgroundColor = UIColor.grayColor;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self tableViewDidTriggerHeader];
     [EaseIMKitManager.shared markAllMessagesAsReadWithConversation:self.currentConversation];
 }
 
@@ -146,6 +146,10 @@
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    //群聊@“我”提醒
+    if(self.currentConversation.type == EMConversationTypeGroupChat && [self.currentConversation remindMe]) {
+        [self.currentConversation resetRemindMe];
+    };
 }
 
 - (void)dealloc
@@ -346,7 +350,7 @@
         [self showHint:@"说话时间太短"];
         return;
     }
-    [self sendMessageWithBody:body ext:nil isUpload:YES];
+    [self sendMessageWithBody:body ext:nil];
 }
 
 #pragma mark - EaseChatBarEmoticonViewDelegate
@@ -400,7 +404,17 @@
         [weakself copyLongPressAction];
     }];
     EaseExtMenuModel *deleteExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"delete"] funcDesc:@"删除" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
-        [weakself deleteLongPressAction];
+        [weakself deleteLongPressAction:^(EMMessage *deleteMsg) {
+            if (deleteMsg) {
+                NSUInteger index = [weakself.messageList indexOfObject:deleteMsg];
+                if (index != -1) {
+                    [weakself.messageList removeObject:deleteMsg];
+                    if ([deleteMsg.messageId isEqualToString:weakself.moreMsgId]) {
+                        weakself.moreMsgId = weakself.messageList[0].messageId;
+                    }
+                }
+            }
+        }];
     }];
     EaseExtMenuModel *recallExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"recall"] funcDesc:@"撤回" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself recallLongPressAction];
@@ -593,26 +607,6 @@
     [self.tableView reloadData];
 }
 
-//为了从会话列表切进来触发 群组阅读回执 或 消息已读回执
-- (void)sendDidReadReceipt
-{
-    __weak typeof(self) weakself = self;
-    NSString *conId = self.currentConversation.conversationId;
-    void (^block)(NSArray *aMessages, EMError *aError) = ^(NSArray *aMessages, EMError *aError) {
-        if (!aError && [aMessages count]) {
-            for (int i = 0; i < [aMessages count]; i++) {
-                EMMessage *msg = aMessages[i];
-                if (![msg.conversationId isEqualToString:conId]) {
-                    continue;
-                }
-                [weakself returnReadReceipt:msg];
-                [weakself.currentConversation markMessageAsReadWithId:msg.messageId error:nil];
-            }
-        }
-    };
-    [self.currentConversation loadMessagesStartFromId:self.moreMsgId count:self.currentConversation.unreadMessagesCount searchDirection:EMMessageSearchDirectionUp completion:block];
-}
-
 - (void)messageStatusDidChange:(EMMessage *)aMessage
                          error:(EMError *)aError
 {
@@ -646,6 +640,16 @@
         }
         
     });
+}
+
+- (void)onConversationRead:(NSString *)from to:(NSString *)to
+{
+    if (self.currentConversation.type == EMConversationTypeChat) {
+        if (self.tableView.isRefreshing) {
+            [self.tableView endRefreshing];
+        }
+        [self refreshTableView:NO];
+    }
 }
 
 #pragma mark - KeyBoard
@@ -717,7 +721,7 @@
     }
     
     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:aText];
-    [self sendMessageWithBody:body ext:aExt isUpload:NO];
+    [self sendMessageWithBody:body ext:aExt];
 }
 
 #pragma mark - Data
@@ -753,47 +757,40 @@
     return formated;
 }
 
-- (void)tableViewDidTriggerHeaderRefresh:(BOOL)isSlideLatestMsg
+- (void)refreshTableViewWithData:(NSArray<EMMessage *> *)messages isScrollBottom:(BOOL)isScrollBottom
 {
     __weak typeof(self) weakself = self;
-    void (^block)(NSArray *aMessages, EMError *aError) = ^(NSArray *aMessages, EMError *aError) {
-        if (!aError && [aMessages count]) {
-            EMMessage *msg = aMessages[0];
-            weakself.moreMsgId = msg.messageId;
-            
-            dispatch_async(self.msgQueue, ^{
-                NSArray *formated = [weakself formatMessages:aMessages];
-                [weakself.dataArray insertObjects:formated atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formated count])]];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (weakself.tableView.isRefreshing) {
-                        [weakself.tableView endRefreshing];
-                    }
-                    [weakself refreshTableView:YES];
-                });
+    if (messages && [messages count]) {
+        [weakself.messageList insertObjects:messages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [messages count])]];
+        EMMessage *msg = messages[0];
+        weakself.moreMsgId = msg.messageId;
+        
+        dispatch_async(self.msgQueue, ^{
+            NSArray *formated = [weakself formatMessages:messages];
+            [weakself.dataArray insertObjects:formated atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formated count])]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (weakself.tableView.isRefreshing) {
+                    [weakself.tableView endRefreshing];
+                }
+                [weakself refreshTableView:isScrollBottom];
             });
-        } else {
-            if (weakself.tableView.isRefreshing) {
-                [weakself.tableView endRefreshing];
-            }
-        }
-    };
-
-    if(self.currentConversation.unreadMessagesCount > 0){
-        [self sendDidReadReceipt];
-    }
-    //是否从服务器拉取历史消息
-    if (_viewModel.isFetchHistoryMessagesFromServer) {
-        [EMClient.sharedClient.chatManager asyncFetchHistoryMessagesFromServer:self.currentConversation.conversationId conversationType:self.currentConversation.type startMessageId:self.moreMsgId pageSize:50 completion:^(EMCursorResult *aResult, EMError *aError) {
-            block(aResult.list, aError);
-         }];
+        });
     } else {
-        [self.currentConversation loadMessagesStartFromId:self.moreMsgId count:50 searchDirection:EMMessageSearchDirectionUp completion:block];
+        if (weakself.tableView.isRefreshing) {
+            [weakself.tableView endRefreshing];
+        }
     }
 }
 
-- (void)tableViewDidTriggerHeader
+- (void)dropdownRefreshTableViewWithData
 {
-    [self tableViewDidTriggerHeaderRefresh:YES];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(loadMoreMessageData:currentMessageList:)]) {
+        [self.delegate loadMoreMessageData:self.moreMsgId currentMessageList:self.messageList];
+    } else {
+        if (self.tableView.isRefreshing) {
+            [self.tableView endRefreshing];
+        }
+    }
 }
 
 #pragma mark - Action
@@ -834,12 +831,7 @@
 //发送消息体
 - (void)sendMessageWithBody:(EMMessageBody *)aBody
                          ext:(NSDictionary * __nullable)aExt
-                    isUpload:(BOOL)aIsUpload
 {
-    if (!([EMClient sharedClient].options.isAutoTransferMessageAttachments) && aIsUpload) {
-        return;
-    }
-    
     NSString *from = [[EMClient sharedClient] currentUsername];
     NSString *to = self.currentConversation.conversationId;
     EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:aBody ext:aExt];
@@ -862,19 +854,24 @@
     });
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself messageStatusDidChange:message error:error];
+        [weakself.messageList addObject:message];
     }];
 }
 
 #pragma mark - Public
 
+//发送输入状态
+- (void)setEditingStatusVisible:(BOOL)editingStatusVisible{}
+
+//已读回执
 - (void)returnReadReceipt:(EMMessage *)msg{}
 
-- (void)refreshTableView:(BOOL)isSlideLatestMsg
+- (void)refreshTableView:(BOOL)isScrollBottom
 {
     [self.tableView reloadData];
     [self.tableView setNeedsLayout];
     [self.tableView layoutIfNeeded];
-    if (isSlideLatestMsg) {
+    if (isScrollBottom) {
         [self scrollToBottomRow];
     }
 }
@@ -892,7 +889,7 @@
         _tableView.estimatedRowHeight = 130;
         _tableView.backgroundColor = [UIColor systemPinkColor];
         [_tableView enableRefresh:@"下拉刷新" color:UIColor.redColor];
-        [_tableView.refreshControl addTarget:self action:@selector(tableViewDidTriggerHeader) forControlEvents:UIControlEventValueChanged];
+        [_tableView.refreshControl addTarget:self action:@selector(dropdownRefreshTableViewWithData) forControlEvents:UIControlEventValueChanged];
     }
     
     return _tableView;
@@ -902,8 +899,15 @@
     if (!_dataArray) {
         _dataArray = [[NSMutableArray alloc] init];;
     }
-    
     return _dataArray;
+}
+
+- (NSMutableArray<EMMessage *> *)messageList
+{
+    if (!_messageList) {
+        _messageList = [[NSMutableArray<EMMessage *> alloc]init];
+    }
+    return _messageList;
 }
 
 @end

@@ -197,12 +197,12 @@ static const void *imagePickerKey = &imagePickerKey;
 - (void)_sendImageDataAction:(NSData *)aImageData
 {
     EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:aImageData displayName:@"image"];
-    [self sendMessageWithBody:body ext:nil isUpload:YES];
+    [self sendMessageWithBody:body ext:nil];
 }
 - (void)_sendVideoAction:(NSURL *)aUrl
 {
     EMVideoMessageBody *body = [[EMVideoMessageBody alloc] initWithLocalPath:[aUrl path] displayName:@"video.mp4"];
-    [self sendMessageWithBody:body ext:nil isUpload:YES];
+    [self sendMessageWithBody:body ext:nil];
 }
 
 #pragma mark - Getter
@@ -249,7 +249,7 @@ static const void *imagePickerKey = &imagePickerKey;
                     address:(NSString *)aAddress
 {
     EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:aCoord.latitude longitude:aCoord.longitude address:aAddress];
-    [self sendMessageWithBody:body ext:nil isUpload:NO];
+    [self sendMessageWithBody:body ext:nil];
 }
 
 @end
@@ -314,7 +314,7 @@ static const void *imagePickerKey = &imagePickerKey;
             }
             NSLog(@"fileName: %@\nfileUrl: %@", fileName, newURL);
             EMFileMessageBody *body = [[EMFileMessageBody alloc]initWithData:fileData displayName:fileName];
-            [self sendMessageWithBody:body ext:nil isUpload:NO];
+            [self sendMessageWithBody:body ext:nil];
         }];
     }
 }
