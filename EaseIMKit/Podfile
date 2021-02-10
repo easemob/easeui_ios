@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-use_frameworks!
+#use_frameworks!
 
 platform :ios, '11.0'
 
@@ -7,31 +7,23 @@ workspace 'EaseIMKit.xcworkspace'
 
 target 'EaseIM' do
   platform :ios, '11.0'
-  project '../../EaseIM/EaseIM/EaseIM.xcodeproj'
-  pod 'Masonry'
-  pod 'MBProgressHUD'
-  pod 'MJRefresh'
-  #pod 'Hyphenate'
-  #pod 'EaseIMKit', :path => './'
+pod 'Hyphenate'
+pod 'MJRefresh'
+pod 'MBProgressHUD'
+pod 'Masonry'
+project '../../EaseIM/EaseIM/EaseIM.xcodeproj'
 end
 
 target 'EaseIMKitDemo' do
   platform :ios, '11.0'
+  pod 'Hyphenate'
+  pod 'Masonry'
   project '../EaseIMKitDemo/EaseIMKitDemo.xcodeproj'
-  #pod 'Masonry'
-  #pod 'Hyphenate'
-  #pod 'EaseIMKit', :path => './'
 end
 
 target 'EaseIMKit' do
   project './EaseIMKit.xcodeproj'
-  #pod 'Hyphenate'
-  pod 'EMVoiceConvert', '~> 0.1.0'
-end
-
-target 'EaseIMKitLite' do
-  project './EaseIMKit.xcodeproj'
-  #pod 'Hyphenate'
+  pod 'Hyphenate'
   pod 'EMVoiceConvert', '~> 0.1.0'
 end
 
