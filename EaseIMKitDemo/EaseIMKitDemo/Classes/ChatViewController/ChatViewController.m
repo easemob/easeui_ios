@@ -8,7 +8,7 @@
 
 #import "ChatViewController.h"
 #import <Masonry/Masonry.h>
-#import <EaseIMKitLite/EaseIMKitLite.h>
+#import <EaseIMKit/EaseIMKit.h>
 
 @interface ChatViewController ()<EaseChatViewControllerDelegate>
 @property (nonatomic, strong) EaseChatViewController *chatController;
@@ -22,9 +22,9 @@
     [super viewDidLoad];
     
     EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
-    _chatController = [[EaseChatViewController alloc] initWithConversationId:self.chatter
-                                                                                   conversationType:self.conversationType
-                                                                                      chatViewModel:viewModel];
+    _chatController = [EaseChatViewController initWithConversationId:self.chatter
+                                                    conversationType:self.conversationType
+                                                       chatViewModel:viewModel];
     _chatController.delegate = self;
     [_chatController setEditingStatusVisible:YES];
     [self addChildViewController:_chatController];

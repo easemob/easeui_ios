@@ -47,7 +47,7 @@
 
 @implementation EaseChatViewController
 
-- (instancetype)initWithConversationId:(NSString *)aConversationId
++ (EaseChatViewController *)initWithConversationId:(NSString *)aConversationId
                       conversationType:(EMConversationType)aType
                          chatViewModel:(EaseChatViewModel *)aModel
 {
@@ -55,26 +55,26 @@
     switch (aType) {
         case EMConversationTypeChat:
         {
-            self = [[EMSingleChatViewController alloc] initSingleChatViewControllerWithCoversationid:aConversationId
+            return [[EMSingleChatViewController alloc] initSingleChatViewControllerWithCoversationid:aConversationId
                                                                                            chatViewModel:aModel];
         }
             break;
         case EMConversationTypeGroupChat:
         {
-            self = [[EMGroupChatViewController alloc] initGroupChatViewControllerWithCoversationid:aConversationId
+            return [[EMGroupChatViewController alloc] initGroupChatViewControllerWithCoversationid:aConversationId
                                                                                            chatViewModel:aModel];
         }
             break;
         case EMConversationTypeChatRoom:
         {
-            self = [[EMChatroomViewController alloc] initChatRoomViewControllerWithCoversationid:aConversationId
+            return [[EMChatroomViewController alloc] initChatRoomViewControllerWithCoversationid:aConversationId
                                                                                    chatViewModel:aModel];
         }
             break;
         default:
             break;
     }
-    return self;
+    return nil;
 }
 
 

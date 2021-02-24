@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3C72BD8525CA9C4700756CBD /* Hyphenate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C72BD8425CA9C4700756CBD /* Hyphenate.framework */; };
 		9071DB9125AD967200E17412 /* EaseExtMenuModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 9071D93F25AD967100E17412 /* EaseExtMenuModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9071DB9225AD967200E17412 /* EaseMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9071D94025AD967100E17412 /* EaseMessageModel.m */; };
 		9071DB9325AD967200E17412 /* EaseChatViewModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 9071D94125AD967100E17412 /* EaseChatViewModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -539,27 +538,9 @@
 		9071E76625ADA6BA00E17412 /* EaseHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 9071E76525ADA6BA00E17412 /* EaseHeaders.h */; };
 		9071E77125ADA8A400E17412 /* EasePublicHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 9071E77025ADA8A400E17412 /* EasePublicHeaders.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		90892DDC25764D0900F50368 /* EaseIMKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 90892DDB25764D0900F50368 /* EaseIMKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		ADC59D630CDB73B70E1CA940 /* libPods-EaseIMKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B87CDBBC30B8E13449C0A5 /* libPods-EaseIMKit.a */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		3C91A29325C9784C00103C2E /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		1C55D99A8C5F8CD707C63C60 /* Pods-EaseIMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.debug.xcconfig"; sourceTree = "<group>"; };
-		3192BA6BF08725587E16CDF6 /* Pods-EaseIMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.release.xcconfig"; sourceTree = "<group>"; };
-		3C72BD8425CA9C4700756CBD /* Hyphenate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Hyphenate.framework; sourceTree = "<group>"; };
-		64B87CDBBC30B8E13449C0A5 /* libPods-EaseIMKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EaseIMKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9071D93F25AD967100E17412 /* EaseExtMenuModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseExtMenuModel.h; sourceTree = "<group>"; };
 		9071D94025AD967100E17412 /* EaseMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseMessageModel.m; sourceTree = "<group>"; };
 		9071D94125AD967100E17412 /* EaseChatViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseChatViewModel.h; sourceTree = "<group>"; };
@@ -1101,23 +1082,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C72BD8525CA9C4700756CBD /* Hyphenate.framework in Frameworks */,
-				ADC59D630CDB73B70E1CA940 /* libPods-EaseIMKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		10014ED42E2ED355F5DF5B04 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				1C55D99A8C5F8CD707C63C60 /* Pods-EaseIMKit.debug.xcconfig */,
-				3192BA6BF08725587E16CDF6 /* Pods-EaseIMKit.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		9071D93A25AD967100E17412 /* Class */ = {
 			isa = PBXGroup;
 			children = (
@@ -2196,7 +2166,6 @@
 			isa = PBXGroup;
 			children = (
 				908930D8257651B100F50368 /* UIKit.framework */,
-				64B87CDBBC30B8E13449C0A5 /* libPods-EaseIMKit.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2204,11 +2173,9 @@
 		90A039E6254A6E7600D57B73 = {
 			isa = PBXGroup;
 			children = (
-				3C72BD8425CA9C4700756CBD /* Hyphenate.framework */,
 				90A039F2254A6E7600D57B73 /* EaseIMKit */,
 				90A039F1254A6E7600D57B73 /* Products */,
 				90892DD325764C6900F50368 /* Frameworks */,
-				10014ED42E2ED355F5DF5B04 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2452,7 +2419,6 @@
 				90A039ED254A6E7600D57B73 /* Frameworks */,
 				9036F13E25773830001F62AA /* ShellScript */,
 				9036F2D525774B45001F62AA /* Resources */,
-				3C91A29325C9784C00103C2E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3013,17 +2979,17 @@
 		};
 		90A039F9254A6E7600D57B73 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1C55D99A8C5F8CD707C63C60 /* Pods-EaseIMKit.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 499WYUV8Q2;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = YES;
-				EXCLUDED_ARCHS = armv7;
+				EXCLUDED_ARCHS = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -3059,17 +3025,17 @@
 		};
 		90A039FA254A6E7600D57B73 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3192BA6BF08725587E16CDF6 /* Pods-EaseIMKit.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 499WYUV8Q2;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = YES;
-				EXCLUDED_ARCHS = armv7;
+				EXCLUDED_ARCHS = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

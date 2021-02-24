@@ -23,9 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
 @property (nonatomic) NSTimeInterval msgTimelTag;   //消息时间格式化
 
-- (instancetype)initWithConversationId:(NSString *)aConversationId
++ (EaseChatViewController *)initWithConversationId:(NSString *)aConversationId
                       conversationType:(EMConversationType)aType
-                         chatViewModel:(EaseChatViewModel *)aModel;
+                                     chatViewModel:(EaseChatViewModel *)aModel;
 //重置聊天控制器
 - (void)resetChatVCWithViewModel:(EaseChatViewModel *)viewModel;
 

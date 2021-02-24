@@ -268,10 +268,12 @@ EMClientDelegate
         NSMutableArray *topConvs = [NSMutableArray array];
         
         for (EMConversation *conv in conversations) {
+            NSLog(@"conversationiud:   %@",conv.conversationId);
+            
             if (!conv.latestMessage) {
-                [EMClient.sharedClient.chatManager deleteConversation:conv.conversationId
+                /*[EMClient.sharedClient.chatManager deleteConversation:conv.conversationId
                                                      isDeleteMessages:NO
-                                                           completion:nil];
+                                                           completion:nil];*/
                 continue;
             }
             if (conv.type == EMConversationTypeChatRoom) {

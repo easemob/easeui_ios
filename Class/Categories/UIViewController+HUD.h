@@ -1,13 +1,13 @@
 /************************************************************
- *  * Hyphenate CONFIDENTIAL
+ *  * HyphenateChat CONFIDENTIAL
  * __________________
- * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
+ * Copyright (C) 2016 HyphenateChat Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Inc.
+ * the property of HyphenateChat Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from Hyphenate Inc.
+ * from HyphenateChat Inc.
  */
 
 #import <UIKit/UIKit.h>
