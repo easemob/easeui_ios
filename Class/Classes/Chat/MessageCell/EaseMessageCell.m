@@ -17,6 +17,7 @@
 #import "EMMsgLocationBubbleView.h"
 #import "EMMsgFileBubbleView.h"
 #import "EMMsgExtGifBubbleView.h"
+#import "UIImageView+EaseWebCache.h"
 
 @interface EaseMessageCell()
 
@@ -285,6 +286,10 @@
     }
     if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(defaultAvatar)]) {
         _avatarView.image = model.userDataDelegate.defaultAvatar;
+    }
+    if (_model.userDataDelegate && [_model.userDataDelegate respondsToSelector:@selector(avatarURL)]) {
+        [_avatarView Ease_setImageWithURL:[NSURL URLWithString:_model.userDataDelegate.avatarURL]
+                           placeholderImage:[UIImage easeUIImageNamed:@"defaultAvatar"]];
     } else {
         _avatarView.image = [UIImage easeUIImageNamed:@"defaultAvatar"];
     }

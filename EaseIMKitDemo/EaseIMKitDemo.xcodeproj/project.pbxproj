@@ -10,6 +10,7 @@
 		3C6DCE4225E6697A00E7E1EA /* EaseIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C6DCE4125E6697A00E7E1EA /* EaseIMKit.framework */; };
 		3C6DCE4325E6697A00E7E1EA /* EaseIMKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3C6DCE4125E6697A00E7E1EA /* EaseIMKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3C7B87922563CCD40074F990 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C7B87912563CCD40074F990 /* ChatViewController.m */; };
+		546825E16837FEBD6EB71864 /* libPods-EaseIMKitDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC02259C922195962E9001C2 /* libPods-EaseIMKitDemo.a */; };
 		90146CF1256CB0CC00A8D524 /* ContactModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90146CF0256CB0CC00A8D524 /* ContactModel.m */; };
 		903EAE7A25540390005E6BB1 /* ConversationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7925540390005E6BB1 /* ConversationsViewController.m */; };
 		903EAE7F2554039B005E6BB1 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EAE7E2554039B005E6BB1 /* ContactsViewController.m */; };
@@ -65,6 +66,7 @@
 		90A18674256B9EE500074CD3 /* DemoUserModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoUserModel.h; sourceTree = "<group>"; };
 		90A18675256B9EE500074CD3 /* DemoUserModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoUserModel.m; sourceTree = "<group>"; };
 		979613458D390AEE181090F4 /* Pods-EaseIMKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKitDemo.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		BC02259C922195962E9001C2 /* libPods-EaseIMKitDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EaseIMKitDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C6DCE4225E6697A00E7E1EA /* EaseIMKit.framework in Frameworks */,
+				546825E16837FEBD6EB71864 /* libPods-EaseIMKitDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				3C6DCE4125E6697A00E7E1EA /* EaseIMKit.framework */,
+				BC02259C922195962E9001C2 /* libPods-EaseIMKitDemo.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
