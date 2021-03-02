@@ -41,7 +41,7 @@
             if (messageList && [messageList count] && [msgList count]) {
                 [msgList addObjectsFromArray:messageList];
             }
-            [weakself.chatController refreshTableViewWithData:[msgList copy] isScrollBottom:YES];
+            [weakself.chatController refreshTableViewWithData:[msgList copy] isInsertBottom:NO isScrollBottom:YES];
         };
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:self.chatter type:self.conversationType createIfNotExist:NO];
     [conversation loadMessagesStartFromId:self.firstMesgId count:50 searchDirection:EMMessageSearchDirectionUp completion:block];

@@ -410,7 +410,11 @@
                 if (index != -1) {
                     [weakself.messageList removeObject:deleteMsg];
                     if ([deleteMsg.messageId isEqualToString:weakself.moreMsgId]) {
-                        weakself.moreMsgId = weakself.messageList[0].messageId;
+                        if ([weakself.messageList count] > 0) {
+                            weakself.moreMsgId = weakself.messageList[0].messageId;
+                        } else {
+                            weakself.moreMsgId = nil;
+                        }
                     }
                 }
             }
@@ -757,17 +761,31 @@
     return formated;
 }
 
-- (void)refreshTableViewWithData:(NSArray<EMMessage *> *)messages isScrollBottom:(BOOL)isScrollBottom
+- (void)refreshTableViewWithData:(NSArray<EMMessage *> *)messages isInsertBottom:(BOOL)isInsertBottom isScrollBottom:(BOOL)isScrollBottom
 {
     __weak typeof(self) weakself = self;
     if (messages && [messages count]) {
-        [weakself.messageList insertObjects:messages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [messages count])]];
-        EMMessage *msg = messages[0];
-        weakself.moreMsgId = msg.messageId;
+        NSMutableArray<EMMessage *> *tempMsgs = [[NSMutableArray<EMMessage *> alloc]init];
+        for (EMMessage *message in messages) {
+            if (message.body.type != EMMessageTypeCmd) {
+                [tempMsgs addObject:message];
+            }
+        }
+        if (isInsertBottom) {
+            [weakself.messageList addObjectsFromArray:tempMsgs];
+        } else {
+            [weakself.messageList insertObjects:tempMsgs atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tempMsgs count])]];
+            EMMessage *msg = tempMsgs[0];
+            weakself.moreMsgId = msg.messageId;
+        }
         
         dispatch_async(self.msgQueue, ^{
-            NSArray *formated = [weakself formatMessages:messages];
-            [weakself.dataArray insertObjects:formated atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formated count])]];
+            NSArray *formated = [weakself formatMessages:tempMsgs];
+            if (isInsertBottom) {
+                [weakself.dataArray addObjectsFromArray:formated];
+            } else {
+                [weakself.dataArray insertObjects:formated atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formated count])]];
+            }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (weakself.tableView.isRefreshing) {
                     [weakself.tableView endRefreshing];
@@ -830,7 +848,7 @@
 
 //发送消息体
 - (void)sendMessageWithBody:(EMMessageBody *)aBody
-                         ext:(NSDictionary * __nullable)aExt
+                         ext:(NSDictionary * __nullable)aExt;
 {
     NSString *from = [[EMClient sharedClient] currentUsername];
     NSString *to = self.currentConversation.conversationId;
