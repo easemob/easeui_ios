@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import <HyphenateLite/HyphenateLite.h>
+#import <HyphenateChat/HyphenateChat.h>
 
 #define kDefaultName @"du001"
 

@@ -14,6 +14,6 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-    #import <HyphenateLite/HyphenateLite.h>
-    #import <EaseIMKitLite/EaseIMKitLite.h>
+    #import <HyphenateChat/HyphenateChat.h>
+    #import <EaseIMKit/EaseIMKit.h>
 #endif

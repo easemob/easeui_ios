@@ -8,13 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#if LITE
-#import <HyphenateLite/HyphenateLite.h>
-#else
-#import <Hyphenate/Hyphenate.h>
-#endif
-
-
+#import <HyphenateChat/HyphenateChat.h>
 
 #import "Easeonry.h"
 #import "EaseEnums.h"

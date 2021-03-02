@@ -10,7 +10,7 @@
 #import "ChatViewController.h"
 #import "ContactModel.h"
 #import <Masonry/Masonry.h>
-#import <EaseIMKitLite/EaseIMKitLite.h>
+#import <EaseIMKit/EaseIMKit.h>
 
 @interface ContactsViewController () <EaseContactsViewControllerDelegate>
 {

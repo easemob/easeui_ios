@@ -111,6 +111,7 @@ NS_ASSUME_NONNULL_BEGIN
  * 下拉加载更多消息回调 
  *
  * @param   firstMessageId          第一条消息 id
+ * @param   messageList                 当前消息列表
  */
 - (void)loadMoreMessageData:(NSString *)firstMessageId currentMessageList:(NSArray<EMMessage *> *)messageList;
 

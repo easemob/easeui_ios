@@ -17,6 +17,7 @@
 #import "EMMsgLocationBubbleView.h"
 #import "EMMsgFileBubbleView.h"
 #import "EMMsgExtGifBubbleView.h"
+#import "UIImageView+EaseWebCache.h"
 
 @interface EaseMessageCell()
 
@@ -273,7 +274,7 @@
         [self.statusView setSenderStatus:model.message.status isReadAcked:model.message.isReadAcked];
     } else {
         if (model.type == EMMessageBodyTypeVoice) {
-            self.statusView.hidden = model.message.isReadAcked;
+            self.statusView.hidden = model.message.isRead;
         }
     }
     if (model.type != EMChatTypeChat) {
@@ -283,9 +284,21 @@
             self.nameLabel.text = model.message.from;
         }
     }
+    BOOL isCustomAvatar = NO;
     if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(defaultAvatar)]) {
-        _avatarView.image = model.userDataDelegate.defaultAvatar;
-    } else {
+        if (model.userDataDelegate.defaultAvatar) {
+            _avatarView.image = model.userDataDelegate.defaultAvatar;
+            isCustomAvatar = YES;
+        }
+    }
+    if (_model.userDataDelegate && [_model.userDataDelegate respondsToSelector:@selector(avatarURL)]) {
+        if ([_model.userDataDelegate.avatarURL length] > 0) {
+            [_avatarView Ease_setImageWithURL:[NSURL URLWithString:_model.userDataDelegate.avatarURL]
+                               placeholderImage:[UIImage easeUIImageNamed:@"defaultAvatar"]];
+            isCustomAvatar = YES;
+        }
+    }
+    if (!isCustomAvatar) {
         _avatarView.image = [UIImage easeUIImageNamed:@"defaultAvatar"];
     }
     if (model.message.isNeedGroupAck) {
