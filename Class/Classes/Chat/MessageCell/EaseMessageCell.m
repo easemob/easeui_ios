@@ -274,7 +274,7 @@
         [self.statusView setSenderStatus:model.message.status isReadAcked:model.message.isReadAcked];
     } else {
         if (model.type == EMMessageBodyTypeVoice) {
-            self.statusView.hidden = model.message.isRead;
+            self.statusView.hidden = model.message.isListened;
         }
     }
     if (model.type != EMChatTypeChat) {

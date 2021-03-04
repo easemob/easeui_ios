@@ -168,8 +168,8 @@
         }
         
         aModel.isPlaying = YES;
-        if (!aModel.message.isRead) {
-            aModel.message.isRead = YES;
+        if (!aModel.message.isListened) {
+            aModel.message.isListened = YES;
         }
         [weakself.tableView reloadData];
         
