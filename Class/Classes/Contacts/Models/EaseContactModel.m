@@ -19,7 +19,10 @@
 
 - (NSString *)showName {
     if (_userDelegate && [_userDelegate respondsToSelector:@selector(showName)]) {
-        return _userDelegate.showName;
+        if (_userDelegate.showName) {
+            return _userDelegate.showName;
+        }
+        return _easeId;
     }else {
         return _easeId;
     }

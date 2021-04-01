@@ -264,6 +264,7 @@
     NSMutableArray *cellModelAry = [NSMutableArray array];
     for (id<EaseUserDelegate> userDelegate in contacts) {
         EaseContactModel *model = [[EaseContactModel alloc] initWithEaseId:userDelegate.easeId];
+        model.userDelegate = userDelegate;
         [cellModelAry addObject:model];
     }
     

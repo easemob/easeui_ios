@@ -150,9 +150,9 @@ static const void *recallViewKey = &recallViewKey;
             }
             [EaseAlertController showSuccessAlert:@"转发消息成功"];
             if ([aTo isEqualToString:weakself.currentConversation.conversationId]) {
-                [weakself returnReadReceipt:message];
+                [weakself sendReadReceipt:message];
                 [weakself.currentConversation markMessageAsReadWithId:message.messageId error:nil];
-                NSArray *formated = [weakself formatMessages:@[message]];
+                NSArray *formated = [weakself formatMsgs:@[message]];
                 [weakself.dataArray addObjectsFromArray:formated];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakself refreshTableView:YES];
@@ -164,7 +164,7 @@ static const void *recallViewKey = &recallViewKey;
 
 #pragma mark - Data
 
-- (NSArray *)formatMessages:(NSArray<EMMessage *> *)aMessages
+- (NSArray *)formatMsgs:(NSArray<EMMessage *> *)aMessages
 {
     NSMutableArray *formated = [[NSMutableArray alloc] init];
 
@@ -189,6 +189,7 @@ static const void *recallViewKey = &recallViewKey;
             id<EaseUserDelegate> userData = [self.delegate userData:msg.from];
             model.userDataDelegate = userData;
         }
+
         [formated addObject:model];
     }
     

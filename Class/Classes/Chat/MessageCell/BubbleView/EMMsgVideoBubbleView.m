@@ -63,6 +63,13 @@
         if ([imgPath length] == 0 && model.direction == EMMessageDirectionSend) {
             imgPath = body.localPath;
         }
+        if (body.thumbnailSize.height == 0 || body.thumbnailSize.width == 0) {
+            NSBundle *resource_bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"/Frameworks/EaseIMKit.framework" ofType:nil]];
+            if (!resource_bundle) {
+                resource_bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"Frameworks/EaseIMKit.framework" ofType:nil]];
+            }
+            imgPath = [resource_bundle pathForResource:@"video_default_thumbnail" ofType:@"png"];
+        }
         [self setThumbnailImageWithLocalPath:imgPath remotePath:body.thumbnailRemotePath thumbImgSize:body.thumbnailSize imgSize:body.thumbnailSize];
     }
 }

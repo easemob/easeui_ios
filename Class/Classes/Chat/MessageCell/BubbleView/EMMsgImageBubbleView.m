@@ -81,6 +81,8 @@
     CGSize size = aThumbSize;
     if (aThumbSize.width == 0 || aThumbSize.height == 0) 
         size = aSize;
+    if (size.width == 0 || size.height == 0)
+        size = CGSizeMake(70, 70);
     
     if (img) {
         self.image = img;

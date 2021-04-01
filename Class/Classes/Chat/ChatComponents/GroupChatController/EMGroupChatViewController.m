@@ -55,12 +55,12 @@
 
 #pragma mark - ACtion
 
-- (void)returnReadReceipt:(EMMessage *)msg
+- (void)sendReadReceipt:(EMMessage *)msg
 {
     if (msg.isNeedGroupAck && !msg.isReadAcked) {
         [[EMClient sharedClient].chatManager sendGroupMessageReadAck:msg.messageId toGroup:msg.conversationId content:@"123" completion:^(EMError *error) {
             if (error) {
-                NSLog(@"\n ------ error   %@",error.errorDescription);
+               
             }
         }];
     }

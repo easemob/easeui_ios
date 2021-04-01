@@ -107,7 +107,7 @@
         }];
         [self.loadingView startAnimation];
     
-    } else if (aStatus == EMMessageStatusFailed) {
+    } else if (aStatus == EMMessageStatusFailed || aStatus == EMMessageStatusPending) {
         self.hidden = NO;
         [_label removeFromSuperview];
         
