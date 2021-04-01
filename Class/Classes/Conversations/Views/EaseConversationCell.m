@@ -81,6 +81,7 @@
     }
     
     _avatarView.backgroundColor = [UIColor clearColor];
+    _avatarView.contentMode = UIViewContentModeScaleAspectFit;
     
     _nameLabel.font = _viewModel.nameLabelFont;
     _nameLabel.textColor = _viewModel.nameLabelColor;

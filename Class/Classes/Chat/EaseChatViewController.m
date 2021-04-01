@@ -413,7 +413,7 @@
                         if ([weakself.messageList count] > 0) {
                             weakself.moreMsgId = weakself.messageList[0].messageId;
                         } else {
-                            weakself.moreMsgId = nil;
+                            weakself.moreMsgId = @"";
                         }
                     }
                 }
@@ -573,9 +573,10 @@
             if (![msg.conversationId isEqualToString:conId]) {
                 continue;
             }
-            [weakself returnReadReceipt:msg];
+            [weakself sendReadReceipt:msg];
             [weakself.currentConversation markMessageAsReadWithId:msg.messageId error:nil];
             [msgArray addObject:msg];
+            [weakself.messageList addObject:msg];
         }
         NSArray *formated = [weakself formatMessages:msgArray];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -755,6 +756,7 @@
             id<EaseUserDelegate> userData = [self.delegate userData:msg.from];
             model.userDataDelegate = userData;
         }
+        
         [formated addObject:model];
     }
     
@@ -803,7 +805,7 @@
 - (void)dropdownRefreshTableViewWithData
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(loadMoreMessageData:currentMessageList:)]) {
-        [self.delegate loadMoreMessageData:self.moreMsgId currentMessageList:self.messageList];
+        [self.delegate loadMoreMessageData:self.moreMsgId currentMessageList:[self.messageList copy]];
     } else {
         if (self.tableView.isRefreshing) {
             [self.tableView endRefreshing];
@@ -853,15 +855,36 @@
     NSString *from = [[EMClient sharedClient] currentUsername];
     NSString *to = self.currentConversation.conversationId;
     EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:aBody ext:aExt];
-    
     //是否需要发送阅读回执
-    if([aExt objectForKey:MSG_EXT_READ_RECEIPT])
+    if([aExt objectForKey:MSG_EXT_READ_RECEIPT]) {
         message.isNeedGroupAck = YES;
-    
+    }
     message.chatType = (EMChatType)self.currentConversation.type;
     
     __weak typeof(self) weakself = self;
-    NSArray *formated = [weakself formatMessages:@[message]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(sendMsgBeforeCallBack:completion:)]) {
+        [self.delegate sendMsgBeforeCallBack:message completion:^(BOOL canSend, NSDictionary * _Nullable ext) {
+            if (canSend) {
+                if ([ext count] > 0) {
+                    NSMutableDictionary *mutableExt = [message.ext mutableCopy];
+                    if (!mutableExt)
+                        mutableExt = [NSMutableDictionary dictionaryWithDictionary:ext];
+                    else
+                        [mutableExt addEntriesFromDictionary:ext];
+                    [message setExt:[mutableExt copy]];
+                }
+                [weakself sendMsgimpl:message];
+            }
+        }];
+    } else {
+        [self sendMsgimpl:message];
+    }
+}
+
+- (void)sendMsgimpl:(EMMessage *)message
+{
+    __weak typeof(self) weakself = self;
+    NSArray *formated = [self formatMessages:@[message]];
     [self.dataArray addObjectsFromArray:formated];
     if (!self.moreMsgId)
         //新会话的第一条消息
@@ -873,6 +896,9 @@
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself messageStatusDidChange:message error:error];
         [weakself.messageList addObject:message];
+        if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(sendMsgCompletion:error:)]) {
+            [weakself.delegate sendMsgCompletion:message error:error];
+        }
     }];
 }
 
@@ -882,7 +908,18 @@
 - (void)setEditingStatusVisible:(BOOL)editingStatusVisible{}
 
 //已读回执
-- (void)returnReadReceipt:(EMMessage *)msg{}
+- (void)sendReadReceipt:(EMMessage *)msg{}
+
+- (void)triggerUserInfoCallBack:(BOOL)isScrollBottom
+{
+    if (self.tableView.isRefreshing) {
+        [self.tableView endRefreshing];
+    }
+    NSArray *formated = [self formatMessages:self.messageList];
+    [self.dataArray removeAllObjects];
+    [self.dataArray addObjectsFromArray:formated];
+    [self refreshTableView:isScrollBottom];
+}
 
 - (void)refreshTableView:(BOOL)isScrollBottom
 {

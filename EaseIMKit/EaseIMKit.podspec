@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
 
   s.platform = :ios, '10.0'
 
-  s.license = { :type => 'Copyright', :text => 'Hyphenate Inc. 2017' }
+  s.license = { :type => 'Copyright', :text => 'HyphenateChat Inc. 2021' }
   s.summary = 'easemob im sdk UIKit'
   s.homepage = 'http://docs-im.easemob.com/im/ios/other/easeimkit'
   s.description = <<-DESC
@@ -26,6 +26,6 @@ Pod::Spec.new do |s|
   s.frameworks = 'UIKit'
   s.libraries = 'stdc++'
   s.dependency 'EMVoiceConvert', '~> 0.1.0'
-  s.dependency 'Hyphenate'
+  s.dependency 'HyphenateChat'
 
 end

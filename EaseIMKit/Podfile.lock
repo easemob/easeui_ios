@@ -1,6 +1,6 @@
 PODS:
   - EMVoiceConvert (0.1.0)
-  - HyphenateChat (0.1.0)
+  - HyphenateChat (3.8.0)
   - Masonry (1.1.0)
 
 DEPENDENCIES:
@@ -16,7 +16,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   EMVoiceConvert: 32a0eaada94d93c151a5abd53ee174cd4e63b01f
-  HyphenateChat: 643440b46c4784f0a9fdbba4ac3c04c6ced7489a
+  HyphenateChat: 254bab73137e88ffb6394ad5de0c8941e0e2d3d7
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
 
 PODFILE CHECKSUM: de64bca53ca324052b6e09a49be085cbf6e16e8b
