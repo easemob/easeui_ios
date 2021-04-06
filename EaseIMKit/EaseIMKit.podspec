@@ -22,7 +22,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.preserve_paths = '*.framework'
   s.vendored_frameworks = '*.framework'
-
   s.frameworks = 'UIKit'
   s.libraries = 'stdc++'
   s.dependency 'EMVoiceConvert', '~> 0.1.0'
