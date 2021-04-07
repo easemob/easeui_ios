@@ -37,7 +37,7 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
 
 - (void)showHint:(NSString *)hint
 {
-    UIWindow *win = [[[UIApplication sharedApplication] windows] firstObject];
+    UIWindow *win = [[[UIApplication sharedApplication] windows] lastObject];
     EaseProgressHUD *hud = [EaseProgressHUD showHUDAddedTo:win animated:YES];
     hud.userInteractionEnabled = NO;
     // Configure for text only and offset down

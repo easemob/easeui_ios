@@ -72,10 +72,10 @@ NS_ASSUME_NONNULL_BEGIN
  * EaseIMKit内部发送消息前回调
  *
  * @param   message         将要发送的消息
- * @param   aCompletion     callBack（canSend:是否可发送 ext:消息扩展）
+ * @param   aCompletion     callBack（返回要发送的消息）
  *
  */
-- (void)sendMsgBeforeCallBack:(EMMessage *)message completion:(void (^)(BOOL canSend, NSDictionary * __nullable ext))aCompletion;
+- (void)willSendMessage:(EMMessage *)message completion:(void (^)(EMMessage * __nullable message))aCompletion;
 
 /**
  * 发送消息完成回调
@@ -84,7 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   error         发送消息结果
  *
  */
-- (BOOL)sendMsgCompletion:(EMMessage *)message error:(EMError *)error;
+-(void)didSendMessage:(EMMessage *)message error:(EMError *)error;
 
 /**
  * 当前会话输入扩展区数据模型组

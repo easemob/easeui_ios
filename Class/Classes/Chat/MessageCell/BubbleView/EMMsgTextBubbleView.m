@@ -62,7 +62,45 @@
 - (void)setModel:(EaseMessageModel *)model
 {
     EMTextMessageBody *body = (EMTextMessageBody *)model.message.body;
-    self.textLabel.text = [EaseEmojiHelper convertEmoji:body.text];
+    NSString *text = [EaseEmojiHelper convertEmoji:body.text];
+    NSMutableAttributedString *attaStr = [[NSMutableAttributedString alloc] initWithString:text];
+    /*
+    //下滑线
+    NSMutableAttributedString *underlineStr = [[NSMutableAttributedString alloc] initWithString:@"下滑线"];
+    [underlineStr addAttributes:@{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle),
+                                  NSUnderlineColorAttributeName: [UIColor redColor]
+                                  } range:NSMakeRange(0, 3)];
+    [attaStr appendAttributedString:underlineStr];
+    //删除线
+    NSMutableAttributedString *throughlineStr = [[NSMutableAttributedString alloc] initWithString:@"删除线"];
+    [throughlineStr addAttributes:@{NSStrikethroughStyleAttributeName: @(NSUnderlineStyleSingle),
+                                    NSStrikethroughColorAttributeName: [UIColor orangeColor]
+                                    } range:NSMakeRange(0, 3)];
+    [attaStr appendAttributedString:throughlineStr];*/
+    //超链接
+    NSDataDetector *detector= [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
+    NSArray *checkArr = [detector matchesInString:text options:0 range:NSMakeRange(0, text.length)];
+    for (NSTextCheckingResult *result in checkArr) {
+        NSString *urlStr = result.URL.absoluteString;
+        NSRange range = [text rangeOfString:urlStr options:NSCaseInsensitiveSearch];
+        if(range.length > 0) {
+            [attaStr setAttributes:@{NSLinkAttributeName : [NSURL URLWithString:urlStr]} range:NSMakeRange(range.location, urlStr.length)];
+        }
+    }
+    /*
+    NSString *urlStr = @"http://www.baidu.com";
+    NSMutableAttributedString *linkStr = [[NSMutableAttributedString alloc] initWithString:urlStr];
+    [linkStr addAttributes:@{NSLinkAttributeName: [NSURL URLWithString:urlStr]} range:NSMakeRange(0, urlStr.length)];
+    [attaStr appendAttributedString:linkStr];*/
+    //图片
+    /*
+    NSTextAttachment *imgAttach =  [[NSTextAttachment alloc] init];
+    imgAttach.image = [UIImage imageNamed:@"dribbble64_imageio"];
+    imgAttach.bounds = CGRectMake(0, 0, 30, 30);
+    NSAttributedString *attachStr = [NSAttributedString attributedStringWithAttachment:imgAttach];
+    [attaStr appendAttributedString:attachStr];*/
+    
+    self.textLabel.attributedText = attaStr;
 }
 
 @end

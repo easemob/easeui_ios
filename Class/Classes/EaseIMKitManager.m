@@ -219,6 +219,7 @@ static NSString *g_UIKitVersion = @"3.8.0";
     NSString *to = itemId;
     EMMessage *message;
     if (conversationType == EMChatTypeChat) {
+        return;
         body = [[EMTextMessageBody alloc] initWithText:[NSString stringWithFormat:@"你与%@已经成为好友，开始聊天吧",aUserName]];
         message = [[EMMessage alloc] initWithConversationID:to from:EMClient.sharedClient.currentUsername to:to body:body ext:@{MSG_EXT_NEWNOTI:NOTI_EXT_ADDFRIEND}];
     } else if (conversationType == EMChatTypeGroupChat) {

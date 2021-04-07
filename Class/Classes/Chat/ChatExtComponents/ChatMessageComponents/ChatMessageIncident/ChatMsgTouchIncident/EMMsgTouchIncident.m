@@ -16,6 +16,7 @@
 #import "EMAudioPlayerUtil.h"
 #import "EMMsgRecordCell.h"
 #import "EaseHeaders.h"
+#import "EMMsgTextBubbleView.h"
 
 @implementation EMMessageEventStrategy
 
@@ -30,6 +31,8 @@
 
 + (EMMessageEventStrategy * _Nonnull)getStratrgyImplWithMsgCell:(EaseMessageCell *)aCell
 {
+    if (aCell.model.type == EMMessageTypeText)
+        return [[TextMsgEvent alloc]init];
     if (aCell.model.type == EMMessageTypeImage)
         return [[ImageMsgEvent alloc] init];
     if (aCell.model.type == EMMessageTypeLocation)
@@ -44,6 +47,39 @@
         return [[ConferenceMsgEvent alloc]init];
     
     return [[EMMessageEventStrategy alloc]init];
+}
+
+@end
+
+/**
+    文本事件
+ */
+@implementation TextMsgEvent
+
+- (void)messageCellEventOperation:(EaseMessageCell *)aCell
+{
+    EMMsgTextBubbleView *textBubbleView = (EMMsgTextBubbleView *)aCell.bubbleView;
+    NSString *chatStr = textBubbleView.textLabel.text;
+
+    NSDataDetector *detector= [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
+    NSArray *checkArr = [detector matchesInString:chatStr options:0 range:NSMakeRange(0, chatStr.length)];
+    //判断有没有链接
+    if(checkArr.count > 0) {
+        if (checkArr.count > 1) { //网址多于1个时让用户选择跳哪个链接
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"请选择要打开的链接" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+            
+            for (NSTextCheckingResult *result in checkArr) {
+                NSString *urlStr = result.URL.absoluteString;
+                [alertController addAction:[UIAlertAction actionWithTitle:urlStr style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr] options:[NSDictionary new] completionHandler:nil];
+                }]];
+            }
+            [self.chatController presentViewController:alertController animated:YES completion:nil];
+        }else {//一个链接直接打开
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[checkArr[0] URL].absoluteString] options:[NSDictionary new] completionHandler:nil];
+        }
+    }
 }
 
 @end
