@@ -213,13 +213,13 @@ static NSString *g_UIKitVersion = @"3.8.0";
 //加好友，加群 成功通知
 - (void)notificationMsg:(NSString *)itemId aUserName:(NSString *)aUserName conversationType:(EMConversationType)aType
 {
+    return;
     EMConversationType conversationType = aType;
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:itemId type:conversationType createIfNotExist:YES];
     EMTextMessageBody *body;
     NSString *to = itemId;
     EMMessage *message;
     if (conversationType == EMChatTypeChat) {
-        return;
         body = [[EMTextMessageBody alloc] initWithText:[NSString stringWithFormat:@"你与%@已经成为好友，开始聊天吧",aUserName]];
         message = [[EMMessage alloc] initWithConversationID:to from:EMClient.sharedClient.currentUsername to:to body:body ext:@{MSG_EXT_NEWNOTI:NOTI_EXT_ADDFRIEND}];
     } else if (conversationType == EMChatTypeGroupChat) {

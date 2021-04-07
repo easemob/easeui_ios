@@ -69,13 +69,12 @@ NS_ASSUME_NONNULL_BEGIN
 /*输入区回调*/
 
 /**
- * EaseIMKit内部发送消息前回调
+ * EaseIMKit发送消息前回调
  *
- * @param   message         将要发送的消息
- * @param   aCompletion     callBack（返回要发送的消息）
+ * @param   aMessage      将要发送的消息
  *
  */
-- (void)willSendMessage:(EMMessage *)message completion:(void (^)(EMMessage * __nullable message))aCompletion;
+- (EMMessage *)willSendMessage:(EMMessage *)aMessage;
 
 /**
  * 发送消息完成回调

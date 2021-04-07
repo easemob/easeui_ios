@@ -386,7 +386,7 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectMessageItem:userData:)]) {
         isCustom = [self.delegate didSelectMessageItem:aCell.model.message userData:aCell.model.userDataDelegate];
     }
-    if (isCustom) return;
+    if (!isCustom) return;
     //消息事件策略分类
     EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgCell:aCell];
     eventStrategy.chatController = self;
@@ -862,12 +862,11 @@
     message.chatType = (EMChatType)self.currentConversation.type;
     
     __weak typeof(self) weakself = self;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(willSendMessage:completion:)]) {
-        [self.delegate willSendMessage:message completion:^(EMMessage * _Nullable message) {
-            if (!message || !message.messageId || [message.messageId isEqualToString:@""])
-                return;
-            [weakself sendMsgimpl:message];
-        }];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(willSendMessage:)]) {
+        EMMessage *callbackMsg = [self.delegate willSendMessage:message];
+        if (!callbackMsg || !callbackMsg.messageId || [callbackMsg.messageId isEqualToString:@""])
+            return;
+        [weakself sendMsgimpl:callbackMsg];
     } else {
         [self sendMsgimpl:message];
     }
