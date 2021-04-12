@@ -13,6 +13,7 @@
 @implementation EaseConversationViewModel
 @synthesize bgView = _bgView;
 @synthesize cellBgColor = _cellBgColor;
+@synthesize topBgColor = _topBgColor;
 @synthesize cellSeparatorInset = _cellSeparatorInset;
 @synthesize cellSeparatorColor = _cellSeparatorColor;
 @synthesize canRefresh = _canRefresh;
@@ -56,6 +57,7 @@
     _badgeLabelCenterVector = CGVectorMake(0, 0);
     _badgeMaxNum = 99;
     
+    _topBgColor = [UIColor colorWithHexString:@"#f2f2f2"];
     _cellBgColor = [UIColor colorWithHexString:@"#FFFFFF"];
     
     _bgView = [[UIView alloc] init];
