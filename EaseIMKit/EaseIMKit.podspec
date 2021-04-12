@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'EaseIMKit'
-  s.version = '3.8.0.1'
+  s.version = '3.8.1'
 
   s.platform = :ios, '10.0'
 
@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
                     3. Contact list
                   DESC
   s.author = { 'easemob' => 'dev@easemob.com' }
-  s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKit_3.8.0.zip' }
+  s.source = {:http => 'https://downloadsdk.easemob.com/downloads/EaseKit/EaseIMKit_3.8.1.zip' }
 
   s.xcconfig = {'OTHER_LDFLAGS' => '-ObjC'}
 
