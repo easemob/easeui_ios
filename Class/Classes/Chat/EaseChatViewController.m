@@ -385,8 +385,8 @@
     BOOL isCustom = NO;
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectMessageItem:userData:)]) {
         isCustom = [self.delegate didSelectMessageItem:aCell.model.message userData:aCell.model.userDataDelegate];
+        if (!isCustom) return;
     }
-    if (!isCustom) return;
     //消息事件策略分类
     EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgCell:aCell];
     eventStrategy.chatController = self;
@@ -931,7 +931,6 @@
         _tableView.dataSource = self;
         _tableView.rowHeight = UITableViewAutomaticDimension;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.rowHeight = UITableViewAutomaticDimension;
         _tableView.estimatedRowHeight = 130;
         _tableView.backgroundColor = [UIColor systemPinkColor];
         [_tableView enableRefresh:@"下拉刷新" color:UIColor.redColor];
