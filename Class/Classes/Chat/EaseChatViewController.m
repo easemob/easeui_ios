@@ -385,8 +385,8 @@
     BOOL isCustom = NO;
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectMessageItem:userData:)]) {
         isCustom = [self.delegate didSelectMessageItem:aCell.model.message userData:aCell.model.userDataDelegate];
+        if (!isCustom) return;
     }
-    if (isCustom) return;
     //消息事件策略分类
     EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgCell:aCell];
     eventStrategy.chatController = self;
@@ -612,7 +612,7 @@
     [self.tableView reloadData];
 }
 
-- (void)messageStatusDidChange:(EMMessage *)aMessage
+- (void)msgStatusDidChange:(EMMessage *)aMessage
                          error:(EMError *)aError
 {
     __weak typeof(self) weakself = self;
@@ -862,20 +862,11 @@
     message.chatType = (EMChatType)self.currentConversation.type;
     
     __weak typeof(self) weakself = self;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(sendMsgBeforeCallBack:completion:)]) {
-        [self.delegate sendMsgBeforeCallBack:message completion:^(BOOL canSend, NSDictionary * _Nullable ext) {
-            if (canSend) {
-                if ([ext count] > 0) {
-                    NSMutableDictionary *mutableExt = [message.ext mutableCopy];
-                    if (!mutableExt)
-                        mutableExt = [NSMutableDictionary dictionaryWithDictionary:ext];
-                    else
-                        [mutableExt addEntriesFromDictionary:ext];
-                    [message setExt:[mutableExt copy]];
-                }
-                [weakself sendMsgimpl:message];
-            }
-        }];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(willSendMessage:)]) {
+        EMMessage *callbackMsg = [self.delegate willSendMessage:message];
+        if (!callbackMsg || !callbackMsg.messageId || [callbackMsg.messageId isEqualToString:@""])
+            return;
+        [weakself sendMsgimpl:callbackMsg];
     } else {
         [self sendMsgimpl:message];
     }
@@ -886,6 +877,7 @@
     __weak typeof(self) weakself = self;
     NSArray *formated = [self formatMessages:@[message]];
     [self.dataArray addObjectsFromArray:formated];
+    [self.messageList addObject:message];
     if (!self.moreMsgId)
         //新会话的第一条消息
         self.moreMsgId = message.messageId;
@@ -894,10 +886,9 @@
         [weakself refreshTableView:YES];
     });
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
-        [weakself messageStatusDidChange:message error:error];
-        [weakself.messageList addObject:message];
-        if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(sendMsgCompletion:error:)]) {
-            [weakself.delegate sendMsgCompletion:message error:error];
+        [weakself msgStatusDidChange:message error:error];
+        if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(didSendMessage:error:)]) {
+            [weakself.delegate didSendMessage:message error:error];
         }
     }];
 }
@@ -940,7 +931,6 @@
         _tableView.dataSource = self;
         _tableView.rowHeight = UITableViewAutomaticDimension;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.rowHeight = UITableViewAutomaticDimension;
         _tableView.estimatedRowHeight = 130;
         _tableView.backgroundColor = [UIColor systemPinkColor];
         [_tableView enableRefresh:@"下拉刷新" color:UIColor.redColor];

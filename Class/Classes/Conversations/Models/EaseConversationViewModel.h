@@ -26,6 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 // 头像位置
 @property (nonatomic) UIEdgeInsets avatarEdgeInsets;
 
+// 会话置顶背景色
+@property (nonatomic, strong) UIColor *topBgColor;
+
 // 昵称字体
 @property (nonatomic, strong) UIFont *nameLabelFont;
 

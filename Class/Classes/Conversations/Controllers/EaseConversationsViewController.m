@@ -98,16 +98,6 @@ EMClientDelegate
     EaseConversationModel *model = self.dataAry[indexPath.row];
     
     cell.model = model;
-    if (model.isTop) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [cell setSelected:YES animated:YES];
-        });
-    } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [cell setSelected:NO animated:YES];
-            cell.backgroundColor = self->_viewModel.cellBgColor;
-        });
-    }
     
     return cell;
 }
@@ -197,6 +187,8 @@ EMClientDelegate
     EaseConversationModel *model = [self.dataAry objectAtIndex:indexPath.row];
     if (!model.isTop) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    } else {
+        
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:didSelectRowAtIndexPath:)]) {
         return [self.delegate easeTableView:tableView didSelectRowAtIndexPath:indexPath];

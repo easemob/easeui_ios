@@ -30,6 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface TextMsgEvent : EMMessageEventStrategy
+@end
+
 @interface ImageMsgEvent : EMMessageEventStrategy
 @end
 

@@ -184,6 +184,13 @@
         self.nameLabel.text = _model.showName;
     }
     
+    if (model.isTop) {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.backgroundColor = _viewModel.topBgColor;
+    } else {
+        self.backgroundColor = _viewModel.cellBgColor;
+    }
+    
     self.detailLabel.attributedText = _model.showInfo;
     self.timeLabel.text = [EaseDateHelper formattedTimeFromTimeInterval:_model.lastestUpdateTime];
     self.badgeLabel.badge = _model.unreadMessagesCount;
