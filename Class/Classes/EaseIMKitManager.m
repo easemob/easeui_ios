@@ -10,10 +10,11 @@
 #import "EaseIMKitManager+ExtFunction.h"
 #import "EaseMulticastDelegate.h"
 #import "EaseDefines.h"
-
+#import <HyphenateChat/EMClient+PrivateDeploy.h>
+   
 bool gInit;
 static EaseIMKitManager *easeIMKit = nil;
-static NSString *g_UIKitVersion = @"3.8.0";
+static NSString *g_UIKitVersion = @"3.8.2";
 
 @interface EaseIMKitManager ()<EMMultiDevicesDelegate, EMContactManagerDelegate, EMGroupManagerDelegate, EMChatManagerDelegate>
 @property (nonatomic, strong) EaseMulticastDelegate<EaseIMKitManagerDelegate> *delegates;
@@ -22,11 +23,12 @@ static NSString *g_UIKitVersion = @"3.8.0";
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
 @end
 
-#define IMKitVersion @"3.8.0"
+#define IMKitVersion @"3.8.2"
 
 @implementation EaseIMKitManager
 + (BOOL)initWithEMOptions:(EMOptions *)options {
     if (!gInit) {
+        EMClient.sharedClient.applyPlatform = @"EaseIMKit_iOS";
         [EMClient.sharedClient initializeSDKWithOptions:options];
         [self shareInstance];
         gInit = YES;
