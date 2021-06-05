@@ -296,7 +296,6 @@
 - (void)recordButtonTouchBegin
 {
     self.titleLabel.text = @"松手发送";
-    
     [self _startRecord];
 }
 

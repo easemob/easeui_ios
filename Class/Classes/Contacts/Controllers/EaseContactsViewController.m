@@ -44,6 +44,13 @@
     [EMClient.sharedClient.contactManager addDelegate:self delegateQueue:nil];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf endRefresh];
+    });
+}
 
 - (void)refreshTabView {
     

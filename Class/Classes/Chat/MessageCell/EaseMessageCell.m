@@ -103,7 +103,7 @@
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.backgroundColor = [UIColor clearColor];
-    
+
     _avatarView = [[UIImageView alloc] init];
     _avatarView.contentMode = UIViewContentModeScaleAspectFit;
     _avatarView.backgroundColor = [UIColor clearColor];
@@ -117,6 +117,9 @@
     }
     if (_viewModel.avatarStyle == Circular) {
         _avatarView.layer.cornerRadius = avatarLonger / 2;
+    }
+    if (_viewModel.avatarStyle != Rectangular) {
+        _avatarView.clipsToBounds = _avatarView.clipsToBounds = YES;;
     }
     [self.contentView addSubview:_avatarView];
     if (self.direction == EMMessageDirectionReceive) {

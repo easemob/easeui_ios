@@ -700,6 +700,7 @@
         [self.view endEditing:YES];
         [self.chatBar clearMoreViewAndSelectedButton];
         [self hideLongPressView];
+        [self scrollToBottomRow];
     }
 }
 
@@ -709,7 +710,7 @@
     if ([self.dataArray count] > 0) {
         toRow = self.dataArray.count - 1;
         NSIndexPath *toIndexPath = [NSIndexPath indexPathForRow:toRow inSection:0];
-        [self.tableView scrollToRowAtIndexPath:toIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+        [self.tableView scrollToRowAtIndexPath:toIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
 }
 

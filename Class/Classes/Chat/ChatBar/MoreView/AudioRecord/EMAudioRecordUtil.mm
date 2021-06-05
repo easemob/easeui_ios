@@ -137,6 +137,15 @@ static EMAudioRecordUtil *recordUtil = nil;
             break;
         }
         
+        AVAudioSessionRecordPermission permissionStatus = [[AVAudioSession sharedInstance] recordPermission];
+        if (permissionStatus == AVAudioSessionRecordPermissionDenied) {
+            error = [NSError errorWithDomain:@"未开启麦克风权限" code:-1 userInfo:nil];
+            if (aCompletion) {
+                aCompletion(error);
+            }
+            return;
+        }
+        
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDuckOthers error:&error];
         if (!error){
             [[AVAudioSession sharedInstance] setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
