@@ -34,9 +34,21 @@ static const void *imagePickerKey = &imagePickerKey;
         #if TARGET_IPHONE_SIMULATOR
             [EaseAlertController showErrorAlert:@"模拟器不支持照相机"];
         #elif TARGET_OS_IPHONE
-            self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-            self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
-            [self presentViewController:self.imagePicker animated:YES completion:nil];
+            AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+            if (authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied) {
+                [EaseAlertController showErrorAlert:@"未开启相机权限"];
+                return;
+            }
+            __weak typeof(self) weakself = self;
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+                if (granted) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        weakself.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                        weakself.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
+                        [weakself presentViewController:self.imagePicker animated:YES completion:nil];
+                    });
+                }
+            }];
         #endif
         
         return;
@@ -201,6 +213,7 @@ static const void *imagePickerKey = &imagePickerKey;
 - (void)_sendVideoAction:(NSURL *)aUrl
 {
     EMVideoMessageBody *body = [[EMVideoMessageBody alloc] initWithLocalPath:[aUrl path] displayName:@"video.mp4"];
+    body.duration = 200;
     [self sendMessageWithBody:body ext:nil];
 }
 
@@ -235,20 +248,29 @@ static const void *imagePickerKey = &imagePickerKey;
 
 - (void)chatToolBarLocationAction
 {
-    EMLocationViewController *controller = [[EMLocationViewController alloc] init];
-    [controller setSendCompletion:^(CLLocationCoordinate2D aCoordinate, NSString * _Nonnull aAddress) {
-        [self _sendLocationAction:aCoordinate address:aAddress];
-    }];
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
-    navController.modalPresentationStyle = 0;
-    [self.navigationController presentViewController:navController animated:YES completion:nil];
+    if ([CLLocationManager locationServicesEnabled] && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
+        EMLocationViewController *controller = [[EMLocationViewController alloc] init];
+        __weak typeof(self) weakself = self;
+        [controller setSendCompletion:^(CLLocationCoordinate2D aCoordinate, NSString * _Nonnull aAddress) {
+            [weakself _sendLocationAction:aCoordinate address:aAddress];
+        }];
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+        navController.modalPresentationStyle = 0;
+        [self.navigationController presentViewController:navController animated:YES completion:nil];
+    } else {
+        [EaseAlertController showErrorAlert:@"未开启位置权限"];
+    }
 }
 
 - (void)_sendLocationAction:(CLLocationCoordinate2D)aCoord
                     address:(NSString *)aAddress
 {
-    EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:aCoord.latitude longitude:aCoord.longitude address:aAddress];
-    [self sendMessageWithBody:body ext:nil];
+    if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
+        EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:aCoord.latitude longitude:aCoord.longitude address:aAddress];
+        [self sendMessageWithBody:body ext:nil];
+    } else {
+        [EaseAlertController showErrorAlert:@"未获取到位置权限"];
+    }
 }
 
 @end

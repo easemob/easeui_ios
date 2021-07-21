@@ -56,6 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
  * 自定义cell
  */
 - (UITableViewCell *)cellForItem:(UITableView *)tableView messageModel:(EaseMessageModel *)messageModel;
+
 /**
  * 当前所长按的 自定义cell 的扩展区数据模型组
  *

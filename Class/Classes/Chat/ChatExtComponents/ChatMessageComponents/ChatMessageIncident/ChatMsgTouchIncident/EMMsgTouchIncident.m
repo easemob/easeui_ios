@@ -244,22 +244,7 @@
 
 - (void)messageCellEventOperation:(EaseMessageCell *)aCell
 {
-    EMVideoMessageBody *body = (EMVideoMessageBody*)aCell.model.message.body;
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
-    if (body.thumbnailDownloadStatus == EMDownloadStatusFailed || ![fileManager fileExistsAtPath:body.thumbnailLocalPath]) {
-        [self.chatController showHint:@"下载缩略图"];
-        if (!isCustomDownload) {
-            [[EMClient sharedClient].chatManager downloadMessageThumbnail:aCell.model.message progress:nil completion:nil];
-        }
-    }
-    
-    if (body.downloadStatus == EMDownloadStatusDownloading) {
-        [EaseAlertController showInfoAlert:@"正在下载视频,稍后点击"];
-        return;
-    }
-    
-    __weak typeof(self.chatController) weakself = self.chatController;
+    __weak typeof(self.chatController) weakChatController = self.chatController;
     void (^playBlock)(NSString *aPath) = ^(NSString *aPathe) {
         NSURL *videoURL = [NSURL fileURLWithPath:aPathe];
         AVPlayerViewController *playerViewController = [[AVPlayerViewController alloc] init];
@@ -267,32 +252,52 @@
         playerViewController.videoGravity = AVLayerVideoGravityResizeAspect;
         playerViewController.showsPlaybackControls = YES;
         playerViewController.modalPresentationStyle = 0;
-        [weakself presentViewController:playerViewController animated:YES completion:^{
+        [weakChatController presentViewController:playerViewController animated:YES completion:^{
             [playerViewController.player play];
         }];
     };
+
+    void (^downloadBlock)(void) = ^ {
+        [weakChatController showHudInView:self.chatController.view hint:@"下载视频..."];
+        [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+            [weakChatController hideHud];
+            if (error) {
+                [EaseAlertController showErrorAlert:@"下载视频失败"];
+            } else {
+                if (!message.isReadAcked) {
+                    [[EMClient sharedClient].chatManager sendMessageReadAck:message.messageId toUser:message.conversationId completion:nil];
+                }
+                playBlock([(EMVideoMessageBody*)message.body localPath]);
+            }
+        }];
+    };
+    
+    EMVideoMessageBody *body = (EMVideoMessageBody*)aCell.model.message.body;
+    if (body.downloadStatus == EMDownloadStatusDownloading) {
+        [EaseAlertController showInfoAlert:@"正在下载视频,稍后点击"];
+        return;
+    }
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
+    if (body.thumbnailDownloadStatus == EMDownloadStatusFailed || ![fileManager fileExistsAtPath:body.thumbnailLocalPath]) {
+        [self.chatController showHint:@"下载缩略图"];
+        if (!isCustomDownload) {
+            [[EMClient sharedClient].chatManager downloadMessageThumbnail:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+                downloadBlock();
+            }];
+            return;
+        }
+    }
     
     if (body.downloadStatus == EMDownloadStatusSuccessed && [fileManager fileExistsAtPath:body.localPath]) {
         playBlock(body.localPath);
-        return;
+    } else {
+        if (!isCustomDownload) {
+            downloadBlock();
+        }
     }
     
-    if (isCustomDownload) {
-        return;
-    }
-    [self.chatController showHudInView:self.chatController.view hint:@"下载视频..."];
-    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
-        [weakself hideHud];
-        if (error) {
-            [EaseAlertController showErrorAlert:@"下载视频失败"];
-        } else {
-            if (!message.isReadAcked) {
-                [[EMClient sharedClient].chatManager sendMessageReadAck:message.messageId toUser:message.conversationId completion:nil];
-                
-            }
-            playBlock([(EMVideoMessageBody*)message.body localPath]);
-        }
-    }];
 }
 
 @end

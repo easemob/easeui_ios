@@ -54,6 +54,14 @@ EMClientDelegate
                                                  name:CONVERSATIONLIST_UPDATE object:nil];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf endRefresh];
+    });
+}
+
 - (void)dealloc
 {
     [[EMClient sharedClient] removeDelegate:self];

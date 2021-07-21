@@ -700,6 +700,7 @@
         [self.view endEditing:YES];
         [self.chatBar clearMoreViewAndSelectedButton];
         [self hideLongPressView];
+        [self scrollToBottomRow];
     }
 }
 
@@ -709,7 +710,7 @@
     if ([self.dataArray count] > 0) {
         toRow = self.dataArray.count - 1;
         NSIndexPath *toIndexPath = [NSIndexPath indexPathForRow:toRow inSection:0];
-        [self.tableView scrollToRowAtIndexPath:toIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+        [self.tableView scrollToRowAtIndexPath:toIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
 }
 
@@ -842,9 +843,10 @@
 {
     if (aLongPress.state == UIGestureRecognizerStateBegan) {
         UIWindow *window = [[UIApplication sharedApplication].windows firstObject];
-        CGPoint longLocation = [aLongPress locationInView:window];
-        //NSIndexPath *newestIndexPath = [self.tableView indexPathForRowAtPoint:longLocation];
-        [self messageCellDidLongPress:_currentLongPressCustomCell cgPoint:longLocation];
+        CGPoint longLocationForWindow = [aLongPress locationInView:window];
+        CGPoint longLocationForTableview = [aLongPress locationInView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:longLocationForTableview];
+        [self messageCellDidLongPress:[self.tableView cellForRowAtIndexPath:indexPath] cgPoint:longLocationForWindow];
     }
 }
 

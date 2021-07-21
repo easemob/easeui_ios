@@ -10,10 +10,10 @@
 #import "EaseIMKitManager+ExtFunction.h"
 #import "EaseMulticastDelegate.h"
 #import "EaseDefines.h"
-
+   
 bool gInit;
 static EaseIMKitManager *easeIMKit = nil;
-static NSString *g_UIKitVersion = @"3.8.0";
+static NSString *g_UIKitVersion = @"3.8.2";
 
 @interface EaseIMKitManager ()<EMMultiDevicesDelegate, EMContactManagerDelegate, EMGroupManagerDelegate, EMChatManagerDelegate>
 @property (nonatomic, strong) EaseMulticastDelegate<EaseIMKitManagerDelegate> *delegates;
@@ -22,7 +22,7 @@ static NSString *g_UIKitVersion = @"3.8.0";
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
 @end
 
-#define IMKitVersion @"3.8.0"
+#define IMKitVersion @"3.8.2"
 
 @implementation EaseIMKitManager
 + (BOOL)initWithEMOptions:(EMOptions *)options {
