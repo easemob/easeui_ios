@@ -23,16 +23,18 @@ typedef NS_ENUM(NSInteger, EMMessageType) {
     EMMessageTypeExtRecall,
     EMMessageTypeExtCall,
     EMMessageTypeExtNewFriend,
-    EMMessageTypeExtAddGroup,
     EMMessageTypePictMixText,
+    EMMessageTypeExtAddGroup
 };
 
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class EaseMessageCell;
 @interface EaseMessageModel : NSObject
 
 @property (nonatomic) id<EaseUserDelegate> userDataDelegate;
+
+@property (nonatomic, weak) EaseMessageCell *weakMessageCell;
 
 @property (nonatomic, strong) EMMessage *message;
 

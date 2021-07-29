@@ -212,8 +212,11 @@ static const void *imagePickerKey = &imagePickerKey;
 }
 - (void)_sendVideoAction:(NSURL *)aUrl
 {
+    /*
+    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:aUrl options:nil];
+    int second = urlAsset.duration.value / urlAsset.duration.timescale;*/
     EMVideoMessageBody *body = [[EMVideoMessageBody alloc] initWithLocalPath:[aUrl path] displayName:@"video.mp4"];
-    body.duration = 200;
+    //body.duration = second;
     [self sendMessageWithBody:body ext:nil];
 }
 

@@ -176,42 +176,35 @@
 
 - (void)messageCellEventOperation:(EaseMessageCell *)aCell
 {
-    if (aCell.model.isPlaying) {
-        [[EMAudioPlayerUtil sharedHelper] stopPlayer];
-        aCell.model.isPlaying = NO;
-        [self.chatController.tableView reloadData];
-        return;
-    }
-    
     EMVoiceMessageBody *body = (EMVoiceMessageBody*)aCell.model.message.body;
     if (body.downloadStatus == EMDownloadStatusDownloading) {
         [EaseAlertController showInfoAlert:@"正在下载语音,稍后点击"];
         return;
     }
     
-    __weak typeof(self.chatController) weakself = self.chatController;
     void (^playBlock)(EaseMessageModel *aModel) = ^(EaseMessageModel *aModel) {
-        id model = [EMAudioPlayerUtil sharedHelper].model;
-        if (model && [model isKindOfClass:[EaseMessageModel class]]) {
-            EaseMessageModel *oldModel = (EaseMessageModel *)model;
-            if (oldModel.isPlaying) {
-                oldModel.isPlaying = NO;
-            }
+        if (!aModel.message.isListened) {
+            aModel.message.isListened = YES;
         }
         
         if (!aModel.message.isReadAcked) {
             [[EMClient sharedClient].chatManager sendMessageReadAck:aModel.message.messageId toUser:aModel.message.conversationId completion:nil];
         }
-        
-        aModel.isPlaying = YES;
-        if (!aModel.message.isListened) {
-            aModel.message.isListened = YES;
+
+        id model = [EMAudioPlayerUtil sharedHelper].model;
+        if (model && [model isKindOfClass:[EaseMessageModel class]]) {
+            EaseMessageModel *oldModel = (EaseMessageModel *)model;
+            if (oldModel == aCell.model && oldModel.isPlaying == YES) {
+                [[EMAudioPlayerUtil sharedHelper] stopPlayer];
+                [EMAudioPlayerUtil sharedHelper].model = nil;
+                [[NSNotificationCenter defaultCenter] postNotificationName:AUDIOMSGSTATECHANGE object:aModel];
+                return;
+            }
         }
-        [weakself.tableView reloadData];
         
+        [[NSNotificationCenter defaultCenter] postNotificationName:AUDIOMSGSTATECHANGE object:aModel];
         [[EMAudioPlayerUtil sharedHelper] startPlayerWithPath:body.localPath model:aModel completion:^(NSError * _Nonnull error) {
-            aModel.isPlaying = NO;
-            [weakself.tableView reloadData];
+            [[NSNotificationCenter defaultCenter] postNotificationName:AUDIOMSGSTATECHANGE object:aModel];
         }];
     };
     
@@ -224,9 +217,10 @@
         return;
     }
     
+    __weak typeof(self.chatController) weakChatControl = self.chatController;
     [self.chatController showHudInView:self.chatController.view hint:@"下载语音..."];
     [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
-        [weakself hideHud];
+        [weakChatControl hideHud];
         if (error) {
             [EaseAlertController showErrorAlert:@"下载语音失败"];
         } else {

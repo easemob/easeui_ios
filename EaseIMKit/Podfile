@@ -17,14 +17,14 @@ workspace 'EaseIMKit.xcworkspace'
 
 target 'EaseIMKitDemo' do
   platform :ios, '10.0'
-  pod 'HyphenateChat'
+  #pod 'HyphenateChat'
   pod 'Masonry'
   project '../EaseIMKitDemo/EaseIMKitDemo.xcodeproj'
 end
 
 target 'EaseIMKit' do
   project './EaseIMKit.xcodeproj'
-  pod 'HyphenateChat'
+  #pod 'HyphenateChat'
   pod 'EMVoiceConvert', '~> 0.1.0'
 end
 

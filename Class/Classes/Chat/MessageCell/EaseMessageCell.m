@@ -267,6 +267,11 @@
     return bubbleView;
 }
 
+- (void)setStatusHidden:(BOOL)isHidden
+{
+    self.statusView.hidden = isHidden;
+}
+
 #pragma mark - Setter
 
 - (void)setModel:(EaseMessageModel *)model
@@ -274,7 +279,7 @@
     _model = model;
     self.bubbleView.model = model;
     if (model.direction == EMMessageDirectionSend) {
-        [self.statusView setSenderStatus:model.message.status isReadAcked:model.message.isReadAcked];
+        [self.statusView setSenderStatus:model.message.status isReadAcked:model.message.chatType == EMChatTypeChat ? model.message.isReadAcked : NO];
     } else {
         if (model.type == EMMessageBodyTypeVoice) {
             self.statusView.hidden = model.message.isListened;

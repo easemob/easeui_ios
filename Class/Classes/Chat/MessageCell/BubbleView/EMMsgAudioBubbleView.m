@@ -97,13 +97,15 @@
 {
     EMMessageType type = model.type;
     if (type == EMMessageTypeVoice) {
+        
         EMVoiceMessageBody *body = (EMVoiceMessageBody *)model.message.body;
         self.textLabel.text = [NSString stringWithFormat:@"%d\"",(int)body.duration];
+        [self.imgView stopAnimating];
         if (model.isPlaying) {
             [self.imgView startAnimating];
-        } else {
-            [self.imgView stopAnimating];
         }
+        [self.imgView setNeedsLayout];
+        [self.imgView layoutIfNeeded];
         
         float width = kEMMsgAudioMinWidth * body.duration / 10;
         if (width > _maxWidth) {

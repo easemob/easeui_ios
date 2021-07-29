@@ -36,6 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
                   messageType:(EMMessageType)aMessageType
                     viewModel:(EaseChatViewModel*)viewModel;
 
+- (void)setStatusHidden:(BOOL)isHidden;
+
 @end
 
 

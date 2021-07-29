@@ -32,7 +32,7 @@
 #import "EaseHeaders.h"
 #import "EaseEnums.h"
 
-@interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate>
+@interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate, UIGestureRecognizerDelegate>
 {
     EaseChatViewModel *_viewModel;
     EaseMessageCell *_currentLongPressCell;
@@ -119,6 +119,7 @@
     [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
  
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapTableViewAction:)];
+    tap.delegate = self;
     [self.tableView addGestureRecognizer:tap];
     
     
@@ -234,6 +235,20 @@
     self.chatBar.moreFunctionView = moreFunction;
 }
 
+#pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    // 输出点击的view的类名
+    //NSLog(@"^ 1 1^^%@", NSStringFromClass([touch.view class]));
+    
+    // 若为UITableViewCellContentView（即点击了tableViewCell），则不截获Touch事件
+    if ([NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"]) {
+        return NO;
+    }
+    
+    return  YES;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -298,7 +313,26 @@
         cell.delegate = self;
     }
     cell.model = model;
+    if (cell.model.message.body.type == EMMessageTypeVoice) {
+        cell.model.weakMessageCell = cell;
+    }
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //NSLog(@"indexpath.row : %ld ", (long)indexPath.row);
+}
+
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    id obj = [self.dataArray objectAtIndex:indexPath.row];
+    if ([obj isKindOfClass:[EaseMessageModel class]]) {
+        EaseMessageModel *model = (EaseMessageModel *)obj;
+        if (model.message.body.type == EMMessageTypeVoice) {
+            model.weakMessageCell = nil;
+        }
+    }
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -312,7 +346,7 @@
 
 #pragma mark - EMChatBarDelegate
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+- (BOOL)textView:(UITextView *)textView shouldngeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
         BOOL isValid = [self.delegate textView:textView shouldChangeTextInRange:range replacementText:text];
@@ -740,6 +774,10 @@
         EMMessage *msg = aMessages[i];
         if (msg.chatType == EMChatTypeChat && msg.isReadAcked && (msg.body.type == EMMessageBodyTypeText || msg.body.type == EMMessageBodyTypeLocation)) {
             [[EMClient sharedClient].chatManager sendMessageReadAck:msg.messageId toUser:msg.conversationId completion:nil];
+        }
+        
+        if (msg.chatType == EMChatTypeGroupChat && msg.isNeedGroupAck && !msg.isReadAcked) {
+            [[EMClient sharedClient].chatManager sendGroupMessageReadAck:msg.messageId toGroup:msg.conversationId content:@"123" completion:nil];
         }
         
         CGFloat interval = (self.msgTimelTag - msg.timestamp) / 1000;

@@ -80,8 +80,6 @@
             continue;
         }
         if([msgModel.message.messageId isEqualToString:msgAck.messageId]){
-            msgModel.message.isReadAcked = YES;
-            [[EMClient sharedClient].chatManager sendMessageReadAck:msgModel.message.messageId toUser:msgModel.message.conversationId completion:nil];
             [self.dataArray setObject:msgModel atIndexedSubscript:i];
             __weak typeof(self) weakself = self;
             dispatch_async(dispatch_get_main_queue(), ^{

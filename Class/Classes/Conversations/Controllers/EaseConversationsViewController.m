@@ -313,9 +313,16 @@ EMClientDelegate
         [totals addObjectsFromArray:normalConvList];
         
         weakSelf.dataAry = (NSMutableArray *)totals;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+            if ([self.tableView.refreshControl isRefreshing]) {
+                [self.tableView.refreshControl endRefreshing];
+            }
+        });
+        
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf endRefresh];
-            [weakSelf _updateBackView];
+         [self.tableView reloadData];
+         [weakSelf _updateBackView];
         });
     });
 }

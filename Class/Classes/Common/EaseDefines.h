@@ -87,6 +87,9 @@
 #define MSG_EXT_CALLID @"em_conference_id"
 #define MSG_EXT_CALLPSWD @"em_conference_password"
 
+//语音状态变化
+#define AUDIOMSGSTATECHANGE @"audio_msg_state_change"
+
 //实时音视频
 #define CALL_CHATTER @"chatter"
 #define CALL_TYPE @"type"

@@ -8,6 +8,7 @@
 
 #import "EaseMessageModel.h"
 #import "EaseHeaders.h"
+#import "EaseMessageCell.h"
 
 @implementation EaseMessageModel
 
@@ -35,10 +36,6 @@
                 _type = EMMessageTypeExtAddGroup;
                 return self;
             }
-            if ([aMsg.ext objectForKey:EMCOMMUNICATE_TYPE]){
-                _type = EMMessageTypePictMixText;
-                return self;
-            }
             NSString *conferenceId = [aMsg.ext objectForKey:@"conferenceId"];
             if ([conferenceId length] == 0)
                 conferenceId = [aMsg.ext objectForKey:MSG_EXT_CALLID];
@@ -49,7 +46,28 @@
             _type = EMMessageTypeText;
         }
     }
+    if (aMsg.body.type == EMMessageTypeVoice) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioStateChange:) name:AUDIOMSGSTATECHANGE object:nil];
+    }
     return self;
+}
+
+- (void)audioStateChange:(NSNotification *)aNotif
+{
+    id object = aNotif.object;
+    if ([object isKindOfClass:[EaseMessageModel class]]) {
+        EaseMessageModel *model = (EaseMessageModel *)object;
+        if (model == self && self.isPlaying == NO) {
+            self.isPlaying = YES;
+        } else {
+            self.isPlaying = NO;
+        }
+        
+        [self.weakMessageCell.bubbleView setModel:self];
+        if (model == self && model.direction == EMMessageDirectionReceive) {
+            [self.weakMessageCell setStatusHidden:model.message.isListened];
+        }
+    }
 }
 
 @end
