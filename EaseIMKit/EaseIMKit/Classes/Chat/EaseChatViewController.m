@@ -32,7 +32,7 @@
 #import "EaseHeaders.h"
 #import "EaseEnums.h"
 
-@interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate, UIGestureRecognizerDelegate>
+@interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate>
 {
     EaseChatViewModel *_viewModel;
     EaseMessageCell *_currentLongPressCell;
@@ -119,7 +119,6 @@
     [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
  
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapTableViewAction:)];
-    tap.delegate = self;
     [self.tableView addGestureRecognizer:tap];
     
     
@@ -233,20 +232,6 @@
     }
     EMMoreFunctionView *moreFunction = [[EMMoreFunctionView alloc]initWithextMenuModelArray:extMenuArray menuViewModel:[[EaseExtMenuViewModel alloc]initWithType:ExtTypeChatBar itemCount:[extMenuArray count] extFuncModel:_viewModel.extFuncModel]];
     self.chatBar.moreFunctionView = moreFunction;
-}
-
-#pragma mark - UIGestureRecognizerDelegate
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    // 输出点击的view的类名
-    //NSLog(@"^ 1 1^^%@", NSStringFromClass([touch.view class]));
-    
-    // 若为UITableViewCellContentView（即点击了tableViewCell），则不截获Touch事件
-    if ([NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"]) {
-        return NO;
-    }
-    
-    return  YES;
 }
 
 #pragma mark - Table view data source
@@ -946,6 +931,7 @@
     if (self.tableView.isRefreshing) {
         [self.tableView endRefreshing];
     }
+    self.msgTimelTag = 0;
     NSArray *formated = [self formatMessages:self.messageList];
     [self.dataArray removeAllObjects];
     [self.dataArray addObjectsFromArray:formated];
