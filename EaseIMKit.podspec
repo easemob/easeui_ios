@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
                   DESC
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.author           = { 'easemob' => 'dev@easemob.com' }
-    #s.source = { :git => 'https://github.com/easemob/easeui_ios.git', :tag => 'EaseIMKit_3.8.4'}
-    s.source = { :git => 'https://github.com/MThrone/easeui_ios.git', :tag => 'EaseIMKit_3.8.4'}
+    s.source = { :git => 'https://github.com/easemob/easeui_ios.git', :tag => 'EaseIMKit_3.8.4'}
+    #s.source = { :git => 'https://github.com/MThrone/easeui_ios.git', :tag => 'EaseIMKit_3.8.4'}
     s.frameworks = 'UIKit'
     s.libraries = 'stdc++'
     s.ios.deployment_target = '10.0'
