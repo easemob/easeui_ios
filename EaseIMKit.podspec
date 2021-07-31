@@ -55,7 +55,7 @@ Pod::Spec.new do |s|
                               'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64, i386'
                             }
 
-    s.dependency 'HyphenateChat'
+    s.dependency 'HyphenateChat', '3.8.4'
     s.dependency 'EMVoiceConvert', '0.1.0'
 
 end
