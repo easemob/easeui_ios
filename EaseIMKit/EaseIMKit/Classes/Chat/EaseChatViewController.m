@@ -535,6 +535,9 @@
     __weak typeof(self) weakself = self;
     [[[EMClient sharedClient] chatManager] resendMessage:aModel.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself.tableView reloadData];
+        if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(didSendMessage:error:)]) {
+            [weakself.delegate didSendMessage:message error:error];
+        }
     }];
     
     [self.tableView reloadData];
