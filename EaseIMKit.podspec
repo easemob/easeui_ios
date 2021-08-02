@@ -17,7 +17,11 @@ Pod::Spec.new do |s|
     s.frameworks = 'UIKit'
     s.libraries = 'stdc++'
     s.ios.deployment_target = '10.0'
-    s.source_files = 'EaseIMKit/EaseIMKit/**/*.{h,m,mm}'
+    s.source_files = [
+        'EaseIMKit/EaseIMKit/EaseIMKit.h',
+        'EaseIMKit/EaseIMKit/EasePublicHeaders.h',
+        'EaseIMKit/EaseIMKit/**/*.{h,m,mm}'
+    ]
     s.public_header_files = [
         'EaseIMKit/EaseIMKit/EaseIMKit.h',
         'EaseIMKit/EaseIMKit/EasePublicHeaders.h',
@@ -52,8 +56,10 @@ Pod::Spec.new do |s|
      # 'EaseIMKit' => ['EaseIMKit/EaseIMKit/Assets/*.png']
     #}
     s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES',
-                              'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64, i386'
+                              'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64, i386',
+                              'VALID_ARCHS' => 'arm64 armv7 x86_64'
                             }
+    s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
     s.dependency 'HyphenateChat', '3.8.4'
     s.dependency 'EMVoiceConvert', '0.1.0'
