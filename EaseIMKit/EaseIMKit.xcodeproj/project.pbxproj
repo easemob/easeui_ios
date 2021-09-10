@@ -383,6 +383,9 @@
 		9E6ADA6F26B3186800F620D5 /* UIImage+EaseUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E6AD8F926B3186500F620D5 /* UIImage+EaseUI.h */; };
 		9E6ADA7026B3186800F620D5 /* EaseIMKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9E6AD8FB26B3186600F620D5 /* EaseIMKit.bundle */; };
 		9E6ADA7126B31C1100F620D5 /* EaseHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E6AD3F426B3097C00F620D5 /* EaseHeaders.h */; };
+		9EAEB48D26B8F80A00A129AC /* HyphenateChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EAEB48C26B8F80A00A129AC /* HyphenateChat.framework */; };
+		9EAEB48E26B8F80A00A129AC /* HyphenateChat.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9EAEB48C26B8F80A00A129AC /* HyphenateChat.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CAD888C375510EA7F382AA60 /* Pods_EaseIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47B50DBB89892354DC9FAA0F /* Pods_EaseIMKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -392,6 +395,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				9EAEB48E26B8F80A00A129AC /* HyphenateChat.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -400,6 +404,7 @@
 
 /* Begin PBXFileReference section */
 		33F150BD1933F8715A082020 /* Pods-EaseIMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.debug.xcconfig"; sourceTree = "<group>"; };
+		47B50DBB89892354DC9FAA0F /* Pods_EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90892DDB25764D0900F50368 /* EaseIMKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseIMKit.h; sourceTree = "<group>"; };
 		90A039F0254A6E7600D57B73 /* EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90A039F4254A6E7600D57B73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -778,6 +783,7 @@
 		9E6AD8F826B3186500F620D5 /* NSObject+Alert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Alert.m"; sourceTree = "<group>"; };
 		9E6AD8F926B3186500F620D5 /* UIImage+EaseUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+EaseUI.h"; sourceTree = "<group>"; };
 		9E6AD8FB26B3186600F620D5 /* EaseIMKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = EaseIMKit.bundle; sourceTree = "<group>"; };
+		9EAEB48C26B8F80A00A129AC /* HyphenateChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = HyphenateChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0F695B9C3665593AEE6B0DB /* Pods-EaseIMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -786,6 +792,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9EAEB48D26B8F80A00A129AC /* HyphenateChat.framework in Frameworks */,
+				CAD888C375510EA7F382AA60 /* Pods_EaseIMKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -805,6 +813,8 @@
 		90892DD325764C6900F50368 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9EAEB48C26B8F80A00A129AC /* HyphenateChat.framework */,
+				47B50DBB89892354DC9FAA0F /* Pods_EaseIMKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
