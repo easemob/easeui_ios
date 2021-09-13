@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = 'EaseIMKit'
-    s.version          = '3.8.4'
+    s.version          = '3.8.5'
     s.summary = 'easemob im sdk UIKit'
     s.homepage = 'http://docs-im.easemob.com/im/ios/other/easeimkit'
     s.description = <<-DESC
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
                   DESC
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.author           = { 'easemob' => 'dev@easemob.com' }
-    s.source = { :git => 'https://github.com/easemob/easeui_ios.git', :tag => 'EaseIMKit_3.8.4'}
+    s.source = { :git => 'https://github.com/easemob/easeui_ios.git', :tag => 'EaseIMKit_3.8.5'}
     #s.source = { :git => 'https://github.com/MThrone/easeui_ios.git', :tag => 'EaseIMKit_3.8.4'}
     s.frameworks = 'UIKit'
     s.libraries = 'stdc++'
@@ -55,13 +55,12 @@ Pod::Spec.new do |s|
     #s.resource_bundles = {
      # 'EaseIMKit' => ['EaseIMKit/EaseIMKit/Assets/*.png']
     #}
-    s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES',
-                              'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64, i386',
+    s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
                               'VALID_ARCHS' => 'arm64 armv7 x86_64'
                             }
     s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
-    s.dependency 'HyphenateChat', '3.8.4'
+    s.dependency 'HyphenateChat', '3.8.5'
     s.dependency 'EMVoiceConvert', '0.1.0'
 
 end

@@ -311,6 +311,7 @@
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (!self.dataArray || [self.dataArray count] == 0 || ([self.dataArray count] - 1) < indexPath.row) return;
     id obj = [self.dataArray objectAtIndex:indexPath.row];
     if ([obj isKindOfClass:[EaseMessageModel class]]) {
         EaseMessageModel *model = (EaseMessageModel *)obj;

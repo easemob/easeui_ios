@@ -39,12 +39,9 @@
         EaseEmoticonGroup *group = [EaseEmoticonGroup getGifGroup];
         for (EaseEmoticonModel *model in group.dataArray) {
             if ([model.name isEqualToString:name]) {
-                NSBundle *resource_bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"/Frameworks/EaseIMKit.framework" ofType:nil]];
-                if (!resource_bundle) {
-                    resource_bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"Frameworks/EaseIMKit.framework" ofType:nil]];
-                }
-                NSString *path = [resource_bundle pathForResource:model.original ofType:@"gif"];
-                NSData *imageData = [NSData dataWithContentsOfFile:path];
+                NSString *path = [[NSBundle mainBundle] pathForResource:@"EaseIMKit" ofType:@"bundle"];
+                NSString *gifPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.gif",model.original]];
+                NSData *imageData = [NSData dataWithContentsOfFile:gifPath];
                 self.gifView.animatedImage = [EaseAnimatedImg animatedImageWithGIFData:imageData];
                 break;
             }
