@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gXz-sZ-0kI">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gXz-sZ-0kI">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--环信-->
+        <!--AgoraChat-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ConversationsViewController" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" userLabel="AgoraChat" customClass="ConversationsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.94994920490000001" green="0.94997149709999995" blue="0.94995945690000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" title="环信" id="rJL-Y1-yzU">
+                    <navigationItem key="navigationItem" title="AgoraChat" id="rJL-Y1-yzU" userLabel="AgoraChat">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="oq6-HF-VeJ">
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </barButtonItem>
@@ -51,17 +51,17 @@
             </objects>
             <point key="canvasLocation" x="140.57971014492756" y="87.723214285714278"/>
         </scene>
-        <!--通讯录-->
+        <!--contact-->
         <scene sceneID="Vu6-Fd-FR9">
             <objects>
-                <viewController id="D97-Os-aP2" customClass="ContactsViewController" sceneMemberID="viewController">
+                <viewController id="D97-Os-aP2" userLabel="contact" customClass="ContactsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mKH-Bc-ZjF">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="d5n-6o-xAo"/>
                         <color key="backgroundColor" red="0.94994920490000001" green="0.94997149709999995" blue="0.94995945690000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" title="通讯录" id="bvo-HS-Tm7">
+                    <navigationItem key="navigationItem" title="contact" id="bvo-HS-Tm7" userLabel="contact">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="gWi-qX-YeA">
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </barButtonItem>
@@ -71,22 +71,22 @@
             </objects>
             <point key="canvasLocation" x="2406" y="88"/>
         </scene>
-        <!--我-->
+        <!--mine-->
         <scene sceneID="Bcu-qc-YDy">
             <objects>
-                <tableViewController id="qQB-c2-5BT" customClass="MineViewController" sceneMemberID="viewController">
+                <tableViewController id="qQB-c2-5BT" userLabel="mine" customClass="MineViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="hdf-39-8ET">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.94994920490000001" green="0.94997149709999995" blue="0.94995945690000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="Efl-IK-nhW">
+                        <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="Efl-IK-nhW" userLabel="logout">
                             <rect key="frame" x="0.0" y="92" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" systemColor="systemRedColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                             <color key="tintColor" systemColor="systemBackgroundColor"/>
-                            <state key="normal" title="退出"/>
+                            <state key="normal" title="logout"/>
                             <connections>
                                 <action selector="logoutBtnClicked:" destination="qQB-c2-5BT" eventType="touchUpInside" id="5h0-7G-JHs"/>
                             </connections>
@@ -130,7 +130,7 @@
                             <outlet property="delegate" destination="qQB-c2-5BT" id="RaV-qg-Z6d"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="我" id="9pR-dp-yr6"/>
+                    <navigationItem key="navigationItem" title="mine" id="9pR-dp-yr6" userLabel="mine"/>
                     <connections>
                         <outlet property="versionLabel" destination="OOD-bp-AJU" id="NEo-gn-9RK"/>
                     </connections>
@@ -192,11 +192,11 @@
             </objects>
             <point key="canvasLocation" x="-1410" y="498"/>
         </scene>
-        <!--通讯录-->
+        <!--contact-->
         <scene sceneID="cIm-6p-ISy">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="WJW-JN-s9r" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="通讯录" image="tabbar_contacts" selectedImage="tabbar_selected_contacts" id="riN-wH-4m0"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="WJW-JN-s9r" userLabel="contact" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="contact" image="tabbar_contacts" selectedImage="tabbar_selected_contacts" id="riN-wH-4m0" userLabel="contact"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="2Ai-77-M3K">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -212,11 +212,11 @@
             </objects>
             <point key="canvasLocation" x="1405.7971014492755" y="87.723214285714278"/>
         </scene>
-        <!--会话-->
+        <!--conversaion-->
         <scene sceneID="Wgj-hu-bh5">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZOO-3r-fhV" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="会话" image="tabbar_conversations" selectedImage="tabbar_selected_conversations" id="cZa-5j-kOs"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZOO-3r-fhV" userLabel="conversaion" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="conversation" image="tabbar_conversations" selectedImage="tabbar_selected_conversations" id="cZa-5j-kOs" userLabel="conversation"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="FPO-DA-fsx">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -232,11 +232,11 @@
             </objects>
             <point key="canvasLocation" x="1405.7971014492755" y="-678.34821428571422"/>
         </scene>
-        <!--我-->
+        <!--mine-->
         <scene sceneID="Z1S-mK-fbR">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="b44-9r-8Ga" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="我" image="tabbar_mine" selectedImage="tabbar_selected_mine" id="Jb9-Wf-LOC"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="b44-9r-8Ga" userLabel="mine" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="mine" image="tabbar_mine" selectedImage="tabbar_selected_mine" id="Jb9-Wf-LOC" userLabel="mine"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="t7a-Ny-tYb">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
