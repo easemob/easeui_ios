@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <EaseIMKitLite/EaseIMKitLite.h>
+#import <EaseIMKit/EaseIMKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

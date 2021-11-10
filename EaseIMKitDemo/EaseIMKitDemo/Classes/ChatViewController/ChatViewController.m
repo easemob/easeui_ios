@@ -8,7 +8,7 @@
 
 #import "ChatViewController.h"
 #import <Masonry/Masonry.h>
-#import <EaseIMKitLite/EaseIMKitLite.h>
+#import <EaseIMKit/EaseIMKit.h>
 
 @interface ChatViewController ()<EaseChatViewControllerDelegate>
 @property (nonatomic, strong) EaseChatViewController *chatController;
@@ -22,9 +22,9 @@
     [super viewDidLoad];
     
     EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
-    _chatController = [[EaseChatViewController alloc] initWithConversationId:self.chatter
-                                                                                   conversationType:self.conversationType
-                                                                                      chatViewModel:viewModel];
+    _chatController = [EaseChatViewController initWithConversationId:self.chatter
+                                                    conversationType:self.conversationType
+                                                       chatViewModel:viewModel];
     _chatController.delegate = self;
     [_chatController setEditingStatusVisible:YES];
     [self addChildViewController:_chatController];
@@ -41,7 +41,7 @@
             if (messageList && [messageList count] && [msgList count]) {
                 [msgList addObjectsFromArray:messageList];
             }
-            [weakself.chatController refreshTableViewWithData:[msgList copy] isScrollBottom:YES];
+            [weakself.chatController refreshTableViewWithData:[msgList copy] isInsertBottom:NO isScrollBottom:YES];
         };
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:self.chatter type:self.conversationType createIfNotExist:NO];
     [conversation loadMessagesStartFromId:self.firstMesgId count:50 searchDirection:EMMessageSearchDirectionUp completion:block];

@@ -7,7 +7,7 @@
 //
 
 #import "ConversationsViewController.h"
-#import <EaseIMKitLite/EaseIMKitLite.h>
+#import <EaseIMKit/EaseIMKit.h>
 #import <Masonry/Masonry.h>
 #import "ChatViewController.h"
 #import "DemoUserModel.h"
@@ -95,7 +95,7 @@
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search"]];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
     label.font = [UIFont systemFontOfSize:16];
-    label.text = @"搜索";
+    label.text = @"search";
     label.textColor = [UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1];
     [label setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
     UIView *subView = [[UIView alloc] init];

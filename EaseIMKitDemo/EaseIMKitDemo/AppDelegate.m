@@ -7,9 +7,9 @@
 //
 
 #import "AppDelegate.h"
-#import <HyphenateLite/HyphenateLite.h>
+#import <HyphenateChat/HyphenateChat.h>
 
-#define kDefaultName @"du001"
+#define kDefaultName @"chong"
 
 #define kDefaultPassword @"1"
 
@@ -22,7 +22,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    EMOptions *options = [EMOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
+    EMOptions *options = [EMOptions optionsWithAppkey:@"easemob-demo#easeim"];
     options.enableConsoleLog = YES;
 
     [EaseIMKitManager initWithEMOptions:options];
