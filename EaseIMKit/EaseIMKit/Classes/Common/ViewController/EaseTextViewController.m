@@ -66,9 +66,9 @@
     self.textView.backgroundColor = [UIColor clearColor];
     self.textView.font = [UIFont systemFontOfSize:16];
     if (!self.isEditable)
-        self.textView.placeholder = @"联系管理员获取编辑权限";
+        self.textView.placeHolder = @"联系管理员获取编辑权限";
     else
-        self.textView.placeholder = self.placeholder;
+        self.textView.placeHolder = self.placeholder;
     self.textView.returnKeyType = UIReturnKeyDone;
     if (self.originalString && ![self.originalString isEqualToString:@""]) {
         self.textView.text = self.originalString;
