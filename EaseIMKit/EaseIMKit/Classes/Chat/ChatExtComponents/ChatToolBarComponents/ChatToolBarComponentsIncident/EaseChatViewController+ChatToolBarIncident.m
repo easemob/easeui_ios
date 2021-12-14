@@ -254,8 +254,8 @@ static const void *imagePickerKey = &imagePickerKey;
     if ([CLLocationManager locationServicesEnabled] && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
         EMLocationViewController *controller = [[EMLocationViewController alloc] init];
         __weak typeof(self) weakself = self;
-        [controller setSendCompletion:^(CLLocationCoordinate2D aCoordinate, NSString * _Nonnull aAddress) {
-            [weakself _sendLocationAction:aCoordinate address:aAddress];
+        [controller setSendCompletion:^(CLLocationCoordinate2D aCoordinate, NSString * _Nonnull aAddress, NSString * _Nonnull aBuildingName) {
+            [weakself _sendLocationAction:aCoordinate address:aAddress buildingName:aBuildingName];
         }];
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
         navController.modalPresentationStyle = 0;
@@ -267,9 +267,11 @@ static const void *imagePickerKey = &imagePickerKey;
 
 - (void)_sendLocationAction:(CLLocationCoordinate2D)aCoord
                     address:(NSString *)aAddress
+               buildingName:(NSString *)aBuildingName
 {
     if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
-        EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:aCoord.latitude longitude:aCoord.longitude address:aAddress];
+        EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:aCoord.latitude longitude:aCoord.longitude address:aAddress buildingName:aBuildingName];
+        
         [self sendMessageWithBody:body ext:nil];
     } else {
         [EaseAlertController showErrorAlert:@"未获取到位置权限"];
