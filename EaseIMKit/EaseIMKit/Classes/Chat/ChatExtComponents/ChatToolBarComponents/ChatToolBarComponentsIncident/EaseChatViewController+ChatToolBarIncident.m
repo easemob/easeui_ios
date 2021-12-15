@@ -110,17 +110,21 @@ static const void *imagePickerKey = &imagePickerKey;
         } else {
             if ([[UIDevice currentDevice].systemVersion doubleValue] >= 9.0f) {
                 PHFetchResult *result = [PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil];
-                [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
-                    if (asset) {
-                        [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
-                            if (data != nil) {
-                                [self _sendImageDataAction:data];
-                            } else {
-                                [EaseAlertController showErrorAlert:@"图片太大，请选择其他图片"];
-                            }
-                        }];
-                    }
-                }];
+                if(result.count == 0){
+                    [EaseAlertController showErrorAlert:@"无权访问该相册"];
+                }else{
+                    [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
+                        if (asset) {
+                            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
+                                if (data != nil) {
+                                    [self _sendImageDataAction:data];
+                                } else {
+                                    [EaseAlertController showErrorAlert:@"图片太大，请选择其他图片"];
+                                }
+                            }];
+                        }
+                    }];
+                }
             } else {
                 ALAssetsLibrary *alasset = [[ALAssetsLibrary alloc] init];
                 [alasset assetForURL:url resultBlock:^(ALAsset *asset) {
