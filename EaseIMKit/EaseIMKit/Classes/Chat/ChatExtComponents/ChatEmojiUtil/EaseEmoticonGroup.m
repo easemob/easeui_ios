@@ -61,7 +61,7 @@ EaseEmoticonGroup *gGifGroup = nil;
         ++index;
         EaseEmoticonModel *model = [[EaseEmoticonModel alloc] initWithType:EMEmotionTypeGif];
         model.eId = [NSString stringWithFormat:@"em%d",(1000 + index)];
-        model.name = [NSString stringWithFormat:@"[示例%d]", index];
+        model.name = [NSString stringWithFormat:EaseLocalizableString(@"[example]", nil), index];
         model.imgName = [NSString stringWithFormat:@"%@_cover", name];
         model.original = name;
         [models2 addObject:model];

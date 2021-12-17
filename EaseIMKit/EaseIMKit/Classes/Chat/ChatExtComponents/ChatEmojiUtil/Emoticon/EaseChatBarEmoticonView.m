@@ -68,7 +68,7 @@
     
     self.sendBtn = [[UIButton alloc]init];
     self.sendBtn.layer.cornerRadius = 8;
-    [self.sendBtn setTitle:@"发送" forState:UIControlStateNormal];
+    [self.sendBtn setTitle:EaseLocalizableString(@"send", nil) forState:UIControlStateNormal];
     [self.sendBtn.titleLabel setFont:[UIFont systemFontOfSize:14.f]];
     [self.sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.sendBtn setTitleColor:[UIColor colorWithHexString:@"#ADADAD"] forState:UIControlStateDisabled];
