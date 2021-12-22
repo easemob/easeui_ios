@@ -12,6 +12,7 @@
 
 #import "EaseEmotionEscape.h"
 #import "UIImage+EaseUI.h"
+#import "EaseDefines.h"
 
 #define RGBCOLOR(r,g,b) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:1]
 #define kEmotionTopMargin -3.0f
@@ -104,7 +105,7 @@ static EaseEmotionEscape *_sharedInstance = nil;
                 str = [NSString stringWithFormat:@"[%@]", str];
                 textAttachmentString = [[NSAttributedString alloc] initWithString:str];
             }else {
-                textAttachmentString = [[NSAttributedString alloc] initWithString:@"[表情]"];
+                textAttachmentString = [[NSAttributedString alloc] initWithString:EaseLocalizableString(@"[emoji]", nil)];
             }
         }
         

@@ -47,7 +47,7 @@
 - (void)_setupSubviews
 {
     if (self.isEditable) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(doneAction)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:EaseLocalizableString(@"save", nil) style:UIBarButtonItemStylePlain target:self action:@selector(doneAction)];
     }
     
     self.view.backgroundColor = [UIColor whiteColor];
@@ -66,7 +66,7 @@
     self.textView.backgroundColor = [UIColor clearColor];
     self.textView.font = [UIFont systemFontOfSize:16];
     if (!self.isEditable)
-        self.textView.placeholder = @"联系管理员获取编辑权限";
+        self.textView.placeholder = EaseLocalizableString(@"fetchEditPermision", nil);
     else
         self.textView.placeholder = self.placeholder;
     self.textView.returnKeyType = UIReturnKeyDone;

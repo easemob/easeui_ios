@@ -8,6 +8,7 @@
 #import "EaseBaseTableViewController.h"
 #import "UITableView+Refresh.h"
 #import "Easeonry.h"
+#import "EaseDefines.h"
 
 @interface EaseBaseTableViewController ()
 {
@@ -97,7 +98,7 @@
         _tableView.tableFooterView = [UIView new];
         _tableView.estimatedRowHeight = 44;
         _tableView.rowHeight = UITableViewAutomaticDimension;
-        [_tableView enableRefresh:@"下拉刷新" color:UIColor.systemGrayColor];
+        [_tableView enableRefresh:EaseLocalizableString(@"dropRefresh", nil) color:UIColor.systemGrayColor];
         [_tableView.refreshControl addTarget:self action:@selector(refreshTabView) forControlEvents:UIControlEventValueChanged];
     }
     
