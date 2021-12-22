@@ -80,7 +80,7 @@
 "read" = "Read";
 "downloaded" = "Downloaded";
 "locationvalue" = "latitude:%.2lf°, longitude:%.2lf°";
-"yestorday" = "M-D HH:mm";
+"yestorday" = "M-d HH:mm";
 "beforedarw" = "aa hh:mm";
 "am" = "aa hh:mm";
 "pm" = "aa hh:mm";
