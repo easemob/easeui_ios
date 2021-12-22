@@ -110,17 +110,21 @@ static const void *imagePickerKey = &imagePickerKey;
         } else {
             if ([[UIDevice currentDevice].systemVersion doubleValue] >= 9.0f) {
                 PHFetchResult *result = [PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil];
-                [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
-                    if (asset) {
-                        [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
-                            if (data != nil) {
-                                [self _sendImageDataAction:data];
-                            } else {
-                                [EaseAlertController showErrorAlert:EaseLocalizableString(@"imageTooLarge", nil)];
-                            }
-                        }];
-                    }
-                }];
+                if(result.count == 0){
+                    [EaseAlertController showErrorAlert:@"无权访问该相册"];
+                }else{
+                    [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
+                        if (asset) {
+                            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
+                                if (data != nil) {
+                                    [self _sendImageDataAction:data];
+                                } else {
+                                    [EaseAlertController showErrorAlert:EaseLocalizableString(@"imageTooLarge", nil)];
+                                }
+                            }];
+                        }
+                    }];
+                }
             } else {
                 ALAssetsLibrary *alasset = [[ALAssetsLibrary alloc] init];
                 [alasset assetForURL:url resultBlock:^(ALAsset *asset) {
@@ -254,8 +258,8 @@ static const void *imagePickerKey = &imagePickerKey;
     if ([CLLocationManager locationServicesEnabled] && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
         EMLocationViewController *controller = [[EMLocationViewController alloc] init];
         __weak typeof(self) weakself = self;
-        [controller setSendCompletion:^(CLLocationCoordinate2D aCoordinate, NSString * _Nonnull aAddress) {
-            [weakself _sendLocationAction:aCoordinate address:aAddress];
+        [controller setSendCompletion:^(CLLocationCoordinate2D aCoordinate, NSString * _Nonnull aAddress, NSString * _Nonnull aBuildingName) {
+            [weakself _sendLocationAction:aCoordinate address:aAddress buildingName:aBuildingName];
         }];
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
         navController.modalPresentationStyle = 0;
@@ -267,9 +271,11 @@ static const void *imagePickerKey = &imagePickerKey;
 
 - (void)_sendLocationAction:(CLLocationCoordinate2D)aCoord
                     address:(NSString *)aAddress
+               buildingName:(NSString *)aBuildingName
 {
     if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
-        EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:aCoord.latitude longitude:aCoord.longitude address:aAddress];
+        EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:aCoord.latitude longitude:aCoord.longitude address:aAddress buildingName:aBuildingName];
+        
         [self sendMessageWithBody:body ext:nil];
     } else {
         [EaseAlertController showErrorAlert:EaseLocalizableString(@"getLocaionPermissionFail", nil)];

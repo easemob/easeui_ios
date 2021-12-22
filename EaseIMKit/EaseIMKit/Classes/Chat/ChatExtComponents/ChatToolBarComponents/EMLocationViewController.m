@@ -17,6 +17,7 @@
 
 @property (nonatomic) CLLocationCoordinate2D locationCoordinate;
 @property (nonatomic, strong) NSString *address;
+@property (nonatomic, strong) NSString *buildingName;
 
 @property (nonatomic, strong) MKMapView *mapView;
 @property (nonatomic, strong) MKPointAnnotation *annotation;
@@ -149,6 +150,7 @@
         if (!error && array.count > 0) {
             CLPlacemark *placemark = [array objectAtIndex:0];
             weakself.address = placemark.name;
+            weakself.buildingName = @"建筑物名称";//自主获取
             [weakself _moveToLocation:userLocation.coordinate];
         }
     }];
@@ -189,7 +191,7 @@
 {
     [self dismissViewControllerAnimated:YES completion:^{
         if (self.sendCompletion) {
-            self.sendCompletion(self.locationCoordinate, self.address);
+            self.sendCompletion(self.locationCoordinate, self.address, self.buildingName?self.buildingName:@"");
         }
     }];
 }
