@@ -66,9 +66,9 @@
     self.textView.backgroundColor = [UIColor clearColor];
     self.textView.font = [UIFont systemFontOfSize:16];
     if (!self.isEditable)
-        self.textView.placeholder = EaseLocalizableString(@"fetchEditPermision", nil);
+        self.textView.placeHolder = EaseLocalizableString(@"fetchEditPermision", nil);
     else
-        self.textView.placeholder = self.placeholder;
+        self.textView.placeHolder = self.placeholder;
     self.textView.returnKeyType = UIReturnKeyDone;
     if (self.originalString && ![self.originalString isEqualToString:@""]) {
         self.textView.text = self.originalString;
