@@ -26,9 +26,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if( @available (iOS 15.0,*) ){
+        [[UITableView appearance] setSectionHeaderTopPadding:0.0f];
+    }
     self.view.backgroundColor = UIColor.clearColor;
     self.tableView.backgroundColor = UIColor.clearColor;
     [self.view addSubview:self.tableView];
+    
     [self.tableView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
         make.left.equalTo(self.view);
         make.top.equalTo(self.view);
