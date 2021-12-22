@@ -10,6 +10,7 @@
 #import "Easeonry.h"
 #import "UIImage+EaseUI.h"
 #import "UIColor+EaseUI.h"
+#import "EaseDefines.h"
 
 @interface EMPickFileViewController ()
 
@@ -49,7 +50,7 @@
     CGFloat location = self.view.frame.size.width / 2;
     
     self.recentBtn = [[UIButton alloc]init];
-    [self.recentBtn setTitle:@"最近" forState:UIControlStateNormal];
+    [self.recentBtn setTitle:EaseLocalizableString(@"Nearest", nil) forState:UIControlStateNormal];
     self.recentBtn.backgroundColor = [UIColor lightGrayColor];
     self.recentBtn.titleLabel.textColor = [UIColor blackColor];
     [self.localMediaView addSubview:self.recentBtn];
@@ -62,7 +63,7 @@
     }];
     
     self.localBtn = [[UIButton alloc]init];
-    [self.localBtn setTitle:@"本机" forState:UIControlStateNormal];
+    [self.localBtn setTitle:EaseLocalizableString(@"localMachine", nil) forState:UIControlStateNormal];
     self.localBtn.backgroundColor = [UIColor lightGrayColor];
     self.localBtn.titleLabel.textColor = [UIColor blackColor];
     [self.localMediaView addSubview:self.localBtn];
@@ -82,7 +83,7 @@
     CGFloat width = (self.view.frame.size.width)/2;
     
     self.avBtn = [[UIButton alloc]init];
-    [_avBtn setTitle:@"影音" forState:UIControlStateNormal];
+    [_avBtn setTitle:EaseLocalizableString(@"movie", nil) forState:UIControlStateNormal];
     [_avBtn setTitleColor:[UIColor colorWithRed:4/255.0 green:174/255.0 blue:240/255.0 alpha:1.0] forState:UIControlStateNormal];
     _avBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     _avBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -97,7 +98,7 @@
     }];
 
     self.picBtn = [[UIButton alloc]init];
-    [_picBtn setTitle:@"图片" forState:UIControlStateNormal];
+    [_picBtn setTitle:EaseLocalizableString(@"image", nil) forState:UIControlStateNormal];
     _picBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     _picBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
     [_picBtn setTitleColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1.0] forState:UIControlStateNormal];

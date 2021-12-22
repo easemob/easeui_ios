@@ -32,11 +32,11 @@ static const void *imagePickerKey = &imagePickerKey;
 
     if (componentType == EMChatToolBarCamera) {
         #if TARGET_IPHONE_SIMULATOR
-            [EaseAlertController showErrorAlert:@"模拟器不支持照相机"];
+            [EaseAlertController showErrorAlert:EaseLocalizableString(@"simUnsupportCamera", nil)];
         #elif TARGET_OS_IPHONE
             AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
             if (authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied) {
-                [EaseAlertController showErrorAlert:@"未开启相机权限"];
+                [EaseAlertController showErrorAlert:EaseLocalizableString(@"cameraPermissionDisabled", nil)];
                 return;
             }
             __weak typeof(self) weakself = self;
@@ -73,11 +73,11 @@ static const void *imagePickerKey = &imagePickerKey;
             }
             if (status == PHAuthorizationStatusDenied) {
                 //用户已经明确否认了这一照片数据的应用程序访问
-                [EaseAlertController showErrorAlert:@"不允许访问相册"];
+                [EaseAlertController showErrorAlert:EaseLocalizableString(@"photoPermissionDisabled", nil)];
             }
             if (status == PHAuthorizationStatusRestricted) {
                 //此应用程序没有被授权访问的照片数据。可能是家长控制权限
-                [EaseAlertController showErrorAlert:@"没有授权访问相册"];
+                [EaseAlertController showErrorAlert:EaseLocalizableString(@"fetchPhotoPermissionFail", nil)];
             }
         });
     }];
@@ -110,17 +110,21 @@ static const void *imagePickerKey = &imagePickerKey;
         } else {
             if ([[UIDevice currentDevice].systemVersion doubleValue] >= 9.0f) {
                 PHFetchResult *result = [PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil];
-                [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
-                    if (asset) {
-                        [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
-                            if (data != nil) {
-                                [self _sendImageDataAction:data];
-                            } else {
-                                [EaseAlertController showErrorAlert:@"图片太大，请选择其他图片"];
-                            }
-                        }];
-                    }
-                }];
+                if(result.count == 0){
+                    [EaseAlertController showErrorAlert:@"无权访问该相册"];
+                }else{
+                    [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
+                        if (asset) {
+                            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
+                                if (data != nil) {
+                                    [self _sendImageDataAction:data];
+                                } else {
+                                    [EaseAlertController showErrorAlert:EaseLocalizableString(@"imageTooLarge", nil)];
+                                }
+                            }];
+                        }
+                    }];
+                }
             } else {
                 ALAssetsLibrary *alasset = [[ALAssetsLibrary alloc] init];
                 [alasset assetForURL:url resultBlock:^(ALAsset *asset) {
@@ -254,25 +258,27 @@ static const void *imagePickerKey = &imagePickerKey;
     if ([CLLocationManager locationServicesEnabled] && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
         EMLocationViewController *controller = [[EMLocationViewController alloc] init];
         __weak typeof(self) weakself = self;
-        [controller setSendCompletion:^(CLLocationCoordinate2D aCoordinate, NSString * _Nonnull aAddress) {
-            [weakself _sendLocationAction:aCoordinate address:aAddress];
+        [controller setSendCompletion:^(CLLocationCoordinate2D aCoordinate, NSString * _Nonnull aAddress, NSString * _Nonnull aBuildingName) {
+            [weakself _sendLocationAction:aCoordinate address:aAddress buildingName:aBuildingName];
         }];
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
         navController.modalPresentationStyle = 0;
         [self.navigationController presentViewController:navController animated:YES completion:nil];
     } else {
-        [EaseAlertController showErrorAlert:@"未开启位置权限"];
+        [EaseAlertController showErrorAlert:EaseLocalizableString(@"LocationPermissionDisabled", nil)];
     }
 }
 
 - (void)_sendLocationAction:(CLLocationCoordinate2D)aCoord
                     address:(NSString *)aAddress
+               buildingName:(NSString *)aBuildingName
 {
     if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
-        EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:aCoord.latitude longitude:aCoord.longitude address:aAddress];
+        EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:aCoord.latitude longitude:aCoord.longitude address:aAddress buildingName:aBuildingName];
+        
         [self sendMessageWithBody:body ext:nil];
     } else {
-        [EaseAlertController showErrorAlert:@"未获取到位置权限"];
+        [EaseAlertController showErrorAlert:EaseLocalizableString(@"getLocaionPermissionFail", nil)];
     }
 }
 
@@ -303,7 +309,7 @@ static const void *imagePickerKey = &imagePickerKey;
         [urls.firstObject stopAccessingSecurityScopedResource];
         return;
     }
-    [self showHint:@"授权失败!"];
+    [self showHint:EaseLocalizableString(@"getPermissionfail", nil)];
 }
 - (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller
 {
@@ -318,7 +324,7 @@ static const void *imagePickerKey = &imagePickerKey;
         [url stopAccessingSecurityScopedResource];
         return;
     }
-    [self showHint:@"授权失败!"];
+    [self showHint:EaseLocalizableString(@"getPermissionfail", nil)];
 }
 
 //icloud
@@ -333,7 +339,7 @@ static const void *imagePickerKey = &imagePickerKey;
             NSError *error = nil;
             NSData *fileData = [NSData dataWithContentsOfURL:newURL options:NSDataReadingMappedIfSafe error:&error];
             if (error) {
-                [self showHint:@"文件读取失败!"];
+                [self showHint:EaseLocalizableString(@"fileOpenFail", nil)];
                 return;
             }
             NSLog(@"fileName: %@\nfileUrl: %@", fileName, newURL);

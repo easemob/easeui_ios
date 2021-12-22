@@ -38,8 +38,8 @@ static const void *recallViewKey = &recallViewKey;
         return;
     }
     __weak typeof(self) weakself = self;
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"确认删除？" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *clearAction = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:EaseLocalizableString(@"confirmDelete", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *clearAction = [UIAlertAction actionWithTitle:EaseLocalizableString(@"delete", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         EaseMessageModel *model = [weakself.dataArray objectAtIndex:weakself.longPressIndexPath.row];
         [weakself.currentConversation deleteMessageWithId:model.message.messageId error:nil];
         NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:weakself.longPressIndexPath.row];
@@ -69,7 +69,7 @@ static const void *recallViewKey = &recallViewKey;
     }];
     [clearAction setValue:[UIColor colorWithRed:245/255.0 green:52/255.0 blue:41/255.0 alpha:1.0] forKey:@"_titleTextColor"];
     [alertController addAction:clearAction];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style: UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:EaseLocalizableString(@"cancel", nil) style: UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         if (aCompletionBlock) {
             aCompletionBlock(nil);
         }
@@ -92,7 +92,7 @@ static const void *recallViewKey = &recallViewKey;
     pasteboard.string = body.text;
     
     self.longPressIndexPath = nil;
-    [self showHint:@"已复制"];
+    [self showHint:EaseLocalizableString(@"copied", nil)];
 }
 
 - (void)recallLongPressAction
@@ -100,7 +100,7 @@ static const void *recallViewKey = &recallViewKey;
     if (self.longPressIndexPath == nil || self.longPressIndexPath.row < 0) {
         return;
     }
-    [self showHudInView:self.view hint:@"正在撤回消息"];
+    [self showHudInView:self.view hint:EaseLocalizableString(@"recalingMsg", nil)];
     NSIndexPath *indexPath = self.longPressIndexPath;
     __weak typeof(self) weakself = self;
     EaseMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
@@ -109,7 +109,7 @@ static const void *recallViewKey = &recallViewKey;
         if (aError) {
             [EaseAlertController showErrorAlert:aError.errorDescription];
         } else {
-            EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:@"您撤回一条消息"];
+            EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:EaseLocalizableString(@"meRecall", nil)];
             NSString *from = [[EMClient sharedClient] currentUsername];
             NSString *to = self.currentConversation.conversationId;
             EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:@{MSG_EXT_RECALL:@(YES)}];
@@ -143,12 +143,12 @@ static const void *recallViewKey = &recallViewKey;
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
         if (error) {
             [weakself.currentConversation deleteMessageWithId:message.messageId error:nil];
-            [EaseAlertController showErrorAlert:@"转发消息失败"];
+            [EaseAlertController showErrorAlert:EaseLocalizableString(@"transferMsgFail", nil)];
         } else {
             if (aCompletionBlock) {
                 aCompletionBlock(message);
             }
-            [EaseAlertController showSuccessAlert:@"转发消息成功"];
+            [EaseAlertController showSuccessAlert:EaseLocalizableString(@"transferMsgSuccess", nil)];
             if ([aTo isEqualToString:weakself.currentConversation.conversationId]) {
                 [weakself sendReadReceipt:message];
                 [weakself.currentConversation markMessageAsReadWithId:message.messageId error:nil];
@@ -206,7 +206,7 @@ static const void *recallViewKey = &recallViewKey;
         newBody = [[EMImageMessageBody alloc]initWithLocalPath:imgBody.localPath displayName:imgBody.displayName];
     } else {
         if (imgBody.downloadStatus != EMDownloadStatusSuccessed) {
-            [EaseAlertController showErrorAlert:@"请先下载原图"];
+            [EaseAlertController showErrorAlert:EaseLocalizableString(@"downloadImageFirst", nil)];
             return;
         }
         
@@ -239,7 +239,7 @@ static const void *recallViewKey = &recallViewKey;
     if (![[NSFileManager defaultManager] fileExistsAtPath:oldBody.localPath]) {
         [[EMClient sharedClient].chatManager downloadMessageAttachment:aMsg progress:nil completion:^(EMMessage *message, EMError *error) {
             if (error) {
-                [EaseAlertController showErrorAlert:@"转发消息失败"];
+                [EaseAlertController showErrorAlert:EaseLocalizableString(@"transferMsgFail", nil)];
             } else {
                 block(aMsg);
             }

@@ -121,7 +121,7 @@
         self.detailLabel.text = [NSString stringWithFormat:@"%.2lf MB",(float)body.fileLength / (1024 * 1024)];
         
         if (self.direction == EMMessageDirectionReceive && body.downloadStatus == EMDownloadStatusSucceed) {
-            self.downloadStatusLabel.text = @"已下载";
+            self.downloadStatusLabel.text = EaseLocalizableString(@"downloaded", nil);
         } else {
             self.downloadStatusLabel.text = @"";
         }

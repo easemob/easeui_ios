@@ -8,12 +8,13 @@
 
 #import "NSObject+Alert.h"
 #import <UIKit/UIKit.h>
+#import "EaseDefines.h"
 
 @implementation NSObject (Alert)
 
 - (void)_showAlertController:(UIAlertController *)aAlert
 {
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:EaseLocalizableString(@"ok", nil) style:UIAlertActionStyleCancel handler:nil];
     [aAlert addAction:okAction];
     
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];

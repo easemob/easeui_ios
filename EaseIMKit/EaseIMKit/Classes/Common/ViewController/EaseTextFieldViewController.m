@@ -47,7 +47,7 @@
 - (void)_setupSubviews
 {
     if (self.isEditable) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(doneAction)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:EaseLocalizableString(@"done", nil) style:UIBarButtonItemStylePlain target:self action:@selector(doneAction)];
     }
     
     self.view.backgroundColor = [UIColor whiteColor];
