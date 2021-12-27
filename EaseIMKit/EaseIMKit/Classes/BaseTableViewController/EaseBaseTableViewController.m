@@ -8,6 +8,7 @@
 #import "EaseBaseTableViewController.h"
 #import "UITableView+Refresh.h"
 #import "Easeonry.h"
+#import "EaseDefines.h"
 
 @interface EaseBaseTableViewController ()
 {
@@ -26,9 +27,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if( @available (iOS 15.0,*) ){
+        [[UITableView appearance] setSectionHeaderTopPadding:0.0f];
+    }
     self.view.backgroundColor = UIColor.clearColor;
     self.tableView.backgroundColor = UIColor.clearColor;
     [self.view addSubview:self.tableView];
+    
     [self.tableView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
         make.left.equalTo(self.view);
         make.top.equalTo(self.view);
@@ -93,7 +98,7 @@
         _tableView.tableFooterView = [UIView new];
         _tableView.estimatedRowHeight = 44;
         _tableView.rowHeight = UITableViewAutomaticDimension;
-        [_tableView enableRefresh:@"下拉刷新" color:UIColor.systemGrayColor];
+        [_tableView enableRefresh:EaseLocalizableString(@"dropRefresh", nil) color:UIColor.systemGrayColor];
         [_tableView.refreshControl addTarget:self action:@selector(refreshTabView) forControlEvents:UIControlEventValueChanged];
     }
     

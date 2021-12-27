@@ -36,11 +36,11 @@
 - (void)_joinChatroom
 {
     __weak typeof(self) weakself = self;
-    [self showHudInView:self.view hint:@"加入聊天室..."];
+    [self showHudInView:self.view hint:EaseLocalizableString(@"joinChatroom...", nil)];
     [[EMClient sharedClient].roomManager joinChatroom:self.currentConversation.conversationId completion:^(EMChatroom *aChatroom, EMError *aError) {
         [weakself hideHud];
         if (aError) {
-            [EaseAlertController showErrorAlert:@"加入聊天室失败"];
+            [EaseAlertController showErrorAlert:EaseLocalizableString(@"joinChatroomFail", nil)];
         }
     }];
 }

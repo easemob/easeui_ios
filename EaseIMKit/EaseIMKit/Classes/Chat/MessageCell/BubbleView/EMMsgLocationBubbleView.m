@@ -34,7 +34,7 @@
     if (type == EMMessageTypeLocation) {
         EMLocationMessageBody *body = (EMLocationMessageBody *)model.message.body;
         self.textLabel.text = body.address;
-        self.detailLabel.text = [NSString stringWithFormat:@"纬度:%.2lf°, 经度:%.2lf°", body.latitude, body.longitude];
+        self.detailLabel.text = [NSString stringWithFormat:EaseLocalizableString(@"locationvalue", nil), body.latitude, body.longitude];
     }
 }
 

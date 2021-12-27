@@ -21,7 +21,7 @@
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message
 {
     if (self = [super init]) {
-        _title = (title && [title length] > 0) ? title : @"提示";
+        _title = (title && [title length] > 0) ? title : EaseLocalizableString(@"prompt", nil);
         _message = message;
     }
     return self;
@@ -89,7 +89,7 @@
     UIButton *confirmBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [confirmBtn addTarget:self action:@selector(confirmAction) forControlEvents:UIControlEventTouchUpInside];
     confirmBtn.layer.cornerRadius = 10;
-    [confirmBtn setTitle:@"确定" forState:UIControlStateNormal];
+    [confirmBtn setTitle:EaseLocalizableString(@"ok", nil) forState:UIControlStateNormal];
     [confirmBtn.titleLabel setFont:[UIFont systemFontOfSize:16.f]];
     [confirmBtn setTitleColor:[UIColor systemBlueColor] forState:UIControlStateNormal];
     [backView addSubview:confirmBtn];

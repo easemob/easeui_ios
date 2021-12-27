@@ -120,7 +120,7 @@ EMClientDelegate
     __weak typeof(self) weakself = self;
     
     UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive
-                                                                               title:@"删除"
+                                                                               title:EaseLocalizableString(@"delete", nil)
                                                                              handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL))
                                         {
         [weakself _deleteConversation:indexPath];
@@ -128,7 +128,7 @@ EMClientDelegate
     }];
     
     UIContextualAction *topAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal
-                                                                            title:!model.isTop ? @"置顶" : @"取消置顶"
+                                                                            title:!model.isTop ? EaseLocalizableString(@"top", nil) : EaseLocalizableString(@"cancelTop", nil)
                                                                           handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL))
                                      {
         EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.easeId
@@ -227,7 +227,7 @@ EMClientDelegate
     __weak typeof(self) weakself = self;
     
     UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive
-                                                                            title:@"删除"
+                                                                            title:EaseLocalizableString(@"delete", nil)
                                                                           handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath)
     {
         [weakself _deleteConversation:indexPath];
@@ -235,7 +235,7 @@ EMClientDelegate
     }];
     
     UITableViewRowAction *topAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive
-                                                                            title:!model.isTop ? @"置顶" : @"取消置顶"
+                                                                            title:!model.isTop ? EaseLocalizableString(@"top", nil) : EaseLocalizableString(@"cancelTop", nil)
                                                                           handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath)
     {
         EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.easeId

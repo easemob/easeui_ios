@@ -311,7 +311,7 @@
     }
     if (model.message.isNeedGroupAck) {
         self.readReceiptBtn.hidden = NO;
-        [self.readReceiptBtn setTitle:[NSString stringWithFormat:@"阅读回执，已读用户（%d）",_model.message.groupAckCount] forState:UIControlStateNormal];
+        [self.readReceiptBtn setTitle:[NSString stringWithFormat:EaseLocalizableString(@"readers", nil),_model.message.groupAckCount] forState:UIControlStateNormal];
     } else {
         self.readReceiptBtn.hidden = YES;
     }

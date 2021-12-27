@@ -66,8 +66,8 @@
     //判断有没有链接
     if(checkArr.count > 0) {
         if (checkArr.count > 1) { //网址多于1个时让用户选择跳哪个链接
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"请选择要打开的链接" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-            [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:EaseLocalizableString(@"selectLinkUrl", nil) message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            [alertController addAction:[UIAlertAction actionWithTitle:EaseLocalizableString(@"cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
             
             for (NSTextCheckingResult *result in checkArr) {
                 NSString *urlStr = result.URL.absoluteString;
@@ -93,7 +93,7 @@
 {
     __weak typeof(self.chatController) weakself = self.chatController;
     void (^downloadThumbBlock)(EaseMessageModel *aModel) = ^(EaseMessageModel *aModel) {
-        [weakself showHint:@"获取缩略图..."];
+        [weakself showHint:EaseLocalizableString(@"getThumnail...", nil)];
         [[EMClient sharedClient].chatManager downloadMessageThumbnail:aModel.message progress:nil completion:^(EMMessage *message, EMError *error) {
             if (!error) {
                 [weakself.tableView reloadData];
@@ -129,11 +129,11 @@
         return;
     }
     
-    [self.chatController showHudInView:self.chatController.view hint:@"下载原图..."];
+    [self.chatController showHudInView:self.chatController.view hint:EaseLocalizableString(@"downloadingImage...", nil)];
     [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
-            [EaseAlertController showErrorAlert:@"下载原图失败"];
+            [EaseAlertController showErrorAlert:EaseLocalizableString(@"downloadImageFail", nil)];
         } else {
             if (message.direction == EMMessageDirectionReceive && !message.isReadAcked) {
                 [[EMClient sharedClient].chatManager sendMessageReadAck:message.messageId toUser:message.conversationId completion:nil];
@@ -144,7 +144,7 @@
             if (image) {
                 [[EMImageBrowser sharedBrowser] showImages:@[image] fromController:weakself];
             } else {
-                [EaseAlertController showErrorAlert:@"获取原图失败"];
+                [EaseAlertController showErrorAlert:EaseLocalizableString(@"fetchImageFail", nil)];
             }
         }
     }];
@@ -178,7 +178,7 @@
 {
     EMVoiceMessageBody *body = (EMVoiceMessageBody*)aCell.model.message.body;
     if (body.downloadStatus == EMDownloadStatusDownloading) {
-        [EaseAlertController showInfoAlert:@"正在下载语音,稍后点击"];
+        [EaseAlertController showInfoAlert:EaseLocalizableString(@"downloadingVoice...", nil)];
         return;
     }
     
@@ -218,11 +218,11 @@
     }
     
     __weak typeof(self.chatController) weakChatControl = self.chatController;
-    [self.chatController showHudInView:self.chatController.view hint:@"下载语音..."];
+    [self.chatController showHudInView:self.chatController.view hint:EaseLocalizableString(@"downloadingVoice", nil)];
     [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakChatControl hideHud];
         if (error) {
-            [EaseAlertController showErrorAlert:@"下载语音失败"];
+            [EaseAlertController showErrorAlert:EaseLocalizableString(@"downloadVoiceFail", nil)];
         } else {
             playBlock(aCell.model);
         }
@@ -252,7 +252,7 @@
     };
 
     void (^downloadBlock)(void) = ^ {
-        [weakChatController showHudInView:self.chatController.view hint:@"下载视频..."];
+        [weakChatController showHudInView:self.chatController.view hint:EaseLocalizableString(@"downloadVideo...", nil)];
         [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
             [weakChatController hideHud];
             if (error) {
@@ -268,14 +268,14 @@
     
     EMVideoMessageBody *body = (EMVideoMessageBody*)aCell.model.message.body;
     if (body.downloadStatus == EMDownloadStatusDownloading) {
-        [EaseAlertController showInfoAlert:@"正在下载视频,稍后点击"];
+        [EaseAlertController showInfoAlert:EaseLocalizableString(@"downloadingVideo...", nil)];
         return;
     }
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
     if (body.thumbnailDownloadStatus == EMDownloadStatusFailed || ![fileManager fileExistsAtPath:body.thumbnailLocalPath]) {
-        [self.chatController showHint:@"下载缩略图"];
+        [self.chatController showHint:EaseLocalizableString(@"downloadThumnail", nil)];
         if (!isCustomDownload) {
             [[EMClient sharedClient].chatManager downloadMessageThumbnail:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
                 downloadBlock();
@@ -307,7 +307,7 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     if (body.downloadStatus == EMDownloadStatusDownloading) {
-        [EaseAlertController showInfoAlert:@"正在下载文件,稍后点击"];
+        [EaseAlertController showInfoAlert:EaseLocalizableString(@"downloadingFile...", nil)];
         return;
     }
     __weak typeof(self.chatController) weakself = self.chatController;
@@ -328,7 +328,7 @@
     [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
-            [EaseAlertController showErrorAlert:@"下载文件失败"];
+            [EaseAlertController showErrorAlert:EaseLocalizableString(@"downFileFail", nil)];
         } else {
             if (!message.isReadAcked) {
                 [[EMClient sharedClient].chatManager sendMessageReadAck:message.messageId toUser:message.conversationId completion:nil];
