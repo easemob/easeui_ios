@@ -11,6 +11,7 @@
 #import "EaseConversationCell.h"
 #import "EaseConversationModel.h"
 #import "EMConversation+EaseUI.h"
+#import "UIImage+EaseUI.h"
 
 @interface EaseConversationsViewController ()
 <
@@ -136,6 +137,7 @@ EMClientDelegate
         [conversation setTop:!model.isTop];
         [weakself refreshTabView];
     }];
+    
     topAction.backgroundColor = [UIColor colorWithHexString:@"CB7D32"];
     
     NSArray *swipeActions = @[deleteAction, topAction];
@@ -150,6 +152,74 @@ EMClientDelegate
     UISwipeActionsConfiguration *actions = [UISwipeActionsConfiguration configurationWithActions:swipeActions];
     actions.performsFirstActionWithFullSwipe = NO;
     return actions;
+}
+
+- (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //[self makeSwipeButton:tableView];
+}
+
+- (void)makeSwipeButton:(UITableView *)tableView
+{
+    if (@available(iOS 13.0, *))
+    {
+        for (UIView *subview in tableView.subviews)
+        {
+            if ([subview isKindOfClass:NSClassFromString(@"_UITableViewCellSwipeContainerView")] )
+            {
+                NSArray *subviewArray=subview.subviews;
+                for (UIView *sub_subview in subviewArray)
+                {
+                    if ([sub_subview isKindOfClass:NSClassFromString(@"UISwipeActionPullView")] )
+                    {
+                        NSArray *subviews=sub_subview.subviews;
+                        
+                        UIView *topView = sub_subview.subviews[1];
+                        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, topView.frame.size.width, topView.frame.size.height)];
+                        
+                        UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage easeUIImageNamed:@"alert_error"]];
+                        [view addSubview:imageView];
+                        [imageView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+                            make.centerX.equalTo(view.ease_centerX);
+                            make.bottom.equalTo(view.ease_centerY);
+                            make.height.width.equalTo(@30);
+                        }];
+                        
+                        UILabel *titleLable = [[UILabel alloc]init];
+                        titleLable.text = @"stick";
+                        titleLable.textAlignment = NSTextAlignmentCenter;
+                        [view addSubview:titleLable];
+                        [titleLable Ease_makeConstraints:^(EaseConstraintMaker *make) {
+                            make.left.right.equalTo(view);
+                            make.top.equalTo(view.ease_centerY);
+                            make.height.equalTo(@30);
+                        }];
+                        view.backgroundColor = [UIColor colorWithHexString:@"CB7D32"];
+                        view.userInteractionEnabled = NO;
+                        
+                        [sub_subview insertSubview:view aboveSubview:topView];
+                        
+                        //                        UIButton*deleteButton = sub_subview.subviews[1];
+                        //                        [deleteButton setImage:[UIImage imageNamed:@"contact_de"] forState:UIControlStateNormal];
+                    }
+                }
+            }
+        }
+    } else if (@available(iOS 11.0, *))
+    {
+        for (UIView *subview in tableView.subviews)
+        {
+            if ([subview isKindOfClass:NSClassFromString(@"UISwipeActionPullView")] )
+            {
+                UIButton*addButton = subview.subviews[0];
+                [addButton setImage:[UIImage imageNamed:@"alert_error"] forState:UIControlStateNormal];
+            }
+        }
+    }else{
+        //     ios 8-10
+        // UITableView -> UITableViewCell -> UITableViewCellDeleteConfirmationView
+        //       UITableViewCell*  cell = [self.FULTable cellForRowAtIndexPath:_indexPath];
+    }
 }
 
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
