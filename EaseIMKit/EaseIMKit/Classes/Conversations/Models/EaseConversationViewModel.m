@@ -38,7 +38,7 @@
     _avatarSize = CGSizeMake(48, 48);
     _avatarEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     
-    _nameLabelFont = [UIFont systemFontOfSize:17];
+    _nameLabelFont = [UIFont systemFontOfSize:16];
     _nameLabelColor = [UIColor colorWithHexString:@"#333333"];
     _nameLabelEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     
