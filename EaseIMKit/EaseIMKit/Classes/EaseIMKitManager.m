@@ -19,7 +19,6 @@ static NSString *g_UIKitVersion = @"3.8.8";
 @property (nonatomic, strong) EaseMulticastDelegate<EaseIMKitManagerDelegate> *delegates;
 @property (nonatomic, strong) NSString *currentConversationId;  //当前会话聊天id
 @property (nonatomic, assign) NSInteger currentUnreadCount; //当前未读总数
-@property (nonatomic, strong) NSMutableDictionary *noPushIds;//所有设置了未打扰会话的map 用map是应为时间复杂度O(1)便于查询
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
 @end
 
@@ -295,20 +294,18 @@ static NSString *g_UIKitVersion = @"3.8.8";
 
 - (BOOL)conversationNoPush:(NSString *)conversationId {
     NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
-    if (_noPushIds.allKeys.count != (EMClient.sharedClient.pushManager.noPushUIds.count+EMClient.sharedClient.pushManager.noPushGroups.count)) {
-        _noPushIds = [NSMutableDictionary dictionary];
-        for (EMConversation *conversation in conversationList) {
-            if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
-                [_noPushIds setValue:conversation.conversationId forKey:conversation.conversationId];
-                continue;
-            }
-            if ([[[EMClient sharedClient].pushManager noPushGroups] containsObject:conversation.conversationId]) {
-                [_noPushIds setValue:conversation.conversationId forKey:conversation.conversationId];
-                continue;
-            }
+    BOOL chatUndisturb,groupUndisturb = NO;
+    for (EMConversation *conversation in conversationList) {
+        if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
+            chatUndisturb = YES;
+            continue;
+        }
+        if ([[[EMClient sharedClient].pushManager noPushGroups] containsObject:conversation.conversationId]) {
+            groupUndisturb = YES;
+            continue;
         }
     }
-    return [_noPushIds valueForKey:conversationId] != nil ? YES:NO;
+    return chatUndisturb | groupUndisturb;
 }
 
 //会话所有信息标记已读
@@ -325,21 +322,16 @@ static NSString *g_UIKitVersion = @"3.8.8";
 {
     NSInteger unreadCount = 0,undisturbCount = 0;
     NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
-    if (_noPushIds.allKeys.count != (EMClient.sharedClient.pushManager.noPushUIds.count+EMClient.sharedClient.pushManager.noPushGroups.count)) {
-        _noPushIds = [NSMutableDictionary dictionary];
-    }
     for (EMConversation *conversation in conversationList) {
         if ([conversation.conversationId isEqualToString:_currentConversationId]) {
             continue;
         }
         if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
             undisturbCount += conversation.unreadMessagesCount;
-            [_noPushIds setValue:conversation.conversationId forKey:conversation.conversationId];
             continue;
         }
         if ([[[EMClient sharedClient].pushManager noPushGroups] containsObject:conversation.conversationId]) {
             undisturbCount += conversation.unreadMessagesCount;
-            [_noPushIds setValue:conversation.conversationId forKey:conversation.conversationId];
             continue;
         }
         unreadCount += conversation.unreadMessagesCount;
