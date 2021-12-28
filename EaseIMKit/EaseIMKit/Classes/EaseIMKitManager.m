@@ -337,12 +337,22 @@ static NSString *g_UIKitVersion = @"3.8.8";
         unreadCount += conversation.unreadMessagesCount;
     }
     _currentUnreadCount = unreadCount;
+    [self conversationsUnreadCountUpdate:unreadCount];
     [self coversationsUnreadCountUpdate:unreadCount undisturbCount:undisturbCount];
 }
 
 #pragma mark - 多播
+//未读多播总数原始代理方法
+- (void)conversationsUnreadCountUpdate:(NSInteger)unreadCount {
+    EaseMulticastDelegateEnumerator *multicastDelegates = [self.delegates delegateEnumerator];
+    for (EaseMulticastDelegateNode *node in [multicastDelegates getDelegates]) {
+        id<EaseIMKitManagerDelegate> delegate = (id<EaseIMKitManagerDelegate>)node.delegate;
+        if (delegate&&[delegate respondsToSelector:@selector(conversationsUnreadCountUpdate:)])
+            [delegate conversationsUnreadCountUpdate:unreadCount];
+    }
+}
 
-//未读总数多播
+//未读总数多播总数扩展代理方法
 - (void)coversationsUnreadCountUpdate:(NSInteger)unreadCount undisturbCount:(NSInteger)undisturbCount
 {
     EaseMulticastDelegateEnumerator *multicastDelegates = [self.delegates delegateEnumerator];
