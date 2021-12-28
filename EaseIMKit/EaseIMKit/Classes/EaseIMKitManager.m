@@ -19,6 +19,7 @@ static NSString *g_UIKitVersion = @"3.8.8";
 @property (nonatomic, strong) EaseMulticastDelegate<EaseIMKitManagerDelegate> *delegates;
 @property (nonatomic, strong) NSString *currentConversationId;  //当前会话聊天id
 @property (nonatomic, assign) NSInteger currentUnreadCount; //当前未读总数
+@property (nonatomic, strong) NSMutableDictionary *noPushIds;//所有设置了未打扰会话的map 用map是应为时间复杂度O(1)便于查询
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
 @end
 
@@ -291,6 +292,25 @@ static NSString *g_UIKitVersion = @"3.8.8";
 
 #pragma mark - 未读数变化
 
+
+- (BOOL)conversationNoPush:(NSString *)conversationId {
+    NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
+    if (_noPushIds.allKeys.count != (EMClient.sharedClient.pushManager.noPushUIds.count+EMClient.sharedClient.pushManager.noPushGroups.count)) {
+        _noPushIds = [NSMutableDictionary dictionary];
+        for (EMConversation *conversation in conversationList) {
+            if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
+                [_noPushIds setValue:conversation.conversationId forKey:conversation.conversationId];
+                continue;
+            }
+            if ([[[EMClient sharedClient].pushManager noPushGroups] containsObject:conversation.conversationId]) {
+                [_noPushIds setValue:conversation.conversationId forKey:conversation.conversationId];
+                continue;
+            }
+        }
+    }
+    return [_noPushIds valueForKey:conversationId] != nil ? YES:NO;
+}
+
 //会话所有信息标记已读
 - (void)markAllMessagesAsReadWithConversation:(EMConversation *)conversation
 {
@@ -303,28 +323,44 @@ static NSString *g_UIKitVersion = @"3.8.8";
 //未读总数变化
 - (void)_resetConversationsUnreadCount
 {
-    NSInteger unreadCount = 0;
+    NSInteger unreadCount = 0,undisturbCount = 0;
     NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
+    if (_noPushIds.allKeys.count != (EMClient.sharedClient.pushManager.noPushUIds.count+EMClient.sharedClient.pushManager.noPushGroups.count)) {
+        _noPushIds = [NSMutableDictionary dictionary];
+    }
     for (EMConversation *conversation in conversationList) {
         if ([conversation.conversationId isEqualToString:_currentConversationId]) {
+            continue;
+        }
+        if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
+            undisturbCount += conversation.unreadMessagesCount;
+            [_noPushIds setValue:conversation.conversationId forKey:conversation.conversationId];
+            continue;
+        }
+        if ([[[EMClient sharedClient].pushManager noPushGroups] containsObject:conversation.conversationId]) {
+            undisturbCount += conversation.unreadMessagesCount;
+            [_noPushIds setValue:conversation.conversationId forKey:conversation.conversationId];
             continue;
         }
         unreadCount += conversation.unreadMessagesCount;
     }
     _currentUnreadCount = unreadCount;
-    [self coversationsUnreadCountUpdate:unreadCount];
+    [self coversationsUnreadCountUpdate:unreadCount undisturbCount:undisturbCount];
 }
 
 #pragma mark - 多播
 
 //未读总数多播
-- (void)coversationsUnreadCountUpdate:(NSInteger)unreadCount
+- (void)coversationsUnreadCountUpdate:(NSInteger)unreadCount undisturbCount:(NSInteger)undisturbCount
 {
     EaseMulticastDelegateEnumerator *multicastDelegates = [self.delegates delegateEnumerator];
     for (EaseMulticastDelegateNode *node in [multicastDelegates getDelegates]) {
         id<EaseIMKitManagerDelegate> delegate = (id<EaseIMKitManagerDelegate>)node.delegate;
-        if ([delegate respondsToSelector:@selector(conversationsUnreadCountUpdate:)])
+        if (delegate&&[delegate respondsToSelector:@selector(conversationsUnreadCountUpdate:)])
             [delegate conversationsUnreadCountUpdate:unreadCount];
+        if (delegate&&[delegate respondsToSelector:@selector(conversationsUnreadCountUpdate:undisturbCount:)]) {
+            [delegate conversationsUnreadCountUpdate:unreadCount undisturbCount:undisturbCount];
+        }
     }
 }
 
