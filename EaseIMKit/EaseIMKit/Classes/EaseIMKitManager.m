@@ -294,7 +294,7 @@ static NSString *g_UIKitVersion = @"3.8.8";
 
 - (BOOL)conversationNoPush:(NSString *)conversationId {
     NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
-    BOOL chatUndisturb,groupUndisturb = NO;
+    BOOL chatUndisturb = NO,groupUndisturb = NO;
     for (EMConversation *conversation in conversationList) {
         if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
             chatUndisturb = YES;
