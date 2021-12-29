@@ -63,7 +63,7 @@
     [self.contentView addSubview:_timeLabel];
     [self.contentView addSubview:_detailLabel];
     [self.contentView addSubview:_badgeLabel];
-    [self.contentView addSubview:_redDot];
+    [self.avatarView addSubview:_redDot];
     [self.contentView addSubview:_undisturbRing];
 }
 
@@ -168,8 +168,8 @@
     [_redDot Ease_remakeConstraints:^(EaseConstraintMaker *make) {
         make.height.Ease_equalTo(8);
         make.width.Ease_equalTo(8);
-        make.top.equalTo(weakSelf.avatarView.ease_top);
-        make.right.equalTo(weakSelf.avatarView.ease_right);
+        make.centerX.equalTo(weakSelf.avatarView.ease_right).offset(-2*sqrt(8));
+        make.centerY.equalTo(weakSelf.avatarView.ease_top).offset(2*sqrt(8));
     }];
     
     [_undisturbRing Ease_remakeConstraints:^(EaseConstraintMaker *make) {
