@@ -293,19 +293,12 @@ static NSString *g_UIKitVersion = @"3.8.8";
 
 
 - (BOOL)conversationNoPush:(NSString *)conversationId {
-    NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
-    BOOL chatUndisturb = NO,groupUndisturb = NO;
-    for (EMConversation *conversation in conversationList) {
-        if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
-            chatUndisturb = YES;
-            continue;
-        }
-        if ([[[EMClient sharedClient].pushManager noPushGroups] containsObject:conversation.conversationId]) {
-            groupUndisturb = YES;
-            continue;
-        }
-    }
-    return chatUndisturb | groupUndisturb;
+    
+    NSMutableArray *undisturbIds = [NSMutableArray array];
+    [undisturbIds addObjectsFromArray:[[EMClient sharedClient].pushManager noPushUIds]];
+    [undisturbIds addObjectsFromArray:[[EMClient sharedClient].pushManager noPushGroups]];
+    
+    return [undisturbIds containsObject:conversationId];
 }
 
 //会话所有信息标记已读
