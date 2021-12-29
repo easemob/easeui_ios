@@ -168,8 +168,8 @@
     [_redDot Ease_remakeConstraints:^(EaseConstraintMaker *make) {
         make.height.Ease_equalTo(8);
         make.width.Ease_equalTo(8);
-        make.centerX.equalTo(weakSelf.avatarView.ease_right).offset(-2*sqrt(8));
-        make.centerY.equalTo(weakSelf.avatarView.ease_top).offset(2*sqrt(8));
+        make.centerX.equalTo(weakSelf.avatarView.ease_right).offset(-2.5*ceilf(sqrt(8)));
+        make.centerY.equalTo(weakSelf.avatarView.ease_top).offset(2.5*ceilf(sqrt(8)));
     }];
     
     [_undisturbRing Ease_remakeConstraints:^(EaseConstraintMaker *make) {
