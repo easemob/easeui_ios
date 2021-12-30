@@ -1,0 +1,24 @@
+PODS:
+  - EMVoiceConvert (0.1.0)
+  - HyphenateChat (3.8.8)
+  - Masonry (1.1.0)
+
+DEPENDENCIES:
+  - EMVoiceConvert (~> 0.1.0)
+  - HyphenateChat
+  - Masonry
+
+SPEC REPOS:
+  trunk:
+    - EMVoiceConvert
+    - HyphenateChat
+    - Masonry
+
+SPEC CHECKSUMS:
+  EMVoiceConvert: 32a0eaada94d93c151a5abd53ee174cd4e63b01f
+  HyphenateChat: ba6458387d651dd49e553de47c2c2b9599ac667c
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+
+PODFILE CHECKSUM: de64bca53ca324052b6e09a49be085cbf6e16e8b
+
+COCOAPODS: 1.10.2

@@ -20,6 +20,7 @@ static NSString *g_UIKitVersion = @"3.8.8";
 @property (nonatomic, strong) NSString *currentConversationId;  //当前会话聊天id
 @property (nonatomic, assign) NSInteger currentUnreadCount; //当前未读总数
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
+@property (nonatomic, strong) NSMutableDictionary *undisturbMaps;//免打扰会话的map
 @end
 
 #define IMKitVersion @"3.8.8"
@@ -61,6 +62,7 @@ static NSString *g_UIKitVersion = @"3.8.8";
         _delegates = (EaseMulticastDelegate<EaseIMKitManagerDelegate> *)[[EaseMulticastDelegate alloc] init];
         _currentConversationId = @"";
         _msgQueue = dispatch_queue_create("easemessage.com", NULL);
+        _undisturbMaps = [NSMutableDictionary dictionary];
     }
     [[EMClient sharedClient] addMultiDevicesDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
@@ -291,14 +293,31 @@ static NSString *g_UIKitVersion = @"3.8.8";
 
 #pragma mark - 未读数变化
 
+- (BOOL)conversationUndisturb:(NSString *)conversationId {
+    if (_undisturbMaps.count <= 0) {
+        [self fillUndisturbMaps];
+    }
+    if (conversationId == nil) { return NO; }
+    return [[_undisturbMaps valueForKey:conversationId] boolValue];
+}
 
-- (BOOL)conversationNoPush:(NSString *)conversationId {
-    
-    NSMutableArray *undisturbIds = [NSMutableArray array];
-    [undisturbIds addObjectsFromArray:[[EMClient sharedClient].pushManager noPushUIds]];
-    [undisturbIds addObjectsFromArray:[[EMClient sharedClient].pushManager noPushGroups]];
-    
-    return [undisturbIds containsObject:conversationId];
+- (void)updateUndisturbMapsKey:(NSString *)key value:(BOOL )value {
+    [_undisturbMaps setValue:[NSNumber numberWithBool:value] forKey:key];
+}
+
+- (void)fillUndisturbMaps {
+    for (EMConversation *conversation in [EMClient.sharedClient.chatManager getAllConversations]) {
+        if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
+            if ([_undisturbMaps valueForKey:conversation.conversationId] == nil) {
+                [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];
+            }
+        }
+        if ([[[EMClient sharedClient].pushManager noPushGroups] containsObject:conversation.conversationId]) {
+            if ([_undisturbMaps valueForKey:conversation.conversationId] == nil) {
+                [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];
+            }
+        }
+    }
 }
 
 //会话所有信息标记已读
@@ -321,10 +340,12 @@ static NSString *g_UIKitVersion = @"3.8.8";
         }
         if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
             undisturbCount += conversation.unreadMessagesCount;
+            [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];
             continue;
         }
         if ([[[EMClient sharedClient].pushManager noPushGroups] containsObject:conversation.conversationId]) {
             undisturbCount += conversation.unreadMessagesCount;
+            [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];
             continue;
         }
         unreadCount += conversation.unreadMessagesCount;

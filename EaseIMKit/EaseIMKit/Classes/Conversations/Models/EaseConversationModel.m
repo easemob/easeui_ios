@@ -55,7 +55,7 @@
 }
 
 - (BOOL)showBadgeValue {
-    return ![[EaseIMKitManager shared] conversationNoPush:_conversation.conversationId];
+    return ![[EaseIMKitManager shared] conversationUndisturb:_conversation.conversationId];
 }
 
 - (NSString *)draft {

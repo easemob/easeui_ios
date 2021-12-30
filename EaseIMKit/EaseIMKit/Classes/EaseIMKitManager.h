@@ -77,7 +77,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 根据会话id查询当前会话是否设置了免打扰 时间复杂度O(1)
 /// @param conversationId 会话id
-- (BOOL)conversationNoPush:(NSString *)conversationId;
+- (BOOL)conversationUndisturb:(NSString *)conversationId;
+
+/// Description 更新免打扰会话map
+/// @param key key
+/// @param value value
+/// 
+- (void)updateUndisturbMapsKey:(NSString *)key value:(BOOL )value;
 + (EaseIMKitManager *)shared;
 + (NSString *)EaseIMKitVersion;
 - (void)addDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
