@@ -165,11 +165,11 @@
         }];
     }
     CGFloat r = _viewModel.avatarSize.width/2.0;
-    CGFloat padding = r - ceilf(r/sqrt(2)) - 4;//求得以内切圆半径为斜边的等直角边直角三角形的单直角边长度，用内切圆半径减去它再减去红点视图的一半距离求得偏移量
+    CGFloat padding = r - ceilf(r/sqrt(2)) - 6;//求得以内切圆半径为斜边的等直角边直角三角形的单直角边长度，用内切圆半径减去它再减去红点视图的一半距离求得偏移量
 
     [_redDot Ease_remakeConstraints:^(EaseConstraintMaker *make) {
-        make.height.Ease_equalTo(8);
-        make.width.Ease_equalTo(8);
+        make.height.Ease_equalTo(12);
+        make.width.Ease_equalTo(12);
         make.top.equalTo(weakSelf.avatarView.ease_top).offset(padding);
         make.right.equalTo(weakSelf.avatarView.ease_right).offset(-padding);
     }];
