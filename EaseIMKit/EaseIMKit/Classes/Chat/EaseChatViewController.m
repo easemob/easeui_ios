@@ -316,7 +316,7 @@
     id obj = [self.dataArray objectAtIndex:indexPath.row];
     if ([obj isKindOfClass:[EaseMessageModel class]]) {
         EaseMessageModel *model = (EaseMessageModel *)obj;
-        if (model.message.body.type == EMMessageTypeVoice) {
+        if (model.message.body.type == EMMessageTypeVoice && model.weakMessageCell == cell) {
             model.weakMessageCell = nil;
         }
     }

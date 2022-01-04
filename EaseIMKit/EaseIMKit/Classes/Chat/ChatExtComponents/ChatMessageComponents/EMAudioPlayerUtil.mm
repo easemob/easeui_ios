@@ -132,8 +132,12 @@ static EMAudioPlayerUtil *playerUtil = nil;
     do {
         NSFileManager *fm = [NSFileManager defaultManager];
         if (![fm fileExistsAtPath:aPath]) {
-            error = [NSError errorWithDomain:EaseLocalizableString(@"fileNotExist", nil) code:-1 userInfo:nil];
-            break;
+            NSString *fileName = aPath.lastPathComponent;
+            aPath = [[self getAudioOrVideoPath] stringByAppendingPathComponent:fileName];
+            if (![fm fileExistsAtPath:aPath]) {
+                error = [NSError errorWithDomain:EaseLocalizableString(@"fileNotExist", nil) code:-1 userInfo:nil];
+                break;
+            }
         }
         
         if (self.player && self.player.isPlaying && [self.playingPath isEqualToString:aPath]) {
@@ -184,6 +188,17 @@ static EMAudioPlayerUtil *playerUtil = nil;
             aCompleton(error);
         }
     }
+}
+
+- (NSString *)getAudioOrVideoPath
+{
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+    path = [path stringByAppendingPathComponent:@"EMDemoRecord"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
+    return path;
 }
 
 - (void)stopPlayer
