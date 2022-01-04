@@ -10,6 +10,7 @@
 #import "UIImage+EaseUI.h"
 #import "EMConversation+EaseUI.h"
 #import "EaseEmojiHelper.h"
+#import "EaseIMKitManager.h"
 
 @interface EaseConversationModel()
 
@@ -51,6 +52,10 @@
 
 - (void)setDraft:(NSString *)draft {
     [_conversation setDraft:draft];
+}
+
+- (BOOL)showBadgeValue {
+    return ![[EaseIMKitManager shared] conversationUndisturb:_conversation.conversationId];
 }
 
 - (NSString *)draft {

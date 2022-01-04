@@ -19,9 +19,11 @@
 		90A03A39254A70E200D57B73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90A03A38254A70E200D57B73 /* Assets.xcassets */; };
 		90A03A3F254A70E200D57B73 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A03A3E254A70E200D57B73 /* main.m */; };
 		90A18676256B9EE500074CD3 /* DemoUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A18675256B9EE500074CD3 /* DemoUserModel.m */; };
+		D227E3D4437E3E8B004C479C /* Pods_EaseIMKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1464720ECF515DE91EFB34F /* Pods_EaseIMKitDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B37C8CC85031A13DE38294B /* Pods-EaseIMKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKitDemo.debug.xcconfig"; path = "../../EaseIMKitDemo/Pods/Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		3C307C55254FBCDE003696CA /* EaseIMKitDemo-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EaseIMKitDemo-Prefix.pch"; sourceTree = "<group>"; };
 		3C7B87902563CCD40074F990 /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		3C7B87912563CCD40074F990 /* ChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
@@ -46,6 +48,8 @@
 		90A03A3E254A70E200D57B73 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		90A18674256B9EE500074CD3 /* DemoUserModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoUserModel.h; sourceTree = "<group>"; };
 		90A18675256B9EE500074CD3 /* DemoUserModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoUserModel.m; sourceTree = "<group>"; };
+		B1464720ECF515DE91EFB34F /* Pods_EaseIMKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EaseIMKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0DDD17B8F6D1CE139D3804D /* Pods-EaseIMKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKitDemo.release.xcconfig"; path = "../../EaseIMKitDemo/Pods/Target Support Files/Pods-EaseIMKitDemo/Pods-EaseIMKitDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D227E3D4437E3E8B004C479C /* Pods_EaseIMKitDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,8 +76,19 @@
 		515DD635275E028E6263F6E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B1464720ECF515DE91EFB34F /* Pods_EaseIMKitDemo.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6761A3C49CB41C8FCD8953D6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1B37C8CC85031A13DE38294B /* Pods-EaseIMKitDemo.debug.xcconfig */,
+				D0DDD17B8F6D1CE139D3804D /* Pods-EaseIMKitDemo.release.xcconfig */,
+			);
+			name = Pods;
+			path = ../EaseIMKit/Pods;
 			sourceTree = "<group>";
 		};
 		903EAE7525540374005E6BB1 /* Classes */ = {
@@ -133,6 +149,7 @@
 				90A03A2B254A70E100D57B73 /* EaseIMKitDemo */,
 				90A03A2A254A70E100D57B73 /* Products */,
 				515DD635275E028E6263F6E4 /* Frameworks */,
+				6761A3C49CB41C8FCD8953D6 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -173,7 +190,7 @@
 				90A03A26254A70E100D57B73 /* Frameworks */,
 				90A03A27254A70E100D57B73 /* Resources */,
 				AF2DB841D2D254CE2E052055 /* [CP] Embed Pods Frameworks */,
-				9256913AA6927B3647AFDCCC /* [CP] Copy Pods Resources */,
+				308143D5856E9340E78FB4B0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -229,7 +246,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9256913AA6927B3647AFDCCC /* [CP] Copy Pods Resources */ = {
+		308143D5856E9340E78FB4B0 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -431,6 +448,7 @@
 		};
 		90A03A43254A70E200D57B73 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1B37C8CC85031A13DE38294B /* Pods-EaseIMKitDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -452,6 +470,23 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"stdc++\"",
+					"-framework",
+					"\"EaseIMKit\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"HyphenateChat\"",
+					"-framework",
+					"\"Masonry\"",
+					"-framework",
+					"\"UIKit\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.easemob.du.EaseIMKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -461,6 +496,7 @@
 		};
 		90A03A44254A70E200D57B73 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D0DDD17B8F6D1CE139D3804D /* Pods-EaseIMKitDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -482,6 +518,23 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"stdc++\"",
+					"-framework",
+					"\"EaseIMKit\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"HyphenateChat\"",
+					"-framework",
+					"\"Masonry\"",
+					"-framework",
+					"\"UIKit\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.easemob.du.EaseIMKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";

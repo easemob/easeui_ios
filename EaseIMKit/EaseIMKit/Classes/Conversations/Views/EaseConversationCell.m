@@ -53,14 +53,18 @@
     _timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _detailLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _badgeLabel = [[EaseBadgeView alloc] initWithFrame:CGRectZero];
-
-
+    _redDot = [[UIImageView alloc] initWithFrame:CGRectZero];
+    _undisturbRing = [[UIImageView alloc] initWithFrame:CGRectZero];
+    _badgeLabel.hidden = YES;
+    self.redDot.hidden = YES;
+    self.undisturbRing.hidden = YES;
     [self.contentView addSubview:_avatarView];
     [self.contentView addSubview:_nameLabel];
     [self.contentView addSubview:_timeLabel];
     [self.contentView addSubview:_detailLabel];
     [self.contentView addSubview:_badgeLabel];
-    
+    [self.avatarView addSubview:_redDot];
+    [self.contentView addSubview:_undisturbRing];
 }
 
 - (void)_setupViewsProperty {
@@ -103,6 +107,9 @@
     _badgeLabel.backgroundColor = _viewModel.badgeLabelBgColor;
     _badgeLabel.badgeColor = _viewModel.badgeLabelTitleColor;
     _badgeLabel.maxNum = _viewModel.badgeMaxNum;
+    
+    _redDot.image = [UIImage imageNamed:@"undisturbDot"];
+    _undisturbRing.image = [UIImage imageNamed:@"undisturbRing"];
     
     self.selectionStyle = UITableViewCellSelectionStyleGray;
 }
@@ -153,11 +160,26 @@
         [_badgeLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
             make.height.offset(_viewModel.badgeLabelHeight);
             make.width.Ease_greaterThanOrEqualTo(weakSelf.viewModel.badgeLabelHeight).priority(1000);
-            make.centerY.equalTo(weakSelf.detailLabel.ease_centerY).offset(weakSelf.viewModel.badgeLabelCenterVector.dy);
-            make.right.equalTo(weakSelf.contentView.ease_right).offset(weakSelf.viewModel.badgeLabelCenterVector.dx - 19);
-            make.left.greaterThanOrEqualTo(weakSelf.detailLabel.ease_right).offset(weakSelf.viewModel.detailLabelEdgeInsets.right + 5);
+            make.centerY.equalTo(weakSelf.avatarView.ease_top).offset(weakSelf.viewModel.badgeLabelCenterVector.dy + 4);
+            make.centerX.equalTo(weakSelf.avatarView.ease_right).offset(weakSelf.viewModel.badgeLabelCenterVector.dx - 8);
         }];
     }
+    CGFloat r = _viewModel.avatarSize.width/2.0;
+    CGFloat padding = r - ceilf(r/sqrt(2)) - 6;//求得以内切圆半径为斜边的等直角边直角三角形的单直角边长度，用内切圆半径减去它再减去红点视图的一半距离求得偏移量
+
+    [_redDot Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.height.Ease_equalTo(12);
+        make.width.Ease_equalTo(12);
+        make.top.equalTo(weakSelf.avatarView.ease_top).offset(padding);
+        make.right.equalTo(weakSelf.avatarView.ease_right).offset(-padding);
+    }];
+    
+    [_undisturbRing Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.height.Ease_equalTo(16);
+        make.width.Ease_equalTo(16);
+        make.top.equalTo(weakSelf.timeLabel.ease_bottom).offset(5);
+        make.right.equalTo(weakSelf.contentView.ease_right).offset(-weakSelf.viewModel.timeLabelEdgeInsets.right - 18);
+    }];
 }
 
 - (void)setModel:(EaseConversationModel *)model
@@ -193,7 +215,15 @@
     
     self.detailLabel.attributedText = _model.showInfo;
     self.timeLabel.text = [EaseDateHelper formattedTimeFromTimeInterval:_model.lastestUpdateTime];
-    self.badgeLabel.badge = _model.unreadMessagesCount;
+    if (model.showBadgeValue == YES) {
+        self.badgeLabel.badge = model.unreadMessagesCount;
+        self.redDot.hidden = YES;
+        self.badgeLabel.hidden = !(model.unreadMessagesCount > 0);
+    } else {
+        self.badgeLabel.hidden = YES;
+        self.redDot.hidden = !(model.unreadMessagesCount > 0);
+    }
+    self.undisturbRing.hidden = model.showBadgeValue;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

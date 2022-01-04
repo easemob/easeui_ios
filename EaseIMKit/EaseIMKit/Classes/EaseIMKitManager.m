@@ -20,6 +20,7 @@ static NSString *g_UIKitVersion = @"3.8.9";
 @property (nonatomic, strong) NSString *currentConversationId;  //当前会话聊天id
 @property (nonatomic, assign) NSInteger currentUnreadCount; //当前未读总数
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
+@property (nonatomic, strong) NSMutableDictionary *undisturbMaps;//免打扰会话的map
 @end
 
 #define IMKitVersion @"3.8.9"
@@ -61,6 +62,7 @@ static NSString *g_UIKitVersion = @"3.8.9";
         _delegates = (EaseMulticastDelegate<EaseIMKitManagerDelegate> *)[[EaseMulticastDelegate alloc] init];
         _currentConversationId = @"";
         _msgQueue = dispatch_queue_create("easemessage.com", NULL);
+        _undisturbMaps = [NSMutableDictionary dictionary];
     }
     [[EMClient sharedClient] addMultiDevicesDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
@@ -291,6 +293,33 @@ static NSString *g_UIKitVersion = @"3.8.9";
 
 #pragma mark - 未读数变化
 
+- (BOOL)conversationUndisturb:(NSString *)conversationId {
+    if (_undisturbMaps.count <= 0) {
+        [self fillUndisturbMaps];
+    }
+    if (conversationId == nil) { return NO; }
+    return [[_undisturbMaps valueForKey:conversationId] boolValue];
+}
+
+- (void)updateUndisturbMapsKey:(NSString *)key value:(BOOL )value {
+    [_undisturbMaps setValue:[NSNumber numberWithBool:value] forKey:key];
+}
+
+- (void)fillUndisturbMaps {
+    for (EMConversation *conversation in [EMClient.sharedClient.chatManager getAllConversations]) {
+        if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
+            if ([_undisturbMaps valueForKey:conversation.conversationId] == nil) {
+                [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];
+            }
+        }
+        if ([[[EMClient sharedClient].pushManager noPushGroups] containsObject:conversation.conversationId]) {
+            if ([_undisturbMaps valueForKey:conversation.conversationId] == nil) {
+                [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];
+            }
+        }
+    }
+}
+
 //会话所有信息标记已读
 - (void)markAllMessagesAsReadWithConversation:(EMConversation *)conversation
 {
@@ -303,28 +332,41 @@ static NSString *g_UIKitVersion = @"3.8.9";
 //未读总数变化
 - (void)_resetConversationsUnreadCount
 {
-    NSInteger unreadCount = 0;
+    NSInteger unreadCount = 0,undisturbCount = 0;
     NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
     for (EMConversation *conversation in conversationList) {
         if ([conversation.conversationId isEqualToString:_currentConversationId]) {
             continue;
         }
+        if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
+            undisturbCount += conversation.unreadMessagesCount;
+            [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];
+            continue;
+        }
+        if ([[[EMClient sharedClient].pushManager noPushGroups] containsObject:conversation.conversationId]) {
+            undisturbCount += conversation.unreadMessagesCount;
+            [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];
+            continue;
+        }
         unreadCount += conversation.unreadMessagesCount;
     }
     _currentUnreadCount = unreadCount;
-    [self coversationsUnreadCountUpdate:unreadCount];
+    [self coversationsUnreadCountUpdate:unreadCount undisturbCount:undisturbCount];
 }
 
 #pragma mark - 多播
 
-//未读总数多播
-- (void)coversationsUnreadCountUpdate:(NSInteger)unreadCount
+//未读总数多播总数法
+- (void)coversationsUnreadCountUpdate:(NSInteger)unreadCount undisturbCount:(NSInteger)undisturbCount
 {
     EaseMulticastDelegateEnumerator *multicastDelegates = [self.delegates delegateEnumerator];
     for (EaseMulticastDelegateNode *node in [multicastDelegates getDelegates]) {
         id<EaseIMKitManagerDelegate> delegate = (id<EaseIMKitManagerDelegate>)node.delegate;
-        if ([delegate respondsToSelector:@selector(conversationsUnreadCountUpdate:)])
+        if (delegate&&[delegate respondsToSelector:@selector(conversationsUnreadCountUpdate:)])
             [delegate conversationsUnreadCountUpdate:unreadCount];
+        if (delegate&&[delegate respondsToSelector:@selector(conversationsUnreadCountUpdate:undisturbCount:)]) {
+            [delegate conversationsUnreadCountUpdate:unreadCount undisturbCount:undisturbCount];
+        }
     }
 }
 
