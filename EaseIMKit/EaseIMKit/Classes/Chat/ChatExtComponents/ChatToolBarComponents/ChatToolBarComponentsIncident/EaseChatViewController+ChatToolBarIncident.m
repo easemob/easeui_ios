@@ -113,17 +113,30 @@ static const void *imagePickerKey = &imagePickerKey;
                 if(result.count == 0){
                     [EaseAlertController showErrorAlert:@"无权访问该相册"];
                 }else{
-                    [result enumerateObjectsUsingBlock:^(PHAsset *asset , NSUInteger idx, BOOL *stop){
-                        if (asset) {
-                            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
-                                if (data != nil) {
+                    for (PHAsset *asset in result) {
+                        NSArray <PHAssetResource *>*resources = [PHAssetResource assetResourcesForAsset:asset];
+                        if (resources.count > 0) {
+                            if ([resources.firstObject.uniformTypeIdentifier isEqualToString:@"public.png"]) {
+                                [PHAssetResourceManager.defaultManager requestDataForAssetResource:resources.firstObject options:nil dataReceivedHandler:^(NSData * _Nonnull data) {
                                     [self _sendImageDataAction:data];
-                                } else {
-                                    [EaseAlertController showErrorAlert:EaseLocalizableString(@"imageTooLarge", nil)];
-                                }
-                            }];
+                                } completionHandler:^(NSError * _Nullable error) {
+                                    if (error) {
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            [EaseAlertController showErrorAlert:EaseLocalizableString(@"imageTooLarge", nil)];
+                                        });
+                                    }
+                                }];
+                            } else {
+                                [PHImageManager.defaultManager requestImageDataForAsset:asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                                    if (imageData != nil) {
+                                        [self _sendImageDataAction:imageData];
+                                    } else {
+                                        [EaseAlertController showErrorAlert:EaseLocalizableString(@"imageTooLarge", nil)];
+                                    }
+                                }];
+                            }
                         }
-                    }];
+                    }
                 }
             } else {
                 ALAssetsLibrary *alasset = [[ALAssetsLibrary alloc] init];
@@ -212,6 +225,7 @@ static const void *imagePickerKey = &imagePickerKey;
 - (void)_sendImageDataAction:(NSData *)aImageData
 {
     EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:aImageData displayName:@"image"];
+//    body.compressionRatio = 1;
     [self sendMessageWithBody:body ext:nil];
 }
 - (void)_sendVideoAction:(NSURL *)aUrl
