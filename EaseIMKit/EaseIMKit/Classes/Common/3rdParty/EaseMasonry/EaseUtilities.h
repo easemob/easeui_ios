@@ -73,7 +73,7 @@
  *  Given a scalar or struct value, wraps it in NSValue
  *  Based on EXPObjectify: https://github.com/specta/expecta
  */
-static inline id _MASBoxValue(const char *type, ...) {
+static inline id _EaseBoxValue(const char *type, ...) {
     va_list v;
     va_start(v, type);
     id obj = nil;
@@ -133,4 +133,4 @@ static inline id _MASBoxValue(const char *type, ...) {
     return obj;
 }
 
-#define EaseBoxValue(value) _MASBoxValue(@encode(__typeof__((value))), (value))
+#define EaseBoxValue(value) _EaseBoxValue(@encode(__typeof__((value))), (value))

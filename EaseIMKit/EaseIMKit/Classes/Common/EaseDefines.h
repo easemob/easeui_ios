@@ -119,4 +119,9 @@
 #define CHATROOM_INFO_UPDATED @"EMChatroomInfoUpdated"
 #define CHATROOM_INFO_PUSHVIEWCONTROLLER @"EMPushChatroomInfoViewController"
 
+#define EaseLocalizableString(key,comment) ^{\
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"EaseIMKit" ofType:@"bundle"];\
+    NSBundle* bundle = [NSBundle bundleWithPath:path];\
+    return NSLocalizedStringFromTableInBundle(key, @"EaseLocalizable", bundle, comment);\
+}()
 #endif /* EMDefines_h */

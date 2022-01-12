@@ -31,6 +31,7 @@
 #import "UIViewController+ComponentSize.h"
 #import "EaseHeaders.h"
 #import "EaseEnums.h"
+#import "EaseDefines.h"
 
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate>
 {
@@ -214,16 +215,16 @@
     
     //更多
     __weak typeof(self) weakself = self;
-    EaseExtMenuModel *photoAlbumExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"photo-album"] funcDesc:@"相册" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+    EaseExtMenuModel *photoAlbumExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"photo-album"] funcDesc:EaseLocalizableString(@"photo", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself chatToolBarComponentIncidentAction:EMChatToolBarPhotoAlbum];
     }];
-    EaseExtMenuModel *cameraExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"camera"] funcDesc:@"相机" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+    EaseExtMenuModel *cameraExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"camera"] funcDesc:EaseLocalizableString(@"camera", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself chatToolBarComponentIncidentAction:EMChatToolBarCamera];
     }];
-    EaseExtMenuModel *locationExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"location"] funcDesc:@"位置" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+    EaseExtMenuModel *locationExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"location"] funcDesc:EaseLocalizableString(@"location", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself chatToolBarLocationAction];
     }];
-    EaseExtMenuModel *fileExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"icloudFile"] funcDesc:@"文件" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+    EaseExtMenuModel *fileExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"icloudFile"] funcDesc:EaseLocalizableString(@"file", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself chatToolBarFileOpenAction];
     }];
     NSMutableArray<EaseExtMenuModel*> *extMenuArray = [@[photoAlbumExtModel,cameraExtModel,locationExtModel,fileExtModel] mutableCopy];
@@ -255,9 +256,9 @@
         EaseMessageModel *model = (EaseMessageModel *)obj;
         if (model.type == EMMessageTypeExtRecall) {
             if ([model.message.from isEqualToString:EMClient.sharedClient.currentUsername]) {
-                cellString = @"您撤回一条消息";
+                cellString = EaseLocalizableString(@"meRecall", nil);
             } else {
-                cellString = @"对方撤回一条消息";
+                cellString = EaseLocalizableString(@"remoteRecall", nil);
             }
             type = EaseWeakRemindSystemHint;
         }
@@ -269,7 +270,7 @@
         }
     }
     
-    if ([cellString length] > 0) {
+    if (cellString.length > 0) {
         NSString *identifier = (type == EaseWeakRemindMsgTime) ? @"EMMessageTimeCell" : @"EMMessageSystemHint";
         EMMessageTimeCell *cell = (EMMessageTimeCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
         // Configure the cell...
@@ -367,7 +368,7 @@
     EMVoiceMessageBody *body = [[EMVoiceMessageBody alloc] initWithLocalPath:aPath displayName:@"audio"];
     body.duration = (int)aTimeLength;
     if(body.duration < 1){
-        [self showHint:@"说话时间太短"];
+        [self showHint:EaseLocalizableString(@"voicetooshor", nil)];
         return;
     }
     [self sendMessageWithBody:body ext:nil];
@@ -420,10 +421,10 @@
     }
     self.longPressIndexPath = [self.tableView indexPathForCell:aCell];
     __weak typeof(self) weakself = self;
-    EaseExtMenuModel *copyExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"copy"] funcDesc:@"复制" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+    EaseExtMenuModel *copyExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"copy"] funcDesc:EaseLocalizableString(@"copy", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself copyLongPressAction];
     }];
-    EaseExtMenuModel *deleteExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"delete"] funcDesc:@"删除" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+    EaseExtMenuModel *deleteExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"delete"] funcDesc:EaseLocalizableString(@"delete", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself deleteLongPressAction:^(EMMessage *deleteMsg) {
             if (deleteMsg) {
                 NSUInteger index = [weakself.messageList indexOfObject:deleteMsg];
@@ -440,7 +441,7 @@
             }
         }];
     }];
-    EaseExtMenuModel *recallExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"recall"] funcDesc:@"撤回" handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+    EaseExtMenuModel *recallExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"recall"] funcDesc:EaseLocalizableString(@"recall", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself recallLongPressAction];
     }];
     
@@ -616,7 +617,7 @@
             if ([obj isKindOfClass:[EaseMessageModel class]]) {
                 EaseMessageModel *model = (EaseMessageModel *)obj;
                 if ([model.message.messageId isEqualToString:msg.messageId]) {
-                    EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:@"对方撤回一条消息"];
+                    EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:EaseLocalizableString(@"remoteRecall", nil)];
                     NSString *to = [[EMClient sharedClient] currentUsername];
                     NSString *from = self.currentConversation.conversationId;
                     EMMessage *message = [[EMMessage alloc] initWithConversationID:from from:from to:to body:body ext:@{MSG_EXT_RECALL:@(YES)}];
@@ -963,7 +964,7 @@
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.estimatedRowHeight = 130;
         _tableView.backgroundColor = [UIColor systemPinkColor];
-        [_tableView enableRefresh:@"下拉刷新" color:UIColor.redColor];
+        [_tableView enableRefresh:EaseLocalizableString(@"dropRefresh", nil) color:UIColor.redColor];
         [_tableView.refreshControl addTarget:self action:@selector(dropdownRefreshTableViewWithData) forControlEvents:UIControlEventValueChanged];
     }
     

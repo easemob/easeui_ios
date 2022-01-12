@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1876E450DBD7DFC623541AD4 /* libPods-EaseIMKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CDFB415C450B4FF02641F5EF /* libPods-EaseIMKit.a */; };
 		90892DDC25764D0900F50368 /* EaseIMKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 90892DDB25764D0900F50368 /* EaseIMKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9E6AD3FA26B3097C00F620D5 /* EasePublicHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E6AD3F526B3097C00F620D5 /* EasePublicHeaders.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9E6AD8FC26B3186600F620D5 /* EaseExtMenuModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E6AD75326B3186400F620D5 /* EaseExtMenuModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -384,29 +383,13 @@
 		9E6ADA6F26B3186800F620D5 /* UIImage+EaseUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E6AD8F926B3186500F620D5 /* UIImage+EaseUI.h */; };
 		9E6ADA7026B3186800F620D5 /* EaseIMKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9E6AD8FB26B3186600F620D5 /* EaseIMKit.bundle */; };
 		9E6ADA7126B31C1100F620D5 /* EaseHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E6AD3F426B3097C00F620D5 /* EaseHeaders.h */; };
-		9EAEB48D26B8F80A00A129AC /* HyphenateChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EAEB48C26B8F80A00A129AC /* HyphenateChat.framework */; };
-		9EAEB48E26B8F80A00A129AC /* HyphenateChat.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9EAEB48C26B8F80A00A129AC /* HyphenateChat.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		9E6ADA7626B31C5900F620D5 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				9EAEB48E26B8F80A00A129AC /* HyphenateChat.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		33F150BD1933F8715A082020 /* Pods-EaseIMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.debug.xcconfig"; path = "../../EaseIMKit/EaseIMKit/Pods/Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.debug.xcconfig"; sourceTree = "<group>"; };
 		90892DDB25764D0900F50368 /* EaseIMKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseIMKit.h; sourceTree = "<group>"; };
 		90A039F0254A6E7600D57B73 /* EaseIMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EaseIMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90A039F4254A6E7600D57B73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9DCC17F1EB6F8805F31C75AF /* Pods-EaseIMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.debug.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.debug.xcconfig"; sourceTree = "<group>"; };
 		9E6AD3F426B3097C00F620D5 /* EaseHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseHeaders.h; sourceTree = "<group>"; };
 		9E6AD3F526B3097C00F620D5 /* EasePublicHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasePublicHeaders.h; sourceTree = "<group>"; };
 		9E6AD75326B3186400F620D5 /* EaseExtMenuModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseExtMenuModel.h; sourceTree = "<group>"; };
@@ -782,9 +765,7 @@
 		9E6AD8F826B3186500F620D5 /* NSObject+Alert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Alert.m"; sourceTree = "<group>"; };
 		9E6AD8F926B3186500F620D5 /* UIImage+EaseUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+EaseUI.h"; sourceTree = "<group>"; };
 		9E6AD8FB26B3186600F620D5 /* EaseIMKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = EaseIMKit.bundle; sourceTree = "<group>"; };
-		9EAEB48C26B8F80A00A129AC /* HyphenateChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = HyphenateChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CDFB415C450B4FF02641F5EF /* libPods-EaseIMKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EaseIMKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F0F695B9C3665593AEE6B0DB /* Pods-EaseIMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.release.xcconfig"; path = "../../EaseIMKit/EaseIMKit/Pods/Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.release.xcconfig"; sourceTree = "<group>"; };
+		EC4B8F3FFB8CAA486AB79BB3 /* Pods-EaseIMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EaseIMKit.release.xcconfig"; path = "Target Support Files/Pods-EaseIMKit/Pods-EaseIMKit.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -792,29 +773,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9EAEB48D26B8F80A00A129AC /* HyphenateChat.framework in Frameworks */,
-				1876E450DBD7DFC623541AD4 /* libPods-EaseIMKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8A94CF3A2999C852685D9B5D /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				33F150BD1933F8715A082020 /* Pods-EaseIMKit.debug.xcconfig */,
-				F0F695B9C3665593AEE6B0DB /* Pods-EaseIMKit.release.xcconfig */,
-			);
-			name = Pods;
-			path = ../../sdk3.x_new/Pods;
-			sourceTree = "<group>";
-		};
 		90892DD325764C6900F50368 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9EAEB48C26B8F80A00A129AC /* HyphenateChat.framework */,
-				CDFB415C450B4FF02641F5EF /* libPods-EaseIMKit.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -825,7 +792,7 @@
 				90A039F2254A6E7600D57B73 /* EaseIMKit */,
 				90A039F1254A6E7600D57B73 /* Products */,
 				90892DD325764C6900F50368 /* Frameworks */,
-				8A94CF3A2999C852685D9B5D /* Pods */,
+				FC02CED380B6EAE58A650C22 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1661,6 +1628,16 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		FC02CED380B6EAE58A650C22 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9DCC17F1EB6F8805F31C75AF /* Pods-EaseIMKit.debug.xcconfig */,
+				EC4B8F3FFB8CAA486AB79BB3 /* Pods-EaseIMKit.release.xcconfig */,
+			);
+			name = Pods;
+			path = ../../sdk3.x_new/Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1883,7 +1860,6 @@
 				90A039ED254A6E7600D57B73 /* Frameworks */,
 				9036F2D525774B45001F62AA /* Resources */,
 				3C0EA82C266B34FB00B6274E /* ShellScript */,
-				9E6ADA7626B31C5900F620D5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2289,7 +2265,7 @@
 		};
 		90A039F9254A6E7600D57B73 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 33F150BD1933F8715A082020 /* Pods-EaseIMKit.debug.xcconfig */;
+			baseConfigurationReference = 9DCC17F1EB6F8805F31C75AF /* Pods-EaseIMKit.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -2340,7 +2316,7 @@
 		};
 		90A039FA254A6E7600D57B73 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F0F695B9C3665593AEE6B0DB /* Pods-EaseIMKit.release.xcconfig */;
+			baseConfigurationReference = EC4B8F3FFB8CAA486AB79BB3 /* Pods-EaseIMKit.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "Apple Development";

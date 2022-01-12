@@ -8,6 +8,7 @@
 #import "EMAudioRecordUtil.h"
 #import "amrFileCodec.h"
 #import <AVFoundation/AVAudioRecorder.h>
+#import "EaseDefines.h"
 
 static EMAudioRecordUtil *recordUtil = nil;
 @interface EMAudioRecordUtil ()<AVAudioRecorderDelegate>
@@ -133,13 +134,13 @@ static EMAudioRecordUtil *recordUtil = nil;
     NSError *error = nil;
     do {
         if (self.recorder && self.recorder.isRecording) {
-            error = [NSError errorWithDomain:@"正在进行录制" code:-1 userInfo:nil];
+            error = [NSError errorWithDomain:EaseLocalizableString(@"recording", nil) code:-1 userInfo:nil];
             break;
         }
         
         AVAudioSessionRecordPermission permissionStatus = [[AVAudioSession sharedInstance] recordPermission];
         if (permissionStatus == AVAudioSessionRecordPermissionDenied) {
-            error = [NSError errorWithDomain:@"未开启麦克风权限" code:-1 userInfo:nil];
+            error = [NSError errorWithDomain:EaseLocalizableString(@"noMicPermission", nil) code:-1 userInfo:nil];
             if (aCompletion) {
                 aCompletion(error);
             }
@@ -161,7 +162,7 @@ static EMAudioRecordUtil *recordUtil = nil;
         self.recorder = [[AVAudioRecorder alloc] initWithURL:wavUrl settings:self.recordSetting error:&error];
         if(error || !self.recorder) {
             self.recorder = nil;
-            error = [NSError errorWithDomain:@"文件格式转换失败" code:-1 userInfo:nil];
+            error = [NSError errorWithDomain:EaseLocalizableString(@"transferFileFail", nil) code:-1 userInfo:nil];
             break;
         }
         
@@ -175,7 +176,7 @@ static EMAudioRecordUtil *recordUtil = nil;
         
         if (!ret) {
             [self _stopRecord];
-            error = [NSError errorWithDomain:@"准备录制工作失败" code:-1 userInfo:nil];
+            error = [NSError errorWithDomain:EaseLocalizableString(@"prepareRecordFail", nil) code:-1 userInfo:nil];
         }
         
     } while (0);

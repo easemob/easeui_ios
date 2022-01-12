@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EMLocationViewController : UIViewController
 
-@property (nonatomic, copy) void (^sendCompletion)(CLLocationCoordinate2D aCoordinate, NSString *aAddress);
+@property (nonatomic, copy) void (^sendCompletion)(CLLocationCoordinate2D aCoordinate, NSString *aAddress, NSString *aBuildingName);
 
 - (instancetype)initWithLocation:(CLLocationCoordinate2D)aLocationCoordinate;
 

@@ -13,12 +13,8 @@
 #import <UIKit/UIKit.h>
 
 @interface EaseTextView : UITextView
-{
-    UIColor *_contentColor;
-    BOOL _editing;
-}
 
-@property(strong, nonatomic) NSString *placeholder;
-@property(strong, nonatomic) UIColor *placeholderColor;
+@property(strong, nonatomic) NSString *placeHolder;
+@property(strong, nonatomic) UIColor *placeHolderColor;
 
 @end
