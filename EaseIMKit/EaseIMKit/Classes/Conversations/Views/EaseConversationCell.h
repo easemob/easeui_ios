@@ -19,6 +19,8 @@
 @property (nonatomic, strong, readonly) UILabel *detailLabel;
 @property (nonatomic, strong, readonly) UILabel *timeLabel;
 @property (nonatomic, strong, readonly) EaseBadgeView *badgeLabel;
+@property (nonatomic, strong, readonly) UIImageView *redDot;
+@property (nonatomic, strong, readonly) UIImageView *undisturbRing;
 @property (nonatomic, strong) EaseConversationModel *model;
 
 + (EaseConversationCell *)tableView:(UITableView *)tableView cellViewModel:(EaseConversationViewModel *)viewModel;

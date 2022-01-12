@@ -58,6 +58,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)conversationsUnreadCountUpdate:(NSInteger)unreadCount;
 
+/**
+ * 会话未读总数变化
+ *
+ * @param   unreadTotalCount     当前会话列表的总未读数
+ * @param   undisturbCount     当前会话列表免打扰收到的总未读数
+ */
+- (void)conversationsUnreadCountUpdate:(NSInteger)unreadTotalCount undisturbCount:(NSInteger)undisturbCount;
+
 @end
 
 
@@ -66,6 +74,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSString *version; //UIKit 版本号
 @property (nonatomic) id<EaseIMKitSystemNotiDelegate>systemNotiDelegate; //系统通知回调代理
 + (BOOL)initWithEMOptions:(EMOptions *)options;
+
+/// 根据会话id查询当前会话是否设置了免打扰 时间复杂度O(1)
+/// @param conversationId 会话id
+- (BOOL)conversationUndisturb:(NSString *)conversationId;
+
+/// Description 更新免打扰会话map
+/// @param key key
+/// @param value value
+/// 
+- (void)updateUndisturbMapsKey:(NSString *)key value:(BOOL )value;
 + (EaseIMKitManager *)shared;
 + (NSString *)EaseIMKitVersion;
 - (void)addDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
