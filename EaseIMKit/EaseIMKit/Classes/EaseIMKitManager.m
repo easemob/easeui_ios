@@ -168,15 +168,15 @@ static NSString *g_UIKitVersion = @"3.8.8";
     NSString *notificationStr = nil;
     NSString *notiType = nil;
     if (reason == ContanctsRequestDidReceive) {
-        notificationStr = [NSString stringWithFormat:@"好友申请来自：%@",conversationId];
+        notificationStr = [NSString stringWithFormat:EaseLocalizableString(@"friendApplyfrom", nil),conversationId];
         notiType = SYSTEM_NOTI_TYPE_CONTANCTSREQUEST;
     }
     if (reason == GroupInvitationDidReceive) {
-        notificationStr = [NSString stringWithFormat:@"加群邀请来自：%@",userName];
+        notificationStr = [NSString stringWithFormat:EaseLocalizableString(@"joinInvitefrom", nil),userName];
         notiType = SYSTEM_NOTI_TYPE_GROUPINVITATION;
     }
     if (reason == JoinGroupRequestDidReceive) {
-        notificationStr = [NSString stringWithFormat:@"加群申请来自：%@",userName];
+        notificationStr = [NSString stringWithFormat:EaseLocalizableString(@"joinApplyfrom", nil),userName];
         notiType = SYSTEM_NOTI_TYPE_JOINGROUPREQUEST;
     }
     if (self.systemNotiDelegate && [self.systemNotiDelegate respondsToSelector:@selector(requestDidReceiveShowMessage:requestUser:reason:)]) {
@@ -220,13 +220,13 @@ static NSString *g_UIKitVersion = @"3.8.8";
     NSString *to = itemId;
     EMMessage *message;
     if (conversationType == EMChatTypeChat) {
-        body = [[EMTextMessageBody alloc] initWithText:[NSString stringWithFormat:@"你与%@已经成为好友，开始聊天吧",aUserName]];
+        body = [[EMTextMessageBody alloc] initWithText:[NSString stringWithFormat:EaseLocalizableString(@"friended", nil),aUserName]];
         message = [[EMMessage alloc] initWithConversationID:to from:EMClient.sharedClient.currentUsername to:to body:body ext:@{MSG_EXT_NEWNOTI:NOTI_EXT_ADDFRIEND}];
     } else if (conversationType == EMChatTypeGroupChat) {
         if ([aUserName isEqualToString:EMClient.sharedClient.currentUsername]) {
-            body = [[EMTextMessageBody alloc] initWithText:@"你已加入本群，开始发言吧"];
+            body = [[EMTextMessageBody alloc] initWithText:EaseLocalizableString(@"joinedgroup", nil)];
         } else {
-            body = [[EMTextMessageBody alloc] initWithText:[NSString stringWithFormat:@"%@ 加入了群聊",aUserName]];
+            body = [[EMTextMessageBody alloc] initWithText:[NSString stringWithFormat:EaseLocalizableString(@"userjoinGroup", nil),aUserName]];
         }
         message = [[EMMessage alloc] initWithConversationID:to from:aUserName to:to body:body ext:@{MSG_EXT_NEWNOTI:NOTI_EXT_ADDGROUP}];
     }

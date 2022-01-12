@@ -76,7 +76,7 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage easeUIImageNamed:@"close_gray"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(closeAction)];
     if (self.canSend) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(sendAction)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:EaseLocalizableString(@"send", nil) style:UIBarButtonItemStylePlain target:self action:@selector(sendAction)];
     }
     self.title = @"地理位置";*/
     self.navigationController.navigationBar.hidden = YES;
@@ -123,7 +123,7 @@
         }
     }
     
-    [self showHudInView:self.view hint:@"正在定位..."];
+    [self showHudInView:self.view hint:EaseLocalizableString(@"Locating...", nil)];
 }
 
 - (void)_moveToLocation:(CLLocationCoordinate2D)locationCoordinate
@@ -202,7 +202,7 @@
 {
     if (_sendLocationBtn == nil) {
         _sendLocationBtn = [[UIButton alloc]init];
-        [_sendLocationBtn setTitle:@"发送" forState:UIControlStateNormal];
+        [_sendLocationBtn setTitle:EaseLocalizableString(@"send", nil) forState:UIControlStateNormal];
         _sendLocationBtn.layer.cornerRadius = 4;
         _sendLocationBtn.backgroundColor = [UIColor colorWithRed:72/255.0 green:200/255.0 blue:144/255.0 alpha:1.0];
         [_sendLocationBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -216,7 +216,7 @@
 {
     if (_cancelBtn == nil) {
         _cancelBtn = [[UIButton alloc]init];
-        [_cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+        [_cancelBtn setTitle:EaseLocalizableString(@"cancel", nil) forState:UIControlStateNormal];
         _cancelBtn.backgroundColor = [UIColor clearColor];
         [_cancelBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_cancelBtn.titleLabel setFont:[UIFont systemFontOfSize:14.0]];

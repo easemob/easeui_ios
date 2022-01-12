@@ -9,6 +9,7 @@
 #import "EaseHeaders.h"
 #import "UIImage+EaseUI.h"
 #import "Easeonry.h"
+#import "EaseDefines.h"
 
 @implementation EaseConversationViewModel
 @synthesize bgView = _bgView;
@@ -82,7 +83,7 @@
     [view addSubview:txtLabel];
     [defaultBgView addSubview:view];
 
-    txtLabel.text = @"暂无聊天消息";
+    txtLabel.text = EaseLocalizableString(@"noMessag", nil);
     [imageView Ease_updateConstraints:^(EaseConstraintMaker *make) {
         make.centerX.equalTo(view);
         make.top.equalTo(view);

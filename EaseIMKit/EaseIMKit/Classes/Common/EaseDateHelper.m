@@ -7,6 +7,7 @@
 //
 
 #import "EaseDateHelper.h"
+#import "EaseDefines.h"
 
 #define DATE_COMPONENTS (NSCalendarUnitYear| NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekOfYear |  NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitWeekday | NSCalendarUnitWeekdayOrdinal)
 
@@ -79,7 +80,7 @@ static EaseDateHelper *shared = nil;
 - (NSDateFormatter *)dfYesterdayHM
 {
     if (_dfYesterdayHM == nil) {
-        _dfYesterdayHM = [self _getDateFormatterWithFormat:@"昨天HH:mm"];
+        _dfYesterdayHM = [self _getDateFormatterWithFormat:EaseLocalizableString(@"yestorday", nil)];
     }
     
     return _dfYesterdayHM;
@@ -88,7 +89,7 @@ static EaseDateHelper *shared = nil;
 - (NSDateFormatter *)dfBeforeDawnHM
 {
     if (_dfBeforeDawnHM == nil) {
-        _dfBeforeDawnHM = [self _getDateFormatterWithFormat:@"凌晨hh:mm"];
+        _dfBeforeDawnHM = [self _getDateFormatterWithFormat:EaseLocalizableString(@"beforedarw", nil)];
     }
     
     return _dfBeforeDawnHM;
@@ -97,7 +98,7 @@ static EaseDateHelper *shared = nil;
 - (NSDateFormatter *)dfAAHM
 {
     if (_dfAAHM == nil) {
-        _dfAAHM = [self _getDateFormatterWithFormat:@"上午hh:mm"];
+        _dfAAHM = [self _getDateFormatterWithFormat:EaseLocalizableString(@"am", nil)];
     }
     
     return _dfAAHM;
@@ -106,7 +107,7 @@ static EaseDateHelper *shared = nil;
 - (NSDateFormatter *)dfPPHM
 {
     if (_dfPPHM == nil) {
-        _dfPPHM = [self _getDateFormatterWithFormat:@"下午hh:mm"];
+        _dfPPHM = [self _getDateFormatterWithFormat:EaseLocalizableString(@"pm", nil)];
     }
     
     return _dfPPHM;
@@ -115,7 +116,7 @@ static EaseDateHelper *shared = nil;
 - (NSDateFormatter *)dfNightHM
 {
     if (_dfNightHM == nil) {
-        _dfNightHM = [self _getDateFormatterWithFormat:@"晚上hh:mm"];
+        _dfNightHM = [self _getDateFormatterWithFormat:EaseLocalizableString(@"night", nil)];
     }
     
     return _dfNightHM;

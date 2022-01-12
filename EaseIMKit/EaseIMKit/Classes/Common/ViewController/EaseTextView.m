@@ -11,79 +11,68 @@
   */
 
 #import "EaseTextView.h"
+#import "EaseHeaders.h"
+
+
+@interface EaseTextView ()
+@property (nonatomic ,strong) UILabel *placeHolderLabel;
+@end
 
 @implementation EaseTextView
-
-- (id)initWithFrame:(CGRect)frame
-{
+#pragma mark - Life cycle
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
-        _contentColor = [UIColor blackColor];
-        _placeholderColor = [UIColor lightGrayColor];
-        _editing = NO;
-        
-        super.scrollEnabled = YES;
-        super.layoutManager.allowsNonContiguousLayout = NO;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startEditing:) name:UITextViewTextDidBeginEditingNotification object:self];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishEditing:) name:UITextViewTextDidEndEditingNotification object:self];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didReceiveTextDidChangeNotification:)
+                                                     name:UITextViewTextDidChangeNotification
+                                                   object:self];
+        [self placeAndLayoutSubviews];
     }
     return self;
 }
 
-#pragma mark - super
-
-- (void)setTextColor:(UIColor *)textColor
-{
-    [super setTextColor:textColor];
-    
-    _contentColor = textColor;
+- (void)placeAndLayoutSubviews {
+    [self addSubview:self.placeHolderLabel];
+    [self.placeHolderLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.top.equalTo(self).offset(7.0);
+        make.left.equalTo(self).offset(14.0);
+        make.right.equalTo(self).offset(-14.0);
+    }];
 }
 
-- (NSString *)text
-{
-    if ([super.text isEqualToString:_placeholder] && super.textColor == _placeholderColor) {
-        return @"";
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:self];
+}
+
+#pragma mark - Notifications
+- (void)didReceiveTextDidChangeNotification:(NSNotification *)notification {
+    self.placeHolderLabel.hidden = self.text.length > 0 ? YES : NO;
+}
+
+
+#pragma mark getter and setter
+- (UILabel *)placeHolderLabel {
+    if (_placeHolderLabel == nil) {
+        _placeHolderLabel = [[UILabel alloc] init];
+        _placeHolderLabel.font = self.font;
+        _placeHolderLabel.textColor = [UIColor lightGrayColor];
+        _placeHolderLabel.textAlignment = NSTextAlignmentLeft;
+        _placeHolderLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     }
-    
-    return [super text];
+    return _placeHolderLabel;
 }
 
-- (void)setText:(NSString *)string
-{
-    super.text = string;
-    [super scrollRangeToVisible:NSMakeRange(super.text.length, 1)];
+- (void)setPlaceHolder:(NSString *)placeHolder {
+    _placeHolder = placeHolder;
+    self.placeHolderLabel.text = _placeHolder;
 }
 
-#pragma mark - setting
-
-- (void)setPlaceholder:(NSString *)string
-{
-    _placeholder = string;
-    
-    [self finishEditing:nil];
+- (void)setPlaceHolderColor:(UIColor *)placeHolderColor {
+    _placeHolderColor = placeHolderColor;
+    self.placeHolderLabel.textColor = _placeHolderColor;
 }
 
-- (void)setPlaceholderColor:(UIColor *)color
-{
-    _placeholderColor = color;
-}
 
-#pragma mark - notification
-
-- (void)startEditing:(NSNotification *)notification
-{
-    _editing = YES;
-    
-    if ([super.text isEqualToString:_placeholder] && super.textColor == _placeholderColor) {
-        super.textColor = _contentColor;
-        super.text = @"";
-    }
-}
-
-- (void)finishEditing:(NSNotification *)notification
-{
-    _editing = NO;
-}
 
 @end

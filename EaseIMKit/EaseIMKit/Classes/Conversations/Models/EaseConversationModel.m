@@ -77,53 +77,53 @@
             msgStr = body.text;
             EMMessage *lastMessage = [_conversation latestMessage];
             if ([msgStr isEqualToString:EMCOMMUNICATE_CALLER_MISSEDCALL]) {
-                msgStr = @"未接听，点击回拨";
+                msgStr = EaseLocalizableString(@"noRespond", nil);
                 if ([lastMessage.from isEqualToString:[EMClient sharedClient].currentUsername])
-                    msgStr = @"已取消";
+                    msgStr = EaseLocalizableString(@"canceled", nil);
             }
             if ([msgStr isEqualToString:EMCOMMUNICATE_CALLED_MISSEDCALL]) {
-                msgStr = @"对方已取消";
+                msgStr = EaseLocalizableString(@"remoteCancel", nil);
                 if ([lastMessage.from isEqualToString:[EMClient sharedClient].currentUsername])
-                    msgStr = @"对方拒绝通话";
+                    msgStr = EaseLocalizableString(@"remoteRefuse", nil);
             }
             if (lastMessage.ext && [lastMessage.ext objectForKey:EMCOMMUNICATE_TYPE]) {
                 NSString *communicateStr = @"";
                 if ([[lastMessage.ext objectForKey:EMCOMMUNICATE_TYPE] isEqualToString:EMCOMMUNICATE_TYPE_VIDEO])
-                    communicateStr = @"[视频通话]";
+                    communicateStr = EaseLocalizableString(@"[videoCall]", nil);
                 if ([[lastMessage.ext objectForKey:EMCOMMUNICATE_TYPE] isEqualToString:EMCOMMUNICATE_TYPE_VOICE])
-                    communicateStr = @"[语音通话]";
+                    communicateStr = EaseLocalizableString(@"[audioCall]", nil);
                 msgStr = [NSString stringWithFormat:@"%@ %@", communicateStr, msgStr];
             }
         }
             break;
         case EMMessageBodyTypeLocation:
         {
-            msgStr = @"[位置]";
+            msgStr = EaseLocalizableString(@"[location]", nil);
         }
             break;
         case EMMessageBodyTypeCustom:
         {
-            msgStr = @"[自定义消息]";
+            msgStr = EaseLocalizableString(@"[customemsg]", nil);
         }
             break;
         case EMMessageBodyTypeImage:
         {
-            msgStr = @"[图片]";
+            msgStr = EaseLocalizableString(@"[image]", nil);
         }
             break;
         case EMMessageBodyTypeFile:
         {
-            msgStr = @"[文件]";
+            msgStr = EaseLocalizableString(@"[file]", nil);
         }
             break;
         case EMMessageBodyTypeVoice:
         {
-            msgStr = @"[音频]";
+            msgStr = EaseLocalizableString(@"[audio]", nil);
         }
             break;
         case EMMessageBodyTypeVideo:
         {
-            msgStr = @"[视频]";
+            msgStr = EaseLocalizableString(@"[video]", nil);
         }
             break;
             
@@ -139,7 +139,7 @@
         [_showInfo setAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:255/255.0 green:43/255.0 blue:43/255.0 alpha:1.0]} range:NSMakeRange(0, msgStr.length)];
     }*/
     if ([_conversation remindMe]) {
-        NSString *atStr = @"[有人@我]";
+        NSString *atStr = EaseLocalizableString(@"[someone@me]", nil);
         msgStr = [NSString stringWithFormat:@"%@ %@", atStr, msgStr];
         _showInfo = [[NSMutableAttributedString alloc] initWithString:msgStr];
         [_showInfo setAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:255/255.0 green:43/255.0 blue:43/255.0 alpha:1.0]} range:NSMakeRange(0, atStr.length)];
