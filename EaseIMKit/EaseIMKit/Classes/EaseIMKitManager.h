@@ -75,14 +75,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) id<EaseIMKitSystemNotiDelegate>systemNotiDelegate; //系统通知回调代理
 + (BOOL)initWithEMOptions:(EMOptions *)options;
 
-/// 根据会话id查询当前会话是否设置了免打扰 时间复杂度O(1)
-/// @param conversationId 会话id
+/// Description 根据会话 ID 查询当前会话是否设置了免打扰。（ 时间复杂度O(1)：将原来 undisturbList 改造为 undisturbMap 降低查询时间复杂度）
+/// @param conversationId 会话 ID /// @result return - `YES`：是； - （默认） `NO` ：否。 不在undisturbMap中查询结果为NO
 - (BOOL)conversationUndisturb:(NSString *)conversationId;
 
-/// Description 更新免打扰会话map
-/// @param key key
-/// @param value value
-/// 
+/// Description 是否将会话设置为免打扰模式。
+/// @param key key 为 conversationId，会话 ID。
+/// @param value 是否设置为免打扰。- `YES`：是； `NO` ：否。
 - (void)updateUndisturbMapsKey:(NSString *)key value:(BOOL )value;
 + (EaseIMKitManager *)shared;
 + (NSString *)EaseIMKitVersion;
