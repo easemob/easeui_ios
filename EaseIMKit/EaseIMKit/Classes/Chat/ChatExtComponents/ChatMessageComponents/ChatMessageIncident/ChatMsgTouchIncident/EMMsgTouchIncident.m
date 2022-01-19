@@ -201,7 +201,8 @@
                 return;
             }
         }
-        
+    
+        [EMClient.sharedClient.chatManager updateMessage:aModel.message completion:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:AUDIOMSGSTATECHANGE object:aModel];
         [[EMAudioPlayerUtil sharedHelper] startPlayerWithPath:body.localPath model:aModel completion:^(NSError * _Nonnull error) {
             [[NSNotificationCenter defaultCenter] postNotificationName:AUDIOMSGSTATECHANGE object:aModel];
