@@ -12,6 +12,8 @@
 #import "EaseConversationModel.h"
 #import "EMConversation+EaseUI.h"
 #import "UIImage+EaseUI.h"
+#import "EaseIMKitManager.h"
+
 
 @interface EaseConversationsViewController ()
 <
@@ -50,6 +52,7 @@ EMClientDelegate
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [[EMClient sharedClient] addMultiDevicesDelegate:self delegateQueue:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshTabView)
                                                  name:CONVERSATIONLIST_UPDATE object:nil];
@@ -69,6 +72,7 @@ EMClientDelegate
     [[EMClient sharedClient].groupManager removeDelegate:self];
     [[EMClient sharedClient].contactManager removeDelegate:self];
     [[EMClient sharedClient].chatManager removeDelegate:self];
+    [[EMClient sharedClient] removeMultiDevicesDelegate:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -79,6 +83,19 @@ EMClientDelegate
     if (!aError) {
         [self _loadAllConversationsFromDB];
     }
+}
+
+#pragma mark - EMMultiDevicesDelegate
+
+- (void)multiDevicesUndisturbEventDidReceive:(EMMultiDevicesEvent)aEvent undisturbData:(NSString *)undisturbData {
+    EMError *error;
+    [[EMClient sharedClient].pushManager getPushOptionsFromServerWithError:&error];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (!error) {
+            [[EaseIMKitManager shared] cleanMemoryUndisturbMaps];
+            [self.tableView reloadData];
+        }
+    });
 }
 
 #pragma mark - Table view data source

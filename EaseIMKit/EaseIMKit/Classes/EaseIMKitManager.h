@@ -83,6 +83,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param key key 为 conversationId，会话 ID。
 /// @param value 是否设置为免打扰。- `YES`：是； `NO` ：否。
 - (void)updateUndisturbMapsKey:(NSString *)key value:(BOOL )value;
+
+/// Description 清空内存中所存储的免打扰会话的键值对Map 用于后续重新根据会话id获取当前会话免打扰状态的更新，此方法尽在开启多设备登录后收到多设备代理EMMultiDevicesDelegate中收到multiDevicesUndisturbEventDidReceive的通知，其它端对某个会话设置免打扰状态后在其它设备上同步后重新从服务器获取pushConfig后才可用此方法清空后，再刷新需要更新会话的免打扰状态
+- (void)cleanMemoryUndisturbMaps;
 + (EaseIMKitManager *)shared;
 + (NSString *)EaseIMKitVersion;
 - (void)addDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
