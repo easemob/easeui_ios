@@ -88,14 +88,16 @@ EMClientDelegate
 #pragma mark - EMMultiDevicesDelegate
 
 - (void)multiDevicesUndisturbEventDidReceive:(EMMultiDevicesEvent)aEvent undisturbData:(NSString *)undisturbData {
-    EMError *error;
-    [[EMClient sharedClient].pushManager getPushOptionsFromServerWithError:&error];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (!error) {
-            [[EaseIMKitManager shared] cleanMemoryUndisturbMaps];
-            [self.tableView reloadData];
-        }
-    });
+    if (aEvent == 100) {
+        EMError *error;
+        [[EMClient sharedClient].pushManager getPushOptionsFromServerWithError:&error];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (!error) {
+                [[EaseIMKitManager shared] cleanMemoryUndisturbMaps];
+                [self.tableView reloadData];
+            }
+        });
+    }
 }
 
 #pragma mark - Table view data source
