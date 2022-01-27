@@ -87,18 +87,31 @@ EMClientDelegate
 
 #pragma mark - EMMultiDevicesDelegate
 
-- (void)multiDevicesUndisturbEventDidReceive:(EMMultiDevicesEvent)aEvent undisturbData:(NSString *)undisturbData {
-    if (aEvent == 100) {
-        EMError *error;
-        [[EMClient sharedClient].pushManager getPushOptionsFromServerWithError:&error];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (!error) {
-                [[EaseIMKitManager shared] cleanMemoryUndisturbMaps];
-                [self.tableView reloadData];
-            }
-        });
-    }
+- (void)multiDevicesUndisturbEventNotifyFormOtherDeviceData:(NSString *)undisturbData {
+#if DEBUG
+    NSLog(@"multiDevicesUndisturbEventNotifyFormOtherDeviceData::: %@",[self dictionaryWithJsonString:undisturbData]);
+#endif
+    [[EMClient sharedClient].pushManager getPushNotificationOptionsFromServerWithCompletion:^(EMPushOptions * _Nonnull aOptions, EMError * _Nonnull aError) {
+        if (!aError) {
+            [[EaseIMKitManager shared] cleanMemoryUndisturbMaps];
+            [self.tableView reloadData];
+        }
+    }];
 }
+
+- (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString {
+    if (jsonString == nil) {
+        return nil;
+    }
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+    if(err) {
+        return nil;
+    }
+    return dic;
+}
+
 
 #pragma mark - Table view data source
 
