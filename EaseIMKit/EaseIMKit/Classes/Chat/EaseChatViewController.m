@@ -655,18 +655,20 @@
                     reloadModel = model;
                     index = idx;
                     *stop = YES;
+                    
+                    if (index != NSNotFound) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [weakself.dataArray replaceObjectAtIndex:index withObject:reloadModel];
+                            [weakself.tableView beginUpdates];
+                            [weakself.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                            [weakself.tableView endUpdates];
+                        });
+                    }
                 }
             }
         }];
         
-        if (index != NSNotFound) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakself.dataArray replaceObjectAtIndex:index withObject:reloadModel];
-                [weakself.tableView beginUpdates];
-                [weakself.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                [weakself.tableView endUpdates];
-            });
-        }
+       
         
     });
 }
@@ -911,10 +913,9 @@
     if (!self.moreMsgId)
         //新会话的第一条消息
         self.moreMsgId = message.messageId;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakself refreshTableView:YES];
-    });
+        
+    [weakself refreshTableView:YES];
+
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakself msgStatusDidChange:message error:error];
         if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(didSendMessage:error:)]) {
