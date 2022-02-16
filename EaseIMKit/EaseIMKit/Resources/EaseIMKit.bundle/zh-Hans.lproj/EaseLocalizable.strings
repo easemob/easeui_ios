@@ -17,8 +17,10 @@
 "camera" = "相机";
 "location" = "位置";
 "file" = "文件";
+"recalledMessage" = "撤回了一条消息";
 "meRecall" = "您撤回一条消息";
 "remoteRecall" = "对方撤回一条消息";
+"admingRecall" = "撤回了一条消息，来自";
 "voicetooshor" = "说话时间太短";
 "copy" = "复制";
 "delete" = "删除";

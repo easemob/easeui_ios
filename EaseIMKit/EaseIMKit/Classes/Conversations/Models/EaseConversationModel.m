@@ -72,7 +72,7 @@
         return _showInfo;
     }
     
-    EMMessage *msg = _conversation.latestMessage;
+    EMChatMessage *msg = _conversation.latestMessage;
     _latestUpdateTime = msg.timestamp;
     NSString *msgStr = nil;
     switch (msg.body.type) {
@@ -80,7 +80,7 @@
         {
             EMTextMessageBody *body = (EMTextMessageBody *)msg.body;
             msgStr = body.text;
-            EMMessage *lastMessage = [_conversation latestMessage];
+            EMChatMessage *lastMessage = [_conversation latestMessage];
             if ([msgStr isEqualToString:EMCOMMUNICATE_CALLER_MISSEDCALL]) {
                 msgStr = EaseLocalizableString(@"noRespond", nil);
                 if ([lastMessage.from isEqualToString:[EMClient sharedClient].currentUsername])
