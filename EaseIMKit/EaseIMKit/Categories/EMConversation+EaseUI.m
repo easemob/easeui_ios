@@ -60,7 +60,7 @@
     NSMutableArray *msgIdArray = [self remindMeArray];
     /*
     for (NSString *msgId in msgIds) {
-        EMMessage *msg = [self loadMessageWithId:msgId error:nil];
+        EMChatMessage *msg = [self loadMessageWithId:msgId error:nil];
         if (!msg.isRead && msg.body.type == EMMessageBodyTypeText) {
             EMTextMessageBody *textBody = (EMTextMessageBody*)msg.body;
             if ([textBody.text containsString:[NSString stringWithFormat:@"@%@",EMClient.sharedClient.currentUsername]]) {

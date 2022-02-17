@@ -193,7 +193,7 @@ static NSString *g_UIKitVersion = @"3.8.9";
         }
     }
     EMTextMessageBody *body = [[EMTextMessageBody alloc]initWithText:notificationStr];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:EMSYSTEMNOTIFICATIONID from:userName to:EMClient.sharedClient.currentUsername body:body ext:nil];
+    EMChatMessage *message = [[EMChatMessage alloc] initWithConversationID:EMSYSTEMNOTIFICATIONID from:userName to:EMClient.sharedClient.currentUsername body:body ext:nil];
     message.timestamp = [self getLatestMsgTimestamp];
     message.isRead = NO;
     message.chatType = EMChatTypeChat;
@@ -220,17 +220,17 @@ static NSString *g_UIKitVersion = @"3.8.9";
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:itemId type:conversationType createIfNotExist:YES];
     EMTextMessageBody *body;
     NSString *to = itemId;
-    EMMessage *message;
+    EMChatMessage *message;
     if (conversationType == EMChatTypeChat) {
         body = [[EMTextMessageBody alloc] initWithText:[NSString stringWithFormat:EaseLocalizableString(@"friended", nil),aUserName]];
-        message = [[EMMessage alloc] initWithConversationID:to from:EMClient.sharedClient.currentUsername to:to body:body ext:@{MSG_EXT_NEWNOTI:NOTI_EXT_ADDFRIEND}];
+        message = [[EMChatMessage alloc] initWithConversationID:to from:EMClient.sharedClient.currentUsername to:to body:body ext:@{MSG_EXT_NEWNOTI:NOTI_EXT_ADDFRIEND}];
     } else if (conversationType == EMChatTypeGroupChat) {
         if ([aUserName isEqualToString:EMClient.sharedClient.currentUsername]) {
             body = [[EMTextMessageBody alloc] initWithText:EaseLocalizableString(@"joinedgroup", nil)];
         } else {
             body = [[EMTextMessageBody alloc] initWithText:[NSString stringWithFormat:EaseLocalizableString(@"userjoinGroup", nil),aUserName]];
         }
-        message = [[EMMessage alloc] initWithConversationID:to from:aUserName to:to body:body ext:@{MSG_EXT_NEWNOTI:NOTI_EXT_ADDGROUP}];
+        message = [[EMChatMessage alloc] initWithConversationID:to from:aUserName to:to body:body ext:@{MSG_EXT_NEWNOTI:NOTI_EXT_ADDGROUP}];
     }
     message.chatType = (EMChatType)conversation.type;
     message.isRead = YES;
@@ -256,7 +256,7 @@ static NSString *g_UIKitVersion = @"3.8.9";
         EMConversation *systemConversation = [EMClient.sharedClient.chatManager getConversation:EMSYSTEMNOTIFICATIONID type:-1 createIfNotExist:NO];
         [systemConversation loadMessagesStartFromId:nil count:systemConversation.unreadMessagesCount searchDirection:EMMessageSearchDirectionUp completion:^(NSArray *aMessages, EMError *aError) {
             BOOL hasUnreadMsg = NO;
-            for (EMMessage *message in aMessages) {
+            for (EMChatMessage *message in aMessages) {
                 if (message.isRead == NO && message.chatType == EMChatTypeChat) {
                     message.isRead = YES;
                     hasUnreadMsg = YES;
@@ -278,7 +278,7 @@ static NSString *g_UIKitVersion = @"3.8.9";
         EMConversation *systemConversation = [EMClient.sharedClient.chatManager getConversation:EMSYSTEMNOTIFICATIONID type:-1 createIfNotExist:NO];
         [systemConversation loadMessagesStartFromId:nil count:systemConversation.unreadMessagesCount searchDirection:EMMessageSearchDirectionUp completion:^(NSArray *aMessages, EMError *aError) {
             BOOL hasUnreadMsg = NO;
-            for (EMMessage *message in aMessages) {
+            for (EMChatMessage *message in aMessages) {
                 if (message.isRead == NO && message.chatType == EMChatTypeGroupChat) {
                     message.isRead = YES;
                     hasUnreadMsg = YES;

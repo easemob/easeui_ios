@@ -12,7 +12,7 @@
 
 @implementation EaseMessageModel
 
-- (instancetype)initWithEMMessage:(EMMessage *)aMsg
+- (instancetype)initWithEMMessage:(EMChatMessage *)aMsg
 {
     self = [super init];
     if (self) {

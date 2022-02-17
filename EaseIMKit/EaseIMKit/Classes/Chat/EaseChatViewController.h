@@ -36,13 +36,13 @@ NS_ASSUME_NONNULL_BEGIN
 //发送消息体
 - (void)sendMessageWithBody:(EMMessageBody *)aBody ext:(NSDictionary * __nullable)aExt;
 //消息已读回执
-- (void)sendReadReceipt:(EMMessage *)msg;
+- (void)sendReadReceipt:(EMChatMessage *)msg;
 //触发用户资料回调 isScrollBottom：列表是否滚动到底部（最新一条消息处）
 - (void)triggerUserInfoCallBack:(BOOL)isScrollBottom;
 //刷新页面 isScrollBottom：列表是否滚动到底部（最新一条消息处）
 - (void)refreshTableView:(BOOL)isScrollBottom;
 //填充数据刷新页面 isInsertBottom:数据集是否插入到尾部（默认插入头部） isScrollBottom：列表是否滚动到底部（最新一条消息处）
-- (void)refreshTableViewWithData:(NSArray<EMMessage *> *)messages isInsertBottom:(BOOL)isInsertBottom isScrollBottom:(BOOL)isScrollBottom;
+- (void)refreshTableViewWithData:(NSArray<EMChatMessage *> *)messages isInsertBottom:(BOOL)isInsertBottom isScrollBottom:(BOOL)isScrollBottom;
 //清除从聊天页弹出的其他控制器页面(例：发起/接收 音视频通话时清理 相册弹出页/图片浏览页/输入扩展区收起等)
 - (void)cleanPopupControllerView;
 //停止音频播放

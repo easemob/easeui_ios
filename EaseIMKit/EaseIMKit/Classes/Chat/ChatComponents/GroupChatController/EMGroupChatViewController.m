@@ -55,7 +55,7 @@
 
 #pragma mark - ACtion
 
-- (void)sendReadReceipt:(EMMessage *)msg
+- (void)sendReadReceipt:(EMChatMessage *)msg
 {
     if (msg.isNeedGroupAck && !msg.isReadAcked) {
         [[EMClient sharedClient].chatManager sendGroupMessageReadAck:msg.messageId toGroup:msg.conversationId content:@"123" completion:^(EMError *error) {
@@ -69,7 +69,7 @@
 #pragma mark - EMChatManagerDelegate
 
 //收到群消息已读回执
-- (void)groupMessageDidRead:(EMMessage *)aMessage groupAcks:(NSArray *)aGroupAcks
+- (void)groupMessageDidRead:(EMChatMessage *)aMessage groupAcks:(NSArray *)aGroupAcks
 {
     EaseMessageModel *msgModel;
     EMGroupMessageAck *msgAck = aGroupAcks[0];

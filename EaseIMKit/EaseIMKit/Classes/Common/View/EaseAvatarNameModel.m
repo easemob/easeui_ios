@@ -10,7 +10,7 @@
 
 @implementation EaseAvatarNameModel
 
-- (instancetype)initWithInfo:(NSString *)keyWord img:(UIImage *)img msg:(EMMessage *)msg time:(NSString *)timestamp
+- (instancetype)initWithInfo:(NSString *)keyWord img:(UIImage *)img msg:(EMChatMessage *)msg time:(NSString *)timestamp
 {
     self = [super init];
     if (self) {
