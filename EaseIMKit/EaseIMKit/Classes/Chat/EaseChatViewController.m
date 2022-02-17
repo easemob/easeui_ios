@@ -33,7 +33,7 @@
 #import "EaseEnums.h"
 #import "EaseDefines.h"
 
-@interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate>
+@interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate, EMReactionManagerDelegate>
 {
     EaseChatViewModel *_viewModel;
     EaseMessageCell *_currentLongPressCell;
@@ -118,6 +118,7 @@
         [self.currentConversation setDraft:@""];
     }*/
     [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
+    [EMClient.sharedClient.reactionManager addDelegate:self delegateQueue:nil];
  
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapTableViewAction:)];
     [self.tableView addGestureRecognizer:tap];
@@ -445,6 +446,16 @@
         [weakself recallLongPressAction];
     }];
     
+    EaseExtMenuModel *reactionExtModel = [[EaseExtMenuModel alloc] initWithData:[UIImage easeUIImageNamed:@"recall"] funcDesc:EaseLocalizableString(@"reaction", @"reaction") handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+        [weakself.chatBar showEmotion:^(NSString * _Nonnull emotion) {
+            EaseMessageModel *model = [weakself.dataArray objectAtIndex:weakself.longPressIndexPath.row];
+//            [EMClient.sharedClient.reactionManager addReaction:emotion toMessage:model.message.messageId];
+            [EMClient.sharedClient.reactionManager removeReaction:emotion fromMessage:model.message.messageId];
+        } cancel:^{
+            
+        }];
+    }];
+    
     NSMutableArray<EaseExtMenuModel*> *extMenuArray = [[NSMutableArray<EaseExtMenuModel*> alloc]init];
     BOOL isCustomCell = NO;
     [extMenuArray addObject:copyExtModel];
@@ -460,6 +471,9 @@
             [extMenuArray addObject:recallExtModel];
         }
     }
+    
+    [extMenuArray addObject:reactionExtModel];
+    
     if (isCustomCell) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(customCellLongPressExtMenuItemArray:customCell:)]) {
             //自定义cell长按
@@ -679,6 +693,12 @@
         }
         [self refreshTableView:NO];
     }
+}
+
+#pragma mark - EMReaction
+- (void)messageReactionDidChange:(NSString *)messageId
+{
+    [self.tableView reloadData];
 }
 
 #pragma mark - KeyBoard
@@ -950,6 +970,13 @@
     [self.tableView layoutIfNeeded];
     if (isScrollBottom) {
         [self scrollToBottomRow];
+    }
+    
+    for (EMMessage *msg in self.messageList) {
+        [EMClient.sharedClient.reactionManager getChatReactionList:msg.messageId completion:^(NSArray<EMReaction *> *reactions, EMError *) {
+            
+            
+        }];
     }
 }
 

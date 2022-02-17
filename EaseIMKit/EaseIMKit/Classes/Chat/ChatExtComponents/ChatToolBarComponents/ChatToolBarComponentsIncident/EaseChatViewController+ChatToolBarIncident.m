@@ -108,7 +108,7 @@ static const void *imagePickerKey = &imagePickerKey;
             NSData *data = UIImageJPEGRepresentation(orgImage, 1);
             [self _sendImageDataAction:data];
         } else {
-            if ([[UIDevice currentDevice].systemVersion doubleValue] >= 9.0f) {
+            if (@available(iOS 9, *)) {
                 PHFetchResult *result = [PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil];
                 if(result.count == 0){
                     [EaseAlertController showErrorAlert:@"无权访问该相册"];

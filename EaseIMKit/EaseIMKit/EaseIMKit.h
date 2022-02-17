@@ -24,3 +24,5 @@
 #import "EaseChatViewModel.h"
 
 #import "EaseExtMenuModel.h"
+
+#import "EMMessageReactionView.h"

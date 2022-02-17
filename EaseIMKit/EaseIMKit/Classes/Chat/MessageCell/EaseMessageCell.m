@@ -18,6 +18,7 @@
 #import "EMMsgFileBubbleView.h"
 #import "EMMsgExtGifBubbleView.h"
 #import "UIImageView+EaseWebCache.h"
+#import "EMMessageReactionView.h"
 
 @interface EaseMessageCell()
 
@@ -30,6 +31,8 @@
 @property (nonatomic, strong) UIButton *readReceiptBtn;//阅读回执按钮
 
 @property (nonatomic, strong) EaseChatViewModel *viewModel;
+
+@property (nonatomic, strong) EMMessageReactionView *reactionView;
 
 @end
 
@@ -122,6 +125,7 @@
         _avatarView.clipsToBounds = _avatarView.clipsToBounds = YES;;
     }
     [self.contentView addSubview:_avatarView];
+    
     if (self.direction == EMMessageDirectionReceive) {
         [_avatarView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(15);
@@ -152,6 +156,7 @@
     _bubbleView.userInteractionEnabled = YES;
     _bubbleView.clipsToBounds = YES;
     [self.contentView addSubview:_bubbleView];
+    [self.contentView addSubview:self.reactionView];
     if (self.direction == EMMessageDirectionReceive) {
         [_bubbleView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             if (chatType != EMChatTypeChat) {
@@ -159,16 +164,29 @@
             } else {
                 make.top.equalTo(self.avatarView);
             }
-            make.bottom.equalTo(self.contentView).offset(-15);
             make.left.equalTo(self.avatarView.ease_right).offset(componentSpacing);
             make.right.lessThanOrEqualTo(self.contentView).offset(-70);
+            make.bottom.equalTo(_reactionView.ease_top);
+        }];
+        [_reactionView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.left.equalTo(_bubbleView);
+            make.bottom.equalTo(self.contentView).offset(-15);
+            make.width.Ease_equalTo(@100);
+            make.height.Ease_equalTo(@0);
         }];
     } else {
         [_bubbleView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self.avatarView);
-            make.bottom.equalTo(self.contentView).offset(-15);
             make.left.greaterThanOrEqualTo(self.contentView).offset(70);
             make.right.equalTo(self.avatarView.ease_left).offset(-componentSpacing);
+            make.bottom.equalTo(_reactionView.ease_top);
+        }];
+        
+        [_reactionView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.right.equalTo(_bubbleView);
+            make.bottom.equalTo(self.contentView).offset(-15);
+            make.width.Ease_equalTo(@100);
+            make.height.Ease_equalTo(@0);
         }];
     }
 
@@ -315,6 +333,15 @@
     } else {
         self.readReceiptBtn.hidden = YES;
     }
+    self.reactionView.reactionList = model.message.reactionList;
+}
+
+#pragma mark - lazy
+- (EMMessageReactionView *)reactionView {
+    if (!_reactionView) {
+        _reactionView = [[EMMessageReactionView alloc] init];
+    }
+    return _reactionView;
 }
 
 #pragma mark - Action

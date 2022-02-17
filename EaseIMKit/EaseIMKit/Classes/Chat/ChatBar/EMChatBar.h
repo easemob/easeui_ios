@@ -37,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)clearMoreViewAndSelectedButton;
 
+- (void)showEmotion:(void(^)(NSString *emotion))selectHandle cancel:(void(^)(void))cancelHandle;
+
 @end
 
 

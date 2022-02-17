@@ -30,6 +30,9 @@
 //@property (nonatomic, strong) UIButton *audioDescBtn;
 @property (nonatomic, strong) EaseChatViewModel *viewModel;
 
+@property (nonatomic, copy) void(^reactionDidSelectEmotionHandle)(NSString * _Nonnull emotion);
+@property (nonatomic, copy) void(^reactionDidCancelEmotionHandle)(void);
+
 @end
 
 @implementation EMChatBar
@@ -289,6 +292,14 @@
 
 - (void)inputViewAppendText:(NSString *)aText
 {
+    if (_reactionDidSelectEmotionHandle) {
+        _reactionDidSelectEmotionHandle(aText);
+        _reactionDidSelectEmotionHandle = nil;
+        _reactionDidCancelEmotionHandle = nil;
+        [self hideKeyboardView];
+        return;
+    }
+    
     if ([aText length] > 0) {
         self.textView.text = [NSString stringWithFormat:@"%@%@", self.textView.text, aText];
         [self _updatetextViewHeight];
@@ -312,6 +323,17 @@
 
 - (void)clearMoreViewAndSelectedButton
 {
+    _reactionDidSelectEmotionHandle = nil;
+    if (_reactionDidCancelEmotionHandle) {
+        _reactionDidCancelEmotionHandle();
+        _reactionDidCancelEmotionHandle = nil;
+    }
+    
+    [self hideKeyboardView];
+}
+
+- (void)hideKeyboardView
+{
     if (self.currentMoreView) {
         [self.currentMoreView removeFromSuperview];
         self.currentMoreView = nil;
@@ -330,6 +352,14 @@
         [self.audioButton Ease_updateConstraints:^(EaseConstraintMaker *make) {
             make.width.Ease_equalTo(kIconwidth);
         }];
+    }
+}
+
+- (void)showEmotion:(void (^)(NSString * _Nonnull))selectHandle cancel:(void (^)(void))cancelHandle {
+    self.reactionDidSelectEmotionHandle = selectHandle;
+    self.reactionDidCancelEmotionHandle = cancelHandle;
+    if (self.selectedButton != self.emojiButton) {
+        [self emoticonButtonAction:self.emojiButton];
     }
 }
 
@@ -376,6 +406,12 @@
 //语音
 - (void)audioButtonAction:(UIButton *)aButton
 {
+    _reactionDidSelectEmotionHandle = nil;
+    if (_reactionDidCancelEmotionHandle) {
+        _reactionDidCancelEmotionHandle();
+        _reactionDidCancelEmotionHandle = nil;
+    }
+    
     if([self _buttonAction:aButton]) {
         return;
     }
@@ -427,6 +463,12 @@
 //更多
 - (void)moreButtonAction:(UIButton *)aButton
 {
+    _reactionDidSelectEmotionHandle = nil;
+    if (_reactionDidCancelEmotionHandle) {
+        _reactionDidCancelEmotionHandle();
+        _reactionDidCancelEmotionHandle = nil;
+    }
+    
     if([self _buttonAction:aButton]) {
         return;
     }
