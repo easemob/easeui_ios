@@ -10,6 +10,7 @@
 #import "EaseBaseTableViewController.h"
 
 #import "EaseConversationViewModel.h"
+#import <HyphenateChat/EMMultiDevicesDelegate.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -36,9 +37,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface EaseConversationsViewController : EaseBaseTableViewController
+@interface EaseConversationsViewController : EaseBaseTableViewController<EMMultiDevicesDelegate>
 @property (nonatomic, strong) NSMutableArray *dataAry;
 @property (nonatomic) id <EaseConversationsViewControllerDelegate> delegate;
+@property (nonatomic, weak) id <EMMultiDevicesDelegate> multiDelegate;
 - (instancetype)initWithModel:(EaseConversationViewModel *)aModel;
 @end
 

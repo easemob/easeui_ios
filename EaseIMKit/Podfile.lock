@@ -1,0 +1,20 @@
+PODS:
+  - EMVoiceConvert (0.1.0)
+  - Masonry (1.1.0)
+
+DEPENDENCIES:
+  - EMVoiceConvert (~> 0.1.0)
+  - Masonry
+
+SPEC REPOS:
+  trunk:
+    - EMVoiceConvert
+    - Masonry
+
+SPEC CHECKSUMS:
+  EMVoiceConvert: 32a0eaada94d93c151a5abd53ee174cd4e63b01f
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+
+PODFILE CHECKSUM: 35d89827cc9c6a627f31a11bde355a7535066331
+
+COCOAPODS: 1.10.2

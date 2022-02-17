@@ -294,6 +294,9 @@ static NSString *g_UIKitVersion = @"3.8.9";
 #pragma mark - 未读数变化
 
 - (BOOL)conversationUndisturb:(NSString *)conversationId {
+    if (_undisturbMaps == nil) {
+        _undisturbMaps = [NSMutableDictionary dictionary];
+    }
     if (_undisturbMaps.count <= 0) {
         [self fillUndisturbMaps];
     }
@@ -303,6 +306,10 @@ static NSString *g_UIKitVersion = @"3.8.9";
 
 - (void)updateUndisturbMapsKey:(NSString *)key value:(BOOL )value {
     [_undisturbMaps setValue:[NSNumber numberWithBool:value] forKey:key];
+}
+
+- (void)cleanMemoryUndisturbMaps {
+    _undisturbMaps = nil;
 }
 
 - (void)fillUndisturbMaps {

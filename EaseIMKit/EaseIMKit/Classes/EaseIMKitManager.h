@@ -75,15 +75,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) id<EaseIMKitSystemNotiDelegate>systemNotiDelegate; //系统通知回调代理
 + (BOOL)initWithEMOptions:(EMOptions *)options;
 
-/// 根据会话id查询当前会话是否设置了免打扰 时间复杂度O(1)
-/// @param conversationId 会话id
+/// Description 根据会话 ID 查询当前会话是否设置了免打扰。（ 时间复杂度O(1)：将原来 undisturbList 改造为 undisturbMap 降低查询时间复杂度）
+/// @param conversationId 会话 ID /// @result return - `YES`：是； - （默认） `NO` ：否。 不在undisturbMap中查询结果为NO
 - (BOOL)conversationUndisturb:(NSString *)conversationId;
 
-/// Description 更新免打扰会话map
-/// @param key key
-/// @param value value
-/// 
+/// Description 是否将会话设置为免打扰模式。
+/// @param key key 为 conversationId，会话 ID。
+/// @param value 是否设置为免打扰。- `YES`：是； `NO` ：否。
 - (void)updateUndisturbMapsKey:(NSString *)key value:(BOOL )value;
+
+/// Description 清空内存中所存储的免打扰会话的键值对Map 用于后续重新根据会话id获取当前会话免打扰状态的更新，此方法尽在开启多设备登录后收到多设备代理EMMultiDevicesDelegate中收到multiDevicesUndisturbEventDidReceive的通知，其它端对某个会话设置免打扰状态后在其它设备上同步后重新从服务器获取pushConfig后才可用此方法清空后，再刷新需要更新会话的免打扰状态
+- (void)cleanMemoryUndisturbMaps;
 + (EaseIMKitManager *)shared;
 + (NSString *)EaseIMKitVersion;
 - (void)addDelegate:(id<EaseIMKitManagerDelegate>)aDelegate;
