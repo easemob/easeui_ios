@@ -56,16 +56,6 @@ EMClientDelegate
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshTabView)
                                                  name:CONVERSATIONLIST_UPDATE object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refreshConversations)
-                                                 name:@"EMUserPushConfigsUpdateSuccess" object:nil];
-    
-}
-
-- (void)refreshConversations {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-    });
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -104,9 +94,7 @@ EMClientDelegate
     [[EMClient sharedClient].pushManager getPushNotificationOptionsFromServerWithCompletion:^(EMPushOptions * _Nonnull aOptions, EMError * _Nonnull aError) {
         if (!aError) {
             [[EaseIMKitManager shared] cleanMemoryUndisturbMaps];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
-            });
+            [self.tableView reloadData];
         }
     }];
 }
