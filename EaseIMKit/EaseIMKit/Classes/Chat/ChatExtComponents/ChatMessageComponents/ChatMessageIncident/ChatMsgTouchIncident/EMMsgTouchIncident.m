@@ -94,7 +94,7 @@
     __weak typeof(self.chatController) weakself = self.chatController;
     void (^downloadThumbBlock)(EaseMessageModel *aModel) = ^(EaseMessageModel *aModel) {
         [weakself showHint:EaseLocalizableString(@"getThumnail...", nil)];
-        [[EMClient sharedClient].chatManager downloadMessageThumbnail:aModel.message progress:nil completion:^(EMMessage *message, EMError *error) {
+        [[EMClient sharedClient].chatManager downloadMessageThumbnail:aModel.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
             if (!error) {
                 [weakself.tableView reloadData];
             }
@@ -130,7 +130,7 @@
     }
     
     [self.chatController showHudInView:self.chatController.view hint:EaseLocalizableString(@"downloadingImage...", nil)];
-    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
             [EaseAlertController showErrorAlert:EaseLocalizableString(@"downloadImageFail", nil)];
@@ -220,7 +220,7 @@
     
     __weak typeof(self.chatController) weakChatControl = self.chatController;
     [self.chatController showHudInView:self.chatController.view hint:EaseLocalizableString(@"downloadingVoice", nil)];
-    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
         [weakChatControl hideHud];
         if (error) {
             [EaseAlertController showErrorAlert:EaseLocalizableString(@"downloadVoiceFail", nil)];
@@ -254,7 +254,7 @@
 
     void (^downloadBlock)(void) = ^ {
         [weakChatController showHudInView:self.chatController.view hint:EaseLocalizableString(@"downloadVideo...", nil)];
-        [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+        [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
             [weakChatController hideHud];
             if (error) {
                 [EaseAlertController showErrorAlert:@"下载视频失败"];
@@ -278,7 +278,7 @@
     if (body.thumbnailDownloadStatus == EMDownloadStatusFailed || ![fileManager fileExistsAtPath:body.thumbnailLocalPath]) {
         [self.chatController showHint:EaseLocalizableString(@"downloadThumnail", nil)];
         if (!isCustomDownload) {
-            [[EMClient sharedClient].chatManager downloadMessageThumbnail:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+            [[EMClient sharedClient].chatManager downloadMessageThumbnail:aCell.model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
                 downloadBlock();
             }];
             return;
@@ -326,7 +326,7 @@
         return;
     }
     
-    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
             [EaseAlertController showErrorAlert:EaseLocalizableString(@"downFileFail", nil)];

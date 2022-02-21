@@ -65,7 +65,7 @@
     dispatch_async(self.msgQueue, ^{
         NSString *conId = weakself.currentConversation.conversationId;
         __block BOOL isReladView = NO;
-        for (EMMessage *message in aMessages) {
+        for (EMChatMessage *message in aMessages) {
             if (![conId isEqualToString:message.conversationId]){
                 continue;
             }
@@ -93,7 +93,7 @@
 - (void)cmdMessagesDidReceive:(NSArray *)aCmdMessages
 {
     NSString *conId = self.currentConversation.conversationId;
-    for (EMMessage *message in aCmdMessages) {
+    for (EMChatMessage *message in aCmdMessages) {
         if (![conId isEqualToString:message.conversationId]) {
             continue;
         }
@@ -135,21 +135,21 @@
     NSString *to = self.currentConversation.conversationId;
     EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:MSG_TYPING_BEGIN];
     body.isDeliverOnlineOnly = YES;
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:nil];
+    EMChatMessage *message = [[EMChatMessage alloc] initWithConversationID:to from:from to:to body:body ext:nil];
     message.chatType = EMChatTypeChat;
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:nil];
 }
 
 #pragma mark - Action
 
-- (void)sendReadReceipt:(EMMessage *)msg
+- (void)sendReadReceipt:(EMChatMessage *)msg
 {
     if ([self _isNeedSendReadAckForMessage:msg isMarkRead:NO]) {
         [[EMClient sharedClient].chatManager sendMessageReadAck:msg.messageId toUser:msg.conversationId completion:nil];
     }
 }
 
-- (BOOL)_isNeedSendReadAckForMessage:(EMMessage *)aMessage
+- (BOOL)_isNeedSendReadAckForMessage:(EMChatMessage *)aMessage
                           isMarkRead:(BOOL)aIsMarkRead
 {
     if (aMessage.direction == EMMessageDirectionSend || aMessage.isReadAcked || aMessage.chatType != EMChatTypeChat)

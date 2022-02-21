@@ -43,7 +43,7 @@
 @property (nonatomic, strong) EMMoreFunctionView *longPressView;
 @property (nonatomic, strong) EMChatBar *chatBar;
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
-@property (nonatomic, strong) NSMutableArray<EMMessage *> *messageList;
+@property (nonatomic, strong) NSMutableArray<EMChatMessage *> *messageList;
 @end
 
 @implementation EaseChatViewController
@@ -86,7 +86,7 @@
     self = [super init];
     if (self) {
         _currentConversation = [EMClient.sharedClient.chatManager getConversation:conversationId type:conType createIfNotExist:YES];
-        _msgQueue = dispatch_queue_create("emmessage.com", NULL);
+        _msgQueue = dispatch_queue_create("EMChatMessage.com", NULL);
         _viewModel = viewModel;
         _isReloadViewWithModel = NO;
         [EaseIMKitManager.shared setConversationId:_currentConversation.conversationId];
@@ -159,6 +159,7 @@
     [self hideLongPressView];
     [[EMAudioPlayerUtil sharedHelper] stopPlayer];
     if (self.currentConversation.type == EMChatTypeChatRoom) {
+        [[EMClient sharedClient].chatManager deleteServerConversation:self.currentConversation.conversationId conversationType:EMConversationTypeChatRoom isDeleteServerMessages:YES completion:nil];
         [[EMClient sharedClient].chatManager deleteConversation:self.currentConversation.conversationId isDeleteMessages:YES completion:nil];
         [[EMClient sharedClient].roomManager leaveChatroom:self.currentConversation.conversationId completion:nil];
     } else {
@@ -255,11 +256,19 @@
     if ([obj isKindOfClass:[EaseMessageModel class]]) {
         EaseMessageModel *model = (EaseMessageModel *)obj;
         if (model.type == EMMessageTypeExtRecall) {
-            if ([model.message.from isEqualToString:EMClient.sharedClient.currentUsername]) {
+            NSString *recallBy = [model.message.ext objectForKey:MSG_EXT_RECALLBY];
+            if ([recallBy isEqualToString:EMClient.sharedClient.currentUsername]) {
                 cellString = EaseLocalizableString(@"meRecall", nil);
+            } else if ([recallBy isEqualToString:model.message.from]) {
+                if (model.message.chatType == EMChatTypeChat) {
+                    cellString = EaseLocalizableString(@"remoteRecall", nil);
+                } else {
+                    cellString = [NSString stringWithFormat:@"%@ %@", recallBy, EaseLocalizableString(@"recalledMessage", nil)];
+                }
             } else {
-                cellString = EaseLocalizableString(@"remoteRecall", nil);
+                cellString = [NSString stringWithFormat:@"%@ %@ %@", recallBy, EaseLocalizableString(@"admingRecall", nil), model.message.from];
             }
+            
             type = EaseWeakRemindSystemHint;
         }
         if (model.type == EMMessageTypeExtNewFriend || model.type == EMMessageTypeExtAddGroup) {
@@ -425,7 +434,7 @@
         [weakself copyLongPressAction];
     }];
     EaseExtMenuModel *deleteExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"delete"] funcDesc:EaseLocalizableString(@"delete", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
-        [weakself deleteLongPressAction:^(EMMessage *deleteMsg) {
+        [weakself deleteLongPressAction:^(EMChatMessage *deleteMsg) {
             if (deleteMsg) {
                 NSUInteger index = [weakself.messageList indexOfObject:deleteMsg];
                 if (index != -1) {
@@ -535,7 +544,7 @@
     }
     
     __weak typeof(self) weakself = self;
-    [[[EMClient sharedClient] chatManager] resendMessage:aModel.message progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[[EMClient sharedClient] chatManager] resendMessage:aModel.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
         [weakself.tableView reloadData];
         if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(didSendMessage:error:)]) {
             [weakself.delegate didSendMessage:message error:error];
@@ -593,7 +602,7 @@
         NSString *conId = weakself.currentConversation.conversationId;
         NSMutableArray *msgArray = [[NSMutableArray alloc] init];
         for (int i = 0; i < [aMessages count]; i++) {
-            EMMessage *msg = aMessages[i];
+            EMChatMessage *msg = aMessages[i];
             if (![msg.conversationId isEqualToString:conId]) {
                 continue;
             }
@@ -610,17 +619,19 @@
     });
 }
 
-- (void)messagesDidRecall:(NSArray *)aMessages {
-    [aMessages enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        EMMessage *msg = (EMMessage *)obj;
+- (void)messagesInfoDidRecall:(NSArray<EMRecallMessageInfo *> *)aRecallMessagesInfo
+{
+    [aRecallMessagesInfo enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        EMRecallMessageInfo *recallMessageInfo = (EMRecallMessageInfo *)obj;
+        EMChatMessage *msg = recallMessageInfo.recallMessage;
         [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([obj isKindOfClass:[EaseMessageModel class]]) {
                 EaseMessageModel *model = (EaseMessageModel *)obj;
                 if ([model.message.messageId isEqualToString:msg.messageId]) {
                     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:EaseLocalizableString(@"remoteRecall", nil)];
-                    NSString *to = [[EMClient sharedClient] currentUsername];
-                    NSString *from = self.currentConversation.conversationId;
-                    EMMessage *message = [[EMMessage alloc] initWithConversationID:from from:from to:to body:body ext:@{MSG_EXT_RECALL:@(YES)}];
+                    NSString *to = msg.to;
+                    NSString *from = msg.from;
+                    EMChatMessage *message = [[EMChatMessage alloc] initWithConversationID:from from:from to:to body:body ext:@{MSG_EXT_RECALL:@(YES), MSG_EXT_RECALLBY:recallMessageInfo.recallBy}];
                     message.chatType = (EMChatType)self.currentConversation.type;
                     message.isRead = YES;
                     message.messageId = msg.messageId;
@@ -636,7 +647,7 @@
     [self.tableView reloadData];
 }
 
-- (void)msgStatusDidChange:(EMMessage *)aMessage
+- (void)msgStatusDidChange:(EMChatMessage *)aMessage
                          error:(EMError *)aError
 {
     __weak typeof(self) weakself = self;
@@ -758,12 +769,12 @@
 
 #pragma mark - Data
 
-- (NSArray *)formatMessages:(NSArray<EMMessage *> *)aMessages
+- (NSArray *)formatMessages:(NSArray<EMChatMessage *> *)aMessages
 {
     NSMutableArray *formated = [[NSMutableArray alloc] init];
 
     for (int i = 0; i < [aMessages count]; i++) {
-        EMMessage *msg = aMessages[i];
+        EMChatMessage *msg = aMessages[i];
         if (msg.chatType == EMChatTypeChat && msg.isReadAcked && (msg.body.type == EMMessageBodyTypeText || msg.body.type == EMMessageBodyTypeLocation)) {
             [[EMClient sharedClient].chatManager sendMessageReadAck:msg.messageId toUser:msg.conversationId completion:nil];
         }
@@ -794,12 +805,12 @@
     return formated;
 }
 
-- (void)refreshTableViewWithData:(NSArray<EMMessage *> *)messages isInsertBottom:(BOOL)isInsertBottom isScrollBottom:(BOOL)isScrollBottom
+- (void)refreshTableViewWithData:(NSArray<EMChatMessage *> *)messages isInsertBottom:(BOOL)isInsertBottom isScrollBottom:(BOOL)isScrollBottom
 {
     __weak typeof(self) weakself = self;
     if (messages && [messages count]) {
-        NSMutableArray<EMMessage *> *tempMsgs = [[NSMutableArray<EMMessage *> alloc]init];
-        for (EMMessage *message in messages) {
+        NSMutableArray<EMChatMessage *> *tempMsgs = [[NSMutableArray<EMChatMessage *> alloc]init];
+        for (EMChatMessage *message in messages) {
             if (message.body.type != EMMessageTypeCmd) {
                 [tempMsgs addObject:message];
             }
@@ -808,7 +819,7 @@
             [weakself.messageList addObjectsFromArray:tempMsgs];
         } else {
             [weakself.messageList insertObjects:tempMsgs atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tempMsgs count])]];
-            EMMessage *msg = tempMsgs[0];
+            EMChatMessage *msg = tempMsgs[0];
             weakself.moreMsgId = msg.messageId;
         }
         
@@ -886,7 +897,7 @@
 {
     NSString *from = [[EMClient sharedClient] currentUsername];
     NSString *to = self.currentConversation.conversationId;
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:aBody ext:aExt];
+    EMChatMessage *message = [[EMChatMessage alloc] initWithConversationID:to from:from to:to body:aBody ext:aExt];
     //是否需要发送阅读回执
     if([aExt objectForKey:MSG_EXT_READ_RECEIPT]) {
         message.isNeedGroupAck = YES;
@@ -895,7 +906,7 @@
     
     __weak typeof(self) weakself = self;
     if (self.delegate && [self.delegate respondsToSelector:@selector(willSendMessage:)]) {
-        EMMessage *callbackMsg = [self.delegate willSendMessage:message];
+        EMChatMessage *callbackMsg = [self.delegate willSendMessage:message];
         if (!callbackMsg || !callbackMsg.messageId || [callbackMsg.messageId isEqualToString:@""])
             return;
         [weakself sendMsgimpl:callbackMsg];
@@ -904,7 +915,7 @@
     }
 }
 
-- (void)sendMsgimpl:(EMMessage *)message
+- (void)sendMsgimpl:(EMChatMessage *)message
 {
     __weak typeof(self) weakself = self;
     NSArray *formated = [self formatMessages:@[message]];
@@ -916,7 +927,7 @@
         
     [weakself refreshTableView:YES];
 
-    [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMChatMessage *message, EMError *error) {
         [weakself msgStatusDidChange:message error:error];
         if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(didSendMessage:error:)]) {
             [weakself.delegate didSendMessage:message error:error];
@@ -930,7 +941,7 @@
 - (void)setEditingStatusVisible:(BOOL)editingStatusVisible{}
 
 //已读回执
-- (void)sendReadReceipt:(EMMessage *)msg{}
+- (void)sendReadReceipt:(EMChatMessage *)msg{}
 
 - (void)triggerUserInfoCallBack:(BOOL)isScrollBottom
 {
@@ -979,10 +990,10 @@
     return _dataArray;
 }
 
-- (NSMutableArray<EMMessage *> *)messageList
+- (NSMutableArray<EMChatMessage *> *)messageList
 {
     if (!_messageList) {
-        _messageList = [[NSMutableArray<EMMessage *> alloc]init];
+        _messageList = [[NSMutableArray<EMChatMessage *> alloc]init];
     }
     return _messageList;
 }

@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) EaseMessageCell *weakMessageCell;
 
-@property (nonatomic, strong) EMMessage *message;
+@property (nonatomic, strong) EMChatMessage *message;
 
 @property (nonatomic) EMMessageDirection direction;
 
@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) BOOL isPlaying;
 
-- (instancetype)initWithEMMessage:(EMMessage *)aMsg;
+- (instancetype)initWithEMMessage:(EMChatMessage *)aMsg;
 
 @end
 
