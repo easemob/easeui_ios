@@ -32,7 +32,7 @@ static const void *recallViewKey = &recallViewKey;
     }
 }
 
-- (void)deleteLongPressAction:(void (^)(EMMessage *deleteMsg))aCompletionBlock
+- (void)deleteLongPressAction:(void (^)(EMChatMessage *deleteMsg))aCompletionBlock
 {
     if (self.longPressIndexPath == nil || self.longPressIndexPath.row < 0) {
         return;
@@ -110,9 +110,9 @@ static const void *recallViewKey = &recallViewKey;
             [EaseAlertController showErrorAlert:aError.errorDescription];
         } else {
             EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:EaseLocalizableString(@"meRecall", nil)];
-            NSString *from = [[EMClient sharedClient] currentUsername];
-            NSString *to = self.currentConversation.conversationId;
-            EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:@{MSG_EXT_RECALL:@(YES)}];
+            NSString *to = model.message.to;
+            NSString *from = model.message.from;
+            EMChatMessage *message = [[EMChatMessage alloc] initWithConversationID:to from:from to:to body:body ext:@{MSG_EXT_RECALL:@(YES), MSG_EXT_RECALLBY:[[EMClient sharedClient] currentUsername]}];
             message.chatType = (EMChatType)self.currentConversation.type;
             message.isRead = YES;
             message.timestamp = model.message.timestamp;
@@ -133,14 +133,14 @@ static const void *recallViewKey = &recallViewKey;
 - (void)_forwardMsgWithBody:(EMMessageBody *)aBody
                          to:(NSString *)aTo
                         ext:(NSDictionary *)aExt
-                 completion:(void (^)(EMMessage *message))aCompletionBlock
+                 completion:(void (^)(EMChatMessage *message))aCompletionBlock
 {
     NSString *from = [[EMClient sharedClient] currentUsername];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:aTo from:from to:aTo body:aBody ext:aExt];
+    EMChatMessage *message = [[EMChatMessage alloc] initWithConversationID:aTo from:from to:aTo body:aBody ext:aExt];
     message.chatType = EMChatTypeChat;
     
     __weak typeof(self) weakself = self;
-    [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMChatMessage *message, EMError *error) {
         if (error) {
             [weakself.currentConversation deleteMessageWithId:message.messageId error:nil];
             [EaseAlertController showErrorAlert:EaseLocalizableString(@"transferMsgFail", nil)];
@@ -164,12 +164,12 @@ static const void *recallViewKey = &recallViewKey;
 
 #pragma mark - Data
 
-- (NSArray *)formatMsgs:(NSArray<EMMessage *> *)aMessages
+- (NSArray *)formatMsgs:(NSArray<EMChatMessage *> *)aMessages
 {
     NSMutableArray *formated = [[NSMutableArray alloc] init];
 
     for (int i = 0; i < [aMessages count]; i++) {
-        EMMessage *msg = aMessages[i];
+        EMChatMessage *msg = aMessages[i];
         if (msg.chatType == EMChatTypeChat && msg.isReadAcked && (msg.body.type == EMMessageBodyTypeText || msg.body.type == EMMessageBodyTypeLocation)) {
             [[EMClient sharedClient].chatManager sendMessageReadAck:msg.messageId toUser:msg.conversationId completion:nil];
         }
@@ -196,7 +196,7 @@ static const void *recallViewKey = &recallViewKey;
     return formated;
 }
 
-- (void)_forwardImageMsg:(EMMessage *)aMsg
+- (void)_forwardImageMsg:(EMChatMessage *)aMsg
                   toUser:(NSString *)aUsername
 {
     EMImageMessageBody *newBody = nil;
@@ -215,29 +215,29 @@ static const void *recallViewKey = &recallViewKey;
     
     newBody.size = imgBody.size;
     __weak typeof(self) weakself = self;
-    [weakself _forwardMsgWithBody:newBody to:aUsername ext:aMsg.ext completion:^(EMMessage *message) {
+    [weakself _forwardMsgWithBody:newBody to:aUsername ext:aMsg.ext completion:^(EMChatMessage *message) {
         
     }];
 }
 
-- (void)_forwardVideoMsg:(EMMessage *)aMsg
+- (void)_forwardVideoMsg:(EMChatMessage *)aMsg
                   toUser:(NSString *)aUsername
 {
     EMVideoMessageBody *oldBody = (EMVideoMessageBody *)aMsg.body;
 
     __weak typeof(self) weakself = self;
-    void (^block)(EMMessage *aMessage) = ^(EMMessage *aMessage) {
+    void (^block)(EMChatMessage *aMessage) = ^(EMChatMessage *aMessage) {
         EMVideoMessageBody *newBody = [[EMVideoMessageBody alloc] initWithLocalPath:oldBody.localPath displayName:oldBody.displayName];
         newBody.thumbnailLocalPath = oldBody.thumbnailLocalPath;
         
-        [weakself _forwardMsgWithBody:newBody to:aUsername ext:aMsg.ext completion:^(EMMessage *message) {
+        [weakself _forwardMsgWithBody:newBody to:aUsername ext:aMsg.ext completion:^(EMChatMessage *message) {
             [(EMVideoMessageBody *)message.body setLocalPath:[(EMVideoMessageBody *)aMessage.body localPath]];
             [[EMClient sharedClient].chatManager updateMessage:message completion:nil];
         }];
     };
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:oldBody.localPath]) {
-        [[EMClient sharedClient].chatManager downloadMessageAttachment:aMsg progress:nil completion:^(EMMessage *message, EMError *error) {
+        [[EMClient sharedClient].chatManager downloadMessageAttachment:aMsg progress:nil completion:^(EMChatMessage *message, EMError *error) {
             if (error) {
                 [EaseAlertController showErrorAlert:EaseLocalizableString(@"transferMsgFail", nil)];
             } else {

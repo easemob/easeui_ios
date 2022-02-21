@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 //长按操作栏
 @property (strong, nonatomic) NSIndexPath *__nullable longPressIndexPath;
 
-- (void)deleteLongPressAction:(void (^)(EMMessage *deleteMsg))aCompletionBlock;
+- (void)deleteLongPressAction:(void (^)(EMChatMessage *deleteMsg))aCompletionBlock;
 - (void)recallLongPressAction;
 - (void)copyLongPressAction;
 

@@ -117,13 +117,18 @@ static const void *imagePickerKey = &imagePickerKey;
                         NSArray <PHAssetResource *>*resources = [PHAssetResource assetResourcesForAsset:asset];
                         if (resources.count > 0) {
                             if ([resources.firstObject.uniformTypeIdentifier isEqualToString:@"public.png"]) {
+                                NSMutableData *imgData = [[NSMutableData alloc]init];
                                 [PHAssetResourceManager.defaultManager requestDataForAssetResource:resources.firstObject options:nil dataReceivedHandler:^(NSData * _Nonnull data) {
-                                    [self _sendImageDataAction:data];
+                                    if (data.length > 0) {
+                                        [imgData appendData:data];
+                                    }
                                 } completionHandler:^(NSError * _Nullable error) {
                                     if (error) {
                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                            [EaseAlertController showErrorAlert:EaseLocalizableString(@"imageTooLarge", nil)];
+                                            [EaseAlertController showErrorAlert:[error localizedDescription]];
                                         });
+                                    } else {
+                                        [self _sendImageDataAction:[imgData copy]];
                                     }
                                 }];
                             } else {
