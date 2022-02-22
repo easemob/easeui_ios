@@ -22,7 +22,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  EaseIMKit: 7daf1c544da290a7bda6d2ef798fa0acc8c6109f
+  EaseIMKit: ca44be011e6f35f8ce23e1812c76118149cc2e61
   EMVoiceConvert: 32a0eaada94d93c151a5abd53ee174cd4e63b01f
   HyphenateChat: 39368eba0957efd32b01fc31b35c656d03ce9ba1
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201

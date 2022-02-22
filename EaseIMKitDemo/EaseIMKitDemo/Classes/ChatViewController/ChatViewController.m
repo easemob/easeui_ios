@@ -9,6 +9,7 @@
 #import "ChatViewController.h"
 #import <Masonry/Masonry.h>
 #import <EaseIMKit/EaseIMKit.h>
+#import <EMChatBar.h>
 
 @interface ChatViewController ()<EaseChatViewControllerDelegate>
 @property (nonatomic, strong) EaseChatViewController *chatController;
