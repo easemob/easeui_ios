@@ -21,7 +21,6 @@
 #import "EMMsgTouchIncident.h"
 #import "EaseChatViewController+EMMsgLongPressIncident.h"
 #import "EaseChatViewController+ChatToolBarIncident.h"
-#import "EMChatBar.h"
 #import "UITableView+Refresh.h"
 #import "EMConversation+EaseUI.h"
 #import "EMSingleChatViewController.h"
@@ -41,7 +40,7 @@
     BOOL _isReloadViewWithModel; //重新刷新会话页面
 }
 @property (nonatomic, strong) EMMoreFunctionView *longPressView;
-@property (nonatomic, strong) EMChatBar *chatBar;
+@property (nonatomic, strong, readwrite) EMChatBar *chatBar;
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
 @property (nonatomic, strong) NSMutableArray<EMMessage *> *messageList;
 @end
