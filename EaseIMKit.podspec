@@ -22,12 +22,6 @@ Pod::Spec.new do |s|
         'EaseIMKit/EaseIMKit/EasePublicHeaders.h',
         'EaseIMKit/EaseIMKit/**/*.{h,m,mm}'
     ]
-    
-    s.public_header_files = [
-      'EaseIMKit/EaseIMKit/**/.h',
-    ]
-    
-    =begin
     s.public_header_files = [
         'EaseIMKit/EaseIMKit/EaseIMKit.h',
         'EaseIMKit/EaseIMKit/EasePublicHeaders.h',
@@ -48,13 +42,12 @@ Pod::Spec.new do |s|
         'EaseIMKit/EaseIMKit/Classes/Chat/ChatModels/EaseExtMenuModel.h',
         'EaseIMKit/EaseIMKit/Classes/Chat/ChatModels/EaseMessageModel.h',
         'EaseIMKit/EaseIMKit/Classes/Chat/ChatModels/EaseChatViewModel.h',
-        'EaseIMKit/EaseIMKit/Classes/Chat/ChatBar/EMChatBar.h',
+        'EaseIMKit/EaseIMKit/**/*.h',
         'EaseIMKit/EaseIMKit/Classes/Common/ViewController/EaseTextView.h',
         'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewModel.h',
         'EaseIMKit/EaseIMKit/Classes/BaseTableviewController/EaseUserDelegate.h',
         'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewController.h'
     ]
-    =end
     
     s.static_framework = true
     s.resource = 'EaseIMKit/EaseIMKit/Resources/EaseIMKit.bundle'
