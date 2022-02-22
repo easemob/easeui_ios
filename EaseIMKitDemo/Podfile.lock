@@ -1,0 +1,32 @@
+PODS:
+  - EaseIMKit (3.8.9):
+    - EMVoiceConvert (= 0.1.0)
+    - HyphenateChat
+  - EMVoiceConvert (0.1.0)
+  - HyphenateChat (3.8.9.1)
+  - Masonry (1.1.0)
+
+DEPENDENCIES:
+  - EaseIMKit (from `../`)
+  - HyphenateChat
+  - Masonry
+
+SPEC REPOS:
+  trunk:
+    - EMVoiceConvert
+    - HyphenateChat
+    - Masonry
+
+EXTERNAL SOURCES:
+  EaseIMKit:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  EaseIMKit: 7daf1c544da290a7bda6d2ef798fa0acc8c6109f
+  EMVoiceConvert: 32a0eaada94d93c151a5abd53ee174cd4e63b01f
+  HyphenateChat: 39368eba0957efd32b01fc31b35c656d03ce9ba1
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+
+PODFILE CHECKSUM: eba87820f10903d240f4e614f042717b2e305ba0
+
+COCOAPODS: 1.10.1
