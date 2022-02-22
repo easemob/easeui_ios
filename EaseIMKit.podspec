@@ -23,6 +23,10 @@ Pod::Spec.new do |s|
         'EaseIMKit/EaseIMKit/**/*.{h,m,mm}'
     ]
     
+    s.public_header_files = [
+      'EaseIMKit/EaseIMKit/**/.h',
+    ]
+    
     =begin
     s.public_header_files = [
         'EaseIMKit/EaseIMKit/EaseIMKit.h',
