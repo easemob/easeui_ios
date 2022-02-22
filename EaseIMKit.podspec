@@ -24,12 +24,12 @@ Pod::Spec.new do |s|
     ]
     
     s.subspec 'Category' do |ss|
-      ss.source_files = "Classes/Category/*.{h,m}"
+      ss.source_files = "EaseIMKit/EaseIMKit/Category/*.{h,m}"
     end
     
     s.subspec 'Classes' do |ss|
-      ss.source_files = "Classes/Classes/**/*.{h,m}"
-    end    
+      ss.source_files = "EaseIMKit/EaseIMKit/Classes/**/*.{h,m}"
+    end
     
     s.static_framework = true
     s.resource = 'EaseIMKit/EaseIMKit/Resources/EaseIMKit.bundle'
