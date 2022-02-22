@@ -43,6 +43,7 @@ Pod::Spec.new do |s|
         'EaseIMKit/EaseIMKit/Classes/Chat/ChatModels/EaseMessageModel.h',
         'EaseIMKit/EaseIMKit/Classes/Chat/ChatModels/EaseChatViewModel.h',
         'EaseIMKit/EaseIMKit/Classes/Chat/ChatBar/EMChatBar.h',
+        'EaseIMKit/EaseIMKit/Classes/Chat/*.h',
         'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewModel.h',
         'EaseIMKit/EaseIMKit/Classes/BaseTableviewController/EaseUserDelegate.h',
         'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewController.h'
