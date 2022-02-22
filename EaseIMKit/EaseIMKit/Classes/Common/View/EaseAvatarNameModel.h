@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *timestamp;
 
-- (instancetype)initWithInfo:(NSString *)keyWord img:(UIImage *)img msg:(EMMessage *)msg time:(NSString *)timestamp;
+- (instancetype)initWithInfo:(NSString *)keyWord img:(UIImage *)img msg:(EMChatMessage *)msg time:(NSString *)timestamp;
 
 @end
 

@@ -17,8 +17,10 @@
 "camera" = "Camera";
 "location" = "Location";
 "file" = "Files";
+"recalledMessage" = "recalled a message";
 "meRecall" = "You recalled a message";
 "remoteRecall" = "The other party recalled a message";
+"admingRecall" = "recalled a message from";
 "voicetooshor" = "Speech too short";
 "copy" = "Copy";
 "delete" = "Delete";

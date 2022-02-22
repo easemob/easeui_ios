@@ -20,6 +20,7 @@ static NSString *g_UIKitVersion = @"3.8.9";
 @property (nonatomic, strong) NSString *currentConversationId;  //当前会话聊天id
 @property (nonatomic, assign) NSInteger currentUnreadCount; //当前未读总数
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
+@property (nonatomic, strong) NSMutableDictionary *undisturbMaps;//免打扰会话的map
 @end
 
 #define IMKitVersion @"3.8.9"
@@ -61,6 +62,7 @@ static NSString *g_UIKitVersion = @"3.8.9";
         _delegates = (EaseMulticastDelegate<EaseIMKitManagerDelegate> *)[[EaseMulticastDelegate alloc] init];
         _currentConversationId = @"";
         _msgQueue = dispatch_queue_create("easemessage.com", NULL);
+        _undisturbMaps = [NSMutableDictionary dictionary];
     }
     [[EMClient sharedClient] addMultiDevicesDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
@@ -191,7 +193,7 @@ static NSString *g_UIKitVersion = @"3.8.9";
         }
     }
     EMTextMessageBody *body = [[EMTextMessageBody alloc]initWithText:notificationStr];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:EMSYSTEMNOTIFICATIONID from:userName to:EMClient.sharedClient.currentUsername body:body ext:nil];
+    EMChatMessage *message = [[EMChatMessage alloc] initWithConversationID:EMSYSTEMNOTIFICATIONID from:userName to:EMClient.sharedClient.currentUsername body:body ext:nil];
     message.timestamp = [self getLatestMsgTimestamp];
     message.isRead = NO;
     message.chatType = EMChatTypeChat;
@@ -218,17 +220,17 @@ static NSString *g_UIKitVersion = @"3.8.9";
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:itemId type:conversationType createIfNotExist:YES];
     EMTextMessageBody *body;
     NSString *to = itemId;
-    EMMessage *message;
+    EMChatMessage *message;
     if (conversationType == EMChatTypeChat) {
         body = [[EMTextMessageBody alloc] initWithText:[NSString stringWithFormat:EaseLocalizableString(@"friended", nil),aUserName]];
-        message = [[EMMessage alloc] initWithConversationID:to from:EMClient.sharedClient.currentUsername to:to body:body ext:@{MSG_EXT_NEWNOTI:NOTI_EXT_ADDFRIEND}];
+        message = [[EMChatMessage alloc] initWithConversationID:to from:EMClient.sharedClient.currentUsername to:to body:body ext:@{MSG_EXT_NEWNOTI:NOTI_EXT_ADDFRIEND}];
     } else if (conversationType == EMChatTypeGroupChat) {
         if ([aUserName isEqualToString:EMClient.sharedClient.currentUsername]) {
             body = [[EMTextMessageBody alloc] initWithText:EaseLocalizableString(@"joinedgroup", nil)];
         } else {
             body = [[EMTextMessageBody alloc] initWithText:[NSString stringWithFormat:EaseLocalizableString(@"userjoinGroup", nil),aUserName]];
         }
-        message = [[EMMessage alloc] initWithConversationID:to from:aUserName to:to body:body ext:@{MSG_EXT_NEWNOTI:NOTI_EXT_ADDGROUP}];
+        message = [[EMChatMessage alloc] initWithConversationID:to from:aUserName to:to body:body ext:@{MSG_EXT_NEWNOTI:NOTI_EXT_ADDGROUP}];
     }
     message.chatType = (EMChatType)conversation.type;
     message.isRead = YES;
@@ -254,7 +256,7 @@ static NSString *g_UIKitVersion = @"3.8.9";
         EMConversation *systemConversation = [EMClient.sharedClient.chatManager getConversation:EMSYSTEMNOTIFICATIONID type:-1 createIfNotExist:NO];
         [systemConversation loadMessagesStartFromId:nil count:systemConversation.unreadMessagesCount searchDirection:EMMessageSearchDirectionUp completion:^(NSArray *aMessages, EMError *aError) {
             BOOL hasUnreadMsg = NO;
-            for (EMMessage *message in aMessages) {
+            for (EMChatMessage *message in aMessages) {
                 if (message.isRead == NO && message.chatType == EMChatTypeChat) {
                     message.isRead = YES;
                     hasUnreadMsg = YES;
@@ -276,7 +278,7 @@ static NSString *g_UIKitVersion = @"3.8.9";
         EMConversation *systemConversation = [EMClient.sharedClient.chatManager getConversation:EMSYSTEMNOTIFICATIONID type:-1 createIfNotExist:NO];
         [systemConversation loadMessagesStartFromId:nil count:systemConversation.unreadMessagesCount searchDirection:EMMessageSearchDirectionUp completion:^(NSArray *aMessages, EMError *aError) {
             BOOL hasUnreadMsg = NO;
-            for (EMMessage *message in aMessages) {
+            for (EMChatMessage *message in aMessages) {
                 if (message.isRead == NO && message.chatType == EMChatTypeGroupChat) {
                     message.isRead = YES;
                     hasUnreadMsg = YES;
@@ -291,6 +293,40 @@ static NSString *g_UIKitVersion = @"3.8.9";
 
 #pragma mark - 未读数变化
 
+- (BOOL)conversationUndisturb:(NSString *)conversationId {
+    if (_undisturbMaps == nil) {
+        _undisturbMaps = [NSMutableDictionary dictionary];
+    }
+    if (_undisturbMaps.count <= 0) {
+        [self fillUndisturbMaps];
+    }
+    if (conversationId == nil) { return NO; }
+    return [[_undisturbMaps valueForKey:conversationId] boolValue];
+}
+
+- (void)updateUndisturbMapsKey:(NSString *)key value:(BOOL )value {
+    [_undisturbMaps setValue:[NSNumber numberWithBool:value] forKey:key];
+}
+
+- (void)cleanMemoryUndisturbMaps {
+    _undisturbMaps = nil;
+}
+
+- (void)fillUndisturbMaps {
+    for (EMConversation *conversation in [EMClient.sharedClient.chatManager getAllConversations]) {
+        if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
+            if ([_undisturbMaps valueForKey:conversation.conversationId] == nil) {
+                [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];
+            }
+        }
+        if ([[[EMClient sharedClient].pushManager noPushGroups] containsObject:conversation.conversationId]) {
+            if ([_undisturbMaps valueForKey:conversation.conversationId] == nil) {
+                [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];
+            }
+        }
+    }
+}
+
 //会话所有信息标记已读
 - (void)markAllMessagesAsReadWithConversation:(EMConversation *)conversation
 {
@@ -303,28 +339,41 @@ static NSString *g_UIKitVersion = @"3.8.9";
 //未读总数变化
 - (void)_resetConversationsUnreadCount
 {
-    NSInteger unreadCount = 0;
+    NSInteger unreadCount = 0,undisturbCount = 0;
     NSArray *conversationList = [EMClient.sharedClient.chatManager getAllConversations];
     for (EMConversation *conversation in conversationList) {
         if ([conversation.conversationId isEqualToString:_currentConversationId]) {
             continue;
         }
+        if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
+            undisturbCount += conversation.unreadMessagesCount;
+            [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];
+            continue;
+        }
+        if ([[[EMClient sharedClient].pushManager noPushGroups] containsObject:conversation.conversationId]) {
+            undisturbCount += conversation.unreadMessagesCount;
+            [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];
+            continue;
+        }
         unreadCount += conversation.unreadMessagesCount;
     }
     _currentUnreadCount = unreadCount;
-    [self coversationsUnreadCountUpdate:unreadCount];
+    [self coversationsUnreadCountUpdate:unreadCount undisturbCount:undisturbCount];
 }
 
 #pragma mark - 多播
 
-//未读总数多播
-- (void)coversationsUnreadCountUpdate:(NSInteger)unreadCount
+//未读总数多播总数法
+- (void)coversationsUnreadCountUpdate:(NSInteger)unreadCount undisturbCount:(NSInteger)undisturbCount
 {
     EaseMulticastDelegateEnumerator *multicastDelegates = [self.delegates delegateEnumerator];
     for (EaseMulticastDelegateNode *node in [multicastDelegates getDelegates]) {
         id<EaseIMKitManagerDelegate> delegate = (id<EaseIMKitManagerDelegate>)node.delegate;
-        if ([delegate respondsToSelector:@selector(conversationsUnreadCountUpdate:)])
+        if (delegate&&[delegate respondsToSelector:@selector(conversationsUnreadCountUpdate:)])
             [delegate conversationsUnreadCountUpdate:unreadCount];
+        if (delegate&&[delegate respondsToSelector:@selector(conversationsUnreadCountUpdate:undisturbCount:)]) {
+            [delegate conversationsUnreadCountUpdate:unreadCount undisturbCount:undisturbCount];
+        }
     }
 }
 

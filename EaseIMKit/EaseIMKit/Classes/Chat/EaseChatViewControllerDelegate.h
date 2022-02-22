@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   groupId        当前消息所属群ID
  *
  */
-- (void)groupMessageReadReceiptDetail:(EMMessage *)message groupId:(NSString*)groupId;
+- (void)groupMessageReadReceiptDetail:(EMChatMessage *)message groupId:(NSString*)groupId;
 
 /**
  * 自定义cell
@@ -75,7 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   aMessage      将要发送的消息
  *
  */
-- (EMMessage *)willSendMessage:(EMMessage *)aMessage;
+- (EMChatMessage *)willSendMessage:(EMChatMessage *)aMessage;
 
 /**
  * 发送消息完成回调
@@ -84,7 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   error         发送消息结果
  *
  */
--(void)didSendMessage:(EMMessage *)message error:(EMError *)error;
+-(void)didSendMessage:(EMChatMessage *)message error:(EMError *)error;
 
 /**
  * 当前会话输入扩展区数据模型组
@@ -119,7 +119,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   userData        当前点击的消息携带的用户资料
  *
  */
-- (BOOL)didSelectMessageItem:(EMMessage *)message userData:(id<EaseUserDelegate>)userData;
+- (BOOL)didSelectMessageItem:(EMChatMessage *)message userData:(id<EaseUserDelegate>)userData;
 
 /**
  * 当前所长按消息的扩展区数据模型组
@@ -128,7 +128,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   message                     当前长按的消息
  *
  */
-- (NSMutableArray<EaseExtMenuModel *> *)messageLongPressExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultLongPressItems message:(EMMessage*)message;
+- (NSMutableArray<EaseExtMenuModel *> *)messageLongPressExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultLongPressItems message:(EMChatMessage*)message;
 
 
 /* 页面下拉加载回调 */
@@ -140,7 +140,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param   messageList             当前消息列表
  *
  */
-- (void)loadMoreMessageData:(NSString *)firstMessageId currentMessageList:(NSArray<EMMessage *> *)messageList;
+- (void)loadMoreMessageData:(NSString *)firstMessageId currentMessageList:(NSArray<EMChatMessage *> *)messageList;
 
 @end
 

@@ -67,6 +67,7 @@
 
 //消息撤回
 #define MSG_EXT_RECALL @"em_recall"
+#define MSG_EXT_RECALLBY @"em_message_recallBy"
 
 //新通知
 #define MSG_EXT_NEWNOTI @"em_noti"

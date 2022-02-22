@@ -12,6 +12,9 @@
 #import "EaseConversationModel.h"
 #import "EMConversation+EaseUI.h"
 #import "UIImage+EaseUI.h"
+#import "EaseIMKitManager.h"
+#import "UIViewController+HUD.h"
+
 
 @interface EaseConversationsViewController ()
 <
@@ -50,6 +53,7 @@ EMClientDelegate
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [[EMClient sharedClient] addMultiDevicesDelegate:self delegateQueue:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshTabView)
                                                  name:CONVERSATIONLIST_UPDATE object:nil];
@@ -69,6 +73,7 @@ EMClientDelegate
     [[EMClient sharedClient].groupManager removeDelegate:self];
     [[EMClient sharedClient].contactManager removeDelegate:self];
     [[EMClient sharedClient].chatManager removeDelegate:self];
+    [[EMClient sharedClient] removeMultiDevicesDelegate:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -80,6 +85,34 @@ EMClientDelegate
         [self _loadAllConversationsFromDB];
     }
 }
+
+#pragma mark - EMMultiDevicesDelegate
+
+- (void)multiDevicesUndisturbEventNotifyFormOtherDeviceData:(NSString *)undisturbData {
+#if DEBUG
+    NSLog(@"multiDevicesUndisturbEventNotifyFormOtherDeviceData::: %@",[self dictionaryWithJsonString:undisturbData]);
+#endif
+    [[EMClient sharedClient].pushManager getPushNotificationOptionsFromServerWithCompletion:^(EMPushOptions * _Nonnull aOptions, EMError * _Nonnull aError) {
+        if (!aError) {
+            [[EaseIMKitManager shared] cleanMemoryUndisturbMaps];
+            [self.tableView reloadData];
+        }
+    }];
+}
+
+- (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString {
+    if (jsonString == nil) {
+        return nil;
+    }
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+    if(err) {
+        return nil;
+    }
+    return dic;
+}
+
 
 #pragma mark - Table view data source
 
@@ -276,14 +309,15 @@ EMClientDelegate
 
 #pragma mark - EMChatManagerDelegate
 
-- (void)messagesDidRecall:(NSArray *)aMessages {
+- (void)messagesInfoDidRecall:(NSArray<EMRecallMessageInfo *> *)aRecallMessagesInfo
+{
     [self _loadAllConversationsFromDB];
 }
 
 - (void)messagesDidReceive:(NSArray *)aMessages
 {
     if (aMessages && [aMessages count]) {
-        EMMessage *msg = aMessages[0];
+        EMChatMessage *msg = aMessages[0];
         if(msg.body.type == EMMessageBodyTypeText) {
             EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:msg.conversationId type:EMConversationTypeGroupChat createIfNotExist:NO];
             //群聊@“我”提醒
@@ -315,6 +349,11 @@ EMClientDelegate
     __weak typeof(self) weakSelf = self;
     NSInteger row = indexPath.row;
     EaseConversationModel *model = [self.dataAry objectAtIndex:row];
+    [[EMClient sharedClient].chatManager deleteServerConversation:model.easeId conversationType:model.type isDeleteServerMessages:YES completion:^(NSString *aConversationId, EMError *aError) {
+        if (aError) {
+            [weakSelf showHint:aError.errorDescription];
+        }
+    }];
     [[EMClient sharedClient].chatManager deleteConversation:model.easeId
                                            isDeleteMessages:YES
                                                  completion:^(NSString *aConversationId, EMError *aError) {

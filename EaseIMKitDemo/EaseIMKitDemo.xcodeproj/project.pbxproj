@@ -81,6 +81,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		6761A3C49CB41C8FCD8953D6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1B37C8CC85031A13DE38294B /* Pods-EaseIMKitDemo.debug.xcconfig */,
+				D0DDD17B8F6D1CE139D3804D /* Pods-EaseIMKitDemo.release.xcconfig */,
+			);
+			name = Pods;
+			path = ../EaseIMKit/Pods;
+			sourceTree = "<group>";
+		};
 		903EAE7525540374005E6BB1 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -190,7 +200,7 @@
 				90A03A26254A70E100D57B73 /* Frameworks */,
 				90A03A27254A70E100D57B73 /* Resources */,
 				AF2DB841D2D254CE2E052055 /* [CP] Embed Pods Frameworks */,
-				9256913AA6927B3647AFDCCC /* [CP] Copy Pods Resources */,
+				308143D5856E9340E78FB4B0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -246,7 +256,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9256913AA6927B3647AFDCCC /* [CP] Copy Pods Resources */ = {
+		308143D5856E9340E78FB4B0 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -471,6 +481,23 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"stdc++\"",
+					"-framework",
+					"\"EaseIMKit\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"HyphenateChat\"",
+					"-framework",
+					"\"Masonry\"",
+					"-framework",
+					"\"UIKit\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.easemob.du.EaseIMKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -501,6 +528,23 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"stdc++\"",
+					"-framework",
+					"\"EaseIMKit\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"HyphenateChat\"",
+					"-framework",
+					"\"Masonry\"",
+					"-framework",
+					"\"UIKit\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.easemob.du.EaseIMKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";

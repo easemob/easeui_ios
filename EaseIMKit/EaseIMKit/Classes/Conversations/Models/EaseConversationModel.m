@@ -10,6 +10,7 @@
 #import "UIImage+EaseUI.h"
 #import "EMConversation+EaseUI.h"
 #import "EaseEmojiHelper.h"
+#import "EaseIMKitManager.h"
 
 @interface EaseConversationModel()
 
@@ -53,6 +54,10 @@
     [_conversation setDraft:draft];
 }
 
+- (BOOL)showBadgeValue {
+    return ![[EaseIMKitManager shared] conversationUndisturb:_conversation.conversationId];
+}
+
 - (NSString *)draft {
     return [_conversation draft];
 }
@@ -67,7 +72,7 @@
         return _showInfo;
     }
     
-    EMMessage *msg = _conversation.latestMessage;
+    EMChatMessage *msg = _conversation.latestMessage;
     _latestUpdateTime = msg.timestamp;
     NSString *msgStr = nil;
     switch (msg.body.type) {
@@ -75,7 +80,7 @@
         {
             EMTextMessageBody *body = (EMTextMessageBody *)msg.body;
             msgStr = body.text;
-            EMMessage *lastMessage = [_conversation latestMessage];
+            EMChatMessage *lastMessage = [_conversation latestMessage];
             if ([msgStr isEqualToString:EMCOMMUNICATE_CALLER_MISSEDCALL]) {
                 msgStr = EaseLocalizableString(@"noRespond", nil);
                 if ([lastMessage.from isEqualToString:[EMClient sharedClient].currentUsername])
