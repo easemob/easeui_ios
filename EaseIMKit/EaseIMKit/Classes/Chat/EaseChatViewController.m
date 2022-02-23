@@ -957,12 +957,15 @@
 
 - (void)refreshTableView:(BOOL)isScrollBottom
 {
-    [self.tableView reloadData];
-    [self.tableView setNeedsLayout];
-    [self.tableView layoutIfNeeded];
-    if (isScrollBottom) {
-        [self scrollToBottomRow];
-    }
+    __weak typeof(self) weakself = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakself.tableView reloadData];
+        [weakself.tableView setNeedsLayout];
+        [weakself.tableView layoutIfNeeded];
+        if (isScrollBottom) {
+            [weakself scrollToBottomRow];
+        }
+    });
 }
 
 #pragma mark - getter
