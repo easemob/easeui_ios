@@ -957,12 +957,14 @@
 
 - (void)refreshTableView:(BOOL)isScrollBottom
 {
-    [self.tableView reloadData];
-    [self.tableView setNeedsLayout];
-    [self.tableView layoutIfNeeded];
-    if (isScrollBottom) {
-        [self scrollToBottomRow];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+        [self.tableView setNeedsLayout];
+        [self.tableView layoutIfNeeded];
+        if (isScrollBottom) {
+            [self scrollToBottomRow];
+        }
+    });
 }
 
 #pragma mark - getter
