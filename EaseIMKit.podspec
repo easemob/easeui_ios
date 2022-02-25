@@ -43,11 +43,16 @@ Pod::Spec.new do |s|
         'EaseIMKit/EaseIMKit/Classes/Chat/ChatModels/EaseChatViewModel.h',
         'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewModel.h',
         'EaseIMKit/EaseIMKit/Classes/BaseTableviewController/EaseUserDelegate.h',
-        'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewController.h'
+        'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewController.h',
+        'EaseIMKit/EaseIMKit/Classes/Chat/MessageCell/EMMessageReactionView.h',
+        'EaseIMKit/EaseIMKit/Classes/Chat/ChatBar/MoreView/MoreFunction/EMBottomReactionDetailView.h'
     ]
     
     s.static_framework = true
-    s.resource = 'EaseIMKit/EaseIMKit/Resources/EaseIMKit.bundle'
+    s.resources = [
+      'EaseIMKit/EaseIMKit/Resources/EaseIMKit.bundle',
+      '*/**/*.xib'
+    ]
     #s.resources = ['Images/*.png', 'Sounds/*']
     
     #s.ios.resource_bundle = { 'EaseIMKit' => 'EaseIMKit/EaseIMKit/Assets/*.png' }

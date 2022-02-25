@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) EMMessageDirection direction;
 @property (nonatomic, strong) NSArray<EMMessageReaction *> *reactionList;
+@property (nonatomic, strong) void(^onClick)(void);
 
 @end
 

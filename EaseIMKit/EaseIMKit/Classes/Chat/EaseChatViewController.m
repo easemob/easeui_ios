@@ -32,6 +32,7 @@
 #import "EaseHeaders.h"
 #import "EaseEnums.h"
 #import "EaseDefines.h"
+#import "EMBottomMoreFunctionView.h"
 
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate, EMReactionManagerDelegate>
 {
@@ -495,6 +496,18 @@
     if ([extMenuArray count] <= 0) {
         return;
     }
+    
+    [EMBottomMoreFunctionView showMenuItems:extMenuArray animation:YES didSelectedMenuItem:^(EaseExtMenuModel * _Nonnull menuItem) {
+        if (menuItem.itemDidSelectedHandle) {
+            menuItem.itemDidSelectedHandle(menuItem.funcDesc, YES);
+        }
+    } didSelectedEmoji:^(NSString * _Nonnull emoji) {
+        EaseMessageModel *model = [weakself.dataArray objectAtIndex:weakself.longPressIndexPath.row];
+//            [EMClient.sharedClient.reactionManager addReaction:emotion toMessage:model.message.messageId];
+        [EMClient.sharedClient.reactionManager removeReaction:emoji fromMessage:model.message.messageId];
+    }];
+    
+    return;
 
     self.longPressView = [[EMMoreFunctionView alloc]initWithextMenuModelArray:extMenuArray menuViewModel:[[EaseExtMenuViewModel alloc]initWithType:isCustomCell ? ExtTypeCustomCellLongPress : ExtTypeLongPress itemCount:[extMenuArray count] extFuncModel:_viewModel.extFuncModel]];
     self.longPressView.delegate = self;
@@ -982,13 +995,6 @@
     [self.tableView layoutIfNeeded];
     if (isScrollBottom) {
         [self scrollToBottomRow];
-    }
-    
-    for (EMMessage *msg in self.messageList) {
-        [EMClient.sharedClient.reactionManager getChatReactionList:msg.messageId completion:^(NSArray<EMReaction *> *reactions, EMError *) {
-            
-            
-        }];
     }
 }
 

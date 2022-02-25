@@ -166,27 +166,27 @@
             }
             make.left.equalTo(self.avatarView.ease_right).offset(componentSpacing);
             make.right.lessThanOrEqualTo(self.contentView).offset(-70);
-            make.bottom.equalTo(_reactionView.ease_top);
+            make.bottom.equalTo(self.contentView).offset(-15);
         }];
         [_reactionView Ease_makeConstraints:^(EaseConstraintMaker *make) {
-            make.left.equalTo(_bubbleView);
-            make.bottom.equalTo(self.contentView).offset(-15);
-            make.width.Ease_equalTo(@100);
-            make.height.Ease_equalTo(@0);
+            make.right.equalTo(self.bubbleView);
+            make.width.Ease_equalTo(100);
+            make.top.equalTo(self.bubbleView).offset(-18);
+            make.height.Ease_equalTo(28);
         }];
     } else {
         [_bubbleView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self.avatarView);
             make.left.greaterThanOrEqualTo(self.contentView).offset(70);
             make.right.equalTo(self.avatarView.ease_left).offset(-componentSpacing);
-            make.bottom.equalTo(_reactionView.ease_top);
+            make.bottom.equalTo(self.contentView).offset(-15);
         }];
         
         [_reactionView Ease_makeConstraints:^(EaseConstraintMaker *make) {
-            make.right.equalTo(_bubbleView);
-            make.bottom.equalTo(self.contentView).offset(-15);
-            make.width.Ease_equalTo(@100);
-            make.height.Ease_equalTo(@0);
+            make.right.equalTo(self.bubbleView);
+            make.width.Ease_equalTo(100);
+            make.top.equalTo(self.bubbleView).offset(-18);
+            make.height.Ease_equalTo(28);
         }];
     }
 
