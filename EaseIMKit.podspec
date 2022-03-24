@@ -45,7 +45,8 @@ Pod::Spec.new do |s|
         'EaseIMKit/EaseIMKit/Classes/BaseTableviewController/EaseUserDelegate.h',
         'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewController.h',
         'EaseIMKit/EaseIMKit/Classes/Chat/MessageCell/EMMessageReactionView.h',
-        'EaseIMKit/EaseIMKit/Classes/Chat/ChatBar/MoreView/MoreFunction/EMBottomReactionDetailView.h'
+        'EaseIMKit/EaseIMKit/Classes/Chat/ChatBar/MoreView/MoreFunction/EMBottomReactionDetailView.h',
+        'EaseIMKit/EaseIMKit/Classes/Chat/ChatBar/MoreView/MoreFunction/EMHollowedOutPathDelegate.h'
     ]
     
     s.static_framework = true
@@ -66,6 +67,6 @@ Pod::Spec.new do |s|
 
     #s.dependency 'HyphenateChat'
     s.dependency 'EMVoiceConvert', '0.1.0'
-
+    s.dependency 'MJRefresh'
 
 end

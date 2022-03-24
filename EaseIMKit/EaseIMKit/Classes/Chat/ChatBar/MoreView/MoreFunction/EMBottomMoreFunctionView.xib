@@ -22,10 +22,10 @@
                     </connections>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Lg-lM-kyj">
-                    <rect key="frame" x="0.0" y="396" width="414" height="500"/>
+                    <rect key="frame" x="0.0" y="397" width="414" height="499"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Iv-vb-vli">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="500"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="499"/>
                             <color key="backgroundColor" white="1" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QtH-Ee-kyJ">
@@ -37,13 +37,13 @@
                             </constraints>
                         </view>
                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Y0I-2H-Iqz">
-                            <rect key="frame" x="0.0" y="36" width="414" height="36"/>
+                            <rect key="frame" x="0.0" y="31" width="414" height="40"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="36" id="SPB-Ho-Wnb"/>
+                                <constraint firstAttribute="height" constant="40" id="SPB-Ho-Wnb"/>
                             </constraints>
                             <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="z2Y-BI-Uhe">
-                                <size key="itemSize" width="128" height="128"/>
+                                <size key="itemSize" width="40" height="40"/>
                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                 <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -53,8 +53,8 @@
                                 <outlet property="delegate" destination="iN0-l3-epB" id="z9y-Pj-Xub"/>
                             </connections>
                         </collectionView>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="54" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ANJ-iM-O97">
-                            <rect key="frame" x="0.0" y="84" width="414" height="416"/>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="54" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ANJ-iM-O97">
+                            <rect key="frame" x="0.0" y="83" width="414" height="416"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="416" id="wQ0-KS-xOm"/>
@@ -65,7 +65,7 @@
                             </connections>
                         </tableView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9yG-X1-tZu">
-                            <rect key="frame" x="0.0" y="500" width="414" height="0.0"/>
+                            <rect key="frame" x="0.0" y="499" width="414" height="0.0"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" id="S7j-P5-47B"/>
@@ -77,7 +77,7 @@
                     <constraints>
                         <constraint firstItem="9yG-X1-tZu" firstAttribute="leading" secondItem="4Lg-lM-kyj" secondAttribute="leading" id="2aY-jZ-Z0H"/>
                         <constraint firstItem="QtH-Ee-kyJ" firstAttribute="top" secondItem="4Lg-lM-kyj" secondAttribute="top" constant="10" id="38I-Vy-P0y"/>
-                        <constraint firstItem="Y0I-2H-Iqz" firstAttribute="top" secondItem="4Lg-lM-kyj" secondAttribute="top" constant="36" id="A8M-8G-0Cb"/>
+                        <constraint firstItem="Y0I-2H-Iqz" firstAttribute="top" secondItem="4Lg-lM-kyj" secondAttribute="top" constant="31" id="A8M-8G-0Cb"/>
                         <constraint firstAttribute="trailing" secondItem="3Iv-vb-vli" secondAttribute="trailing" id="B65-SJ-I5f"/>
                         <constraint firstItem="QtH-Ee-kyJ" firstAttribute="centerX" secondItem="4Lg-lM-kyj" secondAttribute="centerX" id="Fqq-y2-2Tv"/>
                         <constraint firstItem="Y0I-2H-Iqz" firstAttribute="leading" secondItem="4Lg-lM-kyj" secondAttribute="leading" id="HHC-od-jeh"/>

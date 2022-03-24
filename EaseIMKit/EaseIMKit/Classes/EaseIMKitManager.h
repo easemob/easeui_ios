@@ -8,7 +8,23 @@
 #import <Foundation/Foundation.h>
 #import "EasePublicHeaders.h"
 
+@class EMUserInfo;
+
 NS_ASSUME_NONNULL_BEGIN
+
+@protocol EaseIMKitManagerGeneralDelegate <NSObject>
+
+@optional
+
+/// 默认的用户头像
+@property (nonatomic, strong, readonly) UIImage *defaultAvatar;
+
+/// 获取用户详情
+/// @param userId 用户信息
+/// @param result 获取到用户详情，需要用这个回调把详情传递给sdk
+- (void)getUserInfo:(NSString *)userId result:(void(^)(EMUserInfo *))result;
+
+@end
 
 //系统通知接口
 @protocol EaseIMKitSystemNotiDelegate <NSObject>
@@ -73,6 +89,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) NSString *version; //UIKit 版本号
 @property (nonatomic) id<EaseIMKitSystemNotiDelegate>systemNotiDelegate; //系统通知回调代理
+@property (nonatomic, weak) id<EaseIMKitManagerGeneralDelegate>generalDelegate; //通用回调代理
+
 + (BOOL)initWithEMOptions:(EMOptions *)options;
 
 /// Description 根据会话 ID 查询当前会话是否设置了免打扰。（ 时间复杂度O(1)：将原来 undisturbList 改造为 undisturbMap 降低查询时间复杂度）

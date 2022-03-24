@@ -8,7 +8,6 @@
 #import <UIKit/UIKit.h>
 
 @import HyphenateChat;
-@class EMMessageReaction;
 
 NS_ASSUME_NONNULL_BEGIN
 

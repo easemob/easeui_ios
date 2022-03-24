@@ -22,10 +22,10 @@
                     </connections>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Lg-lM-kyj">
-                    <rect key="frame" x="0.0" y="379" width="414" height="517"/>
+                    <rect key="frame" x="0.0" y="179" width="414" height="717"/>
                     <subviews>
                         <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Iv-vb-vli">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="517"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="717"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QtH-Ee-kyJ">
@@ -55,17 +55,14 @@
                             </connections>
                         </collectionView>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="54" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ANJ-iM-O97">
-                            <rect key="frame" x="0.0" y="101" width="414" height="416"/>
+                            <rect key="frame" x="0.0" y="101" width="414" height="616"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="416" id="wQ0-KS-xOm"/>
-                            </constraints>
                             <connections>
                                 <outlet property="dataSource" destination="iN0-l3-epB" id="sUF-6Q-sY0"/>
                             </connections>
                         </tableView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9yG-X1-tZu">
-                            <rect key="frame" x="0.0" y="517" width="414" height="0.0"/>
+                            <rect key="frame" x="0.0" y="717" width="414" height="0.0"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" id="S7j-P5-47B"/>
@@ -102,6 +99,7 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="Vk2-L8-AXT" secondAttribute="bottom" id="Vx3-3V-ac3"/>
+                <constraint firstItem="4Lg-lM-kyj" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" multiplier="0.8" id="WBN-BU-A0N"/>
                 <constraint firstItem="Vk2-L8-AXT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="X3z-8A-YH7"/>
                 <constraint firstAttribute="bottom" secondItem="4Lg-lM-kyj" secondAttribute="bottom" id="ZJa-W2-PGI"/>
                 <constraint firstAttribute="trailing" secondItem="Vk2-L8-AXT" secondAttribute="trailing" id="rLE-AG-sXW"/>
@@ -117,7 +115,6 @@
                 <outlet property="emojiCollectionView" destination="Y0I-2H-Iqz" id="XFe-3u-cuj"/>
                 <outlet property="emojiCollectionViewHeightConstraint" destination="SPB-Ho-Wnb" id="xq8-Ik-oLn"/>
                 <outlet property="itemTableView" destination="ANJ-iM-O97" id="kph-QQ-6kj"/>
-                <outlet property="itemTableViewHeightConstraint" destination="wQ0-KS-xOm" id="t2b-DW-iz1"/>
                 <outlet property="mainView" destination="4Lg-lM-kyj" id="aLr-ot-WD0"/>
             </connections>
             <point key="canvasLocation" x="139" y="77"/>

@@ -16,19 +16,37 @@
                 <rect key="frame" x="0.0" y="0.0" width="177" height="146"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2au-qD-2ye">
+                        <rect key="frame" x="68.5" y="53" width="40" height="40"/>
+                        <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="CiE-42-1Dp"/>
+                            <constraint firstAttribute="width" constant="40" id="s8Q-cj-9Qb"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bNf-XR-IkS">
-                        <rect key="frame" x="0.0" y="0.0" width="177" height="146"/>
+                        <rect key="frame" x="73.5" y="58" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="4rZ-AD-aV4"/>
+                            <constraint firstAttribute="width" constant="30" id="ofU-JG-MON"/>
+                        </constraints>
                     </imageView>
                 </subviews>
             </view>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="bNf-XR-IkS" secondAttribute="bottom" id="Psk-JJ-KnG"/>
-                <constraint firstItem="bNf-XR-IkS" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="SQD-aK-Cgu"/>
-                <constraint firstItem="bNf-XR-IkS" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="XGq-iI-Hjo"/>
-                <constraint firstAttribute="trailing" secondItem="bNf-XR-IkS" secondAttribute="trailing" id="ceS-bF-UiF"/>
+                <constraint firstItem="bNf-XR-IkS" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="Lfh-Ki-B6g"/>
+                <constraint firstItem="2au-qD-2ye" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="Uoj-zQ-hxt"/>
+                <constraint firstItem="2au-qD-2ye" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="rPV-YZ-H3a"/>
+                <constraint firstItem="bNf-XR-IkS" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="um9-bo-iUt"/>
             </constraints>
             <size key="customSize" width="177" height="146"/>
             <connections>
+                <outlet property="bgView" destination="2au-qD-2ye" id="t1o-DS-XVP"/>
                 <outlet property="imageView" destination="bNf-XR-IkS" id="y9x-RT-0Eb"/>
             </connections>
             <point key="canvasLocation" x="229.71014492753625" y="108.48214285714285"/>

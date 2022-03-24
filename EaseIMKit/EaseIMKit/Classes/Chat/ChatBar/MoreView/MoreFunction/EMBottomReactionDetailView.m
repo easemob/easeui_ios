@@ -10,29 +10,16 @@
 #import "EMBottomReactionDetailViewCollectionViewLayout.h"
 #import "EMBottomReactionDetailUserCell.h"
 #import "EMBottomReactionDetailReactionCell.h"
+#import "PageWithId.h"
 
 @import HyphenateChat;
+@import MJRefresh;
 
 typedef struct PanData {
-    CGFloat beiginY;
     CGFloat beiginBottom;
     CGFloat step[3];
     uint8_t currentStep;
 } PanData;
-
-@interface EMBottomReactionDetailCollectionItem : NSObject
-
-@property (nonatomic, copy) NSString *messageId;
-@property (nonatomic, copy) NSString *reaction;
-@property (nonatomic, assign) NSInteger count;
-@property (nonatomic, assign) CGFloat width;
-
-@end
-
-@implementation EMBottomReactionDetailCollectionItem
-@end
-
-@import HyphenateChat;
 
 @interface EMBottomReactionDetailView () <UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDataSource>
 
@@ -43,17 +30,20 @@ typedef struct PanData {
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentViewBottomConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *emojiCollectionViewHeightConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *itemTableViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomContainerHeightConstraint;
 
 @property (nonatomic, strong) CAShapeLayer *maskLayer;
 
 
 @property (nonatomic, strong) EMChatMessage *message;
-@property (nonatomic, strong) NSMutableArray <EMBottomReactionDetailCollectionItem *>* collectionItems;
+@property (nonatomic, strong) NSMutableDictionary <NSNumber *, NSNumber *>*widthCache;
 
 @property (nonatomic, assign) PanData panData;
+
 @property (nonatomic, assign) NSInteger reactionSelectedIndex;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, PageWithId<NSString *>*>*reactionUserListMap;
+
+@property (nonatomic, copy) void(^didRemoveSelfReaction)(NSString *);
 
 @end
 
@@ -69,59 +59,60 @@ static EMBottomReactionDetailView *shareView;
 }
 
 + (void)showMenuItems:(EMChatMessage *)message animation:(BOOL)animation didRemoveSelfReaction:(void (^)(NSString * _Nonnull))didRemoveSelfReaction {
-    [UIApplication.sharedApplication.keyWindow addSubview:EMBottomReactionDetailView.share];
-    EMBottomReactionDetailView.share.frame = UIApplication.sharedApplication.keyWindow.bounds;
-    EMBottomReactionDetailView.share.message = message;
-    EMBottomReactionDetailView.share.bgView.alpha = 1;
+    EMBottomReactionDetailView *shareView = EMBottomReactionDetailView.share;
+    [UIApplication.sharedApplication.keyWindow addSubview:shareView];
+    shareView.frame = UIApplication.sharedApplication.keyWindow.bounds;
+    shareView.message = message;
+    shareView.bgView.alpha = 1;
+    shareView.reactionSelectedIndex = 0;
+    shareView.itemTableView.scrollEnabled = NO;
+    shareView.didRemoveSelfReaction = didRemoveSelfReaction;
     
-    EMBottomReactionDetailView.share.itemTableViewHeightConstraint.constant = 62 * 5.5;
-    EMBottomReactionDetailView.share.contentViewBottomConstraint.constant = 0;
-    EMBottomReactionDetailView.share.reactionSelectedIndex = 0;
-    if (@available(iOS 11.0, *)) {
-        EMBottomReactionDetailView.share.bottomContainerHeightConstraint.constant = UIApplication.sharedApplication.keyWindow.safeAreaInsets.bottom;
+    if (animation) {
+        [shareView layoutIfNeeded];
+        shareView.contentViewBottomConstraint.constant = -shareView.mainView.bounds.size.height;
+        [shareView layoutIfNeeded];
+        shareView.contentViewBottomConstraint.constant = -350 - shareView.bottomContainerHeightConstraint.constant;
+        [UIView animateWithDuration:0.25 animations:^{
+            [shareView layoutIfNeeded];
+        }];
+    } else {
+        shareView.contentViewBottomConstraint.constant = -350 - shareView.bottomContainerHeightConstraint.constant;
     }
     
-    NSMutableArray <EMBottomReactionDetailCollectionItem *>*array = [NSMutableArray array];
+    if (!shareView.widthCache) {
+        shareView.widthCache = [NSMutableDictionary dictionary];
+    } else if (shareView.widthCache.count > 200) {
+        // 最大缓存200个
+        [shareView.widthCache removeAllObjects];
+    }
     for (EMMessageReaction *reaction in message.reactionList) {
-        EMBottomReactionDetailCollectionItem *item = [[EMBottomReactionDetailCollectionItem alloc] init];
-        item.messageId = message.messageId;
-        item.reaction = reaction.reaction;
-        item.count = reaction.count;
-        item.width = [[NSString stringWithFormat:@"%ld", (long)item.count] boundingRectWithSize:CGSizeMake(1000, 1000) options:0 attributes:@{
-            NSFontAttributeName: [UIFont systemFontOfSize:14]
-        } context:nil].size.width + 48;
-        [array addObject:item];
+        if (!shareView.widthCache[@(reaction.count)]) {
+            CGFloat width = [[NSString stringWithFormat:@"%ld", (long)reaction.count] boundingRectWithSize:CGSizeMake(1000, 1000) options:0 attributes:@{
+                NSFontAttributeName: [UIFont systemFontOfSize:14]
+            } context:nil].size.width + 48;
+            shareView.widthCache[@(reaction.count)] = @(width);
+        }
     }
     
-    for (int i = 1; i < 50; i ++) {
-        EMBottomReactionDetailCollectionItem *item = [[EMBottomReactionDetailCollectionItem alloc] init];
-        item.messageId = @"";
-        item.reaction = [NSString stringWithFormat:@"ee_%d", i];
-        item.count = random() % 10000;
-        item.width = [[NSString stringWithFormat:@"%ld", (long)item.count] boundingRectWithSize:CGSizeMake(1000, 1000) options:0 attributes:@{
-            NSFontAttributeName: [UIFont systemFontOfSize:14]
-        } context:nil].size.width + 48;
-        [array addObject:item];
-    }
-    
-    EMBottomReactionDetailView.share.collectionItems = array;
-    
-    [EMBottomReactionDetailView.share.itemTableView reloadData];
-    [EMBottomReactionDetailView.share.emojiCollectionView reloadData];
+    [shareView.emojiCollectionView reloadData];
+    [shareView loadUserListData:YES];
 }
 
 + (void)hideWithAnimation:(BOOL)animation needClear:(BOOL)needClear {
     void(^clearFunc)(void) = ^{
-        [EMBottomReactionDetailView.share removeFromSuperview];
+        [shareView.itemTableView.mj_header endRefreshing];
+        [shareView.itemTableView.mj_footer endRefreshing];
+        [shareView removeFromSuperview];
         if (needClear) {
             shareView = nil;
         }
     };
     if (animation) {
-        EMBottomReactionDetailView.share.contentViewBottomConstraint.constant = -EMBottomReactionDetailView.share.frame.size.height;
+        shareView.contentViewBottomConstraint.constant = -EMBottomReactionDetailView.share.frame.size.height;
         [UIView animateWithDuration:0.25 animations:^{
-            [EMBottomReactionDetailView.share layoutIfNeeded];
-            EMBottomReactionDetailView.share.bgView.alpha = 0;
+            [shareView layoutIfNeeded];
+            shareView.bgView.alpha = 0;
         } completion:^(BOOL finished) {
             clearFunc();
         }];
@@ -133,17 +124,22 @@ static EMBottomReactionDetailView *shareView;
 - (void)awakeFromNib {
     [super awakeFromNib];
         
+    _reactionUserListMap = [NSMutableDictionary dictionary];
+    
+    if (@available(iOS 11.0, *)) {
+        _bottomContainerHeightConstraint.constant = UIApplication.sharedApplication.keyWindow.safeAreaInsets.bottom;
+    }
+    
     EMBottomReactionDetailViewCollectionViewLayout *layout = (EMBottomReactionDetailViewCollectionViewLayout *)_emojiCollectionView.collectionViewLayout;
     layout.contentInsets = UIEdgeInsetsMake(0, 12, 0, 12);
     layout.spacing = 4;
     __weak typeof(self)weakSelf = self;
     layout.getCellItemWidth = ^CGFloat(NSIndexPath * _Nonnull indexPath) {
-        return weakSelf.collectionItems[indexPath.item].width;
+        int count = (int)weakSelf.message.reactionList[indexPath.item].count;
+        return weakSelf.widthCache[@(count)].floatValue;
     };
     [_emojiCollectionView registerNib:[UINib nibWithNibName:@"EMBottomReactionDetailReactionCell" bundle:nil] forCellWithReuseIdentifier:@"cell"];
     [_itemTableView registerNib:[UINib nibWithNibName:@"EMBottomReactionDetailUserCell" bundle:nil] forCellReuseIdentifier:@"cell"];
-    
-    _collectionItems = [NSMutableArray array];
     
     CGFloat radius = 24;
     UIRectCorner corner = UIRectCornerTopLeft | UIRectCornerTopRight;
@@ -152,11 +148,76 @@ static EMBottomReactionDetailView *shareView;
     _maskLayer.frame = _mainView.bounds;
     _maskLayer.path = path.CGPath;
     _mainView.layer.mask = _maskLayer;
+    
+    _itemTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakSelf loadUserListData:YES];
+    }];
+    
+    _itemTableView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingBlock:^{
+        [weakSelf loadUserListData:NO];
+    }];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     _maskLayer.frame = _mainView.bounds;
+}
+
+- (void)loadUserListData:(BOOL)refresh {
+    if (_message.reactionList.count <= _reactionSelectedIndex) {
+        return;
+    }
+    NSString *reaction = _message.reactionList[_reactionSelectedIndex].reaction;
+    PageWithId<NSString *> *page = _reactionUserListMap[reaction];
+    if (!page) {
+        page = [[PageWithId alloc] init];
+        _reactionUserListMap[reaction] = page;
+    }
+    NSString *lastId = @"";
+    if (refresh) {
+        [page clear];
+    } else if (page.lastId.length > 0) {
+        lastId = page.lastId;
+    }
+    
+    __weak typeof(self)weakSelf = self;
+    [EMClient.sharedClient.reactionManager getReactionDetail:_message.messageId reaction:reaction begin:lastId pageSize:30 completion:^(EMReaction *reaction, NSString *cursor, EMError *error) {
+        if (error) {
+            return;
+        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            if (page.dataList.count <= 0 && reaction.state) {
+                [page appendData:@[EMClient.sharedClient.currentUsername] lastId:cursor];
+            }
+            // 自己的操作置顶
+            NSArray <NSString *>*userList = reaction.userList;
+            if (page.userInfo[@"index"] || !reaction.state) {
+                [page appendData:userList lastId:cursor];
+            } else {
+                NSUInteger index = [userList indexOfObject:EMClient.sharedClient.currentUsername];
+                if (index == NSNotFound) {
+                    [page appendData:userList lastId:cursor];
+                } else {
+                    if (index != 0) {
+                        [page appendData:[userList subarrayWithRange:NSMakeRange(0, index)] lastId:cursor];
+                    }
+                    if (index < userList.count - 1) {
+                        [page appendData:[userList subarrayWithRange:NSMakeRange(index + 1, userList.count - index - 1)] lastId:cursor];
+                    }
+                    page.userInfo[@"index"] = @(index);
+                }
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.itemTableView reloadData];
+                [weakSelf.itemTableView.mj_header endRefreshing];
+                if (userList.count < 30) {
+                    [weakSelf.itemTableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [weakSelf.itemTableView.mj_footer endRefreshing];
+                }
+            });
+        });
+    }];
 }
 
 - (IBAction)onBgViewTap:(UITapGestureRecognizer *)sender {
@@ -165,21 +226,20 @@ static EMBottomReactionDetailView *shareView;
 
 - (IBAction)onContentViewPan:(UIPanGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateBegan) {
-        _panData.beiginY = [sender locationInView:self].y;
         _panData.beiginBottom = _contentViewBottomConstraint.constant;
         _panData.step[0] = 0;
-        _panData.step[1] = (CGRectGetHeight(_itemTableView.frame) - 3 * 54) + _bottomContainerHeightConstraint.constant;
+        _panData.step[1] = 350 + _bottomContainerHeightConstraint.constant;
         _panData.step[2] = _mainView.bounds.size.height;
     } else if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateCancelled) {
-        CGFloat currentY = [sender locationInView:self].y;
-        CGFloat offset = currentY - _panData.beiginY;
+        int index = -1;
+        CGFloat offset = [sender translationInView:self].y;
         CGFloat newBottom = _panData.beiginBottom - offset;
         if (newBottom > 0) {
             newBottom = 0;
         }
         
         CGFloat minDistance = 0;
-        int index = -1;
+        
         for (int i = 0; i < 3; i ++) {
             CGFloat distance = fabs(_panData.step[i] + newBottom);
             if (index < 0 || minDistance > distance) {
@@ -187,6 +247,7 @@ static EMBottomReactionDetailView *shareView;
                 minDistance = distance;
             }
         }
+        
         _panData.currentStep = index;
         _contentViewBottomConstraint.constant = -_panData.step[index];
         [UIView animateWithDuration:0.25 animations:^{
@@ -200,10 +261,10 @@ static EMBottomReactionDetailView *shareView;
             if (index == 2) {
                 [self removeFromSuperview];
             }
+            self.itemTableView.scrollEnabled = index == 0 && self.panData.step[1] != 0;
         }];
     } else {
-        CGFloat currentY = [sender locationInView:self].y;
-        CGFloat offset = currentY - _panData.beiginY;
+        CGFloat offset = [sender translationInView:self].y;
         CGFloat newBottom = _panData.beiginBottom - offset;
         if (newBottom > -_panData.step[0]) {
             newBottom = -_panData.step[0];
@@ -220,36 +281,69 @@ static EMBottomReactionDetailView *shareView;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return _collectionItems.count;
+    return _message.reactionList.count;
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    EMBottomReactionDetailCollectionItem *item = _collectionItems[indexPath.item];
+    EMMessageReaction *reaction = _message.reactionList[indexPath.item];
     EMBottomReactionDetailReactionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    cell.reaction = item.reaction;
-    cell.count = item.count;
+    cell.reaction = reaction.reaction;
+    cell.count = reaction.count;
     cell.reactionSelected = _reactionSelectedIndex == indexPath.item;
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    if (_message.reactionList.count > _reactionSelectedIndex) {
+        NSString *reaction = _message.reactionList[_reactionSelectedIndex].reaction;
+        return _reactionUserListMap[reaction].dataList.count;
+    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *reaction = [_message.reactionList objectAtIndex:_reactionSelectedIndex].reaction;
     EMBottomReactionDetailUserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     __weak typeof(self)weakSelf = self;
     cell.didClickRemove = ^{
-        [EMClient.sharedClient.reactionManager removeReaction:@"" fromMessage:@""];
+        [EMClient.sharedClient.reactionManager removeReaction:reaction fromMessage:weakSelf.message.messageId completion:^(EMError * _Nullable error) {
+            if (!error && weakSelf.didRemoveSelfReaction) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf.itemTableView reloadData];
+                    [weakSelf.emojiCollectionView reloadData];
+                    weakSelf.didRemoveSelfReaction(reaction);
+                });
+            }
+        }];
     };
+    cell.userId = _reactionUserListMap[reaction].dataList[indexPath.row];
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     _reactionSelectedIndex = indexPath.item;
+    [_itemTableView.mj_footer endRefreshing];
     for (EMBottomReactionDetailReactionCell *cell in [collectionView visibleCells]) {
         cell.reactionSelected = [collectionView indexPathForCell:cell].item == indexPath.item;
     }
+    NSString *reaction = self.message.reactionList[indexPath.item].reaction;
+    PageWithId <NSString *>*pageData = _reactionUserListMap[reaction];
+    if (pageData) {
+        [_itemTableView reloadData];
+        return;
+    }
+    pageData = [[PageWithId alloc] init];
+    _reactionUserListMap[reaction] = pageData;
+    __weak typeof(self)weakSelf = self;
+    [EMClient.sharedClient.reactionManager getReactionDetail:_message.messageId reaction:reaction begin:pageData.lastId pageSize:30 completion:^(EMReaction * _Nonnull reaction, NSString * _Nullable cursor, EMError * _Nullable error) {
+        if (error) {
+            return;
+        }
+        [pageData appendData:reaction.userList lastId:cursor];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.itemTableView reloadData];
+        });
+    }];
 }
 
 @end

@@ -48,6 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)messageCellDidLongPress:(UITableViewCell *)aCell cgPoint:(CGPoint)point;
 - (void)messageCellDidResend:(EaseMessageModel *)aModel;
 - (void)messageReadReceiptDetil:(EaseMessageCell *)aCell;
+- (void)messageCellDidClickReactionView:(EaseMessageModel *)aModel;
 
 - (void)avatarDidSelected:(EaseMessageModel *)model;
 - (void)avatarDidLongPress:(EaseMessageModel *)model;

@@ -19,8 +19,10 @@
 #import "EMMsgExtGifBubbleView.h"
 #import "UIImageView+EaseWebCache.h"
 #import "EMMessageReactionView.h"
+#import "EMBottomReactionDetailView.h"
+#import "EMMaskHighlightViewDelegate.h"
 
-@interface EaseMessageCell()
+@interface EaseMessageCell() <EMMaskHighlightViewDelegate>
 
 @property (nonatomic, strong) UIImageView *avatarView;
 
@@ -169,7 +171,7 @@
             make.bottom.equalTo(self.contentView).offset(-15);
         }];
         [_reactionView Ease_makeConstraints:^(EaseConstraintMaker *make) {
-            make.right.equalTo(self.bubbleView);
+            make.left.equalTo(self.bubbleView);
             make.width.Ease_equalTo(100);
             make.top.equalTo(self.bubbleView).offset(-18);
             make.height.Ease_equalTo(28);
@@ -340,6 +342,13 @@
 - (EMMessageReactionView *)reactionView {
     if (!_reactionView) {
         _reactionView = [[EMMessageReactionView alloc] init];
+        _reactionView.direction = _direction;
+        __weak typeof(self)weakSelf = self;
+        _reactionView.onClick = ^{
+            if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(messageCellDidClickReactionView:)]) {
+                [weakSelf.delegate messageCellDidClickReactionView:weakSelf.model];
+            }
+        };
     }
     return _reactionView;
 }
@@ -392,6 +401,11 @@
         }
     }
     //[aLongPress release];
+}
+
+#pragma mark - EMHollowedOutPathDelegate
+- (NSArray<UIView *> *)maskHighlight {
+    return @[_bubbleView, _reactionView, _avatarView];
 }
 
 @end

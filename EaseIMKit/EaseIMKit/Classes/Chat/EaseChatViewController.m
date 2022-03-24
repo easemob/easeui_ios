@@ -33,8 +33,10 @@
 #import "EaseEnums.h"
 #import "EaseDefines.h"
 #import "EMBottomMoreFunctionView.h"
+#import "EMMaskHighlightViewDelegate.h"
+#import "EMBottomReactionDetailView.h"
 
-@interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate, EMReactionManagerDelegate>
+@interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate, EMReactionManagerDelegate, EMBottomMoreFunctionViewDelegate>
 {
     EaseChatViewModel *_viewModel;
     EaseMessageCell *_currentLongPressCell;
@@ -158,7 +160,6 @@
 - (void)dealloc
 {
     [EaseIMKitManager.shared setConversationId:@""];
-    [self hideLongPressView];
     [[EMAudioPlayerUtil sharedHelper] stopPlayer];
     if (self.currentConversation.type == EMChatTypeChatRoom) {
         [[EMClient sharedClient].chatManager deleteServerConversation:self.currentConversation.conversationId conversationType:EMConversationTypeChatRoom isDeleteServerMessages:YES completion:nil];
@@ -339,7 +340,6 @@
 {
     [self.view endEditing:YES];
     [self.chatBar clearMoreViewAndSelectedButton];
-    [self hideLongPressView];
 }
 
 #pragma mark - EMChatBarDelegate
@@ -363,7 +363,6 @@
 
 - (void)chatBarDidShowMoreViewAction
 {
-    [self hideLongPressView];
     [self.tableView Ease_updateConstraints:^(EaseConstraintMaker *make) {
         make.bottom.equalTo(self.chatBar.ease_top);
     }];
@@ -413,7 +412,6 @@
 
 - (void)messageCellDidSelected:(EaseMessageCell *)aCell
 {
-    [self hideLongPressView];
     BOOL isCustom = NO;
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectMessageItem:userData:)]) {
         isCustom = [self.delegate didSelectMessageItem:aCell.model.message userData:aCell.model.userDataDelegate];
@@ -427,9 +425,6 @@
 //消息长按事件
 - (void)messageCellDidLongPress:(UITableViewCell *)aCell cgPoint:(CGPoint)point
 {
-    if (aCell != _currentLongPressCell) {
-        [self hideLongPressView];
-    }
     self.longPressIndexPath = [self.tableView indexPathForCell:aCell];
     __weak typeof(self) weakself = self;
     EaseExtMenuModel *copyExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"copy"] funcDesc:EaseLocalizableString(@"copy", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
@@ -456,16 +451,6 @@
         [weakself recallLongPressAction];
     }];
     
-    EaseExtMenuModel *reactionExtModel = [[EaseExtMenuModel alloc] initWithData:[UIImage easeUIImageNamed:@"recall"] funcDesc:EaseLocalizableString(@"reaction", @"reaction") handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
-        [weakself.chatBar showEmotion:^(NSString * _Nonnull emotion) {
-            EaseMessageModel *model = [weakself.dataArray objectAtIndex:weakself.longPressIndexPath.row];
-//            [EMClient.sharedClient.reactionManager addReaction:emotion toMessage:model.message.messageId];
-            [EMClient.sharedClient.reactionManager removeReaction:emotion fromMessage:model.message.messageId];
-        } cancel:^{
-            
-        }];
-    }];
-    
     NSMutableArray<EaseExtMenuModel*> *extMenuArray = [[NSMutableArray<EaseExtMenuModel*> alloc]init];
     BOOL isCustomCell = NO;
     [extMenuArray addObject:copyExtModel];
@@ -482,8 +467,6 @@
         }
     }
     
-    [extMenuArray addObject:reactionExtModel];
-    
     if (isCustomCell) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(customCellLongPressExtMenuItemArray:customCell:)]) {
             //自定义cell长按
@@ -497,71 +480,19 @@
         return;
     }
     
-    [EMBottomMoreFunctionView showMenuItems:extMenuArray animation:YES didSelectedMenuItem:^(EaseExtMenuModel * _Nonnull menuItem) {
-        if (menuItem.itemDidSelectedHandle) {
-            menuItem.itemDidSelectedHandle(menuItem.funcDesc, YES);
-        }
-    } didSelectedEmoji:^(NSString * _Nonnull emoji) {
-        EaseMessageModel *model = [weakself.dataArray objectAtIndex:weakself.longPressIndexPath.row];
-//            [EMClient.sharedClient.reactionManager addReaction:emotion toMessage:model.message.messageId];
-        [EMClient.sharedClient.reactionManager removeReaction:emoji fromMessage:model.message.messageId];
-    }];
-    
-    return;
-
-    self.longPressView = [[EMMoreFunctionView alloc]initWithextMenuModelArray:extMenuArray menuViewModel:[[EaseExtMenuViewModel alloc]initWithType:isCustomCell ? ExtTypeCustomCellLongPress : ExtTypeLongPress itemCount:[extMenuArray count] extFuncModel:_viewModel.extFuncModel]];
-    self.longPressView.delegate = self;
-    
-    CGSize longPressViewsize = [self.longPressView getExtViewSize];
-    self.longPressView.layer.cornerRadius = 8;
-    CGRect viewRect = [self.view convertRect:self.view.bounds toView:nil];
-    CGRect rect = [aCell convertRect:aCell.bounds toView:nil];
-    CGFloat maxWidth = self.view.frame.size.width;
-    CGFloat maxHeight = self.tableView.frame.size.height;
-    CGFloat xOffset = 0;
-    CGFloat yOffset = 0;
-    if (!isCustomCell) {
-        if (_currentLongPressCell.model.direction == EMMessageDirectionReceive || (_viewModel.msgAlignmentStyle == EaseAlignmentlLeft && _currentLongPressCell.model.message.chatType == EMChatTypeGroupChat)) {
-            xOffset = (avatarLonger + 3*componentSpacing + _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
-            if (xOffset < 2*componentSpacing) {
-                xOffset = 2*componentSpacing;
-            }
-        } else {
-            xOffset = (maxWidth - avatarLonger - 3*componentSpacing - _currentLongPressCell.bubbleView.frame.size.width/2) - (longPressViewsize.width/2);
-            if ((xOffset + longPressViewsize.width) > (maxWidth - componentSpacing)) {
-                xOffset = maxWidth - componentSpacing - longPressViewsize.width;
-            }
-        }
-        yOffset = rect.origin.y - longPressViewsize.height + componentSpacing;
-    } else {
-        xOffset = point.x - longPressViewsize.width/2;
-        if ((xOffset + longPressViewsize.width) > (maxWidth - 2*componentSpacing)) {
-            xOffset = maxWidth - 2*componentSpacing - longPressViewsize.width;
-        }
-        if (xOffset < 2*componentSpacing) {
-            xOffset = 2*componentSpacing;
-        }
-        yOffset = point.y - longPressViewsize.height - componentSpacing;
+    NSDictionary *userInfo;
+    if (_currentLongPressCell.model.message) {
+        userInfo = @{
+            @"message": _currentLongPressCell.model.message
+        };
     }
-    CGFloat topBoundary = viewRect.origin.y < [self bangScreenSize] ? [self bangScreenSize] : viewRect.origin.y;
-    if (yOffset <= topBoundary) {
-        yOffset = topBoundary;
-        if ((yOffset + longPressViewsize.height) > isCustomCell ? (point.y + componentSpacing) : (rect.origin.y + componentSpacing)) {
-            yOffset = isCustomCell ? (point.y + 2*componentSpacing) : (rect.origin.y + rect.size.height - componentSpacing);
-        }
-        if (!isCustomCell) {
-            if (_currentLongPressCell.bubbleView.frame.size.height > (maxHeight - longPressViewsize.height - 2 * componentSpacing)) {
-                yOffset = maxHeight / 2;
-            }
-        } else {
-            if (aCell.frame.size.height > (maxHeight - longPressViewsize.height - 4)) {
-                yOffset = maxHeight / 2;
-            }
-        }
+    
+    NSArray *hightlightViews;
+    if ([aCell conformsToProtocol:@protocol(EMMaskHighlightViewDelegate)] && [aCell respondsToSelector:@selector(maskHighlight)]) {
+        hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
     }
-    self.longPressView.frame = CGRectMake(xOffset, yOffset, longPressViewsize.width, longPressViewsize.height);
-    UIWindow *win = [[[UIApplication sharedApplication] windows] firstObject];
-    [win addSubview:self.longPressView];
+    
+    [EMBottomMoreFunctionView showMenuItems:extMenuArray delegate:self ligheViews:hightlightViews animation:YES userInfo:userInfo];
 }
 
 - (void)messageCellDidResend:(EaseMessageModel *)aModel
@@ -584,7 +515,6 @@
 //头像点击
 - (void)avatarDidSelected:(EaseMessageModel *)model
 {
-    [self hideLongPressView];
     if (self.delegate && [self.delegate respondsToSelector:@selector(avatarDidSelected:)]) {
         [self.delegate avatarDidSelected:model.userDataDelegate];
     }
@@ -592,18 +522,35 @@
 //头像长按
 - (void)avatarDidLongPress:(EaseMessageModel *)model
 {
-    [self hideLongPressView];
     if (self.delegate && [self.delegate respondsToSelector:@selector(avatarDidLongPress:)]) {
         [self.delegate avatarDidLongPress:model.userDataDelegate];
     }
 }
 
-#pragma mark -- EMMoreFunctionViewDelegate
-- (void)menuExtItemDidSelected:(EaseExtMenuModel *)menuItemModel extType:(ExtType)extType
-{
-    if (extType != ExtTypeChatBar) {
-        [self hideLongPressView];
-    }
+- (void)messageCellDidClickReactionView:(EaseMessageModel *)aModel {
+    [EMBottomReactionDetailView showMenuItems:aModel.message animation:YES didRemoveSelfReaction:^(NSString * _Nonnull reaction) {
+        __weak typeof(self)weakSelf = self;
+        [EMClient.sharedClient.reactionManager removeReaction:reaction fromMessage:aModel.message.messageId completion:^(EMError * _Nullable error) {
+            if (error) {
+                return;
+            }
+            [weakSelf.tableView reloadData];
+            __strong typeof(weakSelf)strongSelf = self;
+            if (strongSelf) {
+                NSArray *hightlightViews;
+                UITableViewCell *aCell = strongSelf->_currentLongPressCell;
+                if (!aCell) {
+                    aCell = strongSelf->_currentLongPressCustomCell;
+                }
+                if ([aCell conformsToProtocol:@protocol(EMMaskHighlightViewDelegate)] && [aCell respondsToSelector:@selector(maskHighlight)]) {
+                    hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [EMBottomMoreFunctionView updateHighlightViews:hightlightViews];
+                    });
+                }
+            }
+        }];
+    }];
 }
 
 #pragma mark -- UIDocumentInteractionControllerDelegate
@@ -705,9 +652,6 @@
                 }
             }
         }];
-        
-       
-        
     });
 }
 
@@ -722,9 +666,67 @@
 }
 
 #pragma mark - EMReaction
-- (void)messageReactionDidChange:(NSString *)messageId
+- (void)messageReactionDidChange:(NSArray<EMMessageReactionChange *> *)changes
 {
     [self.tableView reloadData];
+
+    NSArray *hightlightViews;
+    UITableViewCell *aCell = _currentLongPressCell;
+    if (!aCell) {
+        aCell = _currentLongPressCustomCell;
+    }
+    if ([aCell conformsToProtocol:@protocol(EMMaskHighlightViewDelegate)] && [aCell respondsToSelector:@selector(maskHighlight)]) {
+        hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [EMBottomMoreFunctionView updateHighlightViews:hightlightViews];
+        });
+    }
+}
+
+#pragma mark - EMBottomMoreFunctionView
+- (void)bottomMoreFunctionView:(EMBottomMoreFunctionView *)view didSelectedMenuItem:(EaseExtMenuModel *)model {
+    if (model.itemDidSelectedHandle) {
+        model.itemDidSelectedHandle(model.funcDesc, YES);
+    }
+}
+
+- (void)bottomMoreFunctionView:(EMBottomMoreFunctionView *)view didSelectedEmoji:(NSString *)emoji changeSelectedStateHandle:(void (^)(void))changeSelectedStateHandle {
+    EaseMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
+    __weak typeof(self)weakSelf = self;
+    [EMClient.sharedClient.reactionManager addReaction:emoji toMessage:model.message.messageId completion:^(EMError * _Nullable error) {
+        if (error) {
+            return;
+        }
+        [weakSelf.tableView reloadData];
+        __strong typeof(weakSelf)strongSelf = self;
+        if (strongSelf) {
+            NSArray *hightlightViews;
+            UITableViewCell *aCell = strongSelf->_currentLongPressCell;
+            if (!aCell) {
+                aCell = strongSelf->_currentLongPressCustomCell;
+            }
+            if ([aCell conformsToProtocol:@protocol(EMMaskHighlightViewDelegate)] && [aCell respondsToSelector:@selector(maskHighlight)]) {
+                hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [EMBottomMoreFunctionView updateHighlightViews:hightlightViews];
+                });
+            }
+        }
+    }];
+}
+
+- (BOOL)bottomMoreFunctionView:(EMBottomMoreFunctionView *)view getEmojiIsSelected:(NSString *)emoji userInfo:(nonnull NSDictionary *)userInfo {
+    
+    EMChatMessage *msg = userInfo[@"message"];
+    if (!msg) {
+        return NO;
+    }
+    
+    EMMessageReaction *reactionObj = [msg getReaction:emoji];
+    if (!reactionObj) {
+        return NO;
+    }
+    return reactionObj.state;
 }
 
 #pragma mark - KeyBoard
@@ -769,7 +771,6 @@
     if (aTap.state == UIGestureRecognizerStateEnded) {
         [self.view endEditing:YES];
         [self.chatBar clearMoreViewAndSelectedButton];
-        [self hideLongPressView];
         [self scrollToBottomRow];
     }
 }
@@ -893,7 +894,6 @@
 - (void)cleanPopupControllerView
 {
     [self.view endEditing:YES];
-    [self hideLongPressView];
     [self.chatBar clearMoreViewAndSelectedButton];
     [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
     [[EMImageBrowser sharedBrowser] dismissViewController];
@@ -903,13 +903,6 @@
 - (void)stopAudioPlayer
 {
     [[EMAudioPlayerUtil sharedHelper] stopPlayer];
-}
-
-//隐藏长按
-- (void)hideLongPressView
-{
-    [self.longPressView removeFromSuperview];
-    [self resetCellLongPressStatus:_currentLongPressCell];
 }
 
 //自定义cell长按
