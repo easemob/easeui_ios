@@ -46,7 +46,7 @@ Pod::Spec.new do |s|
         'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewController.h',
         'EaseIMKit/EaseIMKit/Classes/Chat/MessageCell/EMMessageReactionView.h',
         'EaseIMKit/EaseIMKit/Classes/Chat/ChatBar/MoreView/MoreFunction/EMBottomReactionDetailView.h',
-        'EaseIMKit/EaseIMKit/Classes/Chat/ChatBar/MoreView/MoreFunction/EMHollowedOutPathDelegate.h'
+        'EaseIMKit/EaseIMKit/Classes/Chat/ChatBar/MoreView/MoreFunction/EMMaskHighlightViewDelegate.h'
     ]
     
     s.static_framework = true

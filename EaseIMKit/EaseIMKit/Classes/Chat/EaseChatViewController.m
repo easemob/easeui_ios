@@ -36,6 +36,8 @@
 #import "EMMaskHighlightViewDelegate.h"
 #import "EMBottomReactionDetailView.h"
 
+@import HyphenateChat;
+
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate, EMReactionManagerDelegate, EMBottomMoreFunctionViewDelegate>
 {
     EaseChatViewModel *_viewModel;
@@ -455,6 +457,7 @@
     BOOL isCustomCell = NO;
     [extMenuArray addObject:copyExtModel];
     [extMenuArray addObject:deleteExtModel];
+    
     if (![aCell isKindOfClass:[EaseMessageCell class]]) {
         [extMenuArray addObject:recallExtModel];
         isCustomCell = YES;
@@ -481,9 +484,10 @@
     }
     
     NSDictionary *userInfo;
-    if (_currentLongPressCell.model.message) {
+    id data = _dataArray[self.longPressIndexPath.row];
+    if (data && [data isKindOfClass:EaseMessageModel.class]) {
         userInfo = @{
-            @"message": _currentLongPressCell.model.message
+            @"message": ((EaseMessageModel *)data).message
         };
     }
     
@@ -534,7 +538,7 @@
             if (error) {
                 return;
             }
-            [weakSelf.tableView reloadData];
+            [self reloadVisibleRowsWithMessageIds:[NSSet setWithObject:aModel.message.messageId]];
             __strong typeof(weakSelf)strongSelf = self;
             if (strongSelf) {
                 NSArray *hightlightViews;
@@ -668,7 +672,11 @@
 #pragma mark - EMReaction
 - (void)messageReactionDidChange:(NSArray<EMMessageReactionChange *> *)changes
 {
-    [self.tableView reloadData];
+    NSMutableSet *refreshMessageIds = [NSMutableSet set];
+    for (EMMessageReactionChange *change in changes) {
+        [refreshMessageIds addObject:change.messageId];
+    }
+    [self reloadVisibleRowsWithMessageIds:refreshMessageIds];
 
     NSArray *hightlightViews;
     UITableViewCell *aCell = _currentLongPressCell;
@@ -683,6 +691,21 @@
     }
 }
 
+- (void)reloadVisibleRowsWithMessageIds:(NSSet <NSString *>*)messageIds {
+    NSArray *visibleRows = [_tableView indexPathsForVisibleRows];
+    NSMutableArray <NSIndexPath *>*refreshRows = [NSMutableArray array];
+    for (NSIndexPath *row in visibleRows) {
+        id obj = self.dataArray[row.row];
+        if ([obj isKindOfClass:[EaseMessageModel class]]) {
+            EaseMessageModel *model = (EaseMessageModel *)obj;
+            if ([messageIds containsObject:model.message.messageId]) {
+                [refreshRows addObject:row];
+            }
+        }
+    }
+    [_tableView reloadRowsAtIndexPaths:refreshRows withRowAnimation:UITableViewRowAnimationNone];
+}
+
 #pragma mark - EMBottomMoreFunctionView
 - (void)bottomMoreFunctionView:(EMBottomMoreFunctionView *)view didSelectedMenuItem:(EaseExtMenuModel *)model {
     if (model.itemDidSelectedHandle) {
@@ -693,11 +716,11 @@
 - (void)bottomMoreFunctionView:(EMBottomMoreFunctionView *)view didSelectedEmoji:(NSString *)emoji changeSelectedStateHandle:(void (^)(void))changeSelectedStateHandle {
     EaseMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
     __weak typeof(self)weakSelf = self;
-    [EMClient.sharedClient.reactionManager addReaction:emoji toMessage:model.message.messageId completion:^(EMError * _Nullable error) {
+    void(^refreshBlock)(EMError *, void(^changeSelectedStateHandle)(void)) = ^(EMError *error, void(^changeSelectedStateHandle)(void) ) {
         if (error) {
             return;
         }
-        [weakSelf.tableView reloadData];
+        [self reloadVisibleRowsWithMessageIds:[NSSet setWithObject:model.message.messageId]];
         __strong typeof(weakSelf)strongSelf = self;
         if (strongSelf) {
             NSArray *hightlightViews;
@@ -712,11 +735,23 @@
                 });
             }
         }
-    }];
+        if (changeSelectedStateHandle) {
+            changeSelectedStateHandle();
+        }
+    };
+    
+    if (![model.message getReaction:emoji].state) {
+        [EMClient.sharedClient.reactionManager addReaction:emoji toMessage:model.message.messageId completion:^(EMError * _Nullable error) {
+            refreshBlock(error, changeSelectedStateHandle);
+        }];
+    } else {
+        [EMClient.sharedClient.reactionManager removeReaction:emoji fromMessage:model.message.messageId completion:^(EMError * _Nullable error) {
+            refreshBlock(error, changeSelectedStateHandle);
+        }];
+    }
 }
 
 - (BOOL)bottomMoreFunctionView:(EMBottomMoreFunctionView *)view getEmojiIsSelected:(NSString *)emoji userInfo:(nonnull NSDictionary *)userInfo {
-    
     EMChatMessage *msg = userInfo[@"message"];
     if (!msg) {
         return NO;

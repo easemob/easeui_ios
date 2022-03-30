@@ -76,13 +76,19 @@ static EMBottomMoreFunctionView *shareView;
     shareView.isShowEmojiList = NO;
     [shareView.itemTableView reloadData];
     [shareView.emojiCollectionView reloadData];
-    
     shareView.itemTableView.scrollEnabled = NO;
     shareView.emojiCollectionViewHeightConstraint.constant = 40;
     shareView.itemTableViewHeightConstraint.constant = 54 * menuItems.count;
     shareView.bgView.alpha = 0;
-    
     shareView.maskHighlightViews = views;
+    
+    CGFloat spacing = (UIScreen.mainScreen.bounds.size.width - 30 - shareView.emojiDataList.count * 40) / (shareView.emojiDataList.count - 1);
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)shareView.emojiCollectionView.collectionViewLayout;
+    layout.itemSize = CGSizeMake(40, 40);
+    layout.minimumLineSpacing = 10;
+    layout.minimumInteritemSpacing = floor(spacing);
+    layout.sectionInset = UIEdgeInsetsMake(0, 15, 0, 15);
+    layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     
     if (animation) {
         [shareView layoutIfNeeded];
@@ -174,23 +180,10 @@ static EMBottomMoreFunctionView *shareView;
     }
     
     _emojiDataList = @[@"emoji_40", @"emoji_43", @"emoji_37", @"emoji_36", @"emoji_15", @"emoji_10", @"add_reaction"];
-    CGFloat spacing = (UIScreen.mainScreen.bounds.size.width - 30 - _emojiDataList.count * 40) / (_emojiDataList.count - 1);
-    
-    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)_emojiCollectionView.collectionViewLayout;
-    layout.itemSize = CGSizeMake(40, 40);
-    layout.minimumLineSpacing = 10;
-    layout.minimumInteritemSpacing = spacing;
-    layout.sectionInset = UIEdgeInsetsMake(0, 15, 0, 15);
-    layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     [_emojiCollectionView registerNib:[UINib nibWithNibName:@"EMBottomMoreFunctionViewEmojiCell" bundle:nil] forCellWithReuseIdentifier:@"cell"];
     [_itemTableView registerNib:[UINib nibWithNibName:@"EMBottomMoreFunctionViewMenuItemCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     
-    CGFloat radius = 24;
-    UIRectCorner corner = UIRectCornerTopLeft | UIRectCornerTopRight;
-    UIBezierPath * path = [UIBezierPath bezierPathWithRoundedRect:_mainView.bounds byRoundingCorners:corner cornerRadii:CGSizeMake(radius, radius)];
     _shapeLayer = [[CAShapeLayer alloc] init];
-    _shapeLayer.frame = _mainView.bounds;
-    _shapeLayer.path = path.CGPath;
     _mainView.layer.mask = _shapeLayer;
 }
 
@@ -198,6 +191,13 @@ static EMBottomMoreFunctionView *shareView;
     [super layoutSubviews];
     _shapeLayer.frame = _mainView.bounds;
     _bgMaskLayer.frame = self.bounds;
+    
+    CGFloat radius = 24;
+    UIRectCorner corner = UIRectCornerTopLeft | UIRectCornerTopRight;
+    UIBezierPath * path = [UIBezierPath bezierPathWithRoundedRect:_mainView.bounds byRoundingCorners:corner cornerRadii:CGSizeMake(radius, radius)];
+    
+    _shapeLayer.frame = _mainView.bounds;
+    _shapeLayer.path = path.CGPath;
 }
 
 - (void)resetPanData {
@@ -215,7 +215,7 @@ static EMBottomMoreFunctionView *shareView;
 
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)_emojiCollectionView.collectionViewLayout;
     layout.itemSize = CGSizeMake(40, 40);
-    layout.minimumInteritemSpacing = spacing;
+    layout.minimumInteritemSpacing = floor(spacing);
     layout.sectionInset = UIEdgeInsetsMake(0, 7, 0, 7);
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     
@@ -331,13 +331,14 @@ static EMBottomMoreFunctionView *shareView;
     
     if (_delegate && [_delegate conformsToProtocol:@protocol(EMBottomMoreFunctionViewDelegate)]) {
         if ([_delegate respondsToSelector:@selector(bottomMoreFunctionView:didSelectedEmoji:changeSelectedStateHandle:)]) {
+            __weak typeof(self)weakSelf = self;
             if (_isShowEmojiList) {
                 [_delegate bottomMoreFunctionView:self didSelectedEmoji:[NSString stringWithFormat:@"emoji_%ld", (long)indexPath.item + 1] changeSelectedStateHandle:^{
-                                    
+                    [weakSelf.emojiCollectionView reloadData];
                 }];
             } else {
                 [_delegate bottomMoreFunctionView:self didSelectedEmoji:_emojiDataList[indexPath.item] changeSelectedStateHandle:^{
-                                    
+                    [weakSelf.emojiCollectionView reloadData];
                 }];
             }
         }
