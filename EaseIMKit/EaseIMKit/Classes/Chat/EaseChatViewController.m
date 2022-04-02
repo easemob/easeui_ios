@@ -38,7 +38,7 @@
 
 @import HyphenateChat;
 
-@interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate, EMReactionManagerDelegate, EMBottomMoreFunctionViewDelegate>
+@interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate, EMBottomMoreFunctionViewDelegate>
 {
     EaseChatViewModel *_viewModel;
     EaseMessageCell *_currentLongPressCell;
@@ -123,7 +123,6 @@
         [self.currentConversation setDraft:@""];
     }*/
     [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
-    [EMClient.sharedClient.reactionManager addDelegate:self delegateQueue:nil];
  
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapTableViewAction:)];
     [self.tableView addGestureRecognizer:tap];
@@ -534,7 +533,7 @@
 - (void)messageCellDidClickReactionView:(EaseMessageModel *)aModel {
     [EMBottomReactionDetailView showMenuItems:aModel.message animation:YES didRemoveSelfReaction:^(NSString * _Nonnull reaction) {
         __weak typeof(self)weakSelf = self;
-        [EMClient.sharedClient.reactionManager removeReaction:reaction fromMessage:aModel.message.messageId completion:^(EMError * _Nullable error) {
+        [EMClient.sharedClient.chatManager removeReaction:reaction fromMessage:aModel.message.messageId completion:^(EMError * _Nullable error) {
             if (error) {
                 return;
             }
@@ -672,6 +671,17 @@
 #pragma mark - EMReaction
 - (void)messageReactionDidChange:(NSArray<EMMessageReactionChange *> *)changes
 {
+    BOOL isNeedRefresh = NO;
+    for (EMMessageReactionChange *change in changes) {
+        if ([change.to isEqualToString:self.currentConversation.conversationId]) {
+            isNeedRefresh = YES;
+            break;
+        }
+    }
+    if (!isNeedRefresh) {
+        return;
+    }
+    
     NSMutableSet *refreshMessageIds = [NSMutableSet set];
     for (EMMessageReactionChange *change in changes) {
         [refreshMessageIds addObject:change.messageId];
@@ -741,11 +751,11 @@
     };
     
     if (![model.message getReaction:emoji].state) {
-        [EMClient.sharedClient.reactionManager addReaction:emoji toMessage:model.message.messageId completion:^(EMError * _Nullable error) {
+        [EMClient.sharedClient.chatManager addReaction:emoji toMessage:model.message.messageId completion:^(EMError * _Nullable error) {
             refreshBlock(error, changeSelectedStateHandle);
         }];
     } else {
-        [EMClient.sharedClient.reactionManager removeReaction:emoji fromMessage:model.message.messageId completion:^(EMError * _Nullable error) {
+        [EMClient.sharedClient.chatManager removeReaction:emoji fromMessage:model.message.messageId completion:^(EMError * _Nullable error) {
             refreshBlock(error, changeSelectedStateHandle);
         }];
     }

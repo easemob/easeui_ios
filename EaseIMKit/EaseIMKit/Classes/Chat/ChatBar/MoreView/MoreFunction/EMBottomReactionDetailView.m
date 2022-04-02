@@ -181,7 +181,7 @@ static EMBottomReactionDetailView *shareView;
     }
     
     __weak typeof(self)weakSelf = self;
-    [EMClient.sharedClient.reactionManager getReactionDetail:_message.messageId reaction:reaction begin:lastId pageSize:30 completion:^(EMMessageReaction *reaction, NSString *cursor, EMError *error) {
+    [EMClient.sharedClient.chatManager getReactionDetail:_message.messageId reaction:reaction cursor:lastId pageSize:30 completion:^(EMMessageReaction *reaction, NSString *cursor, EMError *error) {
         if (error) {
             return;
         }
@@ -306,7 +306,7 @@ static EMBottomReactionDetailView *shareView;
     EMBottomReactionDetailUserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     __weak typeof(self)weakSelf = self;
     cell.didClickRemove = ^{
-        [EMClient.sharedClient.reactionManager removeReaction:reaction fromMessage:weakSelf.message.messageId completion:^(EMError * _Nullable error) {
+        [EMClient.sharedClient.chatManager removeReaction:reaction fromMessage:weakSelf.message.messageId completion:^(EMError * _Nullable error) {
             if (!error && weakSelf.didRemoveSelfReaction) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf.itemTableView reloadData];
@@ -335,7 +335,7 @@ static EMBottomReactionDetailView *shareView;
     pageData = [[PageWithId alloc] init];
     _reactionUserListMap[reaction] = pageData;
     __weak typeof(self)weakSelf = self;
-    [EMClient.sharedClient.reactionManager getReactionDetail:_message.messageId reaction:reaction begin:pageData.lastId pageSize:30 completion:^(EMMessageReaction * _Nonnull reaction, NSString * _Nullable cursor, EMError * _Nullable error) {
+    [EMClient.sharedClient.chatManager getReactionDetail:_message.messageId reaction:reaction cursor:pageData.lastId pageSize:30 completion:^(EMMessageReaction * _Nonnull reaction, NSString * _Nullable cursor, EMError * _Nullable error) {
         if (error) {
             return;
         }
