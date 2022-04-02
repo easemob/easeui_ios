@@ -491,9 +491,9 @@
     }
     
     NSArray *hightlightViews;
-    if ([aCell conformsToProtocol:@protocol(EMMaskHighlightViewDelegate)] && [aCell respondsToSelector:@selector(maskHighlight)]) {
-        hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
-    }
+//    if ([aCell conformsToProtocol:@protocol(EMMaskHighlightViewDelegate)] && [aCell respondsToSelector:@selector(maskHighlight)]) {
+//        hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
+//    }
     
     [EMBottomMoreFunctionView showMenuItems:extMenuArray delegate:self ligheViews:hightlightViews animation:YES userInfo:userInfo];
 }
@@ -532,26 +532,26 @@
 
 - (void)messageCellDidClickReactionView:(EaseMessageModel *)aModel {
     [EMBottomReactionDetailView showMenuItems:aModel.message animation:YES didRemoveSelfReaction:^(NSString * _Nonnull reaction) {
-        __weak typeof(self)weakSelf = self;
+//        __weak typeof(self)weakSelf = self;
         [EMClient.sharedClient.chatManager removeReaction:reaction fromMessage:aModel.message.messageId completion:^(EMError * _Nullable error) {
             if (error) {
                 return;
             }
             [self reloadVisibleRowsWithMessageIds:[NSSet setWithObject:aModel.message.messageId]];
-            __strong typeof(weakSelf)strongSelf = self;
-            if (strongSelf) {
-                NSArray *hightlightViews;
-                UITableViewCell *aCell = strongSelf->_currentLongPressCell;
-                if (!aCell) {
-                    aCell = strongSelf->_currentLongPressCustomCell;
-                }
-                if ([aCell conformsToProtocol:@protocol(EMMaskHighlightViewDelegate)] && [aCell respondsToSelector:@selector(maskHighlight)]) {
-                    hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [EMBottomMoreFunctionView updateHighlightViews:hightlightViews];
-                    });
-                }
-            }
+//            __strong typeof(weakSelf)strongSelf = self;
+//            if (strongSelf) {
+//                NSArray *hightlightViews;
+//                UITableViewCell *aCell = strongSelf->_currentLongPressCell;
+//                if (!aCell) {
+//                    aCell = strongSelf->_currentLongPressCustomCell;
+//                }
+//                if ([aCell conformsToProtocol:@protocol(EMMaskHighlightViewDelegate)] && [aCell respondsToSelector:@selector(maskHighlight)]) {
+//                    hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        [EMBottomMoreFunctionView updateHighlightViews:hightlightViews];
+//                    });
+//                }
+//            }
         }];
     }];
 }
@@ -591,6 +591,7 @@
         NSArray *formated = [weakself formatMessages:msgArray];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakself.dataArray addObjectsFromArray:formated];
+            
             [weakself refreshTableView:YES];
         });
     });
@@ -688,17 +689,17 @@
     }
     [self reloadVisibleRowsWithMessageIds:refreshMessageIds];
 
-    NSArray *hightlightViews;
-    UITableViewCell *aCell = _currentLongPressCell;
-    if (!aCell) {
-        aCell = _currentLongPressCustomCell;
-    }
-    if ([aCell conformsToProtocol:@protocol(EMMaskHighlightViewDelegate)] && [aCell respondsToSelector:@selector(maskHighlight)]) {
-        hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [EMBottomMoreFunctionView updateHighlightViews:hightlightViews];
-        });
-    }
+//    NSArray *hightlightViews;
+//    UITableViewCell *aCell = _currentLongPressCell;
+//    if (!aCell) {
+//        aCell = _currentLongPressCustomCell;
+//    }
+//    if ([aCell conformsToProtocol:@protocol(EMMaskHighlightViewDelegate)] && [aCell respondsToSelector:@selector(maskHighlight)]) {
+//        hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [EMBottomMoreFunctionView updateHighlightViews:hightlightViews];
+//        });
+//    }
 }
 
 - (void)reloadVisibleRowsWithMessageIds:(NSSet <NSString *>*)messageIds {
@@ -725,26 +726,26 @@
 
 - (void)bottomMoreFunctionView:(EMBottomMoreFunctionView *)view didSelectedEmoji:(NSString *)emoji changeSelectedStateHandle:(void (^)(void))changeSelectedStateHandle {
     EaseMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
-    __weak typeof(self)weakSelf = self;
+//    __weak typeof(self)weakSelf = self;
     void(^refreshBlock)(EMError *, void(^changeSelectedStateHandle)(void)) = ^(EMError *error, void(^changeSelectedStateHandle)(void) ) {
         if (error) {
             return;
         }
         [self reloadVisibleRowsWithMessageIds:[NSSet setWithObject:model.message.messageId]];
-        __strong typeof(weakSelf)strongSelf = self;
-        if (strongSelf) {
-            NSArray *hightlightViews;
-            UITableViewCell *aCell = strongSelf->_currentLongPressCell;
-            if (!aCell) {
-                aCell = strongSelf->_currentLongPressCustomCell;
-            }
-            if ([aCell conformsToProtocol:@protocol(EMMaskHighlightViewDelegate)] && [aCell respondsToSelector:@selector(maskHighlight)]) {
-                hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [EMBottomMoreFunctionView updateHighlightViews:hightlightViews];
-                });
-            }
-        }
+//        __strong typeof(weakSelf)strongSelf = self;
+//        if (strongSelf) {
+//            NSArray *hightlightViews;
+//            UITableViewCell *aCell = strongSelf->_currentLongPressCell;
+//            if (!aCell) {
+//                aCell = strongSelf->_currentLongPressCustomCell;
+//            }
+//            if ([aCell conformsToProtocol:@protocol(EMMaskHighlightViewDelegate)] && [aCell respondsToSelector:@selector(maskHighlight)]) {
+//                hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [EMBottomMoreFunctionView updateHighlightViews:hightlightViews];
+//                });
+//            }
+//        }
         if (changeSelectedStateHandle) {
             changeSelectedStateHandle();
         }

@@ -47,6 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)cleanPopupControllerView;
 //停止音频播放
 - (void)stopAudioPlayer;
+// 刷新指定messageId的当前可见cell
+- (void)reloadVisibleRowsWithMessageIds:(NSSet <NSString *>*)messageIds;
 
 @end
 
