@@ -181,17 +181,21 @@ static EMBottomReactionDetailView *shareView;
     }
     
     __weak typeof(self)weakSelf = self;
-    [EMClient.sharedClient.chatManager getReactionDetail:_message.messageId reaction:reaction cursor:lastId pageSize:30 completion:^(EMMessageReaction *reaction, NSString *cursor, EMError *error) {
+    [EMClient.sharedClient.chatManager getReactionDetail:_message.messageId reaction:reaction cursor:lastId pageSize:1 completion:^(EMMessageReaction *reaction, NSString *cursor, EMError *error) {
         if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.itemTableView.mj_header endRefreshing];
+                [weakSelf.itemTableView.mj_footer endRefreshing];
+            });
             return;
         }
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            if (page.dataList.count <= 0 && reaction.state) {
+            if (page.dataList.count <= 0 && reaction.isAddedBySelf) {
                 [page appendData:@[EMClient.sharedClient.currentUsername] lastId:cursor];
             }
             // 自己的操作置顶
             NSArray <NSString *>*userList = reaction.userList;
-            if (page.userInfo[@"index"] || !reaction.state) {
+            if (page.userInfo[@"index"] || !reaction.isAddedBySelf) {
                 [page appendData:userList lastId:cursor];
             } else {
                 NSUInteger index = [userList indexOfObject:EMClient.sharedClient.currentUsername];
@@ -210,7 +214,7 @@ static EMBottomReactionDetailView *shareView;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.itemTableView reloadData];
                 [weakSelf.itemTableView.mj_header endRefreshing];
-                if (userList.count < 30) {
+                if (cursor.length <= 0) {
                     [weakSelf.itemTableView.mj_footer endRefreshingWithNoMoreData];
                 } else {
                     [weakSelf.itemTableView.mj_footer endRefreshing];
@@ -308,9 +312,13 @@ static EMBottomReactionDetailView *shareView;
     cell.didClickRemove = ^{
         [EMClient.sharedClient.chatManager removeReaction:reaction fromMessage:weakSelf.message.messageId completion:^(EMError * _Nullable error) {
             if (!error && weakSelf.didRemoveSelfReaction) {
+                NSInteger selectedIndex = weakSelf.reactionSelectedIndex;
+                if (selectedIndex >= weakSelf.message.reactionList.count) {
+                    selectedIndex = weakSelf.message.reactionList.count - 1;
+                }
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf.itemTableView reloadData];
                     [weakSelf.emojiCollectionView reloadData];
+                    [weakSelf collectionView:weakSelf.emojiCollectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0]];
                     weakSelf.didRemoveSelfReaction(reaction);
                 });
             }
@@ -330,20 +338,9 @@ static EMBottomReactionDetailView *shareView;
     PageWithId <NSString *>*pageData = _reactionUserListMap[reaction];
     if (pageData) {
         [_itemTableView reloadData];
-        return;
+    } else {
+        [self loadUserListData:NO];
     }
-    pageData = [[PageWithId alloc] init];
-    _reactionUserListMap[reaction] = pageData;
-    __weak typeof(self)weakSelf = self;
-    [EMClient.sharedClient.chatManager getReactionDetail:_message.messageId reaction:reaction cursor:pageData.lastId pageSize:30 completion:^(EMMessageReaction * _Nonnull reaction, NSString * _Nullable cursor, EMError * _Nullable error) {
-        if (error) {
-            return;
-        }
-        [pageData appendData:reaction.userList lastId:cursor];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.itemTableView reloadData];
-        });
-    }];
 }
 
 @end

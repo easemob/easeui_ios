@@ -674,7 +674,7 @@
 {
     BOOL isNeedRefresh = NO;
     for (EMMessageReactionChange *change in changes) {
-        if ([change.to isEqualToString:self.currentConversation.conversationId]) {
+        if ([change.conversationId isEqualToString:self.currentConversation.conversationId]) {
             isNeedRefresh = YES;
             break;
         }
@@ -722,6 +722,7 @@
     if (model.itemDidSelectedHandle) {
         model.itemDidSelectedHandle(model.funcDesc, YES);
     }
+    [EMBottomMoreFunctionView hideWithAnimation:YES needClear:NO];
 }
 
 - (void)bottomMoreFunctionView:(EMBottomMoreFunctionView *)view didSelectedEmoji:(NSString *)emoji changeSelectedStateHandle:(void (^)(void))changeSelectedStateHandle {
@@ -751,7 +752,7 @@
         }
     };
     
-    if (![model.message getReaction:emoji].state) {
+    if (![model.message getReaction:emoji].isAddedBySelf) {
         [EMClient.sharedClient.chatManager addReaction:emoji toMessage:model.message.messageId completion:^(EMError * _Nullable error) {
             refreshBlock(error, changeSelectedStateHandle);
         }];
@@ -772,7 +773,7 @@
     if (!reactionObj) {
         return NO;
     }
-    return reactionObj.state;
+    return reactionObj.isAddedBySelf;
 }
 
 #pragma mark - KeyBoard
