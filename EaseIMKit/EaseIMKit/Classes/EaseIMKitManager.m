@@ -13,7 +13,7 @@
    
 bool gInit;
 static EaseIMKitManager *easeIMKit = nil;
-static NSString *g_UIKitVersion = @"3.9.0";
+static NSString *g_UIKitVersion = @"3.9.1";
 
 @interface EaseIMKitManager ()<EMMultiDevicesDelegate, EMContactManagerDelegate, EMGroupManagerDelegate, EMChatManagerDelegate>
 @property (nonatomic, strong) EaseMulticastDelegate<EaseIMKitManagerDelegate> *delegates;
@@ -23,7 +23,7 @@ static NSString *g_UIKitVersion = @"3.9.0";
 @property (nonatomic, strong) NSMutableDictionary *undisturbMaps;//免打扰会话的map
 @end
 
-#define IMKitVersion @"3.9.0"
+#define IMKitVersion @"3.9.1"
 
 @implementation EaseIMKitManager
 + (BOOL)initWithEMOptions:(EMOptions *)options {
