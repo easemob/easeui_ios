@@ -496,7 +496,11 @@
 //    }
     
     [self.chatBar resignFirstResponder];
-    [EMBottomMoreFunctionView showMenuItems:extMenuArray delegate:self ligheViews:hightlightViews animation:YES userInfo:userInfo];
+    BOOL showReaction = YES;
+    if (_delegate && [_delegate respondsToSelector:@selector(messageLongPressExtShowReaction:)]) {
+        showReaction = [_delegate messageLongPressExtShowReaction:((EaseMessageModel *)data).message];
+    }
+    [EMBottomMoreFunctionView showMenuItems:extMenuArray showReaction:showReaction delegate:self ligheViews:hightlightViews animation:YES userInfo:userInfo];
 }
 
 - (void)messageCellDidResend:(EaseMessageModel *)aModel

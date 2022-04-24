@@ -38,6 +38,13 @@ NS_ASSUME_NONNULL_BEGIN
             animation:(BOOL)animation
              userInfo:(nullable NSDictionary *)userInfo;
 
++ (void)showMenuItems:(NSArray <EaseExtMenuModel *>*)menuItems
+         showReaction:(BOOL)showReaction
+             delegate:(id<EMBottomMoreFunctionViewDelegate>)delegate
+           ligheViews:(nullable NSArray <UIView *>*)views
+            animation:(BOOL)animation
+             userInfo:(nullable NSDictionary *)userInfo;
+
 + (void)updateHighlightViews:(nullable NSArray <UIView *>*)views;
 
 + (void)hideWithAnimation:(BOOL)animation needClear:(BOOL)needClear;

@@ -130,6 +130,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSMutableArray<EaseExtMenuModel *> *)messageLongPressExtMenuItemArray:(NSMutableArray<EaseExtMenuModel*>*)defaultLongPressItems message:(EMChatMessage*)message;
 
+- (BOOL)messageLongPressExtShowReaction:(EMChatMessage *)message;
 
 /* 页面下拉加载回调 */
 

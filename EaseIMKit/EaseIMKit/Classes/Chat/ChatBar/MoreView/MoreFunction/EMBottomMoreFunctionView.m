@@ -27,6 +27,7 @@ typedef struct PanData {
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *emojiCollectionViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *itemTableViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomContainerHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableViewTopContraint;
 
 @property (nonatomic, strong) CAShapeLayer *shapeLayer;
 @property (nonatomic, strong) CAShapeLayer *bgMaskLayer;
@@ -38,6 +39,7 @@ typedef struct PanData {
 @property (nonatomic, weak) id<EMBottomMoreFunctionViewDelegate> delegate;
 @property (nonatomic, strong) NSDictionary *userInfo;
 
+@property (nonatomic, assign) BOOL showReaction;
 @property (nonatomic, assign) BOOL isShowEmojiList;
 
 @property (nonatomic, assign) PanData panData;
@@ -66,6 +68,10 @@ static EMBottomMoreFunctionView *shareView;
 }
 
 + (void)showMenuItems:(NSArray<EaseExtMenuModel *> *)menuItems delegate:(id<EMBottomMoreFunctionViewDelegate>)delegate ligheViews:(NSArray <UIView *>*)views animation:(BOOL)animation userInfo:(NSDictionary *)userInfo {
+    [self showMenuItems:menuItems showReaction:NO delegate:delegate ligheViews:views animation:animation userInfo:userInfo];
+}
+
++ (void)showMenuItems:(NSArray<EaseExtMenuModel *> *)menuItems showReaction:(BOOL)showReaction delegate:(id<EMBottomMoreFunctionViewDelegate>)delegate ligheViews:(NSArray<UIView *> *)views animation:(BOOL)animation userInfo:(NSDictionary *)userInfo {
     EMBottomMoreFunctionView *shareView = EMBottomMoreFunctionView.share;
     [UIApplication.sharedApplication.keyWindow addSubview:shareView];
     shareView.frame = UIApplication.sharedApplication.keyWindow.bounds;
@@ -74,6 +80,7 @@ static EMBottomMoreFunctionView *shareView;
     shareView.userInfo = userInfo;
     shareView.bgView.alpha = 1;
     shareView.isShowEmojiList = NO;
+    shareView.showReaction = showReaction;
     [shareView.itemTableView reloadData];
     [shareView.emojiCollectionView reloadData];
     shareView.itemTableView.scrollEnabled = NO;
@@ -81,14 +88,18 @@ static EMBottomMoreFunctionView *shareView;
     shareView.itemTableViewHeightConstraint.constant = 54 * menuItems.count;
     shareView.bgView.alpha = 0;
     shareView.maskHighlightViews = views;
+    shareView.emojiCollectionView.hidden = !showReaction;
+    shareView.tableViewTopContraint.constant = showReaction ? 83 : 31;
     
-    CGFloat spacing = (UIScreen.mainScreen.bounds.size.width - 30 - shareView.emojiDataList.count * 40) / (shareView.emojiDataList.count - 1);
-    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)shareView.emojiCollectionView.collectionViewLayout;
-    layout.itemSize = CGSizeMake(40, 40);
-    layout.minimumLineSpacing = 10;
-    layout.minimumInteritemSpacing = floor(spacing);
-    layout.sectionInset = UIEdgeInsetsMake(0, 15, 0, 15);
-    layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    if (showReaction) {
+        CGFloat spacing = (UIScreen.mainScreen.bounds.size.width - 30 - shareView.emojiDataList.count * 40) / (shareView.emojiDataList.count - 1);
+        UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)shareView.emojiCollectionView.collectionViewLayout;
+        layout.itemSize = CGSizeMake(40, 40);
+        layout.minimumLineSpacing = 10;
+        layout.minimumInteritemSpacing = floor(spacing);
+        layout.sectionInset = UIEdgeInsetsMake(0, 15, 0, 15);
+        layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    }
     
     if (animation) {
         [shareView layoutIfNeeded];
@@ -112,7 +123,6 @@ static EMBottomMoreFunctionView *shareView;
         [shareView resetPanData];
     }
 }
-
 
 + (void)updateHighlightViews:(nullable NSArray <UIView *>*)views {
     shareView.maskHighlightViews = views;

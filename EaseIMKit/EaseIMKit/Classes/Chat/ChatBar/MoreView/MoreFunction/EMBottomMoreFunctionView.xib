@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -84,7 +84,7 @@
                         <constraint firstItem="9yG-X1-tZu" firstAttribute="top" secondItem="ANJ-iM-O97" secondAttribute="bottom" id="Hgi-II-8eb"/>
                         <constraint firstAttribute="trailing" secondItem="Y0I-2H-Iqz" secondAttribute="trailing" id="Hs2-PC-8bJ"/>
                         <constraint firstItem="ANJ-iM-O97" firstAttribute="leading" secondItem="4Lg-lM-kyj" secondAttribute="leading" id="M12-Ax-BSG"/>
-                        <constraint firstItem="ANJ-iM-O97" firstAttribute="top" secondItem="Y0I-2H-Iqz" secondAttribute="bottom" constant="12" id="bKq-bd-U2w"/>
+                        <constraint firstItem="ANJ-iM-O97" firstAttribute="top" secondItem="4Lg-lM-kyj" secondAttribute="top" constant="83" id="REJ-f0-HEh"/>
                         <constraint firstItem="3Iv-vb-vli" firstAttribute="top" secondItem="4Lg-lM-kyj" secondAttribute="top" id="ilI-gb-S86"/>
                         <constraint firstAttribute="trailing" secondItem="ANJ-iM-O97" secondAttribute="trailing" id="ipl-f7-9DA"/>
                         <constraint firstItem="3Iv-vb-vli" firstAttribute="leading" secondItem="4Lg-lM-kyj" secondAttribute="leading" id="jOH-tZ-pVp"/>
@@ -117,6 +117,7 @@
                 <outlet property="itemTableView" destination="ANJ-iM-O97" id="kph-QQ-6kj"/>
                 <outlet property="itemTableViewHeightConstraint" destination="wQ0-KS-xOm" id="t2b-DW-iz1"/>
                 <outlet property="mainView" destination="4Lg-lM-kyj" id="aLr-ot-WD0"/>
+                <outlet property="tableViewTopContraint" destination="REJ-f0-HEh" id="N7l-VS-MWM"/>
             </connections>
             <point key="canvasLocation" x="139" y="77"/>
         </view>
