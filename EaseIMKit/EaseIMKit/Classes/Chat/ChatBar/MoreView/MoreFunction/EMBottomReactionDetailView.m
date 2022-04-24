@@ -100,6 +100,7 @@ static EMBottomReactionDetailView *shareView;
 }
 
 + (void)hideWithAnimation:(BOOL)animation needClear:(BOOL)needClear {
+    [shareView.reactionUserListMap removeAllObjects];
     void(^clearFunc)(void) = ^{
         [shareView.itemTableView.mj_header endRefreshing];
         [shareView.itemTableView.mj_footer endRefreshing];
@@ -141,12 +142,7 @@ static EMBottomReactionDetailView *shareView;
     [_emojiCollectionView registerNib:[UINib nibWithNibName:@"EMBottomReactionDetailReactionCell" bundle:nil] forCellWithReuseIdentifier:@"cell"];
     [_itemTableView registerNib:[UINib nibWithNibName:@"EMBottomReactionDetailUserCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     
-    CGFloat radius = 24;
-    UIRectCorner corner = UIRectCornerTopLeft | UIRectCornerTopRight;
-    UIBezierPath * path = [UIBezierPath bezierPathWithRoundedRect:_mainView.bounds byRoundingCorners:corner cornerRadii:CGSizeMake(radius, radius)];
     _maskLayer = [[CAShapeLayer alloc] init];
-    _maskLayer.frame = _mainView.bounds;
-    _maskLayer.path = path.CGPath;
     _mainView.layer.mask = _maskLayer;
     
     _itemTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -160,7 +156,12 @@ static EMBottomReactionDetailView *shareView;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+
+    CGFloat radius = 24;
+    UIRectCorner corner = UIRectCornerTopLeft | UIRectCornerTopRight;
+    UIBezierPath * path = [UIBezierPath bezierPathWithRoundedRect:_mainView.bounds byRoundingCorners:corner cornerRadii:CGSizeMake(radius, radius)];
     _maskLayer.frame = _mainView.bounds;
+    _maskLayer.path = path.CGPath;
 }
 
 - (void)loadUserListData:(BOOL)refresh {
@@ -174,22 +175,21 @@ static EMBottomReactionDetailView *shareView;
         _reactionUserListMap[reaction] = page;
     }
     NSString *lastId = @"";
-    if (refresh) {
-        [page clear];
-    } else if (page.lastId.length > 0) {
+    if (!refresh && page.lastId.length > 0) {
         lastId = page.lastId;
     }
     
     __weak typeof(self)weakSelf = self;
-    [EMClient.sharedClient.chatManager getReactionDetail:_message.messageId reaction:reaction cursor:lastId pageSize:1 completion:^(EMMessageReaction *reaction, NSString *cursor, EMError *error) {
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+    [EMClient.sharedClient.chatManager getReactionDetail:_message.messageId reaction:reaction cursor:lastId pageSize:30 completion:^(EMMessageReaction *reaction, NSString *cursor, EMError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
                 [weakSelf.itemTableView.mj_header endRefreshing];
                 [weakSelf.itemTableView.mj_footer endRefreshing];
-            });
-            return;
-        }
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                return;
+            }
+            if (refresh) {
+                [page clear];
+            }
             if (page.dataList.count <= 0 && reaction.isAddedBySelf) {
                 [page appendData:@[EMClient.sharedClient.currentUsername] lastId:cursor];
             }
@@ -211,15 +211,13 @@ static EMBottomReactionDetailView *shareView;
                     page.userInfo[@"index"] = @(index);
                 }
             }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.itemTableView reloadData];
-                [weakSelf.itemTableView.mj_header endRefreshing];
-                if (cursor.length <= 0) {
-                    [weakSelf.itemTableView.mj_footer endRefreshingWithNoMoreData];
-                } else {
-                    [weakSelf.itemTableView.mj_footer endRefreshing];
-                }
-            });
+            [weakSelf.itemTableView reloadData];
+            [weakSelf.itemTableView.mj_header endRefreshing];
+            if (cursor.length <= 0) {
+                [weakSelf.itemTableView.mj_footer endRefreshingWithNoMoreData];
+            } else {
+                [weakSelf.itemTableView.mj_footer endRefreshing];
+            }
         });
     }];
 }
@@ -312,11 +310,16 @@ static EMBottomReactionDetailView *shareView;
     cell.didClickRemove = ^{
         [EMClient.sharedClient.chatManager removeReaction:reaction fromMessage:weakSelf.message.messageId completion:^(EMError * _Nullable error) {
             if (!error && weakSelf.didRemoveSelfReaction) {
-                NSInteger selectedIndex = weakSelf.reactionSelectedIndex;
-                if (selectedIndex >= weakSelf.message.reactionList.count) {
-                    selectedIndex = weakSelf.message.reactionList.count - 1;
-                }
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    NSInteger reactionCount = weakSelf.message.reactionList.count;
+                    if (reactionCount <= 0) {
+                        [EMBottomReactionDetailView hideWithAnimation:YES needClear:NO];
+                        return;
+                    }
+                    NSInteger selectedIndex = weakSelf.reactionSelectedIndex;
+                    if (selectedIndex >= reactionCount) {
+                        selectedIndex = reactionCount - 1;
+                    }
                     [weakSelf.emojiCollectionView reloadData];
                     [weakSelf collectionView:weakSelf.emojiCollectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0]];
                     weakSelf.didRemoveSelfReaction(reaction);
@@ -324,7 +327,10 @@ static EMBottomReactionDetailView *shareView;
             }
         }];
     };
-    cell.userId = _reactionUserListMap[reaction].dataList[indexPath.row];
+    PageWithId *page = _reactionUserListMap[reaction];
+    if (page.dataList.count > indexPath.row) {
+        cell.userId = page.dataList[indexPath.row];
+    }
     return cell;
 }
 
@@ -334,13 +340,7 @@ static EMBottomReactionDetailView *shareView;
     for (EMBottomReactionDetailReactionCell *cell in [collectionView visibleCells]) {
         cell.reactionSelected = [collectionView indexPathForCell:cell].item == indexPath.item;
     }
-    NSString *reaction = self.message.reactionList[indexPath.item].reaction;
-    PageWithId <NSString *>*pageData = _reactionUserListMap[reaction];
-    if (pageData) {
-        [_itemTableView reloadData];
-    } else {
-        [self loadUserListData:NO];
-    }
+    [self loadUserListData:YES];
 }
 
 @end

@@ -495,6 +495,7 @@
 //        hightlightViews = [((id<EMMaskHighlightViewDelegate>)aCell) maskHighlight];
 //    }
     
+    [self.chatBar resignFirstResponder];
     [EMBottomMoreFunctionView showMenuItems:extMenuArray delegate:self ligheViews:hightlightViews animation:YES userInfo:userInfo];
 }
 
@@ -531,6 +532,7 @@
 }
 
 - (void)messageCellDidClickReactionView:(EaseMessageModel *)aModel {
+    [self.chatBar resignFirstResponder];
     [EMBottomReactionDetailView showMenuItems:aModel.message animation:YES didRemoveSelfReaction:^(NSString * _Nonnull reaction) {
 //        __weak typeof(self)weakSelf = self;
         [EMClient.sharedClient.chatManager removeReaction:reaction fromMessage:aModel.message.messageId completion:^(EMError * _Nullable error) {
@@ -727,12 +729,15 @@
 
 - (void)bottomMoreFunctionView:(EMBottomMoreFunctionView *)view didSelectedEmoji:(NSString *)emoji changeSelectedStateHandle:(void (^)(void))changeSelectedStateHandle {
     EaseMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
-//    __weak typeof(self)weakSelf = self;
-    void(^refreshBlock)(EMError *, void(^changeSelectedStateHandle)(void)) = ^(EMError *error, void(^changeSelectedStateHandle)(void) ) {
+    if (!model || ![model isKindOfClass:EaseMessageModel.class]) {
+        return;
+    }
+    __weak typeof(self)weakSelf = self;
+    void(^refreshBlock)(EMError *, void(^changeSelectedStateHandle)(void)) = ^(EMError *error, void(^changeSelectedStateHandle)(void)) {
         if (error) {
             return;
         }
-        [self reloadVisibleRowsWithMessageIds:[NSSet setWithObject:model.message.messageId]];
+        [weakSelf reloadVisibleRowsWithMessageIds:[NSSet setWithObject:model.message.messageId]];
 //        __strong typeof(weakSelf)strongSelf = self;
 //        if (strongSelf) {
 //            NSArray *hightlightViews;
@@ -756,11 +761,13 @@
         [EMClient.sharedClient.chatManager addReaction:emoji toMessage:model.message.messageId completion:^(EMError * _Nullable error) {
             refreshBlock(error, changeSelectedStateHandle);
         }];
+        
     } else {
         [EMClient.sharedClient.chatManager removeReaction:emoji fromMessage:model.message.messageId completion:^(EMError * _Nullable error) {
             refreshBlock(error, changeSelectedStateHandle);
         }];
     }
+    [EMBottomMoreFunctionView hideWithAnimation:YES needClear:NO];
 }
 
 - (BOOL)bottomMoreFunctionView:(EMBottomMoreFunctionView *)view getEmojiIsSelected:(NSString *)emoji userInfo:(nonnull NSDictionary *)userInfo {

@@ -174,6 +174,11 @@
     self.currentMoreView.backgroundColor = [UIColor colorWithHexString:@"#f2f2f2"];
 }
 
+- (BOOL)resignFirstResponder {
+    [_textView resignFirstResponder];
+    return [super resignFirstResponder];
+}
+
 #pragma mark - UITextViewDelegate
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
