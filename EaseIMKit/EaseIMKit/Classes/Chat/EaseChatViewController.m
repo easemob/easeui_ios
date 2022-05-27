@@ -1077,6 +1077,16 @@
     });
 }
 
+#if YANGJIANXIUGAI
+- (void)refreshControlClick:(UIRefreshControl *)sender{
+    __weak typeof(self) weakSelf = self;
+    [NSRunLoop.currentRunLoop performInModes:@[NSDefaultRunLoopMode] block:^{
+        [weakSelf dropdownRefreshTableViewWithData];
+    }];
+}
+#else
+#endif
+
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -1086,13 +1096,17 @@
         _tableView.dataSource = self;
         _tableView.rowHeight = UITableViewAutomaticDimension;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-#if YANGJIAN_XIUGAI
+#if YANGJIANXIUGAI
+        _tableView.backgroundColor = [UIColor systemPinkColor];
+        [_tableView enableRefresh:EaseLocalizableString(@"dropRefresh", nil) color:UIColor.redColor];
+        [_tableView.refreshControl addTarget:self action:@selector(refreshControlClick:) forControlEvents:UIControlEventValueChanged];
 #else
         _tableView.estimatedRowHeight = 130;
-#endif
         _tableView.backgroundColor = [UIColor systemPinkColor];
         [_tableView enableRefresh:EaseLocalizableString(@"dropRefresh", nil) color:UIColor.redColor];
         [_tableView.refreshControl addTarget:self action:@selector(dropdownRefreshTableViewWithData) forControlEvents:UIControlEventValueChanged];
+#endif
+
 #if YANGJIANXIUGAI
         NSArray *cellNames =
         @[
