@@ -22,28 +22,7 @@ Pod::Spec.new do |s|
         'EaseIMKit/EaseIMKit/**/*.{h,m,mm}'
     ]
     s.public_header_files = [
-        'EaseIMKit/EaseIMKit/EaseIMKit.h',
-        'EaseIMKit/EaseIMKit/EasePublicHeaders.h',
-        'EaseIMKit/EaseIMKit/Classes/EaseIMKitManager.h',
-        'EaseIMKit/EaseIMKit/Classes/EaseEnums.h',
-        'EaseIMKit/EaseIMKit/Classes/Common/EaseDefines.h',
-        'EaseIMKit/EaseIMKit/Classes/Contacts/Models/EaseContactsViewModel.h',
-        'EaseIMKit/EaseIMKit/Classes/Contacts/Models/EaseContactModel.h',
-        'EaseIMKit/EaseIMKit/Classes/Contacts/Controllers/EaseContactsViewController.h',
-        'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewModel.h',
-        'EaseIMKit/EaseIMKit/Classes/Conversations/Views/EaseConversationCell.h',
-        'EaseIMKit/EaseIMKit/Classes/Conversations/Models/EaseConversationViewModel.h',
-        'EaseIMKit/EaseIMKit/Classes/Conversations/Models/EaseConversationModel.h',
-        'EaseIMKit/EaseIMKit/Classes/Conversations/Controllers/EaseConversationsViewController.h',
-        'EaseIMKit/EaseIMKit/Classes/Chat/EaseChatViewController.h',
-        'EaseIMKit/EaseIMKit/Classes/Chat/EaseChatViewControllerDelegate.h',
-        'EaseIMKit/EaseIMKit/Classes/Chat/ChatBar/MoreView/MoreFunction/EaseExtFuncModel.h',
-        'EaseIMKit/EaseIMKit/Classes/Chat/ChatModels/EaseExtMenuModel.h',
-        'EaseIMKit/EaseIMKit/Classes/Chat/ChatModels/EaseMessageModel.h',
-        'EaseIMKit/EaseIMKit/Classes/Chat/ChatModels/EaseChatViewModel.h',
-        'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewModel.h',
-        'EaseIMKit/EaseIMKit/Classes/BaseTableviewController/EaseUserDelegate.h',
-        'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewController.h'
+        'EaseIMKit/EaseIMKit/**/*.h',
     ]
     
     s.static_framework = true
@@ -61,6 +40,7 @@ Pod::Spec.new do |s|
 
     s.dependency 'HyphenateChat', '>= 3.9.0'
     s.dependency 'EMVoiceConvert', '0.1.0'
-
+    s.dependency 'Masonry'
+#    s.dependency 'SDWebImage'
 
 end

@@ -33,6 +33,27 @@
 #import "EaseEnums.h"
 #import "EaseDefines.h"
 
+//--new--
+#if YANGJIANXIUGAI
+#import "EMsgBaseCellModel.h"
+
+#import "EMsgTimeMarkerCell.h"
+#import "EMsgSystemRemindCell.h"
+
+#import "EMsgUserTextCell.h"
+#import "EMsgUserLocationCell.h"
+#import "EMsgUserImageCell.h"
+#import "EMsgUserVideoCell.h"
+#import "EMsgUserBusinessCardCell.h"
+#import "EMsgUserVoiceCell.h"
+#import "EMsgUserFileCell.h"
+#import "EMsgUserBigEmojiCell.h"
+#import "EMsgUserUNKNOWCell.h"
+
+
+#else
+#endif
+
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate>
 {
     EaseChatViewModel *_viewModel;
@@ -246,8 +267,33 @@
     return [self.dataArray count];
 }
 
+#if YANGJIAN_MANUAL
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    EMsgBaseCellModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    return model.cellHeight;
+}
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    EMsgBaseCellModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    return model.cellHeight;
+}
+#else
+#endif
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     id obj = [self.dataArray objectAtIndex:indexPath.row];
+#if YANGJIANXIUGAI
+    if ([obj isKindOfClass:[EMsgBaseCellModel class]]) {
+        EMsgBaseCellModel *model = (EMsgBaseCellModel *)obj;
+        if (model.cellType == EMsgCellType_time) {
+            EMsgBaseCell *cell = (EMsgBaseCell *)[tableView dequeueReusableCellWithIdentifier:model.cellName];
+            [cell bindViewModel:model];
+            return cell;
+        }else if (model.cellType == EMsgCellType_system) {
+            EMsgBaseCell *cell = (EMsgBaseCell *)[tableView dequeueReusableCellWithIdentifier:model.cellName];
+            [cell bindViewModel:model];
+            return cell;
+        }
+    }
+#else
     NSString *cellString = nil;
     EaseWeakRemind type = EaseWeakRemindMsgTime;
     if ([obj isKindOfClass:[NSString class]]) {
@@ -289,8 +335,13 @@
         cell.timeLabel.text = cellString;
         return cell;
     }
+#endif
     
+#if YANGJIANXIUGAI
+    EMsgBaseCellModel *model = (EMsgBaseCellModel *)obj;
+#else
     EaseMessageModel *model = (EaseMessageModel *)obj;
+#endif
     if (self.delegate && [self.delegate respondsToSelector:@selector(cellForItem:messageModel:)]) {
         UITableViewCell *customCell = [self.delegate cellForItem:tableView messageModel:model];
         if (customCell) {
@@ -300,6 +351,31 @@
         }
     }
     NSString *identifier = [EaseMessageCell cellIdentifierWithDirection:model.direction type:model.type];
+#if YANGJIANXIUGAI
+    //当前为测试行为
+    if ([identifier hasSuffix:@"Text"]
+        ||[identifier hasSuffix:@"Location"]
+        ||[identifier hasSuffix:@"Image"]
+        ||[identifier hasSuffix:@"Video"]
+        ||[identifier hasSuffix:@"Voice"]
+        ||[identifier hasSuffix:@"File"]
+        ||[identifier hasSuffix:@"ExtGif"]
+        ||[identifier hasSuffix:@"Custom"]
+        ) {
+        EMsgBaseCell *cell = (EMsgBaseCell *)[tableView dequeueReusableCellWithIdentifier:model.cellName];
+        [cell bindViewModel:model];
+        return cell;
+    }
+    if ([identifier hasSuffix:@"Custom"]) {
+        EMCustomMessageBody *body = (EMCustomMessageBody *)model.message.body;
+        if ([body.event isEqualToString:@"userCard"]) {
+            EMsgBaseCell *cell = (EMsgBaseCell *)[tableView dequeueReusableCellWithIdentifier:model.cellName];
+            [cell bindViewModel:model];
+            return cell;
+        }
+    }
+#else
+#endif
     EaseMessageCell *cell = (EaseMessageCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
     // Configure the cell...
     if (cell == nil || _isReloadViewWithModel == YES) {
@@ -784,14 +860,27 @@
         CGFloat interval = (self.msgTimelTag - msg.timestamp) / 1000;
         if (self.msgTimelTag < 0 || interval > 60 || interval < -60) {
             NSString *timeStr = [EaseDateHelper formattedTimeFromTimeInterval:msg.timestamp];
+#if YANGJIANXIUGAI
+            EMsgBaseCellModel *model = [[EMsgBaseCellModel alloc] initWithTimeMarker:timeStr];
+            [formated addObject:model];
+#else
             [formated addObject:timeStr];
+#endif
             self.msgTimelTag = msg.timestamp;
         }
+#if YANGJIANXIUGAI
+        EMsgBaseCellModel *model = nil;
+        model = [[EMsgBaseCellModel alloc] initWithEMMessage:msg];
+        if (!model) {
+            model = [[EMsgBaseCellModel alloc]init];
+        }
+#else
         EaseMessageModel *model = nil;
         model = [[EaseMessageModel alloc] initWithEMMessage:msg];
         if (!model) {
             model = [[EaseMessageModel alloc]init];
         }
+#endif
         if (self.delegate && [self.delegate respondsToSelector:@selector(userData:)]) {
             id<EaseUserDelegate> userData = [self.delegate userData:msg.from];
             model.userDataDelegate = userData;
@@ -823,16 +912,39 @@
         
         dispatch_async(self.msgQueue, ^{
             NSArray *formated = [weakself formatMessages:tempMsgs];
+#if YANGJIANXIUGAI
+            __block float offsetY = 0;
+#else
+#endif
             if (isInsertBottom) {
                 [weakself.dataArray addObjectsFromArray:formated];
             } else {
+#if YANGJIANXIUGAI
+                for (EMsgBaseCellModel *model in formated) {
+                    offsetY += model.cellHeight;
+                }
+#else
+#endif
                 [weakself.dataArray insertObjects:formated atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formated count])]];
             }
             dispatch_async(dispatch_get_main_queue(), ^{
+#if YANGJIANXIUGAI
+                offsetY += weakself.tableView.contentOffset.y;
+                if (weakself.tableView.isRefreshing) {
+                    [weakself.tableView endRefreshing];
+                }
+                if (isScrollBottom) {
+                    [weakself refreshTableView:isScrollBottom];
+                }else{
+                    [weakself.tableView reloadData];
+                    [weakself.tableView setContentOffset:CGPointMake(0, offsetY) animated:0];
+                }
+#else
                 if (weakself.tableView.isRefreshing) {
                     [weakself.tableView endRefreshing];
                 }
                 [weakself refreshTableView:isScrollBottom];
+#endif
             });
         });
     } else {
@@ -974,10 +1086,34 @@
         _tableView.dataSource = self;
         _tableView.rowHeight = UITableViewAutomaticDimension;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+#if YANGJIAN_XIUGAI
+#else
         _tableView.estimatedRowHeight = 130;
+#endif
         _tableView.backgroundColor = [UIColor systemPinkColor];
         [_tableView enableRefresh:EaseLocalizableString(@"dropRefresh", nil) color:UIColor.redColor];
         [_tableView.refreshControl addTarget:self action:@selector(dropdownRefreshTableViewWithData) forControlEvents:UIControlEventValueChanged];
+#if YANGJIANXIUGAI
+        NSArray *cellNames =
+        @[
+            @"EMsgUserTextCell",
+            @"EMsgTimeMarkerCell",
+            @"EMsgSystemRemindCell",
+            @"EMsgUserLocationCell",
+            @"EMsgUserImageCell",
+            @"EMsgUserVideoCell",
+            @"EMsgUserBusinessCardCell",
+            @"EMsgUserVoiceCell",
+            @"EMsgUserFileCell",
+            @"EMsgUserBigEmojiCell",
+            @"EMsgUserUNKNOWCell",
+        ];
+        
+        for (NSString *cellName in cellNames) {
+            [_tableView registerClass:NSClassFromString(cellName) forCellReuseIdentifier:cellName];
+        }
+#else
+#endif
     }
     
     return _tableView;

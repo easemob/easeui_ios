@@ -7,3 +7,6 @@
 #import "EaseDefines.h"
 
 
+#define YANGJIANXIUGAI 1
+
+#define YANGJIAN_MANUAL 1
