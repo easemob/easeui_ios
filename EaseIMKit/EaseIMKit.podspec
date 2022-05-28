@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'EaseIMKit'
-  s.version = '3.8.4'
+  s.version = '3.9.3'
 
   s.platform = :ios, '10.0'
 
