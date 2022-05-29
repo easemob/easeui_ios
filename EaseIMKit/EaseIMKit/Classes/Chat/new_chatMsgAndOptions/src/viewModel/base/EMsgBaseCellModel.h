@@ -15,7 +15,7 @@
 #import "EMsgTableViewConfig.h"
 #import "EMsgCellLayoutAdapterConfigs.h"
 
-
+//#import "EMsgUserBaseCell.h"
 
 #define MSG_VOICE_CONVERTFAILURETEXT @"转换失败"
 
@@ -48,6 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EMsgBaseCellModel : EaseMessageModel
 
+//@property (nonatomic,weak)EMsgUserBaseCell *weakCell;
 
 @property (nonatomic,copy)NSString *cellName;
 

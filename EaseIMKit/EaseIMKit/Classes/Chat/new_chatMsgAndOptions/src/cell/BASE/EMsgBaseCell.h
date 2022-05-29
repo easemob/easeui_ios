@@ -16,10 +16,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol EMsgUserBaseCellDelegate;
+
 @interface EMsgBaseCell : UITableViewCell
+
+@property (nonatomic,weak)__weak EMsgBaseCellModel *weakModel;
+@property (nonatomic,weak)__weak id userMessageDelegate;
+
+
 
 - (void)bindViewModel:(EMsgBaseCellModel *)model;
 
+
+
 @end
+
 
 NS_ASSUME_NONNULL_END

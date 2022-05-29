@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong)UILabel *durationLabel;
 @property (nonatomic,strong)UILabel *convertTextLabel;
 
+- (void)playing:(BOOL)playing;
+
 @end
 
 NS_ASSUME_NONNULL_END

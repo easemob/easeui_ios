@@ -79,7 +79,7 @@
             {
                 self.voiceConvertTextState = EMVoiceConvertTextStateFailure;
                 self.voiceConvertTextState = EMVoiceConvertTextStateSuccess;
-                self.voiceConvertText = @"啊啊啊不不不啊啊啊啊啊啊不不不啊啊啊啊啊啊不不不啊啊啊啊啊啊不不不啊啊啊啊啊啊不不不啊啊啊";
+                self.voiceConvertText = @"预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.";
             }
 #endif
             
@@ -249,7 +249,9 @@
                                     showName_chatType:self.message.chatType
                                     direction:self.message.direction]]
                             + EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentToVoiceConvertTextContentSpacing
-                            + [EMsgTableViewFunctions fitHeight_string:self.voiceConvertText font:EMsgTableViewConfig.shared.voiceConvertTextFont maxWidth:EMsgCellLayoutAdapterConfigs.shared.msgBackgroundWidth - EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing - EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing];
+                            + [EMsgTableViewFunctions fitHeight_string:self.voiceConvertText font:EMsgTableViewConfig.shared.voiceConvertTextFont maxWidth:EMsgCellLayoutAdapterConfigs.shared.msgBackgroundWidth - EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing - EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing]
+                            + EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing
+                            + EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing;
                         }
                     }
                     return 100;
@@ -317,5 +319,25 @@
     }
     return 0;
 }
+
+
+- (void)audioStateChange:(NSNotification *)aNotif
+{
+    id object = aNotif.object;
+    if ([object isKindOfClass:[EaseMessageModel class]]) {
+        EaseMessageModel *model = (EaseMessageModel *)object;
+        if (model == self && self.isPlaying == NO) {
+            self.isPlaying = YES;
+        } else {
+            self.isPlaying = NO;
+        }
+//        [self.weakCell bindViewModel:self];
+//        [self.weakMessageCell.bubbleView setModel:self];
+//        if (model == self && model.direction == EMMessageDirectionReceive) {
+//            [self.weakCell setStatusHidden:model.message.isListened];
+//        }
+    }
+}
+
 
 @end

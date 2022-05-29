@@ -32,11 +32,12 @@
     [self.msgBackgroundView addSubview:self.msgContentView];
 
     self.textView = UITextView.new;
+    self.textView.backgroundColor = UIColor.clearColor;
     self.textView.textContainer.lineFragmentPadding = 0;
     self.textView.textContainerInset = UIEdgeInsetsMake(0, 0, 0, 0);
     self.textView.editable = false;
     self.textView.scrollEnabled = false;
-    
+    self.textView.userInteractionEnabled = false;
     [self.textView setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
     [self.textView setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
     [self.textView setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
@@ -50,7 +51,23 @@
 - (void)configBubble{
     self.bubbleView = UIImageView.new;
     [self.msgBackgroundView insertSubview:self.bubbleView belowSubview:self.msgContentView];
+    {
+        self.msgContentView.userInteractionEnabled = false;
+        self.bubbleView.userInteractionEnabled = true;
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(messageTapGestureClick:)];
+        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(messagePressGestureClick:)];
+        [self.bubbleView addGestureRecognizer:tapGesture];
+        [self.bubbleView addGestureRecognizer:longPressGesture];
+    }
 }
+
+- (void)messageTapGestureClick:(UITapGestureRecognizer *)tapGesture{
+    [super messageTapGestureClick:tapGesture];
+}
+- (void)messagePressGestureClick:(UILongPressGestureRecognizer *)longPressGesture{
+    [super messagePressGestureClick:longPressGesture];
+}
+
 
 - (void)resetSubViewsLayout:(EMMessageDirection)direction showHead:(BOOL)showHead showName:(BOOL)showName{
     [super resetSubViewsLayout:direction showHead:showHead showName:showName];
@@ -111,6 +128,7 @@
 
 
 - (void)bindViewModel:(EMsgBaseCellModel *)model{
+    self.weakModel = model;
     [self resetSubViewsLayout:model.direction
                      showHead:[EMsgTableViewConfig.shared showHead_chatType:model.message.chatType direction:model.direction]
                      showName:[EMsgTableViewConfig.shared showName_chatType:model.message.chatType direction:model.direction]];

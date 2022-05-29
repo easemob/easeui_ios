@@ -34,7 +34,6 @@
     {
         UIImageView *imageView = UIImageView.new;
         [self.msgContentView addSubview:imageView];
-        imageView.backgroundColor = UIColor.orangeColor;
         [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(0);
             make.left.mas_equalTo(0);
@@ -50,7 +49,23 @@
 - (void)configBubble{
     self.bubbleView = UIImageView.new;
     [self.msgBackgroundView insertSubview:self.bubbleView belowSubview:self.msgContentView];
+    {
+        self.msgContentView.userInteractionEnabled = false;
+        self.bubbleView.userInteractionEnabled = true;
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(messageTapGestureClick:)];
+        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(messagePressGestureClick:)];
+        [self.bubbleView addGestureRecognizer:tapGesture];
+        [self.bubbleView addGestureRecognizer:longPressGesture];
+    }
 }
+
+- (void)messageTapGestureClick:(UITapGestureRecognizer *)tapGesture{
+    [super messageTapGestureClick:tapGesture];
+}
+- (void)messagePressGestureClick:(UILongPressGestureRecognizer *)longPressGesture{
+    [super messagePressGestureClick:longPressGesture];
+}
+
 
 - (void)resetSubViewsLayout:(EMMessageDirection)direction showHead:(BOOL)showHead showName:(BOOL)showName{
     [super resetSubViewsLayout:direction showHead:showHead showName:showName];
@@ -93,6 +108,7 @@
 }
 
 - (void)bindViewModel:(EMsgBaseCellModel *)model{
+    self.weakModel = model;
     [self resetSubViewsLayout:model.direction
                      showHead:[EMsgTableViewConfig.shared
                                showHead_chatType:model.message.chatType

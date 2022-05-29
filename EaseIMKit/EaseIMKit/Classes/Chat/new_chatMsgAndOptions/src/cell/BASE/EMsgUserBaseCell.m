@@ -34,13 +34,58 @@
     [self.customBackgroundView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(UIEdgeInsetsMake(0, 0, 0, 0));
     }];
+    {
+        self.headImageView.userInteractionEnabled = true;
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headImageViewTapGestureClick:)];
+        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(headImageViewLongPressGestureClick:)];
+        [self.headImageView addGestureRecognizer:tapGesture];
+        [self.headImageView addGestureRecognizer:longPressGesture];
+    }
     
-    self.headImageView.backgroundColor = UIColor.orangeColor;
-    self.nameLabel.backgroundColor = UIColor.orangeColor;
-    self.msgBackgroundView.backgroundColor = UIColor.yellowColor;
-//    self.msgContentView.backgroundColor = UIColor.cyanColor;
     
+    self.headImageView.image = [UIImage imageNamed:@"alert_error"];
+
 }
+
+- (UIView *)longPressView{
+    return self.msgBackgroundView;
+}
+
+- (void)headImageViewTapGestureClick:(UITapGestureRecognizer *)tapGesture{
+    if (self.userMessageDelegate
+        && [self.userMessageDelegate respondsToSelector:@selector(userMessageHeadDidSelected:model:)]) {
+        [self.userMessageDelegate userMessageHeadDidSelected:self model:self.weakModel];
+    }
+}
+
+- (void)headImageViewLongPressGestureClick:(UILongPressGestureRecognizer *)longPressGesture{
+    if (longPressGesture.state == UIGestureRecognizerStateBegan) {
+        if (self.userMessageDelegate
+            && [self.userMessageDelegate respondsToSelector:@selector(userMessageHeadDidLongPress:model:)]) {
+            [self.userMessageDelegate userMessageHeadDidLongPress:self model:self.weakModel];
+        }
+    }
+}
+
+
+- (void)messageTapGestureClick:(UITapGestureRecognizer *)tapGesture{
+    if (self.userMessageDelegate
+        && [self.userMessageDelegate respondsToSelector:@selector(userMessageDidSelected:model:)]) {
+        [self.userMessageDelegate userMessageDidSelected:self model:self.weakModel];
+    }
+}
+
+- (void)messagePressGestureClick:(UILongPressGestureRecognizer *)longPressGesture{
+    if (longPressGesture.state == UIGestureRecognizerStateBegan) {
+        if (self.userMessageDelegate
+            && [self.userMessageDelegate respondsToSelector:@selector(userMessageDidLongPress:model:cgPoint:)]) {
+            [self.userMessageDelegate userMessageDidLongPress:self model:self.weakModel cgPoint:CGPointZero];
+        }
+    }
+}
+
+
+
 
 - (void)resetSubViewsLayout:(EMMessageDirection)direction
                    showHead:(BOOL)showHead

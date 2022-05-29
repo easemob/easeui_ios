@@ -113,6 +113,7 @@
 
 
 - (void)bindViewModel:(EMsgBaseCellModel *)model{
+    self.weakModel = model;
     [self resetSubViewsLayout:model.direction
                      showHead:[EMsgTableViewConfig.shared showHead_chatType:model.message.chatType direction:model.direction]
                      showName:[EMsgTableViewConfig.shared showName_chatType:model.message.chatType direction:model.direction]];

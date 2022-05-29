@@ -94,7 +94,7 @@
     self.voiceContentView = voiceContentView;
     
     UIView *convertTextContentView = UIView.new;
-    convertTextContentView.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1];
+    convertTextContentView.backgroundColor = [UIColor colorWithRed:0.88 green:0.88 blue:0.88 alpha:1];
     convertTextContentView.layer.cornerRadius = 6;
     convertTextContentView.layer.masksToBounds = true;
     [self.msgBackgroundView addSubview:convertTextContentView];
@@ -125,7 +125,23 @@
 - (void)configBubble{
     self.bubbleView = UIImageView.new;
     [self.msgBackgroundView insertSubview:self.bubbleView belowSubview:self.voiceContentView];
+    {
+        self.voiceContentView.userInteractionEnabled = false;
+        self.bubbleView.userInteractionEnabled = true;
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(messageTapGestureClick:)];
+        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(messagePressGestureClick:)];
+        [self.bubbleView addGestureRecognizer:tapGesture];
+        [self.bubbleView addGestureRecognizer:longPressGesture];
+    }
 }
+
+- (void)messageTapGestureClick:(UITapGestureRecognizer *)tapGesture{
+    [super messageTapGestureClick:tapGesture];
+}
+- (void)messagePressGestureClick:(UILongPressGestureRecognizer *)longPressGesture{
+    [super messagePressGestureClick:longPressGesture];
+}
+
 
 - (void)resetSubViewsLayout:(EMMessageDirection)direction showHead:(BOOL)showHead showName:(BOOL)showName{
     [super resetSubViewsLayout:direction showHead:showHead showName:showName];
@@ -237,6 +253,7 @@
 }
 
 - (void)bindViewModel:(EMsgBaseCellModel *)model{
+    self.weakModel = model;
     self.voiceConvertTextState = model.voiceConvertTextState;
     [self resetSubViewsLayout:model.direction
                      showHead:[EMsgTableViewConfig.shared showHead_chatType:model.message.chatType direction:model.direction]
@@ -246,6 +263,12 @@
     self.durationLabel.text = [NSString stringWithFormat:@"%d",body.duration];
 //    [self.waveImageView startAnimating];
     
+    if (model.isPlaying) {
+        [self.waveImageView startAnimating];
+    }else{
+        [self.waveImageView stopAnimating];
+    }
+
     switch (self.voiceConvertTextState) {
         case EMVoiceConvertTextStateNone:{
             break;
@@ -271,6 +294,14 @@
         }
     }
     
+}
+
+- (void)playing:(BOOL)playing{
+    if (playing) {
+        [self.waveImageView startAnimating];
+    }else{
+        [self.waveImageView stopAnimating];
+    }
 }
 
 @end

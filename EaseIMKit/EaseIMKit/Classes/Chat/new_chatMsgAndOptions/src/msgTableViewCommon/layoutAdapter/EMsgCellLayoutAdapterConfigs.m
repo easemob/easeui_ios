@@ -133,7 +133,12 @@ static EMsgCellBubbleLayoutAdapterConfigs *obj1 = nil;
     self.catAdapter.receiveImageName = @"bubble_cat_receive";
     self.catAdapter.top = 16;
     self.catAdapter.fromSide = 23;
-    self.catAdapter.toSide = 27;
+    {
+        //如果限定边缘小于保持边缘,显示会出问题.
+        //此问题当然是可以解决的,但解决方法过于麻烦,并针对cell的整体构建还需要进行重新做约束.
+            self.catAdapter.toSide = 27;
+//            self.catAdapter.toSide = 24;
+    }
     self.catAdapter.bottom = 13;
     
     self.catAdapter.resizableTop = 16;
@@ -166,11 +171,11 @@ static EMsgCellOtherLayoutAdapterConfigs *obj2 = nil;
 
 - (void)config{
     
-    self.timeMarkerCellHeight = 30;
+    self.timeMarkerCellHeight = 36;
 
     self.bigEmojiContentSize = CGSizeMake(80, 80);
     
-    self.systemRemindTopAndBottomEdgeSpacing = 8;
+    self.systemRemindTopAndBottomEdgeSpacing = 12;
     self.systemRemindLeftAndRightMiniEdgeSpacing = 20;
     
     self.locationCellMsgContentWidth = EMsgCellLayoutAdapterConfigs.shared.msgContentMaxWidth;
@@ -179,7 +184,7 @@ static EMsgCellOtherLayoutAdapterConfigs *obj2 = nil;
     
     self.voiceContentViewHeight = 24;
     self.voiceContentToVoiceConvertTextContentSpacing = 8;
-    self.voiceConvertTextEdgeSpacing = 4;
+    self.voiceConvertTextEdgeSpacing = 8;
 }
 
 

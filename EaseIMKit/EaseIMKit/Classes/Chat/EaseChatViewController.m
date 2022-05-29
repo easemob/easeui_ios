@@ -58,6 +58,7 @@
 {
     EaseChatViewModel *_viewModel;
     EaseMessageCell *_currentLongPressCell;
+    EMsgUserBaseCell *_currentLongPressNewCell;
     UITableViewCell *_currentLongPressCustomCell;
     BOOL _isReloadViewWithModel; //重新刷新会话页面
 }
@@ -363,16 +364,11 @@
         ||[identifier hasSuffix:@"Custom"]
         ) {
         EMsgBaseCell *cell = (EMsgBaseCell *)[tableView dequeueReusableCellWithIdentifier:model.cellName];
+        cell.userMessageDelegate = self;
         [cell bindViewModel:model];
         return cell;
-    }
-    if ([identifier hasSuffix:@"Custom"]) {
-        EMCustomMessageBody *body = (EMCustomMessageBody *)model.message.body;
-        if ([body.event isEqualToString:@"userCard"]) {
-            EMsgBaseCell *cell = (EMsgBaseCell *)[tableView dequeueReusableCellWithIdentifier:model.cellName];
-            [cell bindViewModel:model];
-            return cell;
-        }
+    }else{
+        return nil;
     }
 #else
 #endif
@@ -646,6 +642,168 @@
         [self.delegate avatarDidLongPress:model.userDataDelegate];
     }
 }
+
+#if YANGJIANXIUGAI
+#pragma mark -- new_messageCellDelegate
+
+//=================
+////消息部分点击与长按
+///点击
+- (void)userMessageDidSelected:(EMsgUserBaseCell *)cell model:(EMsgBaseCellModel*)model{
+    [self hideLongPressView];
+    BOOL isCustom = NO;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectMessageItem:userData:)]) {
+        isCustom = [self.delegate didSelectMessageItem:model.message userData:model.userDataDelegate];
+        if (!isCustom) return;
+    }
+    //消息事件策略分类
+    EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory fetchStratrgyImplWithCellModel:model];
+    eventStrategy.chatController = self;
+    [eventStrategy messageCell:cell selectedEventOperation:model];
+}
+
+///长按
+- (void)userMessageDidLongPress:(EMsgUserBaseCell *)cell model:(EMsgBaseCellModel*)model cgPoint:(CGPoint)point{
+//    EMsgUserBaseCell *_currentLongPressNewCell;
+
+    if (cell != _currentLongPressNewCell) {
+        [self hideLongPressView];
+    }
+    self.longPressIndexPath = [self.tableView indexPathForCell:cell];
+    __weak typeof(self) weakself = self;
+    EaseExtMenuModel *copyExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"copy"] funcDesc:EaseLocalizableString(@"copy", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+        [weakself copyLongPressAction];
+    }];
+    EaseExtMenuModel *deleteExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"delete"] funcDesc:EaseLocalizableString(@"delete", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+        [weakself deleteLongPressAction:^(EMChatMessage *deleteMsg) {
+            if (deleteMsg) {
+                NSUInteger index = [weakself.messageList indexOfObject:deleteMsg];
+                if (index != -1) {
+                    [weakself.messageList removeObject:deleteMsg];
+                    if ([deleteMsg.messageId isEqualToString:weakself.moreMsgId]) {
+                        if ([weakself.messageList count] > 0) {
+                            weakself.moreMsgId = weakself.messageList[0].messageId;
+                        } else {
+                            weakself.moreMsgId = @"";
+                        }
+                    }
+                }
+            }
+        }];
+    }];
+    EaseExtMenuModel *recallExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"recall"] funcDesc:EaseLocalizableString(@"recall", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+        [weakself recallLongPressAction];
+    }];
+    
+    NSMutableArray<EaseExtMenuModel*> *extMenuArray = [[NSMutableArray<EaseExtMenuModel*> alloc]init];
+    [extMenuArray addObject:copyExtModel];
+    [extMenuArray addObject:deleteExtModel];
+    
+    BOOL isCustomCell = NO;
+    if (![cell isKindOfClass:[EMsgUserBaseCell class]]) {
+        isCustomCell = YES;
+        [extMenuArray addObject:recallExtModel];
+        _currentLongPressCustomCell = cell;
+    } else {
+        _currentLongPressNewCell = cell;
+        long long currentTimestamp = [[NSDate new] timeIntervalSince1970] * 1000;
+        if ((currentTimestamp - model.message.timestamp) <= 120000) {
+            [extMenuArray addObject:recallExtModel];
+        }
+    }
+    if (isCustomCell) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(customCellLongPressExtMenuItemArray:customCell:)]) {
+            //自定义cell长按
+            extMenuArray = [self.delegate customCellLongPressExtMenuItemArray:extMenuArray customCell:_currentLongPressCustomCell];
+        }
+    } else if (self.delegate && [self.delegate respondsToSelector:@selector(messageLongPressExtMenuItemArray:message:)]) {
+        //默认消息长按
+        extMenuArray = [self.delegate messageLongPressExtMenuItemArray:extMenuArray message:model.message];
+    }
+    if ([extMenuArray count] <= 0) {
+        return;
+    }
+
+    self.longPressView = [[EMMoreFunctionView alloc]initWithextMenuModelArray:extMenuArray menuViewModel:[[EaseExtMenuViewModel alloc]initWithType:isCustomCell ? ExtTypeCustomCellLongPress : ExtTypeLongPress itemCount:[extMenuArray count] extFuncModel:_viewModel.extFuncModel]];
+    self.longPressView.delegate = self;
+    
+    CGSize longPressViewsize = [self.longPressView getExtViewSize];
+    self.longPressView.layer.cornerRadius = 8;
+    CGRect viewRect = [self.view convertRect:self.view.bounds toView:nil];
+    CGRect rect = [cell convertRect:cell.bounds toView:nil];
+    CGFloat maxWidth = self.view.frame.size.width;
+    CGFloat maxHeight = self.tableView.frame.size.height;
+    CGFloat xOffset = 0;
+    CGFloat yOffset = 0;
+    if (!isCustomCell) {
+        if (model.direction == EMMessageDirectionReceive || (_viewModel.msgAlignmentStyle == EaseAlignmentlLeft && model.message.chatType == EMChatTypeGroupChat)) {
+            xOffset = (avatarLonger + 3*componentSpacing + _currentLongPressNewCell.longPressView.frame.size.width/2) - (longPressViewsize.width/2);
+            if (xOffset < 2*componentSpacing) {
+                xOffset = 2*componentSpacing;
+            }
+        } else {
+            xOffset = (maxWidth - avatarLonger - 3*componentSpacing - _currentLongPressNewCell.longPressView.frame.size.width/2) - (longPressViewsize.width/2);
+            if ((xOffset + longPressViewsize.width) > (maxWidth - componentSpacing)) {
+                xOffset = maxWidth - componentSpacing - longPressViewsize.width;
+            }
+        }
+        yOffset = rect.origin.y - longPressViewsize.height + componentSpacing;
+    } else {
+        xOffset = point.x - longPressViewsize.width/2;
+        if ((xOffset + longPressViewsize.width) > (maxWidth - 2*componentSpacing)) {
+            xOffset = maxWidth - 2*componentSpacing - longPressViewsize.width;
+        }
+        if (xOffset < 2*componentSpacing) {
+            xOffset = 2*componentSpacing;
+        }
+        yOffset = point.y - longPressViewsize.height - componentSpacing;
+    }
+    CGFloat topBoundary = viewRect.origin.y < [self bangScreenSize] ? [self bangScreenSize] : viewRect.origin.y;
+    if (yOffset <= topBoundary) {
+        yOffset = topBoundary;
+        if ((yOffset + longPressViewsize.height) > isCustomCell ? (point.y + componentSpacing) : (rect.origin.y + componentSpacing)) {
+            yOffset = isCustomCell ? (point.y + 2*componentSpacing) : (rect.origin.y + rect.size.height - componentSpacing);
+        }
+        if (!isCustomCell) {
+            if (_currentLongPressNewCell.longPressView.frame.size.height > (maxHeight - longPressViewsize.height - 2 * componentSpacing)) {
+                yOffset = maxHeight / 2;
+            }
+        } else {
+            if (cell.frame.size.height > (maxHeight - longPressViewsize.height - 4)) {
+                yOffset = maxHeight / 2;
+            }
+        }
+    }
+    self.longPressView.frame = CGRectMake(xOffset, yOffset, longPressViewsize.width, longPressViewsize.height);
+    UIWindow *win = [[[UIApplication sharedApplication] windows] firstObject];
+    [win addSubview:self.longPressView];
+}
+//
+////消息重发
+//- (void)userMessageCellDidResend:(EMsgUserBaseCell *)cell model:(EMsgBaseCellModel*)model;
+//
+////消息??
+//- (void)userMessageReadReceiptDetil:(EMsgUserBaseCell *)cell model:(EMsgBaseCellModel*)model;
+
+//头像部分点击与长按
+- (void)userMessageHeadDidSelected:(EMsgUserBaseCell *)cell model:(EMsgBaseCellModel *)model{
+    [self hideLongPressView];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(avatarDidSelected:)]) {
+        [self.delegate avatarDidSelected:model.userDataDelegate];
+    }
+}
+- (void)userMessageHeadDidLongPress:(EMsgUserBaseCell *)cell model:(EMsgBaseCellModel *)model{
+    [self hideLongPressView];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(avatarDidLongPress:)]) {
+        [self.delegate avatarDidLongPress:model.userDataDelegate];
+    }
+}
+
+#else
+
+#endif
+
+
 
 #pragma mark -- EMMoreFunctionViewDelegate
 - (void)menuExtItemDidSelected:(EaseExtMenuModel *)menuItemModel extType:(ExtType)extType
@@ -929,7 +1087,9 @@
             }
             dispatch_async(dispatch_get_main_queue(), ^{
 #if YANGJIANXIUGAI
-                offsetY += weakself.tableView.contentOffset.y;
+                if (offsetY > 1) {
+                    offsetY += weakself.tableView.contentOffset.y;
+                }
                 if (weakself.tableView.isRefreshing) {
                     [weakself.tableView endRefreshing];
                 }
@@ -937,7 +1097,10 @@
                     [weakself refreshTableView:isScrollBottom];
                 }else{
                     [weakself.tableView reloadData];
-                    [weakself.tableView setContentOffset:CGPointMake(0, offsetY) animated:0];
+                    if (offsetY > 1) {
+//                    [weakself.tableView setContentOffset:CGPointMake(0, offsetY) animated:0];
+                    weakself.tableView.contentOffset = CGPointMake(0, offsetY);
+                    }
                 }
 #else
                 if (weakself.tableView.isRefreshing) {
@@ -1079,10 +1242,25 @@
 
 #if YANGJIANXIUGAI
 - (void)refreshControlClick:(UIRefreshControl *)sender{
+    /*
+     标记:
+     借用runloop来实现滚动时暂缓执行.直到滚动停止之后才会执行.
+     但是这里有问题(具体原因,如何解决,暂时没有头绪)
+     问题现象:下拉进入加载后,不松手向上拖动一部分,松手后,无法偏移至预期位置,而是会到顶部+当前偏移量.
+     
+     如果不使用runloop,则不会出现此问题,不过用户体验感不太理想.
+     
+     如果同样想实现松手进行加载,而且解决当前浮现问题,可使用第三方下拉加载控件,如 MJRefresh 是可以解决的.
+     (当前使用的是官方提供的UIRefresh)
+     */
+#if 0
     __weak typeof(self) weakSelf = self;
     [NSRunLoop.currentRunLoop performInModes:@[NSDefaultRunLoopMode] block:^{
         [weakSelf dropdownRefreshTableViewWithData];
     }];
+#else
+    [self dropdownRefreshTableViewWithData];
+#endif
 }
 #else
 #endif
