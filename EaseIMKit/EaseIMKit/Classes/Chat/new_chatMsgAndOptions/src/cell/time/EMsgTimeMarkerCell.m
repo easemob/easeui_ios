@@ -27,13 +27,7 @@
     [self.contentView addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make) {
         //标记测试cell能力,完成后只保留最后一行,前三行约束要注释掉.
-#if YANGJIAN_MANUAL
         make.center.mas_equalTo(0);
-#else
-        make.top.mas_equalTo(10);
-        make.bottom.mas_equalTo(-10);
-        make.centerX.mas_equalTo(0);
-#endif
     }];
     label.textColor = UIColor.grayColor;
     label.font = EMsgTableViewConfig.shared.timeFont;

@@ -268,7 +268,7 @@
     return [self.dataArray count];
 }
 
-#if YANGJIAN_MANUAL
+#if YANGJIANXIUGAI
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     EMsgBaseCellModel *model = [self.dataArray objectAtIndex:indexPath.row];
     return model.cellHeight;
