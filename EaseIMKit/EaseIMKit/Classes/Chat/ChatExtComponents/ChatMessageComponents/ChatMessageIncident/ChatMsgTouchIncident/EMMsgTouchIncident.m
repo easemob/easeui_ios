@@ -21,7 +21,7 @@
 @implementation EMMessageEventStrategy
 
 - (void)messageCellEventOperation:(EaseMessageCell *)aCell{}
-- (void)messageCell:(EMsgUserBaseCell *)cell selectedEventOperation:(EMsgBaseCellModel *)model{}
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{}
 
 @end
 
@@ -103,7 +103,7 @@
         }
     }
 }
-- (void)messageCell:(EMsgUserBaseCell *)cell selectedEventOperation:(EMsgBaseCellModel *)model{
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
     EMTextMessageBody *body = (EMTextMessageBody *)model.message.body;
     NSString *chatStr = body.text;
     NSDataDetector *detector= [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
@@ -194,7 +194,7 @@
         }
     }];
 }
-- (void)messageCell:(EMsgUserBaseCell *)cell selectedEventOperation:(EMsgBaseCellModel *)model{
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
     __weak typeof(self.chatController) weakself = self.chatController;
     void (^downloadThumbBlock)(EaseMessageModel *aModel) = ^(EaseMessageModel *aModel) {
         [weakself showHint:EaseLocalizableString(@"getThumnail...", nil)];
@@ -270,7 +270,7 @@
     navController.modalPresentationStyle = 0;
     [self.chatController.navigationController presentViewController:navController animated:YES completion:nil];
 }
-- (void)messageCell:(EMsgUserBaseCell *)cell selectedEventOperation:(EMsgBaseCellModel *)model{
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
     EMLocationMessageBody *body = (EMLocationMessageBody *)model.message.body;
     EMLocationViewController *controller = [[EMLocationViewController alloc] initWithLocation:CLLocationCoordinate2DMake(body.latitude, body.longitude)];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
@@ -341,14 +341,14 @@
         }
     }];
 }
-- (void)messageCell:(EMsgUserBaseCell *)cell selectedEventOperation:(EMsgBaseCellModel *)model{
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
     EMVoiceMessageBody *body = (EMVoiceMessageBody*)model.message.body;
     if (body.downloadStatus == EMDownloadStatusDownloading) {
         [EaseAlertController showInfoAlert:EaseLocalizableString(@"downloadingVoice...", nil)];
         return;
     }
     
-    void (^playBlock)(EMsgUserBaseCell *cell,EMsgBaseCellModel *model) = ^(EMsgUserBaseCell *cell,EMsgBaseCellModel *model) {
+    void (^playBlock)(EMsgBaseCellModel *model) = ^(EMsgBaseCellModel *model) {
         if (!model.message.isListened) {
             model.message.isListened = YES;
         }
@@ -365,22 +365,22 @@
                 [EMAudioPlayerUtil sharedHelper].model = nil;
 //                [[NSNotificationCenter defaultCenter] postNotificationName:AUDIOMSGSTATECHANGE object:aModel];
                 model.isPlaying = !model.isPlaying;
-                [((EMsgUserVoiceCell *)cell) playing:model.isPlaying];
+                [((EMsgUserVoiceCell *)model.weakCell) playing:model.isPlaying];
                 return;
             }
         }
     
         [EMClient.sharedClient.chatManager updateMessage:model.message completion:nil];
         model.isPlaying = !model.isPlaying;
-        [((EMsgUserVoiceCell *)cell) playing:model.isPlaying];
+        [((EMsgUserVoiceCell *)model.weakCell) playing:model.isPlaying];
         [[EMAudioPlayerUtil sharedHelper] startPlayerWithPath:body.localPath model:model completion:^(NSError * _Nonnull error) {
             model.isPlaying = !model.isPlaying;
-            [((EMsgUserVoiceCell *)cell) playing:model.isPlaying];
+            [((EMsgUserVoiceCell *)model.weakCell) playing:model.isPlaying];
         }];
     };
     
     if (body.downloadStatus == EMDownloadStatusSucceed) {
-        playBlock(cell,model);
+        playBlock(model);
         return;
     }
     
@@ -395,7 +395,7 @@
         if (error) {
             [EaseAlertController showErrorAlert:EaseLocalizableString(@"downloadVoiceFail", nil)];
         } else {
-            playBlock(cell,model);
+            playBlock(model);
         }
     }];
 }
@@ -466,7 +466,7 @@
     
 }
 
-- (void)messageCell:(EMsgUserBaseCell *)cell selectedEventOperation:(EMsgBaseCellModel *)model{
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
     __weak typeof(self.chatController) weakChatController = self.chatController;
     void (^playBlock)(NSString *aPath) = ^(NSString *aPathe) {
         NSURL *videoURL = [NSURL fileURLWithPath:aPathe];
@@ -567,7 +567,7 @@
         }
     }];
 }
-- (void)messageCell:(EMsgUserBaseCell *)cell selectedEventOperation:(EMsgBaseCellModel *)model{
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
     EMFileMessageBody *body = (EMFileMessageBody *)model.message.body;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
@@ -616,7 +616,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:CALL_SELECTCONFERENCECELL object:aCell.model.message];
 }
 
-- (void)messageCell:(EMsgUserBaseCell *)cell selectedEventOperation:(EMsgBaseCellModel *)model{
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
     [[NSNotificationCenter defaultCenter] postNotificationName:CALL_SELECTCONFERENCECELL object:model.message];
 }
 

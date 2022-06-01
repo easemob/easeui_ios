@@ -68,6 +68,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy)NSString *customText;
 
 
+
+
 - (instancetype)initWithEMMessage:(EMChatMessage *)aMsg;
 
 - (instancetype)initWithTimeMarker:(NSString *)timeString;

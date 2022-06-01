@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)messageCellEventOperation:(EaseMessageCell *)aCell;
 
-- (void)messageCell:(EMsgUserBaseCell *)cell selectedEventOperation:(EMsgBaseCellModel *)model;
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model;
 
 @end
 

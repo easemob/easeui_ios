@@ -49,6 +49,7 @@
 #import "EMsgUserFileCell.h"
 #import "EMsgUserBigEmojiCell.h"
 #import "EMsgUserUNKNOWCell.h"
+#import "EMVoiceConvertTextHelper.h"
 
 
 #else
@@ -177,6 +178,7 @@
 
 - (void)dealloc
 {
+    [EMVoiceConvertTextHelper.shared stopAll];
     [EaseIMKitManager.shared setConversationId:@""];
     [self hideLongPressView];
     [[EMAudioPlayerUtil sharedHelper] stopPlayer];
@@ -659,11 +661,11 @@
     //消息事件策略分类
     EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory fetchStratrgyImplWithCellModel:model];
     eventStrategy.chatController = self;
-    [eventStrategy messageCell:cell selectedEventOperation:model];
+    [eventStrategy messageCellSelectedEventOperation:model];
 }
 
 ///长按
-- (void)userMessageDidLongPress:(EMsgUserBaseCell *)cell model:(EMsgBaseCellModel*)model cgPoint:(CGPoint)point{
+- (void)userMessageDidLongPress:(EMsgUserBaseCell *)cell model:(EMsgBaseCellModel *)model cgPoint:(CGPoint)point{
 //    EMsgUserBaseCell *_currentLongPressNewCell;
 
     if (cell != _currentLongPressNewCell) {
@@ -720,6 +722,14 @@
         //默认消息长按
         extMenuArray = [self.delegate messageLongPressExtMenuItemArray:extMenuArray message:model.message];
     }
+
+    if (model.type == EMMessageTypeVoice) {
+        EaseExtMenuModel *convertTextMenuModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"copy"] funcDesc:EaseLocalizableString(@"转文字", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+            [weakself convertTextMenuAction:cell model:model];
+        }];
+        [extMenuArray insertObject:convertTextMenuModel atIndex:1];
+    }
+    
     if ([extMenuArray count] <= 0) {
         return;
     }
@@ -778,6 +788,17 @@
     UIWindow *win = [[[UIApplication sharedApplication] windows] firstObject];
     [win addSubview:self.longPressView];
 }
+
+- (void)convertTextMenuAction:(EMsgUserBaseCell *)cell model:(EMsgBaseCellModel *)model{
+    
+    EMVoiceConvertTextAction *action = EMVoiceConvertTextAction.new;
+    action.messageTableView = self.tableView;
+//    action.cell = (EMsgUserVoiceCell *)cell;
+//    action.models = self.dataArray;
+    action.model = model;
+    [EMVoiceConvertTextHelper.shared addAction:action];
+}
+
 //
 ////消息重发
 //- (void)userMessageCellDidResend:(EMsgUserBaseCell *)cell model:(EMsgBaseCellModel*)model;

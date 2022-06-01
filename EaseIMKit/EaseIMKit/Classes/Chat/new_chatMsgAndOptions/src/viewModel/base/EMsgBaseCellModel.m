@@ -7,7 +7,7 @@
 
 #import "EMsgBaseCellModel.h"
 
-#define Y_TEST 1
+#define Y_TEST 0
 
 
 @interface EMsgBaseCellModel ()
@@ -82,7 +82,6 @@
                 self.voiceConvertText = @"预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.";
             }
 #endif
-            
             
             break;
         }
