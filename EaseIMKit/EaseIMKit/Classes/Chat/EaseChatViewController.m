@@ -893,8 +893,14 @@
                     message.localTime = msg.localTime;
                     message.timestamp = msg.timestamp;
                     [self.currentConversation insertMessage:message error:nil];
+#if YANGJIANXIUGAI
+                    EMsgBaseCellModel *replaceModel = [[EMsgBaseCellModel alloc]initWithEMMessage:message];
+                    [self.dataArray replaceObjectAtIndex:idx withObject:replaceModel];
+#else
                     EaseMessageModel *replaceModel = [[EaseMessageModel alloc]initWithEMMessage:message];
                     [self.dataArray replaceObjectAtIndex:idx withObject:replaceModel];
+#endif
+
                 }
             }
         }];
@@ -931,9 +937,6 @@
                 }
             }
         }];
-        
-       
-        
     });
 }
 
@@ -1092,7 +1095,7 @@
         dispatch_async(self.msgQueue, ^{
             NSArray *formated = [weakself formatMessages:tempMsgs];
 #if YANGJIANXIUGAI
-            __block float offsetY = 0;
+            float newMessageHeight = 0;
 #else
 #endif
             if (isInsertBottom) {
@@ -1100,7 +1103,7 @@
             } else {
 #if YANGJIANXIUGAI
                 for (EMsgBaseCellModel *model in formated) {
-                    offsetY += model.cellHeight;
+                    newMessageHeight += model.cellHeight;
                 }
 #else
 #endif
@@ -1108,6 +1111,22 @@
             }
             dispatch_async(dispatch_get_main_queue(), ^{
 #if YANGJIANXIUGAI
+                if (weakself.tableView.isRefreshing) {
+                    [weakself.tableView endRefreshing];
+                }
+                if (isScrollBottom) {
+                    [weakself refreshTableView:isScrollBottom];
+                }else{
+                    float offsetY = newMessageHeight;
+                    if (newMessageHeight > 1) {
+                        offsetY += weakself.tableView.contentOffset.y;
+                    }
+                    [weakself.tableView reloadData];
+                    if (offsetY > 1) {
+                        [weakself.tableView setContentOffset:CGPointMake(0, offsetY) animated:0];
+                    }
+                }
+                /*
                 if (offsetY > 1) {
                     offsetY += weakself.tableView.contentOffset.y;
                 }
@@ -1119,10 +1138,10 @@
                 }else{
                     [weakself.tableView reloadData];
                     if (offsetY > 1) {
-//                    [weakself.tableView setContentOffset:CGPointMake(0, offsetY) animated:0];
-                    weakself.tableView.contentOffset = CGPointMake(0, offsetY);
+                        [weakself.tableView setContentOffset:CGPointMake(0, offsetY) animated:0];
                     }
                 }
+                 */
 #else
                 if (weakself.tableView.isRefreshing) {
                     [weakself.tableView endRefreshing];
@@ -1226,6 +1245,7 @@
         if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(didSendMessage:error:)]) {
             [weakself.delegate didSendMessage:message error:error];
         }
+        [weakself refreshTableView:YES];
     }];
 }
 
@@ -1293,13 +1313,14 @@
         _tableView.tableFooterView = [UIView new];
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.rowHeight = UITableViewAutomaticDimension;
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 #if YANGJIANXIUGAI
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.backgroundColor = [UIColor systemPinkColor];
         [_tableView enableRefresh:EaseLocalizableString(@"dropRefresh", nil) color:UIColor.redColor];
         [_tableView.refreshControl addTarget:self action:@selector(refreshControlClick:) forControlEvents:UIControlEventValueChanged];
 #else
+        _tableView.rowHeight = UITableViewAutomaticDimension;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.estimatedRowHeight = 130;
         _tableView.backgroundColor = [UIColor systemPinkColor];
         [_tableView enableRefresh:EaseLocalizableString(@"dropRefresh", nil) color:UIColor.redColor];

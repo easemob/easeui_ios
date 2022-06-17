@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithConversation:(EMConversation *)conversation;
 
 @property (nonatomic) id<EaseUserDelegate> userDelegate;
+@property (nonatomic,strong,readonly)EMConversation *conversation;
 
 @property (nonatomic, strong, readonly) NSString *easeId;
 @property (nonatomic, strong, readonly) NSString *showName;

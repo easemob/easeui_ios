@@ -27,10 +27,18 @@
     self.nameLabel.font = EMsgTableViewConfig.shared.nameFont;
     self.msgBackgroundView = UIView.new;
 
+    self.stateLabel = UILabel.new;
+    self.stateLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
+    self.stateLabel.textColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1];
+    
+    
     [self.contentView addSubview:self.customBackgroundView];
     [self.customBackgroundView addSubview:self.headImageView];
     [self.customBackgroundView addSubview:self.nameLabel];
     [self.customBackgroundView addSubview:self.msgBackgroundView];
+    
+    [self.customBackgroundView addSubview:self.stateLabel];
+    
     [self.customBackgroundView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(UIEdgeInsetsMake(0, 0, 0, 0));
     }];
@@ -42,8 +50,7 @@
         [self.headImageView addGestureRecognizer:longPressGesture];
     }
     
-    
-    self.headImageView.image = [UIImage imageNamed:@"alert_error"];
+//    self.headImageView.image = [UIImage imageNamed:@"alert_error"];
 
 }
 
@@ -83,9 +90,6 @@
         }
     }
 }
-
-
-
 
 - (void)resetSubViewsLayout:(EMMessageDirection)direction
                    showHead:(BOOL)showHead
@@ -135,7 +139,7 @@
     }
     //这里说明下:如果不展示头像,聊天内容会偏移,而不是拉宽消息显示控件的宽度.偏移的距离和头像展示时占用的宽度相同(区别于头像本身,头像展示时宽度为 : 头像本身宽度和头像距离边缘的宽度相加)
     UIEdgeInsets msgBackgroundEdgeInsets
-    = [EMsgCellLayoutAdapterConfigs.shared
+    = [EMsgTableViewFunctions
        convertToEdgeInsets_direction:direction
        top:EMsgCellLayoutAdapterConfigs.shared.backgroundLayoutAdapter.top
        + (showName ? EMsgCellLayoutAdapterConfigs.shared.userInfoLayoutAdapter.nameTakeHeight : 0)
@@ -157,6 +161,71 @@
         make.right.mas_equalTo(-msgBackgroundEdgeInsets.right);
 
     }];
+}
+
+- (void)bindViewModel:(EMsgBaseCellModel *)model{
+    [super bindViewModel:model];
+    
+    if (!self.nameLabel.hidden) {
+        if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(showName)]) {
+            NSLog(@"===========%@",model.userDataDelegate.showName);
+            self.nameLabel.text = model.userDataDelegate.showName;
+        } else {
+            self.nameLabel.text = model.message.from;
+        }
+    }
+    if (!self.headImageView.hidden) {
+        BOOL isCustomAvatar = NO;
+        if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(defaultAvatar)]) {
+            if (model.userDataDelegate.defaultAvatar) {
+                self.headImageView.image = model.userDataDelegate.defaultAvatar;
+                isCustomAvatar = YES;
+            }
+        }
+        if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(avatarURL)]) {
+            if ([model.userDataDelegate.avatarURL length] > 0) {
+                [self.headImageView Ease_setImageWithURL:[NSURL URLWithString:model.userDataDelegate.avatarURL]
+                                        placeholderImage:[UIImage imageNamed:@"defaultHead"]];
+                isCustomAvatar = YES;
+            }
+        }
+        if (!isCustomAvatar) {
+//            self.headImageView.image = [UIImage easeUIImageNamed:@"defaultHead"];
+            self.headImageView.image = [UIImage imageNamed:@"defaultHead"];
+        }
+    }
+    
+    if (model.message.chatType == EMChatTypeChat) {
+        if (model.message.direction == EMMessageDirectionSend) {
+            self.stateLabel.hidden = false;
+            switch (model.message.status) {
+                case EMMessageStatusPending:{
+                    self.stateLabel.text = @"等待发送";
+                    break;
+                }
+                case EMMessageStatusDelivering:{
+                    self.stateLabel.text = @"正在发送";
+                    break;
+                }
+                case EMMessageStatusSucceed:{
+                    if (model.message.isReadAcked) {
+                        self.stateLabel.text = @"已读";
+                    }else{
+                        self.stateLabel.text = @"未读";
+                    }
+                    break;
+                }
+                case EMMessageStatusFailed:{
+                    self.stateLabel.text = @"发送失败";
+                    break;
+                }
+                default:
+                    break;
+            }
+        }else{
+            self.stateLabel.hidden = true;
+        }
+    }
 }
 
 @end

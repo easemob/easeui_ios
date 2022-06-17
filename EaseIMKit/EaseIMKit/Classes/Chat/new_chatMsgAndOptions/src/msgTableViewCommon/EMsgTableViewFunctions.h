@@ -18,6 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 //float fitHeight_string(NSString *string,UIFont *font,float maxWidth);
 //CGSize messageCell_imageSizeToFitSize(CGSize imageSize);
 
++ (UIEdgeInsets)convertToEdgeInsets_direction:(EMMessageDirection)direction
+                                          top:(float)top
+                                     fromSide:(float)fromSide
+                                       toSide:(float)toSide
+                                       bottom:(float)bottom;
+
 + (NSAttributedString *)attributedString:(NSString *)string font:(UIFont *)font color:(UIColor *)color;
 
 + (float)fitHeight_attributedString:(NSAttributedString *)attributedString maxWidth:(float)maxWidth;

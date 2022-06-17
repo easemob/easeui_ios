@@ -75,12 +75,12 @@
             return
             [[UIImage imageNamed:self.sendImageName]
                         resizableImageWithCapInsets:
-                 UIEdgeInsetsMake(self.top, self.toSide, self.bottom, self.fromSide)];
+                 UIEdgeInsetsMake(self.resizableTop, self.resizableToSide, self.resizableBottom, self.resizableFromSide)];
         case EMMessageDirectionReceive:
             return
             [[UIImage imageNamed:self.receiveImageName]
                         resizableImageWithCapInsets:
-                 UIEdgeInsetsMake(self.top, self.fromSide, self.bottom, self.toSide)];
+                 UIEdgeInsetsMake(self.resizableTop, self.resizableFromSide, self.resizableBottom, self.resizableToSide)];
         default:
             return [UIImage imageNamed:self.sendImageName];
     }

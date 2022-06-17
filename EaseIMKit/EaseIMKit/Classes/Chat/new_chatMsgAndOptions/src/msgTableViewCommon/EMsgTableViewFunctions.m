@@ -156,5 +156,21 @@ CGSize messageCell_imageSizeToFitSize(CGSize imageSize) {
     return CGSizeMake(ceilf(EMsgCellLayoutAdapterConfigs.shared.msgContentMaxWidth * 9 / 16),EMsgCellLayoutAdapterConfigs.shared.msgContentMaxWidth);
 }
 
++ (UIEdgeInsets)convertToEdgeInsets_direction:(EMMessageDirection)direction
+                                          top:(float)top
+                                     fromSide:(float)fromSide
+                                       toSide:(float)toSide
+                                       bottom:(float)bottom{
+    switch (direction) {
+        case EMMessageDirectionSend:
+            return UIEdgeInsetsMake(top, toSide, bottom, fromSide);
+        case EMMessageDirectionReceive:
+            return UIEdgeInsetsMake(top, fromSide, bottom, toSide);
+        default:
+            return UIEdgeInsetsZero;
+    }
+}
+
+
 
 @end

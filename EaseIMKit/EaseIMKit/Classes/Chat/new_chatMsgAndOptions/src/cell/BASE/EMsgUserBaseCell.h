@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong)UILabel *nameLabel;
 @property (nonatomic,strong)UIView *msgBackgroundView;
 
+@property (nonatomic,strong)UILabel *stateLabel;
+
 @property (nonatomic)EMMessageDirection currentDirection;
 
 - (void)resetSubViewsLayout:(EMMessageDirection)direction

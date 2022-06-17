@@ -73,8 +73,15 @@
         self.fileSizeLabel = label;
     }
     
-    
+    [self configStateView];
     [self configBubble];
+}
+
+- (void)configStateView{
+    [self.stateLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self.msgContentView.mas_bottom);
+        make.right.mas_equalTo(self.msgContentView.mas_left).offset(-20);
+    }];
 }
 
 - (void)configBubble{
@@ -100,7 +107,7 @@
 
 - (void)resetSubViewsLayout:(EMMessageDirection)direction showHead:(BOOL)showHead showName:(BOOL)showName{
     [super resetSubViewsLayout:direction showHead:showHead showName:showName];
-    UIEdgeInsets msgContentEdgeInsets = [EMsgCellLayoutAdapterConfigs.shared
+    UIEdgeInsets msgContentEdgeInsets = [EMsgTableViewFunctions
                                          convertToEdgeInsets_direction:direction top:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.top fromSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.fromSide toSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.toSide bottom:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.bottom];
     [self.msgContentView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(msgContentEdgeInsets.top);
@@ -122,8 +129,8 @@
     }];
 
     UIEdgeInsets bubbleEdgeInsets =
-    [EMsgCellLayoutAdapterConfigs.shared
-     convertToEdgeInsets_direction:direction
+    [EMsgTableViewFunctions
+                                         convertToEdgeInsets_direction:direction
      top:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.top
      fromSide:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.fromSide
      toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.toSide
@@ -139,11 +146,12 @@
 }
 
 - (void)bindViewModel:(EMsgBaseCellModel *)model{
-    model.weakCell = self;
-    self.weakModel = model;
     [self resetSubViewsLayout:model.direction
                      showHead:[EMsgTableViewConfig.shared showHead_chatType:model.message.chatType direction:model.direction]
                      showName:[EMsgTableViewConfig.shared showName_chatType:model.message.chatType direction:model.direction]];
+    
+    [super bindViewModel:model];
+
     EMFileMessageBody *body = (EMFileMessageBody *)model.message.body;
     self.fileNameLabel.text = body.displayName;
     self.fileSizeLabel.text = [NSString stringWithFormat:@"%lld字节",body.fileLength];

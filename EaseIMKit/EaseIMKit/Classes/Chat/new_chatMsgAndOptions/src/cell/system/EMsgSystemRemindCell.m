@@ -47,8 +47,8 @@
 }
 
 - (void)bindViewModel:(EMsgBaseCellModel *)model{
-    model.weakCell = self;
-    self.weakModel = model;
+
+    [super bindViewModel:model];
     if (model.cellType == EMsgCellType_system) {
         self.label.attributedText = model.show_content;
     }

@@ -76,7 +76,7 @@
             self.cellName = @"EMsgUserVoiceCell";
             
 #if Y_TEST
-            {
+            {//这里是用来测试布局情况.无任何意义
                 self.voiceConvertTextState = EMVoiceConvertTextStateFailure;
                 self.voiceConvertTextState = EMVoiceConvertTextStateSuccess;
                 self.voiceConvertText = @"预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.预留语音转文字UI控件.";

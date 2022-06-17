@@ -22,11 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
-- (UIEdgeInsets)convertToEdgeInsets_direction:(EMMessageDirection)direction
-                                          top:(float)top
-                                     fromSide:(float)fromSide
-                                       toSide:(float)toSide
-                                       bottom:(float)bottom;
 
 - (float)msgBackgroundWidth;
 

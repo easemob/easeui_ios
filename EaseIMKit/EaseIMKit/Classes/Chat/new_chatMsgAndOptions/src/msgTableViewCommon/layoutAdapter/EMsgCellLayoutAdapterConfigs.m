@@ -33,7 +33,7 @@ static EMsgCellLayoutAdapterConfigs *obj0 = nil;
     self.userInfoLayoutAdapter.headWidth = 40;
     self.userInfoLayoutAdapter.headHeight = 40;
     self.userInfoLayoutAdapter.nameTop = 4;
-    self.userInfoLayoutAdapter.nameFromSide = 4;
+    self.userInfoLayoutAdapter.nameFromSide = 12;
     self.userInfoLayoutAdapter.nameHeight = 14;
     
     self.backgroundLayoutAdapter = EMsgCellMsgBackgroundLayoutAdapter.new;
@@ -56,21 +56,6 @@ static EMsgCellLayoutAdapterConfigs *obj0 = nil;
 
 }
 
-- (UIEdgeInsets)convertToEdgeInsets_direction:(EMMessageDirection)direction
-                                          top:(float)top
-                                     fromSide:(float)fromSide
-                                       toSide:(float)toSide
-                                       bottom:(float)bottom{
-    switch (direction) {
-        case EMMessageDirectionSend:
-            return UIEdgeInsetsMake(top, toSide, bottom, fromSide);
-        case EMMessageDirectionReceive:
-            return UIEdgeInsetsMake(top, fromSide, bottom, toSide);
-        default:
-            return UIEdgeInsetsZero;
-    }
-}
-
 - (float)msgBackgroundWidth{
     return [self.backgroundLayoutAdapter msgBackgroundWidth_userInfoAdapter:self.userInfoLayoutAdapter];
 }
@@ -83,6 +68,7 @@ static EMsgCellLayoutAdapterConfigs *obj0 = nil;
     return [self.backgroundLayoutAdapter cellMinHeight_userInfoAdapter:self.userInfoLayoutAdapter];
 }
 
+//cellHeight - contentHeight后 , 所剩高度
 - (float)cellHeight_apartFrom_msgContentHeight_showName:(BOOL)showName{
     return [self.contentLayoutAdapter cellHeight_apartFrom_msgContentHeight_userInfoAdapter:self.userInfoLayoutAdapter backgroundAdapter:self.backgroundLayoutAdapter showName:showName];
 }
@@ -118,7 +104,7 @@ static EMsgCellBubbleLayoutAdapterConfigs *obj1 = nil;
     self.defaultAdapter.receiveImageName = @"bubble_cat_receive";
     self.defaultAdapter.top = 16;
     self.defaultAdapter.fromSide = 23;
-    self.defaultAdapter.toSide = 27;
+    self.defaultAdapter.toSide = 28;
     self.defaultAdapter.bottom = 13;
     
     self.defaultAdapter.resizableTop = 16;
@@ -132,13 +118,10 @@ static EMsgCellBubbleLayoutAdapterConfigs *obj1 = nil;
     self.catAdapter.sendImageName = @"bubble_cat_send";
     self.catAdapter.receiveImageName = @"bubble_cat_receive";
     self.catAdapter.top = 16;
-    self.catAdapter.fromSide = 23;
-    {
-        //如果限定边缘小于保持边缘,显示会出问题.
-        //此问题当然是可以解决的,但解决方法过于麻烦,并针对cell的整体构建还需要进行重新做约束.
-            self.catAdapter.toSide = 27;
-//            self.catAdapter.toSide = 24;
-    }
+    
+    self.catAdapter.fromSide = 20;
+    self.catAdapter.toSide = 16;
+    
     self.catAdapter.bottom = 13;
     
     self.catAdapter.resizableTop = 16;

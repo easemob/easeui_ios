@@ -116,10 +116,15 @@
 
     self.convertTextContentView = convertTextContentView;
     
+    [self configStateView];
     [self configBubble];
-    
-    self.durationLabel.backgroundColor = UIColor.yellowColor;
-    
+}
+
+- (void)configStateView{
+    [self.stateLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self.voiceContentView.mas_bottom);
+        make.right.mas_equalTo(self.voiceContentView.mas_left).offset(-20);
+    }];
 }
 
 - (void)configBubble{
@@ -142,11 +147,18 @@
     [super messagePressGestureClick:longPressGesture];
 }
 
+- (void)playing:(BOOL)playing{
+    if (playing) {
+        [self.waveImageView startAnimating];
+    }else{
+        [self.waveImageView stopAnimating];
+    }
+}
 
 - (void)resetSubViewsLayout:(EMMessageDirection)direction showHead:(BOOL)showHead showName:(BOOL)showName{
     [super resetSubViewsLayout:direction showHead:showHead showName:showName];
     UIEdgeInsets msgContentEdgeInsets =
-    [EMsgCellLayoutAdapterConfigs.shared
+    [EMsgTableViewFunctions
      convertToEdgeInsets_direction:direction
      top:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.top
      fromSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.fromSide
@@ -236,8 +248,8 @@
     }
     
     UIEdgeInsets bubbleEdgeInsets =
-    [EMsgCellLayoutAdapterConfigs.shared
-     convertToEdgeInsets_direction:direction
+    [EMsgTableViewFunctions
+                                         convertToEdgeInsets_direction:direction
      top:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.top
      fromSide:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.fromSide
      toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.toSide
@@ -253,12 +265,12 @@
 }
 
 - (void)bindViewModel:(EMsgBaseCellModel *)model{
-    model.weakCell = self;
-    self.weakModel = model;
     self.voiceConvertTextState = model.voiceConvertTextState;
     [self resetSubViewsLayout:model.direction
                      showHead:[EMsgTableViewConfig.shared showHead_chatType:model.message.chatType direction:model.direction]
                      showName:[EMsgTableViewConfig.shared showName_chatType:model.message.chatType direction:model.direction]];
+    [super bindViewModel:model];
+
     EMVoiceMessageBody *body = (EMVoiceMessageBody *)model.message.body;
     
     self.durationLabel.text = [NSString stringWithFormat:@"%d",body.duration];
@@ -297,13 +309,6 @@
     
 }
 
-- (void)playing:(BOOL)playing{
-    if (playing) {
-        [self.waveImageView startAnimating];
-    }else{
-        [self.waveImageView stopAnimating];
-    }
-}
 
 @end
 
