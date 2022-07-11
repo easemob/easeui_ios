@@ -25,23 +25,23 @@ static EMsgTableViewConfig *obj = nil;
 {
     self = [super init];
     if (self) {
-        self.singleSend_showName = false;
-        self.singleReceive_showName = false;
+        self.singleSend_showName = false;       //单聊 发送消息时,是否显示昵称   (当前不显示)
+        self.singleReceive_showName = false;    //单聊 接收消息时,是否显示昵称   (当前不显示)
         
-        self.groupSend_showName = false;
-        self.groupReceive_showName = true;
+        self.groupSend_showName = false;    //群聊 发送消息时,是否显示昵称   (当前不显示)
+        self.groupReceive_showName = true;  //群聊 接收消息时,是否显示昵称   (当前显示)
         
-        self.chatroomSend_showName = false;
-        self.chatroomReceive_showName = true;
+        self.chatroomSend_showName = false;     //聊天室 发送消息时,是否显示昵称   (当前不显示)
+        self.chatroomReceive_showName = true;   //聊天室 接收消息时,是否显示昵称   (当前显示)
         
-        self.singleSend_showHead = true;
-        self.singleReceive_showHead = true;
+        self.singleSend_showHead = true;    //单聊 发送消息时,是否显示头像   (当前显示)
+        self.singleReceive_showHead = true; //单聊 接收消息时,是否显示头像   (当前显示)
         
-        self.groupSend_showHead = true;
-        self.groupReceive_showHead = true;
+        self.groupSend_showHead = true;     //群聊 发送消息时,是否显示头像   (当前显示)
+        self.groupReceive_showHead = true;  //群聊 接收消息时,是否显示头像   (当前显示)
         
-        self.chatroomSend_showHead = true;
-        self.chatroomReceive_showHead = true;
+        self.chatroomSend_showHead = true;      //聊天室 发送消息时,是否显示头像   (当前显示)
+        self.chatroomReceive_showHead = true;   //聊天室 接收消息时,是否显示头像   (当前显示)
         
         self.nameFont =         [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
         self.timeFont =         [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
