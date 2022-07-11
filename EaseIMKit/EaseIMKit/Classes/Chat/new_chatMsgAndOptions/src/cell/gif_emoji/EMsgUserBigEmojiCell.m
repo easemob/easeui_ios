@@ -115,7 +115,7 @@
     self.bubbleView.image = [EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter bubbleImage:direction];
 }
 
-- (void)bindViewModel:(EMsgBaseCellModel *)model{
+- (void)bindDataFromViewModel:(EMsgBaseCellModel *)model{
     [self resetSubViewsLayout:model.direction
                      showHead:[EMsgTableViewConfig.shared
                                showHead_chatType:model.message.chatType
@@ -124,7 +124,7 @@
                                showName_chatType:model.message.chatType
                                direction:model.direction]];
     
-    [super bindViewModel:model];
+    [super bindDataFromViewModel:model];
 
 //    EMTextMessageBody *body = (EMTextMessageBody *)model.message.body;
     

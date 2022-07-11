@@ -163,8 +163,8 @@
     }];
 }
 
-- (void)bindViewModel:(EMsgBaseCellModel *)model{
-    [super bindViewModel:model];
+- (void)bindDataFromViewModel:(EMsgBaseCellModel *)model{
+    [super bindDataFromViewModel:model];
     
     if (!self.nameLabel.hidden) {
         if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(showName)]) {

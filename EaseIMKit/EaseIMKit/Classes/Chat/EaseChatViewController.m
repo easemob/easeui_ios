@@ -288,11 +288,11 @@
         EMsgBaseCellModel *model = (EMsgBaseCellModel *)obj;
         if (model.cellType == EMsgCellType_time) {
             EMsgBaseCell *cell = (EMsgBaseCell *)[tableView dequeueReusableCellWithIdentifier:model.cellName];
-            [cell bindViewModel:model];
+            [cell bindDataFromViewModel:model];
             return cell;
         }else if (model.cellType == EMsgCellType_system) {
             EMsgBaseCell *cell = (EMsgBaseCell *)[tableView dequeueReusableCellWithIdentifier:model.cellName];
-            [cell bindViewModel:model];
+            [cell bindDataFromViewModel:model];
             return cell;
         }
     }
@@ -367,7 +367,7 @@
         ) {
         EMsgBaseCell *cell = (EMsgBaseCell *)[tableView dequeueReusableCellWithIdentifier:model.cellName];
         cell.userMessageDelegate = self;
-        [cell bindViewModel:model];
+        [cell bindDataFromViewModel:model];
         return cell;
     }else{
         return nil;

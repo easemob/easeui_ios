@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-- (void)bindViewModel:(EMsgBaseCellModel *)model;
+- (void)bindDataFromViewModel:(EMsgBaseCellModel *)model;
 
 
 

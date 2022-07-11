@@ -46,9 +46,9 @@
     self.label = label;
 }
 
-- (void)bindViewModel:(EMsgBaseCellModel *)model{
+- (void)bindDataFromViewModel:(EMsgBaseCellModel *)model{
 
-    [super bindViewModel:model];
+    [super bindDataFromViewModel:model];
     if (model.cellType == EMsgCellType_system) {
         self.label.attributedText = model.show_content;
     }

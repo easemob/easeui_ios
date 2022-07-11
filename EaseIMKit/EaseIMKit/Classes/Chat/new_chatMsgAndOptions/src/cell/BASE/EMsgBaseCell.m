@@ -22,7 +22,7 @@
 }
 
 
-- (void)bindViewModel:(EMsgBaseCellModel *)model{
+- (void)bindDataFromViewModel:(EMsgBaseCellModel *)model{
     model.weakCell = self;
     self.weakModel = model;
     

@@ -34,8 +34,8 @@
     self.label = label;
 }
 
-- (void)bindViewModel:(EMsgBaseCellModel *)model{
-    [super bindViewModel:model];
+- (void)bindDataFromViewModel:(EMsgBaseCellModel *)model{
+    [super bindDataFromViewModel:model];
     if (model.cellType == EMsgCellType_time) {
         self.label.attributedText = model.show_content;
     }

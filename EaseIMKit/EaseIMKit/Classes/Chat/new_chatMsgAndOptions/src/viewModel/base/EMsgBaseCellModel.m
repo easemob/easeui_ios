@@ -330,7 +330,7 @@
         } else {
             self.isPlaying = NO;
         }
-//        [self.weakCell bindViewModel:self];
+//        [self.weakCell bindDataFromViewModel:self];
 //        [self.weakMessageCell.bubbleView setModel:self];
 //        if (model == self && model.direction == EMMessageDirectionReceive) {
 //            [self.weakCell setStatusHidden:model.message.isListened];
