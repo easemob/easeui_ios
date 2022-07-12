@@ -50,9 +50,6 @@
 #import "EMsgUserBigEmojiCell.h"
 #import "EMsgUserUNKNOWCell.h"
 #import "EMVoiceConvertTextHelper.h"
-
-
-#else
 #endif
 
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate>
@@ -279,7 +276,6 @@
     EMsgBaseCellModel *model = [self.dataArray objectAtIndex:indexPath.row];
     return model.cellHeight;
 }
-#else
 #endif
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     id obj = [self.dataArray objectAtIndex:indexPath.row];
@@ -372,7 +368,6 @@
     }else{
         return nil;
     }
-#else
 #endif
     EaseMessageCell *cell = (EaseMessageCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
     // Configure the cell...
@@ -647,7 +642,6 @@
 
 #if YANGJIANXIUGAI
 #pragma mark -- new_messageCellDelegate
-
 //=================
 ////消息部分点击与长按
 ///点击
@@ -819,9 +813,6 @@
         [self.delegate avatarDidLongPress:model.userDataDelegate];
     }
 }
-
-#else
-
 #endif
 
 
@@ -1096,7 +1087,6 @@
             NSArray *formated = [weakself formatMessages:tempMsgs];
 #if YANGJIANXIUGAI
             float newMessageHeight = 0;
-#else
 #endif
             if (isInsertBottom) {
                 [weakself.dataArray addObjectsFromArray:formated];
@@ -1105,7 +1095,6 @@
                 for (EMsgBaseCellModel *model in formated) {
                     newMessageHeight += model.cellHeight;
                 }
-#else
 #endif
                 [weakself.dataArray insertObjects:formated atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formated count])]];
             }
@@ -1294,16 +1283,12 @@
      如果同样想实现松手进行加载,而且解决当前浮现问题,可使用第三方下拉加载控件,如 MJRefresh 是可以解决的.
      (当前使用的是官方提供的UIRefresh)
      */
-#if 0
-    __weak typeof(self) weakSelf = self;
-    [NSRunLoop.currentRunLoop performInModes:@[NSDefaultRunLoopMode] block:^{
-        [weakSelf dropdownRefreshTableViewWithData];
-    }];
-#else
+//    __weak typeof(self) weakSelf = self;
+//    [NSRunLoop.currentRunLoop performInModes:@[NSDefaultRunLoopMode] block:^{
+//        [weakSelf dropdownRefreshTableViewWithData];
+//    }];
     [self dropdownRefreshTableViewWithData];
-#endif
 }
-#else
 #endif
 
 #pragma mark - getter
@@ -1346,7 +1331,6 @@
         for (NSString *cellName in cellNames) {
             [_tableView registerClass:NSClassFromString(cellName) forCellReuseIdentifier:cellName];
         }
-#else
 #endif
     }
     

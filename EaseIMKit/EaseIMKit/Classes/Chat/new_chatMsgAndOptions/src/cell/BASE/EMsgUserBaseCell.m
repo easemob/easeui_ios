@@ -152,12 +152,8 @@
     [self.msgBackgroundView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(msgBackgroundEdgeInsets.top);
         make.left.mas_equalTo(msgBackgroundEdgeInsets.left);
-#if YANGJIANXIUGAI
-        //手动算高度
-#else
-        //自动算高度
-        make.bottom.mas_equalTo(-msgBackgroundEdgeInsets.bottom);
-#endif
+        //自动计算高度时,需要下面这行约束
+        //make.bottom.mas_equalTo(-msgBackgroundEdgeInsets.bottom);
         make.right.mas_equalTo(-msgBackgroundEdgeInsets.right);
 
     }];

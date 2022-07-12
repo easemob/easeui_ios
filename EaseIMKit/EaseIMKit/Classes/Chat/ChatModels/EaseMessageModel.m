@@ -46,8 +46,7 @@
             _type = EMMessageTypeText;
         }
     }
-#if YANGJIANXIUGAI
-#else
+#if !YANGJIANXIUGAI
     if (aMsg.body.type == EMMessageTypeVoice) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioStateChange:) name:AUDIOMSGSTATECHANGE object:nil];
     }

@@ -36,7 +36,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #if YANGJIANXIUGAI
 @property (nonatomic, weak) UITableViewCell *weakCell;
-#else
 #endif
 @property (nonatomic, weak) EaseMessageCell *weakMessageCell;
 
