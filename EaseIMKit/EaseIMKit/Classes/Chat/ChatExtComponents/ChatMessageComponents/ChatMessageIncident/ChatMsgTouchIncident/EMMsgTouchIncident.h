@@ -10,6 +10,9 @@
 #import "EaseChatViewController.h"
 #import "EaseMessageCell.h"
 
+#import "EMsgBaseCellModel.h"
+#import "EMsgUserBaseCell.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EMMessageEventStrategy : NSObject
@@ -17,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) EaseChatViewController *chatController;
 
 - (void)messageCellEventOperation:(EaseMessageCell *)aCell;
+
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model;
 
 @end
 
@@ -28,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (EMMessageEventStrategy * _Nonnull)getStratrgyImplWithMsgCell:(EaseMessageCell *)aCell;
 
++ (EMMessageEventStrategy * _Nonnull)fetchStratrgyImplWithCellModel:(EaseMessageModel *)model;
 @end
 
 @interface TextMsgEvent : EMMessageEventStrategy
