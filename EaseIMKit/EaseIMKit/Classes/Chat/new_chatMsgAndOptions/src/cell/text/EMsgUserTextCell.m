@@ -120,10 +120,10 @@
     UIEdgeInsets bubbleEdgeInsets =
     [EMsgTableViewFunctions
                                          convertToEdgeInsets_direction:direction
-     top:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.top
-     fromSide:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.fromSide
-     toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.toSide
-     bottom:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.bottom];
+     top:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.top
+     fromSide:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.fromSide
+     toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.toSide
+     bottom:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.bottom];
     
     [self.bubbleView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.textView).offset(-bubbleEdgeInsets.top);
@@ -131,7 +131,7 @@
         make.bottom.mas_equalTo(self.textView).offset(bubbleEdgeInsets.bottom);
         make.right.mas_equalTo(self.textView).offset(bubbleEdgeInsets.right);
     }];
-    self.bubbleView.image = [EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter bubbleImage:direction];
+    self.bubbleView.image = [EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter bubbleImage:direction];
 }
 
 
