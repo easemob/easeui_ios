@@ -35,13 +35,13 @@
         [self.msgContentView addSubview:imageView];
         imageView.image = [UIImage imageNamed:@"alert_error"];
         
-        [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-            make.left.mas_equalTo(0);
-            make.width.mas_equalTo(50);
-            make.height.mas_equalTo(50);
-            make.right.mas_equalTo(- (EMsgCellLayoutAdapterConfigs.shared.msgContentMaxWidth - 50 - 0));
-            make.bottom.mas_equalTo(0);
+        [imageView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.top.Ease_equalTo(0);
+            make.left.Ease_equalTo(0);
+            make.width.Ease_equalTo(50);
+            make.height.Ease_equalTo(50);
+            make.right.Ease_equalTo(- (EMsgCellLayoutAdapterConfigs.shared.msgContentMaxWidth - 50 - 0));
+            make.bottom.Ease_equalTo(0);
 
 
         }];
@@ -53,10 +53,10 @@
         label.font = [UIFont systemFontOfSize:16];
         [label setContentCompressionResistancePriority:UILayoutPriorityFittingSizeLevel forAxis:UILayoutConstraintAxisHorizontal];
         [self.msgContentView addSubview:label];
-        [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(self.fileIconImageView.mas_right).offset(8);
-            make.right.mas_equalTo(-8);
-            make.centerY.mas_equalTo(self.fileIconImageView);
+        [label Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.left.Ease_equalTo(self.fileIconImageView.ease_right).offset(8);
+            make.right.Ease_equalTo(-8);
+            make.centerY.Ease_equalTo(self.fileIconImageView);
         }];
         self.fileNameLabel = label;
     }
@@ -65,10 +65,10 @@
         label.font = [UIFont systemFontOfSize:13];
         [label setContentCompressionResistancePriority:UILayoutPriorityFittingSizeLevel forAxis:UILayoutConstraintAxisHorizontal];
         [self.msgContentView addSubview:label];
-        [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(self.fileIconImageView.mas_right).offset(8);
-            make.right.mas_equalTo(-8);
-            make.top.mas_equalTo(self.fileNameLabel.mas_bottom).offset(4);
+        [label Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.left.Ease_equalTo(self.fileIconImageView.ease_right).offset(8);
+            make.right.Ease_equalTo(-8);
+            make.top.Ease_equalTo(self.fileNameLabel.ease_bottom).offset(4);
         }];
         self.fileSizeLabel = label;
     }
@@ -78,9 +78,9 @@
 }
 
 - (void)configStateView{
-    [self.stateLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.msgContentView.mas_bottom);
-        make.right.mas_equalTo(self.msgContentView.mas_left).offset(-20);
+    [self.stateLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.bottom.Ease_equalTo(self.msgContentView.ease_bottom);
+        make.right.Ease_equalTo(self.msgContentView.ease_left).offset(-20);
     }];
 }
 
@@ -109,18 +109,18 @@
     [super resetSubViewsLayout:direction showHead:showHead showName:showName];
     UIEdgeInsets msgContentEdgeInsets = [EMsgTableViewFunctions
                                          convertToEdgeInsets_direction:direction top:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.top fromSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.fromSide toSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.toSide bottom:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.bottom];
-    [self.msgContentView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(msgContentEdgeInsets.top);
-        make.bottom.mas_equalTo(-msgContentEdgeInsets.bottom);
+    [self.msgContentView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(msgContentEdgeInsets.top);
+        make.bottom.Ease_equalTo(-msgContentEdgeInsets.bottom);
         switch (direction) {
             case EMMessageDirectionSend:{
-                make.left.mas_greaterThanOrEqualTo(msgContentEdgeInsets.left);
-                make.right.mas_equalTo(-msgContentEdgeInsets.right);
+                make.left.Ease_greaterThanOrEqualTo(msgContentEdgeInsets.left);
+                make.right.Ease_equalTo(-msgContentEdgeInsets.right);
                 break;
             }
             case EMMessageDirectionReceive:{
-                make.left.mas_equalTo(msgContentEdgeInsets.left);
-                make.right.mas_lessThanOrEqualTo(-msgContentEdgeInsets.right);
+                make.left.Ease_equalTo(msgContentEdgeInsets.left);
+                make.right.Ease_lessThanOrEqualTo(-msgContentEdgeInsets.right);
                 break;
             }
             default:
@@ -136,11 +136,11 @@
      toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.toSide
      bottom:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.bottom];
     
-    [self.bubbleView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.top);
-        make.left.mas_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.left);
-        make.bottom.mas_equalTo(self.msgContentView).offset(bubbleEdgeInsets.bottom);
-        make.right.mas_equalTo(self.msgContentView).offset(bubbleEdgeInsets.right);
+    [self.bubbleView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.top);
+        make.left.Ease_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.left);
+        make.bottom.Ease_equalTo(self.msgContentView).offset(bubbleEdgeInsets.bottom);
+        make.right.Ease_equalTo(self.msgContentView).offset(bubbleEdgeInsets.right);
     }];
     self.bubbleView.image = [EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter bubbleImage:direction];
 }

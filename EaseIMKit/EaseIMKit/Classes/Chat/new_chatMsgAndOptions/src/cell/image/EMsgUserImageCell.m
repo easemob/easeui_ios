@@ -33,11 +33,11 @@
     {
         UIImageView *imageView = UIImageView.new;
         [self.msgContentView addSubview:imageView];
-        [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-            make.left.mas_equalTo(0);
-            make.right.mas_equalTo(0);
-            make.bottom.mas_equalTo(0);
+        [imageView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.top.Ease_equalTo(0);
+            make.left.Ease_equalTo(0);
+            make.right.Ease_equalTo(0);
+            make.bottom.Ease_equalTo(0);
         }];
         self.msgImageView = imageView;
     }
@@ -46,9 +46,9 @@
 }
 
 - (void)configStateView{
-    [self.stateLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.msgContentView.mas_bottom);
-        make.right.mas_equalTo(self.msgContentView.mas_left).offset(-20);
+    [self.stateLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.bottom.Ease_equalTo(self.msgContentView.ease_bottom);
+        make.right.Ease_equalTo(self.msgContentView.ease_left).offset(-20);
     }];
 }
 
@@ -77,18 +77,18 @@
     [super resetSubViewsLayout:direction showHead:showHead showName:showName];
     UIEdgeInsets msgContentEdgeInsets = [EMsgTableViewFunctions
                                          convertToEdgeInsets_direction:direction top:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.top fromSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.fromSide toSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.toSide bottom:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.bottom];
-    [self.msgContentView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(msgContentEdgeInsets.top);
-        make.bottom.mas_equalTo(-msgContentEdgeInsets.bottom);
+    [self.msgContentView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(msgContentEdgeInsets.top);
+        make.bottom.Ease_equalTo(-msgContentEdgeInsets.bottom);
         switch (direction) {
             case EMMessageDirectionSend:{
-                make.left.mas_greaterThanOrEqualTo(msgContentEdgeInsets.left);
-                make.right.mas_equalTo(-msgContentEdgeInsets.right);
+                make.left.Ease_greaterThanOrEqualTo(msgContentEdgeInsets.left);
+                make.right.Ease_equalTo(-msgContentEdgeInsets.right);
                 break;
             }
             case EMMessageDirectionReceive:{
-                make.left.mas_equalTo(msgContentEdgeInsets.left);
-                make.right.mas_lessThanOrEqualTo(-msgContentEdgeInsets.right);
+                make.left.Ease_equalTo(msgContentEdgeInsets.left);
+                make.right.Ease_lessThanOrEqualTo(-msgContentEdgeInsets.right);
                 break;
             }
             default:
@@ -104,11 +104,11 @@
      toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.toSide
      bottom:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.bottom];
     
-    [self.bubbleView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.top);
-        make.left.mas_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.left);
-        make.bottom.mas_equalTo(self.msgContentView).offset(bubbleEdgeInsets.bottom);
-        make.right.mas_equalTo(self.msgContentView).offset(bubbleEdgeInsets.right);
+    [self.bubbleView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.top);
+        make.left.Ease_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.left);
+        make.bottom.Ease_equalTo(self.msgContentView).offset(bubbleEdgeInsets.bottom);
+        make.right.Ease_equalTo(self.msgContentView).offset(bubbleEdgeInsets.right);
     }];
     self.bubbleView.image = [EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter bubbleImage:direction];
 }
@@ -125,7 +125,7 @@
     [super bindDataFromViewModel:model];
 
     EMImageMessageBody *body = (EMImageMessageBody *)model.message.body;
-    [self.msgImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.msgImageView Ease_updateConstraints:^(EaseConstraintMaker *make) {
         /*
          这里说明一下,当滑动列表,触发复用时,会遇到约束冲突,
          其实是系统自动给 UITableViewCellContentView 这个添加了一个高度约束,
@@ -134,7 +134,7 @@
          
          不过,如果改用手动计算高度之后,估计这个问题就不再存在了.
          */
-        make.size.mas_equalTo(model.imageFitSize);
+        make.size.Ease_equalTo(model.imageFitSize);
     }];
     
     UIImage *img = nil;

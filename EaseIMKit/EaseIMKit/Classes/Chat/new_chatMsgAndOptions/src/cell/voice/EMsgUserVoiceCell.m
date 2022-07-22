@@ -105,11 +105,11 @@
         [convertTextContentView addSubview:label];
         
 //        int edgeValue = 8;
-        [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing);
-            make.left.mas_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing);
-            make.bottom.mas_equalTo(- EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing);
-            make.right.mas_equalTo(- EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing);
+        [label Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.top.Ease_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing);
+            make.left.Ease_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing);
+            make.bottom.Ease_equalTo(- EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing);
+            make.right.Ease_equalTo(- EMsgCellOtherLayoutAdapterConfigs.shared.voiceConvertTextEdgeSpacing);
         }];
         self.convertTextLabel = label;
     }
@@ -121,9 +121,9 @@
 }
 
 - (void)configStateView{
-    [self.stateLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.voiceContentView.mas_bottom);
-        make.right.mas_equalTo(self.voiceContentView.mas_left).offset(-20);
+    [self.stateLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.bottom.Ease_equalTo(self.voiceContentView.ease_bottom);
+        make.right.Ease_equalTo(self.voiceContentView.ease_left).offset(-20);
     }];
 }
 
@@ -168,43 +168,43 @@
     int waveAndDurationSpacing = 4;
     switch (direction) {
         case EMMessageDirectionSend:{
-            [self.voiceContentView mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.top.mas_equalTo(msgContentEdgeInsets.top);
-                make.left.mas_greaterThanOrEqualTo(msgContentEdgeInsets.left);
-                make.right.mas_equalTo(-msgContentEdgeInsets.right);
-                make.height.mas_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight);
+            [self.voiceContentView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+                make.top.Ease_equalTo(msgContentEdgeInsets.top);
+                make.left.Ease_greaterThanOrEqualTo(msgContentEdgeInsets.left);
+                make.right.Ease_equalTo(-msgContentEdgeInsets.right);
+                make.height.Ease_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight);
             }];
-            [self.durationLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.centerY.mas_equalTo(0);
-                make.left.mas_equalTo(0);
-                make.right.mas_equalTo(-(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight + waveAndDurationSpacing));
+            [self.durationLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+                make.centerY.Ease_equalTo(0);
+                make.left.Ease_equalTo(0);
+                make.right.Ease_equalTo(-(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight + waveAndDurationSpacing));
             }];
-            [self.waveImageView mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.centerY.mas_equalTo(0);
-                make.width.mas_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight);
-                make.height.mas_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight);
-                make.right.mas_equalTo(0);
+            [self.waveImageView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+                make.centerY.Ease_equalTo(0);
+                make.width.Ease_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight);
+                make.height.Ease_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight);
+                make.right.Ease_equalTo(0);
             }];
             self.durationLabel.textAlignment = NSTextAlignmentRight;
             break;
         }
         case EMMessageDirectionReceive:{
-            [self.voiceContentView mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.top.mas_equalTo(msgContentEdgeInsets.top);
-                make.left.mas_equalTo(msgContentEdgeInsets.left);
-                make.right.mas_lessThanOrEqualTo(-msgContentEdgeInsets.right);
-                make.height.mas_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight);
+            [self.voiceContentView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+                make.top.Ease_equalTo(msgContentEdgeInsets.top);
+                make.left.Ease_equalTo(msgContentEdgeInsets.left);
+                make.right.Ease_lessThanOrEqualTo(-msgContentEdgeInsets.right);
+                make.height.Ease_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight);
             }];
-            [self.durationLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.centerY.mas_equalTo(0);
-                make.left.mas_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight + waveAndDurationSpacing);
-                make.right.mas_equalTo(0);
+            [self.durationLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+                make.centerY.Ease_equalTo(0);
+                make.left.Ease_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight + waveAndDurationSpacing);
+                make.right.Ease_equalTo(0);
             }];
-            [self.waveImageView mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.centerY.mas_equalTo(0);
-                make.width.mas_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight);
-                make.height.mas_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight);
-                make.left.mas_equalTo(0);
+            [self.waveImageView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+                make.centerY.Ease_equalTo(0);
+                make.width.Ease_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight);
+                make.height.Ease_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentViewHeight);
+                make.left.Ease_equalTo(0);
             }];
             self.durationLabel.textAlignment = NSTextAlignmentLeft;
             break;
@@ -218,24 +218,24 @@
     switch (self.voiceConvertTextState) {
         case EMVoiceConvertTextStateNone:{
             self.convertTextContentView.hidden = true;
-            [self.voiceContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.bottom.mas_equalTo(- msgContentEdgeInsets.bottom);
+            [self.voiceContentView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+                make.bottom.Ease_equalTo(- msgContentEdgeInsets.bottom);
             }];
             break;
         }
         default:{
             self.convertTextContentView.hidden = false;
-            [self.convertTextContentView mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.top.mas_equalTo(self.voiceContentView.mas_bottom).offset(msgContentEdgeInsets.bottom + EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentToVoiceConvertTextContentSpacing);
-                make.bottom.mas_equalTo(0);
+            [self.convertTextContentView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+                make.top.Ease_equalTo(self.voiceContentView.ease_bottom).offset(msgContentEdgeInsets.bottom + EMsgCellOtherLayoutAdapterConfigs.shared.voiceContentToVoiceConvertTextContentSpacing);
+                make.bottom.Ease_equalTo(0);
                 switch (direction) {
                     case EMMessageDirectionSend:
-                        make.left.mas_greaterThanOrEqualTo(0);
-                        make.right.mas_equalTo(0);
+                        make.left.Ease_greaterThanOrEqualTo(0);
+                        make.right.Ease_equalTo(0);
                         break;
                     case EMMessageDirectionReceive:
-                        make.left.mas_equalTo(0);
-                        make.right.mas_lessThanOrEqualTo(0);
+                        make.left.Ease_equalTo(0);
+                        make.right.Ease_lessThanOrEqualTo(0);
                         break;
                     default:
                         break;
@@ -255,11 +255,11 @@
      toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.toSide
      bottom:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.bottom];
     
-    [self.bubbleView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.voiceContentView).offset(-bubbleEdgeInsets.top);
-        make.left.mas_equalTo(self.voiceContentView).offset(-bubbleEdgeInsets.left);
-        make.bottom.mas_equalTo(self.voiceContentView).offset(bubbleEdgeInsets.bottom);
-        make.right.mas_equalTo(self.voiceContentView).offset(bubbleEdgeInsets.right);
+    [self.bubbleView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(self.voiceContentView).offset(-bubbleEdgeInsets.top);
+        make.left.Ease_equalTo(self.voiceContentView).offset(-bubbleEdgeInsets.left);
+        make.bottom.Ease_equalTo(self.voiceContentView).offset(bubbleEdgeInsets.bottom);
+        make.right.Ease_equalTo(self.voiceContentView).offset(bubbleEdgeInsets.right);
     }];
     self.bubbleView.image = [EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter bubbleImage:direction];
 }

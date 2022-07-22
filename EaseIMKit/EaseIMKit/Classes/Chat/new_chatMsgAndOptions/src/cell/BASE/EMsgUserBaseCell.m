@@ -39,8 +39,8 @@
     
     [self.customBackgroundView addSubview:self.stateLabel];
     
-    [self.customBackgroundView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(UIEdgeInsetsMake(0, 0, 0, 0));
+    [self.customBackgroundView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.edges.Ease_equalTo(UIEdgeInsetsMake(0, 0, 0, 0));
     }];
     {
         self.headImageView.userInteractionEnabled = true;
@@ -97,17 +97,17 @@
     self.headImageView.hidden = !showHead;
     self.nameLabel.hidden = !showName;
     if (showHead) {
-        [self.headImageView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(EMsgCellLayoutAdapterConfigs.shared.userInfoLayoutAdapter.headTop);
-            make.width.mas_equalTo(EMsgCellLayoutAdapterConfigs.shared.userInfoLayoutAdapter.headWidth);
-            make.height.mas_equalTo(EMsgCellLayoutAdapterConfigs.shared.userInfoLayoutAdapter.headHeight);
+        [self.headImageView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+            make.top.Ease_equalTo(EMsgCellLayoutAdapterConfigs.shared.userInfoLayoutAdapter.headTop);
+            make.width.Ease_equalTo(EMsgCellLayoutAdapterConfigs.shared.userInfoLayoutAdapter.headWidth);
+            make.height.Ease_equalTo(EMsgCellLayoutAdapterConfigs.shared.userInfoLayoutAdapter.headHeight);
             switch (direction) {
                 case EMMessageDirectionSend:
-                    make.right.mas_equalTo(- EMsgCellLayoutAdapterConfigs.shared
+                    make.right.Ease_equalTo(- EMsgCellLayoutAdapterConfigs.shared
                                            .userInfoLayoutAdapter.headFromSide);
                     break;
                 case EMMessageDirectionReceive:
-                    make.left.mas_equalTo(EMsgCellLayoutAdapterConfigs.shared
+                    make.left.Ease_equalTo(EMsgCellLayoutAdapterConfigs.shared
                                           .userInfoLayoutAdapter.headFromSide);
                     break;
                 default:
@@ -116,18 +116,18 @@
         }];
     }
     if (showName) {
-        [self.nameLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(EMsgCellLayoutAdapterConfigs.shared.userInfoLayoutAdapter.nameTop);
-            make.height.mas_equalTo(EMsgCellLayoutAdapterConfigs.shared.userInfoLayoutAdapter.nameHeight);
+        [self.nameLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+            make.top.Ease_equalTo(EMsgCellLayoutAdapterConfigs.shared.userInfoLayoutAdapter.nameTop);
+            make.height.Ease_equalTo(EMsgCellLayoutAdapterConfigs.shared.userInfoLayoutAdapter.nameHeight);
             switch (direction) {
                 case EMMessageDirectionSend:
-                    make.right.mas_equalTo(- (EMsgCellLayoutAdapterConfigs.shared
+                    make.right.Ease_equalTo(- (EMsgCellLayoutAdapterConfigs.shared
                                               .userInfoLayoutAdapter.nameFromSide
                                               + (showHead?EMsgCellLayoutAdapterConfigs.shared
                                                  .userInfoLayoutAdapter.headTakeWidth : 0)));
                     break;
                 case EMMessageDirectionReceive:
-                    make.left.mas_equalTo(EMsgCellLayoutAdapterConfigs.shared
+                    make.left.Ease_equalTo(EMsgCellLayoutAdapterConfigs.shared
                                           .userInfoLayoutAdapter.nameFromSide
                                           + (showHead?EMsgCellLayoutAdapterConfigs.shared
                                              .userInfoLayoutAdapter.headTakeWidth : 0));
@@ -149,12 +149,12 @@
        + (showHead ? 0 : EMsgCellLayoutAdapterConfigs.shared.userInfoLayoutAdapter.headTakeWidth)
        bottom:EMsgCellLayoutAdapterConfigs.shared.backgroundLayoutAdapter.bottom];
     
-    [self.msgBackgroundView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(msgBackgroundEdgeInsets.top);
-        make.left.mas_equalTo(msgBackgroundEdgeInsets.left);
+    [self.msgBackgroundView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(msgBackgroundEdgeInsets.top);
+        make.left.Ease_equalTo(msgBackgroundEdgeInsets.left);
         //自动计算高度时,需要下面这行约束
-        //make.bottom.mas_equalTo(-msgBackgroundEdgeInsets.bottom);
-        make.right.mas_equalTo(-msgBackgroundEdgeInsets.right);
+        //make.bottom.Ease_equalTo(-msgBackgroundEdgeInsets.bottom);
+        make.right.Ease_equalTo(-msgBackgroundEdgeInsets.right);
 
     }];
 }
