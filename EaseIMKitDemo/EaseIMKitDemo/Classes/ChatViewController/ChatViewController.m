@@ -33,7 +33,7 @@
     [self loadData:nil];
 }
 
-- (void)loadData:(NSArray<EMMessage *> *)messageList
+- (void)loadData:(NSArray<EMChatMessage *> *)messageList
 {
     __weak typeof(self) weakself = self;
         void (^block)(NSArray *aMessages, EMError *aError) = ^(NSArray *aMessages, EMError *aError) {
@@ -47,7 +47,7 @@
     [conversation loadMessagesStartFromId:self.firstMesgId count:50 searchDirection:EMMessageSearchDirectionUp completion:block];
 }
 
-- (void)loadMoreMessageData:(NSString *)firstMessageId currentMessageList:(NSArray<EMMessage *> *)messageList
+- (void)loadMoreMessageData:(NSString *)firstMessageId currentMessageList:(NSArray<EMChatMessage *> *)messageList
 {
     self.firstMesgId = firstMessageId;
     [self loadData:messageList];

@@ -528,7 +528,10 @@
     [extMenuArray addObject:copyExtModel];
     [extMenuArray addObject:deleteExtModel];
     if (![aCell isKindOfClass:[EaseMessageCell class]]) {
-        [extMenuArray addObject:recallExtModel];
+        long long currentTimestamp = [[NSDate new] timeIntervalSince1970] * 1000;
+        if ((currentTimestamp - _currentLongPressCell.model.message.timestamp) <= 120000) {
+            [extMenuArray addObject:recallExtModel];
+        }
         isCustomCell = YES;
         _currentLongPressCustomCell = aCell;
     } else {
@@ -922,6 +925,7 @@
                     if (index != NSNotFound) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [weakself.dataArray replaceObjectAtIndex:index withObject:reloadModel];
+                            [self.tableView reloadData];
                         });
 
                     }
