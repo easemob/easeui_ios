@@ -28,17 +28,17 @@
     label.textColor = UIColor.grayColor;
     [self.contentView addSubview:label];
     label.numberOfLines = 0;
-    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+    [label Ease_makeConstraints:^(EaseConstraintMaker *make) {
         //标记测试cell能力,完成后只保留最后一行,前三行约束要注释掉.
-        make.top.mas_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.systemRemindTopAndBottomEdgeSpacing);
-        make.centerX.mas_equalTo(0);
-        make.width.mas_lessThanOrEqualTo
+        make.top.Ease_equalTo(EMsgCellOtherLayoutAdapterConfigs.shared.systemRemindTopAndBottomEdgeSpacing);
+        make.centerX.Ease_equalTo(0);
+        make.width.Ease_lessThanOrEqualTo
         (
          ESCREEN_W
          - EMsgCellOtherLayoutAdapterConfigs.shared.systemRemindLeftAndRightMiniEdgeSpacing
          - EMsgCellOtherLayoutAdapterConfigs.shared.systemRemindLeftAndRightMiniEdgeSpacing
          );
-        make.bottom.mas_equalTo
+        make.bottom.Ease_equalTo
         (- EMsgCellOtherLayoutAdapterConfigs.shared.systemRemindTopAndBottomEdgeSpacing);
     }];
     label.textColor = UIColor.grayColor;

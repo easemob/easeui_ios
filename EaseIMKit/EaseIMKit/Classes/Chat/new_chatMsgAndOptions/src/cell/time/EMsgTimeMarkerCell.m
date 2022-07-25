@@ -25,9 +25,9 @@
 - (void)config{
     UILabel *label = UILabel.new;
     [self.contentView addSubview:label];
-    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+    [label Ease_makeConstraints:^(EaseConstraintMaker *make) {
         //标记测试cell能力,完成后只保留最后一行,前三行约束要注释掉.
-        make.center.mas_equalTo(0);
+        make.center.Ease_equalTo(0);
     }];
     label.textColor = UIColor.grayColor;
     label.font = EMsgTableViewConfig.shared.timeFont;

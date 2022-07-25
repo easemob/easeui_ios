@@ -34,12 +34,12 @@
     {
         UIImageView *imageView = UIImageView.new;
         [self.msgContentView addSubview:imageView];
-        [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-            make.left.mas_equalTo(0);
-            make.right.mas_equalTo(0);
-//            make.size.mas_equalTo(CGSizeMake(80, 80));
-            make.bottom.mas_equalTo(0);
+        [imageView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.top.Ease_equalTo(0);
+            make.left.Ease_equalTo(0);
+            make.right.Ease_equalTo(0);
+//            make.size.Ease_equalTo(CGSizeMake(80, 80));
+            make.bottom.Ease_equalTo(0);
         }];
         self.msgVideoCoverView = imageView;
     }
@@ -48,9 +48,9 @@
 }
 
 - (void)configStateView{
-    [self.stateLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.msgContentView.mas_bottom);
-        make.right.mas_equalTo(self.msgContentView.mas_left).offset(-20);
+    [self.stateLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.bottom.Ease_equalTo(self.msgContentView.ease_bottom);
+        make.right.Ease_equalTo(self.msgContentView.ease_left).offset(-20);
     }];
 }
 
@@ -79,18 +79,18 @@
     [super resetSubViewsLayout:direction showHead:showHead showName:showName];
     UIEdgeInsets msgContentEdgeInsets = [EMsgTableViewFunctions
                                          convertToEdgeInsets_direction:direction top:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.top fromSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.fromSide toSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.toSide bottom:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.bottom];
-    [self.msgContentView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(msgContentEdgeInsets.top);
-        make.bottom.mas_equalTo(-msgContentEdgeInsets.bottom);
+    [self.msgContentView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(msgContentEdgeInsets.top);
+        make.bottom.Ease_equalTo(-msgContentEdgeInsets.bottom);
         switch (direction) {
             case EMMessageDirectionSend:{
-                make.left.mas_greaterThanOrEqualTo(msgContentEdgeInsets.left);
-                make.right.mas_equalTo(-msgContentEdgeInsets.right);
+                make.left.Ease_greaterThanOrEqualTo(msgContentEdgeInsets.left);
+                make.right.Ease_equalTo(-msgContentEdgeInsets.right);
                 break;
             }
             case EMMessageDirectionReceive:{
-                make.left.mas_equalTo(msgContentEdgeInsets.left);
-                make.right.mas_lessThanOrEqualTo(-msgContentEdgeInsets.right);
+                make.left.Ease_equalTo(msgContentEdgeInsets.left);
+                make.right.Ease_lessThanOrEqualTo(-msgContentEdgeInsets.right);
                 break;
             }
             default:
@@ -101,18 +101,18 @@
     UIEdgeInsets bubbleEdgeInsets =
     [EMsgTableViewFunctions
                                          convertToEdgeInsets_direction:direction
-     top:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.top
-     fromSide:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.fromSide
-     toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.toSide
-     bottom:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.bottom];
+     top:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.top
+     fromSide:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.fromSide
+     toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.toSide
+     bottom:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.bottom];
     
-    [self.bubbleView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.top);
-        make.left.mas_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.left);
-        make.bottom.mas_equalTo(self.msgContentView).offset(bubbleEdgeInsets.bottom);
-        make.right.mas_equalTo(self.msgContentView).offset(bubbleEdgeInsets.right);
+    [self.bubbleView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.top);
+        make.left.Ease_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.left);
+        make.bottom.Ease_equalTo(self.msgContentView).offset(bubbleEdgeInsets.bottom);
+        make.right.Ease_equalTo(self.msgContentView).offset(bubbleEdgeInsets.right);
     }];
-    self.bubbleView.image = [EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter bubbleImage:direction];
+    self.bubbleView.image = [EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter bubbleImage:direction];
 }
 
 - (void)bindDataFromViewModel:(EMsgBaseCellModel *)model{
@@ -126,14 +126,14 @@
     [super bindDataFromViewModel:model];
 
     EMVideoMessageBody *body = (EMVideoMessageBody *)model.message.body;
-    [self.msgVideoCoverView mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.msgVideoCoverView Ease_updateConstraints:^(EaseConstraintMaker *make) {
         /*
          这里说明一下,当滑动列表,触发复用时,会遇到约束冲突,
          其实是系统自动给 UITableViewCellContentView 这个添加了一个高度约束,
          而不同图片高度是变化的,从而导致复用时,重新给定高度,产生约束冲突.
          对此,我当前不知道如何解决(以前并没有遇到过这个问题,现在却有,很奇怪)
          */
-        make.size.mas_equalTo(model.imageFitSize);
+        make.size.Ease_equalTo(model.imageFitSize);
     }];
 //    UIImage *img = [UIImage imageWithContentsOfFile:body.thumbnailLocalPath];
 //    if (img == nil) {

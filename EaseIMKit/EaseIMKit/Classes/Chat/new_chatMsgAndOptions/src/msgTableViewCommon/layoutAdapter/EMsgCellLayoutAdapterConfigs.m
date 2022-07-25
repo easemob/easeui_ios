@@ -38,15 +38,15 @@ static EMsgCellLayoutAdapterConfigs *obj0 = nil;
     
     self.backgroundLayoutAdapter = EMsgCellMsgBackgroundLayoutAdapter.new;
     self.backgroundLayoutAdapter.top = 4;
-    self.backgroundLayoutAdapter.fromSide = 4;
-    self.backgroundLayoutAdapter.toSide = 70;
+    self.backgroundLayoutAdapter.fromSide = 0;
+    self.backgroundLayoutAdapter.toSide = 60;
     self.backgroundLayoutAdapter.bottom = 8;
 
     self.contentLayoutAdapter = EMsgCellMsgContentLayoutAdapter.new;
     self.contentLayoutAdapter.top = 16;
-    self.contentLayoutAdapter.fromSide = 23;
-    self.contentLayoutAdapter.toSide = 27;
-    self.contentLayoutAdapter.bottom = 13;
+    self.contentLayoutAdapter.fromSide = 30;
+    self.contentLayoutAdapter.toSide = 30;
+    self.contentLayoutAdapter.bottom = 16;
     
     self.contentUnknownLayoutAdapter = EMsgCellMsgContentLayoutAdapter.new;
     self.contentUnknownLayoutAdapter.top = 10;
@@ -100,17 +100,17 @@ static EMsgCellBubbleLayoutAdapterConfigs *obj1 = nil;
 - (void)config{
     self.defaultAdapter = EMsgCellBubbleLayoutAdapter.new;
     
-    self.defaultAdapter.sendImageName = @"bubble_cat_send";
-    self.defaultAdapter.receiveImageName = @"bubble_cat_receive";
-    self.defaultAdapter.top = 16;
-    self.defaultAdapter.fromSide = 23;
-    self.defaultAdapter.toSide = 28;
+    self.defaultAdapter.sendImageName = @"bubble_send_default";
+    self.defaultAdapter.receiveImageName = @"bubble_receive_default";
+    self.defaultAdapter.top = 13;
+    self.defaultAdapter.fromSide = 13;
+    self.defaultAdapter.toSide = 13;
     self.defaultAdapter.bottom = 13;
     
-    self.defaultAdapter.resizableTop = 16;
-    self.defaultAdapter.resizableFromSide = 23;
-    self.defaultAdapter.resizableToSide = 28;
-    self.defaultAdapter.resizableBottom = 13;
+    self.defaultAdapter.resizableTop = 12;
+    self.defaultAdapter.resizableFromSide = 12;
+    self.defaultAdapter.resizableToSide = 12;
+    self.defaultAdapter.resizableBottom = 12;
 
     
     self.catAdapter = EMsgCellBubbleLayoutAdapter.new;
@@ -129,6 +129,10 @@ static EMsgCellBubbleLayoutAdapterConfigs *obj1 = nil;
     self.catAdapter.resizableToSide = 28;
     self.catAdapter.resizableBottom = 13;
 
+}
+
+- (EMsgCellBubbleLayoutAdapter *)currentAdapter{
+    return self.defaultAdapter;
 }
 
 

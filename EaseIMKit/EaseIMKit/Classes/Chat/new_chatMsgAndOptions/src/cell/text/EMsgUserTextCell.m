@@ -50,9 +50,9 @@
 }
 
 - (void)configStateView{
-    [self.stateLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.msgContentView.mas_bottom);
-        make.right.mas_equalTo(self.msgContentView.mas_left).offset(-20);
+    [self.stateLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.bottom.Ease_equalTo(self.msgContentView.ease_bottom);
+        make.right.Ease_equalTo(self.msgContentView.ease_left).offset(-20);
     }];
 }
 
@@ -81,18 +81,18 @@
     [super resetSubViewsLayout:direction showHead:showHead showName:showName];
     UIEdgeInsets msgContentEdgeInsets = [EMsgTableViewFunctions
                                          convertToEdgeInsets_direction:direction top:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.top fromSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.fromSide toSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.toSide bottom:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.bottom];
-    [self.msgContentView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(msgContentEdgeInsets.top);
-        make.bottom.mas_equalTo(-msgContentEdgeInsets.bottom);
+    [self.msgContentView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(msgContentEdgeInsets.top);
+        make.bottom.Ease_equalTo(-msgContentEdgeInsets.bottom);
         switch (direction) {
             case EMMessageDirectionSend:{
-                make.left.mas_greaterThanOrEqualTo(msgContentEdgeInsets.left);
-                make.right.mas_equalTo(-msgContentEdgeInsets.right);
+                make.left.Ease_greaterThanOrEqualTo(msgContentEdgeInsets.left);
+                make.right.Ease_equalTo(-msgContentEdgeInsets.right);
                 break;
             }
             case EMMessageDirectionReceive:{
-                make.left.mas_equalTo(msgContentEdgeInsets.left);
-                make.right.mas_lessThanOrEqualTo(-msgContentEdgeInsets.right);
+                make.left.Ease_equalTo(msgContentEdgeInsets.left);
+                make.right.Ease_lessThanOrEqualTo(-msgContentEdgeInsets.right);
                 break;
             }
             default:
@@ -100,38 +100,38 @@
         }
     }];
 
-    [self.textView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
+    [self.textView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(0);
         switch (direction) {
             case EMMessageDirectionSend:
-                make.left.mas_greaterThanOrEqualTo(0);
-                make.right.mas_equalTo(0);
+                make.left.Ease_greaterThanOrEqualTo(0);
+                make.right.Ease_equalTo(0);
                 break;
             case EMMessageDirectionReceive:
-                make.left.mas_equalTo(0);
-                make.right.mas_lessThanOrEqualTo(0);
+                make.left.Ease_equalTo(0);
+                make.right.Ease_lessThanOrEqualTo(0);
                 break;
             default:
                 break;
         }
-        make.bottom.mas_equalTo(0);
+        make.bottom.Ease_equalTo(0);
     }];
 
     UIEdgeInsets bubbleEdgeInsets =
     [EMsgTableViewFunctions
                                          convertToEdgeInsets_direction:direction
-     top:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.top
-     fromSide:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.fromSide
-     toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.toSide
-     bottom:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.bottom];
+     top:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.top
+     fromSide:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.fromSide
+     toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.toSide
+     bottom:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.bottom];
     
-    [self.bubbleView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.textView).offset(-bubbleEdgeInsets.top);
-        make.left.mas_equalTo(self.textView).offset(-bubbleEdgeInsets.left);
-        make.bottom.mas_equalTo(self.textView).offset(bubbleEdgeInsets.bottom);
-        make.right.mas_equalTo(self.textView).offset(bubbleEdgeInsets.right);
+    [self.bubbleView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(self.textView).offset(-bubbleEdgeInsets.top);
+        make.left.Ease_equalTo(self.textView).offset(-bubbleEdgeInsets.left);
+        make.bottom.Ease_equalTo(self.textView).offset(bubbleEdgeInsets.bottom);
+        make.right.Ease_equalTo(self.textView).offset(bubbleEdgeInsets.right);
     }];
-    self.bubbleView.image = [EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter bubbleImage:direction];
+    self.bubbleView.image = [EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter bubbleImage:direction];
 }
 
 

@@ -9,10 +9,11 @@
 #import "EMsgBaseCellModel.h"
 #import "EMsgCellLayoutAdapterConfigs.h"
 #import "EMsgTableViewFunctions.h"
-#import "Masonry.h"
 
 #import "UIImageView+EaseWebCache.h"
 #import "UIImage+EaseUI.h"
+
+#import "Easeonry.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

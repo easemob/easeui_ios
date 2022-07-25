@@ -44,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
+- (EMsgCellBubbleLayoutAdapter *)currentAdapter;
+
 @end
 
 @interface EMsgCellOtherLayoutAdapterConfigs : NSObject

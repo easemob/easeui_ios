@@ -36,12 +36,12 @@
         [self.msgContentView addSubview:imageView];
         imageView.image = [UIImage imageNamed:@"alert_error"];
         
-        [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(8);
-            make.left.mas_equalTo(8);
-            make.width.mas_equalTo(50);
-            make.height.mas_equalTo(50);
-            make.right.mas_equalTo(- (EMsgCellLayoutAdapterConfigs.shared.msgContentMaxWidth - 8 - 50));
+        [imageView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.top.Ease_equalTo(8);
+            make.left.Ease_equalTo(8);
+            make.width.Ease_equalTo(50);
+            make.height.Ease_equalTo(50);
+            make.right.Ease_equalTo(- (EMsgCellLayoutAdapterConfigs.shared.msgContentMaxWidth - 8 - 50));
         }];
         self.cardHeadImageView = imageView;
     }
@@ -51,10 +51,10 @@
         label.numberOfLines = 2;
         [label setContentCompressionResistancePriority:UILayoutPriorityFittingSizeLevel forAxis:UILayoutConstraintAxisHorizontal];
         [self.msgContentView addSubview:label];
-        [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(self.cardHeadImageView.mas_right).offset(8);
-            make.right.mas_equalTo(-8);
-            make.centerY.mas_equalTo(self.cardHeadImageView);
+        [label Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.left.Ease_equalTo(self.cardHeadImageView.ease_right).offset(8);
+            make.right.Ease_equalTo(-8);
+            make.centerY.Ease_equalTo(self.cardHeadImageView);
         }];
         self.cardNameLabel = label;
     }
@@ -62,11 +62,11 @@
         UIView *view = UIView.new;
         view.backgroundColor = UIColor.grayColor;
         [self.msgContentView addSubview:view];
-        [view mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.cardHeadImageView.mas_bottom).offset(20);
-            make.left.mas_equalTo(8);
-            make.right.mas_equalTo(-8);
-            make.height.mas_equalTo(0.6);
+        [view Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.top.Ease_equalTo(self.cardHeadImageView.ease_bottom).offset(20);
+            make.left.Ease_equalTo(8);
+            make.right.Ease_equalTo(-8);
+            make.height.Ease_equalTo(0.6);
         }];
     }
     {
@@ -76,11 +76,11 @@
         label.textColor = UIColor.grayColor;
         label.text = @"[个人名片]";
         [self.msgContentView addSubview:label];
-        [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(8);
-            make.top.mas_equalTo(self.cardHeadImageView.mas_bottom).offset(20 + 2);
-            make.height.mas_equalTo(16);
-            make.bottom.mas_equalTo(- 2);
+        [label Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.left.Ease_equalTo(8);
+            make.top.Ease_equalTo(self.cardHeadImageView.ease_bottom).offset(20 + 2);
+            make.height.Ease_equalTo(16);
+            make.bottom.Ease_equalTo(- 2);
         }];
     }
     
@@ -89,9 +89,9 @@
 }
 
 - (void)configStateView{
-    [self.stateLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.msgContentView.mas_bottom);
-        make.right.mas_equalTo(self.msgContentView.mas_left).offset(-20);
+    [self.stateLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.bottom.Ease_equalTo(self.msgContentView.ease_bottom);
+        make.right.Ease_equalTo(self.msgContentView.ease_left).offset(-20);
     }];
 }
 
@@ -120,18 +120,18 @@
     [super resetSubViewsLayout:direction showHead:showHead showName:showName];
     UIEdgeInsets msgContentEdgeInsets = [EMsgTableViewFunctions
                                          convertToEdgeInsets_direction:direction top:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.top fromSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.fromSide toSide:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.toSide bottom:EMsgCellLayoutAdapterConfigs.shared.contentLayoutAdapter.bottom];
-    [self.msgContentView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(msgContentEdgeInsets.top);
-        make.bottom.mas_equalTo(-msgContentEdgeInsets.bottom);
+    [self.msgContentView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(msgContentEdgeInsets.top);
+        make.bottom.Ease_equalTo(-msgContentEdgeInsets.bottom);
         switch (direction) {
             case EMMessageDirectionSend:{
-                make.left.mas_greaterThanOrEqualTo(msgContentEdgeInsets.left);
-                make.right.mas_equalTo(-msgContentEdgeInsets.right);
+                make.left.Ease_greaterThanOrEqualTo(msgContentEdgeInsets.left);
+                make.right.Ease_equalTo(-msgContentEdgeInsets.right);
                 break;
             }
             case EMMessageDirectionReceive:{
-                make.left.mas_equalTo(msgContentEdgeInsets.left);
-                make.right.mas_lessThanOrEqualTo(-msgContentEdgeInsets.right);
+                make.left.Ease_equalTo(msgContentEdgeInsets.left);
+                make.right.Ease_lessThanOrEqualTo(-msgContentEdgeInsets.right);
                 break;
             }
             default:
@@ -142,18 +142,18 @@
     UIEdgeInsets bubbleEdgeInsets =
     [EMsgTableViewFunctions
      convertToEdgeInsets_direction:direction
-     top:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.top
-     fromSide:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.fromSide
-     toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.toSide
-     bottom:EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter.bottom];
+     top:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.top
+     fromSide:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.fromSide
+     toSide:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.toSide
+     bottom:EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter.bottom];
     
-    [self.bubbleView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.top);
-        make.left.mas_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.left);
-        make.bottom.mas_equalTo(self.msgContentView).offset(bubbleEdgeInsets.bottom);
-        make.right.mas_equalTo(self.msgContentView).offset(bubbleEdgeInsets.right);
+    [self.bubbleView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+        make.top.Ease_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.top);
+        make.left.Ease_equalTo(self.msgContentView).offset(-bubbleEdgeInsets.left);
+        make.bottom.Ease_equalTo(self.msgContentView).offset(bubbleEdgeInsets.bottom);
+        make.right.Ease_equalTo(self.msgContentView).offset(bubbleEdgeInsets.right);
     }];
-    self.bubbleView.image = [EMsgCellBubbleLayoutAdapterConfigs.shared.catAdapter bubbleImage:direction];
+    self.bubbleView.image = [EMsgCellBubbleLayoutAdapterConfigs.shared.currentAdapter bubbleImage:direction];
 }
 
 - (void)bindDataFromViewModel:(EMsgBaseCellModel *)model{

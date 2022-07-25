@@ -1304,7 +1304,7 @@
         _tableView.dataSource = self;
 #if YANGJIANXIUGAI
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.backgroundColor = [UIColor systemPinkColor];
+        _tableView.backgroundColor = [UIColor whiteColor];
         [_tableView enableRefresh:EaseLocalizableString(@"dropRefresh", nil) color:UIColor.redColor];
         [_tableView.refreshControl addTarget:self action:@selector(refreshControlClick:) forControlEvents:UIControlEventValueChanged];
 #else
