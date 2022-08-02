@@ -670,6 +670,7 @@
                     if (index != NSNotFound) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [weakself.dataArray replaceObjectAtIndex:index withObject:reloadModel];
+                            [weakself.tableView reloadData];
                         });
 
                     }

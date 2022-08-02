@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = 'EaseIMKit'
-    s.version          = '3.9.4'
+    s.version          = '3.9.5'
     s.summary = 'easemob im sdk UIKit'
     s.homepage = 'http://docs-im.easemob.com/im/ios/other/easeimkit'
     s.description = <<-DESC
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
                   DESC
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.author           = { 'easemob' => 'dev@easemob.com' }
-    s.source = { :git => 'https://github.com/easemob/easeui_ios.git', :tag => 'EaseIMKit_3.9.4'}
+    s.source = { :git => 'https://github.com/easemob/easeui_ios.git', :tag => 'EaseIMKit_3.9.5'}
     s.frameworks = 'UIKit'
     s.libraries = 'stdc++'
     s.ios.deployment_target = '10.0'
@@ -59,7 +59,7 @@ Pod::Spec.new do |s|
                             }
     s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
-    s.dependency 'HyphenateChat', '3.9.4'
+    s.dependency 'HyphenateChat', '3.9.5'
     s.dependency 'EMVoiceConvert', '0.1.0'
 
 
