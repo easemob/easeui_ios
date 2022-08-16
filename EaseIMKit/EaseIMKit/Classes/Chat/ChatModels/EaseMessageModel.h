@@ -34,6 +34,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) id<EaseUserDelegate> userDataDelegate;
 
+#if YANGJIANXIUGAI
+@property (nonatomic, weak) UITableViewCell *weakCell;
+#endif
 @property (nonatomic, weak) EaseMessageCell *weakMessageCell;
 
 @property (nonatomic, strong) EMChatMessage *message;

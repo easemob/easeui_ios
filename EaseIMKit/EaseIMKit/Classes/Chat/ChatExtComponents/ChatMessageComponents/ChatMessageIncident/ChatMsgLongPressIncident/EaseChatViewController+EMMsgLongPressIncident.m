@@ -11,6 +11,9 @@
 #import "EMMsgTextBubbleView.h"
 #import "EaseDateHelper.h"
 
+#import "EMsgBaseCellModel.h"
+
+
 typedef NS_ENUM(NSInteger, EaseLongPressExecute) {
     EaseLongPressExecuteCopy = 0,
     EaseLongPressExecuteForward,
@@ -103,7 +106,12 @@ static const void *recallViewKey = &recallViewKey;
     [self showHudInView:self.view hint:EaseLocalizableString(@"recalingMsg", nil)];
     NSIndexPath *indexPath = self.longPressIndexPath;
     __weak typeof(self) weakself = self;
+#if YANGJIANXIUGAI
+    EMsgBaseCellModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
+#else
     EaseMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
+#endif
+
     [[EMClient sharedClient].chatManager recallMessageWithMessageId:model.message.messageId completion:^(EMError *aError) {
         [weakself hideHud];
         if (aError) {
@@ -119,9 +127,15 @@ static const void *recallViewKey = &recallViewKey;
             message.localTime = model.message.localTime;
             [weakself.currentConversation insertMessage:message error:nil];
             
+#if YANGJIANXIUGAI
+            EMsgBaseCellModel *model = [[EMsgBaseCellModel alloc] initWithEMMessage:message];
+            [weakself.dataArray replaceObjectAtIndex:indexPath.row withObject:model];
+            [weakself.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+#else
             EaseMessageModel *model = [[EaseMessageModel alloc] initWithEMMessage:message];
             [weakself.dataArray replaceObjectAtIndex:indexPath.row withObject:model];
             [weakself.tableView reloadData];
+#endif
         }
     }];
     

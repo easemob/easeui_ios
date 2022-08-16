@@ -151,6 +151,11 @@
             CLPlacemark *placemark = [array objectAtIndex:0];
             weakself.address = placemark.name;
             weakself.buildingName = @"建筑物名称";//自主获取
+            
+            NSString *name = placemark.addressDictionary[@"Name"];
+            NSString *address = [placemark.addressDictionary[@"FormattedAddressLines"] count] ? placemark.addressDictionary[@"FormattedAddressLines"][0] : @"未知";
+            weakself.address = address;
+            weakself.buildingName = name;
             [weakself _moveToLocation:userLocation.coordinate];
         }
     }];

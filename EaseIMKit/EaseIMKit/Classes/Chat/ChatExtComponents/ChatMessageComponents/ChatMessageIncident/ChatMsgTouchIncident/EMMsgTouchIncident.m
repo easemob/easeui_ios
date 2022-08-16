@@ -21,6 +21,7 @@
 @implementation EMMessageEventStrategy
 
 - (void)messageCellEventOperation:(EaseMessageCell *)aCell{}
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{}
 
 @end
 
@@ -49,6 +50,27 @@
     return [[EMMessageEventStrategy alloc]init];
 }
 
++ (EMMessageEventStrategy * _Nonnull)fetchStratrgyImplWithCellModel:(EaseMessageModel *)model
+{
+    if (model.type == EMMessageTypeText)
+        return [[TextMsgEvent alloc]init];
+    if (model.type == EMMessageTypeImage)
+        return [[ImageMsgEvent alloc] init];
+    if (model.type == EMMessageTypeLocation)
+        return [[LocationMsgEvent alloc] init];
+    if (model.type == EMMessageTypeVoice)
+        return [[VoiceMsgEvent alloc]init];
+    if (model.type == EMMessageTypeVideo)
+        return [[VideoMsgEvent alloc]init];
+    if (model.type == EMMessageTypeFile)
+        return [[FileMsgEvent alloc]init];
+    if (model.type == EMMessageTypeExtCall)
+        return [[ConferenceMsgEvent alloc]init];
+    
+    return [[EMMessageEventStrategy alloc]init];
+}
+
+
 @end
 
 /**
@@ -61,6 +83,29 @@
     EMMsgTextBubbleView *textBubbleView = (EMMsgTextBubbleView *)aCell.bubbleView;
     NSString *chatStr = textBubbleView.textLabel.text;
 
+    NSDataDetector *detector= [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
+    NSArray *checkArr = [detector matchesInString:chatStr options:0 range:NSMakeRange(0, chatStr.length)];
+    //判断有没有链接
+    if(checkArr.count > 0) {
+        if (checkArr.count > 1) { //网址多于1个时让用户选择跳哪个链接
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:EaseLocalizableString(@"selectLinkUrl", nil) message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            [alertController addAction:[UIAlertAction actionWithTitle:EaseLocalizableString(@"cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+            
+            for (NSTextCheckingResult *result in checkArr) {
+                NSString *urlStr = result.URL.absoluteString;
+                [alertController addAction:[UIAlertAction actionWithTitle:urlStr style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr] options:[NSDictionary new] completionHandler:nil];
+                }]];
+            }
+            [self.chatController presentViewController:alertController animated:YES completion:nil];
+        }else {//一个链接直接打开
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[checkArr[0] URL].absoluteString] options:[NSDictionary new] completionHandler:nil];
+        }
+    }
+}
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
+    EMTextMessageBody *body = (EMTextMessageBody *)model.message.body;
+    NSString *chatStr = body.text;
     NSDataDetector *detector= [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
     NSArray *checkArr = [detector matchesInString:chatStr options:0 range:NSMakeRange(0, chatStr.length)];
     //判断有没有链接
@@ -149,6 +194,65 @@
         }
     }];
 }
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
+    __weak typeof(self.chatController) weakself = self.chatController;
+    void (^downloadThumbBlock)(EaseMessageModel *aModel) = ^(EaseMessageModel *aModel) {
+        [weakself showHint:EaseLocalizableString(@"getThumnail...", nil)];
+        [[EMClient sharedClient].chatManager downloadMessageThumbnail:aModel.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
+            if (!error) {
+                [weakself.tableView reloadData];
+            }
+        }];
+    };
+    
+    EMImageMessageBody *body = (EMImageMessageBody*)model.message.body;
+    BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
+    if (body.thumbnailDownloadStatus == EMDownloadStatusFailed) {
+        if (!isCustomDownload) {
+            downloadThumbBlock(model);
+        }
+        
+        return;
+    }
+    
+    BOOL isAutoDownloadThumbnail = [EMClient sharedClient].options.isAutoDownloadThumbnail;
+    if (body.thumbnailDownloadStatus == EMDownloadStatusPending && !isAutoDownloadThumbnail) {
+        downloadThumbBlock(model);
+        return;
+    }
+    
+    if (body.downloadStatus == EMDownloadStatusSucceed) {
+        UIImage *image = [UIImage imageWithContentsOfFile:body.localPath];
+        if (image) {
+            [[EMImageBrowser sharedBrowser] showImages:@[image] fromController:self.chatController];
+            return;
+        }
+    }
+    
+    if (isCustomDownload) {
+        return;
+    }
+    
+    [self.chatController showHudInView:self.chatController.view hint:EaseLocalizableString(@"downloadingImage...", nil)];
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
+        [weakself hideHud];
+        if (error) {
+            [EaseAlertController showErrorAlert:EaseLocalizableString(@"downloadImageFail", nil)];
+        } else {
+            if (message.direction == EMMessageDirectionReceive && !message.isReadAcked) {
+                [[EMClient sharedClient].chatManager sendMessageReadAck:message.messageId toUser:message.conversationId completion:nil];
+            }
+            
+            NSString *localPath = [(EMImageMessageBody *)message.body localPath];
+            UIImage *image = [UIImage imageWithContentsOfFile:localPath];
+            if (image) {
+                [[EMImageBrowser sharedBrowser] showImages:@[image] fromController:weakself];
+            } else {
+                [EaseAlertController showErrorAlert:EaseLocalizableString(@"fetchImageFail", nil)];
+            }
+        }
+    }];
+}
 
 @end
 
@@ -166,12 +270,20 @@
     navController.modalPresentationStyle = 0;
     [self.chatController.navigationController presentViewController:navController animated:YES completion:nil];
 }
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
+    EMLocationMessageBody *body = (EMLocationMessageBody *)model.message.body;
+    EMLocationViewController *controller = [[EMLocationViewController alloc] initWithLocation:CLLocationCoordinate2DMake(body.latitude, body.longitude)];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+    navController.modalPresentationStyle = 0;
+    [self.chatController.navigationController presentViewController:navController animated:YES completion:nil];
+}
 
 @end
 
 /**
     语音消息事件
  */
+#import "EMsgUserVoiceCell.h"
 @implementation VoiceMsgEvent
 
 - (void)messageCellEventOperation:(EaseMessageCell *)aCell
@@ -229,6 +341,65 @@
         }
     }];
 }
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
+    EMVoiceMessageBody *body = (EMVoiceMessageBody*)model.message.body;
+    if (body.downloadStatus == EMDownloadStatusDownloading) {
+        [EaseAlertController showInfoAlert:EaseLocalizableString(@"downloadingVoice...", nil)];
+        return;
+    }
+    
+    void (^playBlock)(EMsgBaseCellModel *model) = ^(EMsgBaseCellModel *model) {
+        if (!model.message.isListened) {
+            model.message.isListened = YES;
+        }
+        
+        if (!model.message.isReadAcked) {
+            [[EMClient sharedClient].chatManager sendMessageReadAck:model.message.messageId toUser:model.message.conversationId completion:nil];
+        }
+
+        id lastModel = [EMAudioPlayerUtil sharedHelper].model;
+        if (lastModel && [lastModel isKindOfClass:[EaseMessageModel class]]) {
+            EaseMessageModel *oldModel = (EaseMessageModel *)lastModel;
+            if (oldModel == model && oldModel.isPlaying == YES) {
+                [[EMAudioPlayerUtil sharedHelper] stopPlayer];
+                [EMAudioPlayerUtil sharedHelper].model = nil;
+//                [[NSNotificationCenter defaultCenter] postNotificationName:AUDIOMSGSTATECHANGE object:aModel];
+                model.isPlaying = !model.isPlaying;
+                [((EMsgUserVoiceCell *)model.weakCell) playing:model.isPlaying];
+                return;
+            }
+        }
+    
+        [EMClient.sharedClient.chatManager updateMessage:model.message completion:nil];
+        model.isPlaying = !model.isPlaying;
+        [((EMsgUserVoiceCell *)model.weakCell) playing:model.isPlaying];
+        [[EMAudioPlayerUtil sharedHelper] startPlayerWithPath:body.localPath model:model completion:^(NSError * _Nonnull error) {
+            model.isPlaying = !model.isPlaying;
+            [((EMsgUserVoiceCell *)model.weakCell) playing:model.isPlaying];
+        }];
+    };
+    
+    if (body.downloadStatus == EMDownloadStatusSucceed) {
+        playBlock(model);
+        return;
+    }
+    
+    if (![EMClient sharedClient].options.isAutoTransferMessageAttachments) {
+        return;
+    }
+    
+    __weak typeof(self.chatController) weakChatControl = self.chatController;
+    [self.chatController showHudInView:self.chatController.view hint:EaseLocalizableString(@"downloadingVoice", nil)];
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
+        [weakChatControl hideHud];
+        if (error) {
+            [EaseAlertController showErrorAlert:EaseLocalizableString(@"downloadVoiceFail", nil)];
+        } else {
+            playBlock(model);
+        }
+    }];
+}
+
 
 @end
 
@@ -295,6 +466,64 @@
     
 }
 
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
+    __weak typeof(self.chatController) weakChatController = self.chatController;
+    void (^playBlock)(NSString *aPath) = ^(NSString *aPathe) {
+        NSURL *videoURL = [NSURL fileURLWithPath:aPathe];
+        AVPlayerViewController *playerViewController = [[AVPlayerViewController alloc] init];
+        playerViewController.player = [AVPlayer playerWithURL:videoURL];
+        playerViewController.videoGravity = AVLayerVideoGravityResizeAspect;
+        playerViewController.showsPlaybackControls = YES;
+        playerViewController.modalPresentationStyle = 0;
+        [weakChatController presentViewController:playerViewController animated:YES completion:^{
+            [playerViewController.player play];
+        }];
+    };
+
+    void (^downloadBlock)(void) = ^ {
+        [weakChatController showHudInView:self.chatController.view hint:EaseLocalizableString(@"downloadVideo...", nil)];
+        [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
+            [weakChatController hideHud];
+            if (error) {
+                [EaseAlertController showErrorAlert:@"下载视频失败"];
+            } else {
+                if (!message.isReadAcked) {
+                    [[EMClient sharedClient].chatManager sendMessageReadAck:message.messageId toUser:message.conversationId completion:nil];
+                }
+                playBlock([(EMVideoMessageBody*)message.body localPath]);
+            }
+        }];
+    };
+    
+    EMVideoMessageBody *body = (EMVideoMessageBody*)model.message.body;
+    if (body.downloadStatus == EMDownloadStatusDownloading) {
+        [EaseAlertController showInfoAlert:EaseLocalizableString(@"downloadingVideo...", nil)];
+        return;
+    }
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
+    if (body.thumbnailDownloadStatus == EMDownloadStatusFailed || ![fileManager fileExistsAtPath:body.thumbnailLocalPath]) {
+        [self.chatController showHint:EaseLocalizableString(@"downloadThumnail", nil)];
+        if (!isCustomDownload) {
+            [[EMClient sharedClient].chatManager downloadMessageThumbnail:model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
+                downloadBlock();
+            }];
+            return;
+        }
+    }
+    
+    if (body.downloadStatus == EMDownloadStatusSuccessed && [fileManager fileExistsAtPath:body.localPath]) {
+        playBlock(body.localPath);
+    } else {
+        if (!isCustomDownload) {
+            downloadBlock();
+        }
+    }
+    
+}
+
+
 @end
 
 /**
@@ -338,6 +567,42 @@
         }
     }];
 }
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
+    EMFileMessageBody *body = (EMFileMessageBody *)model.message.body;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    if (body.downloadStatus == EMDownloadStatusDownloading) {
+        [EaseAlertController showInfoAlert:EaseLocalizableString(@"downloadingFile...", nil)];
+        return;
+    }
+    __weak typeof(self.chatController) weakself = self.chatController;
+    void (^checkFileBlock)(NSString *aPath) = ^(NSString *aPathe) {
+        NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:aPathe];
+        NSLog(@"\nfile  --    :%@",[fileHandle readDataToEndOfFile]);
+        [fileHandle closeFile];
+        UIDocumentInteractionController *docVc = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:aPathe]];
+        docVc.delegate = weakself;
+        [docVc presentPreviewAnimated:YES];
+    };
+    
+    if (body.downloadStatus == EMDownloadStatusSuccessed && [fileManager fileExistsAtPath:body.localPath]) {
+        checkFileBlock(body.localPath);
+        return;
+    }
+    
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
+        [weakself hideHud];
+        if (error) {
+            [EaseAlertController showErrorAlert:EaseLocalizableString(@"downFileFail", nil)];
+        } else {
+            if (!message.isReadAcked) {
+                [[EMClient sharedClient].chatManager sendMessageReadAck:message.messageId toUser:message.conversationId completion:nil];
+            }
+            checkFileBlock([(EMFileMessageBody*)message.body localPath]);
+        }
+    }];
+}
+
 
 @end
 
@@ -350,5 +615,10 @@
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:CALL_SELECTCONFERENCECELL object:aCell.model.message];
 }
+
+- (void)messageCellSelectedEventOperation:(EMsgBaseCellModel *)model{
+    [[NSNotificationCenter defaultCenter] postNotificationName:CALL_SELECTCONFERENCECELL object:model.message];
+}
+
 
 @end

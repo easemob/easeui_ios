@@ -231,6 +231,7 @@ static const void *imagePickerKey = &imagePickerKey;
 {
     EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:aImageData displayName:@"image"];
 //    body.compressionRatio = 1;
+    body.size = [UIImage imageWithData:aImageData].size;
     [self sendMessageWithBody:body ext:nil];
 }
 - (void)_sendVideoAction:(NSURL *)aUrl
