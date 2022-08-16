@@ -62,7 +62,6 @@ static NSString *g_UIKitVersion = @"3.9.1";
         _delegates = (EaseMulticastDelegate<EaseIMKitManagerDelegate> *)[[EaseMulticastDelegate alloc] init];
         _currentConversationId = @"";
         _msgQueue = dispatch_queue_create("easemessage.com", NULL);
-        _undisturbMaps = [NSMutableDictionary dictionary];
     }
     [[EMClient sharedClient] addMultiDevicesDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
@@ -294,17 +293,15 @@ static NSString *g_UIKitVersion = @"3.9.1";
 #pragma mark - 未读数变化
 
 - (BOOL)conversationUndisturb:(NSString *)conversationId {
-    if (_undisturbMaps == nil) {
-        _undisturbMaps = [NSMutableDictionary dictionary];
-    }
-    if (_undisturbMaps.count <= 0) {
-        [self fillUndisturbMaps];
-    }
     if (conversationId == nil) { return NO; }
     return [[_undisturbMaps valueForKey:conversationId] boolValue];
 }
 
 - (void)updateUndisturbMapsKey:(NSString *)key value:(BOOL )value {
+    if (_undisturbMaps == nil) {
+        _undisturbMaps = [NSMutableDictionary dictionary];
+        [self fillUndisturbMaps];
+    }
     [_undisturbMaps setValue:[NSNumber numberWithBool:value] forKey:key];
 }
 
@@ -314,6 +311,7 @@ static NSString *g_UIKitVersion = @"3.9.1";
 
 - (void)fillUndisturbMaps {
     for (EMConversation *conversation in [EMClient.sharedClient.chatManager getAllConversations]) {
+        
         if ([[[EMClient sharedClient].pushManager noPushUIds] containsObject:conversation.conversationId]) {
             if ([_undisturbMaps valueForKey:conversation.conversationId] == nil) {
                 [_undisturbMaps setValue:[NSNumber numberWithBool:YES] forKey:conversation.conversationId];

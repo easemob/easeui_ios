@@ -95,6 +95,12 @@ EMClientDelegate
     [[EMClient sharedClient].pushManager getPushNotificationOptionsFromServerWithCompletion:^(EMPushOptions * _Nonnull aOptions, EMError * _Nonnull aError) {
         if (!aError) {
             [[EaseIMKitManager shared] cleanMemoryUndisturbMaps];
+            NSMutableArray *undisturbs = [NSMutableArray array];
+            [undisturbs addObjectsFromArray:[EMClient sharedClient].pushManager.noPushGroups];
+            [undisturbs addObjectsFromArray:[EMClient sharedClient].pushManager.noPushUIds];
+            for (NSString *conversationId in undisturbs) {
+                [[EaseIMKitManager shared] updateUndisturbMapsKey:conversationId value:@(YES)];
+            }
             [self.tableView reloadData];
         }
     }];
