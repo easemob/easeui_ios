@@ -342,7 +342,7 @@
 
 #pragma mark - EMChatBarDelegate
 
-- (BOOL)textView:(UITextView *)textView shouldngeTextInRange:(NSRange)range replacementText:(NSString *)text
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
         BOOL isValid = [self.delegate textView:textView shouldChangeTextInRange:range replacementText:text];
