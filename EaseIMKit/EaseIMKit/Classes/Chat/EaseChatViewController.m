@@ -631,7 +631,7 @@
                     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:EaseLocalizableString(@"remoteRecall", nil)];
                     NSString *to = msg.to;
                     NSString *from = msg.from;
-                    EMChatMessage *message = [[EMChatMessage alloc] initWithConversationID:from from:from to:to body:body ext:@{MSG_EXT_RECALL:@(YES), MSG_EXT_RECALLBY:recallMessageInfo.recallBy}];
+                    EMChatMessage *message = [[EMChatMessage alloc] initWithConversationID:msg.conversationId from:from to:to body:body ext:@{MSG_EXT_RECALL:@(YES), MSG_EXT_RECALLBY:recallMessageInfo.recallBy}];
                     message.chatType = (EMChatType)self.currentConversation.type;
                     message.isRead = YES;
                     message.messageId = msg.messageId;
