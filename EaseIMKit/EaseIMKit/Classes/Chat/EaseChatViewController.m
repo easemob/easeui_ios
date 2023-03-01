@@ -439,13 +439,6 @@
                 NSUInteger index = [weakself.messageList indexOfObject:deleteMsg];
                 if (index != -1) {
                     [weakself.messageList removeObject:deleteMsg];
-                    if ([deleteMsg.messageId isEqualToString:weakself.moreMsgId]) {
-                        if ([weakself.messageList count] > 0) {
-                            weakself.moreMsgId = weakself.messageList[0].messageId;
-                        } else {
-                            weakself.moreMsgId = @"";
-                        }
-                    }
                 }
             }
         }];
@@ -819,7 +812,6 @@
         } else {
             [weakself.messageList insertObjects:tempMsgs atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tempMsgs count])]];
             EMChatMessage *msg = tempMsgs[0];
-            weakself.moreMsgId = msg.messageId;
         }
         
         dispatch_async(self.msgQueue, ^{
@@ -920,9 +912,6 @@
     NSArray *formated = [self formatMessages:@[message]];
     [self.dataArray addObjectsFromArray:formated];
     [self.messageList addObject:message];
-    if (!self.moreMsgId)
-        //新会话的第一条消息
-        self.moreMsgId = message.messageId;
         
     [weakself refreshTableView:YES];
 
@@ -997,6 +986,14 @@
         _messageList = [[NSMutableArray<EMChatMessage *> alloc]init];
     }
     return _messageList;
+}
+
+- (NSString *)moreMsgId
+{
+    if (self.messageList.count > 0 ) {
+        return self.messageList[0].messageId;
+    }
+    return @"";
 }
 
 @end
