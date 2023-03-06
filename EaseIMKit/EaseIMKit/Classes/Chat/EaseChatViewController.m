@@ -85,6 +85,7 @@
 {
     self = [super init];
     if (self) {
+        self.endScroll = YES;
         _currentConversation = [EMClient.sharedClient.chatManager getConversation:conversationId type:conType createIfNotExist:YES];
         _msgQueue = dispatch_queue_create("EMChatMessage.com", NULL);
         _viewModel = viewModel;
@@ -333,11 +334,20 @@
 
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    [self.view endEditing:YES];
-    [self.chatBar clearMoreViewAndSelectedButton];
-    [self hideLongPressView];
+   [self.view endEditing:YES];
+   [self.chatBar clearMoreViewAndSelectedButton];
+   [self hideLongPressView];
+   self.endScroll = NO;
+}
+
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+   self.endScroll = YES;
+   if (self.delegate && [self.delegate respondsToSelector:@selector(scrollViewEndScroll)]) {
+       [self.delegate scrollViewEndScroll];
+   }
 }
 
 #pragma mark - EMChatBarDelegate
