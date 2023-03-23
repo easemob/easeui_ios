@@ -286,7 +286,7 @@
         }
     }
     if (model.type != EMChatTypeChat) {
-        if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(showName)]) {
+        if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(showName)] && ![model.userDataDelegate.showName isEqualToString:@""]) {
             self.nameLabel.text = model.userDataDelegate.showName;
         } else {
             self.nameLabel.text = model.message.from;
