@@ -50,6 +50,11 @@ NS_ASSUME_NONNULL_BEGIN
 //停止音频播放
 - (void)stopAudioPlayer;
 
+- (void)appendAtUser:(NSString *)username;
+- (void)removeAtUser:(NSString *)username;
+- (void)appendAtAll;
+- (void)removeAtAll;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -188,6 +188,13 @@
     return YES;
 }
 
+- (void)textViewDidChangeSelection:(UITextView *)textView
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(textViewDidChangeSelection:)]) {
+        [self.delegate textViewDidChangeSelection:textView];
+    }
+}
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text isEqualToString:@"\n"]) {
