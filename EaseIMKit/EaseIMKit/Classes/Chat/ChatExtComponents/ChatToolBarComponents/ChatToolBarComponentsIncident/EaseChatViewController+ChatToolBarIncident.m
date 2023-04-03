@@ -103,59 +103,9 @@ static const void *imagePickerKey = &imagePickerKey;
         [self _sendVideoAction:mp4];
     } else {
         NSURL *url = info[UIImagePickerControllerReferenceURL];
-        if (url == nil) {
-            UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
-            NSData *data = UIImageJPEGRepresentation(orgImage, 1);
-            [self _sendImageDataAction:data];
-        } else {
-            if ([[UIDevice currentDevice].systemVersion doubleValue] >= 9.0f) {
-                PHFetchResult *result = [PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil];
-                if(result.count == 0){
-                    [EaseAlertController showErrorAlert:@"无权访问该相册"];
-                }else{
-                    for (PHAsset *asset in result) {
-                        NSArray <PHAssetResource *>*resources = [PHAssetResource assetResourcesForAsset:asset];
-                        if (resources.count > 0) {
-                            if ([resources.firstObject.uniformTypeIdentifier isEqualToString:@"public.png"]) {
-                                NSMutableData *imgData = [[NSMutableData alloc]init];
-                                [PHAssetResourceManager.defaultManager requestDataForAssetResource:resources.firstObject options:nil dataReceivedHandler:^(NSData * _Nonnull data) {
-                                    if (data.length > 0) {
-                                        [imgData appendData:data];
-                                    }
-                                } completionHandler:^(NSError * _Nullable error) {
-                                    if (error) {
-                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                            [EaseAlertController showErrorAlert:[error localizedDescription]];
-                                        });
-                                    } else {
-                                        [self _sendImageDataAction:[imgData copy]];
-                                    }
-                                }];
-                            } else {
-                                [PHImageManager.defaultManager requestImageDataForAsset:asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-                                    if (imageData != nil) {
-                                        [self _sendImageDataAction:imageData];
-                                    } else {
-                                        [EaseAlertController showErrorAlert:EaseLocalizableString(@"imageTooLarge", nil)];
-                                    }
-                                }];
-                            }
-                        }
-                    }
-                }
-            } else {
-                ALAssetsLibrary *alasset = [[ALAssetsLibrary alloc] init];
-                [alasset assetForURL:url resultBlock:^(ALAsset *asset) {
-                    if (asset) {
-                        ALAssetRepresentation* assetRepresentation = [asset defaultRepresentation];
-                        Byte *buffer = (Byte*)malloc((size_t)[assetRepresentation size]);
-                        NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:(NSUInteger)[assetRepresentation size] error:nil];
-                        NSData *fileData = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
-                        [self _sendImageDataAction:fileData];
-                    }
-                } failureBlock:NULL];
-            }
-        }
+        UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
+        NSData *data = UIImageJPEGRepresentation(orgImage, 1);
+        [self _sendImageDataAction:data];
     }
     
     [picker dismissViewControllerAnimated:YES completion:nil];
