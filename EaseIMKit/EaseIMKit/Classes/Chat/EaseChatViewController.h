@@ -50,9 +50,13 @@ NS_ASSUME_NONNULL_BEGIN
 //停止音频播放
 - (void)stopAudioPlayer;
 
+// 发送消息添加 @的用户，消息发送后删除
 - (void)appendAtUser:(NSString *)username;
+// 发送消息删除 @的用户
 - (void)removeAtUser:(NSString *)username;
+// 发送消息添加 @所有人
 - (void)appendAtAll;
+// 发送消息删除 @所有人
 - (void)removeAtAll;
 
 @end
