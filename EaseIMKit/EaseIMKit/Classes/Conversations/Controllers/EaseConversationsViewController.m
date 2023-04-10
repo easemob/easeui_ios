@@ -357,6 +357,9 @@ EMClientDelegate
         if (message.chatType != EMChatTypeGroupChat) {
             continue;
         }
+        if ([message.from isEqualToString:EMClient.sharedClient.currentUsername]) {
+            continue;
+        }
         id atListObj = message.ext[@"em_at_list"];
         if (atListObj) {
             if ([atListObj isKindOfClass:NSString.class]) {
