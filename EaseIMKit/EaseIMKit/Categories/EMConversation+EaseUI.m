@@ -51,58 +51,6 @@
     return self.ext[EMConversationDraft] ? self.ext[EMConversationDraft] : @"";
 }
 
-- (BOOL)remindMe {
-    //判断会话类型和消息是否包含@我
-    if (self.type != EMConversationTypeGroupChat) {
-        return NO;
-    }
-    BOOL ret = NO;
-    NSMutableArray *msgIdArray = [self remindMeArray];
-    /*
-    for (NSString *msgId in msgIds) {
-        EMChatMessage *msg = [self loadMessageWithId:msgId error:nil];
-        if (!msg.isRead && msg.body.type == EMMessageBodyTypeText) {
-            EMTextMessageBody *textBody = (EMTextMessageBody*)msg.body;
-            if ([textBody.text containsString:[NSString stringWithFormat:@"@%@",EMClient.sharedClient.currentUsername]]) {
-                ret = YES;
-                break;
-            }
-        }
-    }*/
-    if ([msgIdArray count] > 0) {
-        ret = YES;
-    }
-    
-    return ret;
-}
-
-- (NSMutableArray *)remindMeArray {
-    NSMutableArray *dict = [(NSMutableArray *)self.ext[EMConversationRemindMe] mutableCopy];
-    if (!dict) {
-        dict = [[NSMutableArray alloc]init];
-    }
-    
-    return dict;
-}
-
-- (void)setRemindMe:(NSString *)messageId
-{
-    NSMutableDictionary *dict = [self mutableExt];
-    NSMutableArray *msgIdArray = [self remindMeArray];
-    [msgIdArray addObject:messageId];
-    [dict setObject:msgIdArray forKey:EMConversationRemindMe];
-    [self setExt:dict];
-}
-
-- (void)resetRemindMe
-{
-    NSMutableArray *msgIdArray = [self remindMeArray];
-    [msgIdArray removeAllObjects];
-    NSMutableDictionary *dict = [self mutableExt];
-    [dict setObject:msgIdArray forKey:EMConversationRemindMe];
-    [self setExt:dict];
-}
-
 - (NSMutableDictionary *)mutableExt {
     NSMutableDictionary *mutableExt = [self.ext mutableCopy];
     if (!mutableExt) {

@@ -44,6 +44,10 @@
 @property (nonatomic, strong) EMChatBar *chatBar;
 @property (nonatomic, strong) dispatch_queue_t msgQueue;
 @property (nonatomic, strong) NSMutableArray<EMChatMessage *> *messageList;
+
+@property (nonatomic, strong) NSMutableArray<NSString *> *atUserList;
+@property (nonatomic, assign) BOOL atAll;
+
 @end
 
 @implementation EaseChatViewController
@@ -123,7 +127,7 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapTableViewAction:)];
     [self.tableView addGestureRecognizer:tap];
     
-    
+    _atUserList = [[NSMutableArray alloc] init];
     //self.view.backgroundColor = UIColor.grayColor;
 }
 
@@ -141,6 +145,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanPopupControllerView) name:CALL_MAKE1V1 object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanPopupControllerView) name:CALL_MAKECONFERENCE object:nil];
+    
+    if (self.currentConversation.type == EMConversationTypeGroupChat) {
+        [NSNotificationCenter.defaultCenter postNotificationName:CONVERSATIONLIST_BLOCK_AT_BEGIN object:self.currentConversation.conversationId];
+        [NSNotificationCenter.defaultCenter postNotificationName:CONVERSATIONLIST_REMOVE_AT object:self.currentConversation.conversationId];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -148,10 +157,10 @@
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    //群聊@“我”提醒
-    if(self.currentConversation.type == EMConversationTypeGroupChat && [self.currentConversation remindMe]) {
-        [self.currentConversation resetRemindMe];
-    };
+    
+    if (self.currentConversation.type == EMConversationTypeGroupChat) {
+        [NSNotificationCenter.defaultCenter postNotificationName:CONVERSATIONLIST_BLOCK_AT_END object:self.currentConversation.conversationId];
+    }
 }
 
 - (void)dealloc
@@ -359,6 +368,13 @@
         return isValid;
     }
     return YES;
+}
+
+- (void)textViewDidChangeSelection:(UITextView *)textView
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(textViewDidChangeSelection:)]) {
+        [self.delegate textViewDidChangeSelection: textView];
+    }
 }
 
 - (void)chatBarSendMsgAction:(NSString *)text
@@ -912,7 +928,20 @@
         message.isNeedGroupAck = YES;
     }
     message.chatType = (EMChatType)self.currentConversation.type;
-    
+    if (message.chatType == EMChatTypeGroupChat && [message.body isKindOfClass:EMTextMessageBody.class]) {
+        if (_atAll) {
+            message.ext = @{
+                @"em_at_list": @"ALL"
+            };
+            _atAll = NO;
+            [_atUserList removeAllObjects];
+        } else if (_atUserList.count > 0) {
+            message.ext = @{
+                @"em_at_list": _atUserList
+            };
+            [_atUserList removeAllObjects];
+        }
+    }
     __weak typeof(self) weakself = self;
     if (self.delegate && [self.delegate respondsToSelector:@selector(willSendMessage:)]) {
         EMChatMessage *callbackMsg = [self.delegate willSendMessage:message];
@@ -974,6 +1003,26 @@
             [self scrollToBottomRow];
         }
     });
+}
+
+- (void)appendAtUser:(NSString *)username
+{
+    [_atUserList addObject:username];
+}
+
+- (void)removeAtUser:(NSString *)username
+{
+    [_atUserList removeObject:username];
+}
+
+- (void)appendAtAll
+{
+    _atAll = YES;
+}
+
+- (void)removeAtAll
+{
+    _atAll = NO;
 }
 
 #pragma mark - getter

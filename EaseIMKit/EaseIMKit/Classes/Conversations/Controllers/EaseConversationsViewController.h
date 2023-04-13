@@ -10,6 +10,7 @@
 #import "EaseBaseTableViewController.h"
 
 #import "EaseConversationViewModel.h"
+#import "EaseConversationModel.h"
 #import <HyphenateChat/EMMultiDevicesDelegate.h>
 
 NS_ASSUME_NONNULL_BEGIN

@@ -20,11 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setDraft:(NSString *)aDraft;
 - (NSString *)draft;
 
-- (void)setRemindMe:(NSString *)messageId;
-- (void)resetRemindMe;
-
-- (BOOL)remindMe;
-
 - (void)setLatestUpdateTime:(long long)latestUpdateTime;
 
 - (long long)latestUpdateTime;

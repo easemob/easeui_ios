@@ -24,11 +24,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) EMConversationType type; //会话聊天类型
 @property (nonatomic, readonly) int unreadMessagesCount; //对话中未读取的消息数量
 @property (nonatomic, readonly) long long lastestUpdateTime;
-@property (nonatomic, readonly) BOOL remindMe;
 @property (nonatomic, readonly) BOOL showBadgeValue;//YES显示数字默 NO显示红点
 
 @property (nonatomic) BOOL isTop;
 @property (nonatomic, copy, readonly) NSAttributedString *showInfo;
+@property (nonatomic, assign) BOOL hasAtMessage;
 //@property (nonatomic, copy) NSString *draft;
 
 @end
