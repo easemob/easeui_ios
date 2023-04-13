@@ -46,6 +46,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 
+- (void)textViewDidChangeSelection:(UITextView *)textView;
+
 - (void)inputViewDidChange:(EaseTextView *)aInputView;
 
 - (void)chatBarDidShowMoreViewAction;

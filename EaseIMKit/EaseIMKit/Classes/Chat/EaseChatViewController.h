@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
 @property (nonatomic) NSTimeInterval msgTimelTag;   //消息时间格式化
 
+@property (nonatomic) BOOL endScroll;
+
 + (EaseChatViewController *)initWithConversationId:(NSString *)aConversationId
                       conversationType:(EMConversationType)aType
                                      chatViewModel:(EaseChatViewModel *)aModel;
@@ -47,6 +49,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)cleanPopupControllerView;
 //停止音频播放
 - (void)stopAudioPlayer;
+
+// 发送消息添加 @的用户，消息发送后删除
+- (void)appendAtUser:(NSString *)username;
+// 发送消息删除 @的用户
+- (void)removeAtUser:(NSString *)username;
+// 发送消息添加 @所有人
+- (void)appendAtAll;
+// 发送消息删除 @所有人
+- (void)removeAtAll;
 
 @end
 

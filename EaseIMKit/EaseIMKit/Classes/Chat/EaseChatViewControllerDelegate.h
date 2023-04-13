@@ -98,6 +98,10 @@ NS_ASSUME_NONNULL_BEGIN
  * 输入区键盘输入变化回调  例：@群成员
  */
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+/**
+ * 输入区选中范围变化回调
+ */
+- (void)textViewDidChangeSelection:(UITextView *)textView;
 
 /**
  对方正在输入
@@ -141,6 +145,8 @@ NS_ASSUME_NONNULL_BEGIN
  *
  */
 - (void)loadMoreMessageData:(NSString *)firstMessageId currentMessageList:(NSArray<EMChatMessage *> *)messageList;
+
+- (void)scrollViewEndScroll;
 
 @end
 

@@ -30,6 +30,9 @@ EMClientDelegate
 }
 @property (nonatomic, strong) UIView *blankPerchView;
 
+@property (nonatomic, strong) NSMutableDictionary <NSString *, NSString *>*hasAtConversationMap;
+@property (nonatomic, strong) NSMutableSet *blockAtNotificationSet;
+
 @end
 
 @implementation EaseConversationsViewController
@@ -53,10 +56,24 @@ EMClientDelegate
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
+    [EMClient.sharedClient.chatManager addDelegate:self delegateQueue:nil];
     [[EMClient sharedClient] addMultiDevicesDelegate:self delegateQueue:nil];
+    
+    NSDictionary *hasAtConversationMap = [[NSUserDefaults.standardUserDefaults objectForKey:[NSString stringWithFormat:@"at_list_%@", EMClient.sharedClient.currentUsername]] copy];
+    if (hasAtConversationMap) {
+        _hasAtConversationMap = [NSMutableDictionary dictionaryWithDictionary:hasAtConversationMap];
+    } else {
+        _hasAtConversationMap = [NSMutableDictionary dictionary];
+    }
+    _blockAtNotificationSet = [NSMutableSet set];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshTabView)
                                                  name:CONVERSATIONLIST_UPDATE object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(blockAtBeginNotification:) name:CONVERSATIONLIST_BLOCK_AT_BEGIN object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(blockAtEndNotification:) name:CONVERSATIONLIST_BLOCK_AT_END object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(removeAtNotification:) name:CONVERSATIONLIST_REMOVE_AT object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -307,11 +324,19 @@ EMClientDelegate
     } else {
         
     }
+    [self removeAt:model];
     if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:didSelectRowAtIndexPath:)]) {
         return [self.delegate easeTableView:tableView didSelectRowAtIndexPath:indexPath];
     }
 }
 
+- (void)removeAt:(EaseConversationModel *)model
+{
+    if (model.type == EMConversationTypeGroupChat) {
+        [_hasAtConversationMap removeObjectForKey:model.userDelegate.easeId];
+        [NSUserDefaults.standardUserDefaults setObject:_hasAtConversationMap forKey:[NSString stringWithFormat:@"at_list_%@", EMClient.sharedClient.currentUsername]];
+    }
+}
 
 #pragma mark - EMChatManagerDelegate
 
@@ -322,17 +347,42 @@ EMClientDelegate
 
 - (void)messagesDidReceive:(NSArray *)aMessages
 {
-    if (aMessages && [aMessages count]) {
-        EMChatMessage *msg = aMessages[0];
-        if(msg.body.type == EMMessageBodyTypeText) {
-            EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:msg.conversationId type:EMConversationTypeGroupChat createIfNotExist:NO];
-            //群聊@“我”提醒
-            NSString *content = [NSString stringWithFormat:@"@%@",EMClient.sharedClient.currentUsername];
-            if(conversation.type == EMConversationTypeGroupChat && [((EMTextMessageBody *)msg.body).text containsString:content]) {
-                [conversation setRemindMe:msg.messageId];
-            };
+    for (EMChatMessage *message in aMessages) {
+        if ([_blockAtNotificationSet containsObject:message.conversationId]) {
+            continue;
+        }
+        if (_hasAtConversationMap[message.conversationId]) {
+            continue;
+        }
+        if (message.chatType != EMChatTypeGroupChat) {
+            continue;
+        }
+        if ([message.from isEqualToString:EMClient.sharedClient.currentUsername]) {
+            continue;
+        }
+        id atListObj = message.ext[@"em_at_list"];
+        if (atListObj) {
+            if ([atListObj isKindOfClass:NSString.class]) {
+                if ([atListObj isEqualToString:@"ALL"]) {
+                    _hasAtConversationMap[message.conversationId] = @"";
+                    [NSUserDefaults.standardUserDefaults setObject:_hasAtConversationMap forKey:[NSString stringWithFormat:@"at_list_%@", EMClient.sharedClient.currentUsername]];
+                } else {
+                    NSArray <NSString *>*atList = [NSJSONSerialization JSONObjectWithData:[atListObj dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+                    if ([atList containsObject:EMClient.sharedClient.currentUsername]) {
+                        _hasAtConversationMap[message.conversationId] = @"";
+                        [NSUserDefaults.standardUserDefaults setObject:_hasAtConversationMap forKey:[NSString stringWithFormat:@"at_list_%@", EMClient.sharedClient.currentUsername]];
+                    }
+                }
+            } else if ([atListObj isKindOfClass:NSArray.class]) {
+                NSArray <NSString *>*atList = atListObj;
+                if ([atList containsObject:EMClient.sharedClient.currentUsername]) {
+                    _hasAtConversationMap[message.conversationId] = @"";
+                    [NSUserDefaults.standardUserDefaults setObject:_hasAtConversationMap forKey:[NSString stringWithFormat:@"at_list_%@", EMClient.sharedClient.currentUsername]];
+                }
+            }
         }
     }
+    
     [self _loadAllConversationsFromDB];
 }
 
@@ -396,7 +446,8 @@ EMClientDelegate
             if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(easeUserDelegateAtConversationId:conversationType:)]) {
                 item.userDelegate = [weakSelf.delegate easeUserDelegateAtConversationId:conv.conversationId conversationType:conv.type];
             }
-            
+            item.hasAtMessage = weakSelf.hasAtConversationMap[conv.conversationId] != nil;
+
             if (item.isTop) {
                 [topConvs addObject:item];
             }else {
@@ -452,6 +503,36 @@ EMClientDelegate
         [self.tableView.backgroundView setHidden:NO];
     }else {
         [self.tableView.backgroundView setHidden:YES];
+    }
+}
+
+#pragma mark - @
+- (void)blockAtBeginNotification:(NSNotification *)notification
+{
+    NSString *conversationId = notification.object;
+    if ([conversationId isKindOfClass:NSString.class]) {
+        [_blockAtNotificationSet addObject:conversationId];
+    }
+}
+
+- (void)blockAtEndNotification:(NSNotification *)notification
+{
+    NSString *conversationId = notification.object;
+    if ([conversationId isKindOfClass:NSString.class]) {
+        [_blockAtNotificationSet removeObject:conversationId];
+    }
+}
+
+- (void)removeAtNotification:(NSNotification *)notification
+{
+    NSString *conversationId = notification.object;
+    if ([conversationId isKindOfClass:NSString.class]) {
+        for (EaseConversationModel *i in self.dataAry) {
+            if ([i.userDelegate.easeId isEqualToString:conversationId]) {
+                [self removeAt:i];
+                return;
+            }
+        }
     }
 }
 

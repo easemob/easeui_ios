@@ -32,6 +32,14 @@
 //会话列表
 #define CONVERSATIONLIST_UPDATE @"ConversationListUpdate"
 
+//移除会话的 @ 信息
+#define CONVERSATIONLIST_REMOVE_AT @"CONVERSATIONLIST_REMOVE_AT"
+//@信息（默认统计，进入聊天页面不统计当前会话）
+//  不统计
+#define CONVERSATIONLIST_BLOCK_AT_BEGIN @"CONVERSATIONLIST_BLOCK_AT_BEGIN"
+//  统计
+#define CONVERSATIONLIST_BLOCK_AT_END @"CONVERSATIONLIST_BLOCK_AT_END"
+
 //聊天
 #define CHAT_PUSHVIEWCONTROLLER @"EMPushChatViewController"
 #define CHAT_CLEANMESSAGES @"EMChatCleanMessages"
