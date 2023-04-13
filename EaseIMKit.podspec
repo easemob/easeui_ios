@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
     s.source = { :git => 'https://github.com/easemob/easeui_ios.git', :tag => 'EaseIMKit_4.0.1'}
     s.frameworks = 'UIKit'
     s.libraries = 'stdc++'
-    s.ios.deployment_target = '10.0'
+    s.ios.deployment_target = '11.0'
     s.source_files = [
         'EaseIMKit/EaseIMKit/EaseIMKit.h',
         'EaseIMKit/EaseIMKit/EasePublicHeaders.h',

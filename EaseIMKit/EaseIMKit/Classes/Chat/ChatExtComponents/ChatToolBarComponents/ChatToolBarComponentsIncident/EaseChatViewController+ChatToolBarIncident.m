@@ -102,10 +102,19 @@ static const void *imagePickerKey = &imagePickerKey;
         }
         [self _sendVideoAction:mp4];
     } else {
-        NSURL *url = info[UIImagePickerControllerReferenceURL];
-        UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
-        NSData *data = UIImageJPEGRepresentation(orgImage, 1);
-        [self _sendImageDataAction:data];
+        PHFetchResult *fetchResult = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary options:nil];
+        PHAssetCollection *collection = fetchResult.firstObject;
+        PHFetchResult *assetResult = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
+        PHAsset *asset = assetResult.firstObject;
+        NSString *localIdentifier = asset.localIdentifier;
+        PHFetchResult *result = [PHAsset fetchAssetsWithLocalIdentifiers:@[localIdentifier] options:nil];
+        if(result.count == 0){
+            [EaseAlertController showErrorAlert:@"无权访问该相册"];
+        } else {
+            UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
+            NSData *data = UIImageJPEGRepresentation(orgImage, 1);
+            [self _sendImageDataAction:data];
+        }
     }
     
     [picker dismissViewControllerAnimated:YES completion:nil];
