@@ -42,12 +42,8 @@
     return _conversation.type;
 }
 
-- (void)setIsTop:(BOOL)isTop {
-    [_conversation setTop:isTop];
-}
-
 - (BOOL)isTop {
-    return [_conversation isTop];
+    return _conversation.isPin;
 }
 
 - (void)setDraft:(NSString *)draft {

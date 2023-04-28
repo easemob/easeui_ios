@@ -15,21 +15,6 @@
 
 @implementation EMConversation (EaseUI)
 
-- (void)setTop:(BOOL)isTop {
-    if (isTop) {
-        self.latestUpdateTime = [[NSDate new] timeIntervalSince1970] * 1000;
-    }else {
-        self.latestUpdateTime = 0;
-    }
-    NSMutableDictionary *dictionary = [self mutableExt];
-    [dictionary setObject:@(isTop) forKey:EMConversationTop];
-    [self setExt:dictionary];
-}
-
-- (BOOL)isTop {
-    return [self.ext[EMConversationTop] boolValue];
-}
-
 - (void)setShowName:(NSString *)aShowName {
     NSMutableDictionary *dictionary = [self mutableExt];
     [dictionary setObject:aShowName forKey:EMConversationShowName];

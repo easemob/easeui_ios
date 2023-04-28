@@ -123,6 +123,11 @@ EMClientDelegate
     }];
 }
 
+- (void)multiDevicesConversationEvent:(EMMultiDevicesEvent)aEvent conversationId:(NSString *)conversationId conversationType:(EMConversationType)conversationType
+{
+    [self _loadAllConversationsFromDB];
+}
+
 - (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString {
     if (jsonString == nil) {
         return nil;
@@ -187,11 +192,10 @@ EMClientDelegate
                                                                             title:!model.isTop ? EaseLocalizableString(@"top", nil) : EaseLocalizableString(@"cancelTop", nil)
                                                                           handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL))
                                      {
-        EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.easeId
-                                                                                     type:model.type
-                                                                         createIfNotExist:YES];
-        [conversation setTop:!model.isTop];
-        [weakself refreshTabView];
+        [EMClient.sharedClient.chatManager pinConversation:model.easeId isPinned:!model.isTop completionBlock:^(EMError * _Nullable error) {
+            [EMClient.sharedClient.chatManager getConversation:model.easeId type:model.type createIfNotExist:YES];
+            [weakself refreshTabView];
+        }];
     }];
     
     topAction.backgroundColor = [UIColor colorWithHexString:@"CB7D32"];
@@ -294,11 +298,10 @@ EMClientDelegate
                                                                             title:!model.isTop ? EaseLocalizableString(@"top", nil) : EaseLocalizableString(@"cancelTop", nil)
                                                                           handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath)
     {
-        EMConversation *conversation = [EMClient.sharedClient.chatManager getConversation:model.easeId
-                                                                                     type:model.type
-                                                                         createIfNotExist:YES];
-        [conversation setTop:!model.isTop];
-        [weakself refreshTabView];
+        [EMClient.sharedClient.chatManager pinConversation:model.easeId isPinned:!model.isTop completionBlock:^(EMError * _Nullable error) {
+            [EMClient.sharedClient.chatManager getConversation:model.easeId type:model.type createIfNotExist:YES];
+            [weakself refreshTabView];
+        }];
     }];
     
     topAction.backgroundColor = [UIColor colorWithHexString:@"CB7D32"];
@@ -427,7 +430,7 @@ EMClientDelegate
     dispatch_async(_loadDataQueue, ^{
         NSMutableArray<id<EaseUserDelegate>> *totals = [NSMutableArray<id<EaseUserDelegate>> array];
         
-        NSArray *conversations = [EMClient.sharedClient.chatManager getAllConversations];
+        NSArray *conversations = [EMClient.sharedClient.chatManager getAllConversations:YES];
         
         NSMutableArray *convs = [NSMutableArray array];
         NSMutableArray *topConvs = [NSMutableArray array];
