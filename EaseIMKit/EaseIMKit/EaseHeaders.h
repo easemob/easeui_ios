@@ -18,5 +18,6 @@
 #import "EaseEmojiHelper.h"
 #import "UIViewController+HUD.h"
 #import "UIColor+EaseUI.h"
+#import "EaseUserUtils.h"
 
 

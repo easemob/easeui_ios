@@ -33,6 +33,7 @@
 #import "EaseEnums.h"
 #import "EaseDefines.h"
 #import "EaseURLPreviewManager.h"
+#import "EMChatMessage+EaseUIExt.h"
 
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate>
 {
@@ -401,7 +402,17 @@
 - (void)chatBarSendMsgAction:(NSString *)text
 {
     if ((text.length > 0 && ![text isEqualToString:@""])) {
-        [self sendTextAction:text ext:nil];
+        if (self.chatBar.quoteMessage) {
+            [self sendTextAction:text ext:@{@"msgQuote": @{
+                @"msgID": self.chatBar.quoteMessage.message.messageId,
+                @"msgPreview": self.chatBar.quoteMessage.message.easeUI_quoteShowText,
+                @"msgSender": self.chatBar.quoteMessage.message.from,
+                @"msgType": @(self.chatBar.quoteMessage.message.body.type)
+            }}];
+            self.chatBar.quoteMessage = nil;
+        } else {
+            [self sendTextAction:text ext:nil];
+        }
         [self.chatBar clearInputViewText];
     }
 }
@@ -465,9 +476,9 @@
         if (!isCustom) return;
     }
     //消息事件策略分类
-    EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgCell:aCell];
+    EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgType:aCell.model.type];
     eventStrategy.chatController = self;
-    [eventStrategy messageCellEventOperation:aCell];
+    [eventStrategy messageEventOperation:aCell.model];
 }
 //消息长按事件
 - (void)messageCellDidLongPress:(UITableViewCell *)aCell cgPoint:(CGPoint)point
@@ -494,10 +505,16 @@
         [weakself recallLongPressAction];
     }];
     
+    EaseExtMenuModel *quoteModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"quote"] funcDesc:EaseLocalizableString(@"chat.quote", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+        EaseMessageModel *model = [weakself.dataArray objectAtIndex:weakself.longPressIndexPath.row];
+        weakself.chatBar.quoteMessage = model;
+    }];
+    
     NSMutableArray<EaseExtMenuModel*> *extMenuArray = [[NSMutableArray<EaseExtMenuModel*> alloc]init];
     BOOL isCustomCell = NO;
     [extMenuArray addObject:copyExtModel];
     [extMenuArray addObject:deleteExtModel];
+    [extMenuArray addObject:quoteModel];
     if (![aCell isKindOfClass:[EaseMessageCell class]]) {
         [extMenuArray addObject:recallExtModel];
         isCustomCell = YES;
@@ -608,6 +625,28 @@
     [self hideLongPressView];
     if (self.delegate && [self.delegate respondsToSelector:@selector(avatarDidLongPress:)]) {
         [self.delegate avatarDidLongPress:model.userDataDelegate];
+    }
+}
+
+- (void)messageCellDidClickQuote:(EaseMessageCell *)cell
+{
+    [self hideLongPressView];
+    NSString *msgId = cell.model.message.ext[@"msgQuote"][@"msgID"];
+    if (msgId.length <= 0) {
+        return;
+    }
+    for (int i = (int)_dataArray.count - 1; i >= 0; i --) {
+        EaseMessageModel *model = self.dataArray[i];
+        if ([model isKindOfClass:EaseMessageModel.class] && [model.message.messageId isEqualToString:msgId]) {
+            if (model.type == EMMessageTypeImage || model.type == EMMessageTypeVideo || model.type == EMMessageTypeFile) {
+                EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgType:model.type];
+                eventStrategy.chatController = self;
+                [eventStrategy messageEventOperation:model];
+            } else {
+                [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+            }
+            return;
+        }
     }
 }
 

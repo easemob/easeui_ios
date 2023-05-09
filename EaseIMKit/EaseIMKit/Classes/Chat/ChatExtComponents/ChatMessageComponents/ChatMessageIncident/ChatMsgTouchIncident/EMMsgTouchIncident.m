@@ -20,7 +20,7 @@
 
 @implementation EMMessageEventStrategy
 
-- (void)messageCellEventOperation:(EaseMessageCell *)aCell{}
+- (void)messageEventOperation:(EaseMessageModel *)model {}
 
 @end
 
@@ -29,21 +29,21 @@
 */
 @implementation EMMessageEventStrategyFactory
 
-+ (EMMessageEventStrategy * _Nonnull)getStratrgyImplWithMsgCell:(EaseMessageCell *)aCell
++ (EMMessageEventStrategy * _Nonnull)getStratrgyImplWithMsgType:(EMMessageType)type
 {
-    if (aCell.model.type == EMMessageTypeText)
+    if (type == EMMessageTypeText)
         return [[TextMsgEvent alloc]init];
-    if (aCell.model.type == EMMessageTypeImage)
+    if (type == EMMessageTypeImage)
         return [[ImageMsgEvent alloc] init];
-    if (aCell.model.type == EMMessageTypeLocation)
+    if (type == EMMessageTypeLocation)
         return [[LocationMsgEvent alloc] init];
-    if (aCell.model.type == EMMessageTypeVoice)
+    if (type == EMMessageTypeVoice)
         return [[VoiceMsgEvent alloc]init];
-    if (aCell.model.type == EMMessageTypeVideo)
+    if (type == EMMessageTypeVideo)
         return [[VideoMsgEvent alloc]init];
-    if (aCell.model.type == EMMessageTypeFile)
+    if (type == EMMessageTypeFile)
         return [[FileMsgEvent alloc]init];
-    if (aCell.model.type == EMMessageTypeExtCall)
+    if (type == EMMessageTypeExtCall)
         return [[ConferenceMsgEvent alloc]init];
     
     return [[EMMessageEventStrategy alloc]init];
@@ -56,10 +56,9 @@
  */
 @implementation TextMsgEvent
 
-- (void)messageCellEventOperation:(EaseMessageCell *)aCell
+- (void)messageEventOperation:(EaseMessageModel *)model
 {
-    EMMsgTextBubbleView *textBubbleView = (EMMsgTextBubbleView *)aCell.bubbleView;
-    NSString *chatStr = textBubbleView.textLabel.text;
+    NSString *chatStr = ((EMTextMessageBody *)model.message.body).text;
 
     NSDataDetector *detector= [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
     NSArray *checkArr = [detector matchesInString:chatStr options:0 range:NSMakeRange(0, chatStr.length)];
@@ -89,7 +88,7 @@
  */
 @implementation ImageMsgEvent
 
-- (void)messageCellEventOperation:(EaseMessageCell *)aCell
+- (void)messageEventOperation:(EaseMessageModel *)model
 {
     __weak typeof(self.chatController) weakself = self.chatController;
     void (^downloadThumbBlock)(EaseMessageModel *aModel) = ^(EaseMessageModel *aModel) {
@@ -101,11 +100,11 @@
         }];
     };
     
-    EMImageMessageBody *body = (EMImageMessageBody*)aCell.model.message.body;
+    EMImageMessageBody *body = (EMImageMessageBody*)model.message.body;
     BOOL isCustomDownload = !([EMClient sharedClient].options.isAutoTransferMessageAttachments);
     if (body.thumbnailDownloadStatus == EMDownloadStatusFailed) {
         if (!isCustomDownload) {
-            downloadThumbBlock(aCell.model);
+            downloadThumbBlock(model);
         }
         
         return;
@@ -113,7 +112,7 @@
     
     BOOL isAutoDownloadThumbnail = [EMClient sharedClient].options.isAutoDownloadThumbnail;
     if (body.thumbnailDownloadStatus == EMDownloadStatusPending && !isAutoDownloadThumbnail) {
-        downloadThumbBlock(aCell.model);
+        downloadThumbBlock(model);
         return;
     }
     
@@ -130,7 +129,7 @@
     }
     
     [self.chatController showHudInView:self.chatController.view hint:EaseLocalizableString(@"downloadingImage...", nil)];
-    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
             [EaseAlertController showErrorAlert:EaseLocalizableString(@"downloadImageFail", nil)];
@@ -157,10 +156,9 @@
     位置消息事件
  */
 @implementation LocationMsgEvent
-
-- (void)messageCellEventOperation:(EaseMessageCell *)aCell
+- (void)messageEventOperation:(EaseMessageModel *)model
 {
-    EMLocationMessageBody *body = (EMLocationMessageBody *)aCell.model.message.body;
+    EMLocationMessageBody *body = (EMLocationMessageBody *)model.message.body;
     EMLocationViewController *controller = [[EMLocationViewController alloc] initWithLocation:CLLocationCoordinate2DMake(body.latitude, body.longitude)];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
     navController.modalPresentationStyle = 0;
@@ -174,9 +172,9 @@
  */
 @implementation VoiceMsgEvent
 
-- (void)messageCellEventOperation:(EaseMessageCell *)aCell
+- (void)messageEventOperation:(EaseMessageModel *)model
 {
-    EMVoiceMessageBody *body = (EMVoiceMessageBody*)aCell.model.message.body;
+    EMVoiceMessageBody *body = (EMVoiceMessageBody*)model.message.body;
     if (body.downloadStatus == EMDownloadStatusDownloading) {
         [EaseAlertController showInfoAlert:EaseLocalizableString(@"downloadingVoice...", nil)];
         return;
@@ -194,7 +192,7 @@
         id model = [EMAudioPlayerUtil sharedHelper].model;
         if (model && [model isKindOfClass:[EaseMessageModel class]]) {
             EaseMessageModel *oldModel = (EaseMessageModel *)model;
-            if (oldModel == aCell.model && oldModel.isPlaying == YES) {
+            if (oldModel == model && oldModel.isPlaying == YES) {
                 [[EMAudioPlayerUtil sharedHelper] stopPlayer];
                 [EMAudioPlayerUtil sharedHelper].model = nil;
                 [[NSNotificationCenter defaultCenter] postNotificationName:AUDIOMSGSTATECHANGE object:aModel];
@@ -210,7 +208,7 @@
     };
     
     if (body.downloadStatus == EMDownloadStatusSucceed) {
-        playBlock(aCell.model);
+        playBlock(model);
         return;
     }
     
@@ -220,12 +218,12 @@
     
     __weak typeof(self.chatController) weakChatControl = self.chatController;
     [self.chatController showHudInView:self.chatController.view hint:EaseLocalizableString(@"downloadingVoice", nil)];
-    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
         [weakChatControl hideHud];
         if (error) {
             [EaseAlertController showErrorAlert:EaseLocalizableString(@"downloadVoiceFail", nil)];
         } else {
-            playBlock(aCell.model);
+            playBlock(model);
         }
     }];
 }
@@ -237,7 +235,7 @@
  */
 @implementation VideoMsgEvent
 
-- (void)messageCellEventOperation:(EaseMessageCell *)aCell
+- (void)messageEventOperation:(EaseMessageModel *)model
 {
     __weak typeof(self.chatController) weakChatController = self.chatController;
     void (^playBlock)(NSString *aPath) = ^(NSString *aPathe) {
@@ -254,7 +252,7 @@
 
     void (^downloadBlock)(void) = ^ {
         [weakChatController showHudInView:self.chatController.view hint:EaseLocalizableString(@"downloadVideo...", nil)];
-        [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
+        [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
             [weakChatController hideHud];
             if (error) {
                 [EaseAlertController showErrorAlert:@"下载视频失败"];
@@ -267,7 +265,7 @@
         }];
     };
     
-    EMVideoMessageBody *body = (EMVideoMessageBody*)aCell.model.message.body;
+    EMVideoMessageBody *body = (EMVideoMessageBody*)model.message.body;
     if (body.downloadStatus == EMDownloadStatusDownloading) {
         [EaseAlertController showInfoAlert:EaseLocalizableString(@"downloadingVideo...", nil)];
         return;
@@ -278,7 +276,7 @@
     if (body.thumbnailDownloadStatus == EMDownloadStatusFailed || ![fileManager fileExistsAtPath:body.thumbnailLocalPath]) {
         [self.chatController showHint:EaseLocalizableString(@"downloadThumnail", nil)];
         if (!isCustomDownload) {
-            [[EMClient sharedClient].chatManager downloadMessageThumbnail:aCell.model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
+            [[EMClient sharedClient].chatManager downloadMessageThumbnail:model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
                 downloadBlock();
             }];
             return;
@@ -302,9 +300,9 @@
  */
 @implementation FileMsgEvent
 
-- (void)messageCellEventOperation:(EaseMessageCell *)aCell
+- (void)messageEventOperation:(EaseMessageModel *)model
 {
-    EMFileMessageBody *body = (EMFileMessageBody *)aCell.model.message.body;
+    EMFileMessageBody *body = (EMFileMessageBody *)model.message.body;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     if (body.downloadStatus == EMDownloadStatusDownloading) {
@@ -326,7 +324,7 @@
         return;
     }
     
-    [[EMClient sharedClient].chatManager downloadMessageAttachment:aCell.model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
+    [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMChatMessage *message, EMError *error) {
         [weakself hideHud];
         if (error) {
             [EaseAlertController showErrorAlert:EaseLocalizableString(@"downFileFail", nil)];
@@ -346,9 +344,9 @@
  */
 @implementation ConferenceMsgEvent
 
-- (void)messageCellEventOperation:(EaseMessageCell *)aCell
+- (void)messageEventOperation:(EaseMessageModel *)model
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:CALL_SELECTCONFERENCECELL object:aCell.model.message];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CALL_SELECTCONFERENCECELL object:model.message];
 }
 
 @end
