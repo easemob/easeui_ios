@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) EMChatBarRecordAudioView *recordAudioView;
 @property (nonatomic, strong) EaseChatBarEmoticonView *moreEmoticonView;
 @property (nonatomic, strong) EMMoreFunctionView *moreFunctionView;
+@property (nonatomic, copy, nullable) EaseMessageModel *quoteMessage;
 
 - (instancetype)initWithViewModel:(EaseChatViewModel *)viewModel;
 

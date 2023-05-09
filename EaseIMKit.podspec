@@ -43,7 +43,8 @@ Pod::Spec.new do |s|
         'EaseIMKit/EaseIMKit/Classes/Chat/ChatModels/EaseChatViewModel.h',
         'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewModel.h',
         'EaseIMKit/EaseIMKit/Classes/BaseTableviewController/EaseUserDelegate.h',
-        'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewController.h'
+        'EaseIMKit/EaseIMKit/Classes/BaseTableViewController/EaseBaseTableViewController.h',
+        'EaseIMKit/EaseIMKit/Classes/Common/EaseUserUtils.h',
     ]
     
     s.static_framework = true
@@ -59,7 +60,7 @@ Pod::Spec.new do |s|
                             }
     s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
-    s.dependency 'HyphenateChat'
+    # s.dependency 'HyphenateChat'
     s.dependency 'EMVoiceConvert', '0.1.0'
 
 
