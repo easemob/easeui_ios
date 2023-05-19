@@ -515,7 +515,14 @@
         } else {
             nickname = quoteMessage.message.from;
         }
-        self.quoteLabel.text = [NSString stringWithFormat:@"%@:%@", nickname, quoteMessage.message.easeUI_quoteShowText];
+        NSString *content = nil;
+        if (_delegate && [_delegate respondsToSelector:@selector(chatBarQuoteMessageShowContent:)]) {
+            content = [_delegate chatBarQuoteMessageShowContent:quoteMessage.message];
+        }
+        if (!content) {
+            content = quoteMessage.message.easeUI_quoteShowText;
+        }
+        self.quoteLabel.text = [NSString stringWithFormat:@"%@:%@", nickname, content];
         self.quoteView.hidden = NO;
         [self.quoteView Ease_updateConstraints:^(EaseConstraintMaker *make) {
             make.height.equalTo(@44);

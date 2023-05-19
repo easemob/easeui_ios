@@ -148,6 +148,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)scrollViewEndScroll;
 
+- (NSString *)chatBarQuoteMessageShowContent:(EMChatMessage *)message;
+- (NSAttributedString *)messageCellQuoteViewShowContent:(EMChatMessage *)message;
+
 @end
 
 NS_ASSUME_NONNULL_END

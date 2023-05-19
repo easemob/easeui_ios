@@ -403,11 +403,21 @@
 {
     if ((text.length > 0 && ![text isEqualToString:@""])) {
         if (self.chatBar.quoteMessage) {
+            NSDictionary *msgTypeDict = @{
+                @(EMMessageBodyTypeText): @"txt",
+                @(EMMessageBodyTypeImage): @"img",
+                @(EMMessageBodyTypeVideo): @"video",
+                @(EMMessageBodyTypeVoice): @"audio",
+                @(EMMessageBodyTypeCustom): @"custom",
+                @(EMMessageBodyTypeCmd): @"cmd",
+                @(EMMessageBodyTypeFile): @"file",
+                @(EMMessageBodyTypeLocation): @"location"
+            };
             [self sendTextAction:text ext:@{@"msgQuote": @{
                 @"msgID": self.chatBar.quoteMessage.message.messageId,
                 @"msgPreview": self.chatBar.quoteMessage.message.easeUI_quoteShowText,
                 @"msgSender": self.chatBar.quoteMessage.message.from,
-                @"msgType": @(self.chatBar.quoteMessage.message.body.type)
+                @"msgType": msgTypeDict[@(self.chatBar.quoteMessage.message.body.type)]
             }}];
             self.chatBar.quoteMessage = nil;
         } else {
@@ -425,6 +435,22 @@
     }];
     
     [self performSelector:@selector(scrollToBottomRow) withObject:nil afterDelay:0.1];
+}
+
+- (NSString *)chatBarQuoteMessageShowContent:(EMChatMessage *)message
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(chatBarQuoteMessageShowContent:)]) {
+        return [_delegate chatBarQuoteMessageShowContent:message];
+    }
+    return nil;
+}
+
+- (NSAttributedString *)quoteViewShowContent:(EMChatMessage *)message
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(messageCellQuoteViewShowContent:)]) {
+        return [_delegate messageCellQuoteViewShowContent:message];
+    }
+    return nil;
 }
 
 #pragma mark - EMChatBarRecordAudioViewDelegate

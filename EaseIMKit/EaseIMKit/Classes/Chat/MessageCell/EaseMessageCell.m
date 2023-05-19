@@ -19,9 +19,9 @@
 #import "EMMsgExtGifBubbleView.h"
 #import "EMMsgURLPreviewBubbleView.h"
 #import "UIImageView+EaseWebCache.h"
-#import "EMMessageQuoteView.h"
+#import "EaseMessageQuoteView.h"
 
-@interface EaseMessageCell()
+@interface EaseMessageCell() <EaseMessageQuoteViewDelegate>
 
 @property (nonatomic, strong) UIImageView *avatarView;
 
@@ -33,7 +33,7 @@
 
 @property (nonatomic, strong) EaseChatViewModel *viewModel;
 
-@property (nonatomic, strong) EMMessageQuoteView *quoteView;
+@property (nonatomic, strong) EaseMessageQuoteView *quoteView;
 
 @end
 
@@ -194,7 +194,8 @@
         }];
     }
     
-    _quoteView = [[EMMessageQuoteView alloc] init];
+    _quoteView = [[EaseMessageQuoteView alloc] init];
+    _quoteView.delegate = self;
     [self.contentView addSubview:_quoteView];
     if (self.direction == EMMessageDirectionReceive) {
         [_quoteView Ease_makeConstraints:^(EaseConstraintMaker *make) {
@@ -390,6 +391,14 @@
     if (_delegate && [_delegate respondsToSelector:@selector(messageCellDidClickQuote:)]) {
         [_delegate messageCellDidClickQuote:self];
     }
+}
+
+- (NSAttributedString *)quoteViewShowContent:(EMChatMessage *)message
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(quoteViewShowContent:)]) {
+        return [_delegate quoteViewShowContent:message];
+    }
+    return nil;
 }
 
 @end
