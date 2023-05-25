@@ -24,7 +24,11 @@
 @implementation EaseURLPreviewCallback
 @end
 
+<<<<<<< HEAD
 @interface EaseURLPreviewManager ()
+=======
+@interface EaseURLPreviewManager () <NSXMLParserDelegate>
+>>>>>>> ok
 
 @property (nonatomic, strong) NSMutableDictionary <NSURL *, EaseURLPreviewCallback *>*callbackDict;
 
@@ -39,7 +43,11 @@
     dispatch_once(&onceToken, ^{
         shared = [[EaseURLPreviewManager alloc] init];
         shared.callbackDict = [NSMutableDictionary dictionary];
+<<<<<<< HEAD
     }); 
+=======
+    });
+>>>>>>> ok
     return shared;
 }
 
@@ -98,6 +106,7 @@
             return;
         }
         
+<<<<<<< HEAD
         if ([response isKindOfClass:NSHTTPURLResponse.class]) {
             if (![((NSHTTPURLResponse *)response).allHeaderFields[@"content-type"] hasPrefix:@"text"]) {
                 result.state = EaseURLPreviewStateFaild;
@@ -112,6 +121,8 @@
             }
         }
         
+=======
+>>>>>>> ok
         TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:data];
         TFHppleElement *titleElement = [xpathParser searchWithXPathQuery:@"//title"].firstObject;
         result.title = [titleElement content];
@@ -125,6 +136,7 @@
                 result.imageUrl = [element objectForKey:@"content"];
             }
         }
+<<<<<<< HEAD
         if (!result.imageUrl) {
             TFHppleElement *imgElement = [xpathParser peekAtSearchWithXPathQuery:@"//img"];
             if (imgElement) {
@@ -148,6 +160,8 @@
                 }
             }
         }
+=======
+>>>>>>> ok
         result.state = EaseURLPreviewStateSuccess;
         dispatch_async(dispatch_get_main_queue(), ^{
             for (EaseURLPreviewSuccessBlock block in callback.successBlocks) {

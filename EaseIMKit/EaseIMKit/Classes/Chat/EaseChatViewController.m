@@ -34,6 +34,7 @@
 #import "EaseDefines.h"
 #import "EaseURLPreviewManager.h"
 #import "EMChatMessage+EaseUIExt.h"
+#import "EaseURLPreviewManager.h"
 
 @interface EaseChatViewControllerSearchRowAction : NSObject
 @property (nonatomic, assign) BOOL isSearching;
