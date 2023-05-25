@@ -7,6 +7,8 @@
 //
 
 #import "EMMsgTextBubbleView.h"
+#import "EaseURLPreviewManager.h"
+#import "UIImageView+EaseWebCache.h"
 
 @interface EMMsgTextBubbleView ()
 {
@@ -14,6 +16,7 @@
 }
 
 @end
+
 @implementation EMMsgTextBubbleView
 
 - (instancetype)initWithDirection:(EMMessageDirection)aDirection
@@ -84,7 +87,8 @@
         NSString *urlStr = result.URL.absoluteString;
         NSRange range = [text rangeOfString:urlStr options:NSCaseInsensitiveSearch];
         if(range.length > 0) {
-            [attaStr setAttributes:@{NSLinkAttributeName : [NSURL URLWithString:urlStr]} range:NSMakeRange(range.location, urlStr.length)];
+            NSURL *url = [NSURL URLWithString:urlStr];
+            [attaStr setAttributes:@{NSLinkAttributeName : url} range:NSMakeRange(range.location, urlStr.length)];
         }
     }
     /*

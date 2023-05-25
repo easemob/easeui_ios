@@ -32,6 +32,7 @@
 #import "EaseHeaders.h"
 #import "EaseEnums.h"
 #import "EaseDefines.h"
+#import "EaseURLPreviewManager.h"
 
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate>
 {
@@ -299,7 +300,6 @@
         cell.timeLabel.text = cellString;
         return cell;
     }
-    
     EaseMessageModel *model = (EaseMessageModel *)obj;
     if (self.delegate && [self.delegate respondsToSelector:@selector(cellForItem:messageModel:)]) {
         UITableViewCell *customCell = [self.delegate cellForItem:tableView messageModel:model];
@@ -316,6 +316,27 @@
         _isReloadViewWithModel = NO;
         cell = [[EaseMessageCell alloc] initWithDirection:model.direction chatType:model.message.chatType messageType:model.type viewModel:_viewModel];
         cell.delegate = self;
+    }
+    if (model.type == EMMessageTypeURLPreview) {
+        NSString *text = ((EMTextMessageBody *)model.message.body).text;
+        NSDataDetector *detector= [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
+        NSArray *checkArr = [detector matchesInString:text options:0 range:NSMakeRange(0, text.length)];
+        if (checkArr.count == 1) {
+            NSTextCheckingResult *result = checkArr.firstObject;
+            NSString *urlStr = result.URL.absoluteString;
+            NSRange range = [text rangeOfString:urlStr options:NSCaseInsensitiveSearch];
+            if (range.length > 0) {
+                NSURL *url = [NSURL URLWithString:urlStr];
+                EaseURLPreviewResult *result = [EaseURLPreviewManager.shared resultWithURL:url];
+                if (!result || result.state == EaseURLPreviewStateLoading) {
+                    [EaseURLPreviewManager.shared preview:url successHandle:^(EaseURLPreviewResult * _Nonnull result) {
+                        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    } faieldHandle:^{
+                        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    }];
+                }
+            }
+        }
     }
     cell.model = model;
     if (cell.model.message.body.type == EMMessageTypeVoice) {
@@ -691,14 +712,10 @@
                             [weakself.dataArray replaceObjectAtIndex:index withObject:reloadModel];
                             [weakself.tableView reloadData];
                         });
-
                     }
                 }
             }
         }];
-        
-       
-        
     });
 }
 

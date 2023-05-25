@@ -44,6 +44,18 @@
                 return self;
             }
             _type = EMMessageTypeText;
+            
+            NSString *text = ((EMTextMessageBody *)aMsg.body).text;
+            NSDataDetector *detector= [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
+            NSArray *checkArr = [detector matchesInString:text options:0 range:NSMakeRange(0, text.length)];
+            if (checkArr.count == 1) {
+                NSTextCheckingResult *result = checkArr.firstObject;
+                NSString *urlStr = result.URL.absoluteString;
+                NSRange range = [text rangeOfString:urlStr options:NSCaseInsensitiveSearch];
+                if (range.length > 0) {
+                    _type = EMMessageTypeURLPreview;
+                }
+            }
         }
     }
     if (aMsg.body.type == EMMessageTypeVoice) {

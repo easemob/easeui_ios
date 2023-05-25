@@ -17,6 +17,7 @@
 #import "EMMsgLocationBubbleView.h"
 #import "EMMsgFileBubbleView.h"
 #import "EMMsgExtGifBubbleView.h"
+#import "EMMsgURLPreviewBubbleView.h"
 #import "UIImageView+EaseWebCache.h"
 
 @interface EaseMessageCell()
@@ -252,6 +253,9 @@
         case EMMessageTypeCustom:
             bubbleView = [[EMMessageBubbleView alloc] initWithDirection:self.direction type:aType
                 viewModel:_viewModel];
+            break;
+        case EMMessageTypeURLPreview:
+            bubbleView = [[EMMsgURLPreviewBubbleView alloc] initWithDirection:self.direction type:aType viewModel:_viewModel];
             break;
         default:
             break;
