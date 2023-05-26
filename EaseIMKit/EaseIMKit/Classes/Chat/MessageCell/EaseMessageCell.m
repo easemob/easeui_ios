@@ -191,6 +191,7 @@
         }];
     }
     
+    // TODO: lazy
     _quoteView = [[EaseMessageQuoteView alloc] init];
     _quoteView.delegate = self;
     [self.contentView addSubview:_quoteView];
