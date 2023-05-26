@@ -55,6 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)avatarDidLongPress:(EaseMessageModel *)model;
 
 - (void)messageCellDidClickQuote:(EaseMessageCell *)aCell;
+- (void)messageCellDidLongPressQuote:(EaseMessageCell *)aCell;
 
 - (NSAttributedString *)quoteViewShowContent:(EMChatMessage *)message;
 
