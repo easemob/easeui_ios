@@ -214,6 +214,7 @@
     }
     
     [_quoteView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onQuoteViewTap)]];
+    [_quoteView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onQuoteViewLongPress:)]];
     
     [self setCellIsReadReceipt];
 }
@@ -390,6 +391,15 @@
 {
     if (_delegate && [_delegate respondsToSelector:@selector(messageCellDidClickQuote:)]) {
         [_delegate messageCellDidClickQuote:self];
+    }
+}
+
+- (void)onQuoteViewLongPress:(UILongPressGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        if (_delegate && [_delegate respondsToSelector:@selector(messageCellDidLongPressQuote:)]) {
+            [_delegate messageCellDidLongPressQuote:self];
+        }
     }
 }
 

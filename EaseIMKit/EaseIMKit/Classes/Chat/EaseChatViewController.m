@@ -657,6 +657,11 @@
 - (void)messageCellDidClickQuote:(EaseMessageCell *)cell
 {
     [self hideLongPressView];
+    if (_delegate && [_delegate respondsToSelector:@selector(messageCellDidClickQuote:)]) {
+        [_delegate messageCellDidClickQuote:cell.model.message];
+        return;
+    }
+    
     NSString *msgId = cell.model.message.ext[@"msgQuote"][@"msgID"];
     if (msgId.length <= 0) {
         return;
@@ -673,6 +678,15 @@
             }
             return;
         }
+    }
+}
+
+- (void)messageCellDidLongPressQuote:(EaseMessageCell *)aCell
+{
+    [self hideLongPressView];
+    if (_delegate && [_delegate respondsToSelector:@selector(messageCellDidLongPressQuote:)]) {
+        [_delegate messageCellDidLongPressQuote:cell.model.message];
+        return;
     }
 }
 

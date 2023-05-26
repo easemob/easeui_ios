@@ -150,6 +150,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)chatBarQuoteMessageShowContent:(EMChatMessage *)message;
 - (NSAttributedString *)messageCellQuoteViewShowContent:(EMChatMessage *)message;
+- (void)messageCellDidClickQuote:(EMChatMessage *)cell;
+- (void)messageCellDidLongPressQuote:(EMChatMessage *)cell;
 
 @end
 
