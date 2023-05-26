@@ -24,7 +24,7 @@
 @implementation EaseURLPreviewCallback
 @end
 
-@interface EaseURLPreviewManager () <NSXMLParserDelegate>
+@interface EaseURLPreviewManager ()
 
 @property (nonatomic, strong) NSMutableDictionary <NSURL *, EaseURLPreviewCallback *>*callbackDict;
 
@@ -39,7 +39,7 @@
     dispatch_once(&onceToken, ^{
         shared = [[EaseURLPreviewManager alloc] init];
         shared.callbackDict = [NSMutableDictionary dictionary];
-    });
+    }); 
     return shared;
 }
 
