@@ -35,6 +35,17 @@
 #import "EaseURLPreviewManager.h"
 #import "EMChatMessage+EaseUIExt.h"
 
+@interface EaseChatViewControllerSearchRowAction : NSObject
+@property (nonatomic, assign) BOOL isSearching;
+@property (nonatomic, assign) NSInteger maxSearchPageCount;
+@property (nonatomic, assign) NSInteger currentSearchPage;
+@property (nonatomic, copy) NSString *messageId;
+@end
+
+@implementation EaseChatViewControllerSearchRowAction
+
+@end
+
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate>
 {
     EaseChatViewModel *_viewModel;
@@ -49,6 +60,8 @@
 
 @property (nonatomic, strong) NSMutableArray<NSString *> *atUserList;
 @property (nonatomic, assign) BOOL atAll;
+
+@property (nonatomic, strong) EaseChatViewControllerSearchRowAction *searchRowAction;
 
 @end
 
@@ -131,6 +144,10 @@
     
     _atUserList = [[NSMutableArray alloc] init];
     //self.view.backgroundColor = UIColor.grayColor;
+    
+    EaseChatViewControllerSearchRowAction *action = [[EaseChatViewControllerSearchRowAction alloc] init];
+    action.maxSearchPageCount = 4;
+    self.searchRowAction = action;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -658,35 +675,43 @@
 {
     [self hideLongPressView];
     if (_delegate && [_delegate respondsToSelector:@selector(messageCellDidClickQuote:)]) {
-        [_delegate messageCellDidClickQuote:cell.model.message];
-        return;
+        if (![_delegate messageCellDidClickQuote:cell.model.message]) {
+            return;
+        }
     }
-    
     NSString *msgId = cell.model.message.ext[@"msgQuote"][@"msgID"];
     if (msgId.length <= 0) {
         return;
     }
+    
+    _searchRowAction.isSearching = YES;
+    _searchRowAction.currentSearchPage = 1;
+    _searchRowAction.messageId = msgId;
+    
     for (int i = (int)_dataArray.count - 1; i >= 0; i --) {
         EaseMessageModel *model = self.dataArray[i];
         if ([model isKindOfClass:EaseMessageModel.class] && [model.message.messageId isEqualToString:msgId]) {
-            if (model.type == EMMessageTypeImage || model.type == EMMessageTypeVideo || model.type == EMMessageTypeFile) {
+            if (model.type == EMMessageTypeImage || model.type == EMMessageTypeVideo || model.type == EMMessageTypeFile || model.type == EMMessageTypeVoice) {
                 EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgType:model.type];
                 eventStrategy.chatController = self;
                 [eventStrategy messageEventOperation:model];
             } else {
                 [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
             }
+            _searchRowAction.isSearching = NO;
             return;
         }
     }
+    [self dropdownRefreshTableViewWithData];
 }
 
 - (void)messageCellDidLongPressQuote:(EaseMessageCell *)aCell
 {
     [self hideLongPressView];
     if (_delegate && [_delegate respondsToSelector:@selector(messageCellDidLongPressQuote:)]) {
-        [_delegate messageCellDidLongPressQuote:cell.model.message];
-        return;
+        if (![_delegate messageCellDidLongPressQuote:aCell.model.message]) {
+            return;
+        }
     }
 }
 
@@ -933,7 +958,6 @@
             [weakself.messageList addObjectsFromArray:tempMsgs];
         } else {
             [weakself.messageList insertObjects:tempMsgs atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tempMsgs count])]];
-            EMChatMessage *msg = tempMsgs[0];
         }
         
         dispatch_async(self.msgQueue, ^{
@@ -948,6 +972,17 @@
                     [weakself.tableView endRefreshing];
                 }
                 [weakself refreshTableView:isScrollBottom];
+                weakself.searchRowAction.currentSearchPage ++;
+                if (!isInsertBottom && !isScrollBottom && weakself.searchRowAction.isSearching && weakself.searchRowAction.maxSearchPageCount >= weakself.searchRowAction.currentSearchPage) {
+                    for (int i = 0; i < messages.count; i ++) {
+                        if ([messages[i].messageId isEqualToString:self.searchRowAction.messageId]) {
+                            [weakself.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+                            weakself.searchRowAction.isSearching = NO;
+                            return;
+                        }
+                    }
+                    [weakself dropdownRefreshTableViewWithData];
+                }
             });
         });
     } else {
