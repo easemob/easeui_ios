@@ -359,9 +359,12 @@
     } else {
         self.readReceiptBtn.hidden = YES;
     }
-    NSDictionary *quoteInfo = model.message.ext[@"msgQuote"];
-    if (quoteInfo || _quoteView) {
-        self.quoteView.message = model.message;
+    
+    if (model.message.body.type == EMMessageBodyTypeText) {
+        NSDictionary *quoteInfo = model.message.ext[@"msgQuote"];
+        if (quoteInfo || _quoteView) {
+            self.quoteView.message = model.message;
+        }
     }
 }
 
