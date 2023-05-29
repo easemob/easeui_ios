@@ -34,6 +34,8 @@
 
 @property (nonatomic, strong) EaseMessageQuoteView *quoteView;
 
+@property (nonatomic, assign) EMChatType chatType;
+
 @end
 
 @implementation EaseMessageCell
@@ -49,6 +51,7 @@
     if (self) {
         _direction = aDirection;
         _viewModel = viewModel;
+        _chatType = aChatType;
         if (_viewModel.msgAlignmentStyle == EaseAlignmentlLeft && aChatType == EMChatTypeGroupChat) {
             _direction = EMMessageDirectionReceive;
         }
@@ -151,12 +154,14 @@
             } else {
                 make.top.equalTo(self.avatarView);
             }
+            make.bottom.equalTo(self.contentView).offset(-15);
             make.left.equalTo(self.avatarView.ease_right).offset(componentSpacing);
             make.right.lessThanOrEqualTo(self.contentView).offset(-70);
         }];
     } else {
         [_bubbleView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self.avatarView);
+            make.bottom.equalTo(self.contentView).offset(-15);
             make.left.greaterThanOrEqualTo(self.contentView).offset(70);
             make.right.equalTo(self.avatarView.ease_left).offset(-componentSpacing);
         }];
@@ -190,29 +195,6 @@
             make.width.height.equalTo(@8);
         }];
     }
-    
-    // TODO: lazy
-    _quoteView = [[EaseMessageQuoteView alloc] init];
-    _quoteView.delegate = self;
-    [self.contentView addSubview:_quoteView];
-    if (self.direction == EMMessageDirectionReceive) {
-        [_quoteView Ease_makeConstraints:^(EaseConstraintMaker *make) {
-            make.top.equalTo(_bubbleView.ease_bottom).offset(4);
-            make.left.equalTo(self.avatarView.ease_right).offset(componentSpacing);
-            make.right.lessThanOrEqualTo(self.contentView).offset(-70);
-            make.bottom.equalTo(self.contentView).offset(-15);
-        }];
-    } else {
-        [_quoteView Ease_makeConstraints:^(EaseConstraintMaker *make) {
-            make.top.equalTo(_bubbleView.ease_bottom).offset(4);
-            make.left.greaterThanOrEqualTo(self.contentView).offset(70);
-            make.right.equalTo(self.avatarView.ease_left).offset(-componentSpacing);
-            make.bottom.equalTo(self.contentView).offset(-15);
-        }];
-    }
-    
-    [_quoteView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onQuoteViewTap)]];
-    [_quoteView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onQuoteViewLongPress:)]];
     
     [self setCellIsReadReceipt];
 }
@@ -285,6 +267,49 @@
     self.statusView.hidden = isHidden;
 }
 
+- (EaseMessageQuoteView *)quoteView
+{
+    if (!_quoteView) {
+        _quoteView = [[EaseMessageQuoteView alloc] init];
+        _quoteView.delegate = self;
+        [self.contentView addSubview:_quoteView];
+        
+        if (self.direction == EMMessageDirectionReceive) {
+            [_bubbleView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+                if (_chatType != EMChatTypeChat) {
+                    make.top.equalTo(self.nameLabel.ease_bottom).offset(3);
+                } else {
+                    make.top.equalTo(self.avatarView);
+                }
+                make.left.equalTo(self.avatarView.ease_right).offset(componentSpacing);
+                make.right.lessThanOrEqualTo(self.contentView).offset(-70);
+            }];
+            [_quoteView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+                make.top.equalTo(_bubbleView.ease_bottom).offset(4);
+                make.left.equalTo(self.avatarView.ease_right).offset(componentSpacing);
+                make.right.lessThanOrEqualTo(self.contentView).offset(-70);
+                make.bottom.equalTo(self.contentView).offset(-15);
+            }];
+        } else {
+            [_bubbleView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+                make.top.equalTo(self.avatarView);
+                make.left.greaterThanOrEqualTo(self.contentView).offset(70);
+                make.right.equalTo(self.avatarView.ease_left).offset(-componentSpacing);
+            }];
+            [_quoteView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+                make.top.equalTo(_bubbleView.ease_bottom).offset(4);
+                make.left.greaterThanOrEqualTo(self.contentView).offset(70);
+                make.right.equalTo(self.avatarView.ease_left).offset(-componentSpacing);
+                make.bottom.equalTo(self.contentView).offset(-15);
+            }];
+        }
+
+        [_quoteView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onQuoteViewTap)]];
+        [_quoteView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onQuoteViewLongPress:)]];
+    }
+    return _quoteView;
+}
+
 #pragma mark - Setter
 
 - (void)setModel:(EaseMessageModel *)model
@@ -328,8 +353,10 @@
     } else {
         self.readReceiptBtn.hidden = YES;
     }
-    
-    _quoteView.message = model.message;
+    NSDictionary *quoteInfo = model.message.ext[@"msgQuote"];
+    if (quoteInfo || _quoteView) {
+        self.quoteView.message = model.message;
+    }
 }
 
 #pragma mark - Action
