@@ -93,6 +93,8 @@
         identifier = [NSString stringWithFormat:@"%@ExtGif", identifier];
     } else if (aType == EMMessageTypeCustom) {
         identifier = [NSString stringWithFormat:@"%@Custom", identifier];
+    } else if (aType == EMMessageTypeURLPreview) {
+        identifier = [NSString stringWithFormat:@"%@URLPreview", identifier];
     }
     
     return identifier;

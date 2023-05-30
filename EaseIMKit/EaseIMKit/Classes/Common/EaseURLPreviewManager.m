@@ -98,6 +98,20 @@
             return;
         }
         
+        if ([response isKindOfClass:NSHTTPURLResponse.class]) {
+            if (![((NSHTTPURLResponse *)response).allHeaderFields[@"content-type"] hasPrefix:@"text"]) {
+                result.state = EaseURLPreviewStateFaild;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    for (EaseURLPreviewFailedBlock block in callback.failedBlocks) {
+                        block();
+                    }
+                    callback.successBlocks = nil;
+                    callback.failedBlocks = nil;
+                });
+                return;
+            }
+        }
+        
         TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:data];
         TFHppleElement *titleElement = [xpathParser searchWithXPathQuery:@"//title"].firstObject;
         result.title = [titleElement content];
@@ -109,6 +123,29 @@
             }
             if ([[element objectForKey:@"property"] containsString:@"image"] && [[element objectForKey:@"content"] containsString:@"http"]) {
                 result.imageUrl = [element objectForKey:@"content"];
+            }
+        }
+        if (!result.imageUrl) {
+            TFHppleElement *imgElement = [xpathParser peekAtSearchWithXPathQuery:@"//img"];
+            if (imgElement) {
+                NSString *resultUrl = [imgElement objectForKey:@"src"];
+                if ([resultUrl hasPrefix:@"//"]) {
+                    if ([url.absoluteString.lowercaseString hasPrefix:@"https"]) {
+                        result.imageUrl = [@"https:" stringByAppendingString:resultUrl];
+                    } else if ([url.absoluteString.lowercaseString hasPrefix:@"http"]) {
+                        result.imageUrl = [@"http:" stringByAppendingString:resultUrl];
+                    }
+                } else if ([resultUrl hasPrefix:@"/"]) {
+                    NSString *protocol;
+                    if ([url.absoluteString.lowercaseString hasPrefix:@"https"]) {
+                        protocol = @"https";
+                    } else if ([url.absoluteString.lowercaseString hasPrefix:@"http"]) {
+                        protocol = @"http";
+                    }
+                    result.imageUrl = [NSString stringWithFormat:@"%@://%@%@", protocol, url.host, resultUrl];
+                } else {
+                    result.imageUrl = resultUrl;
+                }
             }
         }
         result.state = EaseURLPreviewStateSuccess;
