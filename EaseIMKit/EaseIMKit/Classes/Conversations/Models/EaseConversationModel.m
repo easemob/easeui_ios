@@ -43,7 +43,7 @@
 }
 
 - (BOOL)isTop {
-    return _conversation.isPin;
+    return _conversation.isPinned;
 }
 
 - (void)setDraft:(NSString *)draft {
