@@ -49,30 +49,13 @@
     self.textLabel = [[UILabel alloc] init];
     self.textLabel.font = [UIFont systemFontOfSize:_viewModel.contentFontSize];
     self.textLabel.numberOfLines = 0;
-<<<<<<< HEAD
     self.textLabel.textColor = _viewModel.contentFontColor;
     [self addSubview:self.textLabel];
     [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
         make.top.left.equalTo(@10);
         make.right.bottom.equalTo(@-10);
-=======
-    [self addSubview:self.textLabel];
-    [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
-        make.top.equalTo(self.ease_top).offset(10);
-        make.bottom.equalTo(self.ease_bottom).offset(-10);
     }];
-    self.textLabel.textColor = _viewModel.contentFontColor;
-    if (self.direction == EMMessageDirectionSend) {
-        [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
-            make.left.equalTo(self.ease_left).offset(10);
-            make.right.equalTo(self.ease_right).offset(-10);
-        }];
-    } else {
-        [self.textLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
-            make.left.equalTo(self.ease_left).offset(10);
-            make.right.equalTo(self.ease_right).offset(-10);
-        }];
-    }
+    [self addSubview:self.textLabel];
     
     _urlPreviewLoadingView = [[UIView alloc] init];
     _urlPreviewLoadingView.backgroundColor = UIColor.clearColor;
@@ -104,7 +87,6 @@
         make.centerY.equalTo(_urlPreviewLoadingView);
         make.left.equalTo(_urlPreviewLoadingImageView.ease_right).offset(4);
         make.right.equalTo(_urlPreviewLoadingView);
->>>>>>> ok
     }];
 }
 
@@ -141,33 +123,16 @@
 
 - (void)updateLayoutWithURLPreview:(EaseURLPreviewResult *)result
 {
-<<<<<<< HEAD
     [self.textLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
         make.top.left.equalTo(@10);
         make.right.equalTo(@-10);
     }];
-=======
-    if (self.direction == EMMessageDirectionSend) {
-        [_textLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
-            make.top.equalTo(self.ease_top).offset(10);
-            make.left.equalTo(self.ease_left).offset(10);
-            make.right.equalTo(self.ease_right).offset(-10);
-        }];
-    } else {
-        [_textLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
-            make.top.equalTo(self.ease_top).offset(10);
-            make.left.equalTo(self.ease_left).offset(10);
-            make.right.equalTo(self.ease_right).offset(-10);
-        }];
-    }
->>>>>>> ok
     if (result.state == EaseURLPreviewStateSuccess) {
         _urlPreviewLoadingView.hidden = YES;
         self.urlPreviewView.hidden = NO;
         _titleLabel.text = result.title;
         _contentLabel.text = result.desc;
         [_imageView Ease_setImageWithURL:[NSURL URLWithString:result.imageUrl] placeholderImage:[UIImage easeUIImageNamed:@"url_preview_placeholder"]];
-<<<<<<< HEAD
         [_urlPreviewLoadingView Ease_remakeConstraints:^(EaseConstraintMaker *make) {}];
         [_urlPreviewView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self.textLabel.ease_bottom).offset(9);
@@ -178,41 +143,20 @@
                 make.left.equalTo(@12);
                 make.right.lessThanOrEqualTo(@-12);
             }
-=======
-        [_urlPreviewLoadingView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
-            make.left.top.width.height.equalTo(@0);
-        }];
-        [_urlPreviewView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
-            make.top.equalTo(self.textLabel.ease_bottom).offset(9);
-            make.left.equalTo(@12);
-            make.right.equalTo(@-12);
->>>>>>> ok
             make.bottom.equalTo(@-9);
             make.height.equalTo(@100);
             make.width.equalTo(@217);
         }];
     } else {
-<<<<<<< HEAD
         self.urlPreviewLoadingView.hidden = NO;
         _urlPreviewView.hidden = YES;
         [_urlPreviewView Ease_remakeConstraints:^(EaseConstraintMaker *make) {}];
         [_urlPreviewLoadingView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
-=======
-        _urlPreviewLoadingView.hidden = NO;
-        _urlPreviewView.hidden = YES;
-        [_urlPreviewLoadingView Ease_makeConstraints:^(EaseConstraintMaker *make) {
->>>>>>> ok
             make.top.equalTo(self.textLabel.ease_bottom).offset(9);
             make.left.right.equalTo(self.textLabel);
             make.bottom.equalTo(@-9);
             make.height.equalTo(@16);
         }];
-<<<<<<< HEAD
-=======
-        [_urlPreviewView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
-            make.left.top.width.height.equalTo(@0);
-        }];
->>>>>>> ok
     }
 }
 
@@ -220,35 +164,12 @@
 {
     _urlPreviewView.hidden = YES;
     _urlPreviewLoadingView.hidden = YES;
-<<<<<<< HEAD
     
     [_urlPreviewView Ease_remakeConstraints:^(EaseConstraintMaker *make) {}];
     [_urlPreviewLoadingView Ease_remakeConstraints:^(EaseConstraintMaker *make) {}];
     [_textLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
         make.top.left.equalTo(@10);
         make.right.bottom.equalTo(@-10);
-=======
-    if (self.direction == EMMessageDirectionSend) {
-        [_textLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
-            make.top.equalTo(self.ease_top).offset(10);
-            make.left.equalTo(self.ease_left).offset(10);
-            make.right.equalTo(self.ease_right).offset(-10);
-            make.bottom.equalTo(self.ease_bottom).offset(-10);
-        }];
-    } else {
-        [_textLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
-            make.top.equalTo(self.ease_top).offset(10);
-            make.left.equalTo(self.ease_left).offset(10);
-            make.right.equalTo(self.ease_right).offset(-10);
-            make.bottom.equalTo(self.ease_bottom).offset(-10);
-        }];
-    }
-    [_urlPreviewView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
-        make.left.top.width.height.equalTo(@0);
-    }];
-    [_urlPreviewLoadingView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
-        make.left.top.width.height.equalTo(@0);
->>>>>>> ok
     }];
 }
 
@@ -273,30 +194,13 @@
         [_urlPreviewView addSubview:_contentLabel];
         
         _imageView = [[UIImageView alloc] init];
-<<<<<<< HEAD
         _imageView.backgroundColor = UIColor.clearColor;
         _imageView.image = [UIImage easeUIImageNamed:@"url_preview_placeholder"];
         _imageView.contentMode = UIViewContentModeScaleAspectFit;
-=======
-        _imageView.image = [UIImage easeUIImageNamed:@"url_preview_placeholder"];
-        _imageView.contentMode = UIViewContentModeScaleAspectFill;
->>>>>>> ok
         _imageView.layer.masksToBounds = YES;
         _imageView.layer.cornerRadius = 4;
         [_urlPreviewView addSubview:_imageView];
         
-<<<<<<< HEAD
-=======
-        [_urlPreviewView Ease_makeConstraints:^(EaseConstraintMaker *make) {
-            make.top.equalTo(self.textLabel.ease_bottom).offset(9);
-            make.left.equalTo(@12);
-            make.right.equalTo(@-12);
-            make.bottom.equalTo(@-9);
-            make.height.equalTo(@100);
-            make.width.greaterThanOrEqualTo(@217);
-        }];
-        
->>>>>>> ok
         [_titleLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.left.top.equalTo(@12);
             make.right.equalTo(@-12);
@@ -318,7 +222,6 @@
     return _urlPreviewView;
 }
 
-<<<<<<< HEAD
 - (UIView *)urlPreviewLoadingView
 {
     if (!_urlPreviewLoadingView) {
@@ -349,7 +252,5 @@
     }
     return _urlPreviewLoadingView;
 }
-=======
->>>>>>> ok
 
 @end

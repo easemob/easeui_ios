@@ -548,7 +548,6 @@
     EaseExtMenuModel *recallExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"recall"] funcDesc:EaseLocalizableString(@"recall", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself recallLongPressAction];
     }];
-    
     EaseExtMenuModel *quoteModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"quote"] funcDesc:EaseLocalizableString(@"chat.quote", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         EaseMessageModel *model = [weakself.dataArray objectAtIndex:weakself.longPressIndexPath.row];
         weakself.chatBar.quoteMessage = model;
