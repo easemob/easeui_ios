@@ -64,6 +64,8 @@
 
 @property (nonatomic, strong) EaseChatViewControllerSearchRowAction *searchRowAction;
 
+@property (nonatomic, strong) NSString *highlightMessageId;
+
 @end
 
 @implementation EaseChatViewController
@@ -369,6 +371,19 @@
     //NSLog(@"indexpath.row : %ld ", (long)indexPath.row);
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row >= self.dataArray.count) return;
+    if (!_highlightMessageId) return;
+    if ([cell isKindOfClass:EaseMessageCell.class]) {
+        EaseMessageCell *msgCell = (EaseMessageCell *)cell;
+        if ([_highlightMessageId isEqualToString:msgCell.model.message.messageId]) {
+            [msgCell showHighlight];
+            _highlightMessageId = nil;
+        }
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (!self.dataArray || [self.dataArray count] == 0 || ([self.dataArray count] - 1) < indexPath.row) return;
@@ -551,6 +566,7 @@
     EaseExtMenuModel *quoteModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"quote"] funcDesc:EaseLocalizableString(@"chat.quote", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         EaseMessageModel *model = [weakself.dataArray objectAtIndex:weakself.longPressIndexPath.row];
         weakself.chatBar.quoteMessage = model;
+        [weakself.chatBar.textView becomeFirstResponder];
     }];
     
     NSMutableArray<EaseExtMenuModel*> *extMenuArray = [[NSMutableArray<EaseExtMenuModel*> alloc]init];
@@ -687,6 +703,7 @@
     _searchRowAction.isSearching = YES;
     _searchRowAction.currentSearchPage = 1;
     _searchRowAction.messageId = msgId;
+    _highlightMessageId = msgId;
     
     for (int i = (int)_dataArray.count - 1; i >= 0; i --) {
         EaseMessageModel *model = self.dataArray[i];
@@ -696,7 +713,21 @@
                 eventStrategy.chatController = self;
                 [eventStrategy messageEventOperation:model];
             } else {
-                [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+                NSArray <NSIndexPath *>*indexPaths = [_tableView indexPathsForVisibleRows];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+                for (NSIndexPath *i in indexPaths) {
+                    if ([i isEqual:indexPath]) {
+                        UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
+                        if (cell) {
+                            if ([cell isKindOfClass:EaseMessageCell.class]) {
+                                [((EaseMessageCell *)cell) showHighlight];
+                            }
+                            self.highlightMessageId = nil;
+                        }
+                        break;
+                    }
+                }
+                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
             }
             _searchRowAction.isSearching = NO;
             return;
@@ -974,9 +1005,11 @@
                 [weakself refreshTableView:isScrollBottom];
                 weakself.searchRowAction.currentSearchPage ++;
                 if (!isInsertBottom && !isScrollBottom && weakself.searchRowAction.isSearching && weakself.searchRowAction.maxSearchPageCount >= weakself.searchRowAction.currentSearchPage) {
-                    for (int i = 0; i < messages.count; i ++) {
-                        if ([messages[i].messageId isEqualToString:self.searchRowAction.messageId]) {
-                            [weakself.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+                    for (int i = 0; i < formated.count; i ++) {
+                        id obj = formated[i];
+                        if ([obj isKindOfClass:EaseMessageModel.class] && [((EaseMessageModel *)obj).message.messageId isEqualToString:self.searchRowAction.messageId]) {
+                            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+                            [weakself.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
                             weakself.searchRowAction.isSearching = NO;
                             return;
                         }
@@ -1115,14 +1148,12 @@
 
 - (void)refreshTableView:(BOOL)isScrollBottom
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-        [self.tableView setNeedsLayout];
-        [self.tableView layoutIfNeeded];
-        if (isScrollBottom) {
-            [self scrollToBottomRow];
-        }
-    });
+    [self.tableView reloadData];
+    [self.tableView setNeedsLayout];
+    [self.tableView layoutIfNeeded];
+    if (isScrollBottom) {
+        [self scrollToBottomRow];
+    }
 }
 
 - (void)appendAtUser:(NSString *)username

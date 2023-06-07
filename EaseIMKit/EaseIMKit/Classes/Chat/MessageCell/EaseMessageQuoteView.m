@@ -104,11 +104,7 @@
         switch (msgBodyType) {
             case EMMessageBodyTypeImage: {
                 [self setupImageLayout];
-                if ([quoteMessage.from isEqualToString:EMClient.sharedClient.currentUsername]) {
-                    [_imageView Ease_setImageWithURL:[NSURL fileURLWithPath:((EMImageMessageBody *)quoteMessage.body).thumbnailLocalPath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"]];
-                } else {
-                    [_imageView Ease_setImageWithURL:[NSURL URLWithString:((EMImageMessageBody *)quoteMessage.body).thumbnailRemotePath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"]];
-                }
+                [_imageView Ease_setImageWithURL:[NSURL URLWithString:((EMImageMessageBody *)quoteMessage.body).thumbnailRemotePath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"]];
                 _nameLabel.attributedText = result;
                 break;
             }

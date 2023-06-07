@@ -40,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setQuoteView:(UIView *)view;
 
+- (void)showHighlight;
+
 @end
 
 
