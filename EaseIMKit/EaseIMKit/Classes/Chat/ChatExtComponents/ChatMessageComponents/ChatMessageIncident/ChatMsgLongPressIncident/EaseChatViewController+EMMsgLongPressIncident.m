@@ -128,6 +128,80 @@ static const void *recallViewKey = &recallViewKey;
     self.longPressIndexPath = nil;
 }
 
+- (void)modifyAction {
+    if (self.longPressIndexPath == nil || self.longPressIndexPath.row < 0) {
+        return;
+    }
+    EaseMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:EaseLocalizableString(@"Edit message", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = ((EMTextMessageBody *)model.message.body).text;
+    }];
+    [alertController addAction:[UIAlertAction actionWithTitle:EaseLocalizableString(@"ok", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        if (alertController.textFields.firstObject.text.length > 0) {
+            
+            EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:alertController.textFields.firstObject.text];
+            body.targetLanguages = @[@"en"];
+            [self showHudInView:self.view hint:@"Modifying message..."];
+            [EMClient.sharedClient.chatManager modifyMessage:model.message.messageId body:body completion:^(EMError * _Nullable error, EMChatMessage * _Nullable message) {
+                [self hideHud];
+                if (!error) {
+                    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                       if ([obj isKindOfClass:[EaseMessageModel class]]) {
+                           EaseMessageModel *model = (EaseMessageModel *)obj;
+                           if ( model.message &&[model.message.messageId isEqualToString:message.messageId]) {
+                               model.message = message;
+                               UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:0]];
+                               if ([cell isKindOfClass:[EaseMessageCell class]]) {
+                                   EaseMessageCell *messageCell = (EaseMessageCell*)cell;
+                                   messageCell.model = model;
+                                   if ([self.tableView.visibleCells containsObject:cell]) {
+                                       [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                                   }
+                                   *stop = YES;
+                               }
+                           }
+                       }
+                    }];
+                } {
+                    [self showHint:error.errorDescription];
+                }
+            }];
+        }
+    }]];
+    [alertController addAction:[UIAlertAction actionWithTitle:EaseLocalizableString(@"cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }]];
+    [self presentViewController:alertController animated:YES completion:nil];
+//    [alertController addAction:[UIAlertAction alloc]]
+//    [self showHudInView:self.view hint:EaseLocalizableString(@"recalingMsg", nil)];
+//    NSIndexPath *indexPath = self.longPressIndexPath;
+//    __weak typeof(self) weakself = self;
+//    EaseMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
+//    [[EMClient sharedClient].chatManager recallMessageWithMessageId:model.message.messageId completion:^(EMError *aError) {
+//        [weakself hideHud];
+//        if (aError) {
+//            [EaseAlertController showErrorAlert:aError.errorDescription];
+//        } else {
+//            EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:EaseLocalizableString(@"meRecall", nil)];
+//            NSString *to = model.message.to;
+//            NSString *from = model.message.from;
+//            EMChatMessage *message = [[EMChatMessage alloc] initWithConversationID:to from:from to:to body:body ext:@{MSG_EXT_RECALL:@(YES), MSG_EXT_RECALLBY:[[EMClient sharedClient] currentUsername]}];
+//            message.chatType = (EMChatType)self.currentConversation.type;
+//            message.isRead = YES;
+//            message.timestamp = model.message.timestamp;
+//            message.localTime = model.message.localTime;
+//            [weakself.currentConversation insertMessage:message error:nil];
+//
+//            EaseMessageModel *model = [[EaseMessageModel alloc] initWithEMMessage:message];
+//            [weakself.dataArray replaceObjectAtIndex:indexPath.row withObject:model];
+//            [weakself.tableView reloadData];
+//        }
+//    }];
+//
+//    self.longPressIndexPath = nil;
+}
+
 #pragma mark - Transpond Message
 
 - (void)_forwardMsgWithBody:(EMMessageBody *)aBody
