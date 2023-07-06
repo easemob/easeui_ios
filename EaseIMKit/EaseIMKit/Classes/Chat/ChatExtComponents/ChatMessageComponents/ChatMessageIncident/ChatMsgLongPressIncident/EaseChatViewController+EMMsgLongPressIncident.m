@@ -141,7 +141,6 @@ static const void *recallViewKey = &recallViewKey;
         if (alertController.textFields.firstObject.text.length > 0) {
             
             EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:alertController.textFields.firstObject.text];
-            body.targetLanguages = @[@"en"];
             [self showHudInView:self.view hint:@"Modifying message..."];
             [EMClient.sharedClient.chatManager modifyMessage:model.message.messageId body:body completion:^(EMError * _Nullable error, EMChatMessage * _Nullable message) {
                 [self hideHud];
