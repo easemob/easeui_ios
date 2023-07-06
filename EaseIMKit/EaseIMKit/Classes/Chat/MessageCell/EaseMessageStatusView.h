@@ -13,11 +13,7 @@
 
 @property (nonatomic, copy) void (^resendCompletion)(void);
 
-- (void)updateStateText:(NSString *)text;
-
 - (void)setSenderStatus:(EMMessageStatus)aStatus
             isReadAcked:(BOOL)aIsReadAcked;
-
-
 
 @end

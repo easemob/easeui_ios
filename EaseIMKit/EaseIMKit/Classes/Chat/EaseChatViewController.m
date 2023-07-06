@@ -419,26 +419,6 @@
 
 #pragma mark - EaseMessageCellDelegate
 
-- (void)onMessageContentChanged:(EMChatMessage *)message operatorId:(NSString *)operatorId operationTime:(NSUInteger)operationTime {
-    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-       if ([obj isKindOfClass:[EaseMessageModel class]]) {
-           EaseMessageModel *model = (EaseMessageModel *)obj;
-           if ([model.message.messageId isEqualToString:message.messageId]) {
-               model.message = message;
-               UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:0]];
-               if ([cell isKindOfClass:[EaseMessageCell class]]) {
-                   EaseMessageCell *messageCell = (EaseMessageCell*)cell;
-                   messageCell.model = model;
-                   if ([self.tableView.visibleCells containsObject:cell]) {
-                       [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                   }
-                   *stop = YES;
-               }
-           }
-       }
-    }];
-}
-
 - (void)messageCellDidSelected:(EaseMessageCell *)aCell
 {
     [self hideLongPressView];
@@ -498,12 +478,6 @@
         if ((currentTimestamp - _currentLongPressCell.model.message.timestamp) <= 120000) {
             [extMenuArray addObject:recallExtModel];
         }
-        if ([_currentLongPressCell.model.message.body isKindOfClass:[EMTextMessageBody class]]) {
-            EaseExtMenuModel *modifyExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"modify"] funcDesc:EaseLocalizableString(@"Edit", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
-                [weakself modifyAction];
-            }];
-            [extMenuArray addObject:modifyExtModel];
-        }
     }
     if (isCustomCell) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(customCellLongPressExtMenuItemArray:customCell:)]) {
@@ -512,7 +486,7 @@
         }
     } else if (self.delegate && [self.delegate respondsToSelector:@selector(messageLongPressExtMenuItemArray:message:)]) {
         //默认消息长按
-//        extMenuArray = [self.delegate messageLongPressExtMenuItemArray:extMenuArray message:_currentLongPressCell.model.message];
+        extMenuArray = [self.delegate messageLongPressExtMenuItemArray:extMenuArray message:_currentLongPressCell.model.message];
     }
     if ([extMenuArray count] <= 0) {
         return;
