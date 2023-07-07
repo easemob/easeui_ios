@@ -9,6 +9,7 @@
 #import "EMChatBar.h"
 #import "UIImage+EaseUI.h"
 #import "UIColor+EaseUI.h"
+#import "EMChatMessage+EaseUIExt.h"
 
 #define kTextViewMinHeight 32
 #define kTextViewMaxHeight 80
@@ -29,6 +30,9 @@
 @property (nonatomic, strong) UIView *bottomLine;//下划线
 //@property (nonatomic, strong) UIButton *audioDescBtn;
 @property (nonatomic, strong) EaseChatViewModel *viewModel;
+@property (nonatomic, strong) UIView *quoteView;
+@property (nonatomic, strong) UILabel *quoteLabel;
+@property (nonatomic, strong) UIButton *quoteDeleteButton;
 
 @end
 
@@ -63,13 +67,46 @@
         make.height.equalTo(@0.5);
     }];
     
+    _quoteView = [[UIView alloc] init];
+    _quoteView.hidden = YES;
+    [self addSubview:_quoteView];
+    
+    [_quoteView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.top.equalTo(line);
+        make.height.equalTo(@0);
+    }];
+    
+    _quoteDeleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_quoteDeleteButton setBackgroundImage:[UIImage easeUIImageNamed:@"quote_delete"] forState:UIControlStateNormal];
+    [_quoteDeleteButton addTarget:self action:@selector(deleteQuoteAction) forControlEvents:UIControlEventTouchUpInside];
+    [_quoteView addSubview:_quoteDeleteButton];
+    [_quoteDeleteButton Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.left.Ease_equalTo(16);
+        make.centerY.equalTo(_quoteView);
+        make.size.Ease_equalTo(14);
+    }];
+    
+    _quoteLabel = [[UILabel alloc] init];
+    _quoteLabel.numberOfLines = 1;
+    _quoteLabel.font = [UIFont systemFontOfSize:15];
+    _quoteLabel.textColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1];
+    [_quoteView addSubview:_quoteLabel];
+    [_quoteLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+        make.left.equalTo(_quoteDeleteButton.ease_right).offset(10);
+        make.top.equalTo(@12);
+        make.bottom.equalTo(@-12);
+        make.right.equalTo(@-16);
+        make.height.greaterThanOrEqualTo(@16);
+    }];
+    
     self.audioButton = [[UIButton alloc] init];
     [_audioButton setBackgroundImage:[UIImage easeUIImageNamed:@"audio-unSelected"] forState:UIControlStateNormal];
     [_audioButton setBackgroundImage:[UIImage easeUIImageNamed:@"character"] forState:UIControlStateSelected];
     [_audioButton addTarget:self action:@selector(audioButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.audioButton];
     [_audioButton Ease_makeConstraints:^(EaseConstraintMaker *make) {
-        make.top.equalTo(self).offset(10);
+        make.top.equalTo(_quoteView.ease_bottom).offset(10);
         make.left.equalTo(self).offset(16);
         make.width.Ease_equalTo(@16);
         make.height.Ease_equalTo(kIconwidth);
@@ -81,7 +118,7 @@
     [_conversationToolBarBtn addTarget:self action:@selector(moreButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_conversationToolBarBtn];
     [_conversationToolBarBtn Ease_makeConstraints:^(EaseConstraintMaker *make) {
-        make.top.equalTo(self).offset(10);
+        make.top.equalTo(_quoteView.ease_bottom).offset(10);
         make.right.equalTo(self).offset(-16);
         make.width.height.Ease_equalTo(kIconwidth);
     }];
@@ -92,7 +129,7 @@
     [_emojiButton addTarget:self action:@selector(emoticonButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_emojiButton];
     [_emojiButton Ease_makeConstraints:^(EaseConstraintMaker *make) {
-        make.top.equalTo(self).offset(10);
+        make.top.equalTo(_quoteView.ease_bottom).offset(10);
         make.right.equalTo(self.conversationToolBarBtn.ease_left).offset(-kModuleMargin);
         make.width.height.Ease_equalTo(kIconwidth);
     }];
@@ -114,7 +151,7 @@
     self.textView.layer.cornerRadius = 16;
     [self addSubview:self.textView];
     [self.textView Ease_makeConstraints:^(EaseConstraintMaker *make) {
-        make.top.equalTo(self).offset(5);
+        make.top.equalTo(_quoteView.ease_bottom).offset(5);
         make.height.Ease_equalTo(kTextViewMinHeight);
         if (_viewModel.inputBarStyle == EaseInputBarStyleAll) {
             make.left.equalTo(self.audioButton.ease_right).offset(kModuleMargin);
@@ -169,6 +206,10 @@
         make.bottom.equalTo(self).offset(-EMVIEWBOTTOMMARGIN);
     }];
     self.currentMoreView.backgroundColor = [UIColor colorWithHexString:@"#f2f2f2"];
+}
+
+- (void)deleteQuoteAction {
+    self.quoteMessage = nil;
 }
 
 #pragma mark - UITextViewDelegate
@@ -452,6 +493,40 @@
                 [self.delegate chatBarDidShowMoreViewAction];
             }
         }
+    }
+}
+
+- (void)setQuoteMessage:(EaseMessageModel *)quoteMessage
+{
+    _quoteMessage = quoteMessage;
+    if (!quoteMessage) {
+        self.quoteLabel.text = nil;
+        self.quoteView.hidden = YES;
+        [self.quoteView Ease_updateConstraints:^(EaseConstraintMaker *make) {
+            make.height.equalTo(@0);
+        }];
+    } else {
+        NSString *nickname;
+        if ([quoteMessage.userDataDelegate respondsToSelector:@selector(showName)]) {
+            nickname = quoteMessage.userDataDelegate.showName;
+            if (nickname.length <= 0) {
+                nickname = quoteMessage.message.from;
+            }
+        } else {
+            nickname = quoteMessage.message.from;
+        }
+        NSString *content = nil;
+        if (_delegate && [_delegate respondsToSelector:@selector(chatBarQuoteMessageShowContent:)]) {
+            content = [_delegate chatBarQuoteMessageShowContent:quoteMessage.message];
+        }
+        if (!content) {
+            content = quoteMessage.message.easeUI_quoteShowText;
+        }
+        self.quoteLabel.text = [NSString stringWithFormat:@"%@:%@", nickname, content];
+        self.quoteView.hidden = NO;
+        [self.quoteView Ease_updateConstraints:^(EaseConstraintMaker *make) {
+            make.height.equalTo(@44);
+        }];
     }
 }
 

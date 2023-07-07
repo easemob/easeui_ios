@@ -31,23 +31,13 @@
         _timeLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_timeLabel];
         [_timeLabel Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.top.bottom.equalTo(@0);
             make.center.equalTo(self.contentView);
             make.height.equalTo(@30);
         }];
     }
     
     return self;
-}
-
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 @end

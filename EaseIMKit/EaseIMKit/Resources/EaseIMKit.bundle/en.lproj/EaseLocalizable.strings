@@ -108,3 +108,4 @@
 "[someone@me]" = "[@Mentioning me]";
 "systemNotice" = "System notification";
 "noMessag" = "No messages";
+"chat.quote" = "Quote";

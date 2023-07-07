@@ -32,6 +32,20 @@
 #import "EaseHeaders.h"
 #import "EaseEnums.h"
 #import "EaseDefines.h"
+#import "EaseURLPreviewManager.h"
+#import "EMChatMessage+EaseUIExt.h"
+#import "EaseURLPreviewManager.h"
+
+@interface EaseChatViewControllerSearchRowAction : NSObject
+@property (nonatomic, assign) BOOL isSearching;
+@property (nonatomic, assign) NSInteger maxSearchPageCount;
+@property (nonatomic, assign) NSInteger currentSearchPage;
+@property (nonatomic, copy) NSString *messageId;
+@end
+
+@implementation EaseChatViewControllerSearchRowAction
+
+@end
 
 @interface EaseChatViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, EMChatManagerDelegate, EMChatBarDelegate, EaseMessageCellDelegate, EaseChatBarEmoticonViewDelegate, EMChatBarRecordAudioViewDelegate, EMMoreFunctionViewDelegate>
 {
@@ -47,6 +61,10 @@
 
 @property (nonatomic, strong) NSMutableArray<NSString *> *atUserList;
 @property (nonatomic, assign) BOOL atAll;
+
+@property (nonatomic, strong) EaseChatViewControllerSearchRowAction *searchRowAction;
+
+@property (nonatomic, strong) NSString *highlightMessageId;
 
 @end
 
@@ -129,6 +147,10 @@
     
     _atUserList = [[NSMutableArray alloc] init];
     //self.view.backgroundColor = UIColor.grayColor;
+    
+    EaseChatViewControllerSearchRowAction *action = [[EaseChatViewControllerSearchRowAction alloc] init];
+    action.maxSearchPageCount = 4;
+    self.searchRowAction = action;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -299,7 +321,6 @@
         cell.timeLabel.text = cellString;
         return cell;
     }
-    
     EaseMessageModel *model = (EaseMessageModel *)obj;
     if (self.delegate && [self.delegate respondsToSelector:@selector(cellForItem:messageModel:)]) {
         UITableViewCell *customCell = [self.delegate cellForItem:tableView messageModel:model];
@@ -317,6 +338,27 @@
         cell = [[EaseMessageCell alloc] initWithDirection:model.direction chatType:model.message.chatType messageType:model.type viewModel:_viewModel];
         cell.delegate = self;
     }
+    if (model.type == EMMessageTypeURLPreview) {
+        NSString *text = ((EMTextMessageBody *)model.message.body).text;
+        NSDataDetector *detector= [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
+        NSArray *checkArr = [detector matchesInString:text options:0 range:NSMakeRange(0, text.length)];
+        if (checkArr.count == 1) {
+            NSTextCheckingResult *result = checkArr.firstObject;
+            NSString *urlStr = result.URL.absoluteString;
+            NSRange range = [text rangeOfString:urlStr options:NSCaseInsensitiveSearch];
+            if (range.length > 0) {
+                NSURL *url = [NSURL URLWithString:urlStr];
+                EaseURLPreviewResult *result = [EaseURLPreviewManager.shared resultWithURL:url];
+                if (!result || result.state == EaseURLPreviewStateLoading) {
+                    [EaseURLPreviewManager.shared preview:url successHandle:^(EaseURLPreviewResult * _Nonnull result) {
+                        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    } faieldHandle:^{
+                        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    }];
+                }
+            }
+        }
+    }
     cell.model = model;
     if (cell.model.message.body.type == EMMessageTypeVoice) {
         cell.model.weakMessageCell = cell;
@@ -327,6 +369,19 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //NSLog(@"indexpath.row : %ld ", (long)indexPath.row);
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row >= self.dataArray.count) return;
+    if (!_highlightMessageId) return;
+    if ([cell isKindOfClass:EaseMessageCell.class]) {
+        EaseMessageCell *msgCell = (EaseMessageCell *)cell;
+        if ([_highlightMessageId isEqualToString:msgCell.model.message.messageId]) {
+            [msgCell showHighlight];
+            _highlightMessageId = nil;
+        }
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -380,7 +435,27 @@
 - (void)chatBarSendMsgAction:(NSString *)text
 {
     if ((text.length > 0 && ![text isEqualToString:@""])) {
-        [self sendTextAction:text ext:nil];
+        if (self.chatBar.quoteMessage) {
+            NSDictionary *msgTypeDict = @{
+                @(EMMessageBodyTypeText): @"txt",
+                @(EMMessageBodyTypeImage): @"img",
+                @(EMMessageBodyTypeVideo): @"video",
+                @(EMMessageBodyTypeVoice): @"audio",
+                @(EMMessageBodyTypeCustom): @"custom",
+                @(EMMessageBodyTypeCmd): @"cmd",
+                @(EMMessageBodyTypeFile): @"file",
+                @(EMMessageBodyTypeLocation): @"location"
+            };
+            [self sendTextAction:text ext:@{@"msgQuote": @{
+                @"msgID": self.chatBar.quoteMessage.message.messageId,
+                @"msgPreview": self.chatBar.quoteMessage.message.easeUI_quoteShowText,
+                @"msgSender": self.chatBar.quoteMessage.message.from,
+                @"msgType": msgTypeDict[@(self.chatBar.quoteMessage.message.body.type)]
+            }}];
+            self.chatBar.quoteMessage = nil;
+        } else {
+            [self sendTextAction:text ext:nil];
+        }
         [self.chatBar clearInputViewText];
     }
 }
@@ -393,6 +468,22 @@
     }];
     
     [self performSelector:@selector(scrollToBottomRow) withObject:nil afterDelay:0.1];
+}
+
+- (NSString *)chatBarQuoteMessageShowContent:(EMChatMessage *)message
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(chatBarQuoteMessageShowContent:)]) {
+        return [_delegate chatBarQuoteMessageShowContent:message];
+    }
+    return nil;
+}
+
+- (NSAttributedString *)quoteViewShowContent:(EMChatMessage *)message
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(messageCellQuoteViewShowContent:)]) {
+        return [_delegate messageCellQuoteViewShowContent:message];
+    }
+    return nil;
 }
 
 #pragma mark - EMChatBarRecordAudioViewDelegate
@@ -464,9 +555,9 @@
         if (!isCustom) return;
     }
     //消息事件策略分类
-    EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgCell:aCell];
+    EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgType:aCell.model.type];
     eventStrategy.chatController = self;
-    [eventStrategy messageCellEventOperation:aCell];
+    [eventStrategy messageEventOperation:aCell.model];
 }
 //消息长按事件
 - (void)messageCellDidLongPress:(UITableViewCell *)aCell cgPoint:(CGPoint)point
@@ -492,11 +583,17 @@
     EaseExtMenuModel *recallExtModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"recall"] funcDesc:EaseLocalizableString(@"recall", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
         [weakself recallLongPressAction];
     }];
+    EaseExtMenuModel *quoteModel = [[EaseExtMenuModel alloc]initWithData:[UIImage easeUIImageNamed:@"quote"] funcDesc:EaseLocalizableString(@"chat.quote", nil) handle:^(NSString * _Nonnull itemDesc, BOOL isExecuted) {
+        EaseMessageModel *model = [weakself.dataArray objectAtIndex:weakself.longPressIndexPath.row];
+        weakself.chatBar.quoteMessage = model;
+        [weakself.chatBar.textView becomeFirstResponder];
+    }];
     
     NSMutableArray<EaseExtMenuModel*> *extMenuArray = [[NSMutableArray<EaseExtMenuModel*> alloc]init];
     BOOL isCustomCell = NO;
     [extMenuArray addObject:copyExtModel];
     [extMenuArray addObject:deleteExtModel];
+    [extMenuArray addObject:quoteModel];
     if (![aCell isKindOfClass:[EaseMessageCell class]]) {
         [extMenuArray addObject:recallExtModel];
         isCustomCell = YES;
@@ -616,6 +713,65 @@
     }
 }
 
+- (void)messageCellDidClickQuote:(EaseMessageCell *)cell
+{
+    [self hideLongPressView];
+    if (_delegate && [_delegate respondsToSelector:@selector(messageCellDidClickQuote:)]) {
+        if (![_delegate messageCellDidClickQuote:cell.model.message]) {
+            return;
+        }
+    }
+    NSString *msgId = cell.model.message.ext[@"msgQuote"][@"msgID"];
+    if (msgId.length <= 0) {
+        return;
+    }
+    
+    _searchRowAction.isSearching = YES;
+    _searchRowAction.currentSearchPage = 1;
+    _searchRowAction.messageId = msgId;
+    _highlightMessageId = msgId;
+    
+    for (int i = (int)_dataArray.count - 1; i >= 0; i --) {
+        EaseMessageModel *model = self.dataArray[i];
+        if ([model isKindOfClass:EaseMessageModel.class] && [model.message.messageId isEqualToString:msgId]) {
+            if (model.type == EMMessageTypeImage || model.type == EMMessageTypeVideo || model.type == EMMessageTypeFile || model.type == EMMessageTypeVoice) {
+                EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgType:model.type];
+                eventStrategy.chatController = self;
+                [eventStrategy messageEventOperation:model];
+            } else {
+                NSArray <NSIndexPath *>*indexPaths = [_tableView indexPathsForVisibleRows];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+                for (NSIndexPath *i in indexPaths) {
+                    if ([i isEqual:indexPath]) {
+                        UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
+                        if (cell) {
+                            if ([cell isKindOfClass:EaseMessageCell.class]) {
+                                [((EaseMessageCell *)cell) showHighlight];
+                            }
+                            self.highlightMessageId = nil;
+                        }
+                        break;
+                    }
+                }
+                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+            }
+            _searchRowAction.isSearching = NO;
+            return;
+        }
+    }
+    [self dropdownRefreshTableViewWithData];
+}
+
+- (void)messageCellDidLongPressQuote:(EaseMessageCell *)aCell
+{
+    [self hideLongPressView];
+    if (_delegate && [_delegate respondsToSelector:@selector(messageCellDidLongPressQuote:)]) {
+        if (![_delegate messageCellDidLongPressQuote:aCell.model.message]) {
+            return;
+        }
+    }
+}
+
 #pragma mark -- EMMoreFunctionViewDelegate
 - (void)menuExtItemDidSelected:(EaseExtMenuModel *)menuItemModel extType:(ExtType)extType
 {
@@ -717,14 +873,10 @@
                             [weakself.dataArray replaceObjectAtIndex:index withObject:reloadModel];
                             [weakself.tableView reloadData];
                         });
-
                     }
                 }
             }
         }];
-        
-       
-        
     });
 }
 
@@ -863,7 +1015,6 @@
             [weakself.messageList addObjectsFromArray:tempMsgs];
         } else {
             [weakself.messageList insertObjects:tempMsgs atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tempMsgs count])]];
-            EMChatMessage *msg = tempMsgs[0];
         }
         
         dispatch_async(self.msgQueue, ^{
@@ -878,6 +1029,19 @@
                     [weakself.tableView endRefreshing];
                 }
                 [weakself refreshTableView:isScrollBottom];
+                weakself.searchRowAction.currentSearchPage ++;
+                if (!isInsertBottom && !isScrollBottom && weakself.searchRowAction.isSearching && weakself.searchRowAction.maxSearchPageCount >= weakself.searchRowAction.currentSearchPage) {
+                    for (int i = 0; i < formated.count; i ++) {
+                        id obj = formated[i];
+                        if ([obj isKindOfClass:EaseMessageModel.class] && [((EaseMessageModel *)obj).message.messageId isEqualToString:self.searchRowAction.messageId]) {
+                            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+                            [weakself.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+                            weakself.searchRowAction.isSearching = NO;
+                            return;
+                        }
+                    }
+                    [weakself dropdownRefreshTableViewWithData];
+                }
             });
         });
     } else {
@@ -1010,14 +1174,12 @@
 
 - (void)refreshTableView:(BOOL)isScrollBottom
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-        [self.tableView setNeedsLayout];
-        [self.tableView layoutIfNeeded];
-        if (isScrollBottom) {
-            [self scrollToBottomRow];
-        }
-    });
+    [self.tableView reloadData];
+    [self.tableView setNeedsLayout];
+    [self.tableView layoutIfNeeded];
+    if (isScrollBottom) {
+        [self scrollToBottomRow];
+    }
 }
 
 - (void)appendAtUser:(NSString *)username

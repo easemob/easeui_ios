@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) EaseChatViewController *chatController;
 
-- (void)messageCellEventOperation:(EaseMessageCell *)aCell;
+- (void)messageEventOperation:(EaseMessageModel *)model;
 
 @end
 
@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface EMMessageEventStrategyFactory : NSObject
 
-+ (EMMessageEventStrategy * _Nonnull)getStratrgyImplWithMsgCell:(EaseMessageCell *)aCell;
++ (EMMessageEventStrategy * _Nonnull)getStratrgyImplWithMsgType:(EMMessageType)type;
 
 @end
 

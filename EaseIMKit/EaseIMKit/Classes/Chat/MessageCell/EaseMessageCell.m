@@ -17,9 +17,11 @@
 #import "EMMsgLocationBubbleView.h"
 #import "EMMsgFileBubbleView.h"
 #import "EMMsgExtGifBubbleView.h"
+#import "EMMsgURLPreviewBubbleView.h"
 #import "UIImageView+EaseWebCache.h"
+#import "EaseMessageQuoteView.h"
 
-@interface EaseMessageCell()
+@interface EaseMessageCell() <EaseMessageQuoteViewDelegate>
 
 @property (nonatomic, strong) UIImageView *avatarView;
 
@@ -30,6 +32,10 @@
 @property (nonatomic, strong) UIButton *readReceiptBtn;//阅读                       回执按钮
 
 @property (nonatomic, strong) EaseChatViewModel *viewModel;
+
+@property (nonatomic, strong) EaseMessageQuoteView *quoteView;
+
+@property (nonatomic, assign) EMChatType chatType;
 
 @property (nonatomic, strong) UILabel *editState;
 
@@ -48,6 +54,7 @@
     if (self) {
         _direction = aDirection;
         _viewModel = viewModel;
+        _chatType = aChatType;
         if (_viewModel.msgAlignmentStyle == EaseAlignmentlLeft && aChatType == EMChatTypeGroupChat) {
             _direction = EMMessageDirectionReceive;
         }
@@ -55,17 +62,6 @@
     }
     [self.bubbleView setupBubbleBackgroundImage];
     return self;
-}
-
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 #pragma mark - Class Methods
@@ -94,6 +90,8 @@
         identifier = [NSString stringWithFormat:@"%@ExtGif", identifier];
     } else if (aType == EMMessageTypeCustom) {
         identifier = [NSString stringWithFormat:@"%@Custom", identifier];
+    } else if (aType == EMMessageTypeURLPreview) {
+        identifier = [NSString stringWithFormat:@"%@URLPreview", identifier];
     }
     
     return identifier;
@@ -280,6 +278,9 @@
             bubbleView = [[EMMessageBubbleView alloc] initWithDirection:self.direction type:aType
                 viewModel:_viewModel];
             break;
+        case EMMessageTypeURLPreview:
+            bubbleView = [[EMMsgURLPreviewBubbleView alloc] initWithDirection:self.direction type:aType viewModel:_viewModel];
+            break;
         default:
             break;
     }
@@ -297,6 +298,49 @@
 - (void)setStatusHidden:(BOOL)isHidden
 {
     self.statusView.hidden = isHidden;
+}
+
+- (EaseMessageQuoteView *)quoteView
+{
+    if (!_quoteView) {
+        _quoteView = [[EaseMessageQuoteView alloc] init];
+        _quoteView.delegate = self;
+        [self.contentView addSubview:_quoteView];
+        
+        if (self.direction == EMMessageDirectionReceive) {
+            [_bubbleView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+                if (_chatType != EMChatTypeChat) {
+                    make.top.equalTo(self.nameLabel.ease_bottom).offset(3);
+                } else {
+                    make.top.equalTo(self.avatarView);
+                }
+                make.left.equalTo(self.avatarView.ease_right).offset(componentSpacing);
+                make.right.lessThanOrEqualTo(self.contentView).offset(-70);
+            }];
+            [_quoteView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+                make.top.equalTo(_bubbleView.ease_bottom).offset(4);
+                make.left.equalTo(self.avatarView.ease_right).offset(componentSpacing);
+                make.right.lessThanOrEqualTo(self.contentView).offset(-70);
+                make.bottom.equalTo(self.contentView).offset(-15);
+            }];
+        } else {
+            [_bubbleView Ease_remakeConstraints:^(EaseConstraintMaker *make) {
+                make.top.equalTo(self.avatarView);
+                make.left.greaterThanOrEqualTo(self.contentView).offset(70);
+                make.right.equalTo(self.avatarView.ease_left).offset(-componentSpacing);
+            }];
+            [_quoteView Ease_makeConstraints:^(EaseConstraintMaker *make) {
+                make.top.equalTo(_bubbleView.ease_bottom).offset(4);
+                make.left.greaterThanOrEqualTo(self.contentView).offset(70);
+                make.right.equalTo(self.avatarView.ease_left).offset(-componentSpacing);
+                make.bottom.equalTo(self.contentView).offset(-15);
+            }];
+        }
+
+        [_quoteView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onQuoteViewTap)]];
+        [_quoteView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onQuoteViewLongPress:)]];
+    }
+    return _quoteView;
 }
 
 #pragma mark - Setter
@@ -347,9 +391,25 @@
     } else {
         self.readReceiptBtn.hidden = YES;
     }
+    
+    if (model.message.body.type == EMMessageBodyTypeText) {
+        NSDictionary *quoteInfo = model.message.ext[@"msgQuote"];
+        if (quoteInfo || _quoteView) {
+            self.quoteView.message = model.message;
+        }
+    }
 }
 
 #pragma mark - Action
+
+- (void)showHighlight
+{
+    UIColor *old = self.contentView.backgroundColor;
+    self.contentView.backgroundColor = [UIColor colorWithWhite:0.902 alpha:1];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.contentView.backgroundColor = old;
+    });
+}
 
 - (void)readReceiptDetilAction {
     if (self.delegate && [self.delegate respondsToSelector:@selector(messageReadReceiptDetil:)]) {
@@ -397,6 +457,30 @@
         }
     }
     //[aLongPress release];
+}
+
+- (void)onQuoteViewTap
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(messageCellDidClickQuote:)]) {
+        [_delegate messageCellDidClickQuote:self];
+    }
+}
+
+- (void)onQuoteViewLongPress:(UILongPressGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        if (_delegate && [_delegate respondsToSelector:@selector(messageCellDidLongPressQuote:)]) {
+            [_delegate messageCellDidLongPressQuote:self];
+        }
+    }
+}
+
+- (NSAttributedString *)quoteViewShowContent:(EMChatMessage *)message
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(quoteViewShowContent:)]) {
+        return [_delegate quoteViewShowContent:message];
+    }
+    return nil;
 }
 
 @end

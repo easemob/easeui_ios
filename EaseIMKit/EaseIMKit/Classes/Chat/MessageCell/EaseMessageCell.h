@@ -38,6 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setStatusHidden:(BOOL)isHidden;
 
+- (void)setQuoteView:(UIView *)view;
+
+- (void)showHighlight;
+
 @end
 
 
@@ -51,6 +55,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)avatarDidSelected:(EaseMessageModel *)model;
 - (void)avatarDidLongPress:(EaseMessageModel *)model;
+
+- (void)messageCellDidClickQuote:(EaseMessageCell *)aCell;
+- (void)messageCellDidLongPressQuote:(EaseMessageCell *)aCell;
+
+- (NSAttributedString *)quoteViewShowContent:(EMChatMessage *)message;
 
 @end
 
