@@ -29,13 +29,15 @@
 
 @property (nonatomic, strong) EaseMessageStatusView *statusView;
 
-@property (nonatomic, strong) UIButton *readReceiptBtn;//阅读回执按钮
+@property (nonatomic, strong) UIButton *readReceiptBtn;//阅读                       回执按钮
 
 @property (nonatomic, strong) EaseChatViewModel *viewModel;
 
 @property (nonatomic, strong) EaseMessageQuoteView *quoteView;
 
 @property (nonatomic, assign) EMChatType chatType;
+
+@property (nonatomic, strong) UILabel *editState;
 
 @end
 
@@ -95,13 +97,22 @@
     return identifier;
 }
 
+- (UILabel *)editState {
+    if (!_editState) {
+        _editState = [[UILabel alloc]init];
+        _editState.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
+        _editState.textColor = [UIColor grayColor];
+        _editState.backgroundColor = [UIColor clearColor];
+    }
+    return _editState;
+}
+
 #pragma mark - Subviews
 
 - (void)_setupViewsWithType:(EMMessageType)aType chatType:(EMChatType)chatType
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.backgroundColor = [UIColor clearColor];
-
     _avatarView = [[UIImageView alloc] init];
     _avatarView.contentMode = UIViewContentModeScaleAspectFit;
     _avatarView.backgroundColor = [UIColor clearColor];
@@ -150,6 +161,7 @@
     _bubbleView.userInteractionEnabled = YES;
     _bubbleView.clipsToBounds = YES;
     [self.contentView addSubview:_bubbleView];
+    [self.contentView addSubview:self.editState];
     if (self.direction == EMMessageDirectionReceive) {
         [_bubbleView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             if (chatType != EMChatTypeChat) {
@@ -161,6 +173,15 @@
             make.left.equalTo(self.avatarView.ease_right).offset(componentSpacing);
             make.right.lessThanOrEqualTo(self.contentView).offset(-70);
         }];
+        
+        [self.editState Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.top.equalTo(self.bubbleView.ease_bottom).offset(5);
+            make.left.equalTo(self.bubbleView.ease_left);
+            make.height.equalTo(@20);
+            make.width.equalTo(@40);
+        }];
+        self.editState.textAlignment = 0;
+        
     } else {
         [_bubbleView Ease_makeConstraints:^(EaseConstraintMaker *make) {
             make.top.equalTo(self.avatarView);
@@ -168,6 +189,13 @@
             make.left.greaterThanOrEqualTo(self.contentView).offset(70);
             make.right.equalTo(self.avatarView.ease_left).offset(-componentSpacing);
         }];
+        [self.editState Ease_makeConstraints:^(EaseConstraintMaker *make) {
+            make.top.equalTo(self.bubbleView.ease_bottom).offset(5);
+            make.right.equalTo(self.bubbleView.ease_right);
+            make.height.equalTo(@20);
+            make.width.equalTo(@40);
+        }];
+        self.editState.textAlignment = 2;
     }
 
     _statusView = [[EaseMessageStatusView alloc] init];
@@ -180,7 +208,7 @@
             } else {
                 make.right.equalTo(self.bubbleView.ease_left).offset(-5);
             }
-            make.height.equalTo(@(componentSpacing * 2));
+            make.height.equalTo(@(componentSpacing * 4));
         }];
         __weak typeof(self) weakself = self;
         [_statusView setResendCompletion:^{
@@ -198,7 +226,6 @@
             make.width.height.equalTo(@8);
         }];
     }
-    
     [self setCellIsReadReceipt];
 }
 
@@ -328,6 +355,11 @@
         if (model.type == EMMessageBodyTypeVoice) {
             self.statusView.hidden = model.message.isListened;
         }
+    }
+    if (model.message.body.operatorId && ![model.message.body.operatorId isEqualToString:@""]) {
+        self.editState.text = EaseLocalizableString(@"Edited", nil);
+    } else {
+        self.editState.text = @"";
     }
     if (model.type != EMChatTypeChat) {
         if (model.userDataDelegate && [model.userDataDelegate respondsToSelector:@selector(showName)] && ![model.userDataDelegate.showName isEqualToString:@""]) {

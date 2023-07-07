@@ -24,6 +24,9 @@
 "voicetooshor" = "说话时间太短";
 "copy" = "复制";
 "delete" = "删除";
+"Edit" = "编辑";
+"Edit message" = "编辑消息";
+"Edited" = "已编辑";
 "recall" = "撤回";
 "recording" = "正在进行录制";
 "noMicPermission" = "未开启麦克风权限";
