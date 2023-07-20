@@ -7,6 +7,8 @@
 //
 
 #import "EMMsgAudioBubbleView.h"
+#import "EaseHeaders.h"
+#import "UIImage+EaseUI.h"
 
 #define kEMMsgAudioMinWidth 30
 #define kEMMsgAudioMaxWidth 120

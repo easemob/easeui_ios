@@ -51,4 +51,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ConferenceMsgEvent : EMMessageEventStrategy
 @end
 
+@interface UrlPreviewMsgEvent : EMMessageEventStrategy
+
+@end
+
 NS_ASSUME_NONNULL_END

@@ -74,7 +74,7 @@
     
     EMChatMessage *msg = _conversation.latestMessage;
     _latestUpdateTime = msg.timestamp;
-    NSString *msgStr = nil;
+    NSString *msgStr = @"";
     switch (msg.body.type) {
         case EMMessageBodyTypeText:
         {
@@ -131,6 +131,10 @@
             msgStr = EaseLocalizableString(@"[video]", nil);
         }
             break;
+        case EMMessageBodyTypeCombine:
+        {
+            msgStr = EaseLocalizableString(@"[combine]", nil);
+        }
             
         default:
             break;

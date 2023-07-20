@@ -45,6 +45,8 @@
             return [NSString stringWithFormat:@"%@%d”", EaseLocalizableString(@"[audio]", nil), ((EMVoiceMessageBody *)self.body).duration];
         case EMMessageBodyTypeVideo:
             return EaseLocalizableString(@"[video]", nil);
+        case EMMessageBodyTypeCombine:
+            return ((EMCombineMessageBody *)self.body).compatibleText;
         default:
             return @"unknow message";
     }

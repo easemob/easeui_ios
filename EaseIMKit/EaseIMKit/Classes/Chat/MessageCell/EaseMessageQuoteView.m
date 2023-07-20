@@ -38,6 +38,7 @@
         
         _imageView = [[UIImageView alloc] init];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _imageView.layer.cornerRadius = 2;
         _imageView.layer.masksToBounds = YES;
         [self addSubview:_imageView];
         
@@ -61,7 +62,10 @@
 
 - (void)setMessage:(EMChatMessage *)message
 {
-    NSDictionary *quoteInfo = message.ext[@"msgQuote"];
+    NSDictionary *quoteInfo = [message.ext objectForKey:@"msgQuote"];
+    if (!quoteInfo || ![quoteInfo isKindOfClass:[NSDictionary class]]) {
+        return;
+    }
     if (quoteInfo) {
         NSDictionary <NSString *, NSNumber *>*msgTypeDict = @{
             @"txt": @(EMMessageBodyTypeText),
@@ -73,10 +77,14 @@
             @"file": @(EMMessageBodyTypeFile),
             @"location": @(EMMessageBodyTypeLocation)
         };
-        NSString *quoteMsgId = quoteInfo[@"msgID"];
-        EMMessageBodyType msgBodyType = msgTypeDict[quoteInfo[@"msgType"]].intValue;
-        NSString *msgSender = quoteInfo[@"msgSender"];
-        NSString *msgPreview = quoteInfo[@"msgPreview"];
+        NSString *quoteMsgId = [quoteInfo objectForKey:@"msgID"];
+        NSString *msgType = [quoteInfo objectForKey:@"msgType"];
+        NSString *msgSender = [quoteInfo objectForKey:@"msgSender"];
+        NSString *msgPreview = [quoteInfo objectForKey:@"msgPreview"];
+        if(quoteMsgId.length <= 0 || msgType.length <= 0 || msgSender.length <= 0 || msgPreview.length <= 0) {
+            return;
+        }
+        EMMessageBodyType msgBodyType = [msgTypeDict objectForKey:msgType].intValue;
         EMChatMessage *quoteMessage = [EMClient.sharedClient.chatManager getMessageWithMessageId:quoteMsgId];
         
         _videoImageView.hidden = YES;
@@ -104,7 +112,15 @@
         switch (msgBodyType) {
             case EMMessageBodyTypeImage: {
                 [self setupImageLayout];
-                [_imageView Ease_setImageWithURL:[NSURL URLWithString:((EMImageMessageBody *)quoteMessage.body).thumbnailRemotePath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"]];
+                UIImage *img = nil;
+                if ([((EMImageMessageBody *)quoteMessage.body).localPath length] > 0) {
+                    img = [UIImage imageWithContentsOfFile:((EMImageMessageBody *)quoteMessage.body).localPath];
+                }
+                if (img) {
+                    _imageView.image = img;
+                } else {
+                    [_imageView Ease_setImageWithURL:[NSURL URLWithString:((EMImageMessageBody *)quoteMessage.body).thumbnailRemotePath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"]];
+                }
                 _nameLabel.attributedText = result;
                 break;
             }
@@ -129,7 +145,7 @@
             case EMMessageBodyTypeVoice: {
                 [self setupTextImageTextLayout];
                 _nameLabel.attributedText = result;
-                _contentLabel.text = [NSString stringWithFormat:@"%d”", ((EMVoiceMessageBody *)quoteMessage.body).duration];
+                _contentLabel.text = [NSString stringWithFormat:@"%d\"", ((EMVoiceMessageBody *)quoteMessage.body).duration];
                 _imageView.image = [UIImage easeUIImageNamed:@"quote_voice"];
                 break;
             }

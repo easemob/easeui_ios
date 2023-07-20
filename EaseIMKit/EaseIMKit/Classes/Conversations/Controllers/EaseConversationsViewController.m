@@ -414,7 +414,9 @@ EMClientDelegate
                                            isDeleteMessages:YES
                                                  completion:^(NSString *aConversationId, EMError *aError) {
         if (!aError) {
-            [weakSelf.dataAry removeObjectAtIndex:row];
+            if(weakSelf.dataAry.count >= row) {
+                [weakSelf.dataAry removeObjectAtIndex:row];
+            }
             [weakSelf.tableView reloadData];
             [weakSelf _updateBackView];
         }

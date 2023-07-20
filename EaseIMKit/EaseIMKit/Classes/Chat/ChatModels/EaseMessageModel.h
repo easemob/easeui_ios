@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, EMMessageType) {
     EMMessageTypeFile,
     EMMessageTypeCmd,
     EMMessageTypeCustom,
-    EMMessageTypeExtGif,
+    EMMessageTypeExtGif = 50,
     EMMessageTypeExtRecall,
     EMMessageTypeExtCall,
     EMMessageTypeExtNewFriend,

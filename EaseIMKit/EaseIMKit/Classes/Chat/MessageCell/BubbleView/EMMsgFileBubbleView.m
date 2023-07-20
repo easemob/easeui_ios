@@ -7,6 +7,8 @@
 //
 
 #import "EMMsgFileBubbleView.h"
+#import "EaseHeaders.h"
+#import "UIImage+EaseUI.h"
 
 @interface EMMsgFileBubbleView ()
 {

@@ -7,6 +7,8 @@
 //
 
 #import "EMMessageBubbleView.h"
+#import "EaseHeaders.h"
+#import "UIImage+EaseUI.h"
 
 @implementation EMMessageBubbleView
 

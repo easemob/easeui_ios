@@ -9,9 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "EaseMessageModel.h"
-#import "EaseHeaders.h"
 #import "EaseChatViewModel.h"
-#import "UIImage+EaseUI.h"
 
 @interface EMMessageBubbleView : UIImageView
 

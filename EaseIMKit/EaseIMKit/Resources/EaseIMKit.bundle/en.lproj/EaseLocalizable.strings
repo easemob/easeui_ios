@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   Pods
 
@@ -105,7 +105,9 @@
 "[file]" = "[File]";
 "[audio]" = "[Audio]";
 "[video]" = "[Video]";
+"[combine]" = "[Combine]";
 "[someone@me]" = "[@Mentioning me]";
 "systemNotice" = "System notification";
 "noMessag" = "No messages";
 "chat.quote" = "Quote";
+"not exist message" = "Message does not exist";

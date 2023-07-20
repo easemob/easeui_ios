@@ -9,6 +9,7 @@
 #import "UIImageView+EaseWebCache.h"
 #import "EMMsgImageBubbleView.h"
 #import "EaseHeaders.h"
+#import "UIImage+EaseUI.h"
 
 #define kEMMsgImageDefaultSize 120
 #define kEMMsgImageMinWidth 50
@@ -90,7 +91,7 @@
         block(size);
     } else {
         block(size);
-        BOOL isAutoDownloadThumbnail = ([EMClient sharedClient].options.isAutoDownloadThumbnail);
+        BOOL isAutoDownloadThumbnail = ([EMClient sharedClient].options.autoDownloadThumbnail);
         if (isAutoDownloadThumbnail) {
             [self Ease_setImageWithURL:[NSURL URLWithString:aRemotePath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, EaseImageCacheType cacheType, NSURL * _Nullable imageURL) {}];
         } else {

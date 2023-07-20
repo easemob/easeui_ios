@@ -108,7 +108,9 @@
 "[file]" = "[文件]";
 "[audio]" = "[音频]";
 "[video]" = "[视频]";
+"[combine]" = "[合并消息]";
 "[someone@me]" = "[有人@我]";
 "systemNotice" = "系统通知";
 "noMessag" = "暂无聊天消息";
 "chat.quote" = "引用";
+"not exist message" = "消息不存在";

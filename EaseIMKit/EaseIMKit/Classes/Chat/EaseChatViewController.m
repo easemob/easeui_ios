@@ -32,9 +32,8 @@
 #import "EaseHeaders.h"
 #import "EaseEnums.h"
 #import "EaseDefines.h"
-#import "EaseURLPreviewManager.h"
 #import "EMChatMessage+EaseUIExt.h"
-#import "EaseURLPreviewManager.h"
+#import "UIImage+EaseUI.h"
 
 @interface EaseChatViewControllerSearchRowAction : NSObject
 @property (nonatomic, assign) BOOL isSearching;
@@ -338,27 +337,6 @@
         cell = [[EaseMessageCell alloc] initWithDirection:model.direction chatType:model.message.chatType messageType:model.type viewModel:_viewModel];
         cell.delegate = self;
     }
-    if (model.type == EMMessageTypeURLPreview) {
-        NSString *text = ((EMTextMessageBody *)model.message.body).text;
-        NSDataDetector *detector= [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
-        NSArray *checkArr = [detector matchesInString:text options:0 range:NSMakeRange(0, text.length)];
-        if (checkArr.count == 1) {
-            NSTextCheckingResult *result = checkArr.firstObject;
-            NSString *urlStr = result.URL.absoluteString;
-            NSRange range = [text rangeOfString:urlStr options:NSCaseInsensitiveSearch];
-            if (range.length > 0) {
-                NSURL *url = [NSURL URLWithString:urlStr];
-                EaseURLPreviewResult *result = [EaseURLPreviewManager.shared resultWithURL:url];
-                if (!result || result.state == EaseURLPreviewStateLoading) {
-                    [EaseURLPreviewManager.shared preview:url successHandle:^(EaseURLPreviewResult * _Nonnull result) {
-                        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                    } faieldHandle:^{
-                        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                    }];
-                }
-            }
-        }
-    }
     cell.model = model;
     if (cell.model.message.body.type == EMMessageTypeVoice) {
         cell.model.weakMessageCell = cell;
@@ -444,7 +422,8 @@
                 @(EMMessageBodyTypeCustom): @"custom",
                 @(EMMessageBodyTypeCmd): @"cmd",
                 @(EMMessageBodyTypeFile): @"file",
-                @(EMMessageBodyTypeLocation): @"location"
+                @(EMMessageBodyTypeLocation): @"location",
+                @(EMMessageBodyTypeCombine): @"combine",
             };
             [self sendTextAction:text ext:@{@"msgQuote": @{
                 @"msgID": self.chatBar.quoteMessage.message.messageId,
@@ -730,11 +709,13 @@
     _searchRowAction.currentSearchPage = 1;
     _searchRowAction.messageId = msgId;
     _highlightMessageId = msgId;
+    BOOL find = NO;
     
     for (int i = (int)_dataArray.count - 1; i >= 0; i --) {
         EaseMessageModel *model = self.dataArray[i];
         if ([model isKindOfClass:EaseMessageModel.class] && [model.message.messageId isEqualToString:msgId]) {
-            if (model.type == EMMessageTypeImage || model.type == EMMessageTypeVideo || model.type == EMMessageTypeFile || model.type == EMMessageTypeVoice) {
+            find = YES;
+            if (model.type == EMMessageTypeImage || model.type == EMMessageTypeVideo || model.type == EMMessageTypeFile) {
                 EMMessageEventStrategy *eventStrategy = [EMMessageEventStrategyFactory getStratrgyImplWithMsgType:model.type];
                 eventStrategy.chatController = self;
                 [eventStrategy messageEventOperation:model];
@@ -758,6 +739,9 @@
             _searchRowAction.isSearching = NO;
             return;
         }
+    }
+    if(!find) {
+        [self showHint:EaseLocalizableString(@"not exist message", nil)];
     }
     [self dropdownRefreshTableViewWithData];
 }
