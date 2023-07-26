@@ -522,7 +522,7 @@
         if (!content) {
             content = quoteMessage.message.easeUI_quoteShowText;
         }
-        self.quoteLabel.text = [NSString stringWithFormat:@"%@:%@", nickname, content];
+        self.quoteLabel.text = [NSString stringWithFormat:@"%@:%@", nickname, [EaseEmojiHelper convertEmoji:content]];
         self.quoteView.hidden = NO;
         [self.quoteView Ease_updateConstraints:^(EaseConstraintMaker *make) {
             make.height.equalTo(@44);

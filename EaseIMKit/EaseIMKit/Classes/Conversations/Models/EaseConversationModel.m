@@ -108,7 +108,7 @@
             break;
         case EMMessageBodyTypeCustom:
         {
-            msgStr = EaseLocalizableString(@"[customemsg]", nil);
+            msgStr = EaseLocalizableString(@"[custommsg]", nil);
         }
             break;
         case EMMessageBodyTypeImage:

@@ -500,7 +500,7 @@
 
 - (void)didChatBarEmoticonViewSendAction
 {
-    [self sendTextAction:self.chatBar.textView.text ext:nil];
+    [self chatBarSendMsgAction:self.chatBar.textView.text];
 }
 
 #pragma mark - EaseMessageCellDelegate
@@ -572,15 +572,31 @@
     BOOL isCustomCell = NO;
     [extMenuArray addObject:copyExtModel];
     [extMenuArray addObject:deleteExtModel];
-    [extMenuArray addObject:quoteModel];
+    
     if (![aCell isKindOfClass:[EaseMessageCell class]]) {
-        [extMenuArray addObject:recallExtModel];
         isCustomCell = YES;
         _currentLongPressCustomCell = aCell;
+        if ([aCell respondsToSelector:@selector(model)]) {
+            id model = [aCell performSelector:@selector(model)];
+            if([model respondsToSelector:@selector(message)]) {
+                id message = [model performSelector:@selector(message)];
+                long long currentTimestamp = [[NSDate new] timeIntervalSince1970] * 1000;
+                if (message && [message isKindOfClass:[EMChatMessage class]]) {
+                    if (((EMChatMessage*)message).status == EMMessageStatusSucceed && ((EMChatMessage*)message).direction == EMMessageDirectionSend && (currentTimestamp - ((EMChatMessage*)message).timestamp) <= 120000) {
+                        [extMenuArray addObject:recallExtModel];
+                    }
+                    if(((EMChatMessage*)message).status == EMMessageStatusSucceed) {
+                        [extMenuArray addObject:quoteModel];
+                    }
+                }
+            }
+        }
     } else {
         _currentLongPressCell = (EaseMessageCell*)aCell;
+        if (_currentLongPressCell.model.message.status == EMMessageStatusSucceed)
+            [extMenuArray addObject:quoteModel];
         long long currentTimestamp = [[NSDate new] timeIntervalSince1970] * 1000;
-        if ((currentTimestamp - _currentLongPressCell.model.message.timestamp) <= 120000) {
+        if (_currentLongPressCell.model.message.status == EMMessageStatusSucceed && _currentLongPressCell.model.message.direction == EMMessageDirectionSend && (currentTimestamp - _currentLongPressCell.model.message.timestamp) <= 120000) {
             [extMenuArray addObject:recallExtModel];
         }
         if ([_currentLongPressCell.model.message.body isKindOfClass:[EMTextMessageBody class]]) {
@@ -742,6 +758,7 @@
     }
     if(!find) {
         [self showHint:EaseLocalizableString(@"not exist message", nil)];
+        return;
     }
     [self dropdownRefreshTableViewWithData];
 }
@@ -819,7 +836,6 @@
                     EMChatMessage *message = [[EMChatMessage alloc] initWithConversationID:msg.conversationId from:from to:to body:body ext:@{MSG_EXT_RECALL:@(YES), MSG_EXT_RECALLBY:recallMessageInfo.recallBy}];
                     message.chatType = (EMChatType)self.currentConversation.type;
                     message.isRead = YES;
-                    message.messageId = msg.messageId;
                     message.localTime = msg.localTime;
                     message.timestamp = msg.timestamp;
                     [self.currentConversation insertMessage:message error:nil];

@@ -103,10 +103,10 @@
 "[videoCall]" = "[视频通话]";
 "[audioCall]" = "[语音通话]";
 "[location]" = "[位置]";
-"[customemsg]" = "[自定义消息]";
+"[custommsg]" = "[自定义消息]";
 "[image]" = "[图片]";
 "[file]" = "[文件]";
-"[audio]" = "[音频]";
+"[audio]" = "[语音]";
 "[video]" = "[视频]";
 "[combine]" = "[合并消息]";
 "[someone@me]" = "[有人@我]";

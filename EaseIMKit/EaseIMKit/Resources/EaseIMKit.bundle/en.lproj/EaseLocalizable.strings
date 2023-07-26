@@ -100,7 +100,7 @@
 "[videoCall]" = "[Video call]";
 "[audioCall]" = "[Audio call]";
 "[location]" = "[Location]";
-"[customemsg]" = "[Custom Message]";
+"[custommsg]" = "[Custom Message]";
 "[image]" = "[Image]";
 "[file]" = "[File]";
 "[audio]" = "[Audio]";
