@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = 'EaseIMKit'
-    s.version          = '4.0.2'
+    s.version          = '4.1.0'
     s.summary = 'easemob im sdk UIKit'
     s.homepage = 'http://docs-im.easemob.com/im/ios/other/easeimkit'
     s.description = <<-DESC
@@ -63,7 +63,7 @@ Pod::Spec.new do |s|
                             }
     s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
-    s.dependency 'HyphenateChat'
+    s.dependency 'HyphenateChat', '~> 4.1.0'
     s.dependency 'EMVoiceConvert', '0.1.0'
 
 end
