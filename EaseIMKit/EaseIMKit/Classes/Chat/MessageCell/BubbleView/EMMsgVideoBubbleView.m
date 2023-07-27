@@ -7,6 +7,8 @@
 //
 
 #import "EMMsgVideoBubbleView.h"
+#import "EaseHeaders.h"
+#import "UIImage+EaseUI.h"
 
 @implementation EMMsgVideoBubbleView
 

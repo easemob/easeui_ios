@@ -7,8 +7,8 @@
 //
 
 #import "EMMsgTextBubbleView.h"
-#import "EaseURLPreviewManager.h"
 #import "UIImageView+EaseWebCache.h"
+#import "EaseHeaders.h"
 
 @interface EMMsgTextBubbleView ()
 {

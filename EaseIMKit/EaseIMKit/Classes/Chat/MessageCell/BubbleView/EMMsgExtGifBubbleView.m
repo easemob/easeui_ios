@@ -8,6 +8,7 @@
 
 #import "EMMsgExtGifBubbleView.h"
 #import "EaseEmoticonGroup.h"
+#import "EaseHeaders.h"
 
 @implementation EMMsgExtGifBubbleView
 

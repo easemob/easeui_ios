@@ -10,6 +10,8 @@
 #import "EMMsgImageBubbleView.h"
 #import "EMMsgVideoBubbleView.h"
 #import "EaseMessageModel.h"
+#import "EaseHeaders.h"
+#import "UIImage+EaseUI.h"
 
 @interface EMMsgRecordCell()
 

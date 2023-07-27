@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   Pods
 
@@ -100,12 +100,14 @@
 "[videoCall]" = "[Video call]";
 "[audioCall]" = "[Audio call]";
 "[location]" = "[Location]";
-"[customemsg]" = "[Custom Message]";
+"[custommsg]" = "[Custom Message]";
 "[image]" = "[Image]";
 "[file]" = "[File]";
 "[audio]" = "[Audio]";
 "[video]" = "[Video]";
+"[combine]" = "[Combine]";
 "[someone@me]" = "[@Mentioning me]";
 "systemNotice" = "System notification";
 "noMessag" = "No messages";
 "chat.quote" = "Quote";
+"not exist message" = "Message does not exist";

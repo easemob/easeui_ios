@@ -17,9 +17,10 @@
 #import "EMMsgLocationBubbleView.h"
 #import "EMMsgFileBubbleView.h"
 #import "EMMsgExtGifBubbleView.h"
-#import "EMMsgURLPreviewBubbleView.h"
 #import "UIImageView+EaseWebCache.h"
 #import "EaseMessageQuoteView.h"
+#import "EaseHeaders.h"
+#import "UIImage+EaseUI.h"
 
 @interface EaseMessageCell() <EaseMessageQuoteViewDelegate>
 
@@ -90,8 +91,6 @@
         identifier = [NSString stringWithFormat:@"%@ExtGif", identifier];
     } else if (aType == EMMessageTypeCustom) {
         identifier = [NSString stringWithFormat:@"%@Custom", identifier];
-    } else if (aType == EMMessageTypeURLPreview) {
-        identifier = [NSString stringWithFormat:@"%@URLPreview", identifier];
     }
     
     return identifier;
@@ -254,6 +253,7 @@
     switch (aType) {
         case EMMessageTypeText:
         case EMMessageTypeExtCall:
+        case EMMessageBodyTypeCombine:
             bubbleView = [[EMMsgTextBubbleView alloc] initWithDirection:self.direction type:aType viewModel:_viewModel];
             break;
         case EMMessageTypeImage:
@@ -277,9 +277,6 @@
         case EMMessageTypeCustom:
             bubbleView = [[EMMessageBubbleView alloc] initWithDirection:self.direction type:aType
                 viewModel:_viewModel];
-            break;
-        case EMMessageTypeURLPreview:
-            bubbleView = [[EMMsgURLPreviewBubbleView alloc] initWithDirection:self.direction type:aType viewModel:_viewModel];
             break;
         default:
             break;
@@ -394,8 +391,12 @@
     
     if (model.message.body.type == EMMessageBodyTypeText) {
         NSDictionary *quoteInfo = model.message.ext[@"msgQuote"];
-        if (quoteInfo || _quoteView) {
+        if (quoteInfo) {
+            self.quoteView.hidden = NO;
             self.quoteView.message = model.message;
+        } else {
+            if (_quoteView)
+                _quoteView.hidden = YES;
         }
     }
 }

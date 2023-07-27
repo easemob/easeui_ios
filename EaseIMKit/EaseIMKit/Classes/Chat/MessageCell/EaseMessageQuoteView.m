@@ -13,6 +13,7 @@
 #import "UIImage+EaseUI.h"
 #import "EaseUserUtils.h"
 #import "EaseEmoticonGroup.h"
+#import "EaseEmojiHelper.h"
 
 @interface EaseMessageQuoteView ()
 
@@ -38,6 +39,7 @@
         
         _imageView = [[UIImageView alloc] init];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _imageView.layer.cornerRadius = 2;
         _imageView.layer.masksToBounds = YES;
         [self addSubview:_imageView];
         
@@ -61,7 +63,10 @@
 
 - (void)setMessage:(EMChatMessage *)message
 {
-    NSDictionary *quoteInfo = message.ext[@"msgQuote"];
+    NSDictionary *quoteInfo = [message.ext objectForKey:@"msgQuote"];
+    if (!quoteInfo || ![quoteInfo isKindOfClass:[NSDictionary class]]) {
+        return;
+    }
     if (quoteInfo) {
         NSDictionary <NSString *, NSNumber *>*msgTypeDict = @{
             @"txt": @(EMMessageBodyTypeText),
@@ -73,10 +78,14 @@
             @"file": @(EMMessageBodyTypeFile),
             @"location": @(EMMessageBodyTypeLocation)
         };
-        NSString *quoteMsgId = quoteInfo[@"msgID"];
-        EMMessageBodyType msgBodyType = msgTypeDict[quoteInfo[@"msgType"]].intValue;
-        NSString *msgSender = quoteInfo[@"msgSender"];
-        NSString *msgPreview = quoteInfo[@"msgPreview"];
+        NSString *quoteMsgId = [quoteInfo objectForKey:@"msgID"];
+        NSString *msgType = [quoteInfo objectForKey:@"msgType"];
+        NSString *msgSender = [quoteInfo objectForKey:@"msgSender"];
+        NSString *msgPreview = [quoteInfo objectForKey:@"msgPreview"];
+        if(quoteMsgId.length <= 0 || msgType.length <= 0 || msgSender.length <= 0 || msgPreview.length <= 0) {
+            return;
+        }
+        EMMessageBodyType msgBodyType = [msgTypeDict objectForKey:msgType].intValue;
         EMChatMessage *quoteMessage = [EMClient.sharedClient.chatManager getMessageWithMessageId:quoteMsgId];
         
         _videoImageView.hidden = YES;
@@ -85,7 +94,7 @@
         _nameLabel.numberOfLines = 1;
         
         id<EaseUserDelegate> userInfo = [EaseUserUtils.shared getUserInfo:msgSender moduleType:quoteMessage.chatType == EMChatTypeChat ? EaseUserModuleTypeChat : EaseUserModuleTypeGroupChat];
-        NSString *showName = userInfo.showName.length > 0 ? userInfo.showName : quoteMessage.from;
+        NSString *showName = userInfo.showName.length > 0 ? userInfo.showName : msgSender;
         NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
         [result appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@:", showName] attributes:@{
             NSFontAttributeName: [UIFont systemFontOfSize:13 weight:UIFontWeightMedium]
@@ -101,99 +110,134 @@
             }
         }
         
-        switch (msgBodyType) {
-            case EMMessageBodyTypeImage: {
-                [self setupImageLayout];
-                [_imageView Ease_setImageWithURL:[NSURL URLWithString:((EMImageMessageBody *)quoteMessage.body).thumbnailRemotePath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"]];
-                _nameLabel.attributedText = result;
-                break;
-            }
-            case EMMessageBodyTypeVideo: {
-                [self setupImageLayout];
-                _videoImageView.hidden = NO;
-                if ([quoteMessage.from isEqualToString:EMClient.sharedClient.currentUsername]) {
-                    [_imageView Ease_setImageWithURL:[NSURL fileURLWithPath:((EMVideoMessageBody *)quoteMessage.body).thumbnailLocalPath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"]];
-                } else {
-                    [_imageView Ease_setImageWithURL:[NSURL URLWithString:((EMVideoMessageBody *)quoteMessage.body).thumbnailRemotePath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"]];
-                }
-                _nameLabel.attributedText = result;
-                break;
-            }
-            case EMMessageBodyTypeFile: {
-                [self setupTextImageTextLayout];
-                _nameLabel.attributedText = result;
-                _contentLabel.text = ((EMFileMessageBody *)quoteMessage.body).displayName;
-                _imageView.image = [UIImage easeUIImageNamed:@"quote_file"];
-                break;
-            }
-            case EMMessageBodyTypeVoice: {
-                [self setupTextImageTextLayout];
-                _nameLabel.attributedText = result;
-                _contentLabel.text = [NSString stringWithFormat:@"%d”", ((EMVoiceMessageBody *)quoteMessage.body).duration];
-                _imageView.image = [UIImage easeUIImageNamed:@"quote_voice"];
-                break;
-            }
-            case EMMessageBodyTypeLocation: {
-                [self setupTextLayout:2];
-                NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
-                attachment.image = [UIImage easeUIImageNamed:@"quote_location"];
-                attachment.bounds = CGRectMake(0, -4, attachment.image.size.width, attachment.image.size.height);
-                [result appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
-                [result appendAttributedString:[[NSAttributedString alloc] initWithString:((EMLocationMessageBody *)quoteMessage.body).address attributes:@{
-                    NSFontAttributeName: [UIFont systemFontOfSize:13 weight:UIFontWeightRegular]
-                }]];
-                _nameLabel.attributedText = result;
-                break;
-            }
-            case EMMessageBodyTypeText: {
-                if (quoteMessage.ext[@"em_expression_id"]) {
+        {
+            switch (msgBodyType) {
+                case EMMessageBodyTypeImage: {
                     [self setupImageLayout];
-                    NSString *localeLanguageCode = [NSLocale.currentLocale objectForKey:NSLocaleLanguageCode];;
-                    NSString *name = [(EMTextMessageBody *)quoteMessage.body text];
-                    if ([localeLanguageCode isEqualToString:@"zh"] && [name containsString:@"Example"]) {
-                        name = [name stringByReplacingOccurrencesOfString:@"Example" withString:@"示例"];
+                    UIImage *img = nil;
+                    if ([((EMImageMessageBody *)quoteMessage.body).localPath length] > 0) {
+                        img = [UIImage imageWithContentsOfFile:((EMImageMessageBody *)quoteMessage.body).localPath];
                     }
-                    if ([localeLanguageCode isEqualToString:@"en"] && [name containsString:@"示例"]) {
-                        name = [name stringByReplacingOccurrencesOfString:@"示例" withString:@"Example"];
-                    }
-                    EaseEmoticonGroup *group = [EaseEmoticonGroup getGifGroup];
-                    for (EaseEmoticonModel *model in group.dataArray) {
-                        if ([model.name isEqualToString:name]) {
-                            NSString *path = [NSBundle.mainBundle pathForResource:@"EaseIMKit" ofType:@"bundle"];
-                            NSString *gifPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.gif", model.original]];
-                            NSData *imageData = [NSData dataWithContentsOfFile:gifPath];
-                            self.imageView.image = [UIImage imageWithData:imageData];
-                            break;
-                        }
+                    if (img) {
+                        _imageView.image = img;
+                    } else {
+                        [_imageView Ease_setImageWithURL:[NSURL URLWithString:((EMImageMessageBody *)quoteMessage.body).thumbnailRemotePath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"]];
                     }
                     _nameLabel.attributedText = result;
                     break;
-                } else {
+                }
+                case EMMessageBodyTypeVideo: {
+                    [self setupImageLayout];
+                    _videoImageView.hidden = NO;
+                    if ([quoteMessage.from isEqualToString:EMClient.sharedClient.currentUsername]) {
+                        [_imageView Ease_setImageWithURL:[NSURL fileURLWithPath:((EMVideoMessageBody *)quoteMessage.body).thumbnailLocalPath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"]];
+                    } else {
+                        [_imageView Ease_setImageWithURL:[NSURL URLWithString:((EMVideoMessageBody *)quoteMessage.body).thumbnailRemotePath] placeholderImage:[UIImage easeUIImageNamed:@"msg_img_broken"]];
+                    }
+                    _nameLabel.attributedText = result;
+                    break;
+                }
+                case EMMessageBodyTypeFile: {
+                    [self setupTextImageTextLayout];
+                    _nameLabel.attributedText = result;
+                    if (quoteMessage) {
+                        _contentLabel.text = ((EMFileMessageBody *)quoteMessage.body).displayName;
+                    } else {
+                        _contentLabel.text = [NSString stringWithFormat:@"%@", msgPreview];
+                    }
+                    _imageView.image = [UIImage easeUIImageNamed:@"quote_file"];
+                    break;
+                }
+                case EMMessageBodyTypeVoice: {
+                    [self setupTextImageTextLayout];
+                    _nameLabel.attributedText = result;
+                    if (quoteMessage) {
+                        _contentLabel.text = [NSString stringWithFormat:@"%d\"", ((EMVoiceMessageBody *)quoteMessage.body).duration];
+                    } else {
+                        _contentLabel.text = [NSString stringWithFormat:@"%@", msgPreview];
+                    }
+                    
+                    _imageView.image = [UIImage easeUIImageNamed:@"quote_voice"];
+                    break;
+                }
+                case EMMessageBodyTypeLocation: {
+                    [self setupTextLayout:2];
+                    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+                    attachment.image = [UIImage easeUIImageNamed:@"quote_location"];
+                    attachment.bounds = CGRectMake(0, -4, attachment.image.size.width, attachment.image.size.height);
+                    [result appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
+                    if (quoteMessage)
+                        [result appendAttributedString:[[NSAttributedString alloc] initWithString:((EMLocationMessageBody *)quoteMessage.body).address attributes:@{
+                            NSFontAttributeName: [UIFont systemFontOfSize:13 weight:UIFontWeightRegular]
+                        }]];
+                    else
+                        [result appendAttributedString:[[NSAttributedString alloc] initWithString:msgPreview]];
+                    _nameLabel.attributedText = result;
+                    break;
+                }
+                case EMMessageBodyTypeCustom: {
                     [self setupTextLayout:2];
                     NSString *showText = quoteMessage.easeUI_quoteShowText;
                     if (showText.length <= 0) {
                         showText = msgPreview;
                     }
-                    [result appendAttributedString:[[NSAttributedString alloc] initWithString:showText attributes:@{
+                    [result appendAttributedString:[[NSAttributedString alloc] initWithString:[EaseEmojiHelper convertEmoji:showText] attributes:@{
                         NSFontAttributeName: [UIFont systemFontOfSize:13 weight:UIFontWeightRegular]
                     }]];
                     _nameLabel.attributedText = result;
+                    break;
                 }
-                break;
-            }
-            default: {
-                [self setupTextLayout:2];
-                NSString *showText = quoteMessage.easeUI_quoteShowText;
-                if (showText.length <= 0) {
-                    showText = msgPreview;
+                case EMMessageBodyTypeText: {
+                    if (quoteMessage.ext[@"em_expression_id"]) {
+                        [self setupImageLayout];
+                        NSString *localeLanguageCode = [NSLocale.currentLocale objectForKey:NSLocaleLanguageCode];;
+                        NSString *name = [(EMTextMessageBody *)quoteMessage.body text];
+                        if ([localeLanguageCode isEqualToString:@"zh"] && [name containsString:@"Example"]) {
+                            name = [name stringByReplacingOccurrencesOfString:@"Example" withString:@"示例"];
+                        }
+                        if ([localeLanguageCode isEqualToString:@"en"] && [name containsString:@"示例"]) {
+                            name = [name stringByReplacingOccurrencesOfString:@"示例" withString:@"Example"];
+                        }
+                        EaseEmoticonGroup *group = [EaseEmoticonGroup getGifGroup];
+                        for (EaseEmoticonModel *model in group.dataArray) {
+                            if ([model.name isEqualToString:name]) {
+                                NSString *path = [NSBundle.mainBundle pathForResource:@"EaseIMKit" ofType:@"bundle"];
+                                NSString *gifPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.gif", model.original]];
+                                NSData *imageData = [NSData dataWithContentsOfFile:gifPath];
+                                self.imageView.image = [UIImage imageWithData:imageData];
+                                break;
+                            }
+                        }
+                        _nameLabel.attributedText = result;
+                        break;
+                    } else {
+                        [self setupTextLayout:2];
+                        NSString *showText = quoteMessage.easeUI_quoteShowText;
+                        if (showText.length <= 0) {
+                            showText = msgPreview;
+                        }
+                        [result appendAttributedString:[[NSAttributedString alloc] initWithString:[EaseEmojiHelper convertEmoji:showText] attributes:@{
+                            NSFontAttributeName: [UIFont systemFontOfSize:13 weight:UIFontWeightRegular]
+                        }]];
+                        _nameLabel.attributedText = result;
+                    }
+                    break;
                 }
-                [result appendAttributedString:[[NSAttributedString alloc] initWithString:showText attributes:@{
-                    NSFontAttributeName: [UIFont systemFontOfSize:13 weight:UIFontWeightRegular]
-                }]];
-                _nameLabel.attributedText = result;
-                break;
+                default: {
+                    [self setupTextLayout:2];
+                    NSString *showText = quoteMessage.easeUI_quoteShowText;
+                    if (showText.length <= 0) {
+                        showText = msgPreview;
+                    }
+                    [result appendAttributedString:[[NSAttributedString alloc] initWithString:[EaseEmojiHelper convertEmoji:showText] attributes:@{
+                        NSFontAttributeName: [UIFont systemFontOfSize:13 weight:UIFontWeightRegular]
+                    }]];
+                    _nameLabel.attributedText = result;
+                    break;
+                }
             }
         }
+        
     } else {
         _nameLabel.hidden = YES;
         _imageView.hidden = YES;

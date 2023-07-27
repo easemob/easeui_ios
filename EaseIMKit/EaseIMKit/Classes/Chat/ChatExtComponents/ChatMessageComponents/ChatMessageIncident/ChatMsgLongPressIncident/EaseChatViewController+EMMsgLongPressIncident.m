@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 #import "EMMsgTextBubbleView.h"
 #import "EaseDateHelper.h"
+#import "EaseHeaders.h"
 
 typedef NS_ENUM(NSInteger, EaseLongPressExecute) {
     EaseLongPressExecuteCopy = 0,
@@ -87,6 +88,8 @@ static const void *recallViewKey = &recallViewKey;
     }
     
     EaseMessageModel *model = [self.dataArray objectAtIndex:self.longPressIndexPath.row];
+    if (model.message.body.type != EMMessageTypeText)
+        return;
     EMTextMessageBody *body = (EMTextMessageBody *)model.message.body;
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = body.text;

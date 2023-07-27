@@ -40,11 +40,15 @@
         case EMMessageBodyTypeImage:
             return EaseLocalizableString(@"[image]", nil);
         case EMMessageBodyTypeFile:
-            return [NSString stringWithFormat:@"%@%@", EaseLocalizableString(@"[file]", nil), ((EMFileMessageBody *)self.body).displayName];
+            return [NSString stringWithFormat:@"%@", EaseLocalizableString(@"[file]", nil)];
         case EMMessageBodyTypeVoice:
-            return [NSString stringWithFormat:@"%@%d”", EaseLocalizableString(@"[audio]", nil), ((EMVoiceMessageBody *)self.body).duration];
+            return EaseLocalizableString(@"[audio]", nil);
         case EMMessageBodyTypeVideo:
             return EaseLocalizableString(@"[video]", nil);
+        case EMMessageBodyTypeCombine:
+            return ((EMCombineMessageBody *)self.body).compatibleText;
+        case EMMessageBodyTypeCustom:
+            return EaseLocalizableString(@"[custommsg]", nil);
         default:
             return @"unknow message";
     }

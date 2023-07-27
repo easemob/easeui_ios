@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = 'EaseIMKit'
-    s.version          = '4.0.2'
+    s.version          = '4.1.0'
     s.summary = 'easemob im sdk UIKit'
     s.homepage = 'http://docs-im.easemob.com/im/ios/other/easeimkit'
     s.description = <<-DESC
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
                   DESC
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.author           = { 'easemob' => 'dev@easemob.com' }
-    s.source = { :git => 'https://github.com/easemob/easeui_ios.git', :tag => 'EaseIMKit_4.0.2'}
+    s.source = { :git => 'https://github.com/easemob/easeui_ios.git', :tag => 'EaseIMKit_4.1.0'}
     s.frameworks = 'UIKit'
     s.libraries = 'stdc++'
     s.ios.deployment_target = '11.0'
@@ -36,7 +36,10 @@ Pod::Spec.new do |s|
         'EaseIMKit/EaseIMKit/Classes/Conversations/Models/EaseConversationModel.h',
         'EaseIMKit/EaseIMKit/Classes/Conversations/Controllers/EaseConversationsViewController.h',
         'EaseIMKit/EaseIMKit/Classes/Chat/EaseChatViewController.h',
+        'EaseIMKit/EaseIMKit/Classes/Chat/MessageCell/BubbleView/EMMessageBubbleView.h',
+        'EaseIMKit/EaseIMKit/Classes/Chat/MessageCell/EaseMessageCell.h',
         'EaseIMKit/EaseIMKit/Classes/Chat/EaseChatViewControllerDelegate.h',
+        'EaseIMKit/EaseIMKit/Classes/Chat/ChatExtComponents/ChatEmojiUtil/EaseEmojiHelper.h',
         'EaseIMKit/EaseIMKit/Classes/Chat/ChatBar/MoreView/MoreFunction/EaseExtFuncModel.h',
         'EaseIMKit/EaseIMKit/Classes/Chat/ChatModels/EaseExtMenuModel.h',
         'EaseIMKit/EaseIMKit/Classes/Chat/ChatModels/EaseMessageModel.h',
@@ -60,8 +63,7 @@ Pod::Spec.new do |s|
                             }
     s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
-    s.dependency 'TFHpple'
-    s.dependency 'HyphenateChat'
+    s.dependency 'HyphenateChat', '~> 4.1.0'
     s.dependency 'EMVoiceConvert', '0.1.0'
 
 end
