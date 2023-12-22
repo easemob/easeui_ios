@@ -159,10 +159,11 @@ EMClientDelegate
     }
     
     EaseConversationCell *cell = [EaseConversationCell tableView:tableView cellViewModel:_viewModel];
-    
-    EaseConversationModel *model = self.dataAry[indexPath.row];
-    
-    cell.model = model;
+    if (self.dataAry.count > indexPath.row) {
+        EaseConversationModel *model = self.dataAry[indexPath.row];
+        
+        cell.model = model;
+    }
     
     return cell;
 }
