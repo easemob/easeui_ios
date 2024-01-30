@@ -136,6 +136,7 @@
         make.top.equalTo(weakSelf.nameLabel.ease_bottom).offset(weakSelf.viewModel.nameLabelEdgeInsets.bottom + weakSelf.viewModel.detailLabelEdgeInsets.top);
         make.left.equalTo(weakSelf.avatarView.ease_right).offset(weakSelf.viewModel.avatarEdgeInsets.right + weakSelf.viewModel.detailLabelEdgeInsets.left + 12);
         make.bottom.equalTo(weakSelf.contentView.ease_bottom).offset(weakSelf.viewModel.detailLabelEdgeInsets.bottom - 18);
+        make.right.equalTo(weakSelf.contentView.ease_right).offset(-weakSelf.viewModel.detailLabelEdgeInsets.right - 18);
     }];
     
     [_timeLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
@@ -152,16 +153,12 @@
             make.centerY.equalTo(weakSelf.avatarView.ease_top).offset(weakSelf.viewModel.badgeLabelCenterVector.dy + 4);
             make.centerX.equalTo(weakSelf.avatarView.ease_right).offset(weakSelf.viewModel.badgeLabelCenterVector.dx - 8);
         }];
-        
-        [_detailLabel Ease_updateConstraints:^(EaseConstraintMaker *make) {
-            make.right.equalTo(weakSelf.contentView.ease_right).offset(-weakSelf.viewModel.detailLabelEdgeInsets.right - 18);
-        }];
     }else {
         [_badgeLabel Ease_remakeConstraints:^(EaseConstraintMaker *make) {
             make.height.offset(_viewModel.badgeLabelHeight);
             make.width.Ease_greaterThanOrEqualTo(weakSelf.viewModel.badgeLabelHeight).priority(1000);
-            make.centerY.equalTo(weakSelf.avatarView.ease_top).offset(weakSelf.viewModel.badgeLabelCenterVector.dy + 4);
-            make.centerX.equalTo(weakSelf.avatarView.ease_right).offset(weakSelf.viewModel.badgeLabelCenterVector.dx - 8);
+            make.centerY.equalTo(weakSelf.contentView.ease_top).offset(weakSelf.viewModel.badgeLabelCenterVector.dy + 8);
+            make.centerX.equalTo(weakSelf.contentView.ease_right).offset(weakSelf.viewModel.badgeLabelCenterVector.dx - 8);
         }];
     }
     CGFloat r = _viewModel.avatarSize.width/2.0;
