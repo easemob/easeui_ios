@@ -159,11 +159,12 @@ EMClientDelegate
     }
     
     EaseConversationCell *cell = [EaseConversationCell tableView:tableView cellViewModel:_viewModel];
-    if (self.dataAry.count > indexPath.row) {
-        EaseConversationModel *model = self.dataAry[indexPath.row];
-        
-        cell.model = model;
+    if (indexPath.row >= self.dataAry.count || self.dataAry.count <= 0) {
+        return cell;
     }
+    EaseConversationModel *model = self.dataAry[indexPath.row];
+    
+    cell.model = model;
     
     return cell;
 }
@@ -319,11 +320,12 @@ EMClientDelegate
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row >= self.dataAry.count || self.dataAry.count <= 0) {
+        return;
+    }
     EaseConversationModel *model = [self.dataAry objectAtIndex:indexPath.row];
     if (!model.isTop) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    } else {
-        
     }
     [self removeAt:model];
     if (self.delegate && [self.delegate respondsToSelector:@selector(easeTableView:didSelectRowAtIndexPath:)]) {
