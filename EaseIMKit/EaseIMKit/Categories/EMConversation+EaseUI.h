@@ -11,9 +11,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EMConversation (EaseUI)
 
-- (void)setTop:(BOOL)isTop;
-- (BOOL)isTop;
-
 - (void)setShowName:(NSString *)aShowName;
 - (NSString *)showName;
 
